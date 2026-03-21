@@ -1,0 +1,131 @@
+// ============================================
+// Technical Abilities
+// 6 categories in 3x2 grid with proficiency markers
+// ============================================
+
+@import '../variables';
+
+.technical {
+  background: $color-white;
+  padding: $spacing-4xl 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__header {
+    margin-bottom: $spacing-3xl;
+    max-width: 600px;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: $line-height-h2;
+    letter-spacing: -0.02em;
+    margin-top: $spacing-lg;
+    margin-bottom: $spacing-md;
+  }
+
+  &__subtitle {
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    color: $color-neutral-muted;
+    line-height: $line-height-body;
+  }
+
+  // ==========================================
+  // 3-column grid (2 rows of 3)
+  // ==========================================
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-2xl;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__column-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-sm;
+    border-bottom: 2px solid $color-primary;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__item {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    &--proficient {
+      font-weight: $font-weight-medium;
+      color: $color-neutral-dark;
+    }
+  }
+
+  &__bullet {
+    color: $color-primary;
+    flex-shrink: 0;
+    line-height: $line-height-body-sm;
+  }
+
+  // ==========================================
+  // Proficiency asterisk
+  // ==========================================
+  &__proficiency {
+    color: $color-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  // ==========================================
+  // Legend
+  // ==========================================
+  &__legend {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  &__legend-text {
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+  }
+}
+
+@media (max-width: $breakpoint-lg) {
+  .technical {
+    &__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .technical {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

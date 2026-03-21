@@ -1,0 +1,49 @@
+// ============================================
+// Page Header Component
+// Title, subtitle, and optional back link
+// ============================================
+
+@import '../variables';
+
+.page-header {
+  margin-bottom: $spacing-3xl;
+  padding-bottom: $spacing-2xl;
+  border-bottom: 1px solid $color-neutral-light;
+
+  &__back {
+    display: inline-block;
+    font-size: $font-size-body-sm;
+    color: $color-primary;
+    margin-bottom: $spacing-lg;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h1;
+    line-height: $line-height-h1;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__subtitle {
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-muted;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .page-header {
+    &__title {
+      font-size: $font-size-h2;
+      line-height: $line-height-h2;
+    }
+  }
+}

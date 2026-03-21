@@ -1,0 +1,585 @@
+// ============================================
+// Hero Hybrid — Profile visual + clean text animations
+// Merges current hero's visual richness with
+// the clean typography-first approach
+// ============================================
+
+@import '../variables';
+@import 'animations';
+
+// --- Shared keyframes with hero-alt ---
+@keyframes hybridRevealUp {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hybridCursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@mixin hybrid-reveal($order) {
+  opacity: 0;
+  animation: hybridRevealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: #{0.15 + ($order * 0.1)}s;
+}
+
+.hero-hybrid {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $color-white;
+
+  // ==========================================
+  // Navigation (clean minimal style)
+  // ==========================================
+  &__nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-index-sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xl $spacing-3xl;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+    &-logo {
+      font-family: $font-family-heading;
+      font-size: $font-size-body;
+      font-weight: $font-weight-bold;
+      color: $color-neutral-dark;
+      letter-spacing: -0.02em;
+    }
+
+    &-links {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2xl;
+
+      a {
+        font-size: $font-size-body-sm;
+        color: $color-neutral-muted;
+        text-decoration: none;
+        transition: color $transition-fast;
+
+        &:hover {
+          color: $color-neutral-dark;
+        }
+      }
+    }
+
+    &-cta {
+      font-weight: $font-weight-medium;
+      color: $color-neutral-dark !important;
+      padding: $spacing-sm $spacing-lg;
+      border: 1px solid $color-neutral-light;
+      border-radius: $radius-full;
+      transition: all $transition-fast !important;
+
+      &:hover {
+        background: $color-neutral-dark !important;
+        color: $color-white !important;
+        border-color: $color-neutral-dark !important;
+      }
+    }
+  }
+
+  // ==========================================
+  // Content
+  // ==========================================
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 100px $spacing-2xl $spacing-3xl;
+    width: 100%;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-3xl;
+    align-items: center;
+  }
+
+  // ==========================================
+  // Text side (clean animated)
+  // ==========================================
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__label {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1em;
+  }
+
+  &__role {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+
+  &__reveal {
+    &--1 { @include hybrid-reveal(1); }
+    &--2 { @include hybrid-reveal(2); }
+    &--3 { @include hybrid-reveal(3); }
+    &--4 { @include hybrid-reveal(4); }
+    &--5 { @include hybrid-reveal(5); }
+    &--6 { @include hybrid-reveal(6); }
+  }
+
+  // --- Headline with typing ---
+  &__headline {
+    font-family: $font-family-heading;
+    font-size: 52px;
+    line-height: 1.1;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xl;
+    min-height: 1.2em;
+  }
+
+  &__typed {
+    color: $color-neutral-dark;
+  }
+
+  &__cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: $color-primary;
+    margin-left: 2px;
+    vertical-align: bottom;
+    animation: hybridCursorBlink 0.8s step-end infinite;
+  }
+
+  // --- Body ---
+  &__body {
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-muted;
+    max-width: 480px;
+    margin-bottom: $spacing-2xl;
+  }
+
+  // --- Actions ---
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    text-decoration: none;
+    transition: all $transition-fast;
+    height: 38px;
+
+    &-icon {
+      width: $icon-size-sm;
+      height: $icon-size-sm;
+    }
+
+    &--primary {
+      background: $color-primary;
+      color: $color-white;
+      padding: 0 $spacing-lg;
+      border-radius: $button-radius;
+      font-family: $font-family-heading;
+      font-weight: $font-weight-extrabold;
+
+      &:hover {
+        background: $color-primary-dark;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &--secondary {
+      color: $color-neutral-standard;
+      padding: 0 $spacing-lg;
+      border: 1px solid $color-neutral-light;
+      border-radius: $button-radius;
+
+      svg {
+        transition: transform $transition-fast;
+      }
+
+      &:hover {
+        background: $color-neutral-dark;
+        color: $color-white;
+        border-color: $color-neutral-dark;
+
+        svg {
+          transform: translateX(3px);
+        }
+      }
+    }
+  }
+
+  // ==========================================
+  // Visual side (profile image — kept from original)
+  // ==========================================
+  &__visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include fade-in-up(0.3s);
+  }
+
+  &__image-container {
+    position: relative;
+    width: 420px;
+    height: 420px;
+  }
+
+  &__image-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__orange-bg {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+
+    &-inner {
+      width: 100%;
+      height: 100%;
+      animation: rotateBackground 20s linear infinite;
+    }
+
+    &-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__border-ring {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+    animation: pulseRing 2s ease-in-out infinite;
+  }
+
+  &__profile-circle {
+    position: relative;
+    width: 374px;
+    height: 374px;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 0.6;
+  }
+
+  &__profile-img {
+    width: 100%;
+    height: 170%;
+    object-fit: cover;
+    mix-blend-mode: hard-light;
+    object-position: top;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  // ==========================================
+  // Social Proof Band — full-width separator
+  // ==========================================
+  &__proof-band {
+    position: relative;
+    background: $color-neutral-lightest;
+    border-top: 1px solid $color-neutral-light;
+    border-bottom: 1px solid $color-neutral-light;
+    padding: $spacing-3xl 0;
+    z-index: 1;
+  }
+
+  &__proof-inner {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3xl;
+  }
+
+  &__proof-left {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__proof-label {
+    font-family: $font-family-heading;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__proof-icons {
+    display: flex;
+    align-items: center;
+  }
+
+  &__proof-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -8px;
+    flex-shrink: 0;
+    border: 2px solid $color-neutral-lightest;
+    background: $color-white;
+    transition: transform $transition-fast, z-index 0s;
+
+    &:hover {
+      transform: scale(1.2);
+      z-index: 2;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
+  &__proof-divider {
+    width: 1px;
+    height: 60px;
+    background: $color-neutral-light;
+    flex-shrink: 0;
+  }
+
+  &__proof-right {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__proof-stars {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    span:first-child {
+      font-size: 20px;
+      color: $color-primary;
+      line-height: 1;
+      letter-spacing: 2px;
+    }
+  }
+
+  &__proof-rating {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+  }
+
+  &__proof-text {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    line-height: 1.4;
+  }
+
+  &__proof-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+    transition: all $transition-fast;
+
+    svg {
+      transition: transform $transition-fast;
+    }
+
+    &:hover {
+      color: $color-primary-muted;
+
+      svg {
+        transform: translateY(3px);
+      }
+    }
+  }
+
+  // Angled bottom edge
+  &__proof-angle {
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: $color-neutral-lightest;
+    clip-path: polygon(0 0, 100% 0, 100% 0%, 0 100%);
+    z-index: 0;
+  }
+}
+
+// ==========================================
+// Responsive
+// ==========================================
+@media (max-width: $breakpoint-lg) {
+  .hero-hybrid {
+    &__headline {
+      font-size: 44px;
+    }
+
+    &__image-container {
+      width: 340px;
+      height: 340px;
+    }
+
+    &__orange-bg,
+    &__border-ring {
+      width: 310px;
+      height: 310px;
+    }
+
+    &__profile-circle {
+      width: 304px;
+      height: 304px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .hero-hybrid {
+    &__nav {
+      padding: $spacing-lg $spacing-xl;
+
+      &-links {
+        gap: $spacing-lg;
+      }
+    }
+
+    &__content {
+      padding: 100px $spacing-xl $spacing-2xl;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    &__intro {
+      align-items: center;
+    }
+
+    &__headline {
+      font-size: 38px;
+    }
+
+    &__body {
+      margin-left: auto;
+      margin-right: auto;
+      font-size: $font-size-body;
+    }
+
+    &__actions {
+      justify-content: center;
+    }
+
+    &__visual {
+      order: -1;
+    }
+
+    &__image-container {
+      width: 280px;
+      height: 280px;
+    }
+
+    &__orange-bg,
+    &__border-ring {
+      width: 250px;
+      height: 250px;
+    }
+
+    &__profile-circle {
+      width: 244px;
+      height: 244px;
+    }
+
+    &__proof-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-xl;
+    }
+
+    &__proof-divider {
+      width: 100%;
+      height: 1px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .hero-hybrid {
+    &__nav {
+      &-links a:not(.hero-hybrid__nav-cta) {
+        display: none;
+      }
+    }
+
+    &__headline {
+      font-size: 32px;
+    }
+  }
+}

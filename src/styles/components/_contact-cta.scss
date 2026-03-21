@@ -1,0 +1,107 @@
+// ============================================
+// Contact CTA — centered call to action
+// ============================================
+
+@import '../variables';
+
+.contact-cta {
+  background: $color-neutral-dark;
+  padding: $spacing-4xl 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__content {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &__eyebrow {
+    display: block;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h1;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    line-height: $line-height-h1;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__body {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-muted;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-lg;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    height: $button-height-lg;
+    padding: 0 $button-padding-x-lg;
+    border-radius: $button-radius;
+    transition: all $transition-fast;
+
+    &--primary {
+      background: $color-primary;
+      color: $color-white;
+
+      &:hover {
+        background: $color-primary-dark;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      color: $color-white;
+      border: 1px solid $color-neutral-muted;
+
+      &:hover {
+        background: $color-white;
+        color: $color-neutral-dark;
+        border-color: $color-white;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .contact-cta {
+    &__actions {
+      flex-direction: column;
+    }
+
+    &__btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

@@ -1,0 +1,159 @@
+// ============================================
+// Design Tokens (CSS Custom Properties)
+// Source of truth: Figma Design System
+// ============================================
+
+:root {
+  // ==========================================
+  // COLORS
+  // ==========================================
+
+  // Primary (Orange)
+  --color-primary-light: #fdede9;
+  --color-primary-muted: #f07654;
+  --color-primary: #f03d01;
+  --color-primary-dark: #c23001;
+
+  // Neutral
+  --color-neutral-lightest: #f5f5f5;
+  --color-neutral-light: #e5e5e5;
+  --color-neutral-muted: #7a7a7a;
+  --color-neutral-standard: #4a4a4a;
+  --color-neutral-dark: #1b1b1b;
+
+  // Secondary (Blue-Gray)
+  --color-secondary-light: #f4f6f7;
+  --color-secondary-muted: #d6dce4;
+  --color-secondary: #8f9daf;
+  --color-secondary-dark: #5e6c7c;
+
+  // Semantic
+  --color-text-primary: var(--color-neutral-dark);
+  --color-text-secondary: var(--color-neutral-standard);
+  --color-text-tertiary: var(--color-neutral-muted);
+  --color-text-inverse: #ffffff;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: var(--color-secondary-light);
+  --color-border-default: rgba(27, 27, 27, 0.1);
+  --color-border-light: rgba(0, 0, 0, 0.1);
+
+  // ==========================================
+  // TYPOGRAPHY
+  // ==========================================
+
+  // Font Families
+  --font-heading: 'Hubot Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-mono: 'Menlo', source-code-pro, Monaco, Consolas, 'Courier New', monospace;
+
+  // Font Sizes
+  --text-h1: 38px;
+  --text-h2: 34px;
+  --text-h3: 30px;
+  --text-h4: 26px;
+  --text-h5: 22px;
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-caption: 12px;
+
+  // Line Heights
+  --leading-h1: 45.6px;
+  --leading-h2: 40.8px;
+  --leading-h3: 36px;
+  --leading-h4: 31.2px;
+  --leading-h5: 26.4px;
+  --leading-body-lg: 28px;
+  --leading-body: 25.6px;
+  --leading-body-sm: 20px;
+  --leading-caption: 16px;
+
+  // Font Weights
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  // ==========================================
+  // SPACING
+  // ==========================================
+
+  --space-unit: 8px;
+  --space-xs: 6px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+
+  // ==========================================
+  // BORDER RADIUS
+  // ==========================================
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  // ==========================================
+  // BUTTONS
+  // ==========================================
+
+  --btn-height-sm: 32px;
+  --btn-height-md: 40px;
+  --btn-height-lg: 48px;
+
+  --btn-px-sm: 16px;
+  --btn-px-md: 24px;
+  --btn-px-lg: 32px;
+
+  --btn-radius: 10px;
+  --btn-font-weight: 800;
+
+  --btn-font-sm: 14px;
+  --btn-font-md: 16px;
+  --btn-font-lg: 18px;
+
+  // Secondary button
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-border: #5e6c7c;
+  --btn-secondary-text: #5e6c7c;
+
+  // ==========================================
+  // ICONS
+  // ==========================================
+
+  --icon-sm: 16px;
+  --icon-md: 24px;
+  --icon-lg: 32px;
+  --icon-xl: 48px;
+
+  // ==========================================
+  // SHADOWS
+  // ==========================================
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  // ==========================================
+  // TRANSITIONS
+  // ==========================================
+
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+
+  // ==========================================
+  // LAYOUT
+  // ==========================================
+
+  --container-max: 1186px;
+  --container-px: 32px;
+}

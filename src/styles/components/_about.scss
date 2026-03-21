@@ -1,0 +1,95 @@
+// ============================================
+// About Section
+// Ref: about-page-with-bio-light.png, stats-bar-with-metrics-light.png
+// ============================================
+
+@import '../variables';
+
+.about {
+  background: $color-white;
+  padding: calc(#{$spacing-4xl} + 24px) 0 $spacing-4xl;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__content {
+    max-width: 720px;
+    margin-bottom: $spacing-3xl;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: $line-height-h2;
+    letter-spacing: -0.02em;
+    margin-top: $spacing-xl;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__body {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-standard;
+    margin-bottom: $spacing-lg;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // ==========================================
+  // Stats Bar — horizontal metric strip
+  // ==========================================
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-xl;
+    padding: $spacing-2xl 0;
+    border-top: 1px solid $color-neutral-light;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: $spacing-lg;
+    border-left: 3px solid $color-primary;
+  }
+
+  &__stat-value {
+    font-family: $font-family-heading;
+    font-size: $font-size-h3;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: 1.1;
+  }
+
+  &__stat-label {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .about {
+    &__stats {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .about {
+    &__stats {
+      grid-template-columns: 1fr;
+    }
+  }
+}

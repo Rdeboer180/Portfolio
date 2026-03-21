@@ -1,0 +1,188 @@
+// ============================================
+// Animations & Special Effects
+// ============================================
+
+@import '../variables';
+
+// Orange Circle Animation for Hero Section
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-20px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(0.95);
+  }
+  75% {
+    transform: translate(-10px, 20px) scale(1.02);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Animated profile card background rotation
+@keyframes rotateBackground {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Pulsing border ring
+@keyframes pulseRing {
+  0%, 100% {
+    transform: translate(-48%, -49%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -48%) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+// Mixin for the orange circle graphic
+@mixin orange-circle-graphic {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  top: -10%;
+  left: -10%;
+  z-index: -1;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      $color-primary-muted,
+      $color-primary,
+      $color-primary-dark
+    );
+  }
+
+  &::before {
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  &::after {
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    opacity: 0.4;
+    animation: float 8s ease-in-out infinite reverse, pulse 4s ease-in-out infinite;
+  }
+}
+
+// Profile Image with Blend Mode
+@mixin profile-image-effects {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: $hero-blend-mode;
+    position: relative;
+    z-index: 2;
+  }
+
+  // Backdrop blur effect
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur($hero-backdrop-blur);
+    z-index: 1;
+  }
+}
+
+// Hover Effects
+@mixin card-hover {
+  transition: all $transition-base;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+  }
+}
+
+@mixin button-hover {
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: $shadow-sm;
+  }
+}
+
+// Text animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin fade-in-up($delay: 0s) {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: $delay;
+}
+
+// Link underline animation
+@mixin animated-underline {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: $color-primary;
+    transition: width $transition-base;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}

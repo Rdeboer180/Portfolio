@@ -1,0 +1,450 @@
+// ============================================
+// Case Study Page
+// Layout ref: about-page-with-bio-light.png
+// Editorial ref: blog folder layouts
+// ============================================
+
+@import '../variables';
+@import 'animations';
+
+.cs {
+  min-height: 100vh;
+  background: $color-white;
+  font-family: $font-family-primary;
+
+  // ==========================================
+  // Navigation
+  // ==========================================
+  &__nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-index-sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xl $spacing-3xl;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  &__nav-logo {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  &__nav-back {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  // ==========================================
+  // Container
+  // ==========================================
+  &__container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 100px $spacing-2xl $spacing-4xl;
+  }
+
+  // ==========================================
+  // Header
+  // ==========================================
+  &__header {
+    margin-bottom: $spacing-3xl;
+    @include fade-in-up(0.1s);
+  }
+
+  &__header-badge {
+    margin-bottom: $spacing-xl;
+  }
+
+  &__client {
+    display: block;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h1;
+    line-height: $line-height-h1;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__tag {
+    font-size: $font-size-caption;
+    color: $color-neutral-standard;
+    padding: 4px $spacing-md;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-full;
+  }
+
+  &__year {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+
+  // ==========================================
+  // Featured Image
+  // ==========================================
+  &__featured-image {
+    margin-bottom: $spacing-4xl;
+    border-radius: $card-border-radius-lg;
+    overflow: hidden;
+    @include fade-in-up(0.2s);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  // ==========================================
+  // Overview (2-column)
+  // ==========================================
+  &__overview {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: $spacing-4xl;
+    margin-bottom: $spacing-4xl;
+    padding-bottom: $spacing-4xl;
+    border-bottom: 1px solid $color-neutral-light;
+    @include fade-in-up(0.3s);
+  }
+
+  &__overview-text {
+    p {
+      font-size: $font-size-body-lg;
+      line-height: $line-height-body-lg;
+      color: $color-neutral-standard;
+      margin-bottom: $spacing-2xl;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__section-heading {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin-bottom: $spacing-md;
+  }
+
+  &__overview-meta {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+    padding-top: $spacing-xs;
+  }
+
+  &__meta-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__meta-label {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__meta-value {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-dark;
+    line-height: $line-height-body-sm;
+  }
+
+  // ==========================================
+  // Project Images
+  // ==========================================
+  &__images {
+    margin-bottom: $spacing-4xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2xl;
+  }
+
+  &__figure {
+    margin: 0;
+    border-radius: $radius-xl;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    &--full {
+      // full width
+    }
+
+    &--half {
+      // half width handled by parent grid
+    }
+
+    // Mobile screenshots: iPhone frame + 50% max container
+    &--mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: visible;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+      }
+    }
+  }
+
+  // iPhone frame wrapper
+  &__phone-frame {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 2px #3a3a3a,
+      0 8px 40px rgba(0, 0, 0, 0.2);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 28px;
+    }
+  }
+
+  &__phone-notch {
+    width: 100px;
+    height: 24px;
+    background: #1b1b1b;
+    border-radius: 0 0 16px 16px;
+    margin: -12px auto 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__image-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xl;
+
+    // When both items in a pair are mobile, shrink the pair
+    .cs__figure--mobile + .cs__figure--mobile {
+      // handled by the mobile figure itself
+    }
+  }
+
+  &__caption {
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    padding: $spacing-md 0 0;
+    text-align: center;
+  }
+
+  // ==========================================
+  // Results
+  // ==========================================
+  &__results {
+    background: $color-primary-light;
+    border-radius: $card-border-radius-lg;
+    padding: $spacing-3xl;
+    margin-bottom: $spacing-4xl;
+  }
+
+  &__results-heading {
+    font-family: $font-family-heading;
+    font-size: $font-size-h3;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin-bottom: $spacing-2xl;
+  }
+
+  &__results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__result-value {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    line-height: 1.1;
+  }
+
+  &__result-label {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+  }
+
+  &__results-note {
+    font-size: $font-size-body;
+    line-height: $line-height-body;
+    color: $color-neutral-standard;
+    border-top: 1px solid rgba($color-primary, 0.15);
+    padding-top: $spacing-xl;
+  }
+
+  // ==========================================
+  // Next Project
+  // ==========================================
+  &__next {
+    display: block;
+    text-decoration: none;
+    margin-top: $spacing-4xl;
+  }
+
+  &__next-label {
+    display: block;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__next-card {
+    position: relative;
+    border-radius: $card-border-radius-lg;
+    overflow: hidden;
+    height: 280px;
+    transition: transform $transition-base;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  &__next-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__next-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $spacing-2xl;
+  }
+
+  &__next-client {
+    font-size: $font-size-caption;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__next-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__next-arrow {
+    font-size: $font-size-body-sm;
+    color: $color-primary-light;
+    font-weight: $font-weight-medium;
+  }
+}
+
+// ==========================================
+// Responsive
+// ==========================================
+@media (max-width: $breakpoint-md) {
+  .cs {
+    &__nav {
+      padding: $spacing-lg $spacing-xl;
+    }
+
+    &__container {
+      padding: 80px $spacing-xl $spacing-3xl;
+    }
+
+    &__title {
+      font-size: $font-size-h2;
+      line-height: $line-height-h2;
+    }
+
+    &__overview {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+
+    &__overview-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-lg;
+      padding-top: $spacing-xl;
+      border-top: 1px solid $color-neutral-light;
+    }
+
+    &__image-pair {
+      grid-template-columns: 1fr;
+    }
+
+    &__results-grid {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+
+    &__next-card {
+      height: 200px;
+    }
+  }
+}

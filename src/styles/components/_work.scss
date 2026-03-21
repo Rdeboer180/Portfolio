@@ -1,0 +1,223 @@
+// ============================================
+// Selected Work Section Styles
+// Walmart case study card layout reference
+// ============================================
+
+@import '../variables';
+@import 'animations';
+
+.selected-work {
+  padding: $spacing-4xl $spacing-2xl;
+  background: $color-secondary-lightest;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-3xl;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    line-height: $line-height-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin: $spacing-lg 0 0;
+  }
+
+  // ==========================================
+  // Card List (stacked, full-width)
+  // ==========================================
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2xl;
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    background: #f0f5f4;
+    border-radius: $card-border-radius-lg;
+    overflow: hidden;
+    text-decoration: none;
+    transition: box-shadow $transition-base;
+    min-height: 420px;
+
+    &:nth-child(2) {
+      background: #f2f4f0;
+    }
+
+    &:nth-child(3) {
+      background: #f0f2f5;
+    }
+
+    &:hover {
+      box-shadow: $shadow-lg;
+
+      .selected-work__card-visual img {
+        transform: scale(1);
+      }
+
+      .selected-work__card-btn--outline svg {
+        transform: translateX(3px);
+      }
+
+      .selected-work__card-title {
+        color: $color-primary;
+      }
+    }
+
+    // Alternate layout: image left, content right
+    &--reverse {
+      .selected-work__card-body {
+        order: 2;
+      }
+
+      .selected-work__card-visual {
+        order: 1;
+      }
+    }
+  }
+
+  // ==========================================
+  // Card Body (text content)
+  // ==========================================
+  &__card-body {
+    padding: $spacing-3xl $spacing-3xl $spacing-3xl $spacing-4xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__card-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    font-weight: $font-weight-bold;
+    font-style: italic;
+    color: $color-neutral-dark;
+    line-height: $line-height-h4;
+    transition: color $transition-fast;
+  }
+
+  &__card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-top: $spacing-xs;
+  }
+
+  &__card-tag {
+    font-size: 11px;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-standard;
+    padding: 4px $spacing-md;
+    border: 1px solid $color-secondary-light;
+    border-radius: $radius-full;
+    background: $color-white;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  // ==========================================
+  // Inline Stats (subtle)
+  // ==========================================
+  &__card-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-top: $spacing-md;
+  }
+
+  &__card-stat {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-muted;
+    letter-spacing: 0.02em;
+
+    &:not(:last-child)::after {
+      content: '\00b7';
+      margin-left: $spacing-xs;
+      color: $color-secondary-light;
+    }
+  }
+
+  &__card-stat-label {
+    font-weight: $font-weight-regular;
+  }
+
+  // ==========================================
+  // Card Visual (image area)
+  // ==========================================
+  &__card-visual {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl $spacing-xl $spacing-xl 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: $radius-lg;
+      transform: scale(1.08);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // Reverse cards: pad left instead of right
+  &__card--reverse &__card-visual {
+    padding: $spacing-xl 0 $spacing-xl $spacing-xl;
+  }
+}
+
+// ==========================================
+// Responsive
+// ==========================================
+@media (max-width: $breakpoint-md) {
+  .selected-work {
+    padding: $spacing-3xl $spacing-lg;
+
+    &__card {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    &__card-body {
+      padding: $spacing-2xl;
+    }
+
+    &__card-visual {
+      height: 260px;
+      padding: 0 $spacing-lg $spacing-lg;
+    }
+
+    &__card--reverse {
+      .selected-work__card-body {
+        order: 1;
+      }
+
+      .selected-work__card-visual {
+        order: 2;
+        padding: 0 $spacing-lg $spacing-lg;
+      }
+    }
+
+    &__card-title {
+      font-size: $font-size-h5;
+      line-height: $line-height-h5;
+    }
+
+    &__card-actions {
+      flex-wrap: wrap;
+    }
+  }
+}

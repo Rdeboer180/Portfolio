@@ -1,0 +1,42 @@
+// ============================================
+// Footer — Minimal
+// Ref: minimal-footer-light.png
+// ============================================
+
+@import '../variables';
+
+.footer {
+  background: $color-secondary-lightest;
+  padding: $spacing-3xl 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__links {
+    display: flex;
+    gap: $spacing-2xl;
+    margin-bottom: $spacing-2xl;
+
+    a {
+      font-family: $font-family-primary;
+      font-size: $font-size-body;
+      color: $color-neutral-dark;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $color-primary;
+      }
+    }
+  }
+
+  &__copy {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+}

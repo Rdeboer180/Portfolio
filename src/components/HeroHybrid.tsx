@@ -1,0 +1,184 @@
+import React, { useState, useEffect } from 'react';
+import '../styles/styles.scss';
+
+const proficiencies = [
+  { src: '/images/proficiencies/figma.svg', alt: 'Figma', bg: '#f3e8ff' },
+  { src: '/images/proficiencies/scss.png', alt: 'SCSS' },
+  { src: '/images/proficiencies/chakra.png', alt: 'Chakra UI' },
+  { src: '/images/proficiencies/illustrator.png', alt: 'Illustrator' },
+  { src: '/images/proficiencies/photoshop.png', alt: 'Photoshop' },
+  { src: '/images/proficiencies/aem.png', alt: 'AEM' },
+  { src: '/images/proficiencies/wordpress.png', alt: 'WordPress' },
+  { src: '/images/proficiencies/css3.png', alt: 'CSS3' },
+  { src: '/images/proficiencies/html5.png', alt: 'HTML5', bg: '#dcfce7' },
+  { src: '/images/proficiencies/github.png', alt: 'GitHub' },
+  { src: '/images/proficiencies/vscode.png', alt: 'VS Code' },
+];
+
+const roles = [
+  'Team Leader',
+  'Product UI Engineer',
+  'Design Strategist',
+];
+
+const HeroHybrid: React.FC = () => {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+
+    if (isPaused) {
+      const pauseTimer = setTimeout(() => {
+        setIsPaused(false);
+        setIsDeleting(true);
+      }, 4000);
+      return () => clearTimeout(pauseTimer);
+    }
+
+    if (isDeleting) {
+      if (displayText.length === 0) {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+        return;
+      }
+      const timer = setTimeout(() => {
+        setDisplayText(currentRole.substring(0, displayText.length - 1));
+      }, 40);
+      return () => clearTimeout(timer);
+    }
+
+    if (displayText.length === currentRole.length) {
+      setIsPaused(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setDisplayText(currentRole.substring(0, displayText.length + 1));
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, isPaused, roleIndex]);
+
+  return (
+    <section className="hero-hybrid">
+      {/* Minimal fixed nav */}
+      <nav className="hero-hybrid__nav">
+        <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
+        <div className="hero-hybrid__nav-links">
+          <a href="#about">About</a>
+          <a href="#projects">Work</a>
+          <a href="#skills">Skills</a>
+          <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__nav-cta">Get in touch</a>
+        </div>
+      </nav>
+
+      <div className="hero-hybrid__content">
+        <div className="hero-hybrid__grid">
+          {/* Left: Clean animated text */}
+          <div className="hero-hybrid__text">
+            <div className="hero-hybrid__intro">
+              <span className="hero-hybrid__label hero-hybrid__reveal hero-hybrid__reveal--1">
+                Ryan DeBoer
+              </span>
+              <span className="hero-hybrid__role hero-hybrid__reveal hero-hybrid__reveal--2">
+                Senior Web Designer / High-Fidelity Interface Designer
+              </span>
+            </div>
+
+            <h1 className="hero-hybrid__headline hero-hybrid__reveal hero-hybrid__reveal--3">
+              <span className="hero-hybrid__typed">
+                {displayText}
+                <span className="hero-hybrid__cursor" />
+              </span>
+            </h1>
+
+            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
+              I’m a Front-End Developer and UX Engineer with 12+ years of experience bridging design and engineering. I specialize in high-fidelity UX/UI design and translating complex product experiences into scalable, component-driven interfaces and sustainable design systems. My work focuses on aligning design and code through reusable patterns, modern front-end architecture, and AI-assisted workflows that improve speed, consistency, and long-term maintainability.
+
+            </p>
+
+            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
+              <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__btn hero-hybrid__btn--primary">
+                <img src="/images/hero/email-icon.svg" alt="" className="hero-hybrid__btn-icon" />
+                rdeboer180@gmail.com
+              </a>
+              <a href="#projects" className="hero-hybrid__btn hero-hybrid__btn--secondary">
+                View my work
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Right: Profile image (kept from original) */}
+          <div className="hero-hybrid__visual">
+            <div className="hero-hybrid__image-container">
+              <div className="hero-hybrid__image-wrapper">
+                <div className="hero-hybrid__orange-bg">
+                  <div className="hero-hybrid__orange-bg-inner">
+                    <img
+                      src="/images/hero/orange-background.svg"
+                      alt=""
+                      className="hero-hybrid__orange-bg-img"
+                    />
+                  </div>
+                </div>
+                <div className="hero-hybrid__border-ring" />
+                <div className="hero-hybrid__profile-circle">
+                  <img
+                    src="/images/hero/ryan-deboer.png"
+                    alt="Ryan Deboer"
+                    className="hero-hybrid__profile-img"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Social proof band — full-width separator */}
+      <div className="hero-hybrid__proof-band">
+        <div className="hero-hybrid__proof-inner">
+          <div className="hero-hybrid__proof-left">
+            <p className="hero-hybrid__proof-label">Core Proficiencies</p>
+            <div className="hero-hybrid__proof-icons">
+              {proficiencies.map((icon, i) => (
+                <div
+                  key={i}
+                  className="hero-hybrid__proof-icon"
+                  title={icon.alt}
+                >
+                  <img src={icon.src} alt={icon.alt} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="hero-hybrid__proof-divider" />
+          <div className="hero-hybrid__proof-right">
+            <div className="hero-hybrid__proof-stars">
+              <span>★★★★★</span>
+              <span className="hero-hybrid__proof-rating">5.0</span>
+            </div>
+            <p className="hero-hybrid__proof-text">
+              Reviews from those I have worked with
+            </p>
+            <a href="#testimonials" className="hero-hybrid__proof-cta">
+              View Testimonials
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div className="hero-hybrid__proof-angle" />
+      </div>
+    </section>
+  );
+};
+
+export default HeroHybrid;

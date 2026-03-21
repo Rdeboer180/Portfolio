@@ -1,0 +1,40 @@
+// ============================================
+// Section Badge Component
+// Pill-style label used as section anchors
+// ============================================
+
+@import '../variables';
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background: $color-primary-light;
+  border: 1.5px solid $color-primary;
+  border-radius: $radius-full;
+  padding: $spacing-sm $spacing-xl;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $icon-size-md;
+    height: $icon-size-md;
+    color: $color-primary;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__label {
+    font-family: $font-family-heading;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+  }
+}

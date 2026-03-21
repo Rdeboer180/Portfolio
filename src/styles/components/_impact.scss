@@ -1,0 +1,95 @@
+// ============================================
+// Impact — Two-column numbered list
+// Ref: impact-numbered-list-light.png
+// ============================================
+
+@import '../variables';
+
+.impact {
+  background: $color-white;
+  padding: $spacing-4xl 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__header {
+    margin-bottom: $spacing-3xl;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: $line-height-h2;
+    letter-spacing: -0.02em;
+    margin-top: $spacing-lg;
+  }
+
+  // ==========================================
+  // Two-column layout
+  // ==========================================
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-4xl;
+  }
+
+  &__column-heading {
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: $spacing-xl;
+  }
+
+  // ==========================================
+  // Numbered list items
+  // ==========================================
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding: $spacing-lg 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    &:first-child {
+      border-top: 1px solid $color-neutral-light;
+    }
+  }
+
+  &__number {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-muted;
+    min-width: 24px;
+  }
+
+  &__text {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .impact {
+    &__columns {
+      grid-template-columns: 1fr;
+      gap: $spacing-3xl;
+    }
+  }
+}

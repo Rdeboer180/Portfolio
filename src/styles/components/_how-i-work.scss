@@ -1,0 +1,272 @@
+// ============================================
+// How I Work — Tabbed cycling process section
+// Light brand background, overlapping image/text layout
+// Inspired by strengths-card-grid + Webflow overlap treatment
+// ============================================
+
+@import '../variables';
+
+.how-i-work {
+  position: relative;
+  background: $color-secondary-lightest;
+  padding: $spacing-4xl 0;
+  overflow: hidden;
+
+  // ==========================================
+  // Container
+  // ==========================================
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // ==========================================
+  // Header
+  // ==========================================
+  &__header {
+    margin-bottom: $spacing-3xl;
+  }
+
+  &__eyebrow {
+    display: block;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: $line-height-h2;
+    letter-spacing: -0.02em;
+  }
+
+  // ==========================================
+  // Layout — overlapping panels
+  // ==========================================
+  &__layout {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: $spacing-4xl;
+    align-items: start;
+  }
+
+  // ==========================================
+  // Visual — image frame with overlap into text
+  // ==========================================
+  &__visual {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__image-frame {
+    position: relative;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    // Overlap into the text column
+    margin-right: -$spacing-4xl;
+    box-shadow: $shadow-lg;
+  }
+
+  &__image-placeholder {
+    aspect-ratio: 4 / 3;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image-label {
+    font-family: $font-family-mono;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    opacity: 0.5;
+  }
+
+  &__step-count {
+    margin-top: $spacing-lg;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    letter-spacing: 0.06em;
+  }
+
+  // ==========================================
+  // Steps — tabbed process (right side)
+  // ==========================================
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    // Push content right to clear the image overlap
+    padding-left: $spacing-3xl;
+  }
+
+  &__step {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-lg;
+    padding: $spacing-xl 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid $color-neutral-light;
+    transition: all $transition-base;
+
+    &:first-child {
+      border-top: 1px solid $color-neutral-light;
+    }
+
+    &:hover {
+      .how-i-work__step-label {
+        color: $color-primary;
+      }
+    }
+  }
+
+  // Left progress indicator bar
+  &__step-indicator {
+    width: 3px;
+    height: 40px;
+    background: $color-neutral-light;
+    border-radius: $radius-full;
+    flex-shrink: 0;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+
+  &__step-progress {
+    width: 100%;
+    background: $color-primary;
+    border-radius: $radius-full;
+    transition: height 50ms linear;
+  }
+
+  &__step-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__step-label {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: $line-height-body;
+    transition: color $transition-fast;
+
+    .how-i-work__step--active & {
+      color: $color-primary;
+    }
+  }
+
+  &__step-body {
+    font-family: $font-family-primary;
+    font-size: 15px;
+    font-weight: $font-weight-regular;
+    color: $color-neutral-muted;
+    line-height: 1.6;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+
+    &--visible {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: $spacing-sm;
+    }
+  }
+
+  // ==========================================
+  // Decorative elements — subtle brand accents
+  // ==========================================
+  &__decor {
+    position: absolute;
+    pointer-events: none;
+
+    &--top-left {
+      top: 60px;
+      left: 40px;
+      width: 100px;
+      height: 1px;
+      background: $color-primary;
+      opacity: 0.08;
+      transform: rotate(-35deg);
+      transform-origin: left center;
+    }
+
+    &--bottom-right {
+      bottom: 80px;
+      right: 60px;
+      width: 70px;
+      height: 1px;
+      background: $color-primary;
+      opacity: 0.06;
+      transform: rotate(25deg);
+      transform-origin: right center;
+    }
+
+    &--corner-bracket {
+      top: 40px;
+      right: 80px;
+      width: 20px;
+      height: 20px;
+      border-top: 2px solid $color-primary;
+      border-right: 2px solid $color-primary;
+      opacity: 0.08;
+    }
+  }
+}
+
+// ==========================================
+// Responsive
+// ==========================================
+@media (max-width: $breakpoint-lg) {
+  .how-i-work {
+    &__layout {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    &__image-frame {
+      margin-right: -$spacing-xl;
+    }
+
+    &__steps {
+      padding-left: $spacing-xl;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .how-i-work {
+    padding: $spacing-3xl 0;
+
+    &__layout {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+
+    &__image-frame {
+      margin-right: 0;
+    }
+
+    &__steps {
+      padding-left: 0;
+    }
+
+    &__decor {
+      display: none;
+    }
+  }
+}

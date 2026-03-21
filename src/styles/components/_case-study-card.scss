@@ -1,0 +1,192 @@
+// ============================================
+// Case Study Card Component
+// Image, title, tags, metrics, CTAs
+// Variants: horizontal, stacked
+// ============================================
+
+@import '../variables';
+
+.case-study-card {
+  position: relative;
+  background: $card-background-alt;
+  border-radius: $card-border-radius-lg;
+  overflow: hidden;
+  display: grid;
+
+  &--horizontal {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &--stacked {
+    grid-template-columns: 1fr 1.2fr;
+  }
+
+  // Content
+  &__content {
+    padding: $card-padding-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__company {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__role {
+    font-size: $font-size-caption;
+    color: $color-primary;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    line-height: $line-height-h4;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+  }
+
+  &__description {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-standard;
+  }
+
+  // Tags
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+  }
+
+  &__tag {
+    font-size: $font-size-caption;
+    color: $color-neutral-standard;
+    padding: 4px $spacing-md;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-full;
+    white-space: nowrap;
+  }
+
+  // Metrics
+  &__metrics {
+    display: flex;
+    gap: $spacing-2xl;
+  }
+
+  &__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__metric-value {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+  }
+
+  &__metric-label {
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  // CTAs
+  &__cta {
+    display: flex;
+    gap: $spacing-md;
+    margin-top: $spacing-sm;
+  }
+
+  &__cta-btn {
+    font-family: $font-family-heading;
+    font-weight: $font-weight-extrabold;
+    font-size: $font-size-body-sm;
+    border-radius: $button-radius;
+    padding: $button-padding-y-sm $button-padding-x-sm;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    &--primary {
+      background: $color-primary;
+      color: $color-white;
+      border: none;
+
+      &:hover {
+        background: $color-primary-dark;
+        transform: translateY(-1px);
+      }
+    }
+
+    &--secondary {
+      background: $color-white;
+      color: $color-neutral-dark;
+      border: 1px solid $color-neutral-dark;
+
+      &:hover {
+        background: $color-neutral-dark;
+        color: $color-white;
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  // Image
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl;
+    overflow: hidden;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  // Year
+  &__year {
+    position: absolute;
+    bottom: $spacing-lg;
+    right: $spacing-xl;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .case-study-card {
+    &--horizontal,
+    &--stacked {
+      grid-template-columns: 1fr;
+    }
+
+    &__image {
+      order: -1;
+    }
+
+    &__title {
+      font-size: $font-size-h5;
+      line-height: $line-height-h5;
+    }
+  }
+}

@@ -1,0 +1,78 @@
+// ============================================
+// Testimonial Card Component
+// Avatar, name, role, rating, quote
+// ============================================
+
+@import '../variables';
+
+.testimonial-card {
+  padding: $card-padding;
+  background: $card-background;
+  border: $card-border;
+  border-radius: $card-border-radius;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-full;
+    object-fit: cover;
+    flex-shrink: 0;
+
+    &--placeholder {
+      background: $color-neutral-lightest;
+      color: $color-neutral-standard;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: $font-family-heading;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-body-lg;
+    }
+  }
+
+  &__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+  }
+
+  &__role {
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+  }
+
+  &__rating {
+    display: flex;
+    gap: 2px;
+    color: $color-primary;
+  }
+
+  &__quote {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-standard;
+  }
+
+  &__logo {
+    max-height: 24px;
+    width: auto;
+    object-fit: contain;
+    align-self: flex-start;
+    margin-top: $spacing-xs;
+  }
+}
