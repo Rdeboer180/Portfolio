@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon" opacity="0.5">
+<path id="Vector" d="M40 76C59.8823 76 76 59.8823 76 40C76 20.1177 59.8823 4 40 4C20.1177 4 4 20.1177 4 40C4 59.8823 20.1177 76 40 76Z" stroke="var(--stroke-0, #FF6B35)" stroke-width="2.5"/>
+<path id="Vector_2" opacity="0.4" d="M40 60C51.0457 60 60 51.0457 60 40C60 28.9543 51.0457 20 40 20C28.9543 20 20 28.9543 20 40C20 51.0457 28.9543 60 40 60Z" stroke="var(--stroke-0, #FF6B35)"/>
+</g>
+</svg>
