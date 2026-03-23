@@ -67,12 +67,9 @@ const HeroHybrid: React.FC = () => {
       <nav className="hero-hybrid__nav">
         <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
         <div className="hero-hybrid__nav-links">
-          <a href="#about">About</a>
-          <a href="#how-i-work">How I Work</a>
-          <a href="#skills">Skills</a>
-          <a href="#projects">Work</a>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#faq">FAQ</a>
+          <a href="#/about">About Me</a>
+          <a href="#/work/heatherwood">My Work</a>
+          <a href="#/resume">Resume</a>
           <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__nav-cta">Get in touch</a>
         </div>
       </nav>
