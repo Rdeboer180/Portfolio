@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   {
-    question: 'What types of projects do you take on?',
-    answer: 'I work across brand identity, UX/UI design, design systems, and front-end development. Most of my projects involve translating complex product requirements into scalable, component-driven interfaces \u2014 whether that\u2019s a full e-commerce redesign, a design system build, or a brand-to-web project for a smaller business.',
-  },
-  {
     question: 'Do you work with developers or hand off files?',
     answer: 'Both. I design with engineering handoff in mind \u2014 tokens, specs, and component documentation are built into my process. On many projects I also write production front-end code (HTML, CSS/SCSS, React), so the handoff is often the code itself.',
   },
@@ -19,7 +15,7 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   },
   {
     question: 'Do you take on freelance or contract work?',
-    answer: 'Yes. I take on freelance and contract engagements depending on scope and timing. I\u2019m open to project-based work, embedded team contracts, and advisory roles. Reach out with your timeline and I\u2019ll let you know if it\u2019s a fit.',
+    answer: 'Not at this current time but please reach out if you have an idea and id love to talk.',
   },
 {
     question: 'What drives you outside of design?',

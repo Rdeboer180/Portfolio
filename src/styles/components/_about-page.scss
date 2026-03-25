@@ -114,13 +114,26 @@
   &__chat {
     padding: $spacing-3xl 0 120px;
     min-height: 60vh;
-    background: $color-neutral-lightest ;
+    background: $color-neutral-lightest;
+    position: relative;
+
+    // Subtle dot grid background
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba($color-neutral-standard, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
   }
 
   &__chat-container {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 $container-padding-x;
+    position: relative;
+    z-index: 1;
   }
 
   // "Interactive Component" tag
@@ -134,7 +147,7 @@
     padding: 4px $spacing-md;
     border-radius: $radius-sm;
     letter-spacing: 0.04em;
-    margin-bottom: $spacing-2xl;
+    margin-bottom: $spacing-xl;
   }
 
   // ==========================================
@@ -143,8 +156,8 @@
   &__chat-thread {
     display: flex;
     flex-direction: column;
-    gap: $spacing-2xl;
-    margin-bottom: $spacing-2xl;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
   }
 
   // ==========================================
@@ -153,20 +166,31 @@
   &__msg {
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: 4px;
 
     // Dynamic messages animate in
     &:nth-child(n+3) {
       animation: aboutMsgFadeIn 0.35s ease forwards;
     }
+
+    // User messages right-aligned
+    &--user {
+      align-items: flex-end;
+    }
+
+    // AI messages left-aligned, full width
+    &--ai {
+      align-items: flex-start;
+    }
   }
 
   &__msg-label {
     font-family: $font-family-mono;
-    font-size: $font-size-caption;
+    font-size: 11px;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.03em;
-    padding-left: 2px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0 $spacing-sm;
 
     .about-page__msg--user & {
       color: $color-neutral-muted;
@@ -179,13 +203,13 @@
 
   &__msg-bubble {
     border-radius: $radius-lg;
-    padding: $spacing-xl;
+    padding: $spacing-lg $spacing-xl;
 
     p {
       font-family: $font-family-primary;
       font-size: $font-size-body;
       line-height: $line-height-body-relaxed;
-      margin-bottom: $spacing-md;
+      margin-bottom: $spacing-sm;
 
       &:last-child {
         margin-bottom: 0;
@@ -216,18 +240,19 @@
       }
     }
 
-    // User bubble
+    // User bubble — right-aligned, capped width
     &--user {
-      background: $color-white;
-      color: $color-neutral-standard;
+      max-width: 90%;
+      border-radius: $radius-lg $radius-lg 4px $radius-lg;
     }
 
-    // AI bubble
+    // AI bubble — full width, clean
     &--ai {
       background: $color-white;
       border-left: 3px solid $color-primary;
       color: $color-neutral-standard;
       box-shadow: $shadow-sm;
+      width: 100%;
     }
 
     // Followup — lighter
@@ -390,7 +415,11 @@
     }
 
     &__msg-bubble {
-      padding: $spacing-lg;
+      padding: $spacing-md $spacing-lg;
+
+      &--user {
+        max-width: 85%;
+      }
     }
   }
 }
@@ -411,6 +440,10 @@
       p {
         font-size: $font-size-body-sm;
         line-height: $line-height-body-sm;
+      }
+
+      &--user {
+        max-width: 90%;
       }
     }
 

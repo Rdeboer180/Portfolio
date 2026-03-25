@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useRef } from 'react';
+// @ts-ignore — html2pdf.js has no type declarations
+import html2pdf from 'html2pdf.js';
 
 const ResumePage: React.FC = () => {
-  const handlePrint = () => window.print();
+  const paperRef = useRef<HTMLDivElement>(null);
+
+  const handleExportPDF = () => {
+    if (!paperRef.current) return;
+    const el = paperRef.current;
+    // Measure the element to create a single-page PDF that fits the full content
+    const widthIn = 8.5;
+    const margin = 0.4;
+    const contentWidthIn = widthIn - margin * 2;
+    const contentWidthPx = el.scrollWidth;
+    const contentHeightPx = el.scrollHeight;
+    const scale = contentWidthIn / (contentWidthPx / 96); // 96px = 1in
+    const heightIn = (contentHeightPx / 96) * scale + margin * 2;
+
+    const opt = {
+      margin: [margin, margin, margin, margin],
+      filename: 'Ryan_DeBoer_Resume.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: [widthIn, heightIn] as any, orientation: 'portrait' },
+    };
+    (html2pdf() as any).set(opt).from(el).save();
+  };
 
   return (
     <div className="resume-page">
@@ -9,20 +33,20 @@ const ResumePage: React.FC = () => {
       <nav className="resume-page__nav">
         <a href="#/" className="resume-page__nav-logo">Ryan DeBoer</a>
         <div className="resume-page__nav-actions">
-          <button className="resume-page__print-btn" onClick={handlePrint}>
+          <button className="resume-page__print-btn" onClick={handleExportPDF}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
               <polyline points="6 9 6 2 18 2 18 9" />
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
               <rect x="6" y="14" width="12" height="8" />
             </svg>
-            Print / Save PDF
+            Save as PDF
           </button>
           <a href="#/" className="resume-page__nav-back">Back to Portfolio</a>
         </div>
       </nav>
 
       {/* Resume document */}
-      <div className="resume-page__paper">
+      <div className="resume-page__paper" ref={paperRef}>
         {/* Header */}
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>

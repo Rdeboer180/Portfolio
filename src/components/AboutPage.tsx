@@ -116,10 +116,11 @@ const AboutPage: React.FC = () => {
   const [awaitingMoreConfirm, setAwaitingMoreConfirm] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const inputRowRef = useRef<HTMLDivElement>(null);
+  const hasInteracted = useRef(false);
 
-  // Scroll input into view + focus after each update
+  // Scroll input into view + focus after each update (skip initial mount)
   useEffect(() => {
-    if (!isStreaming) {
+    if (!isStreaming && hasInteracted.current) {
       setTimeout(() => {
         inputRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         inputRef.current?.focus();
@@ -133,6 +134,7 @@ const AboutPage: React.FC = () => {
   }, []);
 
   const handleSubmit = useCallback((value: string) => {
+    hasInteracted.current = true;
     const trimmed = value.trim().toLowerCase();
     if (isStreaming) return;
 
@@ -272,10 +274,10 @@ const AboutPage: React.FC = () => {
           <h1 className="about-page__hero-title">Who is Ryan?</h1>
           <p className="about-page__hero-role">Senior Web Designer / UX Engineer</p>
           <p className="about-page__hero-body">
-            I'm a designer and developer who leads with family first — my wife Stephanie, my two kids, and my playful loving Golden Retriever — and the belief that the best work comes from people who have a full life outside of it. I've spent 16+ years building at the intersection of design and engineering, and I'm looking for a company that sees work-life balance not as a perk but as a foundation for the kind of focused, high-quality output I take pride in delivering.
+            I'm a designer and developer who leads with family first — my wife Stephanie, my two kids, and our playful Golden Retriever — and the belief that the best work comes from people who have a full life outside of it. My biggest passion outside of the family is football. I've managed the same dynasty fantasy league for over a decade, and what I love about the sport is the same thing that drives me professionally: you put in the reps, you study the game tape, and you build your playbook around what the data tells you. That mindset has shaped how I approach design from the beginning — rooted in graphic design fundamentals, refined through years of real client work, and now supercharged by AI integration that lets me build and test ideas at a scale I couldn't have imagined even a few years ago. I'm looking for a company that sees work-life balance not as a perk but as the foundation for the kind of focused, high-quality output I take pride in delivering.
           </p>
           <p className="about-page__hero-body">
-            Beautiful design has always come from the willingness to make mistakes and learn from them fast. What excites me about where AI is taking this space is that the cost of that mistake just collapsed. I've always been someone with more ideas than hours in the day — someone who can see what something should be and map out how to get there. AI gives me a low-cost construction crew that can build in a day what used to take months, and it means I'm no longer precious about tearing something down and starting over. Test it, learn, rebuild better. Figma and XD gave us that on a smaller scale years ago with flows and patterns — now we can test fully fleshed out ideas and interactions at a scale that wasn't possible before. That's what doesn't scare me about the AI movement. Because having the vision, knowing how to direct it, and being able to review and refine what comes out — that's exactly what it will take to be an irreplaceable designer over the next five years as this space contracts and evolves.
+            Beautiful design has always come from the willingness to make mistakes and learn from them fast. What excites me about where AI is taking this space is that the cost of that mistake just diminished. I've always been someone with more ideas than hours in the day — someone who can see what something should be and map out how to get there. AI gives me a low-cost construction crew that can build in a day what used to take months, and it means I'm no longer precious about tearing something down and starting over. Test it, learn, rebuild better. Figma and XD gave us that on a smaller scale years ago with flows and patterns — now we can test fully fleshed out ideas and interactions at a scale that wasn't possible before. That's what doesn't scare me about the AI movement. Because having the vision, knowing how to direct it, and being able to review and refine what comes out — that's exactly what it will take to be an irreplaceable designer over the next five years as this space contracts and evolves.
           </p>
         </div>
       </div>
