@@ -45,8 +45,8 @@ const steps = [
         <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
       </svg>
     ),
-    annotations: ['SCSS/BEM', 'CMS architecture', 'Scalable systems'],
-    body: 'With 10+ years of hands-on code experience, I understand how design decisions live in production. I build sustainable components inside complex CMS architectures, translate brand identity into scalable web systems, and deliver work that holds up long after launch.',
+    annotations: ['SCSS/BEM', 'AEM templates', 'Scalable systems'],
+    body: 'With 10+ years of hands-on code experience, I understand how design decisions live in production. I build sustainable components inside complex CMS architectures like AEM — owning the template layer, writing the styles, and documenting patterns so the broader team can ship consistently. I translate brand identity into scalable web systems and deliver work that holds up long after launch.',
   },
   {
     label: 'Validate, Optimize & Drive Results',
@@ -177,8 +177,9 @@ const HowIWork: React.FC = () => {
   return (
     <section id="how-i-work" className="how-i-work" ref={sectionRef}>
       <div className="how-i-work__header">
-        <SectionBadge icon={<ProcessIcon />} label="Process" />
-        <h2 className="how-i-work__title">I Don't Just Design. I Document, Ship, and Prove It.</h2>
+        <SectionBadge icon={<ProcessIcon />} label="How I Work" />
+        <h2 className="how-i-work__title">My Design &amp; Development Process</h2>
+        <p className="how-i-work__intro">My process isn't rigid&mdash;it adapts to the problem. But the goal is always the same: align early, design with intent, and ship work that holds up in production.</p>
       </div>
 
       <div className="how-i-work__container">

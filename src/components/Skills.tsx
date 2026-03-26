@@ -44,7 +44,10 @@ const Skills: React.FC = () => {
           <SectionBadge icon={<LayersIcon />} label="Strengths" />
           <h2 className="skills__title">What I bring beyond the tools</h2>
           <p className="skills__subtitle">
-            Technical skills ship the work. These are the skills that shape whether the work was worth shipping.
+            Tools help ship the work. These are the strengths that shape whether the work was worth shipping.
+          </p>
+          <p className="skills__intro">
+            My value isn't just in what I can do&mdash;it's in how I help teams make better decisions and ship better work.
           </p>
         </div>
 

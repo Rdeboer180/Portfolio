@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   {
     question: 'Do you work with developers or hand off files?',
-    answer: 'Both. I design with engineering handoff in mind \u2014 tokens, specs, and component documentation are built into my process. On many projects I also write production front-end code (HTML, CSS/SCSS, React), so the handoff is often the code itself.',
+    answer: 'Both. I design with engineering handoff in mind \u2014 tokens, specs, and component documentation are built into my process. On many projects I also write production front-end code (HTML, CSS/SCSS, React), so the handoff is often the code itself. At Tire Rack, I led the effort to build and document our AEM component templates and their styles \u2014 creating a shared pattern library that the full team could use to ship consistently.',
   },
   {
     question: 'Can you work within an existing design system?',
@@ -52,7 +52,7 @@ const FAQ: React.FC = () => {
           <span className="faq__eyebrow">FAQ</span>
           <h2 className="faq__title">Common questions</h2>
           <p className="faq__intro">
-            Answers to the things clients and collaborators usually ask before we start working together.
+            Answers to the things collaborators usually ask before we start working together.
           </p>
         </div>
 

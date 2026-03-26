@@ -68,6 +68,7 @@ const Testimonials: React.FC = () => {
         <div className="testimonials__header">
           <SectionBadge icon={<QuoteIcon />} label="Testimonials" />
           <h2 className="testimonials__title">Words from those I've worked with</h2>
+          <p className="testimonials__subtitle">Known for aligning teams, making thoughtful decisions, and delivering work that holds up in production.</p>
         </div>
 
         <div className="testimonials__grid">

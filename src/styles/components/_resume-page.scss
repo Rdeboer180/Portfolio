@@ -101,7 +101,7 @@
     font-weight: $font-weight-extrabold;
     color: $color-neutral-dark;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.035em;
     margin: 0;
   }
 
@@ -133,7 +133,15 @@
   }
 
   &__contact-sep {
-    color: $color-neutral-light;
+    color: $color-primary-muted;
+  }
+
+  &__contact-portfolio {
+    color: $color-neutral-muted;
+
+    a {
+      text-decoration: underline;
+    }
   }
 
   // ==========================================
@@ -155,11 +163,23 @@
   // ==========================================
   // Summary
   // ==========================================
+  &__summary-section {
+    background: $color-secondary-lightest;
+    padding: $spacing-xl $spacing-2xl;
+    margin: 0 (-$spacing-3xl);
+    margin-top: -$spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
   &__summary {
-    font-size: $font-size-body-sm;
-    line-height: 1.7;
+    font-size: $font-size-body;
+    line-height: 1.5;
     color: $color-neutral-standard;
     margin: 0;
+
+    & + & {
+      margin-top: $spacing-md;
+    }
   }
 
   // ==========================================
@@ -185,23 +205,42 @@
   // Section titles
   // ==========================================
   &__section-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-body;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
     color: $color-neutral-dark;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     padding-bottom: $spacing-sm;
-    border-bottom: 2px solid $color-primary;
+    border-bottom: 1px solid $color-primary-muted;
     margin: 0 0 $spacing-lg;
   }
 
   &__subsection-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-body;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $color-neutral-dark;
     margin: $spacing-xl 0 $spacing-md;
+  }
+
+  // ==========================================
+  // Skills groups (Technical Skills subcategories)
+  // ==========================================
+  &__skills-group {
+    margin-bottom: $spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__skills-category {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    margin: 0 0 $spacing-xs;
   }
 
   // ==========================================
@@ -230,7 +269,7 @@
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: $color-primary;
+        background: $color-neutral-standard;
       }
 
       strong {
@@ -246,8 +285,8 @@
   &__edu {
     strong {
       font-size: $font-size-body-sm;
-      font-weight: $font-weight-bold;
-      color: $color-neutral-dark;
+      font-weight: $font-weight-medium;
+      color: $color-neutral-standard;
       display: block;
     }
 
@@ -276,15 +315,23 @@
     align-items: flex-start;
     gap: $spacing-lg;
     margin-bottom: $spacing-sm;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid $color-neutral-light;
   }
 
   &__job-company {
-    font-family: $font-family-heading;
+    font-family: $font-family-primary;
     font-size: $font-size-body-lg;
-    font-weight: $font-weight-bold;
+    font-weight: $font-weight-semibold;
     color: $color-neutral-dark;
     margin: 0;
-    line-height: 1.3;
+    line-height: 1.5;
+
+    &--freelance {
+      font-size: $font-size-body-sm;
+      font-weight: $font-weight-medium;
+      color: $color-neutral-dark;
+    }
   }
 
   &__job-role {
@@ -295,12 +342,17 @@
   }
 
   &__job-date {
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    color: $color-primary;
-    font-weight: $font-weight-semibold;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
     white-space: nowrap;
     padding-top: 4px;
+  }
+
+  &__job-desc {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+    line-height: 1.5;
+    margin: 0;
   }
 
   &__job-list {
@@ -314,20 +366,8 @@
       margin-bottom: $spacing-xs;
 
       &::marker {
-        color: $color-primary;
+        color: $color-neutral-standard;
       }
-    }
-  }
-
-  // ==========================================
-  // Early career
-  // ==========================================
-  &__early-career {
-    p {
-      font-size: $font-size-body-sm;
-      color: $color-neutral-muted;
-      line-height: 1.6;
-      margin: 0 0 2px;
     }
   }
 }
@@ -344,6 +384,12 @@
     &__paper {
       margin: $spacing-lg;
       padding: $spacing-2xl;
+    }
+
+    &__summary-section {
+      margin-left: -$spacing-2xl;
+      margin-right: -$spacing-2xl;
+      padding: $spacing-lg $spacing-2xl;
     }
 
     &__columns {
@@ -367,6 +413,12 @@
       margin: $spacing-sm;
       padding: $spacing-lg;
       border-radius: 0;
+    }
+
+    &__summary-section {
+      margin-left: -$spacing-lg;
+      margin-right: -$spacing-lg;
+      padding: $spacing-md $spacing-lg;
     }
 
     &__name {
@@ -441,6 +493,14 @@
       print-color-adjust: exact;
     }
 
+    &__summary-section {
+      margin-left: -0.5in;
+      margin-right: -0.5in;
+      padding: 12px 0.5in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
     &__summary {
       font-size: 10px;
       line-height: 1.5;
@@ -461,10 +521,12 @@
     }
 
     &__subsection-title {
-      font-size: 11px;
+      font-size: 13px;
       margin: 12px 0 6px;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+    }
+
+    &__skills-category {
+      font-size: 9px;
     }
 
     &__skill-list li,
@@ -494,6 +556,10 @@
 
     &__job-company {
       font-size: 13px;
+
+      &--freelance {
+        font-size: 10px;
+      }
     }
 
     &__job-role {
@@ -502,8 +568,11 @@
 
     &__job-date {
       font-size: 9px;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+    }
+
+    &__job-desc {
+      font-size: 9px;
+      line-height: 1.4;
     }
 
     &__job-list {
@@ -519,10 +588,6 @@
           print-color-adjust: exact;
         }
       }
-    }
-
-    &__early-career p {
-      font-size: 9px;
     }
   }
 

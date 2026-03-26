@@ -38,6 +38,15 @@
     line-height: $line-height-body;
   }
 
+  &__intro {
+    margin-top: $spacing-md;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    line-height: $line-height-body-sm;
+    font-style: italic;
+  }
+
   // ==========================================
   // Card grid
   // ==========================================

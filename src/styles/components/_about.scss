@@ -30,6 +30,14 @@
     margin-bottom: $spacing-xl;
   }
 
+  &__inline-image {
+    float: right;
+    width: 270px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 0 $spacing-lg $spacing-xl;
+  }
+
   &__body {
     font-family: $font-family-primary;
     font-size: $font-size-body-lg;
@@ -90,10 +98,23 @@
   }
 }
 
+// Wide variant (targeted homepages)
+.about--wide {
+  .about__content {
+    max-width: 960px;
+  }
+}
+
 @media (max-width: $breakpoint-md) {
   .about {
     &__stats {
       grid-template-columns: 1fr 1fr;
+    }
+
+    &__inline-image {
+      float: none;
+      display: block;
+      margin: 0 auto $spacing-lg;
     }
   }
 }

@@ -48,6 +48,16 @@
     max-width: $container-max-width;
   }
 
+  &__intro {
+    margin-top: $spacing-lg;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-muted;
+    max-width: 640px;
+    text-align: center;
+  }
+
   &__container {
     max-width: $container-max-width;
     margin: 0 auto;

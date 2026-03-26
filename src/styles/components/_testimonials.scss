@@ -29,6 +29,13 @@
     margin-top: $spacing-lg;
   }
 
+  &__subtitle {
+    font-size: $font-size-body-lg;
+    color: $color-neutral-muted;
+    font-style: italic;
+    margin-top: $spacing-sm;
+  }
+
   // ==========================================
   // Grid — 3-col
   // ==========================================

@@ -16,9 +16,9 @@ const proficiencies = [
 ];
 
 const roles = [
-  'Team Leader',
-  'Product UI Engineer',
   'Design Strategist',
+  'Product Designer',
+  'UX Engineer',
 ];
 
 const HeroHybrid: React.FC = () => {
@@ -78,25 +78,23 @@ const HeroHybrid: React.FC = () => {
         <div className="hero-hybrid__grid">
           {/* Left: Clean animated text */}
           <div className="hero-hybrid__text">
-            <div className="hero-hybrid__intro">
-              <span className="hero-hybrid__label hero-hybrid__reveal hero-hybrid__reveal--1">
-                Ryan DeBoer
-              </span>
-              <span className="hero-hybrid__role hero-hybrid__reveal hero-hybrid__reveal--2">
-                Senior Web Designer / High-Fidelity Interface Designer
-              </span>
-            </div>
+            <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
+              Senior Web Designer by title but I&rsquo;m also a
+            </p>
 
-            <h1 className="hero-hybrid__headline hero-hybrid__reveal hero-hybrid__reveal--3">
+            <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
               <span className="hero-hybrid__typed">
                 {displayText}
                 <span className="hero-hybrid__cursor" />
               </span>
+            </div>
+
+            <h1 className="hero-hybrid__headline hero-hybrid__reveal hero-hybrid__reveal--3">
+              who turns complex products into usable experiences.
             </h1>
 
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
-              I’m a Front-End Developer and UX Engineer, a designer at my core—specializing in high-fidelity UI, scalable design systems, and turning complex experiences into clean, component-driven code.
-
+              I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions.
             </p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">

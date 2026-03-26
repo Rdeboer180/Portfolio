@@ -18,7 +18,7 @@ const qaItems: QAItem[] = [
     answer: (
       <>
         <p>I'm a Front-End Developer and UX Engineer with 16+ years of professional experience — and a design obsession that started well before that. I built my foundation intentionally: focused every high school elective on visual communication, interned at a local broadcast station, took early college courses while still in high school, and entered <strong>Kendall College of Art and Design's</strong> advanced track, where I majored in Graphic Design and minored in Web Animation.</p>
-        <p>Summers in college meant real client work — Notre Dame, the South Bend Tribune, a fitness startup — before moving into product design full-time. That path led to 10+ years at <strong>Tire Rack</strong>, where my role grew well beyond design into UX strategy, design systems, A/B testing, and hands-on front-end development.</p>
+        <p>Summers in college meant real client work — Notre Dame, the South Bend Tribune, a fitness startup — before moving into product design full-time. That path led to 10+ years at <strong>Tire Rack</strong>, where my role grew well beyond design into UX strategy, design systems, A/B testing, and hands-on front-end development. I became the lead on our team for building and maintaining AEM component templates and their styles — owning the pattern documentation that let the rest of the team ship consistently.</p>
       </>
     ),
   },
@@ -39,7 +39,7 @@ const qaItems: QAItem[] = [
       <>
         <p>I came in fresh out of college into a design role that leaned on my strengths but quickly exposed the gaps. Conversations around HTML tables, CSS variables, and flexbox felt like a different language. I wasn't at the level of the people around me yet.</p>
         <p>So I closed that gap the only way I knew how — <strong>by putting in the reps</strong>. Conferences, certifications, side projects, asking questions (and then asking more), and constantly refining. That process built something most designers don't have: the instinct to recognize when something is off, and the technical depth to actually fix it.</p>
-        <p>I'm as comfortable in the codebase as I am in the design file. I build design systems from the ground up, ship production-quality SCSS/BEM, and work directly with React developers to deliver scalable, token-based component libraries.</p>
+        <p>I'm as comfortable in the codebase as I am in the design file. I build design systems from the ground up, ship production-quality SCSS/BEM, and work directly with React developers to deliver scalable, token-based component libraries. At Tire Rack, I took the lead on building and maintaining our entire AEM template architecture — writing the component styles, defining the patterns, and documenting everything so the team could extend the system without me in the room.</p>
       </>
     ),
   },
@@ -50,7 +50,7 @@ const qaItems: QAItem[] = [
       <>
         <p>I'm methodical but not rigid. Every project starts with <strong>understanding the real problem</strong> — stakeholder interviews, business goals, user research — before a single pixel moves. I document decisions so engineers can build confidently and teams can extend the work without me in the room.</p>
         <p>Communication-wise, I default to transparency. I'd rather surface a risk early than deliver a surprise late. I thrive in cross-functional teams where design, engineering, and product are in the same conversation — whether that's in-person or async over Figma comments and Slack threads.</p>
-        <p>I've worked effectively in both remote and hybrid environments for years. The rhythm matters more than the location.</p>
+        <p>On the remote question — I'll be direct: <strong>remote work has been a dream come true</strong>. I'm a team-first designer and I will put in everything to build unity, camaraderie, and the tools to keep a team aligned strategically and systematically. But there is no more important team to me than my family. Getting to spend an extra hour or two a day with my newborn and two-year-old — seeing them during water cooler breaks, eating lunch together, getting them up for daycare — that's a core value, not a convenience. I keep work and home life separate and I will always show up and show up professionally, but family comes first. I want my next employer to share that sentiment.</p>
       </>
     ),
   },
@@ -274,10 +274,19 @@ const AboutPage: React.FC = () => {
           <h1 className="about-page__hero-title">Who is Ryan?</h1>
           <p className="about-page__hero-role">Senior Web Designer / UX Engineer</p>
           <p className="about-page__hero-body">
-            I'm a designer and developer who leads with family first — my wife Stephanie, my two kids, and our playful Golden Retriever — and the belief that the best work comes from people who have a full life outside of it. My biggest passion outside of the family is football. I've managed the same dynasty fantasy league for over a decade, and what I love about the sport is the same thing that drives me professionally: you put in the reps, you study the game tape, and you build your playbook around what the data tells you. That mindset has shaped how I approach design from the beginning — rooted in graphic design fundamentals, refined through years of real client work, and now supercharged by AI integration that lets me build and test ideas at a scale I couldn't have imagined even a few years ago. I'm looking for a company that sees work-life balance not as a perk but as the foundation for the kind of focused, high-quality output I take pride in delivering.
+            I'm a designer and developer who leads with family first&mdash;my wife Stephanie, our two kids, and a life outside of work that keeps me grounded. I've always believed the best work comes from people who have something real to come back to.
           </p>
           <p className="about-page__hero-body">
-            Beautiful design has always come from the willingness to make mistakes and learn from them fast. What excites me about where AI is taking this space is that the cost of that mistake just diminished. I've always been someone with more ideas than hours in the day — someone who can see what something should be and map out how to get there. AI gives me a low-cost construction crew that can build in a day what used to take months, and it means I'm no longer precious about tearing something down and starting over. Test it, learn, rebuild better. Figma and XD gave us that on a smaller scale years ago with flows and patterns — now we can test fully fleshed out ideas and interactions at a scale that wasn't possible before. That's what doesn't scare me about the AI movement. Because having the vision, knowing how to direct it, and being able to review and refine what comes out — that's exactly what it will take to be an irreplaceable designer over the next five years as this space contracts and evolves.
+            Outside of work, I'm wired like an athlete. I've run the same dynasty fantasy football league for over a decade&mdash;not just for the competition, but for the systems behind it. Studying patterns, refining strategy, and building a playbook based on what the data actually shows. That mindset carries directly into how I work.
+          </p>
+          <p className="about-page__hero-body">
+            I approach design the same way: grounded in fundamentals, shaped by real-world constraints, and constantly refined through iteration. Over time, that's evolved into systems thinking&mdash;understanding not just what to design, but how it holds up in production, scales across teams, and adapts over time.
+          </p>
+          <p className="about-page__hero-body">
+            What excites me about where things are now is the speed. AI has changed how quickly ideas can be built and tested&mdash;but it hasn't replaced the need for direction. If anything, it's made it more important. I see it as a multiplier: a way to explore more, test faster, and refine better&mdash;as long as you know what you're aiming for.
+          </p>
+          <p className="about-page__hero-body">
+            I do my best work on teams that value high standards, real collaboration, and an environment where thoughtful work can move quickly and actually make it into production.
           </p>
         </div>
       </div>

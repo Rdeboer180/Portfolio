@@ -51,33 +51,31 @@ const ResumePage: React.FC = () => {
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
           <p className="resume-page__tagline">
-            Design Systems &amp; Front-End Development &bull; Visual Communicator &bull; Senior Web Designer
+            Senior Web Designer / Front End Web Developer / UX Engineer
           </p>
           <div className="resume-page__contact">
             <span>South Bend, Indiana</span>
             <span className="resume-page__contact-sep">&bull;</span>
             <a href="mailto:rdeboer180@gmail.com">rdeboer180@gmail.com</a>
             <span className="resume-page__contact-sep">&bull;</span>
-            <span>574-261-7049</span>
-            <span className="resume-page__contact-sep">&bull;</span>
-            <a href="#/">Portfolio</a>
+            <span className="resume-page__contact-portfolio">
+              Portfolio Site: <a href="https://rdeboerdesigns.com" target="_blank" rel="noopener noreferrer">RDeboerDesigns.com</a>
+            </span>
           </div>
         </header>
 
         <div className="resume-page__divider resume-page__divider--accent" />
 
         {/* Summary */}
-        <section className="resume-page__section">
+        <section className="resume-page__summary-section">
           <p className="resume-page__summary">
-            Senior UI Engineer and Design Systems Specialist with 10+ years of experience designing and building
-            scalable, component-driven web interfaces. I specialize in bridging design and engineering by translating
-            complex product designs into reusable UI systems and production-ready front-end components. My work
-            focuses on developing sustainable design frameworks in Figma, collaborating closely with engineering teams
-            to ensure design-to-code parity, and creating scalable component libraries that support consistent user
-            experiences across multiple platforms. I also partner with analytics, SEO, and A/B testing teams to ensure
-            design decisions are informed by real user behavior rather than assumptions. With a strong foundation in
-            HTML, CSS, and modern design systems, I bring a systems-thinking approach to UX/UI development that
-            prioritizes performance, accessibility, and maintainable front-end architecture while fostering strong cross-team collaboration.
+            Product-focused designer with 16+ years of experience bridging design and engineering to deliver scalable,
+            production-ready experiences.
+          </p>
+          <p className="resume-page__summary">
+            I specialize in systems thinking&mdash;defining problems clearly, designing within real constraints, and ensuring what
+            ships holds up in production. My background in front-end development and design systems allows me to work
+            fluidly across disciplines, aligning teams and turning complex product challenges into maintainable, reusable solutions.
           </p>
         </section>
 
@@ -85,48 +83,50 @@ const ResumePage: React.FC = () => {
         <div className="resume-page__columns">
           {/* Sidebar */}
           <aside className="resume-page__sidebar">
-            {/* Skills */}
+            {/* Core Strengths */}
             <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Skills</h2>
+              <h2 className="resume-page__section-title">Core Strengths</h2>
               <ul className="resume-page__skill-list">
-                <li>Figma Component Design</li>
-                <li>Landing Page Design</li>
-                <li>Design Psychology</li>
-                <li>Responsive Web Design</li>
-                <li>10+ years HTML/CSS</li>
-                <li>SEO-Focused UI</li>
-                <li>AI-Assisted Workflows</li>
-                <li>Accessibility Best Practices</li>
-                <li>Cross Functional Collaboration</li>
-                <li>5+ years leading employee growth programs</li>
+                <li>Systems Thinking &amp; Design Systems</li>
+                <li>Design &harr; Engineering Collaboration</li>
+                <li>Scalable UI &amp; Component Architecture</li>
+                <li>Product &amp; UX Strategy</li>
+                <li>A/B Testing &amp; Data-Informed Design</li>
+                <li>Accessibility &amp; Performance Optimization</li>
+                <li>AI-Augmented Design Workflows</li>
               </ul>
             </section>
 
-            {/* Tools */}
+            {/* Technical Skills */}
             <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Tools</h2>
-              <ul className="resume-page__tool-list">
-                <li><strong>Figma</strong></li>
-                <li>VS Code</li>
-                <li>iTerm2</li>
-                <li><strong>Adobe Experience Manager (AEM)</strong></li>
-                <li>WordPress</li>
-                <li>Adobe Photoshop</li>
-                <li><strong>Adobe Illustrator</strong></li>
-                <li>Adobe InDesign</li>
-              </ul>
-            </section>
-
-            {/* Certifications */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Certifications</h2>
-              <ul className="resume-page__cert-list">
-                <li>AEM Authoring Essentials</li>
-                <li>AI Toolkit for Web Development &amp; SEO</li>
-                <li>Design Psychology Masterclass</li>
-                <li>Fast &amp; Effective Landing Page Design</li>
-                <li>Ultimate Figma &amp; UI Masterclass</li>
-              </ul>
+              <h2 className="resume-page__section-title">Technical Skills</h2>
+              <div className="resume-page__skills-group">
+                <h4 className="resume-page__skills-category">Core:</h4>
+                <ul className="resume-page__skill-list">
+                  <li>Figma</li>
+                  <li>SCSS/CSS</li>
+                  <li>Adobe Experience Manager (AEM)</li>
+                  <li>Design Systems</li>
+                  <li>Component Architecture</li>
+                </ul>
+              </div>
+              <div className="resume-page__skills-group">
+                <h4 className="resume-page__skills-category">Supporting:</h4>
+                <ul className="resume-page__skill-list">
+                  <li>HTML</li>
+                  <li>WordPress</li>
+                  <li>Git</li>
+                  <li>Adobe Creative Suite</li>
+                </ul>
+              </div>
+              <div className="resume-page__skills-group">
+                <h4 className="resume-page__skills-category">AI Workflow:</h4>
+                <ul className="resume-page__skill-list">
+                  <li>Claude</li>
+                  <li>ChatGPT</li>
+                  <li>Figma Make</li>
+                </ul>
+              </div>
             </section>
 
             {/* Education */}
@@ -150,19 +150,16 @@ const ResumePage: React.FC = () => {
                 <div className="resume-page__job-header">
                   <div>
                     <h3 className="resume-page__job-company">Tire Rack</h3>
-                    <span className="resume-page__job-role">Senior Web Designer — in Addition to my prior responsibilities</span>
+                    <span className="resume-page__job-role">Senior Web Designer - in Addition to my prior responsibilities</span>
                   </div>
-                  <span className="resume-page__job-date">2021–Present</span>
+                  <span className="resume-page__job-date">2021&ndash;Present</span>
                 </div>
                 <ul className="resume-page__job-list">
-                  <li>Lead the design and integration of AEM core components, partnering with backend engineers to build scalable CMS-driven UI architecture.</li>
-                  <li>Design and maintain reusable UI components and design systems in Figma, supporting multiple internal and customer-facing sites.</li>
-                  <li>Translate complex product designs and UX wireframes into production-ready front-end components.</li>
-                  <li>Partner with React developers to bring component systems from design into scalable front-end implementations.</li>
-                  <li>Work closely with SEO, analytics, and A/B testing teams to optimize user experiences based on real customer behavior and performance insights.</li>
-                  <li>Design and implement conversion-focused landing pages using SEO-informed UI patterns and accessibility best practices.</li>
-                  <li>Introduced AI-assisted workflows to enhance SEO insights, accessibility validation, and design iteration efficiency.</li>
-                  <li>Collaborate cross-functionally with design, engineering, and marketing teams to ensure consistency across digital products.</li>
+                  <li>Lead the design and evolution of scalable UI systems within a complex AEM architecture serving millions of users</li>
+                  <li>Built and maintained reusable component libraries and design systems in Figma, improving consistency across product surfaces</li>
+                  <li>Partner closely with engineering to ensure design-to-code parity and long-term maintainability</li>
+                  <li>Work cross-functionally with SEO, analytics, and product teams to optimize user experience based on real customer behavior</li>
+                  <li>Introduced AI-assisted workflows to improve iteration speed, accessibility validation, and design consistency</li>
                 </ul>
               </div>
 
@@ -173,13 +170,13 @@ const ResumePage: React.FC = () => {
                     <h3 className="resume-page__job-company">Tire Rack</h3>
                     <span className="resume-page__job-role">Web Designer</span>
                   </div>
-                  <span className="resume-page__job-date">2014–2021</span>
+                  <span className="resume-page__job-date">2014&ndash;2021</span>
                 </div>
                 <ul className="resume-page__job-list">
-                  <li>Built and maintained responsive web experiences using HTML/CSS and enterprise CMS platforms.</li>
-                  <li>Translated UX wireframes and product concepts into scalable front-end UI.</li>
-                  <li>Managed AEM authoring workflows and collaborated with developers on site architecture improvements.</li>
-                  <li>Contributed to ongoing UI consistency through reusable design patterns and shared component strategies.</li>
+                  <li>Designed and built responsive web experiences using HTML/CSS and enterprise CMS platforms</li>
+                  <li>Translated complex UX concepts into production-ready front-end components</li>
+                  <li>Collaborated with engineering on scalable CMS architecture and UI improvements</li>
+                  <li>Contributed to system-level consistency through reusable design patterns and shared component strategies</li>
                 </ul>
               </div>
 
@@ -190,10 +187,11 @@ const ResumePage: React.FC = () => {
                     <h3 className="resume-page__job-company">Round 2 Corp</h3>
                     <span className="resume-page__job-role">Product Designer / Package Designer</span>
                   </div>
-                  <span className="resume-page__job-date">2013–2014</span>
+                  <span className="resume-page__job-date">2013&ndash;2014</span>
                 </div>
                 <ul className="resume-page__job-list">
-                  <li>Designed action figures, model kits, and wood toy artwork and packaging for major brands including Veggietales, Rudolph, Peanuts, Star Trek, and Marvel.</li>
+                  <li>Designed physical and digital products for major brands including Marvel, Star Trek, Peanuts, and Rudolph</li>
+                  <li>Developed visual systems and packaging that balanced brand identity with production constraints</li>
                 </ul>
               </div>
 
@@ -203,48 +201,41 @@ const ResumePage: React.FC = () => {
               <div className="resume-page__job resume-page__job--compact">
                 <div className="resume-page__job-header">
                   <div>
-                    <h3 className="resume-page__job-company">Heatherwood Equestrian Academy</h3>
+                    <h3 className="resume-page__job-company resume-page__job-company--freelance">Heatherwood Equestrian Academy</h3>
                   </div>
-                  <span className="resume-page__job-date">2023–2024</span>
+                  <span className="resume-page__job-date">2023&ndash;2024</span>
                 </div>
-                <ul className="resume-page__job-list">
-                  <li>Built and maintained responsive WordPress customer-focused website.</li>
-                  <li>Developed brand identity and logo design.</li>
-                </ul>
+                <p className="resume-page__job-desc">Designed and built a responsive WordPress site and brand identity</p>
               </div>
 
               <div className="resume-page__job resume-page__job--compact">
                 <div className="resume-page__job-header">
                   <div>
-                    <h3 className="resume-page__job-company">Stompin Barley Wine Bar</h3>
+                    <h3 className="resume-page__job-company resume-page__job-company--freelance">Stompin Barley Wine Bar</h3>
                   </div>
-                  <span className="resume-page__job-date">2017–2018</span>
+                  <span className="resume-page__job-date">2017&ndash;2018</span>
                 </div>
-                <ul className="resume-page__job-list">
-                  <li>Created logo and brand identity.</li>
-                  <li>Built and maintained website for menu updates and special event promotions.</li>
-                </ul>
+                <p className="resume-page__job-desc">Created brand identity and website supporting events and promotions</p>
               </div>
 
               <div className="resume-page__job resume-page__job--compact">
                 <div className="resume-page__job-header">
                   <div>
-                    <h3 className="resume-page__job-company">FitStop / Vitamin Giant</h3>
+                    <h3 className="resume-page__job-company resume-page__job-company--freelance">FitStop / Vitamin Giant</h3>
                   </div>
-                  <span className="resume-page__job-date">2012–2013</span>
+                  <span className="resume-page__job-date">2012&ndash;2013</span>
                 </div>
-                <ul className="resume-page__job-list">
-                  <li>Restructured and coded Vitamin Giant website.</li>
-                  <li>Created ads, business cards, and promotional materials.</li>
-                </ul>
+                <p className="resume-page__job-desc">Restructured and rebuilt website and marketing materials</p>
               </div>
 
-              {/* Early Career */}
-              <h3 className="resume-page__subsection-title">Early Career</h3>
-              <div className="resume-page__early-career">
-                <p>South Bend Tribune — Ad Designer (Summer 2011)</p>
-                <p>Notre Dame Technology Dept. — Graphic Designer (Summer 2009)</p>
-                <p>WSBT — Graphic Design Intern (Jan–May 2008)</p>
+              <div className="resume-page__job resume-page__job--compact">
+                <div className="resume-page__job-header">
+                  <div>
+                    <h3 className="resume-page__job-company resume-page__job-company--freelance">University of Notre Dame &mdash; Technology Department</h3>
+                  </div>
+                  <span className="resume-page__job-date">2009&ndash;2010</span>
+                </div>
+                <p className="resume-page__job-desc">Designed branded informational materials for internal communications</p>
               </div>
             </section>
           </div>
