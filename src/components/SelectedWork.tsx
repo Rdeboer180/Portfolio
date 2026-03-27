@@ -54,6 +54,13 @@ const SelectedWork: React.FC = () => {
             </a>
           ))}
         </div>
+
+        <div className="selected-work__disclaimer">
+          <span className="selected-work__disclaimer-accent" />
+          <p className="selected-work__disclaimer-text">
+            This is just a glimpse of the work I've spent years building. More case studies are on the way&mdash;covering design systems, AEM component development, and in-progress work on scalable, React-based design systems for Tire Rack's retail site.
+          </p>
+        </div>
       </div>
     </section>
   );

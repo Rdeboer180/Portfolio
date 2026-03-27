@@ -178,6 +178,36 @@
   &__card--reverse &__card-visual {
     padding: $spacing-xl 0 $spacing-xl $spacing-xl;
   }
+
+  // ==========================================
+  // Disclaimer Banner
+  // ==========================================
+  &__disclaimer {
+    display: flex;
+    align-items: stretch;
+    gap: $spacing-lg;
+    margin-top: $spacing-3xl;
+    padding: $spacing-xl $spacing-2xl;
+    background: $color-secondary-lightest;
+    border-radius: $card-border-radius-lg;
+    border: 1px solid $color-secondary-light;
+  }
+
+  &__disclaimer-accent {
+    flex-shrink: 0;
+    width: 4px;
+    border-radius: 2px;
+    background: $color-primary;
+  }
+
+  &__disclaimer-text {
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: $line-height-body;
+    color: $color-neutral-standard;
+    font-style: italic;
+    margin: 0;
+  }
 }
 
 // ==========================================
