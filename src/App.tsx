@@ -15,12 +15,14 @@ import AboutPage from './components/AboutPage';
 import ResumePage from './components/ResumePage';
 import HomepageTargeted from './components/HomepageTargeted';
 import sleeperContent from './data/homepage-sleeper';
+import yahooContent from './data/homepage-yahoo';
 
 function getRoute(hash: string): { page: string; slug?: string } {
   if (hash === '#/design-system') return { page: 'design-system' };
   if (hash === '#/about') return { page: 'about' };
   if (hash === '#/resume') return { page: 'resume' };
   if (hash === '#/homepage_sleeper' || hash.startsWith('#/homepage_sleeper#')) return { page: 'homepage_sleeper' };
+  if (hash === '#/homepage_yahoo' || hash.startsWith('#/homepage_yahoo#')) return { page: 'homepage_yahoo' };
   if (hash.startsWith('#/work/')) return { page: 'case-study', slug: hash.replace('#/work/', '') };
   return { page: 'home' };
 }
@@ -55,6 +57,10 @@ function App() {
 
   if (route.page === 'homepage_sleeper') {
     return <HomepageTargeted content={sleeperContent} />;
+  }
+
+  if (route.page === 'homepage_yahoo') {
+    return <HomepageTargeted content={yahooContent} />;
   }
 
   if (route.page === 'case-study' && route.slug) {
