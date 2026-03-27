@@ -302,7 +302,7 @@ const TargetedFooter: React.FC<{ content: TargetedHomepageContent }> = ({ conten
             <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--md">
               rdeboer180@gmail.com
             </a>
-            <a href="https://profile.indeed.com/p/ryand-ks164vf" className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/ryan-deboer-b4a00351" className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
             </a>
           </div>
