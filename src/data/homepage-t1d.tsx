@@ -10,16 +10,16 @@ const t1dContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Visual Product Designer', 'Design Systems Architect', 'UX Engineer'],
-    headline: 'ready to bring 16 years of visual craft and systems thinking to a product I\u2019ve depended on for over a decade.',
-    body: 'I\u2019m a Senior Product Designer specializing in high-fidelity UI, scalable design systems, and front-end development. I\u2019ve spent my career ensuring that what gets designed is what gets shipped\u2014and I\u2019m looking to bring that discipline to a product that genuinely matters to me.',
+    headline: 'looking to shift 16 years of design craft toward a product I trust, use daily, and want to help elevate.',
+    body: 'I\u2019m a Senior Product Designer specializing in high-fidelity UI, scalable design systems, and front-end development. No single piece of technology has been more influential in my life and wellbeing than Dexcom\u2014and I want to bring everything I\u2019ve built in my career to the team behind it.',
   },
 
   about: {
     title: 'This One Is Personal',
     paragraphs: [
-      'I\u2019ve lived with Type 1 Diabetes for over 20 years. For the last 10 of those, Dexcom has been part of my daily life\u2014worn on my body, checked on my phone, factored into decisions I make about my health every single day. I also maintain a custom-coded branch of the Loop app, an open-source closed-loop insulin delivery system that integrates directly with my Dexcom CGM. I\u2019ve configured, tested, and relied on that system daily.',
-      'That\u2019s not a design credential\u2014it\u2019s context. I know what it feels like to glance at a number and make a real decision based on what I see. I know when the interface builds trust and when it doesn\u2019t. I\u2019m not coming from healthcare design\u2014I\u2019m coming from 16 years of designing scalable UI systems, and I want to apply that experience to a product I already understand as a user.',
-      'My career has been rooted in systems thinking and production quality. At Tire Rack, I built and maintained component libraries and design systems in Figma that powered UI across multiple retail brands. I owned the front-end template layer end-to-end\u2014writing the SCSS, building CMS components, and documenting patterns so the broader team could ship consistently. What I designed is what shipped.',
+      'I\u2019ve lived with Type 1 Diabetes for over 20 years, and for the last 10 of those Dexcom has been part of my daily life\u2014worn on my body, checked on my phone, factored into every decision I make about my health. But it goes beyond just wearing the sensor. I spend a significant amount of my personal time diving into medical and metabolic literature, watching lectures, and listening to podcasts to deepen my understanding of the disease and sharpen my own treatment. I also maintain a custom-coded branch of the Loop app\u2014an open-source closed-loop insulin delivery system that integrates directly with my Dexcom CGM. Managing T1D isn\u2019t just something I do\u2014it\u2019s a discipline I\u2019m deeply invested in.',
+      'That\u2019s why this isn\u2019t just a job application\u2014it\u2019s a career shift I\u2019ve been thinking about for a long time. I\u2019ve spent 16 years building scalable UI systems, design systems, and production-ready front-end code. Now I want to point all of that toward a brand and product I genuinely trust and want to help elevate. No piece of technology has had more impact on my daily life than Dexcom, and I want to bring my best work to the team behind it.',
+      'At Tire Rack, I built and maintained component libraries and design systems in Figma that powered UI across multiple retail brands. I owned the front-end template layer end-to-end\u2014writing the SCSS, building CMS components, and documenting patterns so the broader team could ship consistently. What I designed is what shipped. I\u2019m ready to bring that same discipline to a product where the stakes are personal.',
       (
         <>
           There&rsquo;s more to how I think than what fits on a page&mdash;ask anything about my work, process, or approach.{' '}
@@ -38,12 +38,12 @@ const t1dContent: TargetedHomepageContent = {
   whyCompany: {
     badgeLabel: 'Why Dexcom',
     title: 'Where My Work and My Life Converge',
-    subtitle: 'I\u2019ve spent my career designing scalable UI systems. I want to bring that work to a product I\u2019ve worn on my body for a decade.',
+    subtitle: 'This isn\u2019t just another application\u2014it\u2019s a deliberate shift toward a product I\u2019ve trusted with my health for over a decade.',
     intro: 'Here\u2019s where my experience aligns with what Dexcom\u2019s Global Product Design team needs.',
     points: [
       {
-        title: 'I Use the Product Every Day',
-        body: 'I\u2019ve worn a Dexcom CGM for over 10 years. I understand the micro-interactions, the trust signals, and the moments where UI clarity directly impacts real decisions. That\u2019s not something I can learn from a research deck\u2014it\u2019s something I live.',
+        title: 'More Than a User\u2014an Advocate',
+        body: 'I\u2019ve worn a Dexcom CGM for over 10 years and I spend my personal time studying the metabolic science behind the data it shows me. I understand the micro-interactions, the trust signals, and the moments where UI clarity impacts real decisions\u2014because I live them every day. That kind of product intuition can\u2019t be onboarded.',
       },
       {
         title: 'Visual Craft Is the Work',
@@ -104,8 +104,8 @@ const t1dContent: TargetedHomepageContent = {
         question: 'Why Dexcom?',
         answer: (
           <>
-            <p>Because I&rsquo;ve depended on this product every day for over a decade. I know what it feels like when the interface is clear and trustworthy&mdash;and I know what it feels like when it isn&rsquo;t. Dexcom has already changed my life. I want to help the GPD team continue raising the bar&mdash;for the G7, for Stelo, and for whatever comes next.</p>
-            <p>Dexcom is broadening its vision beyond diabetes into broader health. That ambition, combined with a design team that&rsquo;s already earned 23+ international awards, is exactly the kind of environment where I want to contribute.</p>
+            <p>Because this isn&rsquo;t a casual interest&mdash;it&rsquo;s personal. I&rsquo;ve worn a Dexcom CGM for over a decade, and I spend a significant amount of my free time studying the metabolic science behind the data it shows me. I read the research, follow the podcasts, and actively work to deepen my understanding of T1D management. No piece of technology has had more impact on my daily life.</p>
+            <p>I want to shift my career toward a brand and product I genuinely trust. Dexcom is broadening its vision beyond diabetes into broader health&mdash;G7, Stelo, and whatever comes next. That ambition, combined with a GPD team that&rsquo;s earned 23+ international design awards, is exactly where I want to put my work.</p>
           </>
         ),
       },
@@ -135,7 +135,7 @@ const t1dContent: TargetedHomepageContent = {
         answer: (
           <>
             <p>People first. I married my high school sweetheart Stephanie&mdash;we&rsquo;ve now spent more than half our lives together&mdash;and our two kids are the center of everything. Weekends usually mean the park, the zoo, or wherever the next national park road trip takes us.</p>
-            <p>I also maintain a custom-coded branch of the Loop app&mdash;an open-source closed-loop insulin delivery system that integrates with my Dexcom CGM. I&rsquo;ve configured, tested, and relied on that system daily for years. It&rsquo;s equal parts health management and engineering hobby&mdash;and it keeps me close to the technology I&rsquo;d be designing for.</p>
+            <p>Outside of family, diabetes management is genuinely one of my deepest interests. I maintain a custom-coded branch of the Loop app&mdash;an open-source closed-loop insulin delivery system that integrates with my Dexcom CGM. I read medical and metabolic research, follow endocrinology podcasts, and stay close to the science behind the numbers on my screen. It&rsquo;s equal parts health management, engineering hobby, and personal mission. The line between what I care about professionally and personally has always been blurry&mdash;Dexcom sits right at that intersection.</p>
           </>
         ),
       },
