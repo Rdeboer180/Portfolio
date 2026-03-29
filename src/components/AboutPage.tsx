@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Footer from './Footer';
+import { getHomeHref } from '../utils/homeSession';
 import '../styles/styles.scss';
 
 // ============================================
@@ -153,7 +154,7 @@ const AboutPage: React.FC = () => {
       if (remaining.length === 0) {
         setHistory(prev => [
           ...prev,
-          { type: 'ai', content: <p>You've explored everything I've got! Type <strong>R</strong> to start over, or head back to the <a href="/">homepage</a>.</p> },
+          { type: 'ai', content: <p>You've explored everything I've got! Type <strong>R</strong> to start over, or head back to the <a href={getHomeHref()}>homepage</a>.</p> },
         ]);
       } else {
         setHistory(prev => [
@@ -195,7 +196,7 @@ const AboutPage: React.FC = () => {
         if (moreRemaining.length === 0) {
           newEntries.push({
             type: 'ai',
-            content: <p>That's everything I've got. You've explored all 8 topics! Type <strong>R</strong> to start over, or head back to the <a href="/">homepage</a>.</p>,
+            content: <p>That's everything I've got. You've explored all 8 topics! Type <strong>R</strong> to start over, or head back to the <a href={getHomeHref()}>homepage</a>.</p>,
           });
         }
 
@@ -264,8 +265,8 @@ const AboutPage: React.FC = () => {
     <article className="about-page">
       {/* Fixed nav */}
       <nav className="about-page__nav">
-        <a href="/" className="about-page__nav-logo">Ryan DeBoer</a>
-        <a href="/" className="about-page__nav-back">&larr; Back to Home</a>
+        <a href={getHomeHref()} className="about-page__nav-logo">Ryan DeBoer</a>
+        <a href={getHomeHref()} className="about-page__nav-back">&larr; Back to Home</a>
       </nav>
 
       {/* Hero */}

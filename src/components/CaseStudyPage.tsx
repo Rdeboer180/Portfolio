@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionBadge from './SectionBadge';
 import projects, { Project } from '../data/projects';
+import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import '../styles/styles.scss';
 
 const BriefcaseIcon = () => (
@@ -27,7 +28,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       <div className="cs">
         <div className="cs__container">
           <p>Project not found.</p>
-          <a href="/#projects" className="cs__back">&larr; Back to all work</a>
+          <a href={getProjectsHref()} className="cs__back">&larr; Back to all work</a>
         </div>
       </div>
     );
@@ -39,8 +40,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     <article className="cs">
       {/* Fixed nav */}
       <nav className="cs__nav">
-        <a href="/" className="cs__nav-logo">Ryan DeBoer</a>
-        <a href="/#projects" className="cs__nav-back">&larr; All Projects</a>
+        <a href={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</a>
+        <a href={getProjectsHref()} className="cs__nav-back">&larr; All Projects</a>
       </nav>
 
       <div className="cs__container">

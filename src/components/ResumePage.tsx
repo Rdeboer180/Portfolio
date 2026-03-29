@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 // @ts-ignore — html2pdf.js has no type declarations
 import html2pdf from 'html2pdf.js';
+import { getHomeHref } from '../utils/homeSession';
 
 const ResumePage: React.FC = () => {
   const paperRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ const ResumePage: React.FC = () => {
     <div className="resume-page">
       {/* Screen-only nav */}
       <nav className="resume-page__nav">
-        <a href="#/" className="resume-page__nav-logo">Ryan DeBoer</a>
+        <a href={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</a>
         <div className="resume-page__nav-actions">
           <button className="resume-page__print-btn" onClick={handleExportPDF}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
@@ -41,7 +42,7 @@ const ResumePage: React.FC = () => {
             </svg>
             Save as PDF
           </button>
-          <a href="#/" className="resume-page__nav-back">Back to Portfolio</a>
+          <a href={getHomeHref()} className="resume-page__nav-back">Back to Portfolio</a>
         </div>
       </nav>
 
