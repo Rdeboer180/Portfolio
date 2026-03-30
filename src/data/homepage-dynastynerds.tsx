@@ -123,6 +123,16 @@ const dynastyNerdsContent: TargetedHomepageContent = {
         answer: 'That\u2019s exactly the kind of work I\u2019m drawn to. Community-driven products live or die on trust\u2014and trust is built through consistency, clarity, and an experience that respects the user\u2019s time. I\u2019ve spent my career designing scalable UI systems that hold up as products grow. I understand the constraints of a fast-moving team and know how to prioritize what actually moves the needle.',
       },
       {
+        question: 'Do you have any concerns about the role?',
+        answer: (
+          <>
+            <p>Just one: Rich promising an aggressive live date for a new feature on the podcast before anyone on the product side has been consulted.</p>
+            <p>I&rsquo;ve been a NerdHerd member long enough to know that when Rich gets excited about something, a timeline gets floated&mdash;and somewhere a developer loses a weekend. I&rsquo;m fully prepared for this. I&rsquo;ve already cleared my calendar for the next several Sundays just in case.</p>
+            <p>(Long-time listener. I know exactly what I&rsquo;m signing up for.)</p>
+          </>
+        ),
+      },
+      {
         question: 'How do you handle mentorship and collaboration?',
         answer: 'Collaboration and mentorship aren\u2019t side quests for me\u2014they\u2019re core to how I work. I\u2019ve led ideation sessions, provided feedback to designers at all levels, and built documentation that helps teams ship consistently without bottlenecking through me. My reviews consistently highlight my ability to build cross-functional relationships and create community across design, UX, analytics, and engineering teams.',
       },
