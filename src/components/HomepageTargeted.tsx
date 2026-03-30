@@ -209,7 +209,13 @@ const TargetedWhyCompany: React.FC<{ content: TargetedHomepageContent }> = ({ co
     <section id="why-company" className="skills">
       <div className="skills__container">
         <div className="skills__header">
-          <SectionBadge icon={content.meta.company === 'Dexcom' ? <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="currentColor" /><text x="12" y="13" textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="8" fontWeight="800" fontFamily="inherit" letterSpacing="-0.02em">T1D</text></svg> : <FootballIcon />} label={whyCompany.badgeLabel} />
+          <SectionBadge icon={
+            content.meta.company === 'Dexcom'
+              ? <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="currentColor" /><text x="12" y="13" textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="8" fontWeight="800" fontFamily="inherit" letterSpacing="-0.02em">T1D</text></svg>
+              : content.meta.company === 'Insulet'
+              ? <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="currentColor" /><text x="12" y="13" textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="7.5" fontWeight="800" fontFamily="inherit" letterSpacing="-0.02em">Pod</text></svg>
+              : <FootballIcon />
+          } label={whyCompany.badgeLabel} />
           <h2 className="skills__title">{whyCompany.title}</h2>
           <p className="skills__subtitle">{whyCompany.subtitle}</p>
           <p className="skills__intro">{whyCompany.intro}</p>
