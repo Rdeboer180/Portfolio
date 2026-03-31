@@ -236,17 +236,16 @@
     }
   }
 
-  // Clickable desktop image wrapper — tall page screenshots, capped at 3600px
+  // Clickable desktop image wrapper — cropped 16:9, full image in lightbox
   &__img-wrap {
     position: relative;
     overflow: hidden;
     cursor: zoom-in;
-    max-height: 3600px;
+    aspect-ratio: 16 / 9;
 
     img {
       width: 100%;
-      height: auto;
-      max-height: 3600px;
+      height: 100%;
       object-fit: cover;
       object-position: top;
       display: block;
