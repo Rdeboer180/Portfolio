@@ -30,6 +30,96 @@ export interface Project {
 
 const projects: Project[] = [
   // =============================================
+  // 0. Tire Rack — Winter Seasonalization System
+  // =============================================
+  {
+    slug: 'tire-rack-winter',
+    client: 'Tire Rack',
+    title: 'Seasonal Site Winterization — AEM Experience Fragment System',
+    year: '2013–Present',
+    tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'Design Systems'],
+    role: 'Senior Web Designer / AEM Content Strategist',
+    tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
+    timeline: '10+ years',
+    featured: '/images/work/tire-rack-winter/winter-homepage-desktop.png',
+    brief: 'Since 2013, I have owned the full seasonal content strategy for Tire Rack\'s high-traffic landing pages — designing, authoring, and deploying a winterized version of the site each fall that targets cold-weather customers across the homepage, tire pages, delivery pages, research content, and wheel adjustment pages. Over the years this process evolved from manual content updates into a scalable AEM Experience Fragment system capable of swapping 20+ components across the site simultaneously.',
+    challenge: 'The core challenge was building a maintainable, scalable system that could serve meaningfully different content to winter-climate customers and southern-states customers without duplicating pages or confusing search engines. Early seasonal updates were manual and time-intensive. As Tire Rack\'s digital footprint grew, the process needed to scale — requiring new fragment types, accessible component variants, Adobe Target audience rules, and close collaboration with the Analytics, Photography, and SEO teams to ensure consistency, searchability, and conversion across every variant. I also needed to document the system clearly enough to onboard and mentor junior designers into the authoring workflow.',
+    images: [
+      // 1. AEM fragment tree — shows the authoring system
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-fragment-tree.png',
+        alt: 'Adobe Experience Manager showing the Winter fragment tree with component types including Winter Hero, Red Teaser, Entertainment, Video Center, and Category Bar',
+        layout: 'half',
+        caption: 'AEM fragment tree — the full library of winter components organized for authoring',
+      },
+      // 2. Confluence doc — shows ownership and team recognition
+      {
+        src: '/images/work/tire-rack-winter/winter-confluence-docs.png',
+        alt: 'Tire Rack Confluence documentation for Using Experience Fragments, listing Ryan DeBoer and Gina as points of contact for winter and geo-winter content swaps',
+        layout: 'half',
+        caption: 'Internal documentation naming Ryan as the primary point of contact for winter/geo fragment workflows',
+      },
+      // 3. Winterized homepage — full desktop
+      {
+        src: '/images/work/tire-rack-winter/winter-homepage-desktop.png',
+        alt: 'Tire Rack winterized homepage with snowy SUV hero, Is Traction Control Enough editorial block, Winter Tire and Wheel Package promotion, and seasonal category grid',
+        layout: 'full',
+        caption: 'Winterized homepage — full Experience Fragment swap across above-the-fold and editorial sections',
+      },
+      // 4. Default homepage — for before/after comparison
+      {
+        src: '/images/work/tire-rack-winter/winter-default-desktop.png',
+        alt: 'Tire Rack default homepage with standard warehouse hero, generic product photography, and year-round promotional modules',
+        layout: 'full',
+        caption: 'Default homepage — same structural scaffold, standard year-round content',
+      },
+      // 5. Mobile views — winterized + default paired
+      {
+        src: '/images/work/tire-rack-winter/winter-homepage-mobile.png',
+        alt: 'Mobile view of winterized Tire Rack homepage showing seasonal tire deals, Traction Control editorial, video center, and winter tire category grid',
+        layout: 'half',
+        mobile: true,
+        caption: 'Winterized mobile — responsive fragment rendering across seasonal sections',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-default-mobile.png',
+        alt: 'Mobile view of default Tire Rack homepage showing standard hero, how it works steps, and year-round tire categories',
+        layout: 'half',
+        mobile: true,
+        caption: 'Default mobile — same layout, different fragment content serving non-winter audiences',
+      },
+      // 6. Below the fold — winter editorial depth
+      {
+        src: '/images/work/tire-rack-winter/winter-below-fold.png',
+        alt: 'Below the fold winterized content showing quietest truck tires editorial, skip the shipping promotion, rubber meet the road brand section, and service with a smile team photo',
+        layout: 'full',
+        caption: 'Below-the-fold seasonal content — editorial, promotional, and brand modules all fragment-swapped',
+      },
+      // 7. AEM authoring UI — component editing detail
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-authoring.png',
+        alt: 'Adobe Experience Manager authoring view with Teaser component edit dialog showing title, description, link behavior, and CTA configuration fields',
+        layout: 'half',
+        caption: 'Component authoring — Teaser dialog with link behavior, CTA, and content fields',
+      },
+      // 8. Hero fragment detail — AEM UI
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-hero-detail.png',
+        alt: 'Adobe Experience Manager showing the Winter Hero fragment detail view with component variants including Hero Component, Teaser, Teaser Group, Full Width Image Carousel, and Text and Image Carousel',
+        layout: 'half',
+        caption: 'Hero fragment detail — variant breakdown across hero and teaser component types',
+      },
+    ],
+    metrics: [
+      { value: '+30%', label: 'Winter tire sales increase' },
+      { value: '+20%', label: 'Winter All-Season tire sales' },
+      { value: '20+', label: 'Components swapped site-wide' },
+      { value: '10+', label: 'Years of end-to-end ownership' },
+    ],
+    resultsNote: 'Over 10+ years of ownership, this system grew from manual seasonal content updates into a scalable AEM Experience Fragment library — 20+ component types, audience-targeted via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Close collaboration with the Analytics team defined the audience segmentation rules, work with the Photography team (including on-site shoots I directed) produced the seasonal imagery, and ongoing SEO alignment ensured Google treated winter and southern-states variants consistently rather than as duplicate pages. In recent years I have also mentored junior designers through the authoring environment, extending the team\'s capacity without sacrificing quality.',
+  },
+
+  // =============================================
   // 1. Heatherwood Equestrian Academy
   // =============================================
   {
