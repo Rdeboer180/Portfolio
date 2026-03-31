@@ -119,7 +119,7 @@
     margin-bottom: $spacing-4xl;
     border-radius: $card-border-radius-lg;
     overflow: hidden;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 16 / 9;
     @include fade-in-up(0.2s);
 
     img {
@@ -236,16 +236,17 @@
     }
   }
 
-  // Clickable image wrapper with 2:1 crop
+  // Clickable desktop image wrapper — tall page screenshots, capped at 3600px
   &__img-wrap {
     position: relative;
     overflow: hidden;
     cursor: zoom-in;
-    aspect-ratio: 2 / 1;
+    max-height: 3600px;
 
     img {
       width: 100%;
-      height: 100%;
+      height: auto;
+      max-height: 3600px;
       object-fit: cover;
       object-position: top;
       display: block;
@@ -272,7 +273,7 @@
     backdrop-filter: blur(4px);
   }
 
-  // iPhone frame wrapper
+  // iPhone frame wrapper — image cropped 16:9 inside frame
   &__phone-frame {
     position: relative;
     width: 100%;
@@ -288,7 +289,9 @@
 
     img {
       width: 100%;
-      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      object-position: top;
       display: block;
       border-radius: 28px;
     }
