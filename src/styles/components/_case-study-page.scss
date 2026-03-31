@@ -233,6 +233,42 @@
     }
   }
 
+  // Clickable image wrapper with viewport cap
+  &__img-wrap {
+    position: relative;
+    overflow: hidden;
+    cursor: zoom-in;
+    max-height: 80vh;
+
+    img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    &:hover .cs__zoom-hint {
+      opacity: 1;
+    }
+  }
+
+  &__zoom-hint {
+    position: absolute;
+    bottom: $spacing-md;
+    right: $spacing-md;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    padding: 5px $spacing-md;
+    border-radius: $radius-full;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity $transition-fast;
+    backdrop-filter: blur(4px);
+  }
+
   // iPhone frame wrapper
   &__phone-frame {
     position: relative;
@@ -242,6 +278,7 @@
     background: #1b1b1b;
     border-radius: 40px;
     padding: 12px;
+    cursor: zoom-in;
     box-shadow:
       0 0 0 2px #3a3a3a,
       0 8px 40px rgba(0, 0, 0, 0.2);
@@ -400,6 +437,102 @@
     font-size: $font-size-body-sm;
     color: $color-primary-light;
     font-weight: $font-weight-medium;
+  }
+}
+
+// ==========================================
+// Lightbox
+// ==========================================
+.cs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-3xl;
+
+  &__content {
+    max-width: min(90vw, 1200px);
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: $radius-lg;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  &__close {
+    position: fixed;
+    top: $spacing-xl;
+    right: $spacing-xl;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background $transition-fast;
+    backdrop-filter: blur(6px);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  &__prev,
+  &__next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background $transition-fast;
+    backdrop-filter: blur(6px);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  &__prev {
+    left: $spacing-xl;
+  }
+
+  &__next {
+    right: $spacing-xl;
+  }
+
+  &__counter {
+    position: fixed;
+    bottom: $spacing-xl;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.06em;
   }
 }
 

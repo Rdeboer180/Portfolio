@@ -1,8 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SectionBadge from './SectionBadge';
 import projects, { Project } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import '../styles/styles.scss';
+
+/* ─── Lightbox ─── */
+interface LightboxState { src: string; alt: string; index: number; }
+
+const Lightbox: React.FC<{
+  images: { src: string; alt: string }[];
+  current: LightboxState;
+  onClose: () => void;
+  onNav: (index: number) => void;
+}> = ({ images, current, onClose, onNav }) => {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') onNav((current.index + 1) % images.length);
+      if (e.key === 'ArrowLeft') onNav((current.index - 1 + images.length) % images.length);
+    };
+    document.addEventListener('keydown', handler);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handler);
+      document.body.style.overflow = '';
+    };
+  }, [current.index, images.length, onClose, onNav]);
+
+  return (
+    <div className="cs-lightbox" onClick={onClose}>
+      <button className="cs-lightbox__close" onClick={onClose} aria-label="Close">&#x2715;</button>
+      <div className="cs-lightbox__content" onClick={(e) => e.stopPropagation()}>
+        <img src={current.src} alt={current.alt} className="cs-lightbox__img" />
+      </div>
+      {images.length > 1 && (
+        <>
+          <button className="cs-lightbox__prev" onClick={(e) => { e.stopPropagation(); onNav((current.index - 1 + images.length) % images.length); }} aria-label="Previous">&#8592;</button>
+          <button className="cs-lightbox__next" onClick={(e) => { e.stopPropagation(); onNav((current.index + 1) % images.length); }} aria-label="Next">&#8594;</button>
+          <div className="cs-lightbox__counter">{current.index + 1} / {images.length}</div>
+        </>
+      )}
+    </div>
+  );
+};
 
 const BriefcaseIcon = () => (
   <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
@@ -22,6 +62,14 @@ interface CaseStudyPageProps {
 const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
+  const openLightbox = useCallback((src: string, alt: string, index: number) => setLightbox({ src, alt, index }), []);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+  const navLightbox = useCallback((index: number) => {
+    if (!project) return;
+    const img = project.images[index];
+    setLightbox({ src: img.src, alt: img.alt, index });
+  }, [project]);
 
   if (!project) {
     return (
@@ -101,47 +149,39 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             while (i < project.images.length) {
               const img = project.images[i];
 
+              const renderImg = (img: typeof project.images[0], idx: number) => (
+                img.mobile ? (
+                  <div className="cs__phone-frame" onClick={() => openLightbox(img.src, img.alt, idx)}>
+                    <div className="cs__phone-notch" />
+                    <img src={img.src} alt={img.alt} />
+                  </div>
+                ) : (
+                  <div className="cs__img-wrap" onClick={() => openLightbox(img.src, img.alt, idx)}>
+                    <img src={img.src} alt={img.alt} />
+                    <span className="cs__zoom-hint">&#x26F6; View full</span>
+                  </div>
+                )
+              );
+
               if (img.layout === 'full') {
                 elements.push(
                   <figure key={i} className={`cs__figure cs__figure--full${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                    {img.mobile ? (
-                      <div className="cs__phone-frame">
-                        <div className="cs__phone-notch" />
-                        <img src={img.src} alt={img.alt} />
-                      </div>
-                    ) : (
-                      <img src={img.src} alt={img.alt} />
-                    )}
+                    {renderImg(img, i)}
                     {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
                   </figure>
                 );
                 i++;
               } else {
-                // Pair consecutive half images
                 const next = project.images[i + 1];
                 if (next && next.layout === 'half') {
                   elements.push(
                     <div key={i} className="cs__image-pair">
                       <figure className={`cs__figure cs__figure--half${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                        {img.mobile ? (
-                          <div className="cs__phone-frame">
-                            <div className="cs__phone-notch" />
-                            <img src={img.src} alt={img.alt} />
-                          </div>
-                        ) : (
-                          <img src={img.src} alt={img.alt} />
-                        )}
+                        {renderImg(img, i)}
                         {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
                       </figure>
                       <figure className={`cs__figure cs__figure--half${next.mobile ? ' cs__figure--mobile' : ''}`}>
-                        {next.mobile ? (
-                          <div className="cs__phone-frame">
-                            <div className="cs__phone-notch" />
-                            <img src={next.src} alt={next.alt} />
-                          </div>
-                        ) : (
-                          <img src={next.src} alt={next.alt} />
-                        )}
+                        {renderImg(next, i + 1)}
                         {next.caption && <figcaption className="cs__caption">{next.caption}</figcaption>}
                       </figure>
                     </div>
@@ -150,14 +190,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 } else {
                   elements.push(
                     <figure key={i} className={`cs__figure cs__figure--half cs__figure--solo${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                      {img.mobile ? (
-                        <div className="cs__phone-frame">
-                          <div className="cs__phone-notch" />
-                          <img src={img.src} alt={img.alt} />
-                        </div>
-                      ) : (
-                        <img src={img.src} alt={img.alt} />
-                      )}
+                      {renderImg(img, i)}
                       {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
                     </figure>
                   );
@@ -202,6 +235,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           </a>
         )}
       </div>
+
+      {lightbox && (
+        <Lightbox
+          images={project.images}
+          current={lightbox}
+          onClose={closeLightbox}
+          onNav={navLightbox}
+        />
+      )}
     </article>
   );
 };
