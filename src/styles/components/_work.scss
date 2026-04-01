@@ -42,9 +42,7 @@
     grid-template-columns: 1fr 1fr;
     align-items: center;
     background: white;
-    box-shadow: $shadow-md ;
     border-radius: $card-border-radius-lg;
-    border: 1px solid var(--color-secondary-muted);
     overflow: hidden;
     text-decoration: none;
     transition: box-shadow $transition-base;
