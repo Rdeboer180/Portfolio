@@ -153,7 +153,7 @@ const projects: Project[] = [
   {
     slug: 'tire-rack-winter',
     client: 'Tire Rack',
-    title: 'Seasonal Content Strategy — AEM Experience Fragments & Adobe Target',
+    title: 'Tire Rack Seasonal Content Swap — AEM Experience Fragments & Adobe Target',
     year: '2013\u2013Present',
     tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'Design Systems'],
     role: 'Senior Web Designer / AEM Content Strategist',
