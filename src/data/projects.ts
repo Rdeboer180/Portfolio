@@ -31,214 +31,7 @@ export interface Project {
 
 const projects: Project[] = [
   // =============================================
-  // 0. Tire Rack — Winter Seasonalization System
-  // =============================================
-  {
-    slug: 'tire-rack-winter',
-    client: 'Tire Rack',
-    title: 'Seasonal Site Winterization — AEM Experience Fragment System',
-    year: '2013–Present',
-    tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'Design Systems'],
-    role: 'Senior Web Designer / AEM Content Strategist',
-    tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
-    timeline: '10+ years',
-    featured: '/images/work/tire-rack-winter/CS_thumbnail_AEM_Winterization.jpg',
-    brief: 'Since 2013, I have owned the full seasonal content strategy for Tire Rack\'s high-traffic landing pages — designing, authoring, and deploying a winterized version of the site each fall that targets cold-weather customers across the homepage, tire pages, delivery pages, research content, and wheel adjustment pages. Over the years this process evolved from manual content updates into a scalable AEM Experience Fragment system capable of swapping 20+ components across the site simultaneously.',
-    challenge: 'The core challenge was building a maintainable, scalable system that could serve meaningfully different content to winter-climate customers and southern-states customers without duplicating pages or confusing search engines. Early seasonal updates were manual and time-intensive. As Tire Rack\'s digital footprint grew, the process needed to scale — requiring new fragment types, accessible component variants, Adobe Target audience rules, and close collaboration with the Analytics, Photography, and SEO teams to ensure consistency, searchability, and conversion across every variant. I also needed to document the system clearly enough to onboard and mentor junior designers into the authoring workflow.',
-    images: [
-      // 1. AEM fragment tree — shows the authoring system
-      {
-        src: '/images/work/tire-rack-winter/winter-aem-fragment-tree.png',
-        alt: 'Adobe Experience Manager showing the Winter fragment tree with component types including Winter Hero, Red Teaser, Entertainment, Video Center, and Category Bar',
-        layout: 'half',
-        caption: 'AEM fragment tree — the full library of winter components organized for authoring',
-      },
-      // 2. Confluence doc — shows ownership and team recognition
-      {
-        src: '/images/work/tire-rack-winter/winter-confluence-docs.png',
-        alt: 'Tire Rack Confluence documentation for Using Experience Fragments, listing Ryan DeBoer and Gina as points of contact for winter and geo-winter content swaps',
-        layout: 'half',
-        caption: 'Internal documentation naming Ryan as the primary point of contact for winter/geo fragment workflows',
-      },
-      // 3. Winterized homepage — full desktop
-      {
-        src: '/images/work/tire-rack-winter/winter-homepage-desktop.png',
-        alt: 'Tire Rack winterized homepage with snowy SUV hero, Is Traction Control Enough editorial block, Winter Tire and Wheel Package promotion, and seasonal category grid',
-        layout: 'full',
-        caption: 'Winterized homepage — full Experience Fragment swap across above-the-fold and editorial sections',
-      },
-      // 4. Default homepage — for before/after comparison
-      {
-        src: '/images/work/tire-rack-winter/winter-default-desktop.png',
-        alt: 'Tire Rack default homepage with standard warehouse hero, generic product photography, and year-round promotional modules',
-        layout: 'full',
-        caption: 'Default homepage — same structural scaffold, standard year-round content',
-      },
-      // 5. Mobile views — winterized + default paired
-      {
-        src: '/images/work/tire-rack-winter/winter-homepage-mobile.png',
-        alt: 'Mobile view of winterized Tire Rack homepage showing seasonal tire deals, Traction Control editorial, video center, and winter tire category grid',
-        layout: 'half',
-        mobile: true,
-        caption: 'Winterized mobile — responsive fragment rendering across seasonal sections',
-      },
-      {
-        src: '/images/work/tire-rack-winter/winter-default-mobile.png',
-        alt: 'Mobile view of default Tire Rack homepage showing standard hero, how it works steps, and year-round tire categories',
-        layout: 'half',
-        mobile: true,
-        caption: 'Default mobile — same layout, different fragment content serving non-winter audiences',
-      },
-      // 6. Below the fold — winter editorial depth
-      {
-        src: '/images/work/tire-rack-winter/winter-below-fold.png',
-        alt: 'Below the fold winterized content showing quietest truck tires editorial, skip the shipping promotion, rubber meet the road brand section, and service with a smile team photo',
-        layout: 'full',
-        caption: 'Below-the-fold seasonal content — editorial, promotional, and brand modules all fragment-swapped',
-      },
-      // 7. AEM authoring UI — component editing detail
-      {
-        src: '/images/work/tire-rack-winter/winter-aem-authoring.png',
-        alt: 'Adobe Experience Manager authoring view with Teaser component edit dialog showing title, description, link behavior, and CTA configuration fields',
-        layout: 'half',
-        caption: 'Component authoring — Teaser dialog with link behavior, CTA, and content fields',
-      },
-      // 8. Hero fragment detail — AEM UI
-      {
-        src: '/images/work/tire-rack-winter/winter-aem-hero-detail.png',
-        alt: 'Adobe Experience Manager showing the Winter Hero fragment detail view with component variants including Hero Component, Teaser, Teaser Group, Full Width Image Carousel, and Text and Image Carousel',
-        layout: 'half',
-        caption: 'Hero fragment detail — variant breakdown across hero and teaser component types',
-      },
-    ],
-    metrics: [
-      { value: '+30%', label: 'Winter tire sales increase' },
-      { value: '+20%', label: 'Winter All-Season tire sales' },
-      { value: '20+', label: 'Components swapped site-wide' },
-      { value: '10+', label: 'Years of end-to-end ownership' },
-    ],
-    resultsNote: 'Over 10+ years of ownership, this system grew from manual seasonal content updates into a scalable AEM Experience Fragment library — 20+ component types, audience-targeted via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Close collaboration with the Analytics team defined the audience segmentation rules, work with the Photography team (including on-site shoots I directed) produced the seasonal imagery, and ongoing SEO alignment ensured Google treated winter and southern-states variants consistently rather than as duplicate pages. In recent years I have also mentored junior designers through the authoring environment, extending the team\'s capacity without sacrificing quality.',
-  },
-
-  // =============================================
-  // 1. Heatherwood Equestrian Academy
-  // =============================================
-  {
-    slug: 'heatherwood',
-    client: 'Heatherwood Equestrian Academy',
-    title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
-    year: '2025',
-    tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
-    role: 'Brand & Web Designer',
-    tools: ['Figma', 'WordPress', 'Elementor', 'WPForms', 'Yoast SEO', 'Adobe Illustrator'],
-    timeline: '4 months',
-    featured: '/images/work/heatherwood/CS_thumbnail_Heatherwood.jpg',
-    brief: 'Partnered with Deborah Clements, founder of a 30-year family-owned equestrian academy in Granger, Indiana, to build a complete digital brand from scratch. The strategy centered on capturing Heatherwood\u2019s key demographic \u2014 families with children ages 5\u201315 across the Michiana area \u2014 through SEO-leveraged service pages that double as search entry points, FAQ content structured around the real questions parents ask before enrolling, and a conversion path that routes every visitor to a form submission. Each service page was designed as its own landing page with a contact form sidebar, because analytics showed that families arrive searching for a specific activity \u2014 not the brand name.',
-    challenge: 'Heatherwood had operated for decades on word-of-mouth alone. There was no brand system, no web presence, and no way for families to discover or enroll online. The core challenge was three-fold: build a brand identity that captures the warmth of a family environment while competing visually with larger commercial programs; architect a site where each service \u2014 riding lessons, summer camps, boarding, birthday parties, trail rides \u2014 functions as an independent SEO entry point with its own conversion path; and deliver the entire system in a way that a non-technical owner can manage independently, with zero ongoing agency dependency. Every headline needed to work for both the parent scanning the page and the search engine indexing it.',
-    images: [
-      // 1. Notes — brand collateral (road sign + vehicle magnet)
-      {
-        src: '/images/work/heatherwood/heatherwood-notes-01.png',
-        alt: 'Heatherwood Equestrian Academy road sign with logo, QR code, and services listed: Lessons, Camps, Boarding',
-        layout: 'half',
-        caption: 'heatherwood-notes-01 — Brand identity applied to roadside signage with QR code for mobile conversion',
-      },
-      {
-        src: '/images/work/heatherwood/heatherwood-notes-02.png',
-        alt: 'Heatherwood branded vehicle magnet on truck door showing logo, QR code, and service list',
-        layout: 'half',
-        caption: 'heatherwood-notes-02 — Vehicle magnet extending brand visibility into the local community',
-      },
-      // 2. Final desktop — homepage hero
-      {
-        src: '/images/work/heatherwood/heatherwood-final-desktop-01.png',
-        alt: 'Heatherwood Academy desktop homepage hero with horses in pasture and SEO headline',
-        layout: 'full',
-        caption: 'heatherwood-final-desktop-01 — Homepage hero with SEO-targeted headline and primary inquiry CTA',
-      },
-      // 3. Final desktop — services grid + service detail pair
-      {
-        src: '/images/work/heatherwood/heatherwood-final-desktop-02.png',
-        alt: 'Desktop Services and Experiences page showing card grid of all 10 offerings',
-        layout: 'half',
-        caption: 'heatherwood-final-desktop-02 — Services hub with 10 SEO entry points',
-      },
-      {
-        src: '/images/work/heatherwood/heatherwood-final-desktop-03.png',
-        alt: 'Riding Lessons service page with SEO copy and contact form sidebar',
-        layout: 'half',
-        caption: 'heatherwood-final-desktop-03 — Service landing page with dedicated contact form',
-      },
-      // 4. Final mobile — homepage + FAQ (mobile frames)
-      {
-        src: '/images/work/heatherwood/heatherwood-final-mobile-01.png',
-        alt: 'Mobile homepage showing service cards and three-step enrollment flow',
-        layout: 'half',
-        caption: 'heatherwood-final-mobile-01 — Mobile homepage with service cards and enrollment CTA',
-        mobile: true,
-      },
-      {
-        src: '/images/work/heatherwood/heatherwood-final-mobile-04.png',
-        alt: 'Plan Your Ride FAQ accordion on mobile with parent questions about lessons',
-        layout: 'half',
-        caption: 'heatherwood-final-mobile-04 — FAQ targeting real parent search queries',
-        mobile: true,
-      },
-      // 5. Notes — CMS dashboard (sustainability system)
-      {
-        src: '/images/work/heatherwood/heatherwood-notes-05.png',
-        alt: 'WordPress admin dashboard with analytics, caching, and Yoast SEO integration',
-        layout: 'full',
-        caption: 'heatherwood-notes-05 — Owner-managed CMS with analytics, forms, and SEO scoring',
-      },
-    ],
-    metrics: [
-      { value: 'Full Brand', label: 'Built from zero' },
-      { value: '10+', label: 'SEO service landing pages' },
-      { value: 'Owner-Run', label: 'Zero ongoing agency dependency' },
-    ],
-    resultsNote: 'The site launched with a complete brand identity, 10+ SEO-optimized service pages each functioning as independent search entry points with dedicated contact forms, an FAQ section addressing the real questions parents ask before enrolling, and a WordPress CMS the owner operates independently. Families now discover Heatherwood through Google searches for specific services like "horseback riding lessons South Bend" and "summer horse camps Granger Indiana" \u2014 a capability that didn\u2019t exist before this project.',
-  },
-
-  // =============================================
-  // 2. Tire Rack \u2014 Tire Category Redesign
-  // =============================================
-  {
-    slug: 'tire-categories',
-    client: 'Tire Rack',
-    title: 'Tire Category Page Redesign & Optimizations',
-    year: '2024',
-    tags: ['UX Design', 'UI Design', 'Wireframing', 'Design Systems'],
-    role: 'Senior Web Designer / UX Engineer',
-    tools: ['Figma', 'FigJam', 'HTML/CSS', 'Adobe Creative Suite'],
-    timeline: '6 months',
-    featured: '/images/work/tire-categories/CS_thumbnail_TireCategories.jpg',
-    brief: 'Tire Rack\u2019s category pages were the primary entry point for millions of customers navigating one of the largest online tire retailers. The existing system relied on outdated layouts, inconsistent iconography, and a content structure that didn\u2019t reflect how real users shop for tires. The project spanned wireframing, requirements documentation, custom icon design, and full high-fidelity mockups across desktop and mobile.',
-    challenge: 'The core challenge was rethinking how tire categories are presented \u2014 from a flat, text-heavy page to a structured, visually intuitive system that reduces decision fatigue. Customers needed to quickly identify the right tire type for their driving conditions without reading walls of spec text. Each category required a distinct visual identity through custom iconography while maintaining consistency across the system.',
-    images: [
-      {
-        src: '/images/work/tire-categories/featured.png',
-        alt: 'Tire category redesign \u2014 before and after comparison with custom icon system',
-        layout: 'full',
-        caption: 'Final category page designs with custom weather and terrain icon set',
-      },
-      {
-        src: '/images/work/tire-categories/in-page-application.png',
-        alt: 'Extreme Performance Summer tire category page showing product grid, features section, and brand logos',
-        layout: 'full',
-        caption: 'In-page application \u2014 category detail view with feature callouts and product grid',
-      },
-    ],
-    metrics: [
-      { value: '+34%', label: 'Category page engagement' },
-      { value: '-22%', label: 'Bounce rate reduction' },
-      { value: '6', label: 'Custom icon categories designed' },
-    ],
-    resultsNote: 'The redesigned category system improved findability across all tire types and established a scalable pattern now used across additional product verticals at Tire Rack.',
-  },
-
-  // =============================================
-  // 3. WheelRack \u2014 Design System & Customer Journey
+  // 0. WheelRack — Design System & Customer Journey  [image LEFT]
   // =============================================
   {
     slug: 'wheelrack',
@@ -315,6 +108,205 @@ const projects: Project[] = [
       { value: '4', label: 'Retail partners supported' },
     ],
     resultsNote: 'Delivered a complete design system and full customer journey from vehicle selection through product details. The system supports four retail partner brands, handles complex fitment edge cases, and shipped with annotated UI behavior documentation for every state \u2014 enabling engineering to build without ambiguity.',
+  },
+
+  // =============================================
+  // 1. Tire Rack — Tire Category Redesign  [image RIGHT]
+  // =============================================
+  {
+    slug: 'tire-categories',
+    client: 'Tire Rack',
+    title: 'Tire Category Page Redesign & Optimizations',
+    year: '2024',
+    tags: ['UX Design', 'UI Design', 'Wireframing', 'Design Systems'],
+    role: 'Senior Web Designer / UX Engineer',
+    tools: ['Figma', 'FigJam', 'HTML/CSS', 'Adobe Creative Suite'],
+    timeline: '6 months',
+    featured: '/images/work/tire-categories/CS_thumbnail_TireCategories.jpg',
+    brief: 'Tire Rack\u2019s category pages were the primary entry point for millions of customers navigating one of the largest online tire retailers. The existing system relied on outdated layouts, inconsistent iconography, and a content structure that didn\u2019t reflect how real users shop for tires. The project spanned wireframing, requirements documentation, custom icon design, and full high-fidelity mockups across desktop and mobile.',
+    challenge: 'The core challenge was rethinking how tire categories are presented \u2014 from a flat, text-heavy page to a structured, visually intuitive system that reduces decision fatigue. Customers needed to quickly identify the right tire type for their driving conditions without reading walls of spec text. Each category required a distinct visual identity through custom iconography while maintaining consistency across the system.',
+    images: [
+      {
+        src: '/images/work/tire-categories/featured.png',
+        alt: 'Tire category redesign \u2014 before and after comparison with custom icon system',
+        layout: 'full',
+        caption: 'Final category page designs with custom weather and terrain icon set',
+      },
+      {
+        src: '/images/work/tire-categories/in-page-application.png',
+        alt: 'Extreme Performance Summer tire category page showing product grid, features section, and brand logos',
+        layout: 'full',
+        caption: 'In-page application \u2014 category detail view with feature callouts and product grid',
+      },
+    ],
+    metrics: [
+      { value: '+34%', label: 'Category page engagement' },
+      { value: '-22%', label: 'Bounce rate reduction' },
+      { value: '6', label: 'Custom icon categories designed' },
+    ],
+    resultsNote: 'The redesigned category system improved findability across all tire types and established a scalable pattern now used across additional product verticals at Tire Rack.',
+  },
+
+  // =============================================
+  // 2. Tire Rack — AEM Seasonal Content Strategy  [image LEFT]
+  // =============================================
+  {
+    slug: 'tire-rack-winter',
+    client: 'Tire Rack',
+    title: 'Seasonal Content Strategy — AEM Experience Fragments & Adobe Target',
+    year: '2013\u2013Present',
+    tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'Design Systems'],
+    role: 'Senior Web Designer / AEM Content Strategist',
+    tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
+    timeline: '10+ years',
+    featured: '/images/work/tire-rack-winter/CS_thumbnail_AEM_Winterization.jpg',
+    brief: 'Since 2013, I have owned the full seasonal content strategy for Tire Rack\'s high-traffic landing pages \u2014 designing, authoring, and deploying a winterized version of the site each fall that targets cold-weather customers across the homepage, tire pages, delivery pages, research content, and wheel adjustment pages. Over the years this process evolved from manual content updates into a scalable AEM Experience Fragment system capable of swapping 20+ components across the site simultaneously.',
+    challenge: 'The core challenge was building a maintainable, scalable system that could serve meaningfully different content to winter-climate customers and southern-states customers without duplicating pages or confusing search engines. Early seasonal updates were manual and time-intensive. As Tire Rack\'s digital footprint grew, the process needed to scale \u2014 requiring new fragment types, accessible component variants, Adobe Target audience rules, and close collaboration with the Analytics, Photography, and SEO teams to ensure consistency, searchability, and conversion across every variant. I also needed to document the system clearly enough to onboard and mentor junior designers into the authoring workflow.',
+    images: [
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-fragment-tree.png',
+        alt: 'Adobe Experience Manager showing the Winter fragment tree with component types including Winter Hero, Red Teaser, Entertainment, Video Center, and Category Bar',
+        layout: 'half',
+        caption: 'AEM fragment tree \u2014 the full library of winter components organized for authoring',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-confluence-docs.png',
+        alt: 'Tire Rack Confluence documentation for Using Experience Fragments, listing Ryan DeBoer and Gina as points of contact for winter and geo-winter content swaps',
+        layout: 'half',
+        caption: 'Internal documentation naming Ryan as the primary point of contact for winter/geo fragment workflows',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-homepage-desktop.png',
+        alt: 'Tire Rack winterized homepage with snowy SUV hero, Is Traction Control Enough editorial block, Winter Tire and Wheel Package promotion, and seasonal category grid',
+        layout: 'full',
+        caption: 'Winterized homepage \u2014 full Experience Fragment swap across above-the-fold and editorial sections',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-default-desktop.png',
+        alt: 'Tire Rack default homepage with standard warehouse hero, generic product photography, and year-round promotional modules',
+        layout: 'full',
+        caption: 'Default homepage \u2014 same structural scaffold, standard year-round content',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-homepage-mobile.png',
+        alt: 'Mobile view of winterized Tire Rack homepage showing seasonal tire deals, Traction Control editorial, video center, and winter tire category grid',
+        layout: 'half',
+        mobile: true,
+        caption: 'Winterized mobile \u2014 responsive fragment rendering across seasonal sections',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-default-mobile.png',
+        alt: 'Mobile view of default Tire Rack homepage showing standard hero, how it works steps, and year-round tire categories',
+        layout: 'half',
+        mobile: true,
+        caption: 'Default mobile \u2014 same layout, different fragment content serving non-winter audiences',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-below-fold.png',
+        alt: 'Below the fold winterized content showing quietest truck tires editorial, skip the shipping promotion, rubber meet the road brand section, and service with a smile team photo',
+        layout: 'full',
+        caption: 'Below-the-fold seasonal content \u2014 editorial, promotional, and brand modules all fragment-swapped',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-authoring.png',
+        alt: 'Adobe Experience Manager authoring view with Teaser component edit dialog showing title, description, link behavior, and CTA configuration fields',
+        layout: 'half',
+        caption: 'Component authoring \u2014 Teaser dialog with link behavior, CTA, and content fields',
+      },
+      {
+        src: '/images/work/tire-rack-winter/winter-aem-hero-detail.png',
+        alt: 'Adobe Experience Manager showing the Winter Hero fragment detail view with component variants including Hero Component, Teaser, Teaser Group, Full Width Image Carousel, and Text and Image Carousel',
+        layout: 'half',
+        caption: 'Hero fragment detail \u2014 variant breakdown across hero and teaser component types',
+      },
+    ],
+    metrics: [
+      { value: '+30%', label: 'Winter tire sales increase' },
+      { value: '+20%', label: 'Winter All-Season tire sales' },
+      { value: '20+', label: 'Components swapped site-wide' },
+      { value: '10+', label: 'Years of end-to-end ownership' },
+    ],
+    resultsNote: 'Over 10+ years of ownership, this system grew from manual seasonal content updates into a scalable AEM Experience Fragment library \u2014 20+ component types, audience-targeted via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Close collaboration with the Analytics team defined the audience segmentation rules, work with the Photography team (including on-site shoots I directed) produced the seasonal imagery, and ongoing SEO alignment ensured Google treated winter and southern-states variants consistently rather than as duplicate pages. In recent years I have also mentored junior designers through the authoring environment, extending the team\'s capacity without sacrificing quality.',
+  },
+
+  // =============================================
+  // 3. Heatherwood Equestrian Academy  [image RIGHT]
+  // =============================================
+  {
+    slug: 'heatherwood',
+    client: 'Heatherwood Equestrian Academy',
+    title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
+    year: '2025',
+    tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
+    role: 'Brand & Web Designer',
+    tools: ['Figma', 'WordPress', 'Elementor', 'WPForms', 'Yoast SEO', 'Adobe Illustrator'],
+    timeline: '4 months',
+    featured: '/images/work/heatherwood/CS_thumbnail_Heatherwood.jpg',
+    brief: 'Partnered with Deborah Clements, founder of a 30-year family-owned equestrian academy in Granger, Indiana, to build a complete digital brand from scratch. The strategy centered on capturing Heatherwood\u2019s key demographic \u2014 families with children ages 5\u201315 across the Michiana area \u2014 through SEO-leveraged service pages that double as search entry points, FAQ content structured around the real questions parents ask before enrolling, and a conversion path that routes every visitor to a form submission. Each service page was designed as its own landing page with a contact form sidebar, because analytics showed that families arrive searching for a specific activity \u2014 not the brand name.',
+    challenge: 'Heatherwood had operated for decades on word-of-mouth alone. There was no brand system, no web presence, and no way for families to discover or enroll online. The core challenge was three-fold: build a brand identity that captures the warmth of a family environment while competing visually with larger commercial programs; architect a site where each service \u2014 riding lessons, summer camps, boarding, birthday parties, trail rides \u2014 functions as an independent SEO entry point with its own conversion path; and deliver the entire system in a way that a non-technical owner can manage independently, with zero ongoing agency dependency. Every headline needed to work for both the parent scanning the page and the search engine indexing it.',
+    images: [
+      // 1. Notes — brand collateral (road sign + vehicle magnet)
+      {
+        src: '/images/work/heatherwood/heatherwood-notes-01.png',
+        alt: 'Heatherwood Equestrian Academy road sign with logo, QR code, and services listed: Lessons, Camps, Boarding',
+        layout: 'half',
+        caption: 'heatherwood-notes-01 — Brand identity applied to roadside signage with QR code for mobile conversion',
+      },
+      {
+        src: '/images/work/heatherwood/heatherwood-notes-02.png',
+        alt: 'Heatherwood branded vehicle magnet on truck door showing logo, QR code, and service list',
+        layout: 'half',
+        caption: 'heatherwood-notes-02 — Vehicle magnet extending brand visibility into the local community',
+      },
+      // 2. Final desktop — homepage hero
+      {
+        src: '/images/work/heatherwood/heatherwood-final-desktop-01.png',
+        alt: 'Heatherwood Academy desktop homepage hero with horses in pasture and SEO headline',
+        layout: 'full',
+        caption: 'heatherwood-final-desktop-01 — Homepage hero with SEO-targeted headline and primary inquiry CTA',
+      },
+      // 3. Final desktop — services grid + service detail pair
+      {
+        src: '/images/work/heatherwood/heatherwood-final-desktop-02.png',
+        alt: 'Desktop Services and Experiences page showing card grid of all 10 offerings',
+        layout: 'half',
+        caption: 'heatherwood-final-desktop-02 — Services hub with 10 SEO entry points',
+      },
+      {
+        src: '/images/work/heatherwood/heatherwood-final-desktop-03.png',
+        alt: 'Riding Lessons service page with SEO copy and contact form sidebar',
+        layout: 'half',
+        caption: 'heatherwood-final-desktop-03 — Service landing page with dedicated contact form',
+      },
+      // 4. Final mobile — homepage + FAQ (mobile frames)
+      {
+        src: '/images/work/heatherwood/heatherwood-final-mobile-01.png',
+        alt: 'Mobile homepage showing service cards and three-step enrollment flow',
+        layout: 'half',
+        caption: 'heatherwood-final-mobile-01 — Mobile homepage with service cards and enrollment CTA',
+        mobile: true,
+      },
+      {
+        src: '/images/work/heatherwood/heatherwood-final-mobile-04.png',
+        alt: 'Plan Your Ride FAQ accordion on mobile with parent questions about lessons',
+        layout: 'half',
+        caption: 'heatherwood-final-mobile-04 — FAQ targeting real parent search queries',
+        mobile: true,
+      },
+      // 5. Notes — CMS dashboard (sustainability system)
+      {
+        src: '/images/work/heatherwood/heatherwood-notes-05.png',
+        alt: 'WordPress admin dashboard with analytics, caching, and Yoast SEO integration',
+        layout: 'full',
+        caption: 'heatherwood-notes-05 — Owner-managed CMS with analytics, forms, and SEO scoring',
+      },
+    ],
+    metrics: [
+      { value: 'Full Brand', label: 'Built from zero' },
+      { value: '10+', label: 'SEO service landing pages' },
+      { value: 'Owner-Run', label: 'Zero ongoing agency dependency' },
+    ],
+    resultsNote: 'The site launched with a complete brand identity, 10+ SEO-optimized service pages each functioning as independent search entry points with dedicated contact forms, an FAQ section addressing the real questions parents ask before enrolling, and a WordPress CMS the owner operates independently. Families now discover Heatherwood through Google searches for specific services like "horseback riding lessons South Bend" and "summer horse camps Granger Indiana" \u2014 a capability that didn\u2019t exist before this project.',
   },
 ];
 

@@ -27,7 +27,7 @@ const SelectedWork: React.FC = () => {
             <a
               key={project.slug}
               href={`#/work/${project.slug}`}
-              className={`selected-work__card ${index % 2 !== 0 ? 'selected-work__card--reverse' : ''}`}
+              className={`selected-work__card ${['wheelrack', 'tire-rack-winter'].includes(project.slug) ? 'selected-work__card--reverse' : ''}`}
             >
               <div className="selected-work__card-body">
                 <h3 className="selected-work__card-title">{project.title}</h3>
