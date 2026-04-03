@@ -179,7 +179,7 @@ const HowIWork: React.FC = () => {
       <div className="how-i-work__header">
         <SectionBadge icon={<ProcessIcon />} label="How I Work" />
         <h2 className="how-i-work__title">My Design &amp; Development Process</h2>
-        <p className="how-i-work__intro">My process isn't rigid&mdash;it adapts to the problem. But the goal is always the same: align early, design with intent, and ship work that holds up in production.</p>
+        <p className="how-i-work__intro">I start by defining the problem and aligning early, design with intent, ship confidently, and refine through reflection to make the next iteration better.</p>
       </div>
 
       <div className="how-i-work__container">
