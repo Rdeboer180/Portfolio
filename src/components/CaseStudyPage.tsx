@@ -223,7 +223,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           </div>
         </div>
 
-        {/* ==================== NEW 5-SECTION LAYOUT ==================== */}
+        {/* ==================== NEW SECTION LAYOUT ==================== */}
         {hasNewFormat ? (
           <>
             {/* --- 01 Problem --- */}
@@ -231,8 +231,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               <section className="cs__section">
                 <div className="cs__section-header">
                   <span className="cs__section-number">01</span>
+                  <span className="cs__micro-label">The Problem</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[0]}</h2>
                 </div>
+                {project.problemPunch && (
+                  <p className="cs__punch">{project.problemPunch}</p>
+                )}
                 <ul className="cs__section-bullets">
                   {project.problem.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -244,11 +248,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
             {/* --- 02 Gaps & Opportunity --- */}
             {project.gaps && project.gaps.length > 0 && (
-              <section className="cs__section">
+              <section className="cs__section cs__section--alt">
                 <div className="cs__section-header">
                   <span className="cs__section-number">02</span>
+                  <span className="cs__micro-label">What Was Missing</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[1]}</h2>
                 </div>
+                {project.gapsPunch && (
+                  <p className="cs__punch">{project.gapsPunch}</p>
+                )}
                 <ul className="cs__section-bullets">
                   {project.gaps.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -263,8 +271,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               <section className="cs__section">
                 <div className="cs__section-header">
                   <span className="cs__section-number">03</span>
+                  <span className="cs__micro-label">Real-World Context</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[2]}</h2>
                 </div>
+                {project.constraintsPunch && (
+                  <p className="cs__punch">{project.constraintsPunch}</p>
+                )}
                 <ul className="cs__section-bullets">
                   {project.constraints.map((item, i) => (
                     <li key={i}>{item}</li>
@@ -274,16 +286,28 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </section>
             )}
 
+            {/* --- Insight Callout (moment frame) --- */}
+            {project.insightCallout && (
+              <div className="cs__callout">
+                <span className="cs__callout-marker">Key Insight</span>
+                <p className="cs__callout-text">{project.insightCallout}</p>
+              </div>
+            )}
+
             {/* --- 04 Approach --- */}
             {project.approachSubsections && project.approachSubsections.length > 0 ? (
-              <section className="cs__section">
+              <section className="cs__section cs__section--alt">
                 <div className="cs__section-header">
                   <span className="cs__section-number">04</span>
+                  <span className="cs__micro-label">How It Came Together</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
                 </div>
                 <div className="cs__approach-subs">
                   {project.approachSubsections.map((sub) => (
                     <div key={sub.key} className="cs__approach-sub">
+                      {sub.systemMarker && (
+                        <span className="cs__system-marker">{sub.systemMarker}</span>
+                      )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
                       {sub.images && sub.images.length > 0 && (
@@ -296,9 +320,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 </div>
               </section>
             ) : project.approachSteps && project.approachSteps.length > 0 ? (
-              <section className="cs__section">
+              <section className="cs__section cs__section--alt">
                 <div className="cs__section-header">
                   <span className="cs__section-number">04</span>
+                  <span className="cs__micro-label">How It Came Together</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
                 </div>
                 <ol className="cs__approach-steps">
@@ -320,6 +345,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             <section className="cs__section cs__section--outcome">
               <div className="cs__section-header">
                 <span className="cs__section-number">05</span>
+                <span className="cs__micro-label">What Changed</span>
                 <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
               </div>
               <div className="cs__results-grid">

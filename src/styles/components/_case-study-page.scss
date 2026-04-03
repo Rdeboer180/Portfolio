@@ -154,15 +154,28 @@
   }
 
   // ==========================================
-  // NEW: 5-Section Layout
+  // Section Layout
   // ==========================================
   &__section {
     margin-bottom: $spacing-4xl;
-    padding-bottom: $spacing-4xl;
+    padding: $spacing-4xl 0;
     border-bottom: 1px solid $color-neutral-light;
     @include fade-in-up(0.3s);
 
+    &:first-of-type {
+      padding-top: 0;
+    }
+
     &:last-of-type {
+      border-bottom: none;
+    }
+
+    // Alternating background — full-bleed breakout
+    &--alt {
+      background: rgba(0, 0, 0, 0.015);
+      padding: $spacing-4xl calc((100vw - 960px) / 2 + $spacing-2xl);
+      margin-left: calc(-1 * (100vw - 960px) / 2 - $spacing-2xl);
+      margin-right: calc(-1 * (100vw - 960px) / 2 - $spacing-2xl);
       border-bottom: none;
     }
 
@@ -176,8 +189,8 @@
 
   &__section-header {
     display: flex;
-    align-items: baseline;
-    gap: $spacing-lg;
+    flex-direction: column;
+    gap: $spacing-xs;
     margin-bottom: $spacing-xl;
   }
 
@@ -189,6 +202,16 @@
     letter-spacing: 0.04em;
   }
 
+  // Micro label — new typography level
+  &__micro-label {
+    font-family: $font-family-primary;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
   &__section-heading {
     font-family: $font-family-heading;
     font-size: $font-size-h4;
@@ -196,6 +219,63 @@
     color: $color-neutral-dark;
     letter-spacing: -0.01em;
     margin: 0;
+  }
+
+  // Punch line — fast scan layer
+  &__punch {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    line-height: 1.4;
+    color: $color-neutral-dark;
+    margin: 0 0 $spacing-xl;
+    max-width: 640px;
+  }
+
+  // Insight callout — moment frame
+  &__callout {
+    position: relative;
+    background: $color-primary-light;
+    border-left: 3px solid $color-primary;
+    border-radius: 0 $card-border-radius-lg $card-border-radius-lg 0;
+    padding: $spacing-2xl $spacing-3xl;
+    margin: $spacing-xl 0 $spacing-4xl;
+    @include fade-in-up(0.3s);
+  }
+
+  &__callout-marker {
+    display: block;
+    font-family: $font-family-primary;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__callout-text {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-dark;
+    margin: 0;
+  }
+
+  // System marker — approach subsection tag
+  &__system-marker {
+    display: inline-block;
+    font-family: $font-family-primary;
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: $color-primary-light;
+    padding: 3px $spacing-md;
+    border-radius: $radius-full;
+    margin-bottom: $spacing-sm;
   }
 
   &__section-bullets {
@@ -891,8 +971,23 @@
       gap: $spacing-lg;
     }
 
+    &__section--alt {
+      margin-left: -$spacing-xl;
+      margin-right: -$spacing-xl;
+      padding: $spacing-3xl $spacing-xl;
+    }
+
     &__section-heading {
       font-size: $font-size-h5;
+    }
+
+    &__punch {
+      font-size: $font-size-body;
+    }
+
+    &__callout {
+      padding: $spacing-xl;
+      margin: $spacing-lg 0 $spacing-3xl;
     }
 
     &__approach-steps {
