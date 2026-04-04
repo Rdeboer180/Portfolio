@@ -117,7 +117,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         <div className="hero-hybrid__grid">
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              Senior Web Designer by title <span style={{whiteSpace: 'nowrap'}}>I think in systems and build in code. I operate as a</span>
+              Senior Web Designer by title I think in systems and build in code. I operate as a
             </p>
             <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
               <span className="hero-hybrid__typed">{displayText}<span className="hero-hybrid__cursor" /></span>
