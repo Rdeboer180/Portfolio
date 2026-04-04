@@ -48,6 +48,8 @@ export interface Project {
   approachSubsections?: ApproachSubsection[];
   outcomeNote?: string;
   outcomeImages?: ProjectImage[];
+  outcomeGridImages?: ProjectImage[];
+  outcomeLiveLinks?: { label: string; url: string }[];
   insightCallout?: string;
 
   // Legacy approach steps (kept for other projects during transition)
@@ -436,10 +438,10 @@ const projects: Project[] = [
     ],
     constraintsImages: [
       {
-        src: '/images/work/tire-rack-winter/supporting/constraints/winter-aem-fragment-tree.png',
-        alt: 'AEM fragment tree showing the full library of winter components organized for authoring',
+        src: '/images/work/tire-rack-winter/supporting/constraints/documenting authoring contingencies.png',
+        alt: 'AEM Mapping of component swaps based on author location and their publisher counterparts',
         layout: 'full',
-        caption: 'AEM fragment tree\u2014the full library of winter components organized for authoring',
+        caption: 'AEM Mapping of component swaps based on author location and their publisher counterparts',
       },
     ],
 
@@ -511,13 +513,6 @@ const projects: Project[] = [
         alt: 'Winterized Tire Rack homepage with seasonal hero, editorial blocks, and category grid',
         layout: 'full',
         caption: 'Winterized homepage\u2014full Experience Fragment swap across all above-the-fold sections',
-      },
-      {
-        src: '/images/work/tire-rack-winter/supporting/outcome/winter-homepage-mobile.png',
-        alt: 'Mobile winterized homepage showing responsive seasonal content',
-        layout: 'full',
-        caption: 'Mobile experience\u2014responsive fragment rendering across seasonal sections',
-        mobile: true,
       },
     ],
     metrics: [
@@ -669,150 +664,188 @@ const projects: Project[] = [
     ],
   },
   // =============================================
-  // 4. Tire Rack — Landing Page Design System  [image LEFT]
+  // 4. Tire Rack — AEM Landing Page System  [image LEFT]
   // =============================================
   {
     slug: 'landing-pages',
     client: 'Tire Rack',
-    title: 'Conversion-Focused Landing Pages at Scale',
-    summary: 'Became the go-to designer for rapid landing pages at Tire Rack\u2014building a reusable pattern library that ships 50+ SEO-optimized pages from brief to live in hours.',
-    year: '2021\u2013Present',
-    tags: ['UX Design', 'SEO', 'AEM', 'Content Strategy', 'Responsive'],
-    role: 'Senior Web Designer / AEM Author',
-    tools: ['Figma', 'Adobe Experience Manager', 'HTML/CSS', 'Adobe Creative Suite', 'AI-Assisted Content Tools'],
-    timeline: 'Ongoing',
+    title: 'AEM Landing Page System & SEO Template Framework',
+    summary: 'Developed a scalable AEM template system that shifted landing page creation from one-off design tasks to a repeatable framework\u201450+ pages shipped, from weeks to hours.',
+    year: '2023\u2013Present',
+    tags: ['UX Design', 'UI Design', 'Front-End Development', 'Design Systems'],
+    role: 'Senior Web Designer / UX Engineer',
+    tools: ['AEM', 'Figma', 'HTML/CSS', 'Adobe Creative Suite', 'ChatGPT'],
+    timeline: 'Ongoing (50+ landing pages)',
     featured: '/images/work/landing-pages/CS_thumbnail_landing-pages.jpg',
-    timeToLive: 'Brief to live in hours\u2014typical turnaround for new landing pages',
+    timeToLive: 'From weeks to days\u2014system reduced turnaround from multi-week cycles to same-week launches',
 
     // \u2500\u2500 01 Problem \u2500\u2500
-    problemPunch: 'Inconsistent layouts. No heading hierarchy. Pages that couldn\u2019t serve both users and search engines.',
+    problemPunch: 'Every landing page started from scratch. No templates, no patterns, no scalable process.',
     problem: [
-      'Tire Rack\u2019s landing pages serve as SEO-driven entry points for tire sizes, categories, promotions, and specialty segments.',
-      'Existing pages were inconsistent, lacked clear structure, and weren\u2019t optimized for the long-tail keyword patterns that drive organic traffic.',
-      'Each new page request came with minimal direction\u2014a tire type, a few keywords, maybe a product photo\u2014and needed to ship fast.',
+      'Tire Rack\u2019s SEO strategy relies on targeted landing pages capturing high-intent search queries across tire sizes, categories, and niche segments.',
+      'Pages were requested by SEO or partner teams and needed to launch quickly\u2014without sacrificing consistency, usability, or performance.',
+      'At scale, the challenge wasn\u2019t designing a page\u2014it was creating a system that other designers and teams could use without starting from scratch each time.',
     ],
     problemImages: [
       {
-        src: '/images/work/landing-pages/supporting/Problem/contentBrief.png',
-        alt: 'Content brief showing minimal input for a new landing page request',
+        src: '/images/work/landing-pages/supporting/contentBrief.png',
+        alt: 'Content brief showing SEO keywords and page requirements for a new landing page',
         layout: 'full',
-        caption: 'Typical intake\u2014a lightweight brief that needs to become a full page in hours',
+        caption: 'Typical intake\u2014an SEO-driven content brief that needs to become a live page',
       },
     ],
 
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'No reusable patterns. Every page designed from scratch. Speed and quality treated as tradeoffs.',
+    gapsPunch: 'No reusable templates. No component strategy. Speed and quality treated as tradeoffs.',
     gaps: [
-      'No pattern library\u2014each page was a one-off design effort requiring cross-team coordination.',
+      'No pattern library\u2014each page was a one-off design effort requiring cross-team coordination and multi-week timelines.',
       'Heading hierarchy wasn\u2019t mapped to keyword intent, missing long-tail SEO opportunities.',
-      'Multi-day timelines for pages that should ship same-day.',
+      'No AI-assisted workflow for content generation or QA.',
     ],
     gapsImages: [
       {
-        src: '/images/work/landing-pages/supporting/opportunity/copy_provided.png',
-        alt: 'Copy and content provided for landing page development',
+        src: '/images/work/landing-pages/supporting/copy_provided.png',
+        alt: 'Raw copy and content inputs provided for landing page development',
         layout: 'full',
-        caption: 'Content inputs\u2014translating raw copy into structured, conversion-focused layouts',
+        caption: 'Content inputs\u2014translating raw copy and SEO requirements into structured layouts',
       },
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
-    constraintsPunch: 'Minimal briefs. Two audiences (users + search engines). Speed is the expectation.',
+    constraintsPunch: 'Minimal briefs. Two audiences (users + search engines). AEM component limitations. Speed is the expectation.',
     constraints: [
-      'Pages serve two audiences simultaneously: customers searching for specific tires and search engines indexing structured content.',
-      'Minimal direction per request\u2014often just a tire type and target keywords.',
-      'AEM component system with specific authoring constraints.',
+      'Pages serve two audiences: customers searching for specific tires and search engines indexing structured content.',
+      'Minimal direction per request\u2014often just a tire type, target keywords, and a product photo.',
+      'AEM component system with specific authoring constraints and structured field requirements.',
       'SEO, analytics, and merchandising teams all have input on structure and content.',
     ],
     constraintsImages: [
       {
-        src: '/images/work/landing-pages/supporting/constraints/ongoing_efforts_organize.png',
-        alt: 'Organized list of ongoing landing page efforts and priorities',
+        src: '/images/work/landing-pages/supporting/projectDoc.png',
+        alt: 'Project scope document defining landing page requirements and deliverables',
         layout: 'full',
-        caption: 'Ongoing efforts\u2014managing multiple page requests in parallel',
+        caption: 'Scope document\u2014defining requirements and component needs before design begins',
       },
     ],
 
-    insightCallout: 'Speed and quality aren\u2019t tradeoffs when you invest in systems. Reusable patterns let me ship in hours without shortcuts.',
+    insightCallout: 'Speed and quality aren\u2019t tradeoffs when you invest in systems. Reusable patterns and AI-assisted workflows let me ship in hours without shortcuts.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
-        description: 'Clarify intent with SEO and merchandising teams. Identify target keywords, product focus, and conversion goals from the brief.',
+        label: 'Content-Driven Foundation',
+        description: 'Every page begins with a content brief and defined goal. I establish page hierarchy (hero, features, products, FAQs), required SEO content placement, and internal linking strategy. Close collaboration with SEO and copy teams to refine needs against available component structures.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
-        description: 'Map layout and heading hierarchy to keyword intent. H1\u2013H6 structure serves both user scanning patterns and search engine indexing.',
+        label: 'Component-Based Planning',
+        description: 'In Figma, I map each landing page using reusable components sourced from across the site\u2014hero patterns, product feature sections, FAQ modules, promotional and linking sections. Consistency while allowing flexibility for different page types.',
         systemMarker: 'Pattern introduced',
-        images: [],
+        images: [
+          {
+            src: '/images/work/landing-pages/supporting/ongoing_efforts_organize.png',
+            alt: 'Organized list of ongoing landing page efforts and component planning',
+            layout: 'full',
+            caption: 'System planning\u2014managing component selection and page structure across 50+ pages',
+          },
+        ],
       },
       {
         key: 'system',
-        label: 'System',
-        description: 'Developed reusable layout patterns\u2014hero modules, product grids, FAQ accordions, brand carousels, size tables\u2014that assemble into any category or promotion page.',
+        label: 'AEM System Development',
+        description: 'Built and refined reusable AEM component patterns: rapid page creation from pre-defined layouts, flexible content input through structured fields, and integration with API-driven product and search data.',
         systemMarker: 'System decision',
-        gridColumns: 2,
         images: [
           {
-            src: '/images/work/landing-pages/supporting/outcome/landing-pages-classic-tires.jpg',
-            alt: 'Classic Car Tires category landing page with structured content',
-            layout: 'half',
-            caption: 'Category landing page\u2014reusable pattern with brand carousel and SEO structure',
-          },
-          {
-            src: '/images/work/landing-pages/supporting/outcome/landing-pages-35-inch.jpg',
-            alt: '35-Inch Tires size-based landing page with lifestyle photography',
-            layout: 'half',
-            caption: 'Size-based entry point\u2014same pattern system, different content',
+            src: '/images/work/landing-pages/supporting/communication_images.png',
+            alt: 'Cross-team communication artifacts from landing page development process',
+            layout: 'full',
+            caption: 'Cross-functional coordination\u2014aligning SEO, merchandising, and development on component strategy',
           },
         ],
       },
       {
         key: 'build',
-        label: 'Build',
-        description: 'Author directly in AEM using Experience Fragment components. Source photography, write or refine copy with AI-assisted tools, QA across breakpoints.',
+        label: 'AI-Assisted Workflow',
+        description: 'Developed a ChatGPT-based workflow that generates structured content from component inputs, pulls relevant product categories (tire sizes, wheel sizes), creates internal linking structures aligned to SEO strategy, and produces QA-ready notes and testing scenarios.',
         systemMarker: 'Scalability consideration',
         images: [
           {
-            src: '/images/work/landing-pages/supporting/approach/communication_images.png',
-            alt: 'Communication and collaboration artifacts from the landing page process',
+            src: '/images/work/landing-pages/supporting/testing notes.png',
+            alt: 'QA testing notes and deployment checklist for landing page launch',
             layout: 'full',
-            caption: 'Collaboration artifacts\u2014coordinating across SEO, merchandising, and development',
+            caption: 'QA documentation\u2014AI-generated testing scenarios and deployment checklist',
           },
         ],
       },
       {
         key: 'iteration',
-        label: 'Iteration',
-        description: 'Monitor organic traffic, engagement metrics, and conversion. Refine based on analytics and A/B test results. Feed learnings back into the pattern library.',
+        label: 'Iteration & Deployment',
+        description: 'High-impact pages deploy to staging with generated QA docs and team review. Lower-risk pages publish directly with live testing and optimization. Process evolved from week-long cycles to same-week or multi-day turnarounds.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'This work established a repeatable, scalable system for landing page production at Tire Rack. Pages that previously required cross-team coordination and multi-day timelines now go live in hours. The reusable pattern library reduced design-to-publish time while maintaining consistent quality, SEO structure, and conversion performance across size-based, category, seasonal, and product-focused pages.',
+    outcomeNote: 'This work shifted landing page creation from a one-off design task to a scalable system. By combining design systems, AEM component strategy, and AI-assisted workflows, I enabled faster execution, better consistency, and stronger alignment between SEO, UX, and product discovery.',
     outcomeImages: [
       {
-        src: '/images/work/landing-pages/supporting/outcome/landing-pages-responsive-preview.jpg',
-        alt: 'Product landing page shown across desktop and mobile breakpoints',
+        src: '/images/work/landing-pages/supporting/landing-pages-35-inch.jpg',
+        alt: '35-Inch Tires landing page\u2014SEO-driven content built from reusable component system',
         layout: 'full',
-        caption: 'Responsive landing page\u2014hero, SEO copy, and clear CTA across breakpoints',
-      },
-      {
-        src: '/images/work/landing-pages/supporting/outcome/landing-pages-full-page-layouts.jpg',
-        alt: 'Full-page layouts showing size table, promotions, and product recommendations',
-        layout: 'full',
-        caption: 'Full page structure\u2014size table, promotions, recommendations, and FAQ content',
+        caption: '35-Inch Tires\u2014SEO-driven page built from the reusable template system',
       },
     ],
+    outcomeGridImages: [
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-20-inch.jpg',
+        alt: '20-Inch Tires landing page with product hero and responsive layout',
+        layout: 'half',
+        caption: '20-Inch Tires',
+      },
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-classic-tires.jpg',
+        alt: 'Classic Car Tires category landing page with brand carousel',
+        layout: 'half',
+        caption: 'Classic Car Tires',
+      },
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-full-page-layouts.jpg',
+        alt: 'Full-page layouts showing size table, promotions, and product recommendations',
+        layout: 'half',
+        caption: 'Full Page Layouts',
+      },
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-product-mobile.jpg',
+        alt: 'Product page mobile views with video, specs, and FAQ sections',
+        layout: 'half',
+        caption: 'Mobile Variations',
+      },
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-responsive-preview.jpg',
+        alt: 'Product landing page shown across desktop and mobile breakpoints',
+        layout: 'half',
+        caption: 'Responsive Preview',
+      },
+      {
+        src: '/images/work/landing-pages/supporting/landing-pages-classic-full.jpg',
+        alt: 'Classic Car Tires full page with FAQ, featured brands, and testimonials',
+        layout: 'half',
+        caption: 'Classic Full Page',
+      },
+    ],
+    outcomeLiveLinks: [
+      { label: '35-Inch Tires', url: 'https://www.tirerack.com/tires/35-inch' },
+      { label: 'All-Weather Tires', url: 'https://www.tirerack.com/tires/all-weather' },
+      { label: 'Black Friday Deals', url: 'https://www.tirerack.com/deals/black-friday' },
+      { label: 'G-Force Phenom', url: 'https://www.tirerack.com/landing-page/product/g-forcePhenom' },
+    ],
     metrics: [
-      { value: '50+', label: 'Landing pages designed & published' },
-      { value: 'Hours', label: 'Typical brief-to-live turnaround' },
-      { value: 'End-to-End', label: 'Brief \u2192 Design \u2192 Build \u2192 Live' },
+      { value: '50+', label: 'Landing pages created' },
+      { value: 'Weeks \u2192 Days', label: 'Turnaround reduction' },
+      { value: 'Consistent', label: 'UX across all SEO experiences' },
     ],
   },
 ];

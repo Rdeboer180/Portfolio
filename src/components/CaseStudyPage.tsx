@@ -67,6 +67,7 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
   }
   addSection(project.approachImages);
   addSection(project.outcomeImages);
+  addSection(project.outcomeGridImages);
   // Legacy images
   if (project.images) project.images.forEach((img) => imgs.push({ src: img.src, alt: img.alt }));
   return imgs;
@@ -360,6 +361,35 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
               )}
               <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} />
+
+              {/* Outcome grid — scale wall */}
+              {project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
+                <div className="cs__outcome-grid">
+                  {project.outcomeGridImages.map((img, i) => (
+                    <figure key={i} className="cs__outcome-grid-item">
+                      <div className="cs__img-wrap" onClick={() => openLightbox(img.src, img.alt, lbImages.findIndex((lb) => lb.src === img.src))}>
+                        <img src={img.src} alt={img.alt} />
+                        <span className="cs__zoom-hint">&#x26F6; View full</span>
+                      </div>
+                      {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              )}
+
+              {/* Live links */}
+              {project.outcomeLiveLinks && project.outcomeLiveLinks.length > 0 && (
+                <div className="cs__live-links">
+                  <span className="cs__live-links-label">Select pages are live</span>
+                  <div className="cs__live-links-list">
+                    {project.outcomeLiveLinks.map((link, i) => (
+                      <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="cs__live-link">
+                        {link.label} &rarr;
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* --- Time to Live --- */}

@@ -493,6 +493,69 @@
   }
 
   // ==========================================
+  // Outcome Grid (scale wall)
+  // ==========================================
+  &__outcome-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+    margin-top: $spacing-2xl;
+  }
+
+  &__outcome-grid-item {
+    margin: 0;
+    border-radius: $radius-xl;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  // ==========================================
+  // Live Links
+  // ==========================================
+  &__live-links {
+    margin-top: $spacing-2xl;
+    padding-top: $spacing-xl;
+    border-top: 1px solid rgba($color-primary, 0.15);
+  }
+
+  &__live-links-label {
+    display: block;
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-muted;
+    margin-bottom: $spacing-md;
+  }
+
+  &__live-links-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+  }
+
+  &__live-link {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    text-decoration: none;
+    padding: $spacing-xs $spacing-md;
+    border: 1px solid $color-primary;
+    border-radius: $radius-full;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
+    }
+  }
+
+  // ==========================================
   // Shared Image Styles
   // ==========================================
   &__figure {
@@ -1013,6 +1076,11 @@
 
     &__time-to-live {
       padding: $spacing-xl;
+    }
+
+    &__outcome-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-md;
     }
 
     // Legacy responsive
