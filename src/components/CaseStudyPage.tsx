@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import SectionBadge from './SectionBadge';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import '../styles/styles.scss';
@@ -184,9 +183,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       <div className="cs__container">
         {/* ==================== Header ==================== */}
         <header className="cs__header">
-          <div className="cs__header-badge">
-            <SectionBadge icon={<BriefcaseIcon />} label="Case Study" />
-          </div>
+          <span className="cs__eyebrow">Case Study</span>
           <span className="cs__client">{project.client}</span>
           <h1 className="cs__title">{project.title}</h1>
           {project.summary && (

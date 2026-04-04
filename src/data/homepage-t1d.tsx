@@ -10,22 +10,32 @@ const t1dContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Visual Product Designer', 'Design Systems Architect', 'UX Engineer'],
-    headline: 'looking to shift 16 years of design craft toward a product I trust, use daily, and want to help elevate.',
-    body: 'I\u2019m a Senior Product Designer specializing in high-fidelity UI, scalable design systems, and front-end development. No single piece of technology has been more influential in my life and wellbeing than Dexcom\u2014and I want to bring everything I\u2019ve built in my career to the team behind it.',
+    headline: '',
+    body: (
+      <>
+        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">No single piece of technology has been more influential in my life and wellbeing than Dexcom&mdash;I&rsquo;m looking to shift 16 years of design craft toward a product I trust, use daily, and want to help elevate.</span>
+      </>
+    ),
   },
 
   about: {
     title: 'This One Is Personal',
     paragraphs: [
+      (
+        <>
+          <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
+        </>
+      ),
       'I\u2019ve lived with Type 1 Diabetes for over 20 years, and for the last 10 of those Dexcom has been part of my daily life\u2014worn on my body, checked on my phone, factored into every decision I make about my health. But it goes beyond just wearing the sensor. I spend a significant amount of my personal time diving into medical and metabolic literature, watching lectures, and listening to podcasts to deepen my understanding of the disease and sharpen my own treatment. I also maintain a custom-coded branch of the Loop app\u2014an open-source closed-loop insulin delivery system that integrates directly with my Dexcom CGM. Managing T1D isn\u2019t just something I do\u2014it\u2019s a discipline I\u2019m deeply invested in.',
       'That\u2019s why this isn\u2019t just a job application\u2014it\u2019s a career shift I\u2019ve been thinking about for a long time. I\u2019ve spent 16 years building scalable UI systems, design systems, and production-ready front-end code. Now I want to point all of that toward a brand and product I genuinely trust and want to help elevate. No piece of technology has had more impact on my daily life than Dexcom, and I want to bring my best work to the team behind it.',
       'At Tire Rack, I built and maintained component libraries and design systems in Figma that powered UI across multiple retail brands. I owned the front-end template layer end-to-end\u2014writing the SCSS, building CMS components, and documenting patterns so the broader team could ship consistently. What I designed is what shipped. I\u2019m ready to bring that same discipline to a product where the stakes are personal.',
       (
         <>
-          There&rsquo;s more to how I think than what fits on a page&mdash;ask anything about my work, process, or approach.{' '}
-          <a href="#/about" className="about__read-more">Dig deeper &rarr;</a>
+          <span className="about__highlight">AI is changing how quickly ideas can be explored, designed, and shipped&mdash;but without strategy behind the work and the prompt, the product won&rsquo;t stand out.</span> I&rsquo;ve spent time getting ahead of that curve, actively using LLM workflows to explore faster and push ideas further. But I don&rsquo;t see that as a long-term edge&mdash;it&rsquo;s quickly becoming the expectation.
         </>
       ),
+      'The real separation will come from designers who can think beyond the output\u2014who know how to guide the tools, pressure test what they produce, and push the work further than expected. That\u2019s where I do my best work: bringing clear thinking, high standards, and uncommon care to the final product.',
+      'That\u2019s a big part of why I feel so well matched for where the industry is now\u2014bringing together design taste, systems thinking, technical understanding, and a genuine love for making things better than they need to be.',
     ],
     stats: [
       { value: '20+', label: 'Years living with Type 1 Diabetes' },

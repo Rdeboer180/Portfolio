@@ -10,22 +10,32 @@ const insuletContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Design Strategist', 'Front-End Developer', 'Design System Engineer'],
-    headline: 'ready to bring 16 years of technical web craft to a brand whose product I\u2019ve depended on for over a decade.',
-    body: 'I\u2019m a Senior Web Designer with deep hands-on experience in HTML, CMS platforms, email execution, and design\u2014working at the intersection of marketing, creative, and engineering. I understand regulated industries, I know how to ship compliant digital content fast, and I want to do that work for Insulet.',
+    headline: '',
+    body: (
+      <>
+        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;m ready to bring 16 years of technical web craft to a brand whose product I&rsquo;ve depended on for over a decade.</span>
+      </>
+    ),
   },
 
   about: {
     title: 'Built for This Kind of Work',
     paragraphs: [
+      (
+        <>
+          <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
+        </>
+      ),
       'I\u2019ve lived with Type 1 Diabetes for over 20 years. For more than a decade, the Omnipod has been part of how I manage it\u2014alongside Dexcom CGM technology. Insulet\u2019s mission isn\u2019t abstract to me. I\u2019ve experienced what it means when a medical product works well, and what it means when the digital experience around it falls short. I want to help close that gap.',
       'My career has been rooted in technical digital execution\u2014not just design. At Tire Rack, I worked inside a large-scale AEM (Adobe Experience Manager) CMS environment, managing content updates, building reusable components, and shipping campaigns across web and email channels in a complex, multi-stakeholder organization. I worked closely with marketing, analytics, SEO, and engineering teams to keep digital channels accurate, performant, and on-brand.',
       'I\u2019m comfortable moving between design tools and code. I write HTML and CSS daily, I understand email service platform workflows, and I have hands-on experience with metadata, structured content, and digital governance. I bring both creative capability and operational discipline\u2014which is exactly what the HCP Digital Marketing role at Insulet requires.',
       (
         <>
-          There&rsquo;s more to how I work than what fits on a page&mdash;ask anything about my process or experience.{' '}
-          <a href="#/about" className="about__read-more">Dig deeper &rarr;</a>
+          <span className="about__highlight">AI is changing how quickly ideas can be explored, designed, and shipped&mdash;but without strategy behind the work and the prompt, the product won&rsquo;t stand out.</span> I&rsquo;ve spent time getting ahead of that curve, actively using LLM workflows to explore faster and push ideas further. But I don&rsquo;t see that as a long-term edge&mdash;it&rsquo;s quickly becoming the expectation.
         </>
       ),
+      'The real separation will come from designers who can think beyond the output\u2014who know how to guide the tools, pressure test what they produce, and push the work further than expected. That\u2019s where I do my best work: bringing clear thinking, high standards, and uncommon care to the final product.',
+      'That\u2019s a big part of why I feel so well matched for where the industry is now\u2014bringing together design taste, systems thinking, technical understanding, and a genuine love for making things better than they need to be.',
     ],
     stats: [
       { value: '20+', label: 'Years living with Type 1 Diabetes' },

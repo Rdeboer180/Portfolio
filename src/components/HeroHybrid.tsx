@@ -79,7 +79,7 @@ const HeroHybrid: React.FC = () => {
           {/* Left: Clean animated text */}
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              Senior Web Designer by title <span style={{whiteSpace: 'nowrap'}}>but I&rsquo;m also a</span>
+              Senior Web Designer by title <span style={{whiteSpace: 'nowrap'}}>I think in systems and build in code. I operate as a</span>
             </p>
 
             <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
@@ -88,10 +88,6 @@ const HeroHybrid: React.FC = () => {
                 <span className="hero-hybrid__cursor" />
               </span>
             </div>
-
-            <h1 className="hero-hybrid__headline hero-hybrid__reveal hero-hybrid__reveal--3">
-              who turns complex products into usable experiences.
-            </h1>
 
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
               I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions.
@@ -170,7 +166,7 @@ const HeroHybrid: React.FC = () => {
           <div className="hero-hybrid__proof-divider" />
           <div className="hero-hybrid__proof-right">
             <p className="hero-hybrid__proof-text">
-              Reviews from those I have worked with
+              The best signal of how I work isn't what I say—it's what the people I've worked with say.
             </p>
             <a href="#testimonials" className="hero-hybrid__proof-cta">
               View Testimonials

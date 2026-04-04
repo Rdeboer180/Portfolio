@@ -126,8 +126,12 @@
 
   &__eyebrow {
     font-size: $font-size-body-lg;
-    color: $color-primary;
     margin-bottom: $spacing-sm;
+    font-weight: 700;
+
+      span {
+      color:$color-primary;
+    }
   }
 
   &__reveal {
@@ -183,7 +187,7 @@
     line-height: $line-height-body-lg;
     color: $color-neutral-muted;
     max-width: 480px;
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-2xl;
   }
 
   // --- Social proof line ---

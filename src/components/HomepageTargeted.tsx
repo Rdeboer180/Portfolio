@@ -59,6 +59,29 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const heroRef = React.useRef<HTMLElement>(null);
+
+  // Highlight animation for the hero body
+  useEffect(() => {
+    const section = heroRef.current;
+    if (!section) return;
+
+    const highlights = section.querySelectorAll('.about__highlight');
+    if (highlights.length === 0) return;
+
+    // Delay start so the reveal animations finish first
+    const startTimer = setTimeout(() => {
+      highlights.forEach((el) => {
+        el.classList.add('about__highlight--active');
+        setTimeout(() => {
+          el.classList.add('about__highlight--bold');
+          el.classList.remove('about__highlight--active');
+        }, 2000); // 1s sweep + 1s hold
+      });
+    }, 1800);
+
+    return () => clearTimeout(startTimer);
+  }, []);
 
   useEffect(() => {
     const currentRole = hero.roles[roleIndex];
@@ -79,7 +102,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
   const slug = meta.slug;
 
   return (
-    <section className="hero-hybrid">
+    <section className="hero-hybrid" ref={heroRef}>
       <nav className="hero-hybrid__nav">
         <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
         <div className="hero-hybrid__nav-links">
@@ -94,14 +117,11 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         <div className="hero-hybrid__grid">
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              {hero.eyebrow.includes('but') ? (
-                <>{hero.eyebrow.split('but')[0]} <span style={{whiteSpace: 'nowrap'}}>but{hero.eyebrow.split('but')[1]}</span></>
-              ) : hero.eyebrow}
+              Senior Web Designer by title <span style={{whiteSpace: 'nowrap'}}>I think in systems and build in code. I operate as a</span>
             </p>
             <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
               <span className="hero-hybrid__typed">{displayText}<span className="hero-hybrid__cursor" /></span>
             </div>
-            <h1 className="hero-hybrid__headline hero-hybrid__reveal hero-hybrid__reveal--3">{hero.headline}</h1>
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">{hero.body}</p>
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
@@ -164,9 +184,46 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
 };
 
 const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content }) => {
-  const { about } = content;
+  const { about, meta } = content;
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const highlights = section.querySelectorAll('.about__highlight');
+    if (highlights.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const sweepDuration = 2000;
+            const boldPause = 800;
+            const cycleTime = sweepDuration + boldPause + 400;
+            highlights.forEach((el, i) => {
+              const baseDelay = i * cycleTime;
+              setTimeout(() => {
+                el.classList.add('about__highlight--active');
+              }, baseDelay);
+              setTimeout(() => {
+                el.classList.add('about__highlight--bold');
+                el.classList.remove('about__highlight--active');
+              }, baseDelay + sweepDuration);
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="about" className="about about--wide">
+    <section id="about" className="about about--wide" ref={sectionRef}>
       <div className="about__container">
         <div className="about__content">
           <div className="about__text">
@@ -188,6 +245,14 @@ const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content
                 <p className="about__body">{p}</p>
               </React.Fragment>
             ))}
+            <p className="about__body">
+              There's more to how I think&mdash;and how I help teams do better work&mdash;than what fits here.
+            </p>
+            <div className="about__cta-links">
+              <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
+              <span className="about__link-separator">or</span>
+              <a href={`#/${meta.slug}#testimonials`} className="about__read-more">see what it's like to work with me &rarr;</a>
+            </div>
           </div>
         </div>
         <div className="about__stats">

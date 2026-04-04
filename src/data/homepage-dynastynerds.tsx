@@ -10,23 +10,32 @@ const dynastyNerdsContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Design Strategist', 'Product Designer', 'UX Engineer'],
-    headline: 'a NerdHerd member since day one, ready to help the #1 dynasty platform look as good as it plays.',
-    body: 'I design and build high-fidelity product experiences with a systems-first approach\u2014combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. DynastyNerds isn\u2019t a platform I discovered while job hunting. I\u2019ve been following the podcast since 2018, using the tools year-round, and listening to Garrett, Rich, and Matt on my commute every week. I want to help make this product as strong as the community behind it.',
+    headline: '',
+    body: (
+      <>
+        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">A NerdHerd member since day one, I&rsquo;m ready to help the #1 dynasty platform look as good as it plays.</span>
+      </>
+    ),
   },
 
   about: {
     title: 'Put Me in Coach, I\u2019m Ready to Build',
     titleImage: '/images/sleeper/gremlins_logo.png',
     paragraphs: [
-      'I\u2019m a systems thinker first, designer second. Sixteen years in, my edge has never been just taste\u2014it\u2019s been the ability to read the field before the snap, design with real constraints in mind, and understand the codebase my work lives in. Every great play starts with preparation, and that\u2019s how I approach every product problem.',
+      (
+        <>
+          <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span> Every great play starts with preparation, and that&rsquo;s how I approach every product problem.
+        </>
+      ),
       'Fantasy football isn\u2019t a casual hobby for me\u2014it\u2019s a lifestyle. I\u2019ve run a dynasty league for over a decade, and I designed custom logos and brand identities for every single team. My own squad, the Grandville Gremlins, has become a full family tradition\u2014logo on mugs, baby onesies, t-shirts, sweatshirts, anything that might bring superstitious Sunday luck. Growing up a DeBoer means growing up a Gremlins fan. We also run March Madness brackets and my family\u2019s annual Pigskin Pick\u2019em challenge. Sports platforms aren\u2019t seasonal for us\u2014they\u2019re year-round.',
       'I\u2019ve been following DynastyNerds since 2018 and became a NerdHerd member on day one. Garrett, Rich, and Matt have been a constant in my week\u2014whether it\u2019s the commute, the gym, or just a mental reset from the daily grind. That kind of loyalty doesn\u2019t happen by accident. It comes from genuine passion for the content, trust in the voices behind it, and a community that actually gives a damn. I want to point my craft toward an organization I\u2019m already invested in.',
       (
         <>
-          There&rsquo;s more to how I think than what fits on a page&mdash;ask anything about my work, process, or approach.{' '}
-          <a href="#/about" className="about__read-more">Dig deeper &rarr;</a>
+          <span className="about__highlight">AI is changing how quickly ideas can be explored, designed, and shipped&mdash;but without strategy behind the work and the prompt, the product won&rsquo;t stand out.</span> I&rsquo;ve spent time getting ahead of that curve, actively using LLM workflows to explore faster and push ideas further. But I don&rsquo;t see that as a long-term edge&mdash;it&rsquo;s quickly becoming the expectation.
         </>
       ),
+      'The real separation will come from designers who can think beyond the output\u2014who know how to guide the tools, pressure test what they produce, and push the work further than expected. That\u2019s where I do my best work: bringing clear thinking, high standards, and uncommon care to the final product.',
+      'That\u2019s a big part of why I feel so well matched for where the industry is now\u2014bringing together design taste, systems thinking, technical understanding, and a genuine love for making things better than they need to be.',
     ],
     stats: [
       { value: '16+', label: 'Years designing professionally' },

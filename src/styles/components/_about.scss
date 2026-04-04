@@ -4,6 +4,12 @@
 
 @import '../variables';
 
+@keyframes highlightFadeOut {
+  from { background-color: $color-primary-light; }
+  to   { background-color: transparent; }
+}
+
+
 .about {
   background: $color-white;
   padding: calc(#{$spacing-4xl} + 24px) 0 $spacing-4xl;
@@ -50,13 +56,56 @@
     }
   }
 
+  &__highlight {
+    position: relative;
+    padding: 2px 0;
+    border-radius: 2px;
+    cursor: text;
+    background: linear-gradient(to right, $color-primary-light 50%, transparent 50%);
+    background-size: 200% 100%;
+    background-position: right;
+    transition: background-position 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                font-weight 0.3s ease;
+
+    &--active {
+      background-position: left;
+    }
+
+    // Bold + fade out the highlight
+    &--bold {
+      font-weight: 700;
+      background: $color-primary-light;
+      animation: highlightFadeOut 0.8s ease 0s forwards;
+    }
+  }
+
+
+
+  &__cta-links {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+    margin-top: $spacing-sm;
+
+    .about__read-more {
+      display: inline;
+      margin-top: 0;
+    }
+  }
+
+  &__link-separator {
+    color: $color-neutral-muted;
+    font-style: italic;
+  }
+
   &__read-more {
     color: $color-primary;
     font-weight: $font-weight-semibold;
     text-decoration: none;
     transition: color $transition-fast;
-    display:block;
-    margin-top:1em;
+    display: block;
+    margin-top: 1em;
 
     &:hover {
       color: $color-primary-dark;

@@ -10,22 +10,31 @@ const fantasypointsContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Product Designer', 'UX Engineer', 'Design Systems Lead'],
-    headline: 'designing better fantasy experiences\u2014for the platforms I\u2019ve trusted for years.',
-    body: 'I\u2019m a Senior Product Designer and UX Engineer focused on scalable UI, front-end systems, and product storytelling\u2014with 16+ years turning complex information into clear, usable interfaces.',
+    headline: '',
+    body: (
+      <>
+        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;m designing better fantasy experiences&mdash;for the platforms I&rsquo;ve trusted for years.</span>
+      </>
+    ),
   },
 
   about: {
     title: 'A Subscriber First, a Designer Always',
     paragraphs: [
-      'I\u2019ve been following fantasy football content since college, and John Hansen was one of the first voices I trusted in the space. When FantasyPoints launched, I became a subscriber right away\u2014and I\u2019ve stayed one.',
-      'That kind of long-term trust doesn\u2019t happen by accident. It comes from clarity, consistency, and a product experience that supports the depth of the content behind it.',
-      'That\u2019s the kind of work I care about\u2014and the kind of product I want to help build. I\u2019m a systems thinker first, designer second. Sixteen years in, my edge has never been just taste\u2014it\u2019s been the ability to design with real constraints in mind and understand the codebase my work lives in.',
       (
         <>
-          There&rsquo;s more to how I think than what fits on a page&mdash;ask anything about my work, process, or approach.{' '}
-          <a href="#/about" className="about__read-more">Dig deeper &rarr;</a>
+          <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
         </>
       ),
+      'I\u2019ve been following fantasy football content since college, and John Hansen was one of the first voices I trusted in the space. When FantasyPoints launched, I became a subscriber right away\u2014and I\u2019ve stayed one.',
+      'That kind of long-term trust doesn\u2019t happen by accident. It comes from clarity, consistency, and a product experience that supports the depth of the content behind it. That\u2019s the kind of work I care about\u2014and the kind of product I want to help build.',
+      (
+        <>
+          <span className="about__highlight">AI is changing how quickly ideas can be explored, designed, and shipped&mdash;but without strategy behind the work and the prompt, the product won&rsquo;t stand out.</span> I&rsquo;ve spent time getting ahead of that curve, actively using LLM workflows to explore faster and push ideas further. But I don&rsquo;t see that as a long-term edge&mdash;it&rsquo;s quickly becoming the expectation.
+        </>
+      ),
+      'The real separation will come from designers who can think beyond the output\u2014who know how to guide the tools, pressure test what they produce, and push the work further than expected. That\u2019s where I do my best work: bringing clear thinking, high standards, and uncommon care to the final product.',
+      'That\u2019s a big part of why I feel so well matched for where the industry is now\u2014bringing together design taste, systems thinking, technical understanding, and a genuine love for making things better than they need to be.',
     ],
     stats: [
       { value: '16+', label: 'Years designing professionally' },

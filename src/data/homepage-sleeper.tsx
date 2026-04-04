@@ -15,7 +15,7 @@ export interface TargetedHomepageContent {
     eyebrow: string;
     roles: string[];        // Typing animation roles
     headline: string;
-    body: string;
+    body: string | React.ReactNode;
   };
   about: {
     title: string;
@@ -56,23 +56,32 @@ const sleeperContent: TargetedHomepageContent = {
   hero: {
     eyebrow: 'Senior Web Designer by title but I\u2019m also a',
     roles: ['Design Strategist', 'Product Designer', 'UX Engineer'],
-    headline: 'ready to bring the same game-day intensity to Sleeper\u2019s product team.',
-    body: 'I design and build high-fidelity product experiences with a systems-first approach\u2014combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. I\u2019ve been a Sleeper user since its first season, running a dynasty fantasy football league that keeps my closest friends connected year-round. Now I\u2019m ready to bring that same passion to the team building it.',
+    headline: '',
+    body: (
+      <>
+        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;ve been a Sleeper user since its first season&mdash;now I&rsquo;m ready to bring that same game-day intensity to Sleeper&rsquo;s product team.</span>
+      </>
+    ),
   },
 
   about: {
     title: 'Put me in coach, im ready to Build',
     titleImage: '/images/sleeper/gremlins_logo.png',
     paragraphs: [
-      'I\u2019m a systems thinker first, designer second. Sixteen years in, my edge has never been just taste\u2014it\u2019s been the ability to read the field before the snap, design with real constraints in mind, and understand the codebase my work lives in. Every great play starts with preparation, and that\u2019s how I approach every product problem.',
+      (
+        <>
+          <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span> Every great play starts with preparation, and that&rsquo;s how I approach every product problem.
+        </>
+      ),
       'I didn\u2019t just stumble into Sleeper\u2014I\u2019ve been on the platform since its very first season. I run a dynasty fantasy football league where I designed custom logos for every single team. My own squad, the Grandville Gremlins, has become a full family brand\u2014logo on mugs, baby onesies, t-shirts, sweatshirts, you name it. Growing up a DeBoer means you\u2019re growing up a Gremlins fan. Football Sundays are sacred in our house, and Sleeper is the command center that keeps our tight group of high school and college friends connected from draft day through the championship. We also host our March Madness brackets and my family\u2019s annual Pigskin Pick\u2019em challenge on the platform\u2014Sleeper isn\u2019t just for one season, it\u2019s year-round for us.',
       'That\u2019s why this role feels like a first-round pick. I don\u2019t just understand the product\u2014I live in it. I know what it feels like to check scores at halftime, trash-talk in league chat, and obsess over waiver wire moves at 3am. Combine that instinct with 16 years of designing scalable UI systems, building design systems from the ground up, and shipping production-ready front-end code\u2014and you get someone who can contribute to Sleeper\u2019s design team from day one, across iOS, Android, Web, and Tablet.',
       (
         <>
-          There&rsquo;s more to how I think than what fits on a page&mdash;ask anything about my work, process, or approach.{' '}
-          <a href="#/about" className="about__read-more">Dig deeper &rarr;</a>
+          <span className="about__highlight">AI is changing how quickly ideas can be explored, designed, and shipped&mdash;but without strategy behind the work and the prompt, the product won&rsquo;t stand out.</span> I&rsquo;ve spent time getting ahead of that curve, actively using LLM workflows to explore faster and push ideas further. But I don&rsquo;t see that as a long-term edge&mdash;it&rsquo;s quickly becoming the expectation.
         </>
       ),
+      'The real separation will come from designers who can think beyond the output\u2014who know how to guide the tools, pressure test what they produce, and push the work further than expected. That\u2019s where I do my best work: bringing clear thinking, high standards, and uncommon care to the final product.',
+      'That\u2019s a big part of why I feel so well matched for where the industry is now\u2014bringing together design taste, systems thinking, technical understanding, and a genuine love for making things better than they need to be.',
     ],
     stats: [
       { value: '16+', label: 'Years designing professionally' },
