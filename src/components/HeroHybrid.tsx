@@ -79,7 +79,7 @@ const HeroHybrid: React.FC = () => {
           {/* Left: Clean animated text */}
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              Senior Web Designer by title <span>I think in systems and build in code. I operate as a</span>
+              Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
             </p>
 
             <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
@@ -90,7 +90,7 @@ const HeroHybrid: React.FC = () => {
             </div>
 
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
-              I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions.
+              I design high-fidelity product experiences with a systems-first approach—bringing together UX, front-end development, and design systems to turn complex ideas into scalable solutions.
             </p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
