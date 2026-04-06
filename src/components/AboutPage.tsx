@@ -284,7 +284,7 @@ const AboutPage: React.FC = () => {
             I approach design the same way: grounded in fundamentals, shaped by real-world constraints, and constantly refined through iteration. Over time, that's evolved into systems thinking&mdash;understanding not just what to design, but how it holds up in production, scales across teams, and adapts over time.
           </p>
           <p className="about-page__hero-body">
-            What excites me about where things are now is the speed. AI has changed how quickly ideas can be built and tested&mdash;but it hasn't replaced the need for direction. If anything, it's made it more important. I see it as a multiplier: a way to explore more, test faster, and refine better&mdash;as long as you know what you're aiming for.
+            What excites me about where things are now is the speed. AI has changed how quickly ideas can be built and tested&mdash;but it hasn’t replaced the need for direction. If anything, it’s made it more important. I see it as a multiplier—a way to explore more, test faster, and refine better—as long as you know what you’re aiming for. The tools can accelerate output, but direction is still what defines the result.
           </p>
           <p className="about-page__hero-body">
             I do my best work on teams that value high standards, real collaboration, and an environment where thoughtful work can move quickly and actually make it into production.

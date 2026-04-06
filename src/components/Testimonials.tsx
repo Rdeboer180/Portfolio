@@ -25,32 +25,32 @@ const QuoteMark = () => (
 const testimonials = [
   {
     quote: 'Ryan consistently takes the initiative to engage with relevant teams—such as UX, UXR, Analytics, Imaging, and SEO—whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness. Moreover, it is evident that he genuinely values and cares for his colleagues.',
-    name: 'Director UX Design & Product Insight Manager',
-    role: 'Leadership',
+    name: 'Ryan Kokesh',
+    role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
   },
   {
     quote: 'Ryan\'s work is great. He consistently delivers designs that are at once thoughtful, intentional, and visually beautiful. He is thorough and precise, and he makes sure that everyone\'s expectations are being met. Folks love working with Ryan because they know they can expect great communication, attention to detail and strong visual design sense. He helps to set a standard for our visual presentation on the marketing-oriented pages of the site, and does the same in his collaboration and documentation.',
-    name: 'Web Design Manager',
-    role: 'Design Leadership',
+    name: 'Adam Payne',
+    role: 'Web Design Manager',
     year: '2025',
   },
   {
     quote: 'Ryan\'s team mentality is unshakable. He views every initiative as a group effort, and includes everyone from stakeholders to peer designers in his comms. He cares deeply about establishing a shared understanding, and genuinely works hard to create and maintain a sense of unity and community. This doesn\'t just help our team in terms of skill development and information sharing, it also strengthens our internal culture between the UX, UXR, Analytics and Web Design teams as a community of practice. He creates community not just for himself, but for those he welcomes in. Most importantly, Ryan sets an example to the rest of the team for what great communication and collaboration looks like.',
-    name: 'Web Design Manager',
-    role: 'Design Leadership',
+    name: 'Adam Payne',
+    role: 'Web Design Manager',
     year: '2025',
   },
   {
     quote: 'Always very high quality work. Has always thought through even the minor details, with specific reasoning for most all choices.',
-    name: 'Senior Vice President of Digital Operations',
-    role: 'Executive Leadership',
+    name: 'Tim Joines',
+    role: 'Tire Rack Senior Management',
     year: '2021',
   },
   {
     quote: 'Ryan has a lot of institutional knowledge. He understands what we\'ve done in the past, what\'s worked, what hasn\'t, and why. Combined with his technical skills, he has been very effective in project work.',
-    name: 'Senior Management',
-    role: 'Leadership',
+    name: 'Ryan Kokesh',
+    role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
   },
   {
