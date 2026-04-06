@@ -39,7 +39,7 @@ const testimonials = [
   {
     title: 'Craft & Standard-Setting',
     quote: (
-      <>Ryan&rsquo;s work is great. He consistently delivers designs that are at once <H>thoughtful, intentional, and visually beautiful</H>. He is thorough and precise, and he makes sure that everyone&rsquo;s expectations are being met. Folks love working with Ryan because they know they can expect great communication, <H>attention to detail and strong visual design sense</H>. He helps to set a standard for our visual presentation on the marketing-oriented pages of the site, and does the same in his collaboration and documentation.</>
+      <>Ryan&rsquo;s work is great. He consistently <H>delivers designs that are thoughtful, intentional, and visually beautiful</H>. He is thorough and precise, and he makes sure that everyone&rsquo;s expectations are being met. Folks love working with Ryan because they know they can expect great communication, <H>attention to detail and strong visual design sense</H>. He helps to set a standard for our visual presentation on the marketing-oriented pages of the site, and does the same in his collaboration and documentation.</>
     ),
     name: 'Adam Payne',
     role: 'Web Design Manager',

@@ -1,0 +1,48 @@
+<svg width="376" height="114" viewBox="0 0 376 114" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .card-bg { fill: #1f1f1f; stroke: #f07654; stroke-width: 2; }
+      .body-copy {
+        fill: #c9c9c9;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+      }
+      .footer-copy {
+        fill: #d8d8d8;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+      }
+      .muted {
+        fill: #b8b8b8;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+      }
+      .icon-muted { fill: #ffffff; fill-opacity: 0.95; }
+      .button-bg { fill: #101010; }
+    </style>
+  </defs>
+
+  <!-- Outer card -->
+  <rect x="1" y="1" width="374" height="112" rx="10" ry="10" class="card-bg"/>
+
+  <!-- Main copy -->
+  <text x="16" y="21" class="body-copy">
+    <tspan x="16" dy="0">Build a new iteration of this page based on the attached</tspan>
+    <tspan x="16" dy="15">client document. Follow all requirements and do not alter</tspan>
+    <tspan x="16" dy="15">the layout without approval. Use the design system skillset</tspan>
+    <tspan x="16" dy="15">build to apply the defined tokens for all design decisions.</tspan>
+  </text>
+
+  <!-- Top-right send button -->
+  <rect x="335" y="11" width="26" height="26" rx="6" ry="6" class="button-bg"/>
+  <path d="M344.5 18.5L353.5 24L344.5 29.5V18.5Z" class="icon-muted"/>
+
+  <!-- Bottom left plus -->
+  <text x="16" y="96" class="footer-copy" font-size="20">+</text>
+
+  <!-- Bottom center slash code -->
+  <text x="238" y="96" class="muted">&lt;/&gt; edit automatically</text>
+</svg>

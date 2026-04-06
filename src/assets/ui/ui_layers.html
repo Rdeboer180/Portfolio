@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photoshop Layers Panel Mockup</title>
+  <style>
+    :root {
+      --ps-bg: #2b2b2b;
+      --ps-panel: #313131;
+      --ps-panel-top: #3a3a3a;
+      --ps-line: #444;
+      --ps-line-soft: #3b3b3b;
+      --ps-text: #d8d8d8;
+      --ps-text-soft: #9a9a9a;
+      --ps-text-dim: #7b7b7b;
+      --ps-row: #3b3b3b;
+      --ps-row-selected: #5a5a5a;
+      --ps-icon: #bdbdbd;
+      --ps-icon-dim: #8d8d8d;
+      --ps-accent: #7aa7d9;
+      --thumb-border: #5b5b5b;
+      --font: Arial, Helvetica, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #1e1e1e;
+      font-family: var(--font);
+      color: var(--ps-text);
+    }
+
+    .panel {
+      width: 246px;
+      background: var(--ps-bg);
+      border: 1px solid #505050;
+      box-shadow: 0 8px 24px rgba(0,0,0,.45);
+      overflow: hidden;
+    }
+
+    .panel__top {
+      height: 23px;
+      background: linear-gradient(#3a3a3a, #323232);
+      border-bottom: 1px solid var(--ps-line-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+      font-size: 11px;
+      color: var(--ps-text-dim);
+    }
+
+    .panel__titlebar {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #333;
+      border-bottom: 1px solid var(--ps-line-soft);
+    }
+
+    .panel__title {
+      font-size: 19px;
+      line-height: 1;
+      color: #e5e5e5;
+      font-weight: 400;
+    }
+
+    .panel__menu {
+      color: var(--ps-icon-dim);
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .toolbar,
+    .modebar,
+    .lockbar,
+    .footer {
+      border-bottom: 1px solid var(--ps-line-soft);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 8px 6px;
+      background: #2f2f2f;
+    }
+
+    .search {
+      width: 67px;
+      height: 18px;
+      border: 1px solid #555;
+      background: #272727;
+      color: var(--ps-text-soft);
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      font-size: 10px;
+      gap: 4px;
+    }
+
+    .mini,
+    .icon-btn,
+    .dropdown {
+      height: 18px;
+      border: 1px solid #555;
+      background: linear-gradient(#3a3a3a, #303030);
+      color: var(--ps-icon-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .dropdown {
+      width: 18px;
+    }
+
+    .icon-btn {
+      width: 18px;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      color: #8f8f8f;
+    }
+
+    .modebar,
+    .lockbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      background: #2d2d2d;
+      font-size: 10px;
+      color: var(--ps-text-dim);
+    }
+
+    .mode-select {
+      width: 61px;
+      height: 18px;
+      border: 1px solid #555;
+      background: linear-gradient(#3a3a3a, #303030);
+      padding: 0 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #cfcfcf;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat__field {
+      width: 42px;
+      height: 18px;
+      border: 1px solid #555;
+      background: #3a3a3a;
+      color: #7e7e7e;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lockbar__left,
+    .lockbar__icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lockbar__icons span {
+      color: #8c8c8c;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .layers {
+      min-height: 151px;
+      background: #2b2b2b;
+    }
+
+    .layer {
+      height: 31px;
+      display: grid;
+      grid-template-columns: 20px 34px 1fr 16px;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      color: #dcdcdc;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    .layer:first-child {
+      border-top: none;
+    }
+
+    .layer:hover {
+      background: #474747;
+    }
+
+    .layer--selected {
+      background: var(--ps-row-selected);
+    }
+
+    .layer__eye {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #efefef;
+      text-align: center;
+    }
+
+    .layer__eye svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+      opacity: 0;
+    }
+
+    .layer--active .layer__eye svg {
+      opacity: 1;
+    }
+
+    .layer__thumb {
+      width: 34px;
+      height: 22px;
+      border: 1px solid var(--thumb-border);
+      background: linear-gradient(135deg, #587c2c, #9d7f3c, #4d2a17);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .layer__thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), transparent 35%);
+      pointer-events: none;
+    }
+
+    .layer__thumb--text {
+      background: linear-gradient(#3a3a3a, #2f2f2f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d9d9d9;
+      font-size: 9px;
+      letter-spacing: .02em;
+    }
+
+    .layer__name {
+      font-size: 13px;
+      color: #efefef;
+      line-height: 1;
+    }
+
+    .layer__lock {
+      font-size: 13px;
+      color: #cfcfcf;
+      text-align: center;
+    }
+
+    .footer {
+      height: 38px;
+      background: #2c2c2c;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      border-top: 1px solid var(--ps-line-soft);
+      border-bottom: 0;
+    }
+
+    .footer__left,
+    .footer__right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #9b9b9b;
+      font-size: 18px;
+    }
+
+    .footer__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      line-height: 1;
+      color: #9b9b9b;
+      transition: color .15s ease, transform .15s ease;
+    }
+
+    .footer__icon:hover {
+      color: #d8d8d8;
+      transform: translateY(-1px);
+    }
+
+    .footer__icon--danger:hover {
+      color: #ff7a7a;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .footer__right {
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <section class="panel" aria-label="Photoshop layers panel mockup">
+    <div class="panel__top">
+      <span>×</span>
+      <span>«</span>
+    </div>
+
+    <div class="panel__titlebar">
+      <div class="panel__title">Layers</div>
+      <div class="panel__menu">≡</div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">⌕ <span>Kind</span></div>
+      <div class="dropdown">▾</div>
+      <div class="icon-btn">◐</div>
+      <div class="icon-btn">T</div>
+      <div class="icon-btn">▱</div>
+      <div class="icon-btn">▭</div>
+      <div class="icon-btn">●</div>
+    </div>
+
+    <div class="modebar">
+      <div class="mode-select"><span>Normal</span><span>▾</span></div>
+      <div class="stat"><span>Opacity:</span><span class="stat__field">100%</span></div>
+    </div>
+
+    <div class="lockbar">
+      <div class="lockbar__left">
+        <span>Lock:</span>
+        <div class="lockbar__icons">
+          <span>▩</span>
+          <span>◈</span>
+          <span>✛</span>
+          <span>◫</span>
+          <span>🔒</span>
+        </div>
+      </div>
+      <div class="stat"><span>Fill:</span><span class="stat__field">100%</span></div>
+    </div>
+
+    <div class="layers">
+      <div class="layer layer--selected layer--active" id="layer-product">
+        <div class="layer__eye" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 18C18 18 8.86 31.26 8.48 31.82a1 1 0 000 1.36C8.86 33.74 18 47 32 47s23.14-13.26 23.52-13.82a1 1 0 000-1.36C55.14 31.26 46 18 32 18zm0 27c-11.91 0-20.15-10.18-21.43-12C11.85 31.18 20.09 21 32 21s20.15 10.18 21.43 12C52.15 34.82 43.91 45 32 45zm0-20a8 8 0 108 8 8 8 0 00-8-8zm0 14a6 6 0 116-6 6 6 0 01-6 6z"/>
+          </svg>
+        </div>
+        <div class="layer__thumb layer__thumb--text">T</div>
+        <div class="layer__name">Product</div>
+        <div class="layer__lock"></div>
+      </div>
+
+      <div class="layer" id="layer-strategist">
+        <div class="layer__eye" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 18C18 18 8.86 31.26 8.48 31.82a1 1 0 000 1.36C8.86 33.74 18 47 32 47s23.14-13.26 23.52-13.82a1 1 0 000-1.36C55.14 31.26 46 18 32 18zm0 27c-11.91 0-20.15-10.18-21.43-12C11.85 31.18 20.09 21 32 21s20.15 10.18 21.43 12C52.15 34.82 43.91 45 32 45zm0-20a8 8 0 108 8 8 8 0 00-8-8zm0 14a6 6 0 116-6 6 6 0 01-6 6z"/>
+          </svg>
+        </div>
+        <div class="layer__thumb layer__thumb--text">T</div>
+        <div class="layer__name">Strategist</div>
+        <div class="layer__lock"></div>
+      </div>
+
+      <div class="layer" id="layer-ux">
+        <div class="layer__eye" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 18C18 18 8.86 31.26 8.48 31.82a1 1 0 000 1.36C8.86 33.74 18 47 32 47s23.14-13.26 23.52-13.82a1 1 0 000-1.36C55.14 31.26 46 18 32 18zm0 27c-11.91 0-20.15-10.18-21.43-12C11.85 31.18 20.09 21 32 21s20.15 10.18 21.43 12C52.15 34.82 43.91 45 32 45zm0-20a8 8 0 108 8 8 8 0 00-8-8zm0 14a6 6 0 116-6 6 6 0 01-6 6z"/>
+          </svg>
+        </div>
+        <div class="layer__thumb layer__thumb--text">T</div>
+        <div class="layer__name">UX</div>
+        <div class="layer__lock"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer__left">
+        <span class="footer__icon" aria-label="Link layers" title="Link layers">
+          <svg class="icon icon--link" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 1 0-7l2-2a5 5 0 0 1 7 7l-1 1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M14 11a5 5 0 0 1 0 7l-2 2a5 5 0 0 1-7-7l1-1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="footer__icon" aria-label="Layer styles" title="Layer styles">ƒx</span>
+        <span class="footer__icon" aria-label="Add mask" title="Add mask">◐</span>
+        <span class="footer__icon" aria-label="Adjustment layer" title="Adjustment layer">◑</span>
+        <span class="footer__icon" aria-label="Create group" title="Create group">
+          <svg class="icon icon--folder" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1H3V7z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+            <path d="M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+      <div class="footer__right">
+        <span class="footer__icon" aria-label="Create new layer" title="Create new layer">＋</span>
+        <span class="footer__icon footer__icon--danger" aria-label="Delete layer" title="Delete layer">
+          <svg class="icon icon--trash" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+            <path d="M9 7V4h6v3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

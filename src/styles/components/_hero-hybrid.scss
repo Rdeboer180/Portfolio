@@ -146,6 +146,7 @@
 
   // --- Rotating typed text ---
   &__typed-wrap {
+    position: relative;
     font-family: $font-family-heading;
     font-size: 52px;
     line-height: 1.1;
@@ -157,7 +158,14 @@
   }
 
   &__typed {
+    display: inline-block;
     color: $color-neutral-dark;
+    transform-origin: left center;
+    transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &--stretching {
+      transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
 
   &__cursor {
@@ -168,6 +176,50 @@
     margin-left: 2px;
     vertical-align: bottom;
     animation: hybridCursorBlink 0.8s step-end infinite;
+  }
+
+  // --- Accessible H1 (screen-reader only) ---
+  &__h1-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  // --- Adobe-style transform bounding box ---
+  &__bbox {
+    position: absolute;
+    inset: -6px -10px;
+    border: 1px solid rgba($color-primary, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &--visible {
+      opacity: 1;
+    }
+  }
+
+  &__bbox-handle {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: $color-white;
+    border: 1px solid $color-primary;
+
+    &--tl { top: -4px; left: -4px; }
+    &--tr { top: -4px; right: -4px; }
+    &--bl { bottom: -4px; left: -4px; }
+    &--br { bottom: -4px; right: -4px; }
+    &--tm { top: -4px; left: 50%; transform: translateX(-50%); }
+    &--bm { bottom: -4px; left: 50%; transform: translateX(-50%); }
+    &--ml { top: 50%; left: -4px; transform: translateY(-50%); }
+    &--mr { top: 50%; right: -4px; transform: translateY(-50%); }
   }
 
   // --- Headline (H1) ---
@@ -344,14 +396,15 @@
                  uiDrift2 7s ease-in-out 1.8s infinite;
     }
 
-    // Illustrator workspace — bottom-right
-    &--illustrator {
-      width: 160px;
+    // Layers panel — bottom-right
+    &--layers {
+      width: 200px;
       bottom: -10px;
       right: -70px;
       animation-delay: 1.2s;
       animation: fadeInUp 0.8s ease-out 1.2s forwards,
                  uiDrift3 8s ease-in-out 2s infinite;
+      overflow: visible;
     }
   }
 
@@ -529,7 +582,7 @@
     &__ui-element {
       &--code { width: 160px; right: -30px; }
       &--prompt { width: 150px; left: -40px; }
-      &--illustrator { width: 130px; }
+      &--layers { width: 160px; }
     }
   }
 }

@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/styles.scss';
+import uiCodeSvg from '../assets/ui/ui_code.svg';
+import uiPromptSvg from '../assets/ui/ui_prompt.svg';
+import LayersPanel from './LayersPanel';
 
 const proficiencies = [
   { src: '/images/proficiencies/figma.svg', alt: 'Figma', bg: '#f3e8ff' },
@@ -21,45 +24,159 @@ const roles = [
   'UX Engineer',
 ];
 
+// Phase: typing (first load only) → looping (cycles through layers forever)
+// Interactive layer clicks work during 'looping' phase
+type Phase = 'typing' | 'looping';
+
 const HeroHybrid: React.FC = () => {
-  const [roleIndex, setRoleIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [phase, setPhase] = useState<Phase>('typing');
+  const isFirstRunRef = useRef(true);
 
+  // Bounding box + transform (UX Engineer stretch, first run only)
+  const [showBBox, setShowBBox] = useState(false);
+  const [headlineScale, setHeadlineScale] = useState(1);
+  const [isStretching, setIsStretching] = useState(false);
+
+  // Refs
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const loopRef = useRef<number>(0);
+
+  // ===== TYPING PHASE (first load only) =====
   useEffect(() => {
-    const currentRole = roles[roleIndex];
+    if (phase !== 'typing') return;
+    const target = roles[0];
 
-    if (isPaused) {
-      const pauseTimer = setTimeout(() => {
-        setIsPaused(false);
-        setIsDeleting(true);
-      }, 4000);
-      return () => clearTimeout(pauseTimer);
+    if (displayText.length === target.length) {
+      // Typing done — show bbox briefly, then start looping
+      const t1 = window.setTimeout(() => setShowBBox(true), 400);
+      const t2 = window.setTimeout(() => {
+        setShowBBox(false);
+        setPhase('looping');
+      }, 1200);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
     }
 
-    if (isDeleting) {
-      if (displayText.length === 0) {
-        setIsDeleting(false);
-        setRoleIndex((prev) => (prev + 1) % roles.length);
-        return;
-      }
-      const timer = setTimeout(() => {
-        setDisplayText(currentRole.substring(0, displayText.length - 1));
-      }, 40);
-      return () => clearTimeout(timer);
-    }
-
-    if (displayText.length === currentRole.length) {
-      setIsPaused(true);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setDisplayText(currentRole.substring(0, displayText.length + 1));
+    const id = setTimeout(() => {
+      setDisplayText(target.substring(0, displayText.length + 1));
     }, 80);
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, isPaused, roleIndex]);
+    return () => clearTimeout(id);
+  }, [displayText, phase]);
+
+  // ===== LOOPING SEQUENCE =====
+  // Advances to next layer every ~3.5s, cycling 0→1→2→0→...
+  // First run: layer 2 (UX Engineer) gets the stretch animation
+  // Subsequent runs: instant swap with brief bbox flash only
+  useEffect(() => {
+    if (phase !== 'looping') return;
+
+    const advance = () => {
+      setActiveIndex(prev => {
+        const next = (prev + 1) % roles.length;
+
+        // Set the text instantly
+        setDisplayText(roles[next]);
+
+        // UX Engineer stretch — first run only
+        if (next === 2 && isFirstRunRef.current) {
+          setHeadlineScale(0.8);
+          setShowBBox(true);
+
+          const t1 = window.setTimeout(() => {
+            setIsStretching(true);
+            setHeadlineScale(1);
+          }, 300);
+
+          const t2 = window.setTimeout(() => {
+            setShowBBox(false);
+            setIsStretching(false);
+          }, 2500);
+
+          loopRef.current = window.setTimeout(advance, 4000);
+          // Store timeouts for cleanup
+          (loopRef as any)._subs = [t1, t2];
+        } else {
+          // Standard transition — brief bbox flash
+          setHeadlineScale(1);
+          setIsStretching(false);
+          setShowBBox(true);
+
+          const t1 = window.setTimeout(() => setShowBBox(false), 500);
+          loopRef.current = window.setTimeout(advance, 3000);
+          (loopRef as any)._subs = [t1];
+        }
+
+        // When we cycle back to 0 after completing all 3, first run is over
+        if (next === 0 && prev === 2) {
+          isFirstRunRef.current = false;
+        }
+
+        return next;
+      });
+    };
+
+    // Initial delay before first advance (gives time to read current headline)
+    loopRef.current = window.setTimeout(advance, 2500);
+
+    return () => {
+      window.clearTimeout(loopRef.current);
+      const subs = (loopRef as any)._subs;
+      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+    };
+  }, [phase]);
+
+  // ===== INTERACTIVE LAYER CLICKS =====
+  const handleLayerClick = useCallback((index: number) => {
+    if (phase !== 'looping' || index === activeIndex) return;
+
+    // Cancel the auto-advance loop
+    window.clearTimeout(loopRef.current);
+    const subs = (loopRef as any)._subs;
+    if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+
+    // Apply immediately
+    setActiveIndex(index);
+    setDisplayText(roles[index]);
+    setHeadlineScale(1);
+    setIsStretching(false);
+    setShowBBox(true);
+
+    // Hide bbox after brief flash
+    const t1 = window.setTimeout(() => setShowBBox(false), 500);
+
+    // Restart the loop after a pause
+    loopRef.current = window.setTimeout(() => {
+      // Re-trigger the looping effect by toggling phase
+      // But we can just schedule the next advance inline
+      const advanceFromClick = () => {
+        setActiveIndex(prev => {
+          const next = (prev + 1) % roles.length;
+          setDisplayText(roles[next]);
+          setHeadlineScale(1);
+          setIsStretching(false);
+          setShowBBox(true);
+          const hide = window.setTimeout(() => setShowBBox(false), 500);
+          loopRef.current = window.setTimeout(advanceFromClick, 5000);
+          (loopRef as any)._subs = [hide];
+          return next;
+        });
+      };
+      loopRef.current = window.setTimeout(advanceFromClick, 5000);
+    }, 0);
+
+    (loopRef as any)._subs = [t1];
+  }, [phase, activeIndex]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(loopRef.current);
+      const subs = (loopRef as any)._subs;
+      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+    };
+  }, []);
 
   return (
     <section className="hero-hybrid">
@@ -82,8 +199,34 @@ const HeroHybrid: React.FC = () => {
               Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
             </p>
 
-            <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
-              <span className="hero-hybrid__typed">
+            <div
+              className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
+              ref={headlineRef}
+            >
+              {/* Transform bounding box */}
+              <div
+                className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}
+                aria-hidden="true"
+              >
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+              </div>
+
+              <h1 className="hero-hybrid__h1-sr-only">
+                Design Strategist, Product Designer, UX Engineer
+              </h1>
+
+              <span
+                className={`hero-hybrid__typed${isStretching ? ' hero-hybrid__typed--stretching' : ''}`}
+                style={headlineScale !== 1 ? { transform: `scaleX(${headlineScale})`, transformOrigin: 'left center' } : undefined}
+                aria-hidden="true"
+              >
                 {displayText}
                 <span className="hero-hybrid__cursor" />
               </span>
@@ -132,13 +275,17 @@ const HeroHybrid: React.FC = () => {
 
               {/* Floating UI toolkit overlays */}
               <div className="hero-hybrid__ui-element hero-hybrid__ui-element--code">
-                <img src="/images/hero/ui_elements/ui_code.png" alt="" />
+                <img src={uiCodeSvg} alt="" />
               </div>
               <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
-                <img src="/images/hero/ui_elements/ui_prompt.png?v=2" alt="" />
+                <img src={uiPromptSvg} alt="" />
               </div>
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--illustrator">
-                <img src="/images/hero/ui_elements/ui_illustrator.avif" alt="" />
+              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--layers">
+                <LayersPanel
+                  ref={panelRef}
+                  activeIndex={activeIndex}
+                  onLayerClick={handleLayerClick}
+                />
               </div>
             </div>
           </div>
