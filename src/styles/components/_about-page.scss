@@ -1,6 +1,5 @@
 // ============================================
-// About Page — Chat-style interactive prompt
-// Full-width blog layout, no browser chrome
+// About Page — Hero + collapsible AI panel
 // ============================================
 
 @import '../variables';
@@ -8,19 +7,42 @@
 // ==========================================
 // Animations
 // ==========================================
-@keyframes aboutThinkingPulse {
-  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1); }
+@keyframes aboutContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-@keyframes aboutMsgFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes aboutPanelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aboutPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes aboutCursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @keyframes aboutThinkingPulse { 0%, 100% { opacity: 1; transform: none; } }
-  @keyframes aboutMsgFadeIn { from { opacity: 1; transform: none; } }
+  @keyframes aboutContentReveal { from { opacity: 1; transform: none; } }
+  @keyframes aboutPanelReveal { from { opacity: 1; transform: none; } }
+  @keyframes aboutPulse { 0%, 100% { opacity: 1; } }
 }
 
 .about-page {
@@ -68,10 +90,10 @@
   }
 
   // ==========================================
-  // Hero — compact
+  // Hero — static intro
   // ==========================================
   &__hero {
-    padding: 130px 0 $spacing-2xl;
+    padding: 130px 0 $spacing-3xl;
     background: $color-white;
     border-bottom: 1px solid $color-neutral-light;
   }
@@ -109,26 +131,25 @@
   }
 
   // ==========================================
-  // Chat section
+  // AI panel
   // ==========================================
-  &__chat {
-    padding: $spacing-3xl 0 120px;
-    min-height: 60vh;
+  &__panel {
     background: $color-neutral-lightest;
+    padding: 0 0 $spacing-3xl;
     position: relative;
+    animation: aboutPanelReveal 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 
-    // Subtle dot grid background
     &::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(circle, rgba($color-neutral-standard, 0.15) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba($color-neutral-standard, 0.1) 1px, transparent 1px);
       background-size: 24px 24px;
       pointer-events: none;
     }
   }
 
-  &__chat-container {
+  &__panel-container {
     max-width: 960px;
     margin: 0 auto;
     padding: 0 $container-padding-x;
@@ -136,49 +157,53 @@
     z-index: 1;
   }
 
-  // "Interactive Component" tag
-  &__chat-tag {
-    display: inline-block;
+  // ==========================================
+  // System bar
+  // ==========================================
+  &__system-bar {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-xl 0 $spacing-lg;
+  }
+
+  &__system-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-primary;
+    animation: aboutPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  &__system-label {
     font-family: $font-family-mono;
-    font-size: $font-size-caption;
+    font-size: 11px;
     font-weight: $font-weight-medium;
-    color: $color-primary;
-    background: $color-primary-light;
-    padding: 4px $spacing-md;
-    border-radius: $radius-sm;
-    letter-spacing: 0.04em;
-    margin-bottom: $spacing-xl;
+    color: $color-neutral-muted;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   // ==========================================
-  // Thread — scrollable conversation
+  // Prompt exchange
   // ==========================================
-  &__chat-thread {
+  &__prompt-exchange {
     display: flex;
     flex-direction: column;
     gap: $spacing-lg;
     margin-bottom: $spacing-xl;
   }
 
-  // ==========================================
-  // Messages
-  // ==========================================
   &__msg {
     display: flex;
     flex-direction: column;
     gap: 4px;
 
-    // Dynamic messages animate in
-    &:nth-child(n+3) {
-      animation: aboutMsgFadeIn 0.35s ease forwards;
-    }
-
-    // User messages right-aligned
     &--user {
       align-items: flex-end;
     }
 
-    // AI messages left-aligned, full width
     &--ai {
       align-items: flex-start;
     }
@@ -209,11 +234,7 @@
       font-family: $font-family-primary;
       font-size: $font-size-body;
       line-height: $line-height-body-relaxed;
-      margin-bottom: $spacing-sm;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
+      margin: 0;
     }
 
     strong {
@@ -221,178 +242,143 @@
       color: $color-neutral-dark;
     }
 
-    code {
-      font-family: $font-family-mono;
-      font-size: 0.9em;
-      color: $color-primary-dark;
-      background: $color-primary-light;
-      padding: 1px 6px;
-      border-radius: 4px;
-    }
-
-    a {
-      color: $color-primary;
-      text-decoration: none;
-      font-weight: $font-weight-medium;
-
-      &:hover {
-        color: $color-primary-dark;
-      }
-    }
-
-    // User bubble — right-aligned, capped width
     &--user {
-      max-width: 90%;
+      max-width: 85%;
       border-radius: $radius-lg $radius-lg 4px $radius-lg;
+      background: $color-neutral-standard;
+      color: $color-white;
+
+      p { color: $color-white; }
     }
 
-    // AI bubble — full width, clean
     &--ai {
       background: $color-white;
       border-left: 3px solid $color-primary;
       color: $color-neutral-standard;
       box-shadow: $shadow-sm;
-      width: 100%;
     }
+  }
 
-    // Followup — lighter
-    &--followup {
-      border-left-color: $color-neutral-light;
-      box-shadow: none;
-
-      p {
-        font-size: $font-size-body-sm;
-        color: $color-neutral-muted;
-        font-style: italic;
-      }
-    }
+  &__typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: currentColor;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: aboutCursorBlink 0.9s steps(1) infinite;
   }
 
   // ==========================================
-  // Options list (inside AI bubble)
+  // Topic chips
   // ==========================================
-  &__options {
+  &__chips {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: $spacing-xl;
-    padding-top: $spacing-lg;
-    border-top: 1px solid $color-neutral-light;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
   }
 
-  &__option {
-    display: flex;
-    align-items: baseline;
-    gap: $spacing-md;
-    padding: $spacing-sm $spacing-md;
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-    border-radius: $radius-sm;
-    transition: background $transition-fast;
-
-    &:hover:not(:disabled) {
-      background: $color-primary-light;
-    }
-
-    &:disabled {
-      cursor: default;
-      opacity: 0.5;
-    }
-  }
-
-  &__option-num {
-    font-family: $font-family-mono;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    min-width: 18px;
-    flex-shrink: 0;
-  }
-
-  &__option-text {
+  &__chip {
     font-family: $font-family-primary;
     font-size: $font-size-body-sm;
-    color: $color-neutral-standard;
-    line-height: $line-height-body-sm;
-  }
-
-  // Compact variant — no border-top, less margin
-  &__options--compact {
-    margin-top: $spacing-md;
-    padding-top: 0;
-    border-top: none;
-  }
-
-  // ==========================================
-  // Thinking dots
-  // ==========================================
-  &__thinking {
-    display: flex;
-    gap: 5px;
-    padding: $spacing-xs 0;
-  }
-
-  &__thinking-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: $color-primary;
-    animation: aboutThinkingPulse 1.2s ease-in-out infinite;
-
-    &:nth-child(2) { animation-delay: 0.15s; }
-    &:nth-child(3) { animation-delay: 0.3s; }
-  }
-
-  // ==========================================
-  // Input row — sticky at bottom of viewport
-  // ==========================================
-  &__chat-input-row {
-    position: sticky;
-    bottom: $spacing-xl;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    padding: $spacing-lg $spacing-xl;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-dark;
     background: $color-white;
     border: 1px solid $color-neutral-light;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-lg;
-    transition: border-color $transition-fast, box-shadow $transition-fast;
+    border-radius: $radius-full;
+    padding: $spacing-sm $spacing-lg;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 
-    &:focus-within {
+    &:hover:not(:disabled):not(&--active) {
       border-color: $color-primary;
-      box-shadow: $shadow-lg, 0 0 0 3px rgba($color-primary, 0.1);
+      color: $color-primary;
+      box-shadow: 0 1px 4px rgba($color-primary, 0.12);
     }
-  }
 
-  &__chat-arrow {
-    font-family: $font-family-mono;
-    font-size: $font-size-body;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    flex-shrink: 0;
-    line-height: 1;
-  }
+    &--active {
+      background: $color-primary;
+      border-color: $color-primary;
+      color: $color-white;
+      cursor: default;
+      box-shadow: 0 2px 8px rgba($color-primary, 0.25);
+    }
 
-  &__chat-input {
-    flex: 1;
-    border: none;
-    background: none;
-    font-family: $font-family-mono;
-    font-size: $font-size-body-sm;
-    color: $color-neutral-dark;
-    outline: none;
-    caret-color: $color-primary;
-
-    &::placeholder {
+    &--explored {
+      border-color: rgba($color-primary, 0.3);
       color: $color-neutral-muted;
     }
 
     &:disabled {
-      opacity: 0.5;
+      cursor: default;
+      opacity: 0.6;
+    }
+  }
+
+  // ==========================================
+  // Session awareness
+  // ==========================================
+  &__session-note {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    margin-bottom: $spacing-xl;
+    letter-spacing: 0.02em;
+  }
+
+  // ==========================================
+  // Content display area
+  // ==========================================
+  &__content-area {
+    background: $color-white;
+    border-radius: $radius-lg;
+    padding: $spacing-2xl $spacing-3xl;
+    box-shadow: $shadow-sm;
+    border-left: 3px solid $color-primary;
+    transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &--visible {
+      animation: aboutContentReveal 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    &--erasing {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+  }
+
+  &__content-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $color-neutral-light;
+    text-transform: none !important;
+  }
+
+  &__content-body {
+    p {
+      font-family: $font-family-primary;
+      font-size: $font-size-body-lg;
+      line-height: 1.75;
+      color: $color-neutral-standard;
+      margin-bottom: $spacing-xl;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      strong {
+        font-weight: $font-weight-semibold;
+        color: $color-neutral-dark;
+      }
     }
   }
 }
@@ -414,12 +400,29 @@
       font-size: $font-size-h2;
     }
 
+    &__content-area {
+      padding: $spacing-xl $spacing-lg;
+    }
+
+    &__content-title {
+      font-size: $font-size-h3;
+    }
+
     &__msg-bubble {
       padding: $spacing-md $spacing-lg;
 
       &--user {
-        max-width: 85%;
+        max-width: 90%;
       }
+    }
+
+    &__chips {
+      gap: $spacing-xs;
+    }
+
+    &__chip {
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-caption;
     }
   }
 }
@@ -430,8 +433,21 @@
       font-size: $font-size-h3;
     }
 
-    &__chat {
-      padding: $spacing-xl 0 $spacing-3xl;
+    &__content-title {
+      font-size: $font-size-h4;
+    }
+
+    &__content-area {
+      padding: $spacing-lg $spacing-md;
+    }
+
+    &__content-body p {
+      font-size: $font-size-body;
+      line-height: $line-height-body-relaxed;
+    }
+
+    &__panel {
+      padding-bottom: $spacing-2xl;
     }
 
     &__msg-bubble {
@@ -443,16 +459,12 @@
       }
 
       &--user {
-        max-width: 90%;
+        max-width: 92%;
       }
     }
 
-    &__option {
+    &__chip {
       padding: $spacing-xs $spacing-sm;
-    }
-
-    &__chat-input-row {
-      padding: $spacing-md $spacing-lg;
     }
   }
 }
