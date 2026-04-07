@@ -8,12 +8,12 @@ const t1dContent: TargetedHomepageContent = {
   },
 
   hero: {
-    eyebrow: 'Senior Web Designer by title but I\u2019m also a',
+    eyebrow: 'Senior Web Designer by title.',
     roles: ['Visual Product Designer', 'Design Systems Architect', 'UX Engineer'],
     headline: '',
     body: (
       <>
-        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">No single piece of technology has been more influential in my life and wellbeing than Dexcom&mdash;I&rsquo;m looking to shift 16 years of design craft toward a product I trust, use daily, and want to help elevate.</span>
+        Job titles evolve, but the work doesn&rsquo;t. For 16+ years, I&rsquo;ve worked at the intersection of UX, front-end, and design systems&mdash;crafting experiences that don&rsquo;t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale. <span className="about__highlight">No single piece of technology has been more influential in my life and wellbeing than Dexcom&mdash;I&rsquo;m looking to shift 16 years of design craft toward a product I trust, use daily, and want to help elevate.</span>
       </>
     ),
   },
@@ -26,6 +26,7 @@ const t1dContent: TargetedHomepageContent = {
           <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
         </>
       ),
+      'Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.',
       'I\u2019ve lived with Type 1 Diabetes for over 20 years, and for the last 10 of those Dexcom has been part of my daily life\u2014worn on my body, checked on my phone, factored into every decision I make about my health. But it goes beyond just wearing the sensor. I spend a significant amount of my personal time diving into medical and metabolic literature, watching lectures, and listening to podcasts to deepen my understanding of the disease and sharpen my own treatment. I also maintain a custom-coded branch of the Loop app\u2014an open-source closed-loop insulin delivery system that integrates directly with my Dexcom CGM. Managing T1D isn\u2019t just something I do\u2014it\u2019s a discipline I\u2019m deeply invested in.',
       'That\u2019s why this isn\u2019t just a job application\u2014it\u2019s a career shift I\u2019ve been thinking about for a long time. I\u2019ve spent 16 years building scalable UI systems, design systems, and production-ready front-end code. Now I want to point all of that toward a brand and product I genuinely trust and want to help elevate. No piece of technology has had more impact on my daily life than Dexcom, and I want to bring my best work to the team behind it.',
       'At Tire Rack, I built and maintained component libraries and design systems in Figma that powered UI across multiple retail brands. I owned the front-end template layer end-to-end\u2014writing the SCSS, building CMS components, and documenting patterns so the broader team could ship consistently. What I designed is what shipped. I\u2019m ready to bring that same discipline to a product where the stakes are personal.',

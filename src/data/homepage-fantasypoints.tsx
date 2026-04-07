@@ -8,12 +8,12 @@ const fantasypointsContent: TargetedHomepageContent = {
   },
 
   hero: {
-    eyebrow: 'Senior Web Designer by title but I\u2019m also a',
+    eyebrow: 'Senior Web Designer by title.',
     roles: ['Product Designer', 'UX Engineer', 'Design Systems Lead'],
     headline: '',
     body: (
       <>
-        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;m designing better fantasy experiences&mdash;for the platforms I&rsquo;ve trusted for years.</span>
+        Job titles evolve, but the work doesn&rsquo;t. For 16+ years, I&rsquo;ve worked at the intersection of UX, front-end, and design systems&mdash;crafting experiences that don&rsquo;t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale. <span className="about__highlight">I&rsquo;m designing better fantasy experiences&mdash;for the platforms I&rsquo;ve trusted for years.</span>
       </>
     ),
   },
@@ -26,6 +26,7 @@ const fantasypointsContent: TargetedHomepageContent = {
           <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
         </>
       ),
+      'Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.',
       'I\u2019ve been following fantasy football content since college, and John Hansen was one of the first voices I trusted in the space. When FantasyPoints launched, I became a subscriber right away\u2014and I\u2019ve stayed one.',
       'That kind of long-term trust doesn\u2019t happen by accident. It comes from clarity, consistency, and a product experience that supports the depth of the content behind it. That\u2019s the kind of work I care about\u2014and the kind of product I want to help build.',
       (

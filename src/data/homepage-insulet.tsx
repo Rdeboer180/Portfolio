@@ -8,12 +8,12 @@ const insuletContent: TargetedHomepageContent = {
   },
 
   hero: {
-    eyebrow: 'Senior Web Designer by title but I\u2019m also a',
+    eyebrow: 'Senior Web Designer by title.',
     roles: ['Design Strategist', 'Front-End Developer', 'Design System Engineer'],
     headline: '',
     body: (
       <>
-        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;m ready to bring 16 years of technical web craft to a brand whose product I&rsquo;ve depended on for over a decade.</span>
+        Job titles evolve, but the work doesn&rsquo;t. For 16+ years, I&rsquo;ve worked at the intersection of UX, front-end, and design systems&mdash;crafting experiences that don&rsquo;t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale. <span className="about__highlight">I&rsquo;m ready to bring 16 years of technical web craft to a brand whose product I&rsquo;ve depended on for over a decade.</span>
       </>
     ),
   },
@@ -26,6 +26,7 @@ const insuletContent: TargetedHomepageContent = {
           <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
         </>
       ),
+      'Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.',
       'I\u2019ve lived with Type 1 Diabetes for over 20 years. For more than a decade, the Omnipod has been part of how I manage it\u2014alongside Dexcom CGM technology. Insulet\u2019s mission isn\u2019t abstract to me. I\u2019ve experienced what it means when a medical product works well, and what it means when the digital experience around it falls short. I want to help close that gap.',
       'My career has been rooted in technical digital execution\u2014not just design. At Tire Rack, I worked inside a large-scale AEM (Adobe Experience Manager) CMS environment, managing content updates, building reusable components, and shipping campaigns across web and email channels in a complex, multi-stakeholder organization. I worked closely with marketing, analytics, SEO, and engineering teams to keep digital channels accurate, performant, and on-brand.',
       'I\u2019m comfortable moving between design tools and code. I write HTML and CSS daily, I understand email service platform workflows, and I have hands-on experience with metadata, structured content, and digital governance. I bring both creative capability and operational discipline\u2014which is exactly what the HCP Digital Marketing role at Insulet requires.',

@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import SectionBadge from './SectionBadge';
 import HowIWork from './HowIWork';
 import TechnicalAbilities from './TechnicalAbilities';
 import SelectedWork from './SelectedWork';
 import Testimonials from './Testimonials';
+import LayersPanel from './LayersPanel';
 import type { TargetedHomepageContent } from '../data/homepage-sleeper';
 import { setHomeVariant } from '../utils/homeSession';
+import uiCodeSvg from '../assets/ui/ui_code.svg';
+import uiPromptSvg from '../assets/ui/ui_prompt.svg';
+
+type HeroPhase = 'typing' | 'looping';
 
 /* ─── Shared Icons ─── */
 
@@ -55,11 +60,20 @@ const proficiencies = [
 
 const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content }) => {
   const { hero, meta } = content;
-  const [roleIndex, setRoleIndex] = useState(0);
+  const roles = hero.roles;
+  const heroRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const loopRef = useRef<number>(0);
+  const isFirstRunRef = useRef(true);
+
+  const [activeIndex, setActiveIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const heroRef = React.useRef<HTMLElement>(null);
+  const [phase, setPhase] = useState<HeroPhase>('typing');
+
+  const [showBBox, setShowBBox] = useState(false);
+  const [headlineScale, setHeadlineScale] = useState(1);
+  const [isStretching, setIsStretching] = useState(false);
 
   // Highlight animation for the hero body
   useEffect(() => {
@@ -69,35 +83,127 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
     const highlights = section.querySelectorAll('.about__highlight');
     if (highlights.length === 0) return;
 
-    // Delay start so the reveal animations finish first
     const startTimer = setTimeout(() => {
       highlights.forEach((el) => {
         el.classList.add('about__highlight--active');
         setTimeout(() => {
           el.classList.add('about__highlight--bold');
           el.classList.remove('about__highlight--active');
-        }, 1000); // 0.6s sweep + 0.4s hold
+        }, 1000);
       });
     }, 1800);
 
     return () => clearTimeout(startTimer);
   }, []);
 
+  // ===== TYPING PHASE (first load) =====
   useEffect(() => {
-    const currentRole = hero.roles[roleIndex];
-    if (isPaused) {
-      const t = setTimeout(() => { setIsPaused(false); setIsDeleting(true); }, 4000);
-      return () => clearTimeout(t);
+    if (phase !== 'typing') return;
+    const target = roles[0];
+    if (displayText.length === target.length) {
+      const t1 = window.setTimeout(() => setShowBBox(true), 400);
+      const t2 = window.setTimeout(() => {
+        setShowBBox(false);
+        setPhase('looping');
+      }, 1200);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
     }
-    if (isDeleting) {
-      if (displayText.length === 0) { setIsDeleting(false); setRoleIndex((p) => (p + 1) % hero.roles.length); return; }
-      const t = setTimeout(() => setDisplayText(currentRole.substring(0, displayText.length - 1)), 40);
-      return () => clearTimeout(t);
-    }
-    if (displayText.length === currentRole.length) { setIsPaused(true); return; }
-    const t = setTimeout(() => setDisplayText(currentRole.substring(0, displayText.length + 1)), 80);
-    return () => clearTimeout(t);
-  }, [displayText, isDeleting, isPaused, roleIndex, hero.roles]);
+    const id = setTimeout(() => {
+      setDisplayText(target.substring(0, displayText.length + 1));
+    }, 80);
+    return () => clearTimeout(id);
+  }, [displayText, phase, roles]);
+
+  // ===== LOOPING SEQUENCE =====
+  useEffect(() => {
+    if (phase !== 'looping') return;
+
+    const advance = () => {
+      setActiveIndex(prev => {
+        const next = (prev + 1) % roles.length;
+        setDisplayText(roles[next]);
+
+        if (next === 2 && isFirstRunRef.current) {
+          setHeadlineScale(0.8);
+          setShowBBox(true);
+          const t1 = window.setTimeout(() => {
+            setIsStretching(true);
+            setHeadlineScale(1);
+          }, 300);
+          const t2 = window.setTimeout(() => {
+            setShowBBox(false);
+            setIsStretching(false);
+          }, 2500);
+          loopRef.current = window.setTimeout(advance, 4000);
+          (loopRef as any)._subs = [t1, t2];
+        } else {
+          setHeadlineScale(1);
+          setIsStretching(false);
+          setShowBBox(true);
+          const t1 = window.setTimeout(() => setShowBBox(false), 500);
+          loopRef.current = window.setTimeout(advance, 3000);
+          (loopRef as any)._subs = [t1];
+        }
+
+        if (next === 0 && prev === 2) {
+          isFirstRunRef.current = false;
+        }
+        return next;
+      });
+    };
+
+    loopRef.current = window.setTimeout(advance, 2500);
+
+    return () => {
+      window.clearTimeout(loopRef.current);
+      const subs = (loopRef as any)._subs;
+      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+    };
+  }, [phase, roles]);
+
+  // ===== INTERACTIVE LAYER CLICKS =====
+  const handleLayerClick = useCallback((index: number) => {
+    if (phase !== 'looping' || index === activeIndex) return;
+
+    window.clearTimeout(loopRef.current);
+    const subs = (loopRef as any)._subs;
+    if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+
+    setActiveIndex(index);
+    setDisplayText(roles[index]);
+    setHeadlineScale(1);
+    setIsStretching(false);
+    setShowBBox(true);
+
+    const t1 = window.setTimeout(() => setShowBBox(false), 500);
+
+    loopRef.current = window.setTimeout(() => {
+      const advanceFromClick = () => {
+        setActiveIndex(prev => {
+          const next = (prev + 1) % roles.length;
+          setDisplayText(roles[next]);
+          setHeadlineScale(1);
+          setIsStretching(false);
+          setShowBBox(true);
+          const hide = window.setTimeout(() => setShowBBox(false), 500);
+          loopRef.current = window.setTimeout(advanceFromClick, 5000);
+          (loopRef as any)._subs = [hide];
+          return next;
+        });
+      };
+      loopRef.current = window.setTimeout(advanceFromClick, 5000);
+    }, 0);
+
+    (loopRef as any)._subs = [t1];
+  }, [phase, activeIndex, roles]);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(loopRef.current);
+      const subs = (loopRef as any)._subs;
+      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+    };
+  }, []);
 
   const slug = meta.slug;
 
@@ -117,11 +223,41 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         <div className="hero-hybrid__grid">
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              Senior Web Designer by title <span>I think in systems and build in code. I operate as a</span>
+              Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
             </p>
-            <div className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2">
-              <span className="hero-hybrid__typed">{displayText}<span className="hero-hybrid__cursor" /></span>
+
+            <div
+              className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
+              ref={headlineRef}
+            >
+              <div
+                className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}
+                aria-hidden="true"
+              >
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
+                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+              </div>
+
+              <h1 className="hero-hybrid__h1-sr-only">
+                {roles.join(', ')}
+              </h1>
+
+              <span
+                className={`hero-hybrid__typed${isStretching ? ' hero-hybrid__typed--stretching' : ''}`}
+                style={headlineScale !== 1 ? { transform: `scaleX(${headlineScale})`, transformOrigin: 'left center' } : undefined}
+                aria-hidden="true"
+              >
+                {displayText}
+                <span className="hero-hybrid__cursor" />
+              </span>
             </div>
+
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">{hero.body}</p>
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
@@ -136,6 +272,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
               </a>
             </div>
           </div>
+
           <div className="hero-hybrid__visual">
             <div className="hero-hybrid__image-container">
               <div className="hero-hybrid__image-wrapper">
@@ -148,6 +285,21 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
                 <div className="hero-hybrid__profile-circle">
                   <img src="/images/hero/ryan-deboer.png" alt="Ryan Deboer" className="hero-hybrid__profile-img" />
                 </div>
+              </div>
+
+              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--code">
+                <img src={uiCodeSvg} alt="" />
+              </div>
+              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
+                <img src={uiPromptSvg} alt="" />
+              </div>
+              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--layers">
+                <LayersPanel
+                  ref={panelRef}
+                  activeIndex={activeIndex}
+                  onLayerClick={handleLayerClick}
+                  roles={roles}
+                />
               </div>
             </div>
           </div>

@@ -8,12 +8,12 @@ const yahooContent: TargetedHomepageContent = {
   },
 
   hero: {
-    eyebrow: 'Senior Web Designer by title but I\u2019m also a',
+    eyebrow: 'Senior Web Designer by title.',
     roles: ['Design Strategist', 'Product Designer', 'UX Engineer'],
     headline: '',
     body: (
       <>
-        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">As a lifelong fantasy football fanatic who&rsquo;s spent over a decade running leagues and living inside sports platforms every Sunday&mdash;I&rsquo;m ready to bring that game-day intensity to Yahoo Sports&rsquo; product team.</span>
+        Job titles evolve, but the work doesn&rsquo;t. For 16+ years, I&rsquo;ve worked at the intersection of UX, front-end, and design systems&mdash;crafting experiences that don&rsquo;t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale. <span className="about__highlight">As a lifelong fantasy football fanatic who&rsquo;s spent over a decade running leagues and living inside sports platforms every Sunday&mdash;I&rsquo;m ready to bring that game-day intensity to Yahoo Sports&rsquo; product team.</span>
       </>
     ),
   },
@@ -27,6 +27,7 @@ const yahooContent: TargetedHomepageContent = {
           <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span> Every great play starts with preparation, and that&rsquo;s how I approach every product problem.
         </>
       ),
+      'Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.',
       'Fantasy football isn\u2019t a casual hobby for me\u2014it\u2019s a lifestyle. I\u2019ve run a dynasty league for over a decade, and I designed custom logos and brand identities for every single team. My own squad, the Grandville Gremlins, has become a full family tradition\u2014logo on mugs, baby onesies, t-shirts, sweatshirts, anything that might bring superstitious Sunday luck. Growing up a DeBoer means growing up a Gremlins fan. We also run March Madness brackets and my family\u2019s annual Pigskin Pick\u2019em challenge. Sports platforms aren\u2019t seasonal for us\u2014they\u2019re year-round.',
       'That\u2019s why a role at Yahoo Sports feels like a first-round pick. I don\u2019t just understand sports fans\u2014I am one. I know what it feels like to check scores at halftime, trash-talk in league chat, and obsess over waiver wire moves at 3am. Combine that instinct with 16 years of designing scalable UI systems, building design systems from the ground up, and shipping production-ready front-end code\u2014and you get someone who can contribute to Yahoo Sports\u2019 design team from day one.',
       (

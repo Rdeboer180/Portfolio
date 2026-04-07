@@ -54,12 +54,12 @@ const sleeperContent: TargetedHomepageContent = {
   },
 
   hero: {
-    eyebrow: 'Senior Web Designer by title but I\u2019m also a',
+    eyebrow: 'Senior Web Designer by title.',
     roles: ['Design Strategist', 'Product Designer', 'UX Engineer'],
     headline: '',
     body: (
       <>
-        I design and build high-fidelity product experiences with a systems-first approach&mdash;combining UX, front-end coding, and design systems to turn complex ideas into scalable, production-ready solutions. <span className="about__highlight">I&rsquo;ve been a Sleeper user since its first season&mdash;now I&rsquo;m ready to bring that same game-day intensity to Sleeper&rsquo;s product team.</span>
+        Job titles evolve, but the work doesn&rsquo;t. For 16+ years, I&rsquo;ve worked at the intersection of UX, front-end, and design systems&mdash;crafting experiences that don&rsquo;t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale. <span className="about__highlight">I&rsquo;ve been a Sleeper user since its first season&mdash;now I&rsquo;m ready to bring that same game-day intensity to Sleeper&rsquo;s product team.</span>
       </>
     ),
   },
@@ -73,6 +73,7 @@ const sleeperContent: TargetedHomepageContent = {
           <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span> Every great play starts with preparation, and that&rsquo;s how I approach every product problem.
         </>
       ),
+      'Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.',
       'I didn\u2019t just stumble into Sleeper\u2014I\u2019ve been on the platform since its very first season. I run a dynasty fantasy football league where I designed custom logos for every single team. My own squad, the Grandville Gremlins, has become a full family brand\u2014logo on mugs, baby onesies, t-shirts, sweatshirts, you name it. Growing up a DeBoer means you\u2019re growing up a Gremlins fan. Football Sundays are sacred in our house, and Sleeper is the command center that keeps our tight group of high school and college friends connected from draft day through the championship. We also host our March Madness brackets and my family\u2019s annual Pigskin Pick\u2019em challenge on the platform\u2014Sleeper isn\u2019t just for one season, it\u2019s year-round for us.',
       'That\u2019s why this role feels like a first-round pick. I don\u2019t just understand the product\u2014I live in it. I know what it feels like to check scores at halftime, trash-talk in league chat, and obsess over waiver wire moves at 3am. Combine that instinct with 16 years of designing scalable UI systems, building design systems from the ground up, and shipping production-ready front-end code\u2014and you get someone who can contribute to Sleeper\u2019s design team from day one, across iOS, Android, Web, and Tablet.',
       (

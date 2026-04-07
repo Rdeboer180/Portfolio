@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react';
 
-const roles = ['Design Strategist', 'Product Designer', 'UX Engineer'];
+const defaultRoles = ['Design Strategist', 'Product Designer', 'UX Engineer'];
 
 interface LayersPanelProps {
   activeIndex: number;
   onLayerClick?: (index: number) => void;
+  roles?: string[];
 }
 
 const EyeIcon = () => (
@@ -14,7 +15,7 @@ const EyeIcon = () => (
 );
 
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, onLayerClick }, ref) => {
+  ({ activeIndex, onLayerClick, roles = defaultRoles }, ref) => {
     return (
       <div className="layers-panel" ref={ref} aria-label="Photoshop layers panel mockup">
         <div className="layers-panel__top">

@@ -232,9 +232,7 @@ const HeroHybrid: React.FC = () => {
               </span>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
-              I design high-fidelity product experiences with a systems-first approach—bringing together UX, front-end development, and design systems to turn complex ideas into scalable solutions.
-            </p>
+            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">Job titles evolve, but the work doesn’t. For 16+ years, I’ve worked at the intersection of UX, front-end, and design systems—planning. Crafting experiences that don’t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale.</p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
