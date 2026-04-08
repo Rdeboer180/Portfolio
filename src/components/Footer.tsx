@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="footer__bottom">
           <p className="footer__copy">
-            &copy; {new Date().getFullYear()} Ryan De Boer
+            &copy; {new Date().getFullYear()} Ryan DeBoer
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import TechnicalAbilities from './TechnicalAbilities';
 import SelectedWork from './SelectedWork';
 import Testimonials from './Testimonials';
 import LayersPanel from './LayersPanel';
+import ProficiencyDock from './ProficiencyDock';
 import type { TargetedHomepageContent } from '../data/homepage-sleeper';
 import { setHomeVariant } from '../utils/homeSession';
 import uiCodeSvg from '../assets/ui/ui_code.svg';
@@ -41,20 +42,6 @@ const FootballIcon = () => (
     <path d="M62.26,400.02c9.08-1.93,17.74-3.76,26.39-5.61,39.14-8.33,78.28-16.66,117.41-25.01,12.65-2.7,25.32-5.34,37.93-8.23,2.97-.68,3.46,.53,4.22,2.93,2.55,8.02,4.86,16.2,8.36,23.81,2.26,4.93,6.11,9.28,9.86,13.32,2.87,3.09,6.94,4.32,11.2,2.29,4.31-2.05,6.51-5.81,5.85-10.29-1.25-8.46-3.17-16.82-4.9-25.21-.88-4.26-1.96-8.48-3.07-13.21,12.78-2.65,25.37-5.27,38.73-8.04,.97,5.84,1.88,11.4,2.81,16.96,.64,3.86,1.04,7.79,2.01,11.57,1.39,5.42,5.37,8.54,9.83,8.26,4.42-.28,8.17-3.93,8.06-9.8-.19-9.44-1.43-18.87-2.23-28.3-.08-.88-.22-1.76-.39-3.09,8.65-1.77,17.13-3.51,26.38-5.4,.9,5.64,1.75,11.08,2.62,16.51,.62,3.87,1.01,7.8,1.98,11.58,1.36,5.29,5.24,8.55,9.36,8.45,4.42-.11,8.47-3.49,8.65-9.37,.26-8.37-.82-16.77-1.39-25.16-.13-1.92-.51-3.83-.82-6.05,8.64-1.67,17.01-3.28,26.11-5.04,.83,5.8,1.56,11.25,2.4,16.68,.57,3.72,1,7.49,1.97,11.11,1.49,5.53,5.65,8.84,9.83,8.35,4.32-.51,8.04-4.4,8.09-10.03,.07-7.66-.73-15.33-1.23-22.99-.13-2.08-.5-4.15-.82-6.7,8.52-1.49,16.74-2.93,25.85-4.52,.87,5.83,1.63,11.55,2.6,17.24,.68,3.99,1.25,8.07,2.6,11.85,1.37,3.83,4.05,6.82,8.77,6.46,4.46-.34,7.24-3.43,7.5-7.26,.51-7.6,.07-15.28-.19-22.91-.09-2.69-.8-5.36-1.35-8.86,8.35-1.47,16.67-2.93,25.67-4.51,.8,6.01,1.45,11.79,2.37,17.53,.66,4.14,1.34,8.34,2.63,12.31,1.26,3.87,4.39,6.39,8.57,6.18,4.2-.21,7.26-3,7.74-7.07,.69-5.78,.72-11.68,.54-17.52-.15-4.8-1.02-9.57-1.62-14.75,8.35-1.34,16.47-2.64,25.25-4.05,.76,6.82,1.24,13.38,2.31,19.84,.65,3.93,1.5,8.13,3.51,11.46,3.65,6.06,10.87,5.54,14.03-.83,1.36-2.74,2.22-6.05,2.2-9.09-.04-6.32-.82-12.64-1.29-18.96-.13-1.76-.22-3.52-.35-5.54,13.04-1.8,25.69-3.54,39-5.38,.92,9.81,1.64,19.24,2.78,28.62,.44,3.67,1.22,7.54,2.91,10.77,3.47,6.63,10.96,7.47,16.33,2.25,4.84-4.69,6.7-10.83,6.92-17.21,.28-8.58-.28-17.18-.48-25.78-.02-.72,0-1.45,0-2.87,44.55-4.95,88.99-9.89,134.78-14.97-1.8,7.69-2.96,14.46-4.99,20.96-11.64,37.21-30.04,70.97-53.5,101.93-45.07,59.47-102.06,103.86-170.68,133.17-32.23,13.76-65.72,23.01-100.5,27.77-28.13,3.85-56.33,4.73-84.55,2.39-62.87-5.21-121.62-23.87-176.2-55.52-32.06-18.59-61.28-40.91-86.27-68.32-9.3-10.2-17.04-21.82-25.35-32.89-1.22-1.62-1.69-3.79-2.71-6.19Z" opacity="0.6" />
   </svg>
 );
-
-const proficiencies = [
-  { src: '/images/proficiencies/figma.svg', alt: 'Figma', bg: '#f3e8ff' },
-  { src: '/images/proficiencies/scss.png', alt: 'SCSS' },
-  { src: '/images/proficiencies/chakra.png', alt: 'Chakra UI' },
-  { src: '/images/proficiencies/illustrator.png', alt: 'Illustrator' },
-  { src: '/images/proficiencies/photoshop.png', alt: 'Photoshop' },
-  { src: '/images/proficiencies/aem.png', alt: 'AEM' },
-  { src: '/images/proficiencies/wordpress.png', alt: 'WordPress' },
-  { src: '/images/proficiencies/css3.png', alt: 'CSS3' },
-  { src: '/images/proficiencies/html5.png', alt: 'HTML5', bg: '#dcfce7' },
-  { src: '/images/proficiencies/github.png', alt: 'GitHub' },
-  { src: '/images/proficiencies/vscode.png', alt: 'VS Code' },
-];
 
 /* ─── Section Components (driven by content prop) ─── */
 
@@ -308,26 +295,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
 
       <div className="hero-hybrid__proof-band">
         <div className="hero-hybrid__proof-inner">
-          <div className="hero-hybrid__proof-left">
-            <p className="hero-hybrid__proof-label">Core Proficiencies</p>
-            <div className="hero-hybrid__proof-icons">
-              {proficiencies.map((icon, i) => (
-                <div key={i} className="hero-hybrid__proof-icon" title={icon.alt}>
-                  <img src={icon.src} alt={icon.alt} />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="hero-hybrid__proof-divider" />
-          <div className="hero-hybrid__proof-right">
-            <p className="hero-hybrid__proof-text">Reviews from those I have worked with</p>
-            <a href={`#/${slug}#testimonials`} className="hero-hybrid__proof-cta">
-              View Testimonials
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
-              </svg>
-            </a>
-          </div>
+          <ProficiencyDock testimonialsHref={`#/${slug}#testimonials`} />
         </div>
         <div className="hero-hybrid__proof-angle" />
       </div>
@@ -533,7 +501,7 @@ const TargetedFooter: React.FC<{ content: TargetedHomepageContent }> = ({ conten
         </div>
         <div className="footer__bottom">
           <p className="footer__copy">
-            &copy; {new Date().getFullYear()} Ryan De Boer &bull; {footer.tagline}
+            &copy; {new Date().getFullYear()} Ryan DeBoer &bull; {footer.tagline}
           </p>
         </div>
       </div>

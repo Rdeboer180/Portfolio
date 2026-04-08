@@ -1,0 +1,260 @@
+// ============================================
+// Proficiency Dock — interactive icon dock
+// ============================================
+
+@import '../variables';
+
+.proficiency-dock {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3xl;
+  min-width: 0;
+  width: 100%;
+
+  // ==========================================
+  // Left column: label + icon row
+  // ==========================================
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    flex-shrink: 0;
+  }
+
+  // ==========================================
+  // Divider between left and right
+  // ==========================================
+  &__divider {
+    width: 1px;
+    align-self: stretch;
+    background: $color-neutral-light;
+    flex-shrink: 0;
+  }
+
+  // ==========================================
+  // Label (eyebrow)
+  // ==========================================
+  &__label {
+    font-family: $font-family-heading;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  // ==========================================
+  // Icon row
+  // ==========================================
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: 6px;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03),
+                0 4px 12px rgba(0, 0, 0, 0.04);
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__item {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+    flex-shrink: 0;
+
+    img, svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover:not(&--active) {
+      transform: translateY(-2px);
+      background: rgba($color-primary, 0.06);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+
+    // ---- Active state ----
+    &--active {
+      background: rgba($color-primary, 0.08);
+      box-shadow: inset 0 0 0 1.5px $color-primary;
+      transform: translateY(-1px);
+    }
+
+    // Small orange indicator dot under active icon
+    &--active::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: $color-primary;
+      transform: translateX(-50%);
+    }
+  }
+
+  // ==========================================
+  // Content panel
+  // ==========================================
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 560px;
+    min-height: 74px;
+    flex: 1;
+  }
+
+  &__panel-eyebrow {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  &__panel-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  &__panel-copy {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+    margin: 0;
+
+    strong {
+      color: $color-neutral-dark;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  &__panel-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-muted;
+    }
+  }
+
+  // Inline CTA embedded inside panel copy (e.g. "View Testimonials →")
+  &__panel-inline-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: $font-family-heading;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color $transition-fast;
+
+    svg {
+      transition: transform $transition-fast;
+    }
+
+    &:hover {
+      color: $color-primary-muted;
+
+      svg {
+        transform: translateX(3px);
+      }
+    }
+  }
+
+  // Subtle swap animation on panel content
+  &__panel-body {
+    animation: proficiencyDockFade 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@keyframes proficiencyDockFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes proficiencyDockFade {
+    from { opacity: 1; transform: none; }
+  }
+}
+
+// ==========================================
+// Responsive
+// ==========================================
+@media (max-width: $breakpoint-md) {
+  .proficiency-dock {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-lg;
+
+    &__divider {
+      display: none;
+    }
+
+    &__item {
+      width: 36px;
+      height: 36px;
+    }
+
+    &__panel {
+      min-height: 100px;
+      max-width: 100%;
+    }
+
+    &__panel-title {
+      font-size: $font-size-body;
+    }
+  }
+}
