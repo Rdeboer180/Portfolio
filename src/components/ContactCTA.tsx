@@ -15,7 +15,7 @@ const ContactCTA: React.FC = () => {
             <a href="mailto:rdeboer180@gmail.com" className="contact-cta__btn contact-cta__btn--primary">
               rdeboer180@gmail.com
             </a>
-            <a href="https://linkedin.com/in/ryandeboer" className="contact-cta__btn contact-cta__btn--secondary" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/ryandeboerdesigns" className="contact-cta__btn contact-cta__btn--secondary" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
             </a>
           </div>
