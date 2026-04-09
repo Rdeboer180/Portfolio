@@ -63,12 +63,14 @@ const About: React.FC = () => {
         <div className="about__content">
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" />
-            <h2 className="about__title">Built for where product / UX design is heading</h2>
+            <h2 className="about__title">Built for where design is heading</h2>
             <p className="about__body">
               <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
             </p>
             <p className="about__body">
-              Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the kind of designer who can spot what feels off, understand why, and help fix it at the system level.
+             A big part of that perspective comes from the environment I’ve worked in. Over 12 years at Tire Rack, I’ve operated closely across research, accessibility, SEO, and UX leadership—not in silos, but in the actual work. Running user studies alongside research, designing against WCAG standards from the start, and pressure-testing decisions against how search engines surface and prioritize content. I spent years working directly under our Head of UX, trusted to take on complex flows and help shape how problems were approached. <span className="about__highlight">That kind of cross-functional exposure is what grounded my work in reality—and pushed it beyond surface-level design.</span></p>
+
+            <p className="about__body">Early in my career, I was hired for design instinct, visual craft, and strategic thinking. But I knew that if I wanted to build the kind of work I admired, I needed deeper technical fluency. So I closed that gap the same way I approach everything else: reps, curiosity, experimentation, and a lot of time spent learning by doing. Over time, that turned me into the <span className="about__highlight">kind of designer who can spot what feels off, understand why, and help fix it at the system level.</span>
             </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>

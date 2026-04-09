@@ -218,9 +218,9 @@ const HeroHybrid: React.FC = () => {
         <div className="hero-hybrid__grid">
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              <span className="hero-hybrid__eyebrow-title">16+ years </span>
+              <span className="hero-hybrid__eyebrow-title">16+ years in </span>
               <span className="hero-hybrid__eyebrow-meta">
-                Working across UX, front-end, and design systems
+                design, ux, front end code & design systems
               </span>
             </p>
 
