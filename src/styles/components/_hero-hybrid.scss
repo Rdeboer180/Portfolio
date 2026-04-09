@@ -1,13 +1,11 @@
 // ============================================
 // Hero Hybrid — Profile visual + clean text animations
-// Merges current hero's visual richness with
-// the clean typography-first approach
 // ============================================
 
 @import '../variables';
 @import 'animations';
 
-// --- Shared keyframes with hero-alt ---
+// --- Shared keyframes ---
 @keyframes hybridRevealUp {
   from {
     opacity: 0;
@@ -24,6 +22,40 @@
   50% { opacity: 0; }
 }
 
+@keyframes hybridTypedSwap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hybridGradientReveal {
+  from {
+    opacity: 0.9;
+    filter: saturate(0.85);
+  }
+  to {
+    opacity: 1;
+    filter: saturate(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hybridTypedSwap {
+    from { opacity: 1; transform: none; }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes hybridGradientReveal {
+    from { opacity: 1; filter: none; }
+    to { opacity: 1; filter: none; }
+  }
+}
+
 @mixin hybrid-reveal($order) {
   opacity: 0;
   animation: hybridRevealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -36,9 +68,6 @@
   flex-direction: column;
   background: $color-white;
 
-  // ==========================================
-  // Navigation (clean minimal style)
-  // ==========================================
   &__nav {
     position: fixed;
     top: 0;
@@ -95,9 +124,6 @@
     }
   }
 
-  // ==========================================
-  // Content
-  // ==========================================
   &__content {
     flex: 1;
     display: flex;
@@ -105,7 +131,7 @@
     justify-content: center;
     max-width: $container-max-width;
     margin: 0 auto;
-    padding: 150px $spacing-2xl $spacing-4xl;
+    padding: 150px $spacing-2xl calc(#{$spacing-4xl} * 1.5);
     width: 100%;
   }
 
@@ -116,23 +142,45 @@
     align-items: center;
   }
 
-  // ==========================================
-  // Text side (clean animated)
-  // ==========================================
   &__text {
     display: flex;
     flex-direction: column;
   }
 
   &__eyebrow {
-    font-size: $font-size-body-lg;
-    margin-bottom: $spacing-sm;
-    font-weight: 700;
+    align-items: baseline;
+    gap: $spacing-xs;
+    font-family: $font-family-heading;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    margin-bottom: $spacing-md;
+  }
 
-    span {
-      display: block;
-      color: $color-primary;
-    }
+  &__eyebrow-title {
+    color: $color-neutral-dark;
+  }
+
+  &__eyebrow-sep {
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+
+  &__eyebrow-meta {
+    color: $color-neutral-muted;
+  }
+
+  &__positioning {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    line-height: 1.3;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-dark;
+    letter-spacing: -0.01em;
+    margin: 0 0 $spacing-xl;
+    max-width: 520px;
   }
 
   &__reveal {
@@ -144,41 +192,73 @@
     &--6 { @include hybrid-reveal(6); }
   }
 
-  // --- Rotating typed text ---
-  &__typed-wrap {
-    position: relative;
-    font-family: $font-family-heading;
-    font-size: 52px;
-    line-height: 1.1;
-    font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
-    letter-spacing: -0.02em;
-    margin-bottom: $spacing-lg;
-    min-height: 1.2em;
+  // ============================================
+// Typed title / final word animation package
+// ============================================
+
+@keyframes hybridTypedSwap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hybridGradientReveal {
+  from {
+    opacity: 0.9;
+    filter: saturate(0.85);
+  }
+  to {
+    opacity: 1;
+    filter: saturate(1);
+  }
+}
+
+@keyframes hybridCursorBacktrack {
+  from {
+    right: -6px;
+  }
+  to {
+    right: calc(100% - 6px);
+  }
+}
+
+@keyframes hybridCursorSelect {
+  from {
+    right: calc(100% - 6px);
+  }
+  to {
+    right: -6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hybridTypedSwap {
+    from { opacity: 1; transform: none; }
+    to { opacity: 1; transform: none; }
   }
 
-  &__typed {
-    display: inline-block;
-    color: $color-neutral-dark;
-    transform-origin: left center;
-    transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
-
-    &--stretching {
-      transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  @keyframes hybridGradientReveal {
+    from { opacity: 1; filter: none; }
+    to { opacity: 1; filter: none; }
   }
 
-  &__cursor {
-    display: inline-block;
-    width: 3px;
-    height: 1em;
-    background: $color-primary;
-    margin-left: 2px;
-    vertical-align: bottom;
-    animation: hybridCursorBlink 0.8s step-end infinite;
+  @keyframes hybridCursorBacktrack {
+    from { right: -6px; }
+    to { right: -6px; }
   }
 
-  // --- Accessible H1 (screen-reader only) ---
+  @keyframes hybridCursorSelect {
+    from { right: -6px; }
+    to { right: -6px; }
+  }
+}
+
+.hero-hybrid {
   &__h1-sr-only {
     position: absolute;
     width: 1px;
@@ -190,15 +270,127 @@
     white-space: nowrap;
     border: 0;
   }
+  &__typed-wrap {
+    position: relative;
+    font-family: $font-family-heading;
+    font-size: 52px;
+    line-height: 1.1;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xs;
+    min-height: 1.2em;
+  }
 
-  // --- Adobe-style transform bounding box ---
+  &__typed-group {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-end;
+  }
+
+  &__typed {
+    display: inline-block;
+    color: $color-neutral-dark;
+    transform-origin: left center;
+
+    &--swap {
+      animation: hybridTypedSwap 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+  }
+
+  &__final-word-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  // Selection highlight behind "Strategist"
+  &__selection {
+    position: absolute;
+    left: 0;
+    top: 54%;
+    transform: translateY(-50%);
+    width: 0%;
+    height: 0.9em;
+    background: #a9c8ea;
+    opacity: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    &--active {
+      opacity: 1;
+      width: 100%;
+      transition:
+        width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.12s ease;
+    }
+  }
+
+  &__typed-final-word,
+  &__typed-final-gradient {
+    position: relative;
+    z-index: 2;
+  }
+
+  &__typed-final-word {
+    color: $color-neutral-dark;
+    transition: color 0.25s ease;
+  }
+
+  &__typed-final-gradient {
+    display: inline-block;
+    background: linear-gradient(90deg, $color-primary 0%, #ff9a7a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: hybridGradientReveal 500ms ease forwards;
+  }
+
+  &__cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: $color-primary;
+    margin-left: 2px;
+    vertical-align: bottom;
+    animation: hybridCursorBlink 0.8s step-end infinite;
+    transition: opacity 0.25s ease;
+
+    &--absolute {
+      position: absolute;
+      right: -6px;
+      top: 0.02em;
+      margin-left: 0;
+      z-index: 3;
+    }
+
+    &--backtrack {
+      animation:
+        hybridCursorBlink 0.8s step-end infinite,
+        hybridCursorBacktrack 450ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    &--selecting {
+      animation:
+        hybridCursorBlink 0.8s step-end infinite,
+        hybridCursorSelect 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    &--hide {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  // Adobe-style transform bounding box
   &__bbox {
     position: absolute;
     inset: -6px -10px;
-    border: 1px solid rgba($color-primary, 0.5);
+    border: 1px solid rgba($color-primary, 0.55);
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease;
+    z-index: 1;
 
     &--visible {
       opacity: 1;
@@ -221,8 +413,8 @@
     &--ml { top: 50%; left: -4px; transform: translateY(-50%); }
     &--mr { top: 50%; right: -4px; transform: translateY(-50%); }
   }
+}
 
-  // --- Headline (H1) ---
   &__headline {
     font-family: $font-family-heading;
     font-size: $font-size-h3;
@@ -234,7 +426,6 @@
     max-width: 520px;
   }
 
-  // --- Body ---
   &__body {
     font-size: $font-size-body;
     line-height: $line-height-body;
@@ -243,7 +434,6 @@
     margin-bottom: $spacing-2xl;
   }
 
-  // --- Social proof line ---
   &__proof-line {
     font-size: $font-size-body-sm;
     line-height: $line-height-body-sm;
@@ -253,14 +443,12 @@
     margin-bottom: $spacing-2xl;
   }
 
-  // --- Actions ---
   &__actions {
     display: flex;
     align-items: center;
     gap: $spacing-lg;
   }
 
-  // Buttons use global .btn classes from _base.scss
   &__btn-icon {
     width: $icon-size-sm;
     height: $icon-size-sm;
@@ -278,9 +466,6 @@
     }
   }
 
-  // ==========================================
-  // Visual side (profile image — kept from original)
-  // ==========================================
   &__visual {
     display: flex;
     justify-content: center;
@@ -358,9 +543,6 @@
     image-rendering: crisp-edges;
   }
 
-  // ==========================================
-  // Floating UI Toolkit Overlays
-  // ==========================================
   &__ui-element {
     position: absolute;
     z-index: 10;
@@ -377,26 +559,15 @@
       object-fit: cover;
     }
 
-    // Code editor — top-right, overlapping circle edge
-    &--code {
-      width: 200px;
-      top: -10px;
-      right: -40px;
-      animation-delay: 0.8s;
-      animation: fadeInUp 0.8s ease-out 0.8s forwards,
-                 uiDrift1 6s ease-in-out 1.6s infinite;
-    }
-
-    // Claude prompt — bottom-left
     &--prompt {
-      width: 275px;
-      bottom: 25px;
-      animation-delay: 1s;
-      animation: fadeInUp 0.8s ease-out 1s forwards,
-                 uiDrift2 7s ease-in-out 1.8s infinite;
+      width: 260px;
+      top: -10px;
+      right: -60px;
+      animation-delay: 0.9s;
+      animation: fadeInUp 0.8s ease-out 0.9s forwards,
+                 uiDrift1 6s ease-in-out 1.7s infinite;
     }
 
-    // Layers panel — bottom-right
     &--layers {
       width: 200px;
       bottom: -10px;
@@ -408,9 +579,6 @@
     }
   }
 
-  // ==========================================
-  // Social Proof Band — full-width separator
-  // ==========================================
   &__proof-band {
     position: relative;
     background: $color-neutral-lightest;
@@ -541,7 +709,6 @@
     }
   }
 
-  // Angled bottom edge
   &__proof-angle {
     position: absolute;
     bottom: -24px;
@@ -554,9 +721,6 @@
   }
 }
 
-// ==========================================
-// Responsive
-// ==========================================
 @media (max-width: $breakpoint-lg) {
   .hero-hybrid {
     &__typed-wrap {
@@ -580,8 +744,7 @@
     }
 
     &__ui-element {
-      &--code { width: 160px; right: -30px; }
-      &--prompt { width: 150px; left: -40px; }
+      &--prompt { width: 200px; right: -40px; }
       &--layers { width: 160px; }
     }
   }

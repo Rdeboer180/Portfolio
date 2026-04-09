@@ -198,9 +198,12 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
   return (
     <div className="proficiency-dock">
       <div className="proficiency-dock__left">
-        <p className="proficiency-dock__label">How the Work Gets Made</p>
         <p className="proficiency-dock__intro">
-          These aren’t just the apps I use—they’re the capabilities they unlock.
+          These{' '}
+          <span className="proficiency-dock__intro-highlight">
+            aren&rsquo;t just the apps I&rsquo;ve mastered
+          </span>{' '}
+          I use&mdash;they&rsquo;re the capabilities they unlock.
         </p>
 
         <div className="proficiency-dock__row-wrap">

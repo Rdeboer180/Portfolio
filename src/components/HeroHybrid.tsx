@@ -1,47 +1,41 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/styles.scss';
-import uiCodeSvg from '../assets/ui/ui_code.svg';
 import uiPromptSvg from '../assets/ui/ui_prompt.svg';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
 const roles = [
-  'Design Strategist',
-  'Product Designer',
   'UX Engineer',
+  'Product Designer',
+  'Design Strategist',
 ];
+const FINAL_INDEX = roles.length - 1;
 
-// Phase: typing (first load only) → looping (cycles through layers forever)
-// Interactive layer clicks work during 'looping' phase
-type Phase = 'typing' | 'looping';
+type Phase =
+  | 'typing'
+  | 'cycling'
+  | 'paused-final'
+  | 'cursor-backtrack'
+  | 'editing-final'
+  | 'gradient-final'
+  | 'complete';
 
 const HeroHybrid: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [phase, setPhase] = useState<Phase>('typing');
-  const isFirstRunRef = useRef(true);
-
-  // Bounding box + transform (UX Engineer stretch, first run only)
   const [showBBox, setShowBBox] = useState(false);
-  const [headlineScale, setHeadlineScale] = useState(1);
-  const [isStretching, setIsStretching] = useState(false);
-
-  // Pause state: true when hero is out of view OR tab is hidden
   const [isPaused, setIsPaused] = useState(false);
 
-  // Refs
   const sectionRef = useRef<HTMLElement>(null);
-  const headlineRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
 
-  // Keep activeIndexRef in sync so advance() can read latest without being in deps
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  // Helper: clear all tracked timeouts
   const clearAllTimeouts = useCallback(() => {
     timeoutsRef.current.forEach((id) => window.clearTimeout(id));
     timeoutsRef.current = [];
@@ -49,7 +43,6 @@ const HeroHybrid: React.FC = () => {
 
   const scheduleTimeout = useCallback((cb: () => void, ms: number) => {
     const id = window.setTimeout(() => {
-      // Remove self from tracking when it fires
       timeoutsRef.current = timeoutsRef.current.filter((t) => t !== id);
       cb();
     }, ms);
@@ -57,7 +50,7 @@ const HeroHybrid: React.FC = () => {
     return id;
   }, []);
 
-  // ===== PAUSE WHEN OUT OF VIEW / TAB HIDDEN =====
+  // Pause when out of view or tab hidden
   useEffect(() => {
     const updateVisibilityPause = (inView: boolean) => {
       const tabHidden = document.hidden;
@@ -85,127 +78,132 @@ const HeroHybrid: React.FC = () => {
     };
   }, []);
 
-  // ===== TYPING PHASE (first load only) =====
+  // Reduced motion
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) {
+      setDisplayText(roles[FINAL_INDEX]);
+      setActiveIndex(FINAL_INDEX);
+      activeIndexRef.current = FINAL_INDEX;
+      setPhase('complete');
+      setShowBBox(false);
+    }
+  }, []);
+
+  // Typing first role
   useEffect(() => {
     if (phase !== 'typing' || isPaused) return;
     const target = roles[0];
 
     if (displayText.length === target.length) {
-      // Typing done — show bbox briefly, then start looping
-      scheduleTimeout(() => setShowBBox(true), 400);
-      scheduleTimeout(() => {
-        setShowBBox(false);
-        setPhase('looping');
-      }, 1200);
+      scheduleTimeout(() => setPhase('cycling'), 900);
       return () => clearAllTimeouts();
     }
 
     scheduleTimeout(() => {
       setDisplayText(target.substring(0, displayText.length + 1));
-    }, 80);
+    }, 70);
+
     return () => clearAllTimeouts();
   }, [displayText, phase, isPaused, scheduleTimeout, clearAllTimeouts]);
 
-  // ===== LOOPING SEQUENCE =====
-  // Advances to next layer every ~3.5s, cycling 0→1→2→0→...
-  // First run: layer 2 (UX Engineer) gets the stretch animation
-  // Subsequent runs: instant swap with brief bbox flash only
-  //
-  // NOTE: advance() reads from activeIndexRef and calls setState directly
-  // (NOT from inside a setState updater) to avoid StrictMode double-invocation
-  // scheduling duplicate timeouts — which was causing exponential blow-up
-  // and the "50x flash" when returning to a backgrounded tab.
+  // Cycle remaining roles once
   useEffect(() => {
-    if (phase !== 'looping' || isPaused) return;
+    if (phase !== 'cycling' || isPaused) return;
 
     const advance = () => {
-      const prev = activeIndexRef.current;
-      const next = (prev + 1) % roles.length;
-
+      const next = activeIndexRef.current + 1;
       activeIndexRef.current = next;
       setActiveIndex(next);
       setDisplayText(roles[next]);
 
-      // UX Engineer stretch — first run only
-      if (next === 2 && isFirstRunRef.current) {
-        setHeadlineScale(0.8);
-        setShowBBox(true);
-
+      if (next >= FINAL_INDEX) {
         scheduleTimeout(() => {
-          setIsStretching(true);
-          setHeadlineScale(1);
-        }, 300);
-
-        scheduleTimeout(() => {
-          setShowBBox(false);
-          setIsStretching(false);
-        }, 2500);
-
-        scheduleTimeout(advance, 4000);
-      } else {
-        // Standard transition — brief bbox flash
-        setHeadlineScale(1);
-        setIsStretching(false);
-        setShowBBox(true);
-
-        scheduleTimeout(() => setShowBBox(false), 500);
-        scheduleTimeout(advance, 3000);
+          setPhase('paused-final');
+        }, 2000);
+        return;
       }
 
-      // When we cycle back to 0 after completing all 3, first run is over
-      if (next === 0 && prev === 2) {
-        isFirstRunRef.current = false;
-      }
+      scheduleTimeout(advance, 1400);
     };
 
-    // Initial delay before first advance (gives time to read current headline)
-    scheduleTimeout(advance, 2500);
+    scheduleTimeout(advance, 1400);
 
     return () => clearAllTimeouts();
   }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
 
-  // ===== INTERACTIVE LAYER CLICKS =====
+  // Pause on final word, then show bbox and begin backtrack
+  useEffect(() => {
+    if (phase !== 'paused-final' || isPaused) return;
+
+    scheduleTimeout(() => {
+      setShowBBox(true);
+      setPhase('cursor-backtrack');
+    }, 50);
+
+    return () => clearAllTimeouts();
+  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+
+  // Cursor moves to start of Strategist
+  useEffect(() => {
+    if (phase !== 'cursor-backtrack' || isPaused) return;
+
+    scheduleTimeout(() => {
+      setPhase('editing-final');
+    }, 450);
+
+    return () => clearAllTimeouts();
+  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+
+  // Selection drag across Strategist
+  useEffect(() => {
+    if (phase !== 'editing-final' || isPaused) return;
+
+    scheduleTimeout(() => {
+      setShowBBox(false);
+      setPhase('gradient-final');
+    }, 1100);
+
+    return () => clearAllTimeouts();
+  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+
+  // Gradient reveal then complete
+  useEffect(() => {
+    if (phase !== 'gradient-final' || isPaused) return;
+
+    scheduleTimeout(() => {
+      setPhase('complete');
+    }, 500);
+
+    return () => clearAllTimeouts();
+  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+
   const handleLayerClick = useCallback((index: number) => {
-    if (phase !== 'looping' || index === activeIndex) return;
+    if (phase === 'typing' || index === activeIndexRef.current) return;
 
-    // Cancel all pending timeouts
     clearAllTimeouts();
-
-    // Apply immediately
     activeIndexRef.current = index;
     setActiveIndex(index);
     setDisplayText(roles[index]);
-    setHeadlineScale(1);
-    setIsStretching(false);
-    setShowBBox(true);
+    setShowBBox(false);
 
-    // Hide bbox after brief flash
-    scheduleTimeout(() => setShowBBox(false), 500);
+    if (index === FINAL_INDEX) {
+      // Replay final sequence if clicking Design Strategist
+      setPhase('paused-final');
+    } else {
+      setPhase('cycling');
+    }
+  }, [phase, clearAllTimeouts]);
 
-    // Restart the loop after a longer pause
-    const advanceFromClick = () => {
-      const prev = activeIndexRef.current;
-      const next = (prev + 1) % roles.length;
-      activeIndexRef.current = next;
-      setActiveIndex(next);
-      setDisplayText(roles[next]);
-      setHeadlineScale(1);
-      setIsStretching(false);
-      setShowBBox(true);
-      scheduleTimeout(() => setShowBBox(false), 500);
-      scheduleTimeout(advanceFromClick, 5000);
-    };
-    scheduleTimeout(advanceFromClick, 5000);
-  }, [phase, activeIndex, scheduleTimeout, clearAllTimeouts]);
-
-  // Cleanup on unmount
   useEffect(() => {
     return () => clearAllTimeouts();
   }, [clearAllTimeouts]);
 
+  const isFinalRole = activeIndex === FINAL_INDEX;
+  const showGradient = phase === 'gradient-final' || phase === 'complete';
+
   return (
     <section className="hero-hybrid" ref={sectionRef}>
-      {/* Minimal fixed nav */}
       <nav className="hero-hybrid__nav">
         <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
         <div className="hero-hybrid__nav-links">
@@ -218,46 +216,90 @@ const HeroHybrid: React.FC = () => {
 
       <div className="hero-hybrid__content">
         <div className="hero-hybrid__grid">
-          {/* Left: Clean animated text */}
           <div className="hero-hybrid__text">
             <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
+              <span className="hero-hybrid__eyebrow-title">16+ years </span>
+              <span className="hero-hybrid__eyebrow-meta">
+                Working across UX, front-end, and design systems
+              </span>
             </p>
 
             <div
               className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
-              ref={headlineRef}
+              aria-live="polite"
             >
-              {/* Transform bounding box */}
-              <div
-                className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}
-                aria-hidden="true"
-              >
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
-              </div>
-
               <h1 className="hero-hybrid__h1-sr-only">
-                Design Strategist, Product Designer, UX Engineer
+                UX Engineer. Product Designer. Design Strategist.
               </h1>
 
-              <span
-                className={`hero-hybrid__typed${isStretching ? ' hero-hybrid__typed--stretching' : ''}`}
-                style={headlineScale !== 1 ? { transform: `scaleX(${headlineScale})`, transformOrigin: 'left center' } : undefined}
-                aria-hidden="true"
-              >
-                {displayText}
-                <span className="hero-hybrid__cursor" />
-              </span>
+              <div className="hero-hybrid__typed-group">
+                <span
+                  key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
+                  className={`hero-hybrid__typed${
+                    phase !== 'typing' ? ' hero-hybrid__typed--swap' : ''
+                  }`}
+                  aria-hidden="true"
+                >
+                  {isFinalRole ? (
+                    <>
+                      Design{' '}
+                      <span className="hero-hybrid__final-word-wrap">
+                        <span
+                          className={`hero-hybrid__selection${
+                            phase === 'editing-final' ? ' hero-hybrid__selection--active' : ''
+                          }`}
+                          aria-hidden="true"
+                        />
+                        <span
+                          className={
+                            showGradient
+                              ? 'hero-hybrid__typed-final-gradient'
+                              : 'hero-hybrid__typed-final-word'
+                          }
+                        >
+                          Strategist
+                        </span>
+                        <span
+                          className={`hero-hybrid__cursor hero-hybrid__cursor--absolute${
+                            phase === 'cursor-backtrack' ? ' hero-hybrid__cursor--backtrack' : ''
+                          }${
+                            phase === 'editing-final' ? ' hero-hybrid__cursor--selecting' : ''
+                          }${
+                            phase === 'complete' ? ' hero-hybrid__cursor--hide' : ''
+                          }`}
+                        />
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      {displayText}
+                      {phase === 'typing' && <span className="hero-hybrid__cursor" />}
+                    </>
+                  )}
+                </span>
+
+                <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}>
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
+                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+                </div>
+              </div>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">Job titles evolve, but the work doesn’t. For 16+ years, I’ve worked at the intersection of UX, front-end, and design systems—planning. Crafting experiences that don’t just look right, but hold up in production. I do my best work where high standards, real collaboration, and thoughtful execution all matter at the same time. My strength is connecting those pieces and turning complexity into something teams can ship and scale.</p>
+            <p className="hero-hybrid__positioning hero-hybrid__reveal hero-hybrid__reveal--3">
+              Systems thinker with front-end depth.
+            </p>
+
+            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
+              I design experiences that don&rsquo;t just look right&mdash;they hold up in production.
+              My strength is connecting UX, front-end, and systems thinking to turn complexity into
+              something teams can actually ship and scale.
+            </p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
@@ -267,13 +309,13 @@ const HeroHybrid: React.FC = () => {
               <a href="#projects" className="btn btn--secondary btn--lg">
                 View my work
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <polyline points="19 12 12 19 5 12" />
                 </svg>
               </a>
             </div>
           </div>
 
-          {/* Right: Profile image with UI overlay elements */}
           <div className="hero-hybrid__visual">
             <div className="hero-hybrid__image-container">
               <div className="hero-hybrid__image-wrapper">
@@ -296,10 +338,6 @@ const HeroHybrid: React.FC = () => {
                 </div>
               </div>
 
-              {/* Floating UI toolkit overlays */}
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--code">
-                <img src={uiCodeSvg} alt="" />
-              </div>
               <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
                 <img src={uiPromptSvg} alt="" />
               </div>
@@ -313,10 +351,8 @@ const HeroHybrid: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
 
-      {/* Social proof band — full-width separator */}
       <div className="hero-hybrid__proof-band">
         <div className="hero-hybrid__proof-inner">
           <ProficiencyDock testimonialsHref="#testimonials" />

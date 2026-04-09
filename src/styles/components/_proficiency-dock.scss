@@ -55,6 +55,11 @@
     max-width: 40ch;
   }
 
+  &__intro-highlight {
+    color: $color-primary;
+    font-weight: 700;
+  }
+
   // ==========================================
   // Icon row wrapper — on desktop this is just
   // a hard-bordered dock sized to fit all icons.

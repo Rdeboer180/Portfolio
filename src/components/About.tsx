@@ -63,7 +63,7 @@ const About: React.FC = () => {
         <div className="about__content">
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" />
-            <h2 className="about__title">Why I&rsquo;m especially built for where design is heading</h2>
+            <h2 className="about__title">Built for where product / UX design is heading</h2>
             <p className="about__body">
               <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
             </p>
