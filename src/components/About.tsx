@@ -77,8 +77,6 @@ const About: React.FC = () => {
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
-              <span className="about__link-separator">or</span>
-              <a href="#testimonials" className="about__read-more">see what it&rsquo;s like to work with me &rarr;</a>
             </div>
           </div>
         </div>
