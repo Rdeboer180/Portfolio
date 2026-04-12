@@ -9,7 +9,6 @@ import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 import type { TargetedHomepageContent } from '../data/homepage-sleeper';
 import { setHomeVariant } from '../utils/homeSession';
-import uiCodeSvg from '../assets/ui/ui_code.svg';
 import uiPromptSvg from '../assets/ui/ui_prompt.svg';
 
 type HeroPhase = 'typing' | 'looping';
@@ -274,9 +273,6 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
                 </div>
               </div>
 
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--code">
-                <img src={uiCodeSvg} alt="" />
-              </div>
               <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
                 <img src={uiPromptSvg} alt="" />
               </div>
