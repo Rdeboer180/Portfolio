@@ -291,17 +291,14 @@ const HeroHybrid: React.FC = () => {
               </div>
             </div>
 
-            <p className="hero-hybrid__positioning hero-hybrid__reveal hero-hybrid__reveal--3">
-              Systems thinker with front-end depth.
-            </p>
-
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">
+            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3">
+              <strong className="hero-hybrid__body-lead">I&rsquo;m a Systems thinker with front-end depth.</strong>{' '}
               I design experiences that don&rsquo;t just look right&mdash;they hold up in production.
               My strength is connecting UX, front-end, and systems thinking to turn complexity into
               something teams can actually ship and scale.
             </p>
 
-            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
+            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--4">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
                 <img src="/images/hero/email-icon.svg" alt="" className="hero-hybrid__btn-icon" />
                 rdeboer180@gmail.com

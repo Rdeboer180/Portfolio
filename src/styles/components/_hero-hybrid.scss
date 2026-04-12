@@ -434,6 +434,11 @@
     margin-bottom: $spacing-2xl;
   }
 
+  &__body-lead {
+    font-weight: 700;
+    color: $color-neutral-dark;
+  }
+
   &__proof-line {
     font-size: $font-size-body-sm;
     line-height: $line-height-body-sm;
