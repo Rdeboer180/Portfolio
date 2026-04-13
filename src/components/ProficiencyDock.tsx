@@ -210,11 +210,10 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
     <div className="proficiency-dock">
       <div className="proficiency-dock__left">
         <p className="proficiency-dock__intro">
-          These{' '}
           <span className="proficiency-dock__intro-highlight">
-            aren&rsquo;t just the apps I&rsquo;ve mastered
+            From systems to implementation
           </span>{' '}
-          I use&mdash;they&rsquo;re the capabilities they unlock.
+          This is how the work actually gets made.
         </p>
 
         <div className="proficiency-dock__row-wrap">
@@ -261,9 +260,11 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
         aria-live="polite"
       >
         <div className="proficiency-dock__panel-body" key={active.id}>
-          <p className="proficiency-dock__panel-eyebrow">Tool &rarr; Capability &rarr; Outcome</p>
+          <p className="proficiency-dock__panel-eyebrow">
+            <span className="proficiency-dock__panel-eyebrow-tool">{active.label}</span>
+            {' '}&rarr; Capability &rarr; Outcome
+          </p>
           <h3 className="proficiency-dock__panel-headline">{active.headline}</h3>
-          <p className="proficiency-dock__panel-tool-label">{active.label}</p>
           <p className="proficiency-dock__panel-copy">
             {active.copy({ testimonialsHref })}
           </p>

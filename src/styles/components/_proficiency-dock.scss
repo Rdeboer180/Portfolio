@@ -178,31 +178,28 @@
   &__panel-eyebrow {
     font-family: $font-family-mono;
     font-size: 10px;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-regular;
     color: $color-neutral-muted;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     margin: 0;
   }
 
-  // Orange, bold, larger — the primary scannable value
-  &__panel-headline {
-    font-family: $font-family-heading;
-    font-size: $font-size-h5;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
+  // Tool name inside the eyebrow — slightly bolder so it reads first
+  &__panel-eyebrow-tool {
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-standard;
   }
 
-  // Secondary tool label — smaller, muted
-  &__panel-tool-label {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
+  // Capability headline — orange but restrained
+  &__panel-headline {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
     font-weight: $font-weight-medium;
-    color: $color-neutral-muted;
-    margin: 0 0 4px;
+    color: $color-primary;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
   }
 
   &__panel-copy {
@@ -328,7 +325,7 @@
     }
 
     &__panel-headline {
-      font-size: $font-size-body-lg;
+      font-size: $font-size-body;
     }
   }
 }
