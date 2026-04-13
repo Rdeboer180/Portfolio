@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 interface Proficiency {
   id: string;
   label: string;
-  title: string;
+  headline: string;
   copy: (ctx: { testimonialsHref: string }) => React.ReactNode;
   icon: React.ReactNode;
 }
@@ -33,11 +33,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'slack',
     label: 'Slack',
-    title: 'Slack → Communication & Collaboration',
+    headline: 'Communication & Collaboration',
     copy: ({ testimonialsHref }) => (
       <>
-        I’m known for building trust across UX, engineering, analytics, SEO, and leadership—the kind
-        of alignment that makes better work possible.{' '}
+        A consistent thread across my work is building trust across UX, engineering, analytics, SEO,
+        and leadership&mdash;the kind of alignment that makes better work possible.{' '}
         <InlineCTA href={testimonialsHref} label="View Testimonials" />
       </>
     ),
@@ -46,12 +46,12 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'figma',
     label: 'Figma',
-    title: 'Figma → From Idea to System',
+    headline: 'Designing Systems, Not Screens',
     copy: () => (
       <>
-        Figma is where I turn rough ideas into scalable systems—defining interaction patterns,
-        component structure, and visual direction teams can actually build from.{' '}
-        <InlineCTA href="#/work/wheelrack" label="View the Wheel Rack design system" />
+        Building token-driven systems and component libraries that scale across teams, products,
+        and platforms.{' '}
+        <InlineCTA href="#/work/wheelrack" label="See my Figma Design System" />
       </>
     ),
     icon: <img src="/images/proficiencies/figma-dark.svg" alt="" />,
@@ -59,20 +59,20 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'workfront',
     label: 'Workfront',
-    title: 'Workfront → Owning the Outcome',
+    headline: 'Project Management',
     copy: () =>
-      'Workfront reflects one of my strongest skills: taking loose goals, finding what’s missing, and driving projects forward across research, copy, SEO, and leadership until the work actually meets the objective.',
+      'Turning loose direction into structured execution\u2014connecting research, copy, SEO, and stakeholders to drive work from ambiguity to shipped.',
     icon: <img src="/images/proficiencies/workfront.svg" alt="" />,
   },
   {
     id: 'claude',
-    label: 'Claude',
-    title: 'Claude → Ideas Brought to Life',
+    label: 'Claude / Agentic Coding',
+    headline: 'Accelerating Exploration',
     copy: () => (
       <>
-        Claude has reinvigorated how I work—helping me move from idea to functioning interface in
-        minutes, not days. I built this portfolio using that workflow.{' '}
-        <InlineCTA href="#/design-system" label="View the design system" />
+        Using AI to rapidly prototype, test variations, and push ideas further&mdash;while
+        applying judgment to shape what&rsquo;s worth shipping.{' '}
+        <InlineCTA href="#/work/wheelrack" label="See how I built this portfolio" />
       </>
     ),
     icon: <img src="/images/proficiencies/claude.svg" alt="" />,
@@ -80,11 +80,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'chatgpt',
     label: 'ChatGPT',
-    title: 'ChatGPT → Documenting the Steps',
+    headline: 'LLM Integration',
     copy: () => (
       <>
-        I use ChatGPT to speed up SEO support, alt text, presentation drafts, and documentation that
-        makes systems, components, and tokens easier for teams to use.{' '}
+        Using ChatGPT to speed up SEO support, alt text, presentation drafts, and documentation
+        that makes systems, components, and tokens easier for teams to understand and use.{' '}
         <InlineCTA href="#/about" label="Read how I think about AI" />
       </>
     ),
@@ -93,27 +93,38 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'vscode',
     label: 'VS Code',
-    title: 'VS Code → Understanding the Build',
-    copy: () =>
-      'VS Code is where design gets pressure-tested. After 10+ years building with HTML, CSS3, SCSS, BEM, and WCAG-minded patterns, I know how to refine UI where implementation actually happens.',
+    headline: 'Building What Ships',
+    copy: () => (
+      <>
+        Not just designing interfaces, but validating them in code&mdash;bridging design and
+        implementation to ensure ideas hold up in real environments.{' '}
+        <InlineCTA href="#/work/aem-component-system" label="AEM Core" />{' '}
+        <InlineCTA href="#/work/tire-categories" label="Tire Categories" />
+      </>
+    ),
     icon: <img src="/images/proficiencies/vscode.svg" alt="" />,
   },
   {
     id: 'aem',
     label: 'Adobe Experience Manager',
-    title: 'AEM → Thinking in Components',
-    copy: () =>
-      'AEM taught me to think beyond pages and into systems—building component patterns that stay flexible for authors, consistent across experiences, and maintainable over time.',
+    headline: 'Scaling Through Systems',
+    copy: () => (
+      <>
+        Led and contributed to design patterns powering 80%+ of Tire Rack landing pages&mdash;building
+        reusable components that balance flexibility, performance, and consistency at scale.{' '}
+        <InlineCTA href="#/work/aem-component-system" label="View AEM Core rebuild" />
+      </>
+    ),
     icon: <img src="/images/proficiencies/experience-manager.svg" alt="" />,
   },
   {
     id: 'adobe-cc',
     label: 'Adobe Creative Cloud',
-    title: 'Adobe CC → The Tools That Built My Eye',
+    headline: 'The Tools That Built My Eye',
     copy: () => (
       <>
         Adobe tools were the first applications that unlocked my craft. Illustrator still feels like
-        home—especially in SVG, iconography, and brand systems—and that foundation still shapes how I
+        home&mdash;especially in SVG, iconography, and brand systems&mdash;and that foundation still shapes how I
         think about polish and visual precision.{' '}
         <InlineCTA href="#/work/tire-categories" label="View the tire category page" />
       </>
@@ -123,11 +134,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'analytics',
     label: 'Adobe Analytics',
-    title: 'Adobe Analytics → Reading the Behavior',
+    headline: 'Reading the Behavior',
     copy: () => (
       <>
-        Analytics helps me understand what users are actually doing—not just what we assume. On Tire
-        Rack’s winterization work, it helped shape region-specific experiences based on real seasonal
+        Analytics helps me understand what users are actually doing&mdash;not just what we assume. On Tire
+        Rack&rsquo;s winterization work, it helped shape region-specific experiences based on real seasonal
         behavior.{' '}
         <InlineCTA href="#/work/tire-rack-winter" label="View the winterization case study" />
       </>
@@ -137,12 +148,12 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'github',
     label: 'GitHub',
-    title: 'GitHub → Shipping Thoughtfully',
+    headline: 'Collaborating in Code',
     copy: () => (
       <>
-        GitHub is where ideas become real—helping me work close to versioned code, live implementation,
-        and production-ready delivery.{' '}
-        <InlineCTA href="#/work/heatherwood" label="View the case study" />
+        Comfortable working in shared repos, reviewing implementations, and contributing
+        directly&mdash;ensuring design intent survives through development.{' '}
+        <InlineCTA href="#/work/aem-component-system" label="Explore implementation" />
       </>
     ),
     icon: <img src="/images/proficiencies/github.svg" alt="" />,
@@ -250,8 +261,9 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
         aria-live="polite"
       >
         <div className="proficiency-dock__panel-body" key={active.id}>
-          <p className="proficiency-dock__panel-eyebrow">Tool in practice</p>
-          <h3 className="proficiency-dock__panel-title">{active.title}</h3>
+          <p className="proficiency-dock__panel-eyebrow">Tool &rarr; Capability &rarr; Outcome</p>
+          <h3 className="proficiency-dock__panel-headline">{active.headline}</h3>
+          <p className="proficiency-dock__panel-tool-label">{active.label}</p>
           <p className="proficiency-dock__panel-copy">
             {active.copy({ testimonialsHref })}
           </p>

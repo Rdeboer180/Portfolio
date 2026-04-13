@@ -61,11 +61,7 @@
   }
 
   // ==========================================
-  // Icon row wrapper — on desktop this is just
-  // a hard-bordered dock sized to fit all icons.
-  // On smaller viewports it constrains the visible
-  // width of the scroller and adds edge fade masks
-  // so overflow icons crop cleanly.
+  // Icon row wrapper
   // ==========================================
   &__row-wrap {
     position: relative;
@@ -76,6 +72,21 @@
     border-radius: 14px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03),
                 0 4px 12px rgba(0, 0, 0, 0.04);
+
+    // Right-edge fade mask for scroll peek
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 32px;
+      border-radius: 0 14px 14px 0;
+      background: linear-gradient(to right, transparent, $color-white);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
   }
 
   // ==========================================
@@ -87,7 +98,6 @@
     gap: $spacing-xs;
     padding: 6px;
     width: 100%;
-    // Hide the native scrollbar in case the row does scroll on small screens
     scrollbar-width: none;
     scroll-behavior: smooth;
 
@@ -96,9 +106,11 @@
 
   &__item {
     position: relative;
-    width: 40px;
-    height: 40px;
-    padding: 6px;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
     border: none;
     background: transparent;
     border-radius: 10px;
@@ -120,8 +132,9 @@
     }
 
     &:hover:not(&--active) {
-      transform: translateY(-2px);
+      transform: scale(1.05);
       background: rgba($color-primary, 0.06);
+      box-shadow: 0 0 0 1px rgba($color-primary, 0.12);
     }
 
     &:focus-visible {
@@ -133,7 +146,7 @@
     &--active {
       background: rgba($color-primary, 0.08);
       box-shadow: inset 0 0 0 1.5px $color-primary;
-      transform: translateY(-1px);
+      transform: scale(1.05);
     }
 
     // Small orange indicator dot under active icon
@@ -166,20 +179,30 @@
     font-family: $font-family-mono;
     font-size: 10px;
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: $color-neutral-muted;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     margin: 0;
   }
 
-  &__panel-title {
+  // Orange, bold, larger — the primary scannable value
+  &__panel-headline {
     font-family: $font-family-heading;
-    font-size: $font-size-body-lg;
+    font-size: $font-size-h5;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
+    color: $color-primary;
     margin: 0;
     line-height: 1.2;
     letter-spacing: -0.01em;
+  }
+
+  // Secondary tool label — smaller, muted
+  &__panel-tool-label {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-muted;
+    margin: 0 0 4px;
   }
 
   &__panel-copy {
@@ -273,30 +296,30 @@
       display: none;
     }
 
-    // On mobile, fit all 10 icons inside the container with hard edges
-    // (no fade mask, no scroll). Icons flex-shrink to whatever the
-    // viewport allows, preserving the dock's bordered look.
+    // On mobile, enable horizontal scroll with fade peek
     &__row-wrap {
       width: 100%;
       max-width: 100%;
+      overflow: hidden;
+
+      &::after {
+        opacity: 1;
+      }
     }
 
     &__row {
       gap: 4px;
       padding: 5px;
-      justify-content: space-between;
-      overflow: hidden;
+      overflow-x: auto;
     }
 
     &__item {
-      // Let each button shrink to fit the row; cap at 36px on the upper end.
-      width: auto;
-      flex: 1 1 0;
-      min-width: 0;
-      max-width: 36px;
-      aspect-ratio: 1 / 1;
-      height: auto;
-      padding: 5px;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      padding: 8px;
     }
 
     &__panel {
@@ -304,8 +327,8 @@
       max-width: 100%;
     }
 
-    &__panel-title {
-      font-size: $font-size-body;
+    &__panel-headline {
+      font-size: $font-size-body-lg;
     }
   }
 }
