@@ -427,6 +427,70 @@
   }
 }
 
+// ==========================================
+// Standalone About Section (UX Variant)
+// ==========================================
+.about-page--standalone {
+  min-height: auto;
+  padding: $spacing-4xl $spacing-3xl;
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-3xl $spacing-2xl;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2xl $spacing-lg;
+  }
+}
+
+.about-page__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-page__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-page__heading {
+  font-family: $font-family-heading;
+  font-size: $font-size-h2;
+  font-weight: $font-weight-extrabold;
+  color: $color-neutral-dark;
+  margin-bottom: $spacing-3xl;
+  text-align: left;
+  letter-spacing: 0.035em;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-h3;
+    margin-bottom: $spacing-2xl;
+  }
+}
+
+.about-page__body {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  p {
+    font-size: $font-size-body;
+    line-height: $line-height-body-relaxed;
+    color: $color-neutral-standard;
+    margin: 0;
+
+    strong {
+      font-weight: $font-weight-semibold;
+      color: $color-neutral-dark;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: $font-size-body-sm;
+      line-height: 1.6;
+    }
+  }
+}
+
 @media (max-width: $breakpoint-sm) {
   .about-page {
     &__hero-title {
