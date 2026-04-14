@@ -14,6 +14,7 @@ import CaseStudyPage from './components/CaseStudyPage';
 import AboutPage from './components/AboutPage';
 import ResumePage from './components/ResumePage';
 import HomepageTargeted from './components/HomepageTargeted';
+import HomepageUX from './components/HomepageUX';
 import sleeperContent from './data/homepage-sleeper';
 import yahooContent from './data/homepage-yahoo';
 import fantasypointsContent from './data/homepage-fantasypoints';
@@ -29,6 +30,7 @@ function getRoute(hash: string): { page: string; slug?: string; anchor?: string 
   if (hash === '#/design-system') return { page: 'design-system' };
   if (hash === '#/about') return { page: 'about' };
   if (hash === '#/resume') return { page: 'resume' };
+  if (hash === '#/homepage_ux' || hash.startsWith('#/homepage_ux#')) return { page: 'homepage_ux', anchor };
   if (hash === '#/homepage_sleeper' || hash.startsWith('#/homepage_sleeper#')) return { page: 'homepage_sleeper', anchor };
   if (hash === '#/homepage_yahoo' || hash.startsWith('#/homepage_yahoo#')) return { page: 'homepage_yahoo', anchor };
   if (hash === '#/homepage_fantasypoints' || hash.startsWith('#/homepage_fantasypoints#')) return { page: 'homepage_fantasypoints', anchor };
@@ -79,6 +81,10 @@ function App() {
 
   if (route.page === 'resume') {
     return <ResumePage />;
+  }
+
+  if (route.page === 'homepage_ux') {
+    return <HomepageUX />;
   }
 
   if (route.page === 'homepage_sleeper') {

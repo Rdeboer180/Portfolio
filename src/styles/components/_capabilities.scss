@@ -1,0 +1,104 @@
+// ============================================
+// Capabilities Section (UX Variant)
+// ============================================
+
+.capabilities-section {
+  padding: 5rem $spacing-3xl;
+  background: $color-white;
+  
+  @media (max-width: $breakpoint-md) {
+    padding: 3rem $spacing-2xl;
+  }
+  
+  @media (max-width: $breakpoint-sm) {
+    padding: 2rem $spacing-lg;
+  }
+}
+
+.capabilities-section__container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.capabilities-section__heading {
+  font-family: $font-family-heading;
+  font-size: $font-size-h2;
+  font-weight: $font-weight-extrabold;
+  color: $color-neutral-dark;
+  margin-bottom: $spacing-3xl;
+  text-align: center;
+  letter-spacing: 0.035em;
+}
+
+.capabilities-section__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-3xl;
+  margin-bottom: $spacing-4xl;
+}
+
+.capabilities-section__group {
+  padding: $spacing-2xl;
+  border: 1px solid $color-neutral-light;
+  border-radius: $radius-lg;
+  background: $color-neutral-lightest;
+}
+
+.capabilities-section__group-title {
+  font-family: $font-family-primary;
+  font-size: $font-size-body-lg;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-dark;
+  margin-bottom: $spacing-sm;
+}
+
+.capabilities-section__group-description {
+  font-size: $font-size-body-sm;
+  color: $color-neutral-muted;
+  margin-bottom: $spacing-lg;
+  line-height: 1.5;
+}
+
+.capabilities-section__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+    line-height: 1.6;
+    margin-bottom: $spacing-md;
+    
+    strong {
+      color: $color-neutral-dark;
+      font-weight: $font-weight-semibold;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.capabilities-section__tools {
+  padding: $spacing-2xl;
+  background: $color-white;
+  border: 1px solid $color-primary-muted;
+  border-radius: $radius-lg;
+  margin-top: $spacing-3xl;
+}
+
+.capabilities-section__tools-heading {
+  font-size: $font-size-body-lg;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-dark;
+  margin: 0 0 $spacing-md;
+}
+
+.capabilities-section__tools-text {
+  font-size: $font-size-body-sm;
+  color: $color-neutral-standard;
+  line-height: 1.6;
+  margin: 0;
+}
