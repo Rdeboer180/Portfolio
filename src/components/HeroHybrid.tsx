@@ -5,9 +5,8 @@ import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
 const roles = [
-  'UX Engineer',
   'Product Designer',
-  'Design Strategist',
+  'Systems Designer',
 ];
 const FINAL_INDEX = roles.length - 1;
 
@@ -229,7 +228,7 @@ const HeroHybrid: React.FC = () => {
               aria-live="polite"
             >
               <h1 className="hero-hybrid__h1-sr-only">
-                UX Engineer. Product Designer. Design Strategist.
+                Product Designer. Systems Designer.
               </h1>
 
               <div className="hero-hybrid__typed-group">
