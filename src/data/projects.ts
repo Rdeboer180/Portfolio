@@ -4,11 +4,13 @@ export interface ProjectMetric {
 }
 
 export interface ProjectImage {
-  src: string;
+  src?: string;
   alt: string;
   layout: 'full' | 'half';
   caption?: string;
   mobile?: boolean;
+  isOverlay?: boolean;
+  overlayText?: string;
 }
 
 export interface ApproachSubsection {
@@ -81,7 +83,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / UX Engineer',
     tools: ['Figma', 'Token Studio', 'Storybook', 'HTML/CSS', 'JavaScript'],
     timeline: '~4 months dedicated (12+ months total with API delays)',
-    featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem.jpg',
+    featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
     timeToLive: '8+ months of work to build out system, project pending live date due to ongoing API call work',
 
     // ── 01 Problem ──
@@ -93,10 +95,11 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/wheelrack/supporting/Problem/oldsite1.png',
-        alt: 'Old WheelRack vehicle selector showing basic dropdown and outdated partner branding',
+        alt: 'Placeholder for omitted legacy site screenshot',
         layout: 'full',
-        caption: 'The existing vehicle selector\u2014no autocomplete, no responsive behavior, no shared design language',
+        caption: 'Legacy state available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -127,10 +130,11 @@ const projects: Project[] = [
     ],
     constraintsImages: [
       {
-        src: '/images/work/wheelrack/supporting/opportunity/beforeIbegin_discovery.png',
-        alt: 'Figma Masterclass certification awarded to Ryan DeBoer\u2014system thinking before visual design',
+        alt: 'Placeholder for omitted internal discovery artifact',
         layout: 'full',
-        caption: 'Invested in system-level thinking before jumping into visuals\u2014the foundation for everything that followed',
+        caption: 'Discovery/learning detail available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -187,10 +191,11 @@ const projects: Project[] = [
         systemMarker: 'Scalability consideration',
         images: [
           {
-            src: '/images/work/wheelrack/supporting/opportunity/storybook.png',
-            alt: 'Storybook button component with props table showing variant, size, and state controls',
+            alt: 'Placeholder for omitted internal Storybook artifact',
             layout: 'full',
-            caption: 'Storybook integration\u2014props, variants, and interactive playground bridging design to code',
+            caption: 'Storybook detail available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -238,7 +243,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / UX Engineer',
     tools: ['Figma', 'FigJam', 'HTML/CSS', 'Adobe Creative Suite'],
     timeline: '2 months',
-    featured: '/images/work/tire-categories/CS_thumbnail_TireCategories.jpg',
+    featured: '/images/work/tire-categories/CS_thumbnail_TireCategories_safe.jpg',
     timeToLive: '~2 months from brief to system launch across 30+ category pages',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -250,10 +255,11 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/tire-categories/supporting/Problem/projectNotes.png',
-        alt: 'Project notes outlining category page requirements, content structure, and initial scope',
+        alt: 'Placeholder for omitted internal project-notes artifact',
         layout: 'full',
-        caption: 'Project notes\u2014scoping the category system before any design work began',
+        caption: 'Project notes available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -266,10 +272,11 @@ const projects: Project[] = [
     ],
     gapsImages: [
       {
-        src: '/images/work/tire-categories/supporting/opportunity/earlyProcess_notes.png',
-        alt: 'Early process notes mapping category structure and content requirements',
+        alt: 'Placeholder for omitted internal process-notes artifact',
         layout: 'full',
-        caption: 'Early discovery notes\u2014mapping what was missing before any design began',
+        caption: 'Early-process notes available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -300,10 +307,11 @@ const projects: Project[] = [
         systemMarker: 'Pattern introduced',
         images: [
           {
-            src: '/images/work/tire-categories/supporting/Problem/wireframes.png',
-            alt: 'Category page wireframes showing layout hierarchy and content zones',
+            alt: 'Placeholder for omitted internal wireframe artifact',
             layout: 'full',
-            caption: 'Wireframes establishing the repeatable page structure across all category types',
+            caption: 'Wireframes available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -315,13 +323,14 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/tire-categories/supporting/constraints/workingFiles.png',
-            alt: 'Working design files showing icon system development and category component variants',
-            layout: 'half',
-            caption: 'Working files\u2014icon system and component development across category types',
+            alt: 'Placeholder for omitted internal file-system artifact',
+            layout: 'full',
+            caption: 'Working files available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
           {
-            src: '/images/work/tire-categories/supporting/outcome/primaryHome+icons.png',
+            src: '/images/work/tire-categories/primaryHome+icons_safe.png',
             alt: 'Primary category landing page with 8 category icons and visual hierarchy',
             layout: 'half',
             caption: 'Category hub\u20148 primary icons enabling quick visual scanning across tire types',
@@ -336,16 +345,18 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/tire-categories/supporting/approach/snipet_beforede1.png',
-            alt: 'Code snippet showing CSS implementation of category page components',
-            layout: 'half',
-            caption: 'Front-end execution\u2014CSS and component structure contributed directly to the build',
+            alt: 'Placeholder for omitted internal design-proof artifact',
+            layout: 'full',
+            caption: 'Pre-dev proof available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
           {
-            src: '/images/work/tire-categories/supporting/approach/versioning_git.png',
-            alt: 'Git version control showing branch management for category page development',
-            layout: 'half',
-            caption: 'Version control\u2014managing code alongside the development team',
+            alt: 'Placeholder for omitted internal version-control artifact',
+            layout: 'full',
+            caption: 'Versioning detail available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -367,7 +378,7 @@ const projects: Project[] = [
         caption: 'Category page in context\u2014performance data, icon system, and product discovery working together',
       },
       {
-        src: '/images/work/tire-categories/supporting/outcome/winter_m.png',
+        src: '/images/work/tire-categories/winter_m_safe.png',
         alt: 'Winter tire category page on mobile showing responsive layout with performance data and product listings',
         layout: 'full',
         caption: 'Mobile category experience\u2014responsive layout maintaining full functionality',
@@ -394,7 +405,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / AEM Content Strategist',
     tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
     timeline: '10+ years',
-    featured: '/images/work/tire-rack-winter/CS_thumbnail_AEM_Winterization.jpg',
+    featured: '/images/work/tire-rack-winter/CS_thumbnail_AEM_Winterization_safe.jpg',
     timeToLive: '10+ years of continuous ownership\u2014system deployed seasonally each fall with same-day content swaps',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -405,10 +416,11 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/tire-rack-winter/supporting/Problem/contentDoc.png',
-        alt: 'Content documentation outlining seasonal swap requirements and component inventory',
+        alt: 'Placeholder for omitted internal release-notes artifact',
         layout: 'full',
-        caption: 'Content documentation\u2014scoping the seasonal system before building',
+        caption: 'Release notes available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -421,10 +433,11 @@ const projects: Project[] = [
     ],
     gapsImages: [
       {
-        src: '/images/work/tire-rack-winter/supporting/opportunity/photography_collecting_ideas.png',
-        alt: 'Photography direction notes for seasonal imagery collection and shoot planning',
+        alt: 'Placeholder for omitted internal photography-ideation artifact',
         layout: 'full',
-        caption: 'Photography direction\u2014collecting ideas and planning seasonal shoots',
+        caption: 'Photography ideation available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -438,10 +451,11 @@ const projects: Project[] = [
     ],
     constraintsImages: [
       {
-        src: '/images/work/tire-rack-winter/supporting/constraints/documenting authoring contingencies.png',
-        alt: 'AEM Mapping of component swaps based on author location and their publisher counterparts',
+        alt: 'Placeholder for omitted internal authoring-notes artifact',
         layout: 'full',
-        caption: 'AEM Mapping of component swaps based on author location and their publisher counterparts',
+        caption: 'Authoring contingencies available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -536,7 +550,7 @@ const projects: Project[] = [
     role: 'Brand & Web Designer',
     tools: ['Figma', 'WordPress', 'Elementor', 'WPForms', 'Yoast SEO', 'Adobe Illustrator'],
     timeline: '4 months',
-    featured: '/images/work/heatherwood/CS_thumbnail_Heatherwood.jpg',
+    featured: '/images/work/heatherwood/CS_thumbnail_Heatherwood_safe.jpg',
     timeToLive: '~4 months from first meeting to full brand + site launch',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -548,7 +562,7 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/heatherwood/supporting/Problem/Screenshot 2026-04-02 at 10.16.00\u202FAM.png',
+        src: '/images/work/heatherwood/supporting/Problem/Screenshot 2026-04-02 at 10.16.00 AM.png',
         alt: 'Initial project scope and requirements for Heatherwood digital brand',
         layout: 'full',
         caption: 'Project scope\u2014defining what the brand and site needed to accomplish',
@@ -676,7 +690,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / UX Engineer',
     tools: ['AEM', 'Figma', 'HTML/CSS', 'Adobe Creative Suite', 'ChatGPT'],
     timeline: 'Ongoing (50+ landing pages)',
-    featured: '/images/work/landing-pages/CS_thumbnail_landing-pages.jpg',
+    featured: '/images/work/landing-pages/CS_thumbnail_landing-pages_safe.jpg',
     timeToLive: 'From weeks to days\u2014system reduced turnaround from multi-week cycles to same-week launches',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -688,10 +702,11 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/landing-pages/supporting/contentBrief.png',
-        alt: 'Content brief showing SEO keywords and page requirements for a new landing page',
+        alt: 'Placeholder for omitted content-brief artifact',
         layout: 'full',
-        caption: 'Typical intake\u2014an SEO-driven content brief that needs to become a live page',
+        caption: 'Content / SEO brief available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -704,10 +719,11 @@ const projects: Project[] = [
     ],
     gapsImages: [
       {
-        src: '/images/work/landing-pages/supporting/copy_provided.png',
-        alt: 'Raw copy and content inputs provided for landing page development',
+        alt: 'Placeholder for omitted internal copy spec',
         layout: 'full',
-        caption: 'Content inputs\u2014translating raw copy and SEO requirements into structured layouts',
+        caption: 'Copy spec available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -721,10 +737,11 @@ const projects: Project[] = [
     ],
     constraintsImages: [
       {
-        src: '/images/work/landing-pages/supporting/projectDoc.png',
-        alt: 'Project scope document defining landing page requirements and deliverables',
+        alt: 'Placeholder for omitted internal project-management artifact',
         layout: 'full',
-        caption: 'Scope document\u2014defining requirements and component needs before design begins',
+        caption: 'Project-management surface available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -745,10 +762,11 @@ const projects: Project[] = [
         systemMarker: 'Pattern introduced',
         images: [
           {
-            src: '/images/work/landing-pages/supporting/ongoing_efforts_organize.png',
-            alt: 'Organized list of ongoing landing page efforts and component planning',
+            alt: 'Placeholder for omitted internal roadmap artifact',
             layout: 'full',
-            caption: 'System planning\u2014managing component selection and page structure across 50+ pages',
+            caption: 'Program roadmap available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -759,10 +777,11 @@ const projects: Project[] = [
         systemMarker: 'System decision',
         images: [
           {
-            src: '/images/work/landing-pages/supporting/communication_images.png',
-            alt: 'Cross-team communication artifacts from landing page development process',
+            alt: 'Placeholder for omitted internal review/communication artifact',
             layout: 'full',
-            caption: 'Cross-functional coordination\u2014aligning SEO, tire test team, and development on component strategy',
+            caption: 'Review and iteration detail available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -773,10 +792,11 @@ const projects: Project[] = [
         systemMarker: 'Scalability consideration',
         images: [
           {
-            src: '/images/work/landing-pages/supporting/testing notes.png',
-            alt: 'QA testing notes and deployment checklist for landing page launch',
+            alt: 'Placeholder for omitted internal testing-notes artifact',
             layout: 'full',
-            caption: 'QA documentation\u2014AI-generated testing scenarios and deployment checklist',
+            caption: 'Testing notes available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -862,7 +882,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / UX Engineer',
     tools: ['AEM', 'Figma', 'Sass', 'HTML/CSS', 'Git'],
     timeline: '~12 months (ongoing)',
-    featured: '/images/work/aem-component-system/CS_thumbnail_AEM_componentSystemRebuild.jpg',
+    featured: '/images/work/aem-component-system/CS_thumbnail_AEM_componentSystemRebuild_safe.jpg',
     timeToLive: '12 months from kickoff to live components\u2014core variants and templates now powering the homepage and tires hub.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -874,7 +894,7 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/aem-component-system/supporting/AEM_CoreComponents.jpeg',
+        src: '/images/work/aem-component-system/AEM_CoreComponents_blurred.jpeg',
         alt: 'Existing AEM component inventory showing fragmented, aging custom components',
         layout: 'full',
         caption: 'Starting point\u2014fragmented custom components built up over a decade of authoring decisions',
@@ -891,16 +911,18 @@ const projects: Project[] = [
     ],
     gapsImages: [
       {
-        src: '/images/work/aem-component-system/supporting/Notes_AEM_HeroCore_Solution.jpeg',
-        alt: 'Audit notes mapping repeated hero patterns and proposing a consolidated core hero component',
-        layout: 'half',
-        caption: 'Hero audit\u2014mapping repeated patterns into a single core component with defined variants',
+        alt: 'Placeholder for omitted internal solution-notes artifact',
+        layout: 'full',
+        caption: 'Solution write-up available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
       {
-        src: '/images/work/aem-component-system/supporting/Notes_AEM_ProductGridComponentNeeds.jpeg',
-        alt: 'Product grid component needs documented with variant requirements and authoring fields',
-        layout: 'half',
-        caption: 'Product grid proposal\u2014documenting authoring fields, variants, and edge cases before dev work started',
+        alt: 'Placeholder for omitted internal component-requirements artifact',
+        layout: 'full',
+        caption: 'Requirements doc available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -914,10 +936,11 @@ const projects: Project[] = [
     ],
     constraintsImages: [
       {
-        src: '/images/work/aem-component-system/supporting/Notes_AEM_AssetDam_Cleanup.jpeg',
-        alt: 'Asset DAM cleanup notes showing image organization and SEO optimization plan',
+        alt: 'Placeholder for omitted internal documentation artifact',
         layout: 'full',
-        caption: 'DAM cleanup plan\u2014100+ assets reorganized and optimized before the new components went live',
+        caption: 'DAM cleanup process available on request.',
+        isOverlay: true,
+        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
       },
     ],
 
@@ -937,10 +960,11 @@ const projects: Project[] = [
         description: 'Before any dev work started, I wrote up each component\u2014authoring fields, variants, responsive behavior, edge cases, and how it should plug into editable templates. These proposals became the shared contract between design and engineering.',
         images: [
           {
-            src: '/images/work/aem-component-system/supporting/Notes_AEMfeaturedProduct_ComponentWriteUp.jpeg',
-            alt: 'Featured product component write-up documenting variants, fields, and authoring behavior',
+            alt: 'Placeholder for omitted internal component write-up artifact',
             layout: 'full',
-            caption: 'Featured product write-up\u2014the kind of proposal that turned ambiguous patterns into buildable specs',
+            caption: 'Write-up available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -952,13 +976,13 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/aem-component-system/supporting/FinalComponentBuildout_Hero.jpeg',
+            src: '/images/work/aem-component-system/FinalComponentBuildout_Hero_safe.jpeg',
             alt: 'Final hero component buildout showing variants and responsive behavior',
             layout: 'half',
             caption: 'Hero core\u2014one component, multiple variants, consistent authoring',
           },
           {
-            src: '/images/work/aem-component-system/supporting/FinalComponentBuildout_Teasers.jpeg',
+            src: '/images/work/aem-component-system/FinalComponentBuildout_Teasers_safe.jpeg',
             alt: 'Final teaser component buildout with multiple layout variations',
             layout: 'half',
             caption: 'Teasers\u2014built to handle editorial, promotional, and product surfaces from the same base',
@@ -972,16 +996,18 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/aem-component-system/supporting/AEM_ThinHeroCode.png',
-            alt: 'Sass and component code for the thin hero variant',
-            layout: 'half',
-            caption: 'Thin hero Sass\u2014component-level code I owned end-to-end',
+            alt: 'Placeholder for omitted internal version-control artifact',
+            layout: 'full',
+            caption: 'Versioning and release detail available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
           {
-            src: '/images/work/aem-component-system/supporting/newCore_variables.jpeg',
-            alt: 'Global Sass variables powering the new AEM core component system',
-            layout: 'half',
-            caption: 'Global variables\u2014the foundation every new component pulls from',
+            alt: 'Placeholder for omitted internal code-editor artifact',
+            layout: 'full',
+            caption: 'Token / variable work available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
           },
         ],
       },
@@ -994,7 +1020,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system\u2014faster page loads, cleaner authoring, and a shared foundation across design, dev, SEO, and accessibility. The new core components now power the homepage and the tires hub in production.',
+    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system\u2014faster page loads, cleaner authoring, and a shared foundation across design, dev, SEO, and accessibility. The new core components now power the homepage and the tires hub in production. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed. I\u2019m happy to walk through these in detail during a conversation.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tire Rack Tires', url: 'https://www.tirerack.com/tires' },

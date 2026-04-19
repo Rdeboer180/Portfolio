@@ -1,0 +1,1213 @@
+{
+  "summary": {
+    "total_images": 121,
+    "safe_count": 65,
+    "blurred_count": 6,
+    "removed_count": 50
+  },
+  "images": [
+    {
+      "original_filename": "aem-component-system/CS_thumbnail_AEM_componentSystemRebuild.jpg",
+      "output_filename": "aem-component-system/CS_thumbnail_AEM_componentSystemRebuild_safe.jpg",
+      "category": "SAFE",
+      "reason": "Case study thumbnail with polished cover imagery only",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use as case-study card thumbnail",
+      "alt_text": "AEM component system rebuild case study cover",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/AEM_CoreComponents.jpeg",
+      "output_filename": "aem-component-system/AEM_CoreComponents_blurred.jpeg",
+      "category": "BLUR",
+      "reason": "AEM Sites authoring UI — exposes internal site tree (campaigns, core-components-examples, we-retail, wknd-events, cq:graphql, tirerack) and environment URL",
+      "blur_regions": [
+        { "description": "browser tab row + AEM top admin bar (URL)", "x": 0, "y": 0, "width": 1536, "height": 110 },
+        { "description": "left site tree sidebar", "x": 0, "y": 110, "width": 460, "height": 846 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use the blurred version; main Component Library canvas remains visible as proof of work",
+      "alt_text": "AEM Sites Component Library view with internal site tree obscured",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/AEM_ThinHeroCode.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Desktop git client (rdeboer_AEM) showing commit history, internal branch names with PN project numbers, author emails, proprietary SCSS diffs — backend-heavy, low portfolio value even after blur",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace image block with overlay card",
+      "alt_text": "Placeholder for omitted internal version-control artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Final_live_Home.jpeg",
+      "output_filename": "aem-component-system/Final_live_Home_safe.jpeg",
+      "category": "SAFE",
+      "reason": "Public-facing mobile homepage",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Mobile homepage final composition with component system applied",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Final_withNewComponents_Tire_CoreMobile.jpeg",
+      "output_filename": "aem-component-system/Final_withNewComponents_Tire_CoreMobile_safe.jpeg",
+      "category": "SAFE",
+      "reason": "Public-facing mobile UI outcome",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Mobile tire category screen with rebuilt core components",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/FinalComponentBuildout_Hero.jpeg",
+      "output_filename": "aem-component-system/FinalComponentBuildout_Hero_safe.jpeg",
+      "category": "SAFE",
+      "reason": "Polished hero component variants presentation",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Hero component variants: Standard, Thin with paragraph, Thin with pretitle",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/FinalComponentBuildout_List.jpeg",
+      "output_filename": "aem-component-system/FinalComponentBuildout_List_safe.jpeg",
+      "category": "SAFE",
+      "reason": "Final list-component buildout, public visual",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "List component variants from rebuilt design system",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/FinalComponentBuildout_Teasers.jpeg",
+      "output_filename": "aem-component-system/FinalComponentBuildout_Teasers_safe.jpeg",
+      "category": "SAFE",
+      "reason": "Final teaser-component buildout, public visual",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Teaser component variants from rebuilt design system",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/newCore_variables.jpeg",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "VS Code source tree with internal file paths, SCSS variable names, AI chat sidebar, status bar — backend is the subject, not salvageable with blur",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace image block with overlay card",
+      "alt_text": "Placeholder for omitted internal code-editor artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Notes_AEM_AssetDam_Cleanup.jpeg",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Internal working notes / documentation about AEM DAM cleanup — proprietary process detail",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal documentation artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Notes_AEM_AssetDam_Cleanup.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Duplicate of the DAM cleanup notes in PNG form — same reasoning",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card (or skip, duplicate of JPEG)",
+      "alt_text": "Placeholder for omitted internal documentation artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Notes_AEM_HeroCore_Solution.jpeg",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Internal FigJam / whiteboard with SCSS class-level implementation notes, internal AEM URLs, component-naming conventions. Internal doc screenshot — not salvageable with blur.",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal solution-notes artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Notes_AEM_ProductGridComponentNeeds.jpeg",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Internal component-requirements notes doc — proprietary planning material",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal component-requirements artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "aem-component-system/supporting/Notes_AEMfeaturedProduct_ComponentWriteUp.jpeg",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Internal component write-up doc — proprietary planning material",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal component write-up artifact",
+      "case_study_tag": "AEM"
+    },
+
+    {
+      "original_filename": "heatherwood/CS_thumbnail_Heatherwood.jpg",
+      "output_filename": "heatherwood/CS_thumbnail_Heatherwood_safe.jpg",
+      "category": "SAFE",
+      "reason": "Heatherwood — explicit permission to show",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood Equestrian Academy case study cover",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-01.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-01_safe.png",
+      "category": "SAFE",
+      "reason": "Heatherwood — explicit permission",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood homepage desktop hero",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-02.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-02_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood services & experiences desktop section",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-03.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-03_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood desktop page section",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-04.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-04_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood desktop page section",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-05.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-05_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood desktop page section",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-desktop-06.png",
+      "output_filename": "heatherwood/heatherwood-final-desktop-06_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood desktop page section",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-mobile-01.png",
+      "output_filename": "heatherwood/heatherwood-final-mobile-01_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood mobile screen",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-mobile-02.png",
+      "output_filename": "heatherwood/heatherwood-final-mobile-02_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood mobile screen",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-mobile-03.png",
+      "output_filename": "heatherwood/heatherwood-final-mobile-03_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood mobile screen",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-final-mobile-04.png",
+      "output_filename": "heatherwood/heatherwood-final-mobile-04_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood mobile screen",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-01.png",
+      "output_filename": "heatherwood/heatherwood-notes-01_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission; signage photo",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood Equestrian Academy physical signage",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-02.png",
+      "output_filename": "heatherwood/heatherwood-notes-02_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood process/discovery image",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-03.png",
+      "output_filename": "heatherwood/heatherwood-notes-03_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood process/discovery image",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-04.png",
+      "output_filename": "heatherwood/heatherwood-notes-04_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood process/discovery image",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-05.png",
+      "output_filename": "heatherwood/heatherwood-notes-05_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood approach / working image",
+      "case_study_tag": "Heatherwood"
+    },
+    {
+      "original_filename": "heatherwood/heatherwood-notes-06.png",
+      "output_filename": "heatherwood/heatherwood-notes-06_safe.png",
+      "category": "SAFE", "reason": "Heatherwood — explicit permission",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Heatherwood approach / working image",
+      "case_study_tag": "Heatherwood"
+    },
+
+    {
+      "original_filename": "landing-pages/CS_thumbnail_landing-pages.jpg",
+      "output_filename": "landing-pages/CS_thumbnail_landing-pages_safe.jpg",
+      "category": "SAFE", "reason": "Case-study cover art",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Landing pages case study cover",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-20-inch.jpg",
+      "output_filename": "landing-pages/landing-pages-20-inch_safe.jpg",
+      "category": "SAFE", "reason": "Final public 20-inch tire landing page, desktop + mobile",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "20-inch tires landing page, desktop and mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-35-inch.jpg",
+      "output_filename": "landing-pages/landing-pages-35-inch_safe.jpg",
+      "category": "SAFE", "reason": "Final public landing page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "35-inch tires landing page",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-classic-full.jpg",
+      "output_filename": "landing-pages/landing-pages-classic-full_safe.jpg",
+      "category": "SAFE", "reason": "Final public landing page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Classic car landing page full layout",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-classic-tires.jpg",
+      "output_filename": "landing-pages/landing-pages-classic-tires_safe.jpg",
+      "category": "SAFE", "reason": "Final public landing page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Classic tires landing page",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-full-page-layouts.jpg",
+      "output_filename": "landing-pages/landing-pages-full-page-layouts_safe.jpg",
+      "category": "SAFE", "reason": "Montage of final landing-page layouts",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Full-page layouts overview for landing pages program",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-product-mobile.jpg",
+      "output_filename": "landing-pages/landing-pages-product-mobile_safe.jpg",
+      "category": "SAFE", "reason": "Public mobile product view",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Landing page product view, mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/landing-pages-responsive-preview.jpg",
+      "output_filename": "landing-pages/landing-pages-responsive-preview_safe.jpg",
+      "category": "SAFE", "reason": "Responsive hero presentation",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Responsive preview of landing page across breakpoints",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/communication_images.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Sprawling internal FigJam with proof mockups, feedback markers, internal URLs — low-value after blur and obviously internal",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal review/communication artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/contentBrief.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "SEO content brief — URLs, meta tags, keyword-difficulty table, search volumes. Proprietary SEO data.",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted content-brief artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/copy_provided.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Internal copy spec document — proprietary text + SEO requirements",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal copy spec",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/ongoing_efforts_organize.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Roadmap / planning view — proprietary planning material",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal roadmap artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/projectDoc.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Adobe Workfront project page with PN number, project owner, stakeholders, internal bookmarks/nav — backend tooling IS the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal project-management artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "landing-pages/supporting/testing notes.png",
+      "output_filename": null,
+      "category": "REMOVE",
+      "reason": "Workfront comment thread with PM names, internal URLs, file references — internal communication",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal testing-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+
+    {
+      "original_filename": "tire-categories/CS_thumbnail_TireCategories.jpg",
+      "output_filename": "tire-categories/CS_thumbnail_TireCategories_safe.jpg",
+      "category": "SAFE", "reason": "Case-study cover art",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Tire categories case study cover",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/featured.png",
+      "output_filename": "tire-categories/featured_safe.png",
+      "category": "SAFE", "reason": "Polished featured dual-monitor mockup w/ illustrated category icons",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Tire category pages featured mockup with illustrated icon set",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/in-page-application.png",
+      "output_filename": "tire-categories/in-page-application_safe.png",
+      "category": "SAFE", "reason": "Final category page application visual",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "In-page application of new tire-category design",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/allTerrain_desktop.png",
+      "output_filename": "tire-categories/allTerrain_desktop_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "All-terrain category page, desktop",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/m_fullcategorylp.png",
+      "output_filename": "tire-categories/m_fullcategorylp_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Full category landing page, mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/performance_m.png",
+      "output_filename": "tire-categories/performance_m_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Performance tires category, mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/primaryHome+icons.png",
+      "output_filename": "tire-categories/primaryHome+icons_safe.png",
+      "category": "SAFE", "reason": "Final public homepage with category icons",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Homepage with new category icons applied",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/track_desktop.png",
+      "output_filename": "tire-categories/track_desktop_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Track tires category page, desktop",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/outcome/winter_m.png",
+      "output_filename": "tire-categories/winter_m_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter tires category, mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/communication during iteration.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal review thread / chat — internal communication",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal communication artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/cssWork_sharedBranch.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Desktop git client (retail_desktop Git) with branch list, PN numbers, commit authors, Java code diff — backend tooling IS the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal version-control artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/iconDiscussions.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal review / FigJam chatter — low signal, obviously internal",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal icon-review artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/snipet_beforede1.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal design-proof snippet with markup/annotations — review artifact",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal design-proof artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/snipet_beforedev2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal design-proof snippet with annotations",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal design-proof artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/approach/versioning_git.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Git client — backend tooling IS the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal version-control artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/documenting decisions and thought process1.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal decision log / notes — not hiring-useful after blur",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal decision-log artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/documenting decisions and thought process2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal decision log / notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal decision-log artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/photographyNote1.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal photography sourcing notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal photography-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/photographyNote2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal photography sourcing notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal photography-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/photographyNote3.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal photography sourcing notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal photography-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/photographyNote4.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal photography sourcing notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal photography-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/proofBefore_dev.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal design-proof artifact with annotations/reviewer info",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal design-proof artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/constraints/workingFiles.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal working files listing with project-number naming conventions",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal file-system artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/opportunity/admin_fieldAdditions.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "AEM admin field-additions spec — internal admin/CMS field structure is the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal admin-spec artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/opportunity/earlyProcess_note2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal early-process notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal process-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/opportunity/earlyProcess_notes.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal early-process notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal process-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/Problem/projectBrief1.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal project brief Word doc with PN number, revision history, project-goal spec",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal project-brief artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/Problem/projectBrief2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal project brief page 2 — same as above",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal project-brief artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/Problem/projectNotes.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal project notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal project-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-categories/supporting/Problem/wireframes.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal wireframe working file with annotations",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal wireframe artifact",
+      "case_study_tag": "Tire Rack"
+    },
+
+    {
+      "original_filename": "tire-rack/featured.png",
+      "output_filename": "tire-rack/featured_safe.png",
+      "category": "SAFE", "reason": "Final public homepage screenshot",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Final public homepage featured image",
+      "case_study_tag": "Tire Rack"
+    },
+
+    {
+      "original_filename": "tire-rack-winter/CS_thumbnail_AEM_Winterization.jpg",
+      "output_filename": "tire-rack-winter/CS_thumbnail_AEM_Winterization_safe.jpg",
+      "category": "SAFE", "reason": "Case-study cover art",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "AEM winterization case-study cover",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-aem-authoring.png",
+      "output_filename": "tire-rack-winter/winter-aem-authoring_blurred.png",
+      "category": "BLUR",
+      "reason": "AEM Teaser authoring dialog — exposes component name, internal field labels, link behavior/type enumerations. Context (page behind) is fine; only the dialog is blurred so the authoring-workflow point is still legible.",
+      "blur_regions": [
+        { "description": "Teaser component dialog box", "x": 840, "y": 230, "width": 1100, "height": 1150 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use blurred version; supports the 'AEM authoring' narrative without exposing field names",
+      "alt_text": "Tire Rack page being authored in AEM with the Teaser component dialog obscured",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-aem-fragment-tree.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "AEM experience-fragment tree — architecture/backend view, the tree IS the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal fragment-tree artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-aem-hero-detail.png",
+      "output_filename": "tire-rack-winter/winter-aem-hero-detail_blurred.png",
+      "category": "BLUR",
+      "reason": "AEM authoring screen — blurring browser chrome (tabs reveal many internal URLs) and left nav; main canvas retained",
+      "blur_regions": [
+        { "description": "browser chrome + tabs", "x": 0, "y": 0, "width": 3482, "height": 220 },
+        { "description": "left AEM nav rail", "x": 0, "y": 0, "width": 600, "height": 2168 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use blurred version",
+      "alt_text": "Hero component detail being authored, with browser tabs and nav chrome obscured",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-below-fold.png",
+      "output_filename": "tire-rack-winter/winter-below-fold_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter homepage below-the-fold",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-confluence-docs.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Atlassian Confluence internal documentation page — Confluence is the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal documentation artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-default-desktop 2.png",
+      "output_filename": "tire-rack-winter/winter-default-desktop-2_safe.png",
+      "category": "SAFE", "reason": "Final public page (duplicate variant)",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter default desktop variant",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-default-desktop.png",
+      "output_filename": "tire-rack-winter/winter-default-desktop_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter default desktop",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-default-mobile.png",
+      "output_filename": "tire-rack-winter/winter-default-mobile_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter default mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-homepage-desktop.png",
+      "output_filename": "tire-rack-winter/winter-homepage-desktop_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter homepage desktop",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/winter-homepage-mobile.png",
+      "output_filename": "tire-rack-winter/winter-homepage-mobile_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "Winter homepage mobile",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/supporting/constraints/documenting authoring contingencies.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal authoring-contingency notes",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal authoring-notes artifact",
+      "case_study_tag": "AEM"
+    },
+    {
+      "original_filename": "tire-rack-winter/supporting/opportunity/photography_collecting_ideas.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal photography-ideation board",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal photography-ideation artifact",
+      "case_study_tag": "Tire Rack"
+    },
+    {
+      "original_filename": "tire-rack-winter/supporting/Problem/contentDoc.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal release-notes Word doc with PN numbers, URLs, tester instructions — proprietary",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal release-notes artifact",
+      "case_study_tag": "Tire Rack"
+    },
+
+    {
+      "original_filename": "wheelrack/CS_thumbnail_wheelrack_designSystem.jpg",
+      "output_filename": "wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg",
+      "category": "SAFE", "reason": "Case-study cover art",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system case-study cover",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-01.png",
+      "output_filename": "wheelrack/wheelrack-design-system-01_safe.png",
+      "category": "SAFE", "reason": "Design-system presentation page. The doc-level text references token/style-guide context but no internal tooling.",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system overview",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-02.png",
+      "output_filename": "wheelrack/wheelrack-design-system-02_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — tokens",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-03.png",
+      "output_filename": "wheelrack/wheelrack-design-system-03_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — color",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-04.png",
+      "output_filename": "wheelrack/wheelrack-design-system-04_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — typography",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-05.png",
+      "output_filename": "wheelrack/wheelrack-design-system-05_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — components",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-06.png",
+      "output_filename": "wheelrack/wheelrack-design-system-06_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — components",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-07.png",
+      "output_filename": "wheelrack/wheelrack-design-system-07_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — patterns",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-design-system-08.png",
+      "output_filename": "wheelrack/wheelrack-design-system-08_safe.png",
+      "category": "SAFE", "reason": "Design-system spec page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack design system — patterns",
+      "case_study_tag": "Design System"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-01.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-01_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-02.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-02_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-03.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-03_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-04.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-04_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-05.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-05_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-06.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-06_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-desktop-07.png",
+      "output_filename": "wheelrack/wheelrack-final-desktop-07_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final desktop page",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-final-mobile-01.png",
+      "output_filename": "wheelrack/wheelrack-final-mobile-01_safe.png",
+      "category": "SAFE", "reason": "Final public page",
+      "blur_regions": [], "replacement_overlay_text": null,
+      "notes_for_codebase": "Keep as-is",
+      "alt_text": "WheelRack final mobile screen",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-ux-wireframe-01.png",
+      "output_filename": "wheelrack/wheelrack-ux-wireframe-01_blurred.png",
+      "category": "BLUR",
+      "reason": "Wireframe proof PDF page with PN number in header and a 'UI Behavior' spec table to the right exposing internal feature flags and implementation detail",
+      "blur_regions": [
+        { "description": "top header with project/PN number", "x": 0, "y": 0, "width": 2550, "height": 200 },
+        { "description": "right-side UI Behavior spec table", "x": 1350, "y": 200, "width": 1200, "height": 1450 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use blurred version to preserve the wireframe visual while obscuring spec text",
+      "alt_text": "WheelRack UX wireframe page with project metadata and spec table obscured",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-ux-wireframe-02.png",
+      "output_filename": "wheelrack/wheelrack-ux-wireframe-02_blurred.png",
+      "category": "BLUR",
+      "reason": "Wireframe proof PDF page with PN-number header and UI Behavior spec table",
+      "blur_regions": [
+        { "description": "top header with project/PN number", "x": 0, "y": 0, "width": 2550, "height": 200 },
+        { "description": "right-side UI Behavior spec table", "x": 1350, "y": 200, "width": 1200, "height": 1450 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use blurred version",
+      "alt_text": "WheelRack UX wireframe page with project metadata and spec table obscured",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/wheelrack-ux-wireframe-03.png",
+      "output_filename": "wheelrack/wheelrack-ux-wireframe-03_blurred.png",
+      "category": "BLUR",
+      "reason": "Wireframe proof PDF page with PN-number header and UI Behavior spec table",
+      "blur_regions": [
+        { "description": "top header with project/PN number", "x": 0, "y": 0, "width": 2550, "height": 200 },
+        { "description": "right-side UI Behavior spec table", "x": 1350, "y": 200, "width": 1200, "height": 1450 }
+      ],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Use blurred version",
+      "alt_text": "WheelRack UX wireframe page with project metadata and spec table obscured",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/approach/communication_often.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal Slack / chat screenshot",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal chat artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/approach/figma_Designcases.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Figma working canvas with internal project naming and dev annotations",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal Figma artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/approach/figma_ReactDevComments.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Figma canvas with in-file React-dev comments referencing internal components",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal Figma / dev-comment artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/approach/ux.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal UX working file / sitemap",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal UX working artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/constraints/edgeCases.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Edge-case matrix from internal working doc",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal edge-cases artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/opportunity/beforeIbegin_discovery.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Personal course-completion certificate, not portfolio-relevant; also author name metadata",
+      "blur_regions": [],
+      "replacement_overlay_text": null,
+      "notes_for_codebase": "Skip — not needed in portfolio (LinkedIn surface better)",
+      "alt_text": "Personal course-completion certificate (not shown)",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/opportunity/storybook.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal Storybook dev instance at storybook.dev.tirerack.com — shows component internals and props; backend tooling IS the subject",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal Storybook artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/opportunity/storybook2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal Storybook dev instance",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal Storybook artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/opportunity/storybook3.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Internal Storybook dev instance",
+      "blur_regions": [],
+      "replacement_overlay_text": "Due to proprietary constraints, internal system architecture and workflows are not displayed here. Additional detail available upon request.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted internal Storybook artifact",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/Problem/oldsite1.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Old WheelRack site preview served from a partner-branded (Lithia.com PITSTOP) dealer frame — mixes a different brand's identity into the shot; ambiguous to share",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card — or if you want to show the 'before state' use a neutral grayscale thumbnail instead",
+      "alt_text": "Placeholder for omitted legacy site screenshot",
+      "case_study_tag": "WheelRack"
+    },
+    {
+      "original_filename": "wheelrack/supporting/Problem/oldSite2.png",
+      "output_filename": null, "category": "REMOVE",
+      "reason": "Same as oldsite1 — partner-branded dealer frame",
+      "blur_regions": [],
+      "replacement_overlay_text": "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
+      "notes_for_codebase": "Replace with overlay card",
+      "alt_text": "Placeholder for omitted legacy site screenshot",
+      "case_study_tag": "WheelRack"
+    }
+  ]
+}

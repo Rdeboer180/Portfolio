@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
+import OverlayCard from './OverlayCard';
+import PasswordModal from './PasswordModal';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -55,7 +57,9 @@ const BriefcaseIcon = () => (
 const allLightboxImages = (project: Project): { src: string; alt: string }[] => {
   const imgs: { src: string; alt: string }[] = [];
   const addSection = (sectionImages?: ProjectImage[]) => {
-    if (sectionImages) sectionImages.forEach((img) => imgs.push({ src: img.src, alt: img.alt }));
+    if (sectionImages) sectionImages.forEach((img) => {
+      if (img.src) imgs.push({ src: img.src, alt: img.alt });
+    });
   };
   addSection(project.problemImages);
   addSection(project.gapsImages);
@@ -68,7 +72,9 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
   addSection(project.outcomeImages);
   addSection(project.outcomeGridImages);
   // Legacy images
-  if (project.images) project.images.forEach((img) => imgs.push({ src: img.src, alt: img.alt }));
+  if (project.images) project.images.forEach((img) => {
+    if (img.src) imgs.push({ src: img.src, alt: img.alt });
+  });
   return imgs;
 };
 
@@ -79,29 +85,49 @@ const SectionImages: React.FC<{
   images: ProjectImage[];
   allImages: { src: string; alt: string }[];
   onOpen: (src: string, alt: string, index: number) => void;
-}> = ({ images, allImages, onOpen }) => {
+  isUnlocked?: boolean;
+  onOverlayClick?: () => void;
+}> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick }) => {
   if (!images || images.length === 0) return null;
 
   const findGlobalIndex = (src: string) => allImages.findIndex((img) => img.src === src);
 
-  const renderImg = (img: ProjectImage) => (
-    img.mobile ? (
-      <div className="cs__phone-frame" onClick={() => onOpen(img.src, img.alt, findGlobalIndex(img.src))}>
+  const shouldSkipImage = (img: ProjectImage): boolean => {
+    // Skip overlay images without src when unlocked
+    return !!(img.isOverlay && !img.src && isUnlocked);
+  };
+
+  const renderImg = (img: ProjectImage) => {
+    // Show overlay card if locked
+    if (img.isOverlay && img.overlayText && !isUnlocked) {
+      return <OverlayCard text={img.overlayText} altText={img.alt} onClick={onOverlayClick} />;
+    }
+    // Skip rendering overlay images that don't have a src (when unlocked)
+    if (shouldSkipImage(img)) {
+      return null;
+    }
+    // Render actual images
+    return img.mobile ? (
+      <div className="cs__phone-frame" onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!))}>
         <div className="cs__phone-notch" />
         <img src={img.src} alt={img.alt} />
       </div>
     ) : (
-      <div className="cs__img-wrap" onClick={() => onOpen(img.src, img.alt, findGlobalIndex(img.src))}>
+      <div className="cs__img-wrap" onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!))}>
         <img src={img.src} alt={img.alt} />
         <span className="cs__zoom-hint">&#x26F6; View full</span>
       </div>
-    )
-  );
+    );
+  };
 
   const elements: React.ReactNode[] = [];
   let i = 0;
   while (i < images.length) {
     const img = images[i];
+    if (shouldSkipImage(img)) {
+      i++;
+      continue;
+    }
     if (img.layout === 'full') {
       elements.push(
         <figure key={i} className={`cs__figure cs__figure--full${img.mobile ? ' cs__figure--mobile' : ''}`}>
@@ -112,7 +138,7 @@ const SectionImages: React.FC<{
       i++;
     } else {
       const next = images[i + 1];
-      if (next && next.layout === 'half') {
+      if (next && next.layout === 'half' && !shouldSkipImage(next)) {
         elements.push(
           <div key={i} className="cs__image-pair">
             <figure className={`cs__figure cs__figure--half${img.mobile ? ' cs__figure--mobile' : ''}`}>
@@ -149,6 +175,63 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+
+  const hasOverlayImages = useCallback((proj: Project) => {
+    const allImages = [
+      ...(proj.problemImages || []),
+      ...(proj.gapsImages || []),
+      ...(proj.constraintsImages || []),
+      ...(proj.outcomeImages || []),
+      ...(proj.outcomeGridImages || []),
+      ...(proj.images || []),
+    ];
+    if (proj.approachSubsections) {
+      proj.approachSubsections.forEach((sub) => {
+        if (sub.images) allImages.push(...sub.images);
+      });
+    }
+    return allImages.some((img) => img.isOverlay);
+  }, []);
+
+  useEffect(() => {
+    if (project) {
+      const unlockedKey = `project-unlocked-${project.slug}`;
+      const dismissedKey = `project-dismissed-${project.slug}`;
+      const unlocked = localStorage.getItem(unlockedKey) === 'true';
+      const dismissed = localStorage.getItem(dismissedKey) === 'true';
+
+      setIsUnlocked(unlocked);
+      setIsDismissed(dismissed);
+
+      const hasOverlay = hasOverlayImages(project);
+      setShowPasswordModal(hasOverlay && !unlocked && !dismissed);
+    }
+  }, [project, hasOverlayImages]);
+
+  const handleUnlock = () => {
+    if (project) {
+      localStorage.setItem(`project-unlocked-${project.slug}`, 'true');
+      setIsUnlocked(true);
+      setShowPasswordModal(false);
+    }
+  };
+
+  const handleDismiss = () => {
+    if (project) {
+      localStorage.setItem(`project-dismissed-${project.slug}`, 'true');
+      setIsDismissed(true);
+      setShowPasswordModal(false);
+    }
+  };
+
+  const handleOverlayClick = () => {
+    if (!isUnlocked) {
+      setShowPasswordModal(true);
+    }
+  };
 
   const lbImages = project ? allLightboxImages(project) : [];
   const openLightbox = useCallback((src: string, alt: string, index: number) => setLightbox({ src, alt, index }), []);
@@ -174,6 +257,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
   return (
     <article className="cs">
+      {showPasswordModal && <PasswordModal onUnlock={handleUnlock} onDismiss={handleDismiss} />}
       {/* Fixed nav */}
       <nav className="cs__nav">
         <a href={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</a>
@@ -240,7 +324,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
-                <SectionImages images={project.problemImages || []} allImages={lbImages} onOpen={openLightbox} />
+                <SectionImages images={project.problemImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
               </section>
             )}
 
@@ -260,7 +344,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
-                <SectionImages images={project.gapsImages || []} allImages={lbImages} onOpen={openLightbox} />
+                <SectionImages images={project.gapsImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
               </section>
             )}
 
@@ -280,7 +364,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
-                <SectionImages images={project.constraintsImages || []} allImages={lbImages} onOpen={openLightbox} />
+                <SectionImages images={project.constraintsImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
               </section>
             )}
 
@@ -310,7 +394,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       <p className="cs__approach-sub-desc">{sub.description}</p>
                       {sub.images && sub.images.length > 0 && (
                         <div className={`cs__approach-sub-images${sub.gridColumns ? ` cs__approach-sub-images--col-${sub.gridColumns}` : ''}`}>
-                          <SectionImages images={sub.images} allImages={lbImages} onOpen={openLightbox} />
+                          <SectionImages images={sub.images} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
                         </div>
                       )}
                     </div>
@@ -335,7 +419,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     </li>
                   ))}
                 </ol>
-                <SectionImages images={project.approachImages || []} allImages={lbImages} onOpen={openLightbox} />
+                <SectionImages images={project.approachImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
               </section>
             ) : null}
 
@@ -357,14 +441,14 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               {(project.outcomeNote || project.resultsNote) && (
                 <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
               )}
-              <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} />
+              <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
 
               {/* Outcome grid — scale wall */}
               {project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
                 <div className="cs__outcome-grid">
-                  {project.outcomeGridImages.map((img, i) => (
+                  {project.outcomeGridImages.filter(img => img.src).map((img, i) => (
                     <figure key={i} className="cs__outcome-grid-item">
-                      <div className="cs__img-wrap" onClick={() => openLightbox(img.src, img.alt, lbImages.findIndex((lb) => lb.src === img.src))}>
+                      <div className="cs__img-wrap" onClick={() => openLightbox(img.src!, img.alt, lbImages.findIndex((lb) => lb.src === img.src))}>
                         <img src={img.src} alt={img.alt} />
                         <span className="cs__zoom-hint">&#x26F6; View full</span>
                       </div>
@@ -470,12 +554,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     const img = project.images[i];
                     const renderImg = (img: ProjectImage, idx: number) => (
                       img.mobile ? (
-                        <div className="cs__phone-frame" onClick={() => openLightbox(img.src, img.alt, idx)}>
+                        <div className="cs__phone-frame" onClick={() => openLightbox(img.src!, img.alt, idx)}>
                           <div className="cs__phone-notch" />
                           <img src={img.src} alt={img.alt} />
                         </div>
                       ) : (
-                        <div className="cs__img-wrap" onClick={() => openLightbox(img.src, img.alt, idx)}>
+                        <div className="cs__img-wrap" onClick={() => openLightbox(img.src!, img.alt, idx)}>
                           <img src={img.src} alt={img.alt} />
                           <span className="cs__zoom-hint">&#x26F6; View full</span>
                         </div>
