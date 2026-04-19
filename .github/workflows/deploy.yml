@@ -37,3 +37,10 @@ jobs:
             -e "ssh -o StrictHostKeyChecking=no" \
             ./build/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET }}
+
+      - name: Purge Varnish cache
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+            -o StrictHostKeyChecking=no \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 'ban req.url ~ .'"
