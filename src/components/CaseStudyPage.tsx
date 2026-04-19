@@ -213,7 +213,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const handleDismiss = () => {
     if (project) {
       localStorage.setItem(`project-dismissed-${project.slug}`, 'true');
-      setIsDismissed(true);
       setShowPasswordModal(false);
     }
   };
