@@ -33,7 +33,7 @@ jobs:
 
       - name: Deploy via rsync with sshpass
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete \
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./build/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET }}
