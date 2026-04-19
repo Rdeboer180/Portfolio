@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
@@ -45,13 +45,6 @@ const Lightbox: React.FC<{
   );
 };
 
-const BriefcaseIcon = () => (
-  <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
-    <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a5.275,5.275,0,0,0,5.26,5.27H54.41A5.601,5.601,0,0,0,60,54.02V32.52A5.595,5.595,0,0,0,55.44,27.02ZM12.53,54.35A3.265,3.265,0,0,1,6,54.35V31.92a1.739,1.739,0,0,1,1.73-1.74H12.53Z" />
-    <path d="M27.32,17.06a7.613,7.613,0,0,1,5.43,2.29l4.97,5.09a1.639,1.639,0,0,0,1.14.48c1.215.049,15.812-.107,16.58.08-.044-.577.109-9.054-.11-9.32-1.228-.002-9.544.001-10.98,0a4.432,4.432,0,0,1-4.43-4.43V3.45a2.171,2.171,0,0,0-.36-.02H21.05A3.98,3.98,0,0,0,17.08,7.4V17.14C17.631,17.031,27.32,17.06,27.32,17.06ZM23.71,6.89H35.29a1,1,0,0,1,0,2H23.71A1,1,0,0,1,23.71,6.89Zm0,4.71H35.29a1,1,0,0,1,0,2H23.71A1,1,0,0,1,23.71,11.6Z" />
-    <path d="M44.35,13.68H54.42a4.425,4.425,0,0,0-.98-1L42.6,4.46a4.339,4.339,0,0,0-.68-.43v7.22A2.433,2.433,0,0,0,44.35,13.68Z" />
-  </svg>
-);
 
 /* ─── Helpers ─── */
 const allLightboxImages = (project: Project): { src: string; alt: string }[] => {
@@ -177,7 +170,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
 
   const hasOverlayImages = useCallback((proj: Project) => {
     const allImages = [
@@ -204,7 +196,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       const dismissed = localStorage.getItem(dismissedKey) === 'true';
 
       setIsUnlocked(unlocked);
-      setIsDismissed(dismissed);
 
       const hasOverlay = hasOverlayImages(project);
       setShowPasswordModal(hasOverlay && !unlocked && !dismissed);
@@ -233,7 +224,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     }
   };
 
-  const lbImages = project ? allLightboxImages(project) : [];
+  const lbImages = useMemo(() => project ? allLightboxImages(project) : [], [project]);
   const openLightbox = useCallback((src: string, alt: string, index: number) => setLightbox({ src, alt, index }), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
   const navLightbox = useCallback((index: number) => {
