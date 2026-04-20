@@ -403,6 +403,42 @@
     max-width: 720px;
   }
 
+  &__code-block {
+    margin: 0 0 $spacing-xl;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-md;
+    overflow: hidden;
+    background: #0d1117;
+  }
+
+  &__code-filename {
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: $font-size-caption;
+    color: #8b949e;
+    padding: $spacing-sm $spacing-lg;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    letter-spacing: 0.02em;
+  }
+
+  &__code {
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #c9d1d9;
+    padding: $spacing-lg;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre;
+
+    code {
+      font-family: inherit;
+      color: inherit;
+      background: transparent;
+      padding: 0;
+    }
+  }
+
   &__approach-sub-images {
     margin-top: $spacing-lg;
 

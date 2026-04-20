@@ -13,6 +13,13 @@ export interface ProjectImage {
   overlayText?: string;
 }
 
+export interface CodeBlock {
+  code: string;
+  language?: string;
+  filename?: string;
+  caption?: string;
+}
+
 export interface ApproachSubsection {
   key: string;
   label: string;
@@ -20,6 +27,7 @@ export interface ApproachSubsection {
   images?: ProjectImage[];
   gridColumns?: 2 | 3 | 4;
   systemMarker?: string;
+  codeBlock?: CodeBlock;
 }
 
 export interface Project {
@@ -77,14 +85,14 @@ const projects: Project[] = [
     slug: 'wheelrack',
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
-    summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform\u2014growing partner adoption from 6 to 10+ retail brands.',
+    summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI.',
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
     role: 'Senior Web Designer / UX Engineer',
-    tools: ['Figma', 'Token Studio', 'Storybook', 'HTML/CSS', 'JavaScript'],
+    tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS', 'JavaScript', 'Jira'],
     timeline: '~4 months dedicated (12+ months total with API delays)',
     featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
-    timeToLive: '8+ months of work to build out system, project pending live date due to ongoing API call work',
+    timeToLive: 'System and partner brand builds complete. Full release planned for Q2 2026, pending API integration work.',
 
     // ── 01 Problem ──
     problemPunch: 'A 20-year-old platform. No design system. No responsive design. Six partners, zero consistency.',
@@ -107,8 +115,9 @@ const projects: Project[] = [
     gapsPunch: 'Every partner was a one-off. No tokens, no components, no shared language between design and engineering.',
     gaps: [
       'No shared design system, tokens, or component library\u2014every partner variant handled ad hoc.',
-      'Identified early that my Figma skills needed leveling up. Completed an 80+ hour Figma Masterclass certification mid-project.',
-      'Partnered with a senior React developer to build the system from the ground up\u2014Figma components integrated with Token Studio, validated through Storybook.',
+      'Invested deliberately in advanced design-system fluency: completed an 80+ hour Figma Masterclass covering Atomic Design, components and variants, tokens and variables, responsive behavior, documentation and handoff, and prototyping component behavior.',
+      'Partnered with senior React developer Cheryl Carpenter to build the system from the ground up. I owned system design, component logic, token structure, edge cases, responsive behavior, and design\u2013dev alignment. Cheryl owned React implementation, component integration, and viewport/behavior stress testing. Work moved Figma \u2192 Tokens Studio \u2192 Storybook \u2192 React, tracked in Jira.',
+      'Chose Tokens Studio because this work predated Figma Variables. It better supported structured token sets, sync, export/import, and the React/Storybook pipeline. Today I\u2019d start in Figma Variables and evaluate an external pipeline from there.',
     ],
     gapsImages: [
       {
@@ -124,7 +133,7 @@ const projects: Project[] = [
     constraints: [
       'Sprint 0 followed Waterfall; future sprints shifted to Agile\u2014a new methodology for the team.',
       'Design time split across higher priority retail projects, with 10\u201320 day windows per task.',
-      'Complex fitment edge cases: front/rear sizing, unavailable finish combos, missing vehicle photography, partner-specific behaviors.',
+      'Key edge cases: wheel models with multiple colors/sizes on a single tile, front/rear tire-size variance, separating the visualizer from supporting product info and shopping, and filter complexity with accessibility requirements.',
       'Custom headers/footers per partner with additional filters or cart integration.',
       'Coordinated with in-house photography team for vehicle and wheel images at specific angles.',
     ],
@@ -208,7 +217,7 @@ const projects: Project[] = [
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'Delivered a complete design system and full customer journey from vehicle selection through checkout. 6 additional dealer partners opted in after seeing the redesigned UI\u2014growing the platform from 6 to 10+ retail partners. The Storybook-integrated component library enabled the React team to build without ambiguity, and the token system established a shared language between design and engineering.',
+    outcomeNote: 'Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI\u2014the redesign helped influence buy-in, though final adoption reflects broader business factors too. The Storybook-integrated component library gave the React team an unambiguous source of truth, and the token system established a shared language between design and engineering. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
     outcomeImages: [
       {
         src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',
@@ -226,7 +235,8 @@ const projects: Project[] = [
     metrics: [
       { value: '200+', label: 'Atomic-level design tokens' },
       { value: '50+', label: 'Storybook-integrated components' },
-      { value: '6 \u2192 10+', label: 'Retail partners (organic growth)' },
+      { value: '6 \u2192 10', label: 'Partners during build (influenced adoption)' },
+      { value: 'Wholesale', label: 'System extended 6 months post-build' },
     ],
   },
 
@@ -237,7 +247,7 @@ const projects: Project[] = [
     slug: 'tire-categories',
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
-    summary: 'Redesigned 30+ tire category pages into a scalable system\u2014creating a unified framework of iconography, data visualization, and content structure that drove +400% entry growth and +50% conversion lift.',
+    summary: 'Redesigned 30+ tire category pages into a scalable system of iconography, data visualization, and content structure. Top-performing category pages saw up to +50% conversion lift in the first month after launch.',
     year: '2024',
     tags: ['UX/UI Design', 'Wireframing', 'Component Design', 'Modular Design', 'SEO Optimization', 'Icon System Implementation'],
     role: 'Senior Web Designer / UX Engineer',
@@ -290,14 +300,14 @@ const projects: Project[] = [
       'Performance data had to be sourced, validated, and visualized for each category.',
     ],
 
-    insightCallout: 'Created 32 custom icons and a CSS-animated performance chart system\u2014turning dense spec data into scannable, visual decision-making tools.',
+    insightCallout: 'Pushed back on 90 one-off icons in favor of a scalable system\u20148 primary icons for broad strengths, 24 supporting icons for specific category distinctions. This framework now governs a 100+ icon sprite library used across the site.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Broke the experience into scalable layers: category hierarchy, icon systems, data visualization, and content structure aligned to SEO intent. Close coordination across SEO, copy, testing, and development teams throughout.',
+        description: 'Broke the experience into scalable layers: category hierarchy, icon systems, data visualization, and content structure aligned to SEO intent. Partnered closely with Ransom Rockliffe on the SEO side, navigating the core tension\u2014preserving usability and clarity while adding enough keyword and product depth for SEO and LLM discoverability.',
         images: [],
       },
       {
@@ -318,7 +328,7 @@ const projects: Project[] = [
       {
         key: 'system',
         label: 'System',
-        description: 'Developed 8 primary category icons and 24 supporting characteristic icons to reduce cognitive load. Designed a CSS-animated bar chart system for performance comparison. Worked with the photography team to define visual direction for each category.',
+        description: 'Developed 8 primary category icons and 24 supporting characteristic icons\u2014a deliberate scaling move against a proposed 90 one-offs. Designed a CSS-animated bar chart system for performance comparison, shipped with reduced-motion support, text fallback, and screen-reader labeling. Sourced photography inspiration, aligned category/vehicle/product fit with specialists, and worked with in-house photography on location, weather, tone, and composition\u2014joining two specialized shoots for the trailer and classic tire categories.',
         systemMarker: 'System decision',
         gridColumns: 2,
         images: [
@@ -369,7 +379,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The redesigned system aligned SEO, UX, and product discovery into a single framework\u2014reducing friction while increasing clarity and conversion. It created a scalable foundation that supports 30+ category pages with consistent patterns and CMS-driven flexibility.',
+    outcomeNote: 'The redesigned system aligned SEO, UX, and product discovery into a single framework\u2014reducing friction while increasing clarity and conversion. Measured against the month before launch, top-performing category pages (Performance All-Season, Performance Summer) saw up to +50% conversion lift in the first month; niche categories saw 30\u201340% gains. Category page entry traffic across the system saw up to +400% growth in the same window. Beyond the initial launch, this work influenced the broader direction of characteristic icons sitewide\u2014now governed as a 100+ icon sprite library.',
     outcomeImages: [
       {
         src: '/images/work/tire-categories/supporting/outcome/in-page-application.png',
@@ -386,9 +396,12 @@ const projects: Project[] = [
       },
     ],
     metrics: [
-      { value: '+400%', label: 'Category page entry growth' },
-      { value: '+50%', label: 'Conversion lift across key pages' },
-      { value: '32', label: 'Custom icons (8 primary + 24 supporting)' },
+      { value: 'Up to +50%', label: 'Conversion lift, top pages (first month)' },
+      { value: 'Up to +400%', label: 'Category entry growth vs. month prior' },
+      { value: '32 \u2192 100+', label: 'Icons scaled into sitewide sprite library' },
+    ],
+    outcomeLiveLinks: [
+      { label: 'High Performance Summer (live CSS chart)', url: 'https://www.tirerack.com/tires/summer/high-performance' },
     ],
   },
 
@@ -399,7 +412,7 @@ const projects: Project[] = [
     slug: 'tire-rack-winter',
     client: 'Tire Rack',
     title: 'Tire Rack Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
-    summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season\u2014driving +30% winter tire sales over 10+ years.',
+    summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season. Seasonal winterization has been associated with stronger annual winter conversion lift compared with pre-winterization periods.',
     year: '2013\u2013Present',
     tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'CMS', 'Component Design', 'Modular Design', 'Adobe Target'],
     role: 'Senior Web Designer / AEM Content Strategist',
@@ -445,9 +458,10 @@ const projects: Project[] = [
     constraintsPunch: 'SEO can\u2019t see duplicate pages. Analytics needs audience segmentation. Photography needs seasonal imagery on a schedule.',
     constraints: [
       'Google had to treat winter and southern-states variants consistently\u2014not as duplicate pages.',
-      'Audience segmentation rules defined with Analytics team via Adobe Target.',
-      'Directed on-site photography shoots for seasonal imagery.',
-      'System needed to be documented clearly enough to onboard and mentor junior designers.',
+      'Audience segmentation currently runs as a geo-based split with two segmented audiences via Adobe Target, coordinated with the Analytics team.',
+      'Shaped the annual Sweden winter-shoot wishlist alongside Tire Rack\u2019s tire-testing trips\u2014using marketing goals, AI-generated reference imagery, and design-system needs to brief composition and tone.',
+      'System needed to be documented clearly enough for two junior designers to author seasonally alongside me, with my oversight on approvals, governance, and design-system alignment.',
+      'When breaks happen, they\u2019re usually tied to Experience Fragment / Adobe Target sync issues\u2014resolved through coordinated fixes across authoring, analytics, and targeting.',
     ],
     constraintsImages: [
       {
@@ -514,13 +528,13 @@ const projects: Project[] = [
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'Refined annually over 10+ years. Added new fragment types, updated audience rules with Analytics, and expanded the system from homepage-only to 6 high-traffic landing pages.',
+        description: 'This was never static work. Two phase shifts defined its evolution: in 2018, reduced unnecessary winter / non-winter content swaps to focus ROI on the highest-traffic surfaces. In 2025\u20132026, SEO identified indexing harm from serving different content on the same URLs\u2014which drove a more visual-first, system-driven winterization approach that preserved seasonal distinction without creating duplicate-content signals.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'Over 10+ years of ownership, this system grew into a scalable AEM Experience Fragment library\u201420+ component types, audience-targeted via Adobe Target, spanning 6 high-traffic landing pages simultaneously. The Photography team collaboration (including on-site shoots I directed) produced the seasonal imagery, and ongoing SEO alignment ensured consistent indexing across variants. Junior designers now author independently using the documented system.',
+    outcomeNote: 'Over a decade of continuous ownership, this system evolved into a scalable AEM Experience Fragment library\u201420+ component types, geo-based audience targeting via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Seasonal winterization has been associated with stronger annual winter conversion lift than pre-winterization periods\u2014though that outcome reflects product, marketing, and climate factors alongside the system itself. Two junior designers now author seasonal content under my governance, with documentation, approvals, and design-system alignment owned by me. The 10+ year arc is less about repetition and more about long-term system governance, documentation leadership, and strategic refinement.',
     outcomeImages: [
       {
         src: '/images/work/tire-rack-winter/supporting/outcome/winter-homepage-desktop.png',
@@ -530,10 +544,10 @@ const projects: Project[] = [
       },
     ],
     metrics: [
-      { value: '+30%', label: 'Winter tire sales increase' },
-      { value: '+20%', label: 'Winter All-Season tire sales' },
-      { value: '20+', label: 'Components swapped site-wide' },
-      { value: '10+', label: 'Years of end-to-end ownership' },
+      { value: '20+', label: 'Experience Fragment components swapped' },
+      { value: '6', label: 'High-traffic landing pages governed' },
+      { value: '10+', label: 'Years of system governance + documentation' },
+      { value: '2', label: 'Junior designers authoring under my oversight' },
     ],
   },
 
@@ -544,7 +558,7 @@ const projects: Project[] = [
     slug: 'heatherwood',
     client: 'Heatherwood Equestrian Academy',
     title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
-    summary: 'Rebranded and rebuilt the digital presence for a 30-year family-owned academy\u2014driving a 400% increase in form submissions, 6x service page inquiries, and 600%+ traffic growth in the first month.',
+    summary: 'End-to-end rebrand and rebuild for a family-owned equestrian academy\u2014brand identity, IA, WordPress CMS, and SEO architecture. Inquiries moved from ~3\u20134 per month pre-launch to 4\u20135 form submissions daily in the weeks after launch.',
     year: '2025',
     tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
     role: 'Brand & Web Designer',
@@ -556,7 +570,7 @@ const projects: Project[] = [
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'An outdated brand and website that wasn\u2019t converting\u2014after 12+ years, the digital presence no longer matched the quality of the program.',
     problem: [
-      'Heatherwood had operated under the same brand and website for 12+ years\u2014it wasn\u2019t optimized for search, wasn\u2019t converting visitors, and didn\u2019t reflect the caliber of the program.',
+      'Heatherwood had operated under the same brand and website for 12+ years. Core issues: outdated look, weak brand continuity, no logical UX path, and a trust/conversion structure that wasn\u2019t supporting inquiries.',
       'Families search for specific activities ("horseback riding lessons South Bend"), not the brand name. Each service needed its own search entry point.',
       'The system had to be fully owner-managed with zero ongoing agency dependency.',
     ],
@@ -573,6 +587,7 @@ const projects: Project[] = [
     gapsPunch: 'An aging identity competing against polished commercial programs\u2014without the SEO or conversion infrastructure to back it up.',
     gaps: [
       'The existing brand felt dated and lacked the polish needed to compete with larger commercial programs\u2014needed a full rebrand that feels warm and family-oriented but holds its own visually.',
+      'Brand work started from a phone-image dump and required curation, aesthetic research, and regional positioning before a usable visual system could take shape.',
       'Each service (lessons, camps, boarding, birthday parties, trail rides) needed to function as an independent SEO landing page with its own conversion path.',
       'Every headline had to work for both the parent scanning the page and the search engine indexing it.',
     ],
@@ -655,7 +670,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebrand and new site launched with a complete identity overhaul, 10+ SEO-optimized service pages each functioning as independent search entry points with dedicated contact forms, and a WordPress CMS the owner operates independently. In the first month, Deborah Clements saw a 400% increase in form submissions, service pages experienced a 6x increase in inquiries, and overall traffic grew over 600%.',
+    outcomeNote: 'The rebrand and new site launched with a complete identity overhaul, 10+ SEO-optimized service pages each functioning as independent search entry points with dedicated contact forms, and a WordPress CMS that Deborah Clements still manages independently. Inquiries moved from ~3\u20134 website-driven submissions per month pre-launch to 4\u20135 daily in the weeks after launch\u2014a step-change in demand alignment with the local market. Testimonial themes emphasize site cleanliness, clear UX flow, easy access to training materials, simple service requests, and rider consent access. The redesign drove increased demand; broader conversion results reflect the combined effect of brand, IA, SEO, and CMS handoff.',
     outcomeImages: [
       {
         src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-desktop-01.png',
@@ -672,9 +687,9 @@ const projects: Project[] = [
       },
     ],
     metrics: [
-      { value: '400%', label: 'Increase in form submissions' },
-      { value: '6x', label: 'Service page inquiries' },
-      { value: '600%+', label: 'Traffic growth in first month' },
+      { value: '~3\u20134/mo \u2192 4\u20135/day', label: 'Inquiry volume, pre vs. post launch' },
+      { value: '10+', label: 'SEO-targeted service landing pages' },
+      { value: 'Owner-managed', label: 'No agency dependency post-handoff' },
     ],
   },
   // =============================================
@@ -684,14 +699,14 @@ const projects: Project[] = [
     slug: 'landing-pages',
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
-    summary: 'Developed a scalable AEM template system that shifted landing page creation from one-off design tasks to a repeatable framework\u201450+ pages shipped, from weeks to hours.',
+    summary: 'Designed 50+ landing pages personally, then built the governed AEM template system that two junior designers now use\u2014shifting turnaround from ~1 month to 1\u20132 weeks for complex pages and 1\u20132 days for simple launches.',
     year: '2023\u2013Present',
     tags: ['UX/UI Design', 'Front-End Development', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
     tools: ['AEM', 'Figma', 'HTML/CSS', 'Adobe Creative Suite', 'ChatGPT'],
     timeline: 'Ongoing (50+ landing pages)',
     featured: '/images/work/landing-pages/CS_thumbnail_landing-pages_safe.jpg',
-    timeToLive: 'From weeks to days\u2014system reduced turnaround from multi-week cycles to same-week launches',
+    timeToLive: '~1 month \u2192 1\u20132 weeks for complex pages, 1 week for standard, 1\u20132 days for simple launches.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'Every landing page started from scratch. No templates, no patterns, no scalable process.',
@@ -745,7 +760,7 @@ const projects: Project[] = [
       },
     ],
 
-    insightCallout: 'Speed and quality aren\u2019t tradeoffs when you invest in systems. Reusable patterns and AI-assisted skills provided me with a system to document and prepare notes for stakeholder signoff and for QA/Live testing in a matter of minutes.',
+    insightCallout: 'Speed and quality aren\u2019t tradeoffs when you invest in systems. QA now surfaces under one issue per landing page on average\u2014fast turnaround without cutting corners.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -788,7 +803,7 @@ const projects: Project[] = [
       {
         key: 'build',
         label: 'AI-Assisted Workflow',
-        description: 'Developed a ChatGPT-based workflow that generates structured content from component inputs, pulls relevant product size links and builds them into the structured table, creates internal linking structures aligned to SEO strategy, and produces QA-ready notes and testing scenarios.',
+        description: 'AI is used to standardize repetitive content-ops and production tasks\u2014not to replace strategy. Practical uses: SEO-friendly image naming, alt text generation, release-note drafting, and documentation assistance that helps junior designers navigate the system. LLM assistance is layered on top of the internal wiki I govern, not instead of it.',
         systemMarker: 'Scalability consideration',
         images: [
           {
@@ -803,13 +818,13 @@ const projects: Project[] = [
       {
         key: 'iteration',
         label: 'Iteration & Deployment',
-        description: 'High-impact pages deploy to staging with generated QA docs and team review. Lower-risk pages publish directly with live testing and optimization. Took ownership over process and documentation for junior designers to follow. Process evolved from week-long cycles to same-week or multi-day turnarounds.',
+        description: 'High-impact pages (homepage, major category pages, high-traffic surfaces) go through senior review, SEO, analytics, and QA. Lower-risk pages move faster\u2014often senior review, publish, live validation. When SEO needs a structure the template doesn\u2019t support, a formal project request is filed so the system grows deliberately rather than through one-off exceptions. I govern all AEM template and component-level updates.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'This work shifted landing page creation from a one-off design task to a scalable system. By combining design patterns, AEM component strategy, and AI-assisted workflows, I enabled faster execution, better consistency, and stronger alignment between SEO, UX, and product discovery.',
+    outcomeNote: 'This work shifted landing page creation from a one-off design task to a governed system. I personally designed and built 50+ landing pages, and later built the governed system that two junior designers now use under my oversight. Turnaround moved from ~1 month to 1\u20132 weeks for complex pages, a week for standard pages, and 1\u20132 days for simple launches\u2014with QA surfacing under one issue per page on average. One illustrative SEO win: a 40-inch tire landing page contributed to $10k+ in added annual revenue per SEO reporting, though there was no prior page to compare against, so the gain reflects net-new reach rather than design attribution alone.',
     outcomeImages: [
       {
         src: '/images/work/landing-pages/supporting/landing-pages-35-inch.jpg',
@@ -863,9 +878,9 @@ const projects: Project[] = [
       { label: 'G-Force Phenom', url: 'https://www.tirerack.com/landing-page/product/g-forcePhenom' },
     ],
     metrics: [
-      { value: '50+', label: 'Landing pages created' },
-      { value: 'Weeks \u2192 Days', label: 'Turnaround reduction' },
-      { value: 'Consistent', label: 'UX across all SEO experiences' },
+      { value: '50+', label: 'Landing pages personally designed' },
+      { value: 'Weeks \u2192 Days', label: 'Turnaround via governed template system' },
+      { value: '<1', label: 'QA issues per page on average' },
     ],
   },
 
@@ -876,7 +891,7 @@ const projects: Project[] = [
     slug: 'aem-component-system',
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
-    summary: 'Partnered with a newly formed AEM dev team to rebuild Tire Rack\u2019s authoring system around reusable core components\u201410+ components shipped, 60% faster page loads, and a foundation the whole content org could scale on.',
+    summary: 'Partnered with Tire Rack\u2019s new AEM dev team to rebuild the authoring system around reusable core components. Shipped 10+ live components powering homepage, tires hub, events, and packages\u201460% faster page loads (WebPageTest) and a shared foundation for design, dev, SEO, and accessibility.',
     year: '2024\u20132025',
     tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
@@ -930,9 +945,9 @@ const projects: Project[] = [
     constraintsPunch: 'Live enterprise CMS. SEO-critical surfaces. A new dev team still learning the codebase.',
     constraints: [
       'Work happened inside a live production AEM instance\u2014nothing could break authoring for merchandising or content teams mid-flight.',
-      'Every component had to meet WCAG and SEO requirements from day one, not as a post-launch cleanup pass.',
-      'The Digital Asset Manager had years of unoptimized imagery dragging down page performance\u2014100+ assets needed reorganization and compression before new components could ship cleanly.',
-      'I had to invest in technical fluency myself\u2014completed AEM authoring certification, finished the weekend AEM tutorial, and leveled up on Sass structure so I could contribute real code alongside the dev team.',
+      'Every component shipped with SEO and accessibility requirements baked in: lazy loading with toggle control, H1 restrictions per surface, eyebrow support in teaser/hero for keyword headroom without breaking hierarchy, and Akamai integration for serving only the relevant JSP/CSS assets per page.',
+      'Invested deliberately in technical fluency: completed AEM authoring certification, finished the weekend AEM tutorial, and leveled up on Sass structure so I could contribute real code alongside the dev team, not just hand off specs.',
+      'Led 15 years of DAM cleanup\u2014tagging, alt text, file naming, and asset governance across 100+ images. The operational win (discoverability, consistency, authoring speed) was as important as the performance win.',
     ],
     constraintsImages: [
       {
@@ -944,14 +959,14 @@ const projects: Project[] = [
       },
     ],
 
-    insightCallout: 'The win wasn\u2019t any single component\u2014it was establishing a shared system of variables, variants, and documentation that the design, dev, SEO, and accessibility teams could all build against.',
+    insightCallout: 'The win wasn\u2019t any single component\u2014it was establishing a shared system of variables, variants, and documentation that the design, dev, SEO, and accessibility teams could all build against. Shipped real Sass, not just specs.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Worked directly with Patrick Steins, our lead AEM dev, to establish what core components we could adopt as-is, which needed extension, and which had to be built from scratch. Partnered early with SEO and accessibility leads so their requirements were baked into the component contract, not layered on after.',
+        description: 'Worked side by side with Patrick Steins, a trusted engineering peer on AEM, to establish which core components we could adopt as-is, which needed extension, and which had to be built from scratch. He reviewed my branch work based on established trust. Partnered early with SEO and accessibility leads so their requirements\u2014lazy-load toggles, H1 rules, eyebrow patterns, Akamai-scoped asset loading\u2014were baked into the component contract, not layered on after.',
         images: [],
       },
       {
@@ -971,7 +986,7 @@ const projects: Project[] = [
       {
         key: 'system',
         label: 'Building the Variants',
-        description: 'Built 8 core component variants directly\u2014heroes, teasers, lists, featured product blocks\u2014and directed 3 more API-driven foundation components that pull live content. Each variant shipped with its Sass, authoring defaults, and documentation at the same time.',
+        description: 'Built 8 core component variants directly\u2014heroes, teasers, lists, featured product blocks\u2014each shipping with its Sass, authoring defaults, and documentation at the same time. For 3 additional API-driven foundation components, I wrote the utility and authoring behavior, defined the interaction pattern, provided SCSS, and oversaw implementation through replication with the dev team.',
         systemMarker: 'System decision',
         gridColumns: 2,
         images: [
@@ -992,24 +1007,56 @@ const projects: Project[] = [
       {
         key: 'build',
         label: 'Design-to-Code Foundation',
-        description: 'This wasn\u2019t a design-only handoff. I wrote Sass, defined the global variable layer, and shipped component-level code alongside the dev team\u2014closing the gap between what was designed and what landed in production.',
-        gridColumns: 2,
-        images: [
-          {
-            alt: 'Placeholder for omitted internal version-control artifact',
-            layout: 'full',
-            caption: 'Versioning and release detail available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-          {
-            alt: 'Placeholder for omitted internal code-editor artifact',
-            layout: 'full',
-            caption: 'Token / variable work available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-        ],
+        description: 'This wasn\u2019t a design-only handoff. I wrote Sass, defined the global variable layer, and shipped component-level code alongside the dev team\u2014closing the gap between what was designed and what landed in production. Sanitized excerpt below (file names redacted; CSS custom properties for tokens, responsive-aware layout containers, and component-scoped Sass).',
+        codeBlock: {
+          filename: 'components/heroTeaser/scss/styles/_default.scss (sanitized)',
+          language: 'scss',
+          code: `$desktop-max-height: 560px;
+$desktop-max-width: 1260px;
+$mobile-max-height: 250px;
+$mobile-max-width: 768px;
+
+.heroTeaser {
+  .cmp-heroTeaser {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+    position: relative;
+
+    .cmp-teaser__action-link {
+      min-width: 250px;
+    }
+
+    a.standard, button.standard,
+    a.redGreater, button.redGreater {
+      font-family: var(--font-family-primary);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-md);
+      color: var(--color-white);
+
+      &:hover {
+        text-decoration: none;
+
+        span {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .cmp-button.secondaryPillBtn {
+      color: var(--color-red) !important;
+    }
+
+    .cmp-button.secondaryBtn {
+      color: var(--font-color-primary) !important;
+      width: auto;
+    }
+  }
+}`,
+          caption: 'Excerpt from a component-scoped Sass file I authored\u2014variables for responsive ceilings, CSS custom properties as the token layer, and nested component states. Happy to walk through the broader architecture (global variables, layout containers, token pipeline) in conversation.',
+        },
+        images: [],
       },
       {
         key: 'iteration',
@@ -1020,15 +1067,17 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system\u2014faster page loads, cleaner authoring, and a shared foundation across design, dev, SEO, and accessibility. The new core components now power the homepage and the tires hub in production. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed. I\u2019m happy to walk through these in detail during a conversation.',
+    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system\u2014faster page loads (60% improvement measured in WebPageTest), cleaner authoring, and a shared foundation across design, dev, SEO, and accessibility. The new core components now power the homepage, tires landing, events and sponsorship pages, and packages page in production. The authoring experience is night-and-day better for junior designers; combined with my documentation, it lets design and SEO use the CMS much more like a true CMS. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed\u2014happy to walk through them in detail in conversation.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
-      { label: 'Tire Rack Tires', url: 'https://www.tirerack.com/tires' },
+      { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
+      { label: 'Events & Sponsorship', url: 'https://www.tirerack.com/events' },
+      { label: 'Packages', url: 'https://www.tirerack.com/packages' },
     ],
     metrics: [
-      { value: '60%', label: 'Faster page load time' },
-      { value: '10+', label: 'Reusable components shipped' },
-      { value: '100+', label: 'DAM assets optimized' },
+      { value: '60%', label: 'Faster page loads (WebPageTest)' },
+      { value: '10+', label: 'Reusable components shipped to production' },
+      { value: '15 yrs', label: 'DAM governance debt resolved' },
     ],
   },
 ];

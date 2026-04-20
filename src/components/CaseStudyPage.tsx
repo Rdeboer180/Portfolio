@@ -382,6 +382,19 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
+                      {sub.codeBlock && (
+                        <figure className="cs__code-block">
+                          {sub.codeBlock.filename && (
+                            <div className="cs__code-filename">{sub.codeBlock.filename}</div>
+                          )}
+                          <pre className={`cs__code${sub.codeBlock.language ? ` language-${sub.codeBlock.language}` : ''}`}>
+                            <code>{sub.codeBlock.code}</code>
+                          </pre>
+                          {sub.codeBlock.caption && (
+                            <figcaption className="cs__caption">{sub.codeBlock.caption}</figcaption>
+                          )}
+                        </figure>
+                      )}
                       {sub.images && sub.images.length > 0 && (
                         <div className={`cs__approach-sub-images${sub.gridColumns ? ` cs__approach-sub-images--col-${sub.gridColumns}` : ''}`}>
                           <SectionImages images={sub.images} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
