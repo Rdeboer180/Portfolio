@@ -63,7 +63,7 @@
     background: linear-gradient(to right, $color-primary-light 50%, transparent 50%);
     background-size: 200% 100%;
     background-position: right;
-    transition: background-position 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transition: background-position 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 font-weight 0.2s ease;
 
     &--active {
@@ -74,7 +74,7 @@
     &--bold {
       font-weight: 700;
       background: $color-primary-light;
-      animation: highlightFadeOut 0.5s ease 0s forwards;
+      animation: highlightFadeOut 0.36s ease 0s forwards;
     }
   }
 

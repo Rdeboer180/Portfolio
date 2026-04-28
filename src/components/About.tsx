@@ -32,10 +32,10 @@ const About: React.FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sweepDuration = 600;
-            const holdDuration = 400;
-            const fadeOut = 500;
-            const cycleTime = sweepDuration + holdDuration + fadeOut + 200;
+            const sweepDuration = 420;
+            const holdDuration = 240;
+            const fadeOut = 360;
+            const cycleTime = sweepDuration + holdDuration + fadeOut + 180;
             highlights.forEach((el, i) => {
               const baseDelay = i * cycleTime;
               setTimeout(() => {
@@ -65,15 +65,15 @@ const About: React.FC = () => {
             <SectionBadge icon={<UserIcon />} label="About Me" />
             <h2 className="about__title">Built for where design is heading</h2>
               <p className="about__body">
-                <span className="about__highlight">Part designer, part front-end thinker, part systems builder</span>&mdash;I do my best work where craft, strategy, and implementation meet. For the last 16 years, what&rsquo;s set me apart hasn&rsquo;t been just visual taste&mdash;it&rsquo;s been the ability to <span className="about__highlight">define the real problem, work within real constraints, and understand how the final product actually gets made.</span>
+                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where <span className="about__highlight">craft, strategy, and implementation meet</span>, with a strength for <span className="about__highlight">defining the real problem, working within real constraints, and understanding how the final product actually gets made</span>.
               </p>
 
               <p className="about__body">
-                A big part of that perspective comes from how I’ve worked. Over 12 years at Tire Rack, I’ve operated closely across research, accessibility, SEO, and UX leadership—not in silos, but in the actual work. Running user studies, designing against WCAG standards from the start, and pressure-testing decisions against how content is surfaced and prioritized. <span className="about__highlight">That kind of cross-functional exposure grounded my work in reality—and pushed it beyond surface-level design.</span>
+                Over 12 years at Tire Rack, I&rsquo;ve operated closely across <span className="about__highlight">research, accessibility, SEO, UX leadership, and engineering</span>&mdash;running user studies, designing against WCAG standards from the start, and pressure-testing decisions against how content is surfaced, prioritized, built, and scaled.
               </p>
 
               <p className="about__body">
-                Early on, I knew I needed deeper technical fluency to build the kind of work I admired, so I closed that gap the way I’m built to—asking questions, learning by doing, and putting in the reps. That same mindset is what’s pulled me into AI-native workflows. The speed is real—but without direction, the output falls apart. I use these tools to move faster, while keeping the work grounded in systems and production reality.
+                More recently, <span className="about__highlight">that same systems mindset has pulled me into AI-native design operations</span>: from being the first designer involved in our corporate ChatGPT rollout in 2023 to now leading practical workflow exploration across Claude Code, Claude Design, collaborative AI tooling, personalized skills, MCP-connected workflows, design proof automation, Figma output cleanup, and design system documentation.
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
