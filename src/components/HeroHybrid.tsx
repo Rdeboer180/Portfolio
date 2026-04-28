@@ -292,9 +292,9 @@ const HeroHybrid: React.FC = () => {
             </div>
 
             <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3">
-            <strong className="hero-hybrid__body-lead">I&rsquo;m a product designer with systems thinking and front-end depth.</strong>{' '}
+            <strong className="hero-hybrid__body-lead">I&rsquo;m a product designer with systems thinking, front-end depth, and a bias for building the workflows behind the work</strong>.{' '}
             I design experiences that don&rsquo;t just look right&mdash;they hold up in production.
-            My strength is connecting UX, engineering, and design systems to turn complexity into products teams can confidently ship and scale.
+            My strength is connecting UX, engineering, design systems, and AI-assisted processes to turn complexity into products teams can confidently ship and scale.
           </p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--4">
