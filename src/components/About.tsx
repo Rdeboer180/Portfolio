@@ -65,11 +65,15 @@ const About: React.FC = () => {
             <SectionBadge icon={<UserIcon />} label="About Me" />
             <h2 className="about__title">Built for where design is heading</h2>
               <p className="about__body">
-                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where <span className="about__highlight">craft, strategy, and implementation meet</span>, with a strength for <span className="about__highlight">defining the real problem, working within real constraints, and understanding how the final product actually gets made</span>.
+                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where <span className="about__highlight">high-fidelity product design, design systems, and implementation strategy meet</span>, with a strength for turning user needs and business constraints into experiences teams can confidently build.
               </p>
 
               <p className="about__body">
-                Over 12 years at Tire Rack, I&rsquo;ve operated closely across <span className="about__highlight">research, accessibility, SEO, UX leadership, and engineering</span>&mdash;running user studies, designing against WCAG standards from the start, and pressure-testing decisions against how content is surfaced, prioritized, built, and scaled.
+                Over 12 years at Tire Rack, I&rsquo;ve worked closely across research, accessibility, SEO, UX leadership, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make <span className="about__highlight">clearer, more user-focused design decisions</span>.
+              </p>
+
+              <p className="about__body">
+                My strongest work happens in the systems behind the experience: <span className="about__highlight">designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved</span>.
               </p>
 
               <p className="about__body">
