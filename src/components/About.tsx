@@ -77,7 +77,11 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                More recently, <span className="about__highlight">that same systems mindset has pulled me into AI-native design operations</span>: from being the first designer involved in our corporate ChatGPT rollout in 2023 to now leading practical workflow exploration across Claude Code, Claude Design, collaborative AI tooling, personalized skills, MCP-connected workflows, design proof automation, Figma output cleanup, and design system documentation.
+                More recently, that same systems mindset has pulled me into AI-native design operations&mdash;starting as the first designer involved in our corporate ChatGPT rollout in 2023 and evolving into leading practical workflow exploration across Claude Code, Claude Design, and connected tooling.
+              </p>
+
+              <p className="about__body">
+                What that&rsquo;s become in practice is <span className="about__highlight">building a design harness: structuring prompts, workflows, and system constraints so AI outputs are consistent, scalable, and production-ready</span>. This includes personalized skills, MCP-connected workflows, design proof automation, Figma output cleanup, and design system documentation.
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
