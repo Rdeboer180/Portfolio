@@ -181,6 +181,27 @@
 
   &__layers {
     background: #2b2b2b;
+    position: relative;
+    transition: padding-left 0.2s ease;
+
+    &--grouping {
+      padding-left: 8px;
+    }
+  }
+
+  // Brief grouping bracket that brackets all layers when phase === 'grouping'
+  &__group-bracket {
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    bottom: 4px;
+    width: 6px;
+    border-left: 1.5px solid #8ab8e8;
+    border-top: 1.5px solid #8ab8e8;
+    border-bottom: 1.5px solid #8ab8e8;
+    border-radius: 2px 0 0 2px;
+    pointer-events: none;
+    animation: layersGroupBracket 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 
   &__layer {
@@ -193,6 +214,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.03);
     color: #dcdcdc;
     cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
 
     &:first-child {
       border-top: 0;
@@ -204,6 +226,19 @@
 
     &--selected {
       background: #5a5a5a;
+    }
+
+    // Subtle per-action accents on the active layer
+    &--nudge {
+      animation: layerNudge 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    &--align {
+      animation: layerAlignFlash 360ms ease both;
+    }
+
+    &--rename .layers-panel__name {
+      animation: layerRenameCaret 600ms steps(1) both;
     }
   }
 
@@ -304,4 +339,33 @@
       display: block;
     }
   }
+}
+
+@keyframes layersGroupBracket {
+  from { opacity: 0; transform: translateX(-3px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes layerNudge {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes layerAlignFlash {
+  0%   { box-shadow: inset 0 0 0 0 rgba(138, 184, 232, 0); }
+  50%  { box-shadow: inset 2px 0 0 0 rgba(138, 184, 232, 0.9); }
+  100% { box-shadow: inset 0 0 0 0 rgba(138, 184, 232, 0); }
+}
+
+@keyframes layerRenameCaret {
+  0%, 49%   { border-right: 1px solid #efefef; }
+  50%, 100% { border-right: 1px solid transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes layersGroupBracket { from, to { opacity: 1; transform: none; } }
+  @keyframes layerNudge { from, to { transform: none; } }
+  @keyframes layerAlignFlash { from, to { box-shadow: none; } }
+  @keyframes layerRenameCaret { from, to { border-right: 1px solid transparent; } }
 }

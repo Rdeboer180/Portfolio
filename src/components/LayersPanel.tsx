@@ -1,11 +1,21 @@
 import React, { forwardRef } from 'react';
 
-const defaultRoles = ['Design Strategist', 'Product Designer', 'UX Engineer'];
+const defaultRoles = [
+  'Web Designer',
+  'UI Designer',
+  'Product Designer',
+  'AI Workflow Designer',
+  'Systems Designer',
+];
+
+type LayerAction = 'nudge' | 'align' | 'rename' | null;
 
 interface LayersPanelProps {
   activeIndex: number;
   onLayerClick?: (index: number) => void;
   roles?: string[];
+  grouping?: boolean;
+  action?: LayerAction;
 }
 
 const EyeIcon = () => (
@@ -15,9 +25,13 @@ const EyeIcon = () => (
 );
 
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, onLayerClick, roles = defaultRoles }, ref) => {
+  ({ activeIndex, onLayerClick, roles = defaultRoles, grouping = false, action = null }, ref) => {
     return (
-      <div className="layers-panel" ref={ref} aria-label="Photoshop layers panel mockup">
+      <div
+        className={`layers-panel${grouping ? ' layers-panel--grouping' : ''}`}
+        ref={ref}
+        aria-label="Photoshop layers panel mockup"
+      >
         <div className="layers-panel__top">
           <span>&times;</span>
           <span>&laquo;</span>
@@ -57,22 +71,29 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           <div className="layers-panel__stat"><span>Fill:</span><span className="layers-panel__stat-field">100%</span></div>
         </div>
 
-        <div className="layers-panel__layers">
-          {roles.map((name, i) => (
-            <div
-              key={i}
-              data-layer-index={i}
-              className={`layers-panel__layer${i === activeIndex ? ' layers-panel__layer--selected layers-panel__layer--active' : ''}`}
-              onClick={() => onLayerClick?.(i)}
-            >
-              <div className="layers-panel__eye">
-                <EyeIcon />
+        <div className={`layers-panel__layers${grouping ? ' layers-panel__layers--grouping' : ''}`}>
+          {grouping && <span className="layers-panel__group-bracket" aria-hidden="true" />}
+          {roles.map((name, i) => {
+            const isActive = i === activeIndex;
+            const layerAction = isActive ? action : null;
+            return (
+              <div
+                key={i}
+                data-layer-index={i}
+                className={`layers-panel__layer${
+                  isActive || grouping ? ' layers-panel__layer--selected layers-panel__layer--active' : ''
+                }${layerAction ? ` layers-panel__layer--${layerAction}` : ''}`}
+                onClick={() => onLayerClick?.(i)}
+              >
+                <div className="layers-panel__eye">
+                  <EyeIcon />
+                </div>
+                <div className="layers-panel__thumb layers-panel__thumb--text">T</div>
+                <div className="layers-panel__name">{name}</div>
+                <div className="layers-panel__lock"></div>
               </div>
-              <div className="layers-panel__thumb layers-panel__thumb--text">T</div>
-              <div className="layers-panel__name">{name}</div>
-              <div className="layers-panel__lock"></div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="layers-panel__footer">
