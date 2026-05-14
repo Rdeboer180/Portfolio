@@ -30,7 +30,8 @@ type Phase =
   | 'cursor-backtrack'
   | 'editing-final'
   | 'gradient-final'
-  | 'complete';
+  | 'complete'
+  | 'static'; // user clicked a non-final layer post-load — render text, no animation
 
 // Inserted between "Systems" and " Designer" to evolve the last role into the final title.
 const FINAL_INSERTION = '-First Product';
@@ -50,6 +51,7 @@ const HeroHybrid: React.FC = () => {
   const activeIndexRef = useRef(0);
   const lastFlashedRef = useRef<string>('');
   const [flashKey, setFlashKey] = useState(0);
+  const highlightsAppliedRef = useRef(false);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -104,6 +106,7 @@ const HeroHybrid: React.FC = () => {
       setDisplayText(roles[FINAL_INDEX]);
       setActiveIndex(FINAL_INDEX);
       activeIndexRef.current = FINAL_INDEX;
+      setTypedInsertion(FINAL_INSERTION); // keep panel layer name in sync with final title
       setPhase('complete');
       setShowBBox(false);
     }
@@ -247,14 +250,17 @@ const HeroHybrid: React.FC = () => {
     setFlashKey((k) => k + 1);
   }, [phase, activeIndex]);
 
-  // After H1 resolves, sweep + bold the highlight spans in the supporting paragraph one at a time
+  // After H1 resolves, sweep + bold the highlight spans in the supporting paragraph one at a time.
+  // Runs only on the FIRST time phase reaches 'complete' so later clicks don't re-trigger the sweep.
   useEffect(() => {
-    if (phase !== 'complete') return;
+    if (phase !== 'complete' || highlightsAppliedRef.current) return;
     const body = bodyRef.current;
     if (!body) return;
 
     const highlights = body.querySelectorAll('.about__highlight');
     if (highlights.length === 0) return;
+
+    highlightsAppliedRef.current = true;
 
     // Match the About-section pacing (1.2s per highlight)
     const sweepDuration = 420;
@@ -291,16 +297,18 @@ const HeroHybrid: React.FC = () => {
     clearAllTimeouts();
     activeIndexRef.current = index;
     setActiveIndex(index);
-    setDisplayText(roles[index]);
     setShowBBox(false);
 
     if (index === FINAL_INDEX) {
-      // Replay the rename + highlight + gradient sequence
-      setTypedInsertion('');
-      setPhase('typing-final');
+      // Final layer is permanent: jump straight to the resolved gradient title.
+      // typedInsertion is fixed at FINAL_INSERTION so the panel name stays "Systems-First Product Designer".
+      setTypedInsertion(FINAL_INSERTION);
+      setDisplayText(`Systems${FINAL_INSERTION} Designer`);
+      setPhase('complete');
     } else {
-      setTypedInsertion('');
-      setPhase('cycling');
+      // Non-final click: just statically display the role text — no cycle, no flash, no action animation.
+      setDisplayText(roles[index]);
+      setPhase('static');
     }
   }, [phase, clearAllTimeouts]);
 
@@ -316,7 +324,9 @@ const HeroHybrid: React.FC = () => {
     phase === 'complete';
   const showGradient = phase === 'gradient-final' || phase === 'complete';
   const isTypingFinal = phase === 'typing-final';
-  const currentAction = isTypingFinal ? 'rename' : roleActions[activeIndex] || null;
+  // Only animate the per-role tool action during the automatic cycle — never on user clicks.
+  const isAutoCycle = phase === 'cycling';
+  const currentAction = isTypingFinal ? 'rename' : isAutoCycle ? roleActions[activeIndex] || null : null;
 
   // Layer name in the panel evolves with the typed insertion so the rename reads as in-place editing.
   // Once typing completes, the layer "saves" the full final title — preserved across scroll/replay.
