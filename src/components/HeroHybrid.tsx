@@ -5,20 +5,35 @@ import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
 const roles = [
+  'Web Designer',
+  'UI Designer',
   'Product Designer',
-  'Front-End Engineer',
+  'AI Workflow Designer',
   'Systems Designer',
 ];
 const FINAL_INDEX = roles.length - 1;
 
+// Subtle per-role tool action that maps to a CSS modifier on the bbox
+const roleActions: Array<'nudge' | 'align' | 'rename' | null> = [
+  'nudge', // Web Designer — gets selected and slightly nudged
+  'align', // UI Designer — snaps to alignment guide
+  null,    // Product Designer — clean selection (already familiar)
+  'rename',// AI Workflow Designer — newer layer being renamed
+  null,    // Systems Designer — leads into grouping
+];
+
 type Phase =
   | 'typing'
   | 'cycling'
+  | 'typing-final'
   | 'paused-final'
   | 'cursor-backtrack'
   | 'editing-final'
   | 'gradient-final'
   | 'complete';
+
+// Inserted between "Systems" and " Designer" to evolve the last role into the final title.
+const FINAL_INSERTION = '-First Product';
 
 const HeroHybrid: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -26,9 +41,11 @@ const HeroHybrid: React.FC = () => {
   const [phase, setPhase] = useState<Phase>('typing');
   const [showBBox, setShowBBox] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [typedInsertion, setTypedInsertion] = useState('');
 
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLParagraphElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
 
@@ -118,23 +135,47 @@ const HeroHybrid: React.FC = () => {
       setDisplayText(roles[next]);
 
       if (next >= FINAL_INDEX) {
+        // Hold on "Systems Designer" briefly, then start typing the rename
         scheduleTimeout(() => {
-          setPhase('paused-final');
-        }, 2000);
+          setShowBBox(false);
+          setTypedInsertion('');
+          setPhase('typing-final');
+        }, 900);
         return;
       }
 
-      scheduleTimeout(advance, 1400);
+      scheduleTimeout(advance, 1000);
     };
 
-    scheduleTimeout(advance, 1400);
+    scheduleTimeout(advance, 1000);
 
     return () => clearAllTimeouts();
   }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
 
+  // Designer-renaming-a-layer moment: type "-First Product" between "Systems" and " Designer"
+  useEffect(() => {
+    if (phase !== 'typing-final' || isPaused) return;
+
+    if (typedInsertion.length === FINAL_INSERTION.length) {
+      // Typing done — hold briefly so the full title reads, then enter resolved state
+      scheduleTimeout(() => setPhase('paused-final'), 450);
+      return () => clearAllTimeouts();
+    }
+
+    scheduleTimeout(() => {
+      setTypedInsertion(FINAL_INSERTION.substring(0, typedInsertion.length + 1));
+    }, 70);
+
+    return () => clearAllTimeouts();
+  }, [phase, isPaused, typedInsertion, scheduleTimeout, clearAllTimeouts]);
+
   // Pause on final word, then show bbox and begin backtrack
   useEffect(() => {
     if (phase !== 'paused-final' || isPaused) return;
+
+    // Move H1 to the resolved final title
+    activeIndexRef.current = FINAL_INDEX;
+    setActiveIndex(FINAL_INDEX);
 
     scheduleTimeout(() => {
       setShowBBox(true);
@@ -178,6 +219,44 @@ const HeroHybrid: React.FC = () => {
     return () => clearAllTimeouts();
   }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
 
+  // After H1 resolves, sweep + bold the highlight spans in the supporting paragraph one at a time
+  useEffect(() => {
+    if (phase !== 'complete') return;
+    const body = bodyRef.current;
+    if (!body) return;
+
+    const highlights = body.querySelectorAll('.about__highlight');
+    if (highlights.length === 0) return;
+
+    // Match the About-section pacing (1.2s per highlight)
+    const sweepDuration = 420;
+    const holdDuration = 240;
+    const fadeOut = 360;
+    const cycleTime = sweepDuration + holdDuration + fadeOut + 180;
+    // Small breathing room after the gradient lands before the first sweep starts
+    const initialDelay = 250;
+
+    const ids: number[] = [];
+    highlights.forEach((el, i) => {
+      const baseDelay = initialDelay + i * cycleTime;
+      ids.push(
+        window.setTimeout(() => {
+          el.classList.add('about__highlight--active');
+        }, baseDelay)
+      );
+      ids.push(
+        window.setTimeout(() => {
+          el.classList.add('about__highlight--bold');
+          el.classList.remove('about__highlight--active');
+        }, baseDelay + sweepDuration + holdDuration)
+      );
+    });
+
+    return () => {
+      ids.forEach((id) => window.clearTimeout(id));
+    };
+  }, [phase]);
+
   const handleLayerClick = useCallback((index: number) => {
     if (phase === 'typing' || index === activeIndexRef.current) return;
 
@@ -188,9 +267,11 @@ const HeroHybrid: React.FC = () => {
     setShowBBox(false);
 
     if (index === FINAL_INDEX) {
-      // Replay final sequence if clicking Design Strategist
-      setPhase('paused-final');
+      // Replay the rename + highlight + gradient sequence
+      setTypedInsertion('');
+      setPhase('typing-final');
     } else {
+      setTypedInsertion('');
       setPhase('cycling');
     }
   }, [phase, clearAllTimeouts]);
@@ -199,8 +280,20 @@ const HeroHybrid: React.FC = () => {
     return () => clearAllTimeouts();
   }, [clearAllTimeouts]);
 
-  const isFinalRole = activeIndex === FINAL_INDEX;
+  const showResolved =
+    phase === 'paused-final' ||
+    phase === 'cursor-backtrack' ||
+    phase === 'editing-final' ||
+    phase === 'gradient-final' ||
+    phase === 'complete';
   const showGradient = phase === 'gradient-final' || phase === 'complete';
+  const isTypingFinal = phase === 'typing-final';
+  const currentAction = isTypingFinal ? 'rename' : roleActions[activeIndex] || null;
+
+  // Layer name in the panel evolves with the typed insertion so the rename reads as in-place editing.
+  // Once typing completes, the layer "saves" the full final title — preserved across scroll/replay.
+  const lastLayerName = `Systems${typedInsertion} Designer`;
+  const dynamicRoles = [roles[0], roles[1], roles[2], roles[3], lastLayerName];
 
   return (
     <section className="hero-hybrid" ref={sectionRef}>
@@ -229,20 +322,19 @@ const HeroHybrid: React.FC = () => {
               aria-live="polite"
             >
               <h1 className="hero-hybrid__h1-sr-only">
-                Product Designer. Front-End Engineer. Systems Designer.
+                Web Designer. UI Designer. Product Designer. AI Workflow Designer. Systems Designer. Systems-First Product Designer.
               </h1>
 
-              <div className="hero-hybrid__typed-group">
+              <div className={`hero-hybrid__typed-group${isTypingFinal ? ' hero-hybrid__typed-group--renaming' : ''}`}>
                 <span
                   key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
                   className={`hero-hybrid__typed${
-                    phase !== 'typing' ? ' hero-hybrid__typed--swap' : ''
+                    phase !== 'typing' && phase !== 'typing-final' ? ' hero-hybrid__typed--swap' : ''
                   }`}
                   aria-hidden="true"
                 >
-                  {isFinalRole ? (
+                  {showResolved ? (
                     <>
-                      Design{' '}
                       <span className="hero-hybrid__final-word-wrap">
                         <span
                           className={`hero-hybrid__selection${
@@ -257,7 +349,7 @@ const HeroHybrid: React.FC = () => {
                               : 'hero-hybrid__typed-final-word'
                           }
                         >
-                          Strategist
+                          Systems-First
                         </span>
                         <span
                           className={`hero-hybrid__cursor hero-hybrid__cursor--absolute${
@@ -269,6 +361,14 @@ const HeroHybrid: React.FC = () => {
                           }`}
                         />
                       </span>
+                      {' '}Product Designer
+                    </>
+                  ) : isTypingFinal ? (
+                    <>
+                      Systems
+                      <span className="hero-hybrid__typed-insert">{typedInsertion}</span>
+                      <span className="hero-hybrid__cursor" />
+                      {' Designer'}
                     </>
                   ) : (
                     <>
@@ -278,7 +378,7 @@ const HeroHybrid: React.FC = () => {
                   )}
                 </span>
 
-                <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}>
+                <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}${currentAction ? ` hero-hybrid__bbox--${currentAction}` : ''}`}>
                   <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
                   <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
                   <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
@@ -291,10 +391,8 @@ const HeroHybrid: React.FC = () => {
               </div>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3">
-            <strong className="hero-hybrid__body-lead">I&rsquo;m a product designer with systems thinking, front-end depth, and a bias for building the workflows behind the work</strong>.{' '}
-            I design experiences that don&rsquo;t just look right&mdash;they hold up in production.
-            My strength is connecting UX, engineering, design systems, and AI-assisted processes to turn complexity into products teams can confidently ship and scale.
+            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3" ref={bodyRef}>
+            My systems thinking <span className="about__highlight">extends beyond the Figma artboard</span>. Over time, the layers of my career&mdash;web design, UI, product thinking, front-end logic, design systems, and AI-assisted workflows&mdash;have become the <span className="about__highlight">foundation of how I design and lead</span>: helping teams with different strengths move with a shared voice and turn complex ideas into scalable, production-ready experiences.
           </p>
 
             <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--4">
@@ -342,6 +440,8 @@ const HeroHybrid: React.FC = () => {
                   ref={panelRef}
                   activeIndex={activeIndex}
                   onLayerClick={handleLayerClick}
+                  roles={dynamicRoles}
+                  action={currentAction}
                 />
               </div>
             </div>
