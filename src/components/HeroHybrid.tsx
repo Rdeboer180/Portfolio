@@ -48,6 +48,8 @@ const HeroHybrid: React.FC = () => {
   const bodyRef = useRef<HTMLParagraphElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
+  const lastFlashedRef = useRef<string>('');
+  const [flashKey, setFlashKey] = useState(0);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -107,7 +109,17 @@ const HeroHybrid: React.FC = () => {
     }
   }, []);
 
-  // Typing first role
+  // Flash an orange selection bbox whenever a new layer/role becomes active.
+  // Mirrors Adobe/Figma's "I just clicked this layer" feedback before the cursor lands.
+  useEffect(() => {
+    if (phase !== 'typing' && phase !== 'cycling' && phase !== 'typing-final') return;
+    const key = `${activeIndex}-${phase === 'typing-final' ? 'edit' : 'sel'}`;
+    if (key === lastFlashedRef.current) return;
+    lastFlashedRef.current = key;
+    setFlashKey((k) => k + 1);
+  }, [activeIndex, phase]);
+
+  // Typing first role — first character is delayed so the flash plays before the cursor appears
   useEffect(() => {
     if (phase !== 'typing' || isPaused) return;
     const target = roles[0];
@@ -117,9 +129,10 @@ const HeroHybrid: React.FC = () => {
       return () => clearAllTimeouts();
     }
 
+    const delay = displayText.length === 0 ? 360 : 70;
     scheduleTimeout(() => {
       setDisplayText(target.substring(0, displayText.length + 1));
-    }, 70);
+    }, delay);
 
     return () => clearAllTimeouts();
   }, [displayText, phase, isPaused, scheduleTimeout, clearAllTimeouts]);
@@ -162,9 +175,11 @@ const HeroHybrid: React.FC = () => {
       return () => clearAllTimeouts();
     }
 
+    // First character is delayed so the bbox flash plays before the cursor lands
+    const delay = typedInsertion.length === 0 ? 360 : 70;
     scheduleTimeout(() => {
       setTypedInsertion(FINAL_INSERTION.substring(0, typedInsertion.length + 1));
-    }, 70);
+    }, delay);
 
     return () => clearAllTimeouts();
   }, [phase, isPaused, typedInsertion, scheduleTimeout, clearAllTimeouts]);
@@ -218,6 +233,19 @@ const HeroHybrid: React.FC = () => {
 
     return () => clearAllTimeouts();
   }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+
+  // Brand-orange selection flash — fires when a new role layer becomes active,
+  // mirroring Adobe's brief bounding-box outline the instant a layer is selected.
+  useEffect(() => {
+    const isCyclingNewRole = phase === 'cycling' && activeIndex > 0;
+    const isTypingFinalStart = phase === 'typing-final';
+    if (!isCyclingNewRole && !isTypingFinalStart) return;
+
+    const key = `${phase}-${activeIndex}`;
+    if (lastFlashedRef.current === key) return;
+    lastFlashedRef.current = key;
+    setFlashKey((k) => k + 1);
+  }, [phase, activeIndex]);
 
   // After H1 resolves, sweep + bold the highlight spans in the supporting paragraph one at a time
   useEffect(() => {
@@ -367,16 +395,24 @@ const HeroHybrid: React.FC = () => {
                     <>
                       Systems
                       <span className="hero-hybrid__typed-insert">{typedInsertion}</span>
-                      <span className="hero-hybrid__cursor" />
+                      {typedInsertion.length > 0 && <span className="hero-hybrid__cursor" />}
                       {' Designer'}
                     </>
                   ) : (
                     <>
                       {displayText}
-                      {phase === 'typing' && <span className="hero-hybrid__cursor" />}
+                      {phase === 'typing' && displayText.length > 0 && <span className="hero-hybrid__cursor" />}
                     </>
                   )}
                 </span>
+
+                {(phase === 'typing' || phase === 'cycling' || phase === 'typing-final') && (
+                  <span
+                    key={flashKey}
+                    className="hero-hybrid__bbox-flash"
+                    aria-hidden="true"
+                  />
+                )}
 
                 <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}${currentAction ? ` hero-hybrid__bbox--${currentAction}` : ''}`}>
                   <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
