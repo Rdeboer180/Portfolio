@@ -458,23 +458,26 @@ const HeroHybrid: React.FC = () => {
 
           <div className="hero-hybrid__visual">
             <div className="hero-hybrid__image-container">
-              <div className="hero-hybrid__image-wrapper">
-                <div className="hero-hybrid__orange-bg">
-                  <div className="hero-hybrid__orange-bg-inner">
+              <div className="hero-hybrid__image-wrapper hero-hybrid__profile">
+                <div className="hero-hybrid__profile-shell">
+                  <div className="hero-hybrid__profile-selection" aria-hidden="true">
+                    <span className="hero-hybrid__profile-handle hero-hybrid__profile-handle--tl" />
+                    <span className="hero-hybrid__profile-handle hero-hybrid__profile-handle--br" />
+                  </div>
+                  <div className="hero-hybrid__profile-frame">
                     <img
-                      src="/images/hero/orange-background.svg"
-                      alt=""
-                      className="hero-hybrid__orange-bg-img"
+                      src="/images/hero/ryan-deboer.png"
+                      alt="Ryan Deboer"
+                      className="hero-hybrid__profile-img"
                     />
                   </div>
                 </div>
-                <div className="hero-hybrid__border-ring" />
-                <div className="hero-hybrid__profile-circle">
-                  <img
-                    src="/images/hero/ryan-deboer.png"
-                    alt="Ryan Deboer"
-                    className="hero-hybrid__profile-img"
-                  />
+
+                <div className="hero-hybrid__profile-label hero-hybrid__profile-label--token" aria-hidden="true">
+                  <span>token</span> / profile.avatar.hero
+                </div>
+                <div className="hero-hybrid__profile-label hero-hybrid__profile-label--layer" aria-hidden="true">
+                  <span>layer</span> / 01 Portfolio image
                 </div>
               </div>
 
