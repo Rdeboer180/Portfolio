@@ -466,7 +466,7 @@ const HeroHybrid: React.FC = () => {
                   </div>
                   <div className="hero-hybrid__profile-frame">
                     <img
-                      src="/images/hero/ryan-deboer.png"
+                      src="/images/hero/ryan-deboer.jpeg"
                       alt="Ryan Deboer"
                       className="hero-hybrid__profile-img"
                     />
