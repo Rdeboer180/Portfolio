@@ -586,10 +586,10 @@
 
   &__profile-img {
     width: 100%;
-    height: 110%;
+    height: 115%;
     display: block;
     object-fit: cover;
-    object-position: top;
+    object-position: left top;
     filter: saturate(0.98) contrast(1.03) brightness(1.02);
   }
 
