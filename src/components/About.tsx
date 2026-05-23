@@ -25,26 +25,30 @@ const About: React.FC = () => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const highlights = section.querySelectorAll('.about__highlight');
+    const highlights = section.querySelectorAll('.animated-bold');
     if (highlights.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sweepDuration = 420;
-            const holdDuration = 240;
-            const fadeOut = 360;
-            const cycleTime = sweepDuration + holdDuration + fadeOut + 180;
+            // Brush sweeps across → brief wet hold → highlight fades back to page
+            // while text settles to bold black. CSS owns the actual transition
+            // durations; these JS values are the handoff points between phases.
+            const sweepDuration = 650;   // brush sweeps across the span
+            const wetHold = 200;         // hold the wet vibrant ink briefly
+            const fadeOutDuration = 900; // highlight fades + text settles to black
+            const cycleGap = 150;
+            const cycleTime = sweepDuration + wetHold + fadeOutDuration + cycleGap;
             highlights.forEach((el, i) => {
               const baseDelay = i * cycleTime;
               setTimeout(() => {
-                el.classList.add('about__highlight--active');
+                el.classList.add('animated-bold--active');
               }, baseDelay);
               setTimeout(() => {
-                el.classList.add('about__highlight--bold');
-                el.classList.remove('about__highlight--active');
-              }, baseDelay + sweepDuration + holdDuration);
+                el.classList.add('animated-bold--settled');
+                el.classList.remove('animated-bold--active');
+              }, baseDelay + sweepDuration + wetHold);
             });
             observer.disconnect();
           }
@@ -65,23 +69,20 @@ const About: React.FC = () => {
             <SectionBadge icon={<UserIcon />} label="About Me" />
             <h2 className="about__title">Built for where design is heading</h2>
               <p className="about__body">
-                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where <span className="about__highlight">high-fidelity product design, design systems, and implementation strategy meet</span>, with a strength for turning user needs and business constraints into experiences teams can confidently build.
+                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where high-fidelity product design, design systems, and implementation strategy meet, with a strength for turning user needs and business constraints into experiences teams can confidently build.
               </p>
 
               <p className="about__body">
-                Over 12 years at Tire Rack, I&rsquo;ve worked closely across research, accessibility, SEO, UX leadership, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make <span className="about__highlight">clearer, more user-focused design decisions</span>.
+                <span className="animated-bold">That is why I can thrive under a few different titles&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer.</span>{' '}
+                <span className="animated-bold">The title may shift depending on the team, but the through-line stays the same: I connect design, front-end logic, systems thinking, and practical implementation so complex ideas become clearer, more scalable, and easier for teams to ship.</span>
               </p>
 
               <p className="about__body">
-                My strongest work happens in the systems behind the experience: <span className="about__highlight">designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved</span>.
+                Over 12 years at Tire Rack, I&rsquo;ve worked closely across research, accessibility, SEO, UX leadership, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make clearer, more user-focused design decisions.
               </p>
 
               <p className="about__body">
-                More recently, that same systems mindset has pulled me into AI-native design operations&mdash;starting as the first designer involved in our corporate ChatGPT rollout in 2023 and evolving into leading practical workflow exploration across Claude Code, Claude Design, and connected tooling.
-              </p>
-
-              <p className="about__body">
-                What that&rsquo;s become in practice is <span className="about__highlight">building a design harness: structuring prompts, workflows, and system constraints so AI outputs are consistent, scalable, and production-ready</span>. This includes personalized skills, MCP-connected workflows, design proof automation, Figma output cleanup, and design system documentation.
+                <span className="animated-bold">My strongest work happens in the systems behind the experience: designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved.</span>
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>

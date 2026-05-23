@@ -4,9 +4,102 @@
 
 @import '../variables';
 
-@keyframes highlightFadeOut {
-  from { background-color: $color-primary-light; }
-  to   { background-color: transparent; }
+// ============================================
+// Shared paintbrush highlight — used site-wide for inline text callouts.
+//
+// Behavior per span:
+//   default → text in body color + body weight, no highlight
+//   --active → brush sweeps left → right across the span, text snaps to
+//              bold + brand orange in lock-step with the brush
+//   --bold / --settled → highlight fades back to the page (alpha → 0),
+//              text settles to bold black
+//
+// Uses @property to make the gradient's alpha smoothly transitionable
+// in CSS without animation keyframes. Brush color is orange-300
+// ($color-primary-md) — the lighter brand orange — consistently across
+// every instance.
+//
+// Two class names + two settled-state modifiers are supported so both
+// the legacy (.about__highlight + --bold) and the newer
+// (.animated-bold + --settled) JS observers keep working.
+// ============================================
+@property --paint-alpha {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
+// Resolve $color-primary-md (#f9c4b0 — orange 300) to discrete RGB channels
+// so we can multiply each gradient stop's alpha by --paint-alpha at runtime.
+$paint-r: red($color-primary-md);
+$paint-g: green($color-primary-md);
+$paint-b: blue($color-primary-md);
+
+.animated-bold,
+.about__highlight {
+  font-weight: inherit;
+  color: inherit;
+  --paint-alpha: 0;
+  background-image: linear-gradient(
+    97deg,
+    transparent 0%,
+    transparent 30%,
+    rgba($paint-r, $paint-g, $paint-b, calc(var(--paint-alpha) * 0.55)) 32%,
+    rgba($paint-r, $paint-g, $paint-b, calc(var(--paint-alpha) * 0.95)) 38%,
+    rgba($paint-r, $paint-g, $paint-b, calc(var(--paint-alpha) * 0.82)) 48%,
+    rgba($paint-r, $paint-g, $paint-b, calc(var(--paint-alpha) * 0.95)) 58%,
+    rgba($paint-r, $paint-g, $paint-b, calc(var(--paint-alpha) * 0.55)) 68%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-position: right; // brush parked off to the right (invisible)
+  background-repeat: no-repeat;
+  padding: 2px 6px;
+  margin: 0 -6px;
+  border-radius: 4px;
+  // Base transition covers sweep-in + color shift to brand orange.
+  // --paint-alpha intentionally absent so it snaps to 1 instantly when
+  // --active fires (paint appears at full strength and rides the brush
+  // as it sweeps).
+  transition:
+    background-position 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.55s ease;
+
+  &--active {
+    background-position: left;
+    --paint-alpha: 1;
+    color: $color-primary;
+    font-weight: 700;
+  }
+
+  // Settled state — both legacy (--bold) and new (--settled) modifiers
+  // resolve to the same final look: brush fades, text is bold black.
+  &--bold,
+  &--settled {
+    background-position: left;
+    --paint-alpha: 0;
+    color: $color-neutral-dark;
+    font-weight: 700;
+    transition:
+      --paint-alpha 0.9s ease,
+      color 0.8s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-bold,
+  .about__highlight {
+    transition: none;
+
+    &--active,
+    &--bold,
+    &--settled {
+      --paint-alpha: 0;
+      color: $color-neutral-dark;
+      font-weight: 700;
+    }
+  }
 }
 
 
@@ -55,28 +148,8 @@
     }
   }
 
-  &__highlight {
-    position: relative;
-    padding: 2px 0;
-    border-radius: 2px;
-    cursor: text;
-    background: linear-gradient(to right, $color-primary-light 50%, transparent 50%);
-    background-size: 200% 100%;
-    background-position: right;
-    transition: background-position 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                font-weight 0.2s ease;
-
-    &--active {
-      background-position: left;
-    }
-
-    // Bold + fade out the highlight
-    &--bold {
-      font-weight: 700;
-      background: $color-primary-light;
-      animation: highlightFadeOut 0.36s ease 0s forwards;
-    }
-  }
+  // .about__highlight styling now lives in the shared paintbrush block
+  // at the top of this file (alongside .animated-bold).
 
 
 
