@@ -73,8 +73,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                <span className="animated-bold">That is why I can thrive under a few different titles&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer.</span>{' '}
-                <span className="animated-bold">The title may shift depending on the team, but the through-line stays the same: I connect design, front-end logic, systems thinking, and practical implementation so complex ideas become clearer, more scalable, and easier for teams to ship.</span>
+                <span className="animated-bold">That is why I can thrive under a few different titles</span>&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer. The title may shift depending on the team, but the through-line stays the same: <span className="animated-bold">I connect design, front-end logic, systems thinking, and practical implementation</span> so complex ideas become clearer, more scalable, and easier for teams to ship.
               </p>
 
               <p className="about__body">
@@ -82,7 +81,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                <span className="animated-bold">My strongest work happens in the systems behind the experience: designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved.</span>
+                <span className="animated-bold">My strongest work happens in the systems behind the experience:</span> designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved.
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
