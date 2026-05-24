@@ -26,6 +26,13 @@ jobs:
         run: npm install
 
       - name: Build
+        env:
+          # SHA-256 of "RDesignsUnlock" — the case-study unlock password.
+          # Hash is safe to expose (reversing requires brute-forcing the
+          # original). Swap to a GitHub Secret like
+          # ${{ secrets.PROJECT_PASSWORD_HASH }} if you ever want to rotate
+          # without committing a workflow change.
+          REACT_APP_PROJECT_PASSWORD_HASH: 18a45c7fec0bb00024f3c06a777a56e3917031c18bb58a04ea078f58512e18c8
         run: npm run build
 
       - name: Install sshpass
