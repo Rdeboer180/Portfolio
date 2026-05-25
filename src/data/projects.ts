@@ -11,6 +11,14 @@ export interface ProjectImage {
   mobile?: boolean;
   isOverlay?: boolean;
   overlayText?: string;
+  // When true, src is treated as an inline video (muted autoplay loop, playsInline).
+  // Used for short prototype clips. Poster falls back to the project's featured image
+  // if not provided.
+  isVideo?: boolean;
+  videoPoster?: string;
+  // Constrains the rendered image to a max pixel width and centers it.
+  // Useful for small brand marks / app icons that shouldn't fill the column.
+  maxWidth?: number;
 }
 
 export interface CodeBlock {
@@ -40,7 +48,7 @@ export interface Project {
   role: string;
   tools: string[];
   timeline: string;
-  featured: string;
+  featured?: string;
   metrics: ProjectMetric[];
   hidden?: boolean;
   timeToLive?: string;
@@ -1270,6 +1278,224 @@ Frame every output as:
       { value: 'TestFlight', label: 'Running on device, used personally' },
       { value: 'Pattern-first', label: 'Review surfaces, not a dose calculator' },
       { value: '0 directives', label: 'Every output frames as evidence or discussion point' },
+    ],
+  },
+
+  // =============================================
+  // 7. PlayDraft — Social drafting app (in progress, direct-link only)
+  // =============================================
+  // PlayDraft is intentionally hidden from public project listings while
+  // the app is still in active prototype. Direct-link only: #/work/playdraft.
+  {
+    slug: 'playdraft',
+    hidden: true,
+    client: 'PlayDraft (personal product)',
+    title: 'PlayDraft: A Social Drafting App, Built System-First with AI-Assisted Execution',
+    summary: 'An in-progress 0 → 1 mobile product that turns Candy, Movies, Songs, Fast Food, Super Powers, and GOAT Athletes into quick competitive draft experiences. Built on Expo + Supabase with a token-driven design system as the harness for AI-assisted execution.',
+    year: '2026',
+    tags: ['0 → 1 Product Design', 'Mobile (iOS)', 'Design System', 'AI-Assisted Workflow', 'Brand System', 'Prototype'],
+    role: 'Product Design · Brand · UX/UI · Design System · AI-Assisted Prototyping · QA',
+    tools: ['Figma', 'Figma MCP', 'Claude', 'Claude Design', 'Claude Code', 'Expo / React Native', 'TypeScript', 'Expo Router', 'Supabase', 'Cursor', 'Xcode / TestFlight'],
+    timeline: 'In active prototype — ongoing since April 2026',
+    // PlayDraft intentionally has no featured/hero image — direct-link only;
+    // the page leads with the title + summary, then drops into the prototype videos.
+    timeToLive: 'Active prototype. Core product system, visual language, major flows, and app structure in place. Ongoing refinement across voting logic, topic content, reward mechanics, UI polish, and TestFlight readiness.',
+
+    // ── 01 Problem ──
+    problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports — but it has stayed locked to sports.',
+    problem: [
+      'The rituals of a fantasy draft—on-the-clock pressure, sleeper picks, post-draft debates, the group chat after—work because the format is competitive, social, and replayable. Outside of fantasy sports, that same mechanic almost never gets used.',
+      'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic—Candy, Movies, Songs, Super Powers, GOAT Athletes, Fast Food—could be drafted with friends in under five minutes?',
+    ],
+    // Two short prototype clips placed right after the intro so the page proves
+    // PlayDraft is already moving — not just a design concept — before the
+    // deeper system/process sections.
+    problemImages: [
+      {
+        src: '/images/work/playdraft/playdraft-draft-flow-demo.mp4',
+        alt: 'Short looping prototype clip of the PlayDraft draft flow — navigating from the My Drafts hub into a live draft board and adding picks to the queue',
+        layout: 'half',
+        caption: 'Draft Flow Prototype — early loop showing the app moving beyond static screens into real draft behavior',
+        mobile: true,
+        isVideo: true,
+        videoPoster: '/images/work/playdraft/playdraft-draft-hub-screen.png',
+      },
+      {
+        src: '/images/work/playdraft/playdraft-voting-flow-demo.mp4',
+        alt: 'Short looping prototype clip of the PlayDraft voting flow — bracketed vote sessions sized to fit a phone screen, with confidence updates after each round',
+        layout: 'half',
+        caption: 'Voting Flow Prototype — bracketed vote sessions and confidence updates in motion',
+        mobile: true,
+        isVideo: true,
+        videoPoster: '/images/work/playdraft/playdraft-draft-hub-screen.png',
+      },
+    ],
+
+    // ── 02 Gaps & Opportunity ──
+    gapsPunch: 'The mechanic is universal. The product to host it casually wasn’t.',
+    gaps: [
+      'Fantasy apps assume rosters, scoring, and weekly commitment. PlayDraft needed the opposite: 3-, 6-, or 8-player quick drafts that resolve in one session with community voting.',
+      'Voting on a full bracket is a UX problem. Asking outside users to review every team at once doesn’t scale—so the system needed bracketed vote sessions sized to fit a phone screen (≤4 options per screen).',
+      'Topic content needs to grow without flattening personality. A Scary Movie draft, a Super Powers draft, and a GOAT Athletes draft should feel like the same product but read very differently.',
+      'AI-assisted prototyping can produce a lot of screens fast—and just as easily produce inconsistent ones. The project needed a design system strong enough to act as a constraint layer, not a style guide tacked on later.',
+    ],
+    gapsImages: [
+      {
+        src: '/images/work/playdraft/playdraft-icon-pack-system.png',
+        alt: 'PlayDraft pack icon system — a grid of category marks (Candy, Ice Cream, Songs, Movies, Soda, Super Powers, Fast Food, Recess Games, plus premium Scary Movies, Video Games, GOAT Athletes), each pulling from one of five pack accent color pairs',
+        layout: 'full',
+        caption: 'Pack/category icons — a flexible brand language that lets candy, music, movies, sports, and games read as the same product while keeping their own personalities',
+      },
+      {
+        src: '/images/work/playdraft/playdraft-mascot.png',
+        alt: 'PlayDraft mascot — a friendly blue robot with a gold crown and a coin-shaped chest plate, framed in a circular gold-ringed badge',
+        layout: 'half',
+        caption: 'Mascot exploration—the brand had to read competitive without becoming aggressive, and game-like without becoming childish',
+      },
+    ],
+
+    // ── 03 Constraints ──
+    constraintsPunch: 'Solo designer-builder. Real mobile stack. Family-friendly. No copyrighted rosters.',
+    constraints: [
+      'Solo product design and build—no engineering team, no design partner, no UX research budget. Needed a workflow that compressed system design, screen design, and implementation into a single loop.',
+      'Real production stack from day one: Expo Router, React Native, TypeScript, Supabase (auth, DB, realtime, RLS), Expo Notifications, RevenueCat-ready monetization rails. UI not coupled to provider SDKs—everything routes through /src/services/*.service.ts.',
+      'Family-friendly content rules: no copyrighted characters, no franchise-specific rosters, no gambling or loot-box patterns. Coins are not redeemable for money; premium topics are paid or coin-unlocked, not randomized.',
+      'Mobile-first surface area only. Three supported draft sizes (3 / 6 / 8) chosen specifically so vote brackets stay ≤4 options per screen—an interface constraint that drove the entire voting feature.',
+    ],
+
+    insightCallout: 'The design system became the product’s operating layer. It gave the app a consistent visual voice—but more importantly, it gave every new feature, every new topic, and every AI-assisted screen a place to belong.',
+
+    // ── 04 Approach (subsections) ──
+    approachSubsections: [
+      {
+        key: 'alignment',
+        label: 'Alignment',
+        description: 'Wrote the project brief and core product loop before any UI: Create/Join Draft → Snake-style picks → Voting → Confidence builds → Winner finalized → Daily coin reward. Locked the tone (family-friendly, competitive, social, replayable) and explicitly ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. Influences were studied (fantasy draft tools, social voting interfaces, mobile reward systems, draft-room interaction patterns) but translated, not lifted.',
+        images: [
+          {
+            src: '/images/work/playdraft/playdraft-app-icon-mark.png',
+            alt: 'PlayDraft app icon mark — gold and navy shield with a stylized D and play triangle, the visual condensation of the brief and tone',
+            layout: 'full',
+            maxWidth: 120,
+            caption: 'App icon mark — the brief condensed into a single shape: competitive, playful, social, badge-worthy',
+          },
+        ],
+      },
+      {
+        key: 'structure',
+        label: 'Structure',
+        description: 'Mapped the app around drafts as the primary noun. The home surface is a single live “My Drafts” feed segmented by state (drafting / pre-draft / results pending) with quick-join slots for drafts looking for one more player. Below that, a “Join a New Draft” section lists open public drafts with sizes (3/6/8) and pack accents. Status pills carry nine states (filling / predraft / drafting / pending / ready / locked / joined / eliminated / winner). The bottom nav holds five tabs—Drafts, Results, Packs, Shop, Profile—with the active tab in gold to mark progress and reward moments.',
+        systemMarker: 'Pattern introduced',
+        images: [
+          {
+            src: '/images/work/playdraft/playdraft-draft-hub-screen.png',
+            alt: 'PlayDraft home / My Drafts hub showing three active drafts (Drafting, Pre-Draft, Results Pending), six open public drafts with join states, and the five-tab bottom navigation with Drafts selected in gold',
+            layout: 'full',
+            caption: 'My Drafts hub—the home surface is a live feed of drafts in flight, not a marketing landing page',
+            mobile: true,
+          },
+          {
+            src: '/images/work/playdraft/playdraft-core-app-flows-overview.png',
+            alt: 'Core app flow overview — onboarding, account entry, My Drafts hub, choosing a draft pack, draft setup, draft lobby, draft chat, draft board, queueing picks, voting, champion selection, results, profile/stats, and settings laid out as one connected map',
+            layout: 'full',
+            caption: 'Core flow overview — onboarding through draft → voting → results → profile, mapped as one connected product, not a stack of standalone screens',
+          },
+        ],
+      },
+      {
+        key: 'system',
+        label: 'System',
+        description: 'Built the design system as the constraint layer first, screens second. Foundation Locked v0.2 ships as tokens.json + tokens.css + a TypeScript design system in /src/design-system/—colors, typography (Rajdhani + Inter + JetBrains Mono), spacing (12-step scale), radius, shadows, sizes, motion, packs, and component recipes—all source-of-truth from Figma. Five pack accent pairs (green / yellow / plum / red / blue) × twelve launch topics so a Candy draft and a GOAT Athletes draft pull from the same color logic but feel distinct. Nine status pill states with required leading icons. A five-mascot system for profiles—pack-goblin, draft-dragon, pick-knight, card-critter, draft-fox—each tied to a pack accent without inventing new tokens.',
+        systemMarker: 'System decision',
+        gridColumns: 2,
+        images: [
+          {
+            src: '/images/work/playdraft/playdraft-token-reference-v02.png',
+            alt: 'PlayDraft token reference board v0.2 — color scales, semantic states, gradients, shadows, spacing, radius, and component sizing all on one board',
+            layout: 'full',
+            caption: 'Token reference v0.2 — color, semantic state, gradient, shadow, spacing, radius, and sizing tokens all source-of-truth from a single board',
+          },
+          {
+            src: '/images/work/playdraft/playdraft-component-primitives.png',
+            alt: 'PlayDraft component primitives — inputs, draft pick chips, buttons (primary gold, primary blue, secondary, ghost), and draft cards rendered with the v0.2 tokens',
+            layout: 'half',
+            caption: 'Primitives — inputs, draft picks, buttons, and draft cards built directly from the token recipes',
+          },
+          {
+            src: '/images/work/playdraft/playdraft-status-navigation-system.png',
+            alt: 'PlayDraft status pills and bottom navigation system — nine status states (filling, predraft, drafting, pending, ready, locked, joined, eliminated, winner) and the five-tab nav with the active tab in gold',
+            layout: 'half',
+            caption: 'Status + navigation — nine status pill states and a five-tab nav that keeps draft progress legible from anywhere in the app',
+          },
+        ],
+      },
+      {
+        key: 'build',
+        label: 'Build',
+        description: 'Working stack: Expo Router for navigation, TypeScript end-to-end, Supabase for auth + DB + realtime + RLS, Expo Notifications and RevenueCat as provider-agnostic rails accessed only through /src/services/*.service.ts. The voting + draft engine is eight pure-function modules in /src/features/: draft state machine, snake-order generator, vote-session builder (deterministic shuffled brackets for 3/6/8), submitVote / leadingOptions / promoteWinnersToFinal, confidence math (+1 finalist, +2 winner), daily 5-coin reward cap, 24-hour pre-draft vote gate, and a session prioritizer that ranks open votes by confidence + age. Pure logic on the inside, providers at the edge. AI-assisted execution slots in as the loop accelerator—component scaffolding, recipe variants, QA prompts, missing-state audits—always against the system, never against a blank canvas.',
+        systemMarker: 'Scalability consideration',
+        codeBlock: {
+          language: 'ts',
+          filename: 'src/design-system/packs.ts (excerpt)',
+          code: `// Five pack accent pairs × twelve launch topics — the topic catalog
+// pulls a tier + glyph + accent from the same source the components do.
+export const packAccents = {
+  green:  { primary: '...', secondary: '...' },
+  yellow: { primary: '...', secondary: '...' },
+  plum:   { primary: '...', secondary: '...' },
+  red:    { primary: '...', secondary: '...' },
+  blue:   { primary: '...', secondary: '...' },
+} as const;
+
+export const launchPacks = [
+  { id: 'candy',          tier: 'free',    accent: 'red',    glyph: 'candy' },
+  { id: 'ice-cream',      tier: 'free',    accent: 'plum',   glyph: 'cone' },
+  { id: 'recess-games',   tier: 'free',    accent: 'green',  glyph: 'whistle' },
+  { id: 'soda',           tier: 'free',    accent: 'red',    glyph: 'bottle' },
+  { id: 'super-powers',   tier: 'free',    accent: 'blue',   glyph: 'bolt' },
+  { id: 'fast-food',      tier: 'free',    accent: 'yellow', glyph: 'burger' },
+  { id: 'movies',         tier: 'free',    accent: 'plum',   glyph: 'clapper' },
+  { id: 'songs',          tier: 'free',    accent: 'green',  glyph: 'note' },
+  { id: 'comedy-movies',  tier: 'premium', accent: 'yellow', glyph: 'mic' },
+  { id: 'scary-movies',   tier: 'premium', accent: 'plum',   glyph: 'ghost' },
+  { id: 'video-games',    tier: 'premium', accent: 'blue',   glyph: 'pad' },
+  { id: 'goat-athletes',  tier: 'premium', accent: 'red',    glyph: 'crown' },
+] as const;`,
+          caption: 'Pack accents and the launch topic catalog live in one file so the design system, the topic surface, and the monetization rails read from the same source.',
+        },
+        images: [],
+      },
+      {
+        key: 'iteration',
+        label: 'Iteration',
+        description: 'Testing forced the product out of presentation mode and into product mode. Once the flows were moving, the work shifted from judging screens to testing behavior—queue logic, voting paths, state changes, navigation, and the smaller polish issues that only show up when a prototype starts acting like a product. Voting brackets were resized to keep ≤4 options per screen so finalist rounds always fit a phone viewport. Confidence triggers landed at 50% / 75% / 100% so notifications didn’t fire on weak signals. Bug + QA passes lived in /docs/qa-checklist.md and the /memories/progress-log.md—an append-only working journal that surfaces flow bugs, state bugs, missing icons, inconsistent pack accents, and TestFlight prep items as design work, not engineering chores. AI-assisted reviews helped expose missing empty / locked / unlocked / completed states the eye misses on a single screen but a state matrix catches every time.',
+        images: [
+          {
+            src: '/images/work/playdraft/playdraft-login-onboarding-exploration.png',
+            alt: 'PlayDraft login + onboarding exploration board — earlier iterations of the entry, login, and account creation flow tested against the v0.2 token system',
+            layout: 'full',
+            caption: 'Login + onboarding exploration — earlier iterations tested against the v0.2 tokens; small-flow polish surfaces friction the hero screens never catch',
+          },
+        ],
+      },
+    ],
+
+    // ── 05 Outcome ──
+    outcomeNote: 'PlayDraft is in active prototype. The core product system, voting + draft engine, brand and design system, major flows, mascot identity, and Expo + Supabase stack are in place. Ongoing work covers topic content expansion (beyond the 12 launch packs), reward mechanic polish, paywall + RevenueCat wiring, push notifications via Expo, TestFlight readiness, and the closing rounds of UI consistency. The bigger takeaway sits one level up: PlayDraft is a working proof of how my process now operates—define the system, build the experience, test the behavior, and use AI-assisted workflows as an execution multiplier, not as the author of the work.',
+    outcomeImages: [
+      {
+        src: '/images/work/playdraft/playdraft-draft-hub-screen.png',
+        alt: 'Current end-state of the PlayDraft home / My Drafts hub running in the working prototype',
+        layout: 'full',
+        caption: 'Current end-state of the prototype—My Drafts hub running on the live Expo build',
+        mobile: true,
+      },
+    ],
+    metrics: [
+      { value: '12', label: 'Launch topics: 8 free + 4 premium' },
+      { value: '3 / 6 / 8', label: 'Supported draft sizes (≤4 options per vote screen)' },
+      { value: '5 × 9', label: 'Pack accent pairs × status pill states' },
+      { value: 'v0.2', label: 'Foundation Locked design system (tokens + recipes)' },
     ],
   },
 ];
