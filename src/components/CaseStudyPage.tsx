@@ -51,7 +51,8 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
   const imgs: { src: string; alt: string }[] = [];
   const addSection = (sectionImages?: ProjectImage[]) => {
     if (sectionImages) sectionImages.forEach((img) => {
-      if (img.src) imgs.push({ src: img.src, alt: img.alt });
+      // Skip videos — lightbox only handles images
+      if (img.src && !img.isVideo) imgs.push({ src: img.src, alt: img.alt });
     });
   };
   addSection(project.problemImages);
@@ -99,6 +100,29 @@ const SectionImages: React.FC<{
     if (shouldSkipImage(img)) {
       return null;
     }
+    // Inline video — short prototype clips, muted autoplay loop
+    if (img.isVideo) {
+      const videoEl = (
+        <video
+          src={img.src}
+          poster={img.videoPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={img.alt}
+        />
+      );
+      return img.mobile ? (
+        <div className="cs__phone-frame cs__phone-frame--video">
+          <div className="cs__phone-notch" />
+          {videoEl}
+        </div>
+      ) : (
+        <div className="cs__img-wrap cs__img-wrap--video">{videoEl}</div>
+      );
+    }
     // Render actual images
     return img.mobile ? (
       <div className="cs__phone-frame" onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!))}>
@@ -122,8 +146,14 @@ const SectionImages: React.FC<{
       continue;
     }
     if (img.layout === 'full') {
+      // Optional width constraint — small marks/icons that shouldn't fill the column
+      const constrainedStyle = img.maxWidth ? { maxWidth: img.maxWidth, margin: '0 auto' } : undefined;
       elements.push(
-        <figure key={i} className={`cs__figure cs__figure--full${img.mobile ? ' cs__figure--mobile' : ''}`}>
+        <figure
+          key={i}
+          className={`cs__figure cs__figure--full${img.mobile ? ' cs__figure--mobile' : ''}${img.maxWidth ? ' cs__figure--constrained' : ''}`}
+          style={constrainedStyle}
+        >
           {renderImg(img)}
           {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
         </figure>
@@ -242,7 +272,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     );
   }
 
-  const nextProject: Project | undefined = projects[(projectIndex + 1) % projects.length];
+  // "Next project" should cycle through visible projects only so a hidden,
+  // direct-link-only case study (e.g. PlayDraft) is never surfaced via the
+  // bottom nav of a public project.
+  const visibleProjects = projects.filter((p) => !p.hidden);
+  const visibleIndex = visibleProjects.findIndex((p) => p.slug === project.slug);
+  const nextProject: Project | undefined =
+    visibleIndex >= 0
+      ? visibleProjects[(visibleIndex + 1) % visibleProjects.length]
+      : undefined;
   const hasNewFormat = !!(project.problem || project.gaps || project.constraints || project.approachSteps || project.approachSubsections);
 
   return (
@@ -270,10 +308,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           </div>
         </header>
 
-        {/* ==================== Featured Image ==================== */}
-        <div className="cs__featured-image">
-          <img src={project.featured} alt={project.title} />
-        </div>
+        {/* ==================== Featured Image (optional) ==================== */}
+        {project.featured && (
+          <div className="cs__featured-image">
+            <img src={project.featured} alt={project.title} />
+          </div>
+        )}
 
         {/* ==================== Meta Bar (horizontal) ==================== */}
         <div className="cs__meta-bar">
