@@ -478,9 +478,6 @@ const Hero: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="hero__profile-label hero__profile-label--token" aria-hidden="true">
-                  <span>token</span> / profile.avatar.hero
-                </div>
                 <div className="hero__profile-label hero__profile-label--layer" aria-hidden="true">
                   <span>layer</span> / 01 Portfolio image
                 </div>
