@@ -203,70 +203,70 @@ const HeroUX: React.FC = () => {
   const showGradient = phase === 'gradient-final' || phase === 'complete';
 
   return (
-    <section className="hero-hybrid" ref={sectionRef}>
-      <nav className="hero-hybrid__nav">
-        <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
-        <div className="hero-hybrid__nav-links">
+    <section className="hero" ref={sectionRef}>
+      <nav className="hero__nav">
+        <div className="hero__nav-logo">Ryan DeBoer</div>
+        <div className="hero__nav-links">
           <a href="#/about">About Me</a>
           <a href="#projects">My Work</a>
           <a href="#/resume">Resume</a>
-          <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__nav-cta">Get in touch</a>
+          <a href="mailto:rdeboer180@gmail.com" className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
 
-      <div className="hero-hybrid__content">
-        <div className="hero-hybrid__grid">
-          <div className="hero-hybrid__text">
-            <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              <span className="hero-hybrid__eyebrow-title">14+ years</span>
+      <div className="hero__content">
+        <div className="hero__grid">
+          <div className="hero__text">
+            <p className="hero__eyebrow hero__reveal hero__reveal--1">
+              <span className="hero__eyebrow-title">14+ years</span>
               <br />
-              <span className="hero-hybrid__eyebrow-meta">
+              <span className="hero__eyebrow-meta">
                 bridging UX, design engineering, and systems thinking
               </span>
             </p>
 
             <div
-              className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
+              className="hero__typed-wrap hero__reveal hero__reveal--2"
               aria-live="polite"
             >
-              <h1 className="hero-hybrid__h1-sr-only">
+              <h1 className="hero__h1-sr-only">
                 I bridge the gap between ambitious UX and buildable systems.
               </h1>
 
-              <div className="hero-hybrid__typed-group">
+              <div className="hero__typed-group">
                 <span
                   key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
-                  className={`hero-hybrid__typed${
-                    phase !== 'typing' ? ' hero-hybrid__typed--swap' : ''
+                  className={`hero__typed${
+                    phase !== 'typing' ? ' hero__typed--swap' : ''
                   }`}
                   aria-hidden="true"
                 >
                   {isFinalRole ? (
                     <>
                       Designs What{' '}
-                      <span className="hero-hybrid__final-word-wrap">
+                      <span className="hero__final-word-wrap">
                         <span
-                          className={`hero-hybrid__selection${
-                            phase === 'editing-final' ? ' hero-hybrid__selection--active' : ''
+                          className={`hero__selection${
+                            phase === 'editing-final' ? ' hero__selection--active' : ''
                           }`}
                           aria-hidden="true"
                         />
                         <span
                           className={
                             showGradient
-                              ? 'hero-hybrid__typed-final-gradient'
-                              : 'hero-hybrid__typed-final-word'
+                              ? 'hero__typed-final-gradient'
+                              : 'hero__typed-final-word'
                           }
                         >
                           Ships
                         </span>
                         <span
-                          className={`hero-hybrid__cursor hero-hybrid__cursor--absolute${
-                            phase === 'cursor-backtrack' ? ' hero-hybrid__cursor--backtrack' : ''
+                          className={`hero__cursor hero__cursor--absolute${
+                            phase === 'cursor-backtrack' ? ' hero__cursor--backtrack' : ''
                           }${
-                            phase === 'editing-final' ? ' hero-hybrid__cursor--selecting' : ''
+                            phase === 'editing-final' ? ' hero__cursor--selecting' : ''
                           }${
-                            phase === 'complete' ? ' hero-hybrid__cursor--hide' : ''
+                            phase === 'complete' ? ' hero__cursor--hide' : ''
                           }`}
                         />
                       </span>
@@ -274,32 +274,32 @@ const HeroUX: React.FC = () => {
                   ) : (
                     <>
                       {displayText}
-                      {phase === 'typing' && <span className="hero-hybrid__cursor" />}
+                      {phase === 'typing' && <span className="hero__cursor" />}
                     </>
                   )}
                 </span>
 
-                <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}>
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+                <div className={`hero__bbox${showBBox ? ' hero__bbox--visible' : ''}`}>
+                  <span className="hero__bbox-handle hero__bbox-handle--tl" />
+                  <span className="hero__bbox-handle hero__bbox-handle--tr" />
+                  <span className="hero__bbox-handle hero__bbox-handle--bl" />
+                  <span className="hero__bbox-handle hero__bbox-handle--br" />
+                  <span className="hero__bbox-handle hero__bbox-handle--tm" />
+                  <span className="hero__bbox-handle hero__bbox-handle--bm" />
+                  <span className="hero__bbox-handle hero__bbox-handle--ml" />
+                  <span className="hero__bbox-handle hero__bbox-handle--mr" />
                 </div>
               </div>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3">
-              <strong className="hero-hybrid__body-lead">I solve ambiguous UX problems at the systems level.</strong>{' '}
+            <p className="hero__body hero__reveal hero__reveal--3">
+              <strong className="hero__body-lead">I solve ambiguous UX problems at the systems level.</strong>{' '}
               I translate between product vision and technical reality—designing solutions that engineers want to build and teams can ship confidently.
             </p>
 
-            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--4">
+            <div className="hero__actions hero__reveal hero__reveal--4">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
-                <img src="/images/hero/email-icon.svg" alt="" className="hero-hybrid__btn-icon" />
+                <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
                 rdeboer180@gmail.com
               </a>
               <a href="#projects" className="btn btn--secondary btn--lg">
@@ -312,32 +312,32 @@ const HeroUX: React.FC = () => {
             </div>
           </div>
 
-          <div className="hero-hybrid__visual">
-            <div className="hero-hybrid__image-container">
-              <div className="hero-hybrid__image-wrapper">
-                <div className="hero-hybrid__orange-bg">
-                  <div className="hero-hybrid__orange-bg-inner">
+          <div className="hero__visual">
+            <div className="hero__image-container">
+              <div className="hero__image-wrapper">
+                <div className="hero__orange-bg">
+                  <div className="hero__orange-bg-inner">
                     <img
                       src="/images/hero/orange-background.svg"
                       alt=""
-                      className="hero-hybrid__orange-bg-img"
+                      className="hero__orange-bg-img"
                     />
                   </div>
                 </div>
-                <div className="hero-hybrid__border-ring" />
-                <div className="hero-hybrid__profile-circle">
+                <div className="hero__border-ring" />
+                <div className="hero__profile-circle">
                   <img
                     src="/images/hero/ryan-deboer.png"
                     alt="Ryan Deboer"
-                    className="hero-hybrid__profile-img"
+                    className="hero__profile-img"
                   />
                 </div>
               </div>
 
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
+              <div className="hero__ui-element hero__ui-element--prompt">
                 <img src={uiPromptSvg} alt="" />
               </div>
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--layers">
+              <div className="hero__ui-element hero__ui-element--layers">
                 <LayersPanel
                   ref={panelRef}
                   activeIndex={activeIndex}
@@ -349,11 +349,11 @@ const HeroUX: React.FC = () => {
         </div>
       </div>
 
-      <div className="hero-hybrid__proof-band">
-        <div className="hero-hybrid__proof-inner">
+      <div className="hero__proof-band">
+        <div className="hero__proof-inner">
           <ProficiencyDock testimonialsHref="#testimonials" />
         </div>
-        <div className="hero-hybrid__proof-angle" />
+        <div className="hero__proof-angle" />
       </div>
     </section>
   );

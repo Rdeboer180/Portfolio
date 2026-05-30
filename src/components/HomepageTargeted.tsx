@@ -194,60 +194,60 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
   const slug = meta.slug;
 
   return (
-    <section className="hero-hybrid" ref={heroRef}>
-      <nav className="hero-hybrid__nav">
-        <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
-        <div className="hero-hybrid__nav-links">
+    <section className="hero" ref={heroRef}>
+      <nav className="hero__nav">
+        <div className="hero__nav-logo">Ryan DeBoer</div>
+        <div className="hero__nav-links">
           <a href={`#/${slug}#about`}>About Me</a>
           <a href={`#/${slug}#projects`}>My Work</a>
           <a href="#/resume">Resume</a>
-          <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__nav-cta">Get in touch</a>
+          <a href="mailto:rdeboer180@gmail.com" className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
 
-      <div className="hero-hybrid__content">
-        <div className="hero-hybrid__grid">
-          <div className="hero-hybrid__text">
-            <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
+      <div className="hero__content">
+        <div className="hero__grid">
+          <div className="hero__text">
+            <p className="hero__eyebrow hero__reveal hero__reveal--1">
               Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
             </p>
 
             <div
-              className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
+              className="hero__typed-wrap hero__reveal hero__reveal--2"
               ref={headlineRef}
             >
               <div
-                className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}`}
+                className={`hero__bbox${showBBox ? ' hero__bbox--visible' : ''}`}
                 aria-hidden="true"
               >
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
-                <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+                <span className="hero__bbox-handle hero__bbox-handle--tl" />
+                <span className="hero__bbox-handle hero__bbox-handle--tr" />
+                <span className="hero__bbox-handle hero__bbox-handle--bl" />
+                <span className="hero__bbox-handle hero__bbox-handle--br" />
+                <span className="hero__bbox-handle hero__bbox-handle--tm" />
+                <span className="hero__bbox-handle hero__bbox-handle--bm" />
+                <span className="hero__bbox-handle hero__bbox-handle--ml" />
+                <span className="hero__bbox-handle hero__bbox-handle--mr" />
               </div>
 
-              <h1 className="hero-hybrid__h1-sr-only">
+              <h1 className="hero__h1-sr-only">
                 {roles.join(', ')}
               </h1>
 
               <span
-                className={`hero-hybrid__typed${isStretching ? ' hero-hybrid__typed--stretching' : ''}`}
+                className={`hero__typed${isStretching ? ' hero__typed--stretching' : ''}`}
                 style={headlineScale !== 1 ? { transform: `scaleX(${headlineScale})`, transformOrigin: 'left center' } : undefined}
                 aria-hidden="true"
               >
                 {displayText}
-                <span className="hero-hybrid__cursor" />
+                <span className="hero__cursor" />
               </span>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--4">{hero.body}</p>
-            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--5">
+            <p className="hero__body hero__reveal hero__reveal--4">{hero.body}</p>
+            <div className="hero__actions hero__reveal hero__reveal--5">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
-                <img src="/images/hero/email-icon.svg" alt="" className="hero-hybrid__btn-icon" />
+                <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
                 rdeboer180@gmail.com
               </a>
               <a href={`#/${slug}#projects`} className="btn btn--secondary btn--lg">
@@ -259,24 +259,24 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
             </div>
           </div>
 
-          <div className="hero-hybrid__visual">
-            <div className="hero-hybrid__image-container">
-              <div className="hero-hybrid__image-wrapper">
-                <div className="hero-hybrid__orange-bg">
-                  <div className="hero-hybrid__orange-bg-inner">
-                    <img src="/images/hero/orange-background.svg" alt="" className="hero-hybrid__orange-bg-img" />
+          <div className="hero__visual">
+            <div className="hero__image-container">
+              <div className="hero__image-wrapper">
+                <div className="hero__orange-bg">
+                  <div className="hero__orange-bg-inner">
+                    <img src="/images/hero/orange-background.svg" alt="" className="hero__orange-bg-img" />
                   </div>
                 </div>
-                <div className="hero-hybrid__border-ring" />
-                <div className="hero-hybrid__profile-circle">
-                  <img src="/images/hero/ryan-deboer.png" alt="Ryan Deboer" className="hero-hybrid__profile-img" />
+                <div className="hero__border-ring" />
+                <div className="hero__profile-circle">
+                  <img src="/images/hero/ryan-deboer.png" alt="Ryan Deboer" className="hero__profile-img" />
                 </div>
               </div>
 
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
+              <div className="hero__ui-element hero__ui-element--prompt">
                 <img src={uiPromptSvg} alt="" />
               </div>
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--layers">
+              <div className="hero__ui-element hero__ui-element--layers">
                 <LayersPanel
                   ref={panelRef}
                   activeIndex={activeIndex}
@@ -289,11 +289,11 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         </div>
       </div>
 
-      <div className="hero-hybrid__proof-band">
-        <div className="hero-hybrid__proof-inner">
+      <div className="hero__proof-band">
+        <div className="hero__proof-inner">
           <ProficiencyDock testimonialsHref={`#/${slug}#testimonials`} />
         </div>
-        <div className="hero-hybrid__proof-angle" />
+        <div className="hero__proof-angle" />
       </div>
     </section>
   );
