@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/styles.scss';
-import uiPromptSvg from '../assets/ui/ui_prompt.svg';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
@@ -36,7 +35,7 @@ type Phase =
 // Inserted between "Systems" and " Designer" to evolve the last role into the final title.
 const FINAL_INSERTION = '-First Product';
 
-const HeroHybrid: React.FC = () => {
+const Hero: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [phase, setPhase] = useState<Phase>('typing');
@@ -257,7 +256,7 @@ const HeroHybrid: React.FC = () => {
     const body = bodyRef.current;
     if (!body) return;
 
-    const highlights = body.querySelectorAll('.about__highlight');
+    const highlights = body.querySelectorAll('.animated-bold, .about__highlight');
     if (highlights.length === 0) return;
 
     highlightsAppliedRef.current = true;
@@ -272,16 +271,22 @@ const HeroHybrid: React.FC = () => {
 
     const ids: number[] = [];
     highlights.forEach((el, i) => {
+      // Match modifier prefix to the element's base class so the shared
+      // paintbrush rule fires correctly for either .animated-bold or
+      // .about__highlight (BEM modifiers are class-name based).
+      const base = el.classList.contains('animated-bold')
+        ? 'animated-bold'
+        : 'about__highlight';
       const baseDelay = initialDelay + i * cycleTime;
       ids.push(
         window.setTimeout(() => {
-          el.classList.add('about__highlight--active');
+          el.classList.add(`${base}--active`);
         }, baseDelay)
       );
       ids.push(
         window.setTimeout(() => {
-          el.classList.add('about__highlight--bold');
-          el.classList.remove('about__highlight--active');
+          el.classList.add(`${base}--bold`);
+          el.classList.remove(`${base}--active`);
         }, baseDelay + sweepDuration + holdDuration)
       );
     });
@@ -334,68 +339,68 @@ const HeroHybrid: React.FC = () => {
   const dynamicRoles = [roles[0], roles[1], roles[2], roles[3], lastLayerName];
 
   return (
-    <section className="hero-hybrid" ref={sectionRef}>
-      <nav className="hero-hybrid__nav">
-        <div className="hero-hybrid__nav-logo">Ryan DeBoer</div>
-        <div className="hero-hybrid__nav-links">
+    <section className="hero" ref={sectionRef}>
+      <nav className="hero__nav">
+        <div className="hero__nav-logo">Ryan DeBoer</div>
+        <div className="hero__nav-links">
           <a href="#/about">About Me</a>
           <a href="#projects">My Work</a>
           <a href="#/resume">Resume</a>
-          <a href="mailto:rdeboer180@gmail.com" className="hero-hybrid__nav-cta">Get in touch</a>
+          <a href="mailto:rdeboer180@gmail.com" className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
 
-      <div className="hero-hybrid__content">
-        <div className="hero-hybrid__grid">
-          <div className="hero-hybrid__text">
-            <p className="hero-hybrid__eyebrow hero-hybrid__reveal hero-hybrid__reveal--1">
-              <span className="hero-hybrid__eyebrow-title">16+ years in </span>
-              <span className="hero-hybrid__eyebrow-meta">
+      <div className="hero__content">
+        <div className="hero__grid">
+          <div className="hero__text">
+            <p className="hero__eyebrow hero__reveal hero__reveal--1">
+              <span className="hero__eyebrow-title">16+ years in </span>
+              <span className="hero__eyebrow-meta">
                 design, ux, front end code & design systems
               </span>
             </p>
 
             <div
-              className="hero-hybrid__typed-wrap hero-hybrid__reveal hero-hybrid__reveal--2"
+              className="hero__typed-wrap hero__reveal hero__reveal--2"
               aria-live="polite"
             >
-              <h1 className="hero-hybrid__h1-sr-only">
+              <h1 className="hero__h1-sr-only">
                 Web Designer. UI Designer. Product Designer. AI Workflow Designer. Systems Designer. Systems-First Product Designer.
               </h1>
 
-              <div className={`hero-hybrid__typed-group${isTypingFinal ? ' hero-hybrid__typed-group--renaming' : ''}`}>
+              <div className={`hero__typed-group${isTypingFinal ? ' hero__typed-group--renaming' : ''}`}>
                 <span
                   key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
-                  className={`hero-hybrid__typed${
-                    phase !== 'typing' && phase !== 'typing-final' ? ' hero-hybrid__typed--swap' : ''
+                  className={`hero__typed${
+                    phase !== 'typing' && phase !== 'typing-final' ? ' hero__typed--swap' : ''
                   }`}
                   aria-hidden="true"
                 >
                   {showResolved ? (
                     <>
-                      <span className="hero-hybrid__final-word-wrap">
+                      <span className="hero__final-word-wrap">
                         <span
-                          className={`hero-hybrid__selection${
-                            phase === 'editing-final' ? ' hero-hybrid__selection--active' : ''
+                          className={`hero__selection${
+                            phase === 'editing-final' ? ' hero__selection--active' : ''
                           }`}
                           aria-hidden="true"
                         />
                         <span
                           className={
                             showGradient
-                              ? 'hero-hybrid__typed-final-gradient'
-                              : 'hero-hybrid__typed-final-word'
+                              ? 'hero__typed-final-gradient'
+                              : 'hero__typed-final-word'
                           }
                         >
                           Systems-First
                         </span>
                         <span
-                          className={`hero-hybrid__cursor hero-hybrid__cursor--absolute${
-                            phase === 'cursor-backtrack' ? ' hero-hybrid__cursor--backtrack' : ''
+                          className={`hero__cursor hero__cursor--absolute${
+                            phase === 'cursor-backtrack' ? ' hero__cursor--backtrack' : ''
                           }${
-                            phase === 'editing-final' ? ' hero-hybrid__cursor--selecting' : ''
+                            phase === 'editing-final' ? ' hero__cursor--selecting' : ''
                           }${
-                            phase === 'complete' ? ' hero-hybrid__cursor--hide' : ''
+                            phase === 'complete' ? ' hero__cursor--hide' : ''
                           }`}
                         />
                       </span>
@@ -404,14 +409,14 @@ const HeroHybrid: React.FC = () => {
                   ) : isTypingFinal ? (
                     <>
                       Systems
-                      <span className="hero-hybrid__typed-insert">{typedInsertion}</span>
-                      {typedInsertion.length > 0 && <span className="hero-hybrid__cursor" />}
+                      <span className="hero__typed-insert">{typedInsertion}</span>
+                      {typedInsertion.length > 0 && <span className="hero__cursor" />}
                       {' Designer'}
                     </>
                   ) : (
                     <>
                       {displayText}
-                      {phase === 'typing' && displayText.length > 0 && <span className="hero-hybrid__cursor" />}
+                      {phase === 'typing' && displayText.length > 0 && <span className="hero__cursor" />}
                     </>
                   )}
                 </span>
@@ -419,31 +424,31 @@ const HeroHybrid: React.FC = () => {
                 {(phase === 'typing' || phase === 'cycling' || phase === 'typing-final') && (
                   <span
                     key={flashKey}
-                    className="hero-hybrid__bbox-flash"
+                    className="hero__bbox-flash"
                     aria-hidden="true"
                   />
                 )}
 
-                <div className={`hero-hybrid__bbox${showBBox ? ' hero-hybrid__bbox--visible' : ''}${currentAction ? ` hero-hybrid__bbox--${currentAction}` : ''}`}>
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tl" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tr" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bl" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--br" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--tm" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--bm" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--ml" />
-                  <span className="hero-hybrid__bbox-handle hero-hybrid__bbox-handle--mr" />
+                <div className={`hero__bbox${showBBox ? ' hero__bbox--visible' : ''}${currentAction ? ` hero__bbox--${currentAction}` : ''}`}>
+                  <span className="hero__bbox-handle hero__bbox-handle--tl" />
+                  <span className="hero__bbox-handle hero__bbox-handle--tr" />
+                  <span className="hero__bbox-handle hero__bbox-handle--bl" />
+                  <span className="hero__bbox-handle hero__bbox-handle--br" />
+                  <span className="hero__bbox-handle hero__bbox-handle--tm" />
+                  <span className="hero__bbox-handle hero__bbox-handle--bm" />
+                  <span className="hero__bbox-handle hero__bbox-handle--ml" />
+                  <span className="hero__bbox-handle hero__bbox-handle--mr" />
                 </div>
               </div>
             </div>
 
-            <p className="hero-hybrid__body hero-hybrid__reveal hero-hybrid__reveal--3" ref={bodyRef}>
-            My systems thinking <span className="about__highlight">extends beyond the Figma artboard</span>. Over time, the layers of my career&mdash;web design, UI, product thinking, front-end logic, design systems, and AI-assisted workflows&mdash;have become the <span className="about__highlight">foundation of how I design and lead</span>: helping teams with different strengths move with a shared voice and turn complex ideas into scalable, production-ready experiences.
+            <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
+            My systems thinking extends beyond the Figma artboard. Over 16+ years, I&rsquo;ve learned that senior-level design is not just about producing polished work&mdash;it is about <span className="animated-bold">raising the quality of the team</span>, the process, and the decisions behind the experience. The layers of my career&mdash;web design, UI, product thinking, front-end logic, design systems, and AI-assisted workflows&mdash;have shaped how I design and lead: helping teams with different strengths move with a shared voice and turn complex ideas into scalable, brand-aligned, production-ready experiences. In a world where more people can build faster than ever, my edge is <span className="animated-bold">knowing what to design and why</span> it matters, and how to make it hold up in the real world.
           </p>
 
-            <div className="hero-hybrid__actions hero-hybrid__reveal hero-hybrid__reveal--4">
+            <div className="hero__actions hero__reveal hero__reveal--4">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
-                <img src="/images/hero/email-icon.svg" alt="" className="hero-hybrid__btn-icon" />
+                <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
                 rdeboer180@gmail.com
               </a>
               <a href="#projects" className="btn btn--secondary btn--lg">
@@ -456,35 +461,45 @@ const HeroHybrid: React.FC = () => {
             </div>
           </div>
 
-          <div className="hero-hybrid__visual">
-            <div className="hero-hybrid__image-container">
-              <div className="hero-hybrid__image-wrapper hero-hybrid__profile">
-                <div className="hero-hybrid__profile-shell">
-                  <div className="hero-hybrid__profile-selection" aria-hidden="true">
-                    <span className="hero-hybrid__profile-handle hero-hybrid__profile-handle--tl" />
-                    <span className="hero-hybrid__profile-handle hero-hybrid__profile-handle--br" />
+          <div className="hero__visual">
+            <div className="hero__image-container">
+              <div className="hero__image-wrapper hero__profile">
+                <div className="hero__profile-shell">
+                  <div className="hero__profile-selection" aria-hidden="true">
+                    <span className="hero__profile-handle hero__profile-handle--tl" />
+                    <span className="hero__profile-handle hero__profile-handle--br" />
                   </div>
-                  <div className="hero-hybrid__profile-frame">
+                  <div className="hero__profile-frame">
                     <img
                       src="/images/hero/ryan-deboer.jpeg"
                       alt="Ryan Deboer"
-                      className="hero-hybrid__profile-img"
+                      className="hero__profile-img"
                     />
                   </div>
                 </div>
 
-                <div className="hero-hybrid__profile-label hero-hybrid__profile-label--token" aria-hidden="true">
+                <div className="hero__profile-label hero__profile-label--token" aria-hidden="true">
                   <span>token</span> / profile.avatar.hero
                 </div>
-                <div className="hero-hybrid__profile-label hero-hybrid__profile-label--layer" aria-hidden="true">
+                <div className="hero__profile-label hero__profile-label--layer" aria-hidden="true">
                   <span>layer</span> / 01 Portfolio image
                 </div>
               </div>
 
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--prompt">
-                <img src={uiPromptSvg} alt="" />
+              {/* DevTools-style tag indicator pointing at the portrait layer */}
+              <div
+                className="hero__ui-element hero__ui-element--tag-indicator"
+                aria-hidden="true"
+              >
+                <div className="hero__tag-indicator">
+                  <span className="hero__tag-indicator-selector">
+                    <span className="hero__tag-indicator-tag">div</span>
+                    <span className="hero__tag-indicator-class">.hero__profile-shell</span>
+                  </span>
+                  <span className="hero__tag-indicator-dims">480&thinsp;&times;&thinsp;480</span>
+                </div>
               </div>
-              <div className="hero-hybrid__ui-element hero-hybrid__ui-element--layers">
+              <div className="hero__ui-element hero__ui-element--layers">
                 <LayersPanel
                   ref={panelRef}
                   activeIndex={activeIndex}
@@ -498,14 +513,14 @@ const HeroHybrid: React.FC = () => {
         </div>
       </div>
 
-      <div className="hero-hybrid__proof-band">
-        <div className="hero-hybrid__proof-inner">
+      <div className="hero__proof-band">
+        <div className="hero__proof-inner">
           <ProficiencyDock testimonialsHref="#testimonials" />
         </div>
-        <div className="hero-hybrid__proof-angle" />
+        <div className="hero__proof-angle" />
       </div>
     </section>
   );
 };
 
-export default HeroHybrid;
+export default Hero;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import HeroHybrid from './components/HeroHybrid';
+import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
 import TechnicalAbilities from './components/TechnicalAbilities';
@@ -117,7 +117,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <HeroHybrid />
+      <Hero />
       <About />
       <SelectedWork />
       <Skills />
