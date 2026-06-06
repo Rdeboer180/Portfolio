@@ -71,10 +71,6 @@
     background: $color-white;
     border: 1px solid $color-neutral-light;
     border-radius: 14px;
-    // Hover-lifted cases need vertical breathing room.
-    // Keep horizontal clipping (for the fade peek), let vertical lift escape.
-    overflow-x: hidden;
-    overflow-y: visible;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03),
                 0 4px 12px rgba(0, 0, 0, 0.04);
 
@@ -95,254 +91,77 @@
   }
 
   // ==========================================
-  // Icon row — now a "shelf of CDs"
+  // Icon row
   // ==========================================
   &__row {
     display: flex;
     align-items: center;
-    gap: $spacing-sm;
-    padding: 14px 10px;
+    gap: $spacing-xs;
+    padding: 6px;
     width: 100%;
     scrollbar-width: none;
     scroll-behavior: smooth;
-    // 3D context for the cover hinge
-    perspective: 800px;
-    perspective-origin: center 60%;
-    scroll-padding-inline: 24px;
 
     &::-webkit-scrollbar { display: none; }
   }
 
-  // ==========================================
-  // Jewel case item — outer box stays a stable 56×64 so the
-  // scrollTo math in ProficiencyDock.tsx keeps working. All
-  // visual scale/rotation lives on inner spans.
-  // ==========================================
   &__item {
     position: relative;
-    min-width: 56px;
-    min-height: 64px;
-    width: 56px;
-    height: 64px;
-    padding: 0;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
     border: none;
     background: transparent;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
-    display: block;
-    flex-shrink: 0;
-
-    &:focus-visible {
-      outline: 2px solid $color-primary;
-      outline-offset: 4px;
-      border-radius: 6px;
-    }
-
-    // Hover lift (only when not already active)
-    &:hover:not(&--active) {
-      .proficiency-dock__case {
-        will-change: transform;
-        transform: translateY(-2px) scale(1.12);
-        filter:
-          drop-shadow(0 3px 4px rgba(0, 0, 0, 0.08))
-          drop-shadow(0 8px 14px rgba(0, 0, 0, 0.10));
-      }
-      .proficiency-dock__cover-gloss {
-        opacity: 0.9;
-        transform: translateX(220%);
-      }
-    }
-
-    // ---- Active state: cover hinges open, disc grows in ----
-    &--active {
-      .proficiency-dock__case {
-        will-change: transform;
-        transform: translateY(-3px) scale(1.08);
-        filter:
-          drop-shadow(0 4px 6px rgba(0, 0, 0, 0.10))
-          drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
-      }
-      .proficiency-dock__cover {
-        transform: rotateY(-115deg);
-      }
-      .proficiency-dock__disc {
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
-  }
-
-  // ---- Case wrapper (preserves 3D for the cover hinge) ----
-  &__case {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    border-radius: 3px;
-    transition:
-      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      filter 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    // Resting drop shadow — filter (not box-shadow) so the
-    // shadow follows the cover when it opens.
-    filter:
-      drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
-  }
-
-  // ---- Back of the case (with the CD inside) ----
-  &__case-back {
-    position: absolute;
-    inset: 0;
-    border-radius: 3px;
-    background: linear-gradient(
-      135deg,
-      $color-neutral-lightest 0%,
-      $color-white 55%,
-      $color-neutral-light 100%
-    );
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-
-    // Subtle CS3 spine stripe on the left edge
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 4px;
-      background: linear-gradient(
-        to bottom,
-        rgba($color-primary, 0.55),
-        rgba($color-primary, 0.35)
-      );
-    }
-  }
-
-  // ---- The CD itself ----
-  &__disc {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0.92);
-    transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    background: radial-gradient(
-      circle at 35% 35%,
-      #f7f7f7 0%,
-      #dcdcdc 45%,
-      #c0c0c0 80%
-    );
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.15),
-      inset 0 0 0 1px rgba(0, 0, 0, 0.06);
-
-    // Faint conic shimmer to suggest CD shine (no rainbow — restrained)
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 210deg,
-        rgba(255, 255, 255, 0.55),
-        rgba(255, 255, 255, 0) 30%,
-        rgba(255, 255, 255, 0.35) 55%,
-        rgba(255, 255, 255, 0) 80%
-      );
-      mix-blend-mode: screen;
-      opacity: 0.35;
-      pointer-events: none;
-    }
-  }
-
-  // ---- Disc label sticker (white circle that normalizes all icons) ----
-  &__disc-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 26px;
-    height: 26px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: $color-white;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+    flex-shrink: 0;
 
     img, svg {
-      width: 70%;
-      height: 70%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
-      display: block;
       pointer-events: none;
+      transition: transform 0.2s ease;
     }
-  }
 
-  // ---- Center spindle hole ----
-  &__hub {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: $color-neutral-lightest;
-    box-shadow:
-      inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 3px rgba(255, 255, 255, 0.6);
-    z-index: 2;
-    pointer-events: none;
-  }
+    &:hover:not(&--active) {
+      transform: scale(1.05);
+      background: rgba($color-primary, 0.06);
+      box-shadow: 0 0 0 1px rgba($color-primary, 0.12);
+    }
 
-  // ---- Clear plastic front cover (hinges open on active) ----
-  &__cover {
-    position: absolute;
-    inset: 0;
-    border-radius: 3px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.18) 45%,
-      rgba(255, 255, 255, 0.42) 100%
-    );
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.7),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      inset 0 -1px 2px rgba(0, 0, 0, 0.06);
-    // Critical: cover must never swallow the click
-    pointer-events: none;
-    transform-origin: left center;
-    transform: rotateY(0deg);
-    backface-visibility: hidden;
-    transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    overflow: hidden;
-  }
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
 
-  // ---- Diagonal highlight sweep on hover ----
-  &__cover-gloss {
-    position: absolute;
-    top: 0;
-    left: -20%;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(
-      115deg,
-      transparent 30%,
-      rgba(255, 255, 255, 0.7) 50%,
-      transparent 70%
-    );
-    opacity: 0;
-    transition:
-      opacity 240ms ease,
-      transform 480ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    pointer-events: none;
+    // ---- Active state ----
+    &--active {
+      background: rgba($color-primary, 0.08);
+      box-shadow: inset 0 0 0 1.5px $color-primary;
+      transform: scale(1.05);
+    }
+
+    // Small orange indicator dot under active icon
+    &--active::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: $color-primary;
+      transform: translateX(-50%);
+    }
   }
 
   // ==========================================
@@ -460,35 +279,6 @@
   @keyframes proficiencyDockFade {
     from { opacity: 1; transform: none; }
   }
-
-  // Strip all jewel-case motion. Preserve the active end-state
-  // (cover open + disc visible) statically; hover gets no scale.
-  .proficiency-dock {
-    &__case,
-    &__cover,
-    &__disc,
-    &__cover-gloss {
-      transition: none !important;
-    }
-
-    &__item:hover:not(&__item--active) .proficiency-dock__case {
-      transform: none;
-      filter: none;
-    }
-
-    &__item--active .proficiency-dock__case {
-      transform: none;
-      filter: none;
-    }
-
-    &__item--active .proficiency-dock__cover {
-      transform: rotateY(-115deg);
-    }
-
-    &__cover-gloss {
-      display: none;
-    }
-  }
 }
 
 // ==========================================
@@ -508,8 +298,7 @@
     &__row-wrap {
       width: 100%;
       max-width: 100%;
-      overflow-x: hidden;
-      overflow-y: visible;
+      overflow: hidden;
 
       &::after {
         opacity: 1;
@@ -517,56 +306,18 @@
     }
 
     &__row {
-      // No 3D on mobile — cover fades instead of rotates
-      perspective: none;
-      gap: 6px;
-      padding: 10px 8px;
+      gap: 4px;
+      padding: 5px;
       overflow-x: auto;
     }
 
-    // Smaller case footprint on phones
     &__item {
       min-width: 44px;
-      min-height: 52px;
+      min-height: 44px;
       width: 44px;
-      height: 52px;
+      height: 44px;
       flex-shrink: 0;
-    }
-
-    &__disc {
-      width: 32px;
-      height: 32px;
-    }
-
-    &__disc-label {
-      width: 22px;
-      height: 22px;
-    }
-
-    &__hub {
-      width: 5px;
-      height: 5px;
-    }
-
-    // Cover fades instead of hinging (avoids 3D math on small viewports)
-    &__cover-gloss {
-      display: none;
-    }
-
-    &__item:hover:not(&__item--active) .proficiency-dock__case {
-      transform: scale(1.04);
-    }
-
-    &__item--active {
-      .proficiency-dock__case {
-        transform: scale(1.06);
-        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
-      }
-      .proficiency-dock__cover {
-        transform: none;
-        opacity: 0;
-        transition: opacity 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
+      padding: 8px;
     }
 
     &__panel {
