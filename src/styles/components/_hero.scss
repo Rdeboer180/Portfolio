@@ -311,6 +311,13 @@
   &__final-word-wrap {
     position: relative;
     display: inline-block;
+    // The blue selection band is absolutely positioned over this wrap. If the
+    // highlighted word ("Systems-First") wraps onto two lines on narrow
+    // viewports, the inline-block bounding box becomes one tall rectangle and
+    // the band stretches as a single flat strip across both lines (visible bug
+    // on mobile). Keep the highlighted word together so the band always covers
+    // a single line; let the surrounding title wrap on word boundaries.
+    white-space: nowrap;
   }
 
   // Selection highlight behind "Strategist"
@@ -1018,6 +1025,17 @@
 
     &__typed-wrap {
       font-size: 32px;
+    }
+  }
+}
+
+// At the narrowest phone widths, shrink the H1 once more so "Systems-First"
+// (which is forced to stay on one line so the highlight band lands correctly)
+// still fits without horizontal overflow.
+@media (max-width: $breakpoint-xs) {
+  .hero {
+    &__typed-wrap {
+      font-size: 26px;
     }
   }
 }

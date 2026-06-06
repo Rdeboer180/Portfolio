@@ -93,14 +93,14 @@ const projects: Project[] = [
     slug: 'wheelrack',
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
-    summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI.',
+    summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
     role: 'Senior Web Designer / UX Engineer',
     tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS', 'JavaScript', 'Jira'],
     timeline: '~4 months dedicated (12+ months total with API delays)',
     featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
-    timeToLive: 'System and partner brand builds complete. Full release planned for Q2 2026, pending API integration work.',
+    timeToLive: 'Live as of June 4, 2026 at wheelrack.com/pitstop/search. System and partner brand builds complete; rollout continuing across additional retailers.',
 
     // ── 01 Problem ──
     problemPunch: 'A 20-year-old platform. No design system. No responsive design. Six partners, zero consistency.',
@@ -225,7 +225,10 @@ const projects: Project[] = [
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI\u2014the redesign helped influence buy-in, though final adoption reflects broader business factors too. The Storybook-integrated component library gave the React team an unambiguous source of truth, and the token system established a shared language between design and engineering. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
+    outcomeNote: 'Now live at wheelrack.com/pitstop/search. Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI\u2014the redesign helped influence buy-in, though final adoption reflects broader business factors too. The Storybook-integrated component library gave the React team an unambiguous source of truth, and the token system established a shared language between design and engineering. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
+    outcomeLiveLinks: [
+      { label: 'View the live WheelRack PitStop experience', url: 'https://wheelrack.com/pitstop/search' },
+    ],
     outcomeImages: [
       {
         src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',

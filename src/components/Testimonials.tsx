@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import SectionBadge from './SectionBadge';
 
 const QuoteIcon = () => (
@@ -22,13 +22,32 @@ const QuoteMark = () => (
   </svg>
 );
 
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2.5l2.95 6.55 7.05.75-5.3 4.85 1.5 7.1L12 18l-6.2 3.75 1.5-7.1L2 9.8l7.05-.75L12 2.5z" />
+  </svg>
+);
+
 const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
 );
 
+// Order locked by the case-study brief:
+// 1. Leadership & Team Impact (Adam) → 2. Cross-Functional & Human (Kokesh)
+// → 3. Craft & Standard-Setting (Adam) → 4. Systems Thinking (Kokesh)
+// → 5. Precision & Reasoning (Tim) → 6. Business Impact (Deborah)
 const testimonials = [
   {
-    title: 'Cross-functional & Human',
+    title: 'Leadership & Team Impact',
+    quote: (
+      <>Ryan&rsquo;s <H>team mentality is unshakable</H>. He views every initiative as a group effort, and includes everyone from stakeholders to peer designers in his comms. He cares deeply about establishing a shared understanding, and genuinely works hard to create and maintain a sense of unity and community. This doesn&rsquo;t just help our team in terms of skill development and information sharing, it also strengthens our internal culture between the UX, UXR, Analytics and Web Design teams as a community of practice. He creates community not just for himself, but for those he welcomes in. Most importantly, Ryan <H>sets an example to the rest of the team for what great communication and collaboration looks like</H>.</>
+    ),
+    name: 'Adam Payne',
+    role: 'Web Design Manager',
+    year: '2025',
+  },
+  {
+    title: 'Cross-Functional & Human',
     quote: (
       <>Ryan consistently takes the initiative to engage with relevant teams&mdash;such as UX, UXR, Analytics, Imaging, and SEO&mdash;whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. Moreover, it is evident that he genuinely <H>values and cares for his colleagues</H>.</>
     ),
@@ -46,13 +65,13 @@ const testimonials = [
     year: '2025',
   },
   {
-    title: 'Leadership & Team Impact',
+    title: 'Systems Thinking',
     quote: (
-      <>Ryan&rsquo;s <H>team mentality is unshakable</H>. He views every initiative as a group effort, and includes everyone from stakeholders to peer designers in his comms. He cares deeply about establishing a shared understanding, and genuinely works hard to create and maintain a sense of unity and community. This doesn&rsquo;t just help our team in terms of skill development and information sharing, it also strengthens our internal culture between the UX, UXR, Analytics and Web Design teams as a community of practice. He creates community not just for himself, but for those he welcomes in. Most importantly, Ryan <H>sets an example to the rest of the team for what great communication and collaboration looks like</H>.</>
+      <>Ryan has a lot of <H>institutional knowledge</H>. He understands what we&rsquo;ve done in the past, <H>what&rsquo;s worked, what hasn&rsquo;t, and why</H>. Combined with his technical skills, he has been very effective in project work.</>
     ),
-    name: 'Adam Payne',
-    role: 'Web Design Manager',
-    year: '2025',
+    name: 'Ryan Kokesh',
+    role: 'Senior UX Manager (overseeing design 2022-2024)',
+    year: '2024',
   },
   {
     title: 'Precision & Reasoning',
@@ -62,15 +81,6 @@ const testimonials = [
     name: 'Tim Joines',
     role: 'Tire Rack Senior Management',
     year: '2021',
-  },
-  {
-    title: 'Systems Thinking',
-    quote: (
-      <>Ryan has a lot of <H>institutional knowledge</H>. He understands what we&rsquo;ve done in the past, <H>what&rsquo;s worked, what hasn&rsquo;t, and why</H>. Combined with his technical skills, he has been very effective in project work.</>
-    ),
-    name: 'Ryan Kokesh',
-    role: 'Senior UX Manager (overseeing design 2022-2024)',
-    year: '2024',
   },
   {
     title: 'Business Impact',
@@ -83,26 +93,158 @@ const testimonials = [
   },
 ];
 
+const teamScoreTags = [
+  'Systems thinker',
+  'Remote teammate',
+  'Design → code bridge',
+  'AI-forward builder',
+];
+
 const Testimonials: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Single IntersectionObserver drives both the TeamScore-card stack reveal
+  // and the testimonial-card stagger. Each card gets `--in` toggled when it
+  // crosses ~25% into the viewport. Reduced-motion is honored entirely in CSS.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const reveals = section.querySelectorAll<HTMLElement>('[data-reveal]');
+    if (reveals.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('testimonials__reveal--in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: '0px 0px -8% 0px' }
+    );
+
+    reveals.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="testimonials" className="testimonials">
+    <section id="testimonials" className="testimonials" ref={sectionRef}>
       <div className="testimonials__container">
-        <div className="testimonials__header">
-          <SectionBadge icon={<QuoteIcon />} label="Testimonials" />
-          <h2 className="testimonials__title">The best signal of how I work isn't what I say&mdash;it's what the people I've worked with say.</h2>
+        {/* ==== Zone A — Hero proof area ==================================== */}
+        <div className="testimonials__hero">
+          <div className="testimonials__hero-text">
+            <SectionBadge icon={<QuoteIcon />} label="Peer Reviewed" />
+            <h2 className="testimonials__lede">
+              Hear from the people I build with
+            </h2>
+            <p className="testimonials__subline">
+              I can tell you I&rsquo;m systems-minded, collaborative, fast-moving,
+              and easy to work with&mdash;but the people I&rsquo;ve partnered with
+              probably say it better.
+            </p>
+            <p className="testimonials__micro">Straight from my year-end reviews</p>
+            <a href="#peer-reviews" className="testimonials__cta">
+              Read the feedback
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          </div>
+
+          {/* ==== TeamScore stacked card ================================== */}
+          <figure
+            className="testimonials__team-score testimonials__reveal"
+            data-reveal
+          >
+            <span
+              className="testimonials__team-score-shadow testimonials__team-score-shadow--back"
+              aria-hidden="true"
+            />
+            <span
+              className="testimonials__team-score-shadow testimonials__team-score-shadow--mid"
+              aria-hidden="true"
+            />
+            <div className="testimonials__team-score-card">
+              <div className="testimonials__team-score-header">
+                <span className="testimonials__team-score-mark">
+                  <span className="testimonials__team-score-mark-glyph" aria-hidden="true">★</span>
+                  <span className="testimonials__team-score-mark-text">TeamScore</span>
+                </span>
+                <div
+                  className="testimonials__team-score-stars"
+                  role="img"
+                  aria-label="4.9 out of 5 stars"
+                >
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <span
+                      key={i}
+                      className={`testimonials__team-score-star testimonials__team-score-star--${i + 1}`}
+                      aria-hidden="true"
+                    >
+                      <StarIcon />
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <figcaption className="testimonials__team-score-body">
+                <p className="testimonials__team-score-rating">
+                  <span className="testimonials__team-score-label">Collaboration Rating</span>
+                  <span className="testimonials__team-score-score">
+                    <strong>4.9</strong> / 5
+                  </span>
+                  <span className="sr-only"> — 4.9 out of 5</span>
+                </p>
+                <p className="testimonials__team-score-basis">
+                  Built from 12+ years of design systems, production handoff, remote
+                  teamwork, and cross-functional problem solving.
+                </p>
+                <ul className="testimonials__team-score-tags">
+                  {teamScoreTags.map((tag) => (
+                    <li key={tag} className="testimonials__team-score-tag">{tag}</li>
+                  ))}
+                </ul>
+              </figcaption>
+            </div>
+          </figure>
         </div>
 
+        {/* ==== Zone B — Divider =========================================== */}
+        <div className="testimonials__divider">
+          <h3 id="peer-reviews" className="testimonials__divider-label">
+            Year-end review highlights
+          </h3>
+        </div>
+
+        {/* ==== Zone C — Testimonial grid ================================== */}
         <div className="testimonials__grid">
           {testimonials.map((t, i) => (
-            <div key={i} className="testimonials__card">
+            <blockquote
+              key={i}
+              className="testimonials__card testimonials__reveal"
+              data-reveal
+              style={{ ['--reveal-delay' as string]: `${i * 90}ms` }}
+            >
               <QuoteMark />
               <span className="testimonials__card-title">{t.title}</span>
               <p className="testimonials__quote">{t.quote}</p>
-              <div className="testimonials__author">
-                <span className="testimonials__name">— {t.name}</span>
+              <cite className="testimonials__author">
+                <span className="testimonials__name">&mdash; {t.name}</span>
                 <span className="testimonials__role">{t.role}, {t.year}</span>
-              </div>
-            </div>
+              </cite>
+            </blockquote>
           ))}
         </div>
       </div>

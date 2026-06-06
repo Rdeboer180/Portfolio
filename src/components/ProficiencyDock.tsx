@@ -241,7 +241,21 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
                   onClick={() => setActiveId(p.id)}
                   title={p.label}
                 >
-                  {p.icon}
+                  {/* CS3-style jewel case: clear plastic cover hinged over a CD,
+                      icon sits on a white "label sticker" disc. All visuals live
+                      on the inner spans so the button outer box stays a stable
+                      56×64, protecting the scroll-centering math above. */}
+                  <span className="proficiency-dock__case" aria-hidden="true">
+                    <span className="proficiency-dock__case-back">
+                      <span className="proficiency-dock__disc">
+                        <span className="proficiency-dock__disc-label">{p.icon}</span>
+                        <span className="proficiency-dock__hub" />
+                      </span>
+                    </span>
+                    <span className="proficiency-dock__cover">
+                      <span className="proficiency-dock__cover-gloss" />
+                    </span>
+                  </span>
                   <span className="sr-only">{p.label}</span>
                 </button>
               );

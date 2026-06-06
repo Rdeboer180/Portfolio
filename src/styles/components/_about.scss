@@ -58,6 +58,12 @@ $paint-b: blue($color-primary-md);
   padding: 2px 6px;
   margin: 0 -6px;
   border-radius: 4px;
+  // Inline spans that wrap onto multiple lines must paint per-line-box,
+  // not as one stretched gradient across the merged bounding rect. Without
+  // this the highlight reads as a single flat band on multi-line wraps
+  // (the mobile H1 "Systems-First" bug). Modern Safari 15+ supports it.
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
   // Base transition covers sweep-in + color shift to brand orange.
   // --paint-alpha intentionally absent so it snaps to 1 instantly when
   // --active fires (paint appears at full strength and rides the brush

@@ -1,12 +1,12 @@
 // ============================================
-// Testimonials — Quote card grid
-// Ref: stylized quote card with decorative marks
+// Testimonials — Editorial "proof of collaboration"
+// Hero proof area (left text + right TeamScore card) → divider → grid
 // ============================================
 
 @import '../variables';
 
 .testimonials {
-  background: $color-white;
+  background: $color-secondary-lightest;
   padding: $spacing-4xl 0;
 
   &__container {
@@ -15,30 +15,293 @@
     padding: 0 $container-padding-x;
   }
 
-  &__header {
+  // ==========================================
+  // Zone A — Hero proof area (two-column desktop)
+  // ==========================================
+  &__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: $spacing-3xl;
+    align-items: center;
     margin-bottom: $spacing-3xl;
-    max-width: $container-text-width;
   }
 
-  &__title {
+  &__hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    max-width: 36em;
+  }
+
+  &__lede {
     font-family: $font-family-heading;
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;
-    color:$color-neutral-dark;
+    color: $color-neutral-dark;
     line-height: $line-height-h2;
     letter-spacing: -0.02em;
-    margin-top: $spacing-lg;
+    margin: $spacing-sm 0 0;
   }
 
-  &__subtitle {
+  &__subline {
+    font-family: $font-family-primary;
     font-size: $font-size-body-lg;
-    color: $color-neutral-muted;
-    font-style: italic;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+    margin: 0;
+  }
+
+  &__micro {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    align-self: flex-start;
     margin-top: $spacing-sm;
+    padding: $spacing-sm $spacing-lg;
+    background: $color-neutral-dark;
+    color: $color-white;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    border-radius: $radius-full;
+    transition: transform $transition-fast, background-color $transition-fast;
+
+    svg { transition: transform $transition-fast; }
+
+    &:hover,
+    &:focus-visible {
+      background: $color-primary;
+      transform: translateY(-1px);
+      outline: none;
+      svg { transform: translateX(3px); }
+    }
   }
 
   // ==========================================
-  // Grid — 3-col
+  // TeamScore stacked card
+  // ==========================================
+  &__team-score {
+    position: relative;
+    margin: 0;
+    justify-self: end;
+    width: 100%;
+    max-width: 460px;
+    perspective: 1000px;
+  }
+
+  // Two ghost cards stacked behind the main one
+  &__team-score-shadow {
+    position: absolute;
+    inset: 0;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-2xl;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.03),
+      0 6px 14px rgba(0, 0, 0, 0.04);
+    transform-origin: center;
+    transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &--back {
+      transform: translate(18px, 18px) rotate(0deg);
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    &--mid {
+      transform: translate(10px, 10px) rotate(0deg);
+      opacity: 0.85;
+      z-index: 1;
+    }
+  }
+
+  // Reveal: stack the ghost cards into their rotated rest positions
+  &__team-score.testimonials__reveal--in &__team-score-shadow--back {
+    transform: translate(18px, 18px) rotate(3.5deg);
+  }
+  &__team-score.testimonials__reveal--in &__team-score-shadow--mid {
+    transform: translate(10px, 10px) rotate(-1.5deg);
+  }
+
+  &__team-score-card {
+    position: relative;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-2xl;
+    padding: $spacing-xl $spacing-2xl;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 10px 30px rgba(0, 0, 0, 0.06);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__team-score-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-md;
+  }
+
+  &__team-score-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  &__team-score-mark-glyph {
+    color: $color-primary;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  &__team-score-mark-text {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.01em;
+  }
+
+  &__team-score-stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__team-score-star {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    color: $color-neutral-light; // unfilled
+    transition: color 220ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform: scale(0.85);
+
+    svg { width: 100%; height: 100%; display: block; }
+  }
+
+  &__team-score.testimonials__reveal--in &__team-score-star {
+    color: $color-primary;
+    transform: scale(1);
+
+    @for $i from 1 through 5 {
+      &--#{$i} { transition-delay: #{0.18 + $i * 0.08}s; }
+    }
+  }
+
+  &__team-score-body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__team-score-rating {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $spacing-md;
+    margin: 0;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px dashed $color-neutral-light;
+  }
+
+  &__team-score-label {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+
+  &__team-score-score {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    color: $color-neutral-standard;
+    letter-spacing: -0.01em;
+
+    strong {
+      font-size: $font-size-h3;
+      font-weight: $font-weight-bold;
+      color: $color-neutral-dark;
+      margin-right: 2px;
+    }
+  }
+
+  &__team-score-basis {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+    margin: 0;
+  }
+
+  &__team-score-tags {
+    list-style: none;
+    margin: $spacing-xs 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__team-score-tag {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: $color-neutral-standard;
+    background: $color-secondary-lightest;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-full;
+    padding: 4px 10px;
+  }
+
+  // ==========================================
+  // Zone B — Divider
+  // ==========================================
+  &__divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: $spacing-2xl 0 $spacing-2xl;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $color-neutral-light;
+    }
+
+    &::before { margin-right: $spacing-md; }
+    &::after { margin-left: $spacing-md; }
+  }
+
+  &__divider-label {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    margin: 0;
+    padding: $spacing-xs $spacing-md;
+    background: $color-secondary-lightest;
+    font-weight: $font-weight-medium;
+  }
+
+  // ==========================================
+  // Zone C — Testimonial grid
   // ==========================================
   &__grid {
     display: grid;
@@ -46,18 +309,18 @@
     gap: $spacing-xl;
   }
 
-  // ==========================================
-  // Card — white with accent corner borders
-  // ==========================================
   &__card {
-    background: $color-secondary-lightest;
+    background: $color-white;
     border-radius: $card-border-radius;
     padding: $spacing-3xl $spacing-2xl $spacing-2xl;
     display: flex;
     flex-direction: column;
     gap: $spacing-lg;
     position: relative;
-    transition: box-shadow $transition-base, transform $transition-base;
+    margin: 0;
+    transition:
+      box-shadow $transition-base,
+      transform $transition-base;
 
     // Top-left accent corner
     &::before {
@@ -70,6 +333,7 @@
       border-top: 3px solid $color-primary;
       border-left: 3px solid $color-primary;
       border-radius: $card-border-radius 0 0 0;
+      transition: width $transition-base, height $transition-base;
     }
 
     // Bottom-right accent corner
@@ -83,17 +347,23 @@
       border-bottom: 3px solid $color-primary;
       border-right: 3px solid $color-primary;
       border-radius: 0 0 $card-border-radius 0;
+      transition: width $transition-base, height $transition-base;
     }
 
     &:hover {
       box-shadow: $shadow-lg;
       transform: translateY(-2px);
+
+      &::before,
+      &::after { width: 48px; height: 48px; }
+
+      .testimonials__card-title {
+        transform: translateX(2px);
+        color: $color-primary;
+      }
     }
   }
 
-  // ==========================================
-  // Decorative quote mark
-  // ==========================================
   &__quote-mark {
     width: 20px;
     height: 20px;
@@ -108,6 +378,7 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: $color-primary-muted;
+    transition: color $transition-base, transform $transition-base;
   }
 
   &__quote {
@@ -117,6 +388,7 @@
     line-height: $line-height-body-sm;
     color: $color-neutral-standard;
     flex: 1;
+    margin: 0;
   }
 
   // ==========================================
@@ -147,6 +419,7 @@
     gap: 2px;
     padding-top: $spacing-md;
     border-top: 1px solid $color-neutral-light;
+    font-style: normal;
   }
 
   &__name {
@@ -161,20 +434,101 @@
     font-size: $font-size-caption;
     color: $color-neutral-muted;
   }
+
+  // ==========================================
+  // Scroll-triggered reveal
+  // ==========================================
+  &__reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+
+    &--in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
+// ==========================================
+// Responsive — tablet
+// ==========================================
 @media (max-width: $breakpoint-lg) {
   .testimonials {
+    &__hero {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+
+    &__team-score {
+      justify-self: start;
+      max-width: 100%;
+    }
+
     &__grid {
       grid-template-columns: 1fr 1fr;
     }
   }
 }
 
+// ==========================================
+// Responsive — mobile
+// ==========================================
 @media (max-width: $breakpoint-sm) {
   .testimonials {
+    padding: $spacing-3xl 0;
+
+    &__hero { gap: $spacing-xl; }
+
+    &__lede { font-size: $font-size-h3; }
+
+    &__team-score-card { padding: $spacing-lg $spacing-xl; }
+
+    &__team-score-shadow--back { transform: translate(12px, 12px) rotate(0deg); }
+    &__team-score-shadow--mid { transform: translate(6px, 6px) rotate(0deg); }
+    &__team-score.testimonials__reveal--in &__team-score-shadow--back {
+      transform: translate(12px, 12px) rotate(3deg);
+    }
+    &__team-score.testimonials__reveal--in &__team-score-shadow--mid {
+      transform: translate(6px, 6px) rotate(-1.5deg);
+    }
+
     &__grid {
       grid-template-columns: 1fr;
     }
+  }
+}
+
+// ==========================================
+// Reduced motion
+// ==========================================
+@media (prefers-reduced-motion: reduce) {
+  .testimonials {
+    &__reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    &__team-score-shadow,
+    &__team-score-star,
+    &__cta,
+    &__card,
+    &__card::before,
+    &__card::after,
+    &__card-title { transition: none !important; }
+
+    // Show stars in their final colored state without staggered timing
+    &__team-score-star {
+      color: $color-primary;
+      transform: none;
+    }
+
+    // Show stacked cards in their resting rotated positions immediately
+    &__team-score-shadow--back { transform: translate(18px, 18px) rotate(3.5deg); }
+    &__team-score-shadow--mid { transform: translate(10px, 10px) rotate(-1.5deg); }
   }
 }
