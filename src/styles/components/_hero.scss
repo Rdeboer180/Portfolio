@@ -201,11 +201,14 @@
   // path. The nib uses CSS `offset-path` (same path string as the SVG) so
   // it stays glued to the leading edge. After the draw, the nib fades and
   // the 0.5px stroke remains as the final "signature."
+  // Position the SVG overlay outside hero__text by the same padding values
+  // hard-coded in Hero.tsx (BORDER_PAD_X = 32, BORDER_PAD_Y = 28). The SVG
+  // carries its own width/height inline so the path coordinates match the
+  // visible bounds exactly — no scaling, no preserveAspectRatio surprises.
   &__text-border {
     position: absolute;
-    inset: -14px -18px;
-    width: calc(100% + 36px);
-    height: calc(100% + 28px);
+    top: -28px;
+    left: -32px;
     pointer-events: none;
     z-index: 1;
     overflow: visible;
@@ -220,7 +223,7 @@
     // pathLength=1 → dashoffset progresses from 1 to 0 to "draw" the stroke.
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    transition: stroke-dashoffset 1000ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: stroke-dashoffset 1600ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
   &__text-border--drawn &__text-border-path {
@@ -229,18 +232,15 @@
 
   &__nib {
     position: absolute;
-    // Same inset window the border occupies so offset-path coordinates
-    // align with the SVG. Sized to the same box via inset.
-    inset: -14px -18px;
-    width: calc(100% + 36px);
-    height: calc(100% + 28px);
+    // Same anchor point as the SVG so offset-path coordinates line up.
+    top: -28px;
+    left: -32px;
     pointer-events: none;
     z-index: 2;
     // offset-path is set inline (it carries the measured path string).
     offset-rotate: auto;
     offset-distance: 0%;
     opacity: 0;
-    // Anchor the nib's transform origin so the visible tip sits on the path
     transform-origin: 0 0;
     will-change: offset-distance, opacity, transform;
 
@@ -249,11 +249,11 @@
       // The viewBox is already shifted (-1 -1 16 16) so (0,0) is the tip.
       display: block;
       transform: translate(-2px, -2px) scale(0.86);
-      transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     &--travel {
-      animation: heroNibDraw 1100ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+      animation: heroNibDraw 1800ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
     }
 
     &--travel svg {
@@ -263,7 +263,7 @@
     &--done {
       animation: none;
       opacity: 0;
-      transition: opacity 220ms ease;
+      transition: opacity 260ms ease;
     }
   }
 

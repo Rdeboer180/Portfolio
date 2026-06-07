@@ -283,15 +283,16 @@ const Hero: React.FC = () => {
 
   // After the title fully settles (phase === 'complete'), hold briefly so
   // the viewer registers the resolved title, then trigger the border draw.
-  // Runs exactly once per session.
+  // Runs exactly once per session. Timing aligned with the SCSS draw +
+  // travel durations below.
   useEffect(() => {
     if (phase !== 'complete' || borderDrawn) return;
     const ids: number[] = [];
     ids.push(window.setTimeout(() => {
       setBorderDrawn(true);
-      // After the draw + a small overshoot beat, fade the nib out.
-      ids.push(window.setTimeout(() => setNibFaded(true), 1100));
-    }, 280));
+      // After the full draw + travel completes, fade the nib out.
+      ids.push(window.setTimeout(() => setNibFaded(true), 1800));
+    }, 360));
     return () => ids.forEach((id) => window.clearTimeout(id));
   }, [phase, borderDrawn]);
 
@@ -400,27 +401,31 @@ const Hero: React.FC = () => {
   // from "System Builder" → "System-First Builder" as the rename plays.
   const dynamicRoles = [roles[0], roles[1], lastLayerName];
 
-  // Rounded-rectangle border path matching hero__text's measured size.
-  // Travels clockwise from the top-left corner so the nib enters where a
-  // designer would naturally place a first anchor point.
+  // Padding between hero__text content and the drawn border (in px).
+  // Border path is sized to the expanded box (content + padding on all sides)
+  // so the stroke + nib sit cleanly outside the text rather than touching it.
+  const BORDER_PAD_X = 32;
+  const BORDER_PAD_Y = 28;
+  const borderBoxW = boxSize.w + BORDER_PAD_X * 2;
+  const borderBoxH = boxSize.h + BORDER_PAD_Y * 2;
+
+  // Rounded-rectangle border path matching the padded box. Travels clockwise
+  // from the top-left corner so the nib enters where a designer would
+  // naturally place a first anchor point.
   const borderPath = useMemo(() => {
-    const { w, h } = boxSize;
-    if (!w || !h) return '';
-    const r = 10;
-    // M (top edge start) → top edge → top-right corner → right edge →
-    // bottom-right corner → bottom edge → bottom-left corner → left edge →
-    // top-left corner → close
+    if (!boxSize.w || !boxSize.h) return '';
+    const r = 14;
     return (
-      `M ${r} 0 L ${w - r} 0 ` +
-      `A ${r} ${r} 0 0 1 ${w} ${r} ` +
-      `L ${w} ${h - r} ` +
-      `A ${r} ${r} 0 0 1 ${w - r} ${h} ` +
-      `L ${r} ${h} ` +
-      `A ${r} ${r} 0 0 1 0 ${h - r} ` +
+      `M ${r} 0 L ${borderBoxW - r} 0 ` +
+      `A ${r} ${r} 0 0 1 ${borderBoxW} ${r} ` +
+      `L ${borderBoxW} ${borderBoxH - r} ` +
+      `A ${r} ${r} 0 0 1 ${borderBoxW - r} ${borderBoxH} ` +
+      `L ${r} ${borderBoxH} ` +
+      `A ${r} ${r} 0 0 1 0 ${borderBoxH - r} ` +
       `L 0 ${r} ` +
       `A ${r} ${r} 0 0 1 ${r} 0 Z`
     );
-  }, [boxSize]);
+  }, [boxSize.w, boxSize.h, borderBoxW, borderBoxH]);
 
   return (
     <section className="hero" ref={sectionRef}>
@@ -444,9 +449,9 @@ const Hero: React.FC = () => {
             {borderPath && (
               <svg
                 className={`hero__text-border${borderDrawn ? ' hero__text-border--drawn' : ''}`}
-                width={boxSize.w}
-                height={boxSize.h}
-                viewBox={`0 0 ${boxSize.w} ${boxSize.h}`}
+                width={borderBoxW}
+                height={borderBoxH}
+                viewBox={`0 0 ${borderBoxW} ${borderBoxH}`}
                 aria-hidden="true"
               >
                 <path
