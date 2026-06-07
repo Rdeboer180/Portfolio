@@ -4,21 +4,17 @@ import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
 const roles = [
-  'Web Designer',
-  'UI Designer',
-  'Product Designer',
-  'AI Workflow Designer',
-  'Systems Designer',
+  'Designer',
+  'UX Engineer',
+  'System Builder',
 ];
 const FINAL_INDEX = roles.length - 1;
 
 // Subtle per-role tool action that maps to a CSS modifier on the bbox
 const roleActions: Array<'nudge' | 'align' | 'rename' | null> = [
-  'nudge', // Web Designer — gets selected and slightly nudged
-  'align', // UI Designer — snaps to alignment guide
-  null,    // Product Designer — clean selection (already familiar)
-  'rename',// AI Workflow Designer — newer layer being renamed
-  null,    // Systems Designer — leads into grouping
+  'nudge', // Designer — gets selected and slightly nudged
+  'align', // UX Engineer — snaps to alignment guide
+  null,    // System Builder — leads into the typing-final rename
 ];
 
 type Phase =
@@ -32,8 +28,8 @@ type Phase =
   | 'complete'
   | 'static'; // user clicked a non-final layer post-load — render text, no animation
 
-// Inserted between "Systems" and " Designer" to evolve the last role into the final title.
-const FINAL_INSERTION = '-First Product';
+// Inserted between "System" and " Builder" to evolve the last role into the final title.
+const FINAL_INSERTION = '-First';
 
 const Hero: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -306,9 +302,9 @@ const Hero: React.FC = () => {
 
     if (index === FINAL_INDEX) {
       // Final layer is permanent: jump straight to the resolved gradient title.
-      // typedInsertion is fixed at FINAL_INSERTION so the panel name stays "Systems-First Product Designer".
+      // typedInsertion is fixed at FINAL_INSERTION so the panel name stays "System-First Builder".
       setTypedInsertion(FINAL_INSERTION);
-      setDisplayText(`Systems${FINAL_INSERTION} Designer`);
+      setDisplayText(`System${FINAL_INSERTION} Builder`);
       setPhase('complete');
     } else {
       // Non-final click: just statically display the role text — no cycle, no flash, no action animation.
@@ -335,7 +331,7 @@ const Hero: React.FC = () => {
 
   // Layer name in the panel evolves with the typed insertion so the rename reads as in-place editing.
   // Once typing completes, the layer "saves" the full final title — preserved across scroll/replay.
-  const lastLayerName = `Systems${typedInsertion} Designer`;
+  const lastLayerName = `System${typedInsertion} Builder`;
   const dynamicRoles = [roles[0], roles[1], roles[2], roles[3], lastLayerName];
 
   return (
@@ -354,10 +350,7 @@ const Hero: React.FC = () => {
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">16+ years in </span>
-              <span className="hero__eyebrow-meta">
-                design, ux, front end code & design systems
-              </span>
+              <span className="hero__eyebrow-title">16+ years as a senior designer working as a</span>
             </p>
 
             <div
@@ -365,7 +358,7 @@ const Hero: React.FC = () => {
               aria-live="polite"
             >
               <h1 className="hero__h1-sr-only">
-                Web Designer. UI Designer. Product Designer. AI Workflow Designer. Systems Designer. Systems-First Product Designer.
+                Designer. UX Engineer. System Builder. System-First Builder.
               </h1>
 
               <div className={`hero__typed-group${isTypingFinal ? ' hero__typed-group--renaming' : ''}`}>
@@ -392,7 +385,7 @@ const Hero: React.FC = () => {
                               : 'hero__typed-final-word'
                           }
                         >
-                          Systems-First
+                          System-First
                         </span>
                         <span
                           className={`hero__cursor hero__cursor--absolute${
@@ -404,14 +397,14 @@ const Hero: React.FC = () => {
                           }`}
                         />
                       </span>
-                      {' '}Product Designer
+                      {' '}Builder
                     </>
                   ) : isTypingFinal ? (
                     <>
-                      Systems
+                      System
                       <span className="hero__typed-insert">{typedInsertion}</span>
                       {typedInsertion.length > 0 && <span className="hero__cursor" />}
-                      {' Designer'}
+                      {' Builder'}
                     </>
                   ) : (
                     <>
@@ -443,7 +436,9 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            My systems thinking extends beyond the Figma artboard. Over 16+ years, I&rsquo;ve learned that senior-level design is not just about producing polished work&mdash;it is about <span className="animated-bold">raising the quality of the team</span>, the process, and the decisions behind the experience. The layers of my career&mdash;web design, UI, product thinking, front-end logic, design systems, and AI-assisted workflows&mdash;have shaped how I design and lead: helping teams with different strengths move with a shared voice and turn complex ideas into scalable, brand-aligned, production-ready experiences. In a world where more people can build faster than ever, my edge is <span className="animated-bold">knowing what to design and why</span> it matters, and how to make it hold up in the real world.
+            Product design, UX/UI, front-end logic, and design systems&mdash;<span className="animated-bold">connected by craft, care, and production-minded judgment.</span>
+            {' '}
+            Design is no longer just a handoff. My background in visual communication, front-end code, design systems, and AI-assisted workflows helps me move from idea to interface with more context and better judgment. <span className="animated-bold">I build beyond the artboard</span>&mdash;shaping the systems, details, and decisions that help teams ship stronger work.
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">

@@ -67,21 +67,21 @@ const About: React.FC = () => {
         <div className="about__content">
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" />
-            <h2 className="about__title">Built for where design is heading</h2>
+            <h2 className="about__title">Built For Where Design Is Heading</h2>
               <p className="about__body">
-                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where high-fidelity product design, design systems, and implementation strategy meet, with a strength for turning user needs and business constraints into experiences teams can confidently build.
+                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where high-fidelity product design, design systems, front-end implementation, and creative strategy meet.
               </p>
 
               <p className="about__body">
-                <span className="animated-bold">That is why I can thrive under a few different titles</span>&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer. The title may shift depending on the team, but the through-line stays the same: <span className="animated-bold">I connect design, front-end logic, systems thinking, and practical implementation</span> so complex ideas become clearer, more scalable, and easier for teams to ship.
+                The title may change depending on the team&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer&mdash;but the through-line is the same: <span className="animated-bold">I connect design, front-end logic, systems thinking, and practical implementation</span> so complex ideas become clearer, more scalable, and easier for teams to ship.
               </p>
 
               <p className="about__body">
-                Over 12 years at Tire Rack, I&rsquo;ve worked closely across research, accessibility, SEO, UX leadership, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make clearer, more user-focused design decisions.
+                Over 12 years at Tire Rack, I&rsquo;ve worked across research, accessibility, SEO, UX leadership, analytics, content, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make clearer, more user-focused decisions.
               </p>
 
               <p className="about__body">
-                <span className="animated-bold">My strongest work happens in the systems behind the experience:</span> designing polished interactive interfaces, defining scalable component patterns, and shaping the evolving process that governs how products are designed, documented, built, and improved.
+                My strongest work happens in the systems behind the experience: designing polished interfaces, defining scalable component patterns, and improving the process that governs how products are designed, documented, built, and improved. In a world where more people can build faster than ever, my edge is <span className="animated-bold">knowing what to design, why it matters, and how to make it hold up in the real world.</span>
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
