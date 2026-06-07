@@ -1,7 +1,24 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import '../styles/styles.scss';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
+
+// Pen-nib icon — Adobe-Illustrator-style anchor + slanted nib, oriented so
+// the tip sits at coordinate (0,0). offset-path travels the path under the
+// nib's origin, so anchoring the visual tip at 0,0 keeps the nib visually
+// "drawing" the leading edge of the stroke.
+const PenNib: React.FC = () => (
+  <svg viewBox="-1 -1 16 16" width="14" height="14" fill="none" aria-hidden="true">
+    <path
+      d="M0 0 L11 5 L5.5 6.2 L0 12 Z"
+      fill="#f03d01"
+      stroke="#c23001"
+      strokeWidth="0.6"
+      strokeLinejoin="round"
+    />
+    <circle cx="0" cy="0" r="1.3" fill="#ffffff" stroke="#c23001" strokeWidth="0.6" />
+  </svg>
+);
 
 const roles = [
   'Designer',
@@ -42,8 +59,19 @@ const Hero: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLParagraphElement>(null);
+  const heroTextRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
+
+  // ── Pen-tool border state ────────────────────────────────────────────────
+  // Three-step sequence after the title fully settles:
+  //   1. hold ~280ms (let the title register)
+  //   2. start the draw — nib fades in and travels the path (~1000ms)
+  //   3. nib fades out (~200ms), leaving a thin brand-gray stroke behind
+  // Runs once per session — does not replay on rerender or layer-click.
+  const [borderDrawn, setBorderDrawn] = useState(false);
+  const [nibFaded, setNibFaded] = useState(false);
+  const [boxSize, setBoxSize] = useState({ w: 0, h: 0 });
   const lastFlashedRef = useRef<string>('');
   const [flashKey, setFlashKey] = useState(0);
   const highlightsAppliedRef = useRef(false);
@@ -232,6 +260,41 @@ const Hero: React.FC = () => {
     return () => clearAllTimeouts();
   }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
 
+  // ── Pen-tool border draw ────────────────────────────────────────────────
+  // Track hero__text dimensions so the border path can be computed in absolute
+  // pixel space. ResizeObserver covers content reflow (font load, viewport
+  // changes); the window resize handler is a safety net for older browsers.
+  useEffect(() => {
+    const el = heroTextRef.current;
+    if (!el) return;
+    const measure = () => {
+      const rect = el.getBoundingClientRect();
+      setBoxSize({ w: Math.round(rect.width), h: Math.round(rect.height) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  // After the title fully settles (phase === 'complete'), hold briefly so
+  // the viewer registers the resolved title, then trigger the border draw.
+  // Runs exactly once per session.
+  useEffect(() => {
+    if (phase !== 'complete' || borderDrawn) return;
+    const ids: number[] = [];
+    ids.push(window.setTimeout(() => {
+      setBorderDrawn(true);
+      // After the draw + a small overshoot beat, fade the nib out.
+      ids.push(window.setTimeout(() => setNibFaded(true), 1100));
+    }, 280));
+    return () => ids.forEach((id) => window.clearTimeout(id));
+  }, [phase, borderDrawn]);
+
   // Brand-orange selection flash — fires when a new role layer becomes active,
   // mirroring Adobe's brief bounding-box outline the instant a layer is selected.
   useEffect(() => {
@@ -332,7 +395,32 @@ const Hero: React.FC = () => {
   // Layer name in the panel evolves with the typed insertion so the rename reads as in-place editing.
   // Once typing completes, the layer "saves" the full final title — preserved across scroll/replay.
   const lastLayerName = `System${typedInsertion} Builder`;
-  const dynamicRoles = [roles[0], roles[1], roles[2], roles[3], lastLayerName];
+  // Panel layer list mirrors the role list 1:1 (no orphan undefined rows),
+  // with the last layer's name driven by the typed insertion so it evolves
+  // from "System Builder" → "System-First Builder" as the rename plays.
+  const dynamicRoles = [roles[0], roles[1], lastLayerName];
+
+  // Rounded-rectangle border path matching hero__text's measured size.
+  // Travels clockwise from the top-left corner so the nib enters where a
+  // designer would naturally place a first anchor point.
+  const borderPath = useMemo(() => {
+    const { w, h } = boxSize;
+    if (!w || !h) return '';
+    const r = 10;
+    // M (top edge start) → top edge → top-right corner → right edge →
+    // bottom-right corner → bottom edge → bottom-left corner → left edge →
+    // top-left corner → close
+    return (
+      `M ${r} 0 L ${w - r} 0 ` +
+      `A ${r} ${r} 0 0 1 ${w} ${r} ` +
+      `L ${w} ${h - r} ` +
+      `A ${r} ${r} 0 0 1 ${w - r} ${h} ` +
+      `L ${r} ${h} ` +
+      `A ${r} ${r} 0 0 1 0 ${h - r} ` +
+      `L 0 ${r} ` +
+      `A ${r} ${r} 0 0 1 ${r} 0 Z`
+    );
+  }, [boxSize]);
 
   return (
     <section className="hero" ref={sectionRef}>
@@ -348,7 +436,35 @@ const Hero: React.FC = () => {
 
       <div className="hero__content">
         <div className="hero__grid">
-          <div className="hero__text">
+          <div className="hero__text" ref={heroTextRef}>
+            {/* Pen-tool border — sized to hero__text's measured box, drawn
+                clockwise from the top-left corner via stroke-dashoffset.
+                The nib element follows the same path via offset-path so it
+                stays glued to the leading edge of the stroke. */}
+            {borderPath && (
+              <svg
+                className={`hero__text-border${borderDrawn ? ' hero__text-border--drawn' : ''}`}
+                width={boxSize.w}
+                height={boxSize.h}
+                viewBox={`0 0 ${boxSize.w} ${boxSize.h}`}
+                aria-hidden="true"
+              >
+                <path
+                  className="hero__text-border-path"
+                  d={borderPath}
+                  pathLength={1}
+                />
+              </svg>
+            )}
+            {borderPath && (
+              <span
+                className={`hero__nib${borderDrawn ? ' hero__nib--travel' : ''}${nibFaded ? ' hero__nib--done' : ''}`}
+                style={{ offsetPath: `path('${borderPath}')` }}
+                aria-hidden="true"
+              >
+                <PenNib />
+              </span>
+            )}
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
               <span className="hero__eyebrow-title">16+ years as a senior designer working as a</span>
             </p>

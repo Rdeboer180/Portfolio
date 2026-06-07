@@ -143,6 +143,7 @@
   }
 
   &__text {
+    position: relative; // anchor for the pen-tool border SVG + nib overlay
     display: flex;
     flex-direction: column;
   }
@@ -191,6 +192,112 @@
     &--5 { @include hybrid-reveal(5); }
     &--6 { @include hybrid-reveal(6); }
   }
+
+  // ============================================
+  // Pen-tool border draw — Shopify-Editions-inspired signature flourish
+  // ============================================
+  // After the typed title fully resolves, a thin brand-gray rounded-rect
+  // stroke is drawn around .hero__text by a small pen-nib that travels the
+  // path. The nib uses CSS `offset-path` (same path string as the SVG) so
+  // it stays glued to the leading edge. After the draw, the nib fades and
+  // the 0.5px stroke remains as the final "signature."
+  &__text-border {
+    position: absolute;
+    inset: -14px -18px;
+    width: calc(100% + 36px);
+    height: calc(100% + 28px);
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+  }
+
+  &__text-border-path {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.16); // restrained brand-gray; reads as a guide line
+    stroke-width: 0.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    // pathLength=1 → dashoffset progresses from 1 to 0 to "draw" the stroke.
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1000ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  &__text-border--drawn &__text-border-path {
+    stroke-dashoffset: 0;
+  }
+
+  &__nib {
+    position: absolute;
+    // Same inset window the border occupies so offset-path coordinates
+    // align with the SVG. Sized to the same box via inset.
+    inset: -14px -18px;
+    width: calc(100% + 36px);
+    height: calc(100% + 28px);
+    pointer-events: none;
+    z-index: 2;
+    // offset-path is set inline (it carries the measured path string).
+    offset-rotate: auto;
+    offset-distance: 0%;
+    opacity: 0;
+    // Anchor the nib's transform origin so the visible tip sits on the path
+    transform-origin: 0 0;
+    will-change: offset-distance, opacity, transform;
+
+    svg {
+      // Lift the nib so its rendered anchor circle sits where the stroke is.
+      // The viewBox is already shifted (-1 -1 16 16) so (0,0) is the tip.
+      display: block;
+      transform: translate(-2px, -2px) scale(0.86);
+      transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    &--travel {
+      animation: heroNibDraw 1100ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    &--travel svg {
+      transform: translate(-2px, -2px) scale(1);
+    }
+
+    &--done {
+      animation: none;
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+  }
+
+// Single keyframe that drives the nib's fade-in, travel, and brief
+// overshoot all on one timeline — so it reads as a single confident gesture.
+// (Nested inside .hero {} per the file's structural convention — SCSS hoists.)
+@keyframes heroNibDraw {
+  0% {
+    opacity: 0;
+    offset-distance: 0%;
+  }
+  10% {
+    // Anchor "place" moment: nib appears at the start, scaled up briefly
+    opacity: 1;
+    offset-distance: 0%;
+  }
+  100% {
+    opacity: 1;
+    offset-distance: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // Skip the drawing animation entirely — show the completed border at
+  // rest, drop the nib. The title's resolved state is whatever it already
+  // is via the existing reduced-motion overrides earlier in this file.
+  .hero__text-border-path {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+  .hero__nib {
+    display: none !important;
+  }
+}
 
   // ============================================
 // Typed title / final word animation package
