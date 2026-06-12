@@ -67,6 +67,10 @@
   display: flex;
   flex-direction: column;
   background: $color-white;
+  // Prevent the off-screen panel start position from creating a horizontal scrollbar
+  overflow-x: clip;
+  // Dial for pencil ghost remnant opacity after eraser mechanic
+  --intro-remnant-opacity: 0.05;
 
   &__nav {
     position: fixed;
@@ -143,7 +147,7 @@
   }
 
   &__text {
-    position: relative; // anchor for the pen-tool border SVG + nib overlay
+    position: relative;
     display: flex;
     flex-direction: column;
   }
@@ -194,188 +198,9 @@
   }
 
   // ============================================
-  // Pen-tool border draw — Shopify-Editions-inspired signature flourish
+  // Typed title / final word animation package
   // ============================================
-  // After the typed title fully resolves, a thin brand-gray rounded-rect
-  // stroke is drawn around .hero__text by a small pen-nib that travels the
-  // path. The nib uses CSS `offset-path` (same path string as the SVG) so
-  // it stays glued to the leading edge. After the draw, the nib fades and
-  // the 0.5px stroke remains as the final "signature."
-  // Position the SVG overlay outside hero__text by the same padding values
-  // hard-coded in Hero.tsx (BORDER_PAD_X = 32, BORDER_PAD_Y = 28). The SVG
-  // carries its own width/height inline so the path coordinates match the
-  // visible bounds exactly — no scaling, no preserveAspectRatio surprises.
-  &__text-border {
-    position: absolute;
-    top: -28px;
-    left: -32px;
-    pointer-events: none;
-    z-index: 1;
-    overflow: visible;
-  }
 
-  &__text-border-path {
-    fill: none;
-    stroke: rgba(0, 0, 0, 0.16); // restrained brand-gray; reads as a guide line
-    stroke-width: 0.5px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    // pathLength=1 → dashoffset progresses from 1 to 0 to "draw" the stroke.
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    transition: stroke-dashoffset 1600ms cubic-bezier(0.4, 0.0, 0.2, 1);
-  }
-
-  &__text-border--drawn &__text-border-path {
-    stroke-dashoffset: 0;
-  }
-
-  &__nib {
-    position: absolute;
-    // Same anchor point as the SVG so offset-path coordinates line up.
-    top: -28px;
-    left: -32px;
-    pointer-events: none;
-    z-index: 2;
-    // offset-path is set inline (it carries the measured path string).
-    offset-rotate: auto;
-    offset-distance: 0%;
-    opacity: 0;
-    transform-origin: 0 0;
-    will-change: offset-distance, opacity, transform;
-
-    svg {
-      // Lift the nib so its rendered anchor circle sits where the stroke is.
-      // The viewBox is already shifted (-1 -1 16 16) so (0,0) is the tip.
-      display: block;
-      transform: translate(-2px, -2px) scale(0.86);
-      transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    &--travel {
-      animation: heroNibDraw 1800ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-    }
-
-    &--travel svg {
-      transform: translate(-2px, -2px) scale(1);
-    }
-
-    &--done {
-      animation: none;
-      opacity: 0;
-      transition: opacity 260ms ease;
-    }
-  }
-
-// Single keyframe that drives the nib's fade-in, travel, and brief
-// overshoot all on one timeline — so it reads as a single confident gesture.
-// (Nested inside .hero {} per the file's structural convention — SCSS hoists.)
-@keyframes heroNibDraw {
-  0% {
-    opacity: 0;
-    offset-distance: 0%;
-  }
-  10% {
-    // Anchor "place" moment: nib appears at the start, scaled up briefly
-    opacity: 1;
-    offset-distance: 0%;
-  }
-  100% {
-    opacity: 1;
-    offset-distance: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  // Skip the drawing animation entirely — show the completed border at
-  // rest, drop the nib. The title's resolved state is whatever it already
-  // is via the existing reduced-motion overrides earlier in this file.
-  .hero__text-border-path {
-    stroke-dashoffset: 0 !important;
-    transition: none !important;
-  }
-  .hero__nib {
-    display: none !important;
-  }
-}
-
-  // ============================================
-// Typed title / final word animation package
-// ============================================
-
-@keyframes hybridTypedSwap {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes hybridGradientReveal {
-  from {
-    opacity: 0.9;
-    filter: saturate(0.85);
-  }
-  to {
-    opacity: 1;
-    filter: saturate(1);
-  }
-}
-
-@keyframes hybridCursorBacktrack {
-  from {
-    right: -6px;
-  }
-  to {
-    right: calc(100% - 6px);
-  }
-}
-
-@keyframes hybridCursorSelect {
-  from {
-    right: calc(100% - 6px);
-  }
-  to {
-    right: -6px;
-  }
-}
-
-@keyframes hybridBboxFlash {
-  0%   { opacity: 0; transform: scale(0.96); }
-  35%  { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes hybridTypedSwap {
-    from { opacity: 1; transform: none; }
-    to { opacity: 1; transform: none; }
-  }
-
-  @keyframes hybridGradientReveal {
-    from { opacity: 1; filter: none; }
-    to { opacity: 1; filter: none; }
-  }
-
-  @keyframes hybridCursorBacktrack {
-    from { right: -6px; }
-    to { right: -6px; }
-  }
-
-  @keyframes hybridCursorSelect {
-    from { right: -6px; }
-    to { right: -6px; }
-  }
-
-  @keyframes hybridBboxFlash {
-    0%, 100% { opacity: 0; transform: none; }
-  }
-}
-
-.hero {
   &__h1-sr-only {
     position: absolute;
     width: 1px;
@@ -387,6 +212,7 @@
     white-space: nowrap;
     border: 0;
   }
+
   &__typed-wrap {
     position: relative;
     font-family: $font-family-heading;
@@ -418,16 +244,11 @@
   &__final-word-wrap {
     position: relative;
     display: inline-block;
-    // The blue selection band is absolutely positioned over this wrap. If the
-    // highlighted word ("Systems-First") wraps onto two lines on narrow
-    // viewports, the inline-block bounding box becomes one tall rectangle and
-    // the band stretches as a single flat strip across both lines (visible bug
-    // on mobile). Keep the highlighted word together so the band always covers
-    // a single line; let the surrounding title wrap on word boundaries.
+    // Keep highlighted word together so the selection band always covers a single line
     white-space: nowrap;
   }
 
-  // Selection highlight behind "Strategist"
+  // Selection highlight behind "System-First"
   &__selection {
     position: absolute;
     left: 0;
@@ -444,7 +265,7 @@
       opacity: 1;
       width: 100%;
       transition:
-        width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1),
+        width 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), // compressed from 1.1s
         opacity 0.12s ease;
     }
   }
@@ -467,7 +288,7 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: hybridGradientReveal 500ms ease forwards;
+    animation: hybridGradientReveal 400ms ease forwards; // compressed from 500ms
   }
 
   &__cursor {
@@ -491,13 +312,13 @@
     &--backtrack {
       animation:
         hybridCursorBlink 0.8s step-end infinite,
-        hybridCursorBacktrack 450ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        hybridCursorBacktrack 350ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards; // compressed from 450ms
     }
 
     &--selecting {
       animation:
         hybridCursorBlink 0.8s step-end infinite,
-        hybridCursorSelect 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        hybridCursorSelect 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; // compressed from 1.1s
     }
 
     &--hide {
@@ -548,7 +369,6 @@
     &--ml { top: 50%; left: -4px; transform: translateY(-50%); }
     &--mr { top: 50%; right: -4px; transform: translateY(-50%); }
   }
-}
 
   &__headline {
     font-family: $font-family-heading;
@@ -609,6 +429,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative; // needed so intro-overlay children position relative to this column
     @include fade-in-up(0.3s);
   }
 
@@ -651,18 +472,19 @@
     place-items: center;
   }
 
+  // Dashed selection ring — stage-keyed: hidden before lowfi, fades in at lowfi
   &__profile-selection {
     position: absolute;
     width: calc(var(--profile-size) + 40px);
     height: calc(var(--profile-size) + 40px);
-    transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 1px dashed rgba($color-primary, 0.5);
     pointer-events: none;
     z-index: 3;
     transition: border-color 0.2s ease;
+    // Default: hidden (before intro begins)
     opacity: 0;
-    animation: fadeInUp 0.6s ease-out 0.8s forwards;
+    animation: none;
   }
 
   &__profile-handle {
@@ -676,17 +498,19 @@
     &--br { right: 13%; bottom: 13%; }
   }
 
+  // Profile frame — shows neutral-gray bg shell from lowfi; border transparent until ring draw completes
   &__profile-frame {
     position: relative;
     width: var(--profile-size);
     height: var(--profile-size);
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid $color-primary;
+    border: 2px solid transparent; // border fades in after ring draw via stage CSS below
     box-shadow:
       0 0 0 8px rgba($color-primary, 0.08),
       0 16px 42px rgba(0, 0, 0, 0.18);
     z-index: 4;
+    background: #d8d8d8; // neutral-gray shell visible from lowfi stage
 
     &::after {
       content: "";
@@ -698,6 +522,7 @@
     }
   }
 
+  // Photo image — hidden (clip-path: 0%) before final stage; reveals at final
   &__profile-img {
     width: 100%;
     height: 115%;
@@ -705,6 +530,10 @@
     object-fit: cover;
     object-position: right;
     filter: saturate(0.98) contrast(1.03) brightness(1.02);
+    // Default hidden state before final stage
+    clip-path: circle(0% at 50% 43%);
+    transform: scale(1.04);
+    transition: none;
   }
 
   &__profile-label {
@@ -724,8 +553,10 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     pointer-events: none;
     transition: border-color 0.2s ease, transform 0.2s ease;
+    // Hidden by default; stage-keyed pop at lowfi
     opacity: 0;
-    animation: fadeInUp 0.5s ease-out forwards;
+    transform: scale(0.96);
+    animation: none;
 
     span {
       color: $color-primary;
@@ -741,20 +572,19 @@
       top: 50%;
     }
 
-    // Stagger annotation labels so they appear after the selection ring and alongside the layers panel
-    &--token     { top: 14%; left: 4%;   animation-delay: 1.0s; }
+    &--token     { top: 14%; left: 4%;   }
     &--token::after     { left: 100%;  width: 50px; }
 
-    &--radius    { top: 8%;  right: 14%; animation-delay: 1.1s; }
+    &--radius    { top: 8%;  right: 14%; }
     &--radius::after    { right: 100%; width: 40px; }
 
-    &--component { top: 32%; right: 0%;  animation-delay: 1.2s; }
+    &--component { top: 32%; right: 0%;  }
     &--component::after { right: 100%; width: 46px; }
 
-    &--layer     { bottom: 22%; left: 2%; animation-delay: 1.3s; }
+    &--layer     { bottom: 22%; left: 2%; }
     &--layer::after     { left: 100%;  width: 52px; }
 
-    &--src       { bottom: 10%; right: 8%; animation-delay: 1.4s; }
+    &--src       { bottom: 10%; right: 8%; }
     &--src::after       { right: 100%; width: 42px; }
   }
 
@@ -773,8 +603,8 @@
     border-radius: $radius-lg;
     box-shadow: $shadow-lg;
     overflow: hidden;
+    // Default: hidden; animated in via stage-keyed CSS below
     opacity: 0;
-    animation: fadeInUp 0.8s ease-out forwards;
 
     img {
       display: block;
@@ -787,14 +617,9 @@
       width: 260px;
       top: -10px;
       right: -60px;
-      animation-delay: 0.9s;
-      animation: fadeInUp 0.8s ease-out 0.9s forwards,
-                 uiDrift1 6s ease-in-out 1.7s infinite;
     }
 
-    // DevTools-style class tag indicator that replaces the old prompt SVG.
-    // Same slot as --prompt so the existing fade-in + drift animations keep
-    // the visual rhythm. Box-shadow + radius mimic Chrome's element overlay.
+    // DevTools-style class tag indicator
     &--tag-indicator {
       top: 6%;
       left: -8%;
@@ -804,24 +629,24 @@
       box-shadow: none;
       border-radius: 0;
       overflow: visible;
-      animation: fadeInUp 0.8s ease-out 0.9s forwards,
-                 uiDrift1 6s ease-in-out 1.7s infinite;
+      // Hidden; pops at lowfi stage
+      opacity: 0;
+      transform: scale(0.96);
     }
 
+    // Layers panel — off-screen (right) before panel stage; docks in at panel
     &--layers {
       width: 200px;
       bottom: -10px;
       right: -70px;
-      animation-delay: 1.2s;
-      animation: fadeInUp 0.8s ease-out 1.2s forwards,
-                 uiDrift3 8s ease-in-out 2s infinite;
       overflow: visible;
+      // Off-screen start: panel slides in from the right via heroPanelDock keyframes
+      transform: translateX(calc(100% + 80px));
+      opacity: 0;
     }
   }
 
-  // DevTools-style class tag pill — white card with bold tag + class name and
-  // a dim dimensions readout. Pointer triangle sits at bottom-left so the
-  // card reads as "labeling" the element below it.
+  // DevTools-style class tag pill
   &__tag-indicator {
     position: relative;
     display: inline-flex;
@@ -839,8 +664,6 @@
     line-height: 1.3;
     white-space: nowrap;
 
-    // Pointer triangle, bottom-left edge (drop-shadow renders the same tail
-    // shadow direction as the card's main shadow).
     &::after {
       content: "";
       position: absolute;
@@ -1019,6 +842,1198 @@
   }
 }
 
+// ============================================
+// Typed-title cursor/selection keyframes
+// ============================================
+
+@keyframes hybridTypedSwap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hybridGradientReveal {
+  from {
+    opacity: 0.9;
+    filter: saturate(0.85);
+  }
+  to {
+    opacity: 1;
+    filter: saturate(1);
+  }
+}
+
+// Cursor backtrack — compressed 350ms (was 450ms)
+@keyframes hybridCursorBacktrack {
+  from {
+    right: -6px;
+  }
+  to {
+    right: calc(100% - 6px);
+  }
+}
+
+// Cursor select sweep — compressed 850ms (was 1100ms)
+@keyframes hybridCursorSelect {
+  from {
+    right: calc(100% - 6px);
+  }
+  to {
+    right: -6px;
+  }
+}
+
+@keyframes hybridBboxFlash {
+  0%   { opacity: 0; transform: scale(0.96); }
+  35%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes hybridTypedSwap {
+    from { opacity: 1; transform: none; }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes hybridGradientReveal {
+    from { opacity: 1; filter: none; }
+    to { opacity: 1; filter: none; }
+  }
+
+  @keyframes hybridCursorBacktrack {
+    from { right: -6px; }
+    to { right: -6px; }
+  }
+
+  @keyframes hybridCursorSelect {
+    from { right: -6px; }
+    to { right: -6px; }
+  }
+
+  @keyframes hybridBboxFlash {
+    0%, 100% { opacity: 0; transform: none; }
+  }
+}
+
+// ============================================
+// Intro overlay elements — construction/annotation pass
+// ============================================
+// Local duration vars for the intro block
+$intro-sketch:        700ms;
+$intro-ring:          500ms;
+$intro-note-pop:      120ms;
+$intro-photo-reveal:  600ms;
+$intro-panel-dock:    650ms;
+$intro-cursor-arc:    400ms;
+$intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
+
+// Scrawl path draw-in via stroke-dashoffset
+@keyframes heroScrawlDraw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+// Eraser scrub — two diagonal passes across the blob area
+@keyframes heroEraserScrub {
+  0%   { opacity: 0; transform: translate(60px, 60px) rotate(-18deg); }
+  8%   { opacity: 1; transform: translate(60px, 60px) rotate(-18deg); }
+  42%  { opacity: 1; transform: translate(200px, 180px) rotate(-18deg); }
+  58%  { opacity: 1; transform: translate(155px, 148px) rotate(-18deg); }
+  90%  { opacity: 1; transform: translate(310px, 265px) rotate(-18deg); }
+  100% { opacity: 0; transform: translate(310px, 265px) rotate(-18deg); }
+}
+
+// Scrawl SVG mask wipe — synced to eraser scrub
+@keyframes heroScrawlWipe {
+  from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+  to   { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+}
+
+// Panel dock entrance keyframes — named so Hero.tsx can listen for animationend
+@keyframes heroPanelDock {
+  0%   { transform: translateX(calc(100% + 80px)); opacity: 0; }
+  60%  { transform: translateX(-6px); opacity: 1; }
+  80%  { transform: translateX(2px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+// Sketch circle draw-in via stroke-dashoffset
+@keyframes heroSketchDraw {
+  from { stroke-dashoffset: 1; opacity: 0.7; }
+  to   { stroke-dashoffset: 0; opacity: 0.7; }
+}
+
+// Orange ring draw-in
+@keyframes heroRingDraw {
+  from { stroke-dashoffset: 1; opacity: 1; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+
+// Mono note pop
+@keyframes heroNotePop {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Photo clip-path reveal + scale settle
+@keyframes heroPhotoReveal {
+  from {
+    clip-path: circle(0% at 50% 43%);
+    transform: scale(1.04);
+  }
+  to {
+    clip-path: circle(75% at 50% 43%);
+    transform: scale(1);
+  }
+}
+
+// Cursor arc in from the right — compressed to 230ms (first leg of cursor stage)
+@keyframes heroCursorArc {
+  0%   { transform: translate(80px, -40px) rotate(-15deg) scale(0.7); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+}
+
+// Right-click pulse — small scale dip at ~240ms into cursor stage
+@keyframes heroCursorRightClick {
+  0%   { transform: translate(0, 0) scale(1); }
+  40%  { transform: translate(0, 0) scale(0.88); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+// Cursor travels from click point to Paste row (row 3 of 5)
+//
+// Coordinate derivation (commented here per spec):
+//   .hero__visual is 420×420 (desktop container).
+//   .hero__intro-cursor resting position: top:40%, right:10%
+//     → 0.40×420 = 168px from visual top; (420 − 0.10×420) = 378px from visual left.
+//   .hero__intro-menu resting position: top:28%, left:55%
+//     → 0.28×420 = 117.6px from visual top; 0.55×420 = 231px from visual left.
+//   Each __row: padding 5px top+bottom (10px total) + font 0.7rem×line-height ~1.4 ≈ 9.8px
+//     → row height ≈ 19.8px ≈ 20px.
+//   Row 3 (Paste) center from menu top = 20 + 20 + 10 = 50px.
+//   Cursor vertical offset from menu top = 168 − 117.6 = 50.4px.
+//     → Paste row center is at 50px from menu top; cursor lands at 50.4px → Δy ≈ −0.4px (negligible).
+//   Horizontally: menu min-width 140px, cursor lands at 378px from left;
+//     menu left edge at 231px, row center ≈ 231 + 70 = 301px from visual left.
+//     Cursor at 378px → Δx = 301 − 378 = −77px (move left).
+//   Final translate from resting (0,0): translate(-77px, 0).
+@keyframes heroCursorToPaste {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-77px, 0) scale(1); }
+}
+
+// Cursor 1px down-tick during Paste press
+@keyframes heroCursorPressTick {
+  0%   { transform: translate(-77px, 0) scale(1); }
+  50%  { transform: translate(-77px, 1px) scale(1); }
+  100% { transform: translate(-77px, 1px) scale(1); }
+}
+
+// Cursor fade out during panel dock
+@keyframes heroCursorFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+// Context menu pop — only appears, held open; close is separate keyframe
+@keyframes heroMenuPop {
+  0%   { opacity: 0; transform: scale(0.94) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+// Paste row hover highlight tint
+@keyframes heroPasteHover {
+  0%   { background: transparent; color: rgba(0, 0, 0, 0.8); }
+  100% { background: rgba(0, 96, 215, 0.14); color: rgba(0, 0, 0, 0.9); }
+}
+
+// Paste row pressed state — darkens + slight scale dip
+@keyframes heroPastePress {
+  0%   { background: rgba(0, 96, 215, 0.14); color: rgba(0, 0, 0, 0.9); transform: scale(1); }
+  100% { background: #0060d7; color: #ffffff; transform: scale(0.97); }
+}
+
+// Note stagger fade-out (lowfi → final transition)
+@keyframes heroNoteFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+// Grid fade in then out
+@keyframes heroGridFade {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+// Crosshair construction line draw (hline and vline)
+@keyframes heroLineDraw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+// Silhouette draw-in via dashoffset
+@keyframes heroSilhouetteDraw {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+
+// Note erase: clip-path wipe from right + fade to remnant
+@keyframes heroNoteErase {
+  from {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0 65%);
+    opacity: var(--intro-remnant-opacity);
+  }
+}
+
+// Arrow draw-in via dashoffset
+@keyframes heroArrowDraw {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+
+// Arrow erase (same as note erase but for the SVG container)
+@keyframes heroArrowErase {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+// Menu close: starts from pressed/held state and fades out — no visual fight
+@keyframes heroMenuClose {
+  0%   { opacity: 1; transform: scale(1) translateY(0); }
+  30%  { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.97) translateY(-2px); }
+}
+
+// Generic pop-in for UI elements at lowfi stage
+@keyframes heroLowfiPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+// Selection ring fade-in
+@keyframes heroRingFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// ── Base styles for intro overlay elements (always pointer-events:none) ──
+.hero__intro-grid,
+.hero__intro-sketch,
+.hero__intro-ring,
+.hero__intro-note,
+.hero__intro-crop,
+.hero__intro-cursor,
+.hero__intro-menu,
+.hero__intro-arrow,
+.hero__intro-scrawl,
+.hero__intro-scrawl-remnant,
+.hero__intro-eraser {
+  pointer-events: none;
+  position: absolute;
+}
+
+// Scrawl marker SVG — inside .hero__image-container (420×420), above sketch
+.hero__intro-scrawl {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0;
+  // Mask used for eraser-wipe mechanic at sketch stage
+  -webkit-mask-image: linear-gradient(105deg, transparent 45%, black 55%);
+  -webkit-mask-size: 300% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-image: linear-gradient(105deg, transparent 45%, black 55%);
+  mask-size: 300% 100%;
+  mask-position: 100% 0;
+
+  path {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.32);
+    stroke-width: 2.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength is an SVG attribute set in JSX — NOT a CSS property
+  }
+}
+
+// Scrawl tick remnant — separate SVG so mask never touches it
+.hero__intro-scrawl-remnant {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0;
+
+  path {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.32);
+    stroke-width: 2.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength is an SVG attribute set in JSX — NOT a CSS property
+  }
+}
+
+// Eraser block — small pill div that animates across the scrawl
+.hero__intro-eraser {
+  width: 20px;
+  height: 11px;
+  border-radius: 3px;
+  background: #e9e5df;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+  transform: translate(60px, 60px) rotate(-18deg);
+  top: 0;
+  left: 0;
+  z-index: 8;
+  opacity: 0;
+}
+
+.hero__intro-grid {
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  opacity: 0;
+}
+
+.hero__intro-sketch {
+  // Positioned inside .hero__image-container (420×420, position:relative)
+  // so it's perfectly concentric with the profile circle
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+
+  circle {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.22);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength is an SVG attribute set in JSX — NOT a CSS property
+  }
+
+  &__hline,
+  &__vline {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength set in JSX
+  }
+
+  &__silhouette {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 1;
+    transition: opacity 250ms ease;
+    // pathLength set in JSX
+  }
+}
+
+.hero__intro-ring {
+  // Positioned inside .hero__image-container — inset:0, exactly concentric
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  opacity: 0;
+
+  circle {
+    fill: none;
+    stroke: $color-primary;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength is an SVG attribute set in JSX — NOT a CSS property
+  }
+}
+
+.hero__intro-note {
+  font-family: $font-family-mono;
+  font-size: 0.6rem;
+  letter-spacing: -0.01em;
+  color: rgba(0, 0, 0, 0.55);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 2px 5px;
+  z-index: 6;
+  opacity: 0;
+  white-space: nowrap;
+  // Clip used for eraser mechanic; starts fully visible
+  clip-path: inset(0 0 0 0);
+
+  // Per-note rotation for chicken-scratch feel
+  &--shell  { top: 12%; left: 3%;   transform: rotate(-2deg); }
+  &--radius { top: 5%;  right: 10%; transform: rotate(1.5deg); }
+  &--mask   { bottom: 30%; left: 2%; transform: rotate(-1.5deg); }
+  &--motion { bottom: 18%; right: 6%; transform: rotate(1deg); }
+}
+
+// Hand-drawn curved arrows — base styles (positioned on .hero__visual)
+.hero__intro-arrow {
+  pointer-events: none;
+  position: absolute;
+  z-index: 6;
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+
+  path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    // pathLength set in JSX for the curved stroke
+  }
+
+  &--1 {
+    // Arrow from --radius-full note (top right) toward the orange ring
+    top: 8%;
+    right: 22%;
+    transform: rotate(20deg);
+  }
+
+  &--2 {
+    // Arrow from image-mask: circle note (bottom left) toward the ring
+    bottom: 33%;
+    left: 16%;
+    transform: rotate(-10deg);
+  }
+}
+
+.hero__intro-crop {
+  // Bounding corners of the profile area
+  inset: 8% 8%;
+  z-index: 6;
+
+  span {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: rgba(0, 0, 0, 0.35);
+    border-style: solid;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &__tl { top: 0; left: 0;  border-width: 1.5px 0 0 1.5px; }
+  &__tr { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
+  &__bl { bottom: 0; left: 0;  border-width: 0 0 1.5px 1.5px; }
+  &__br { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
+}
+
+.hero__intro-cursor {
+  // Starts off-screen right; arc keyframes bring it into position over the profile
+  top: 40%;
+  right: 10%;
+  width: 28px;
+  height: 28px;
+  z-index: 20;
+  opacity: 0;
+}
+
+.hero__intro-menu {
+  // Context menu card positioned over the profile
+  top: 28%;
+  left: 55%;
+  z-index: 21;
+  background: $color-white;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.16),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  min-width: 140px;
+  overflow: hidden;
+  opacity: 0;
+  font-family: $font-family-mono;
+  font-size: 0.7rem;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    color: rgba(0, 0, 0, 0.8);
+    gap: 16px;
+
+    span {
+      color: rgba(0, 0, 0, 0.4);
+      font-size: 0.62rem;
+    }
+
+    // --highlight: base state is NOT highlighted — hover + press fire via
+    // stage-keyed keyframes in [data-intro-stage="cursor"] only.
+  }
+}
+
+// ============================================
+// Intro stage-keyed CSS — data-intro-stage on .hero root
+// Stage order: scrawl → sketch → lowfi → cursor → final → panel → type → done
+// Desktop schedule: sketch@800, lowfi@1700, cursor@2400, final@3200, panel@3750, type via animationend + 4800ms fallback
+// Mobile schedule:  sketch@0 (initial), lowfi@400, final@800 (no cursor), type@1300
+// Stages are cumulative — higher stages carry earlier-stage final states
+// ============================================
+
+// ── scrawl stage (0–800ms desktop only) ──────────────────────────────────
+// Napkin-rough marker strokes draw in fast; mobile starts at sketch and never enters scrawl
+.hero[data-intro-stage="scrawl"] {
+  // Scrawl SVG becomes visible; paths draw in staggered fast
+  .hero__intro-scrawl {
+    opacity: 1;
+    // Reset mask to fully visible during draw phase
+    -webkit-mask-image: none;
+    mask-image: none;
+
+    // blob 0–380ms
+    .hero__intro-scrawl__blob {
+      animation: heroScrawlDraw 380ms cubic-bezier(0.2, 0.8, 0.2, 1) 0ms forwards;
+    }
+    // squiggle-1 250–500ms
+    .hero__intro-scrawl__squiggle-1 {
+      animation: heroScrawlDraw 250ms cubic-bezier(0.2, 0.8, 0.2, 1) 250ms forwards;
+    }
+    // squiggle-2 380–600ms
+    .hero__intro-scrawl__squiggle-2 {
+      animation: heroScrawlDraw 220ms cubic-bezier(0.2, 0.8, 0.2, 1) 380ms forwards;
+    }
+    // arrow 450–680ms
+    .hero__intro-scrawl__arrow {
+      animation: heroScrawlDraw 230ms cubic-bezier(0.2, 0.8, 0.2, 1) 450ms forwards;
+    }
+  }
+
+  // Tick remnant draws in 520–650ms
+  .hero__intro-scrawl-remnant {
+    opacity: 1;
+    .hero__intro-scrawl__tick {
+      animation: heroScrawlDraw 130ms cubic-bezier(0.2, 0.8, 0.2, 1) 520ms forwards;
+    }
+  }
+
+  // Other overlays hidden during scrawl
+  .hero__intro-grid   { opacity: 0; }
+  .hero__intro-sketch { opacity: 0; }
+  .hero__intro-ring   { opacity: 0; }
+  .hero__intro-crop span { opacity: 0; }
+  .hero__intro-note   { opacity: 0; }
+  .hero__intro-arrow  { opacity: 0; }
+  .hero__intro-cursor { opacity: 0; }
+  .hero__intro-menu   { opacity: 0; }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ── sketch stage (800ms desktop / 0ms mobile) ─────────────────────────────
+// Rough sketch first frame: grid, crosshairs, wobbly circles, silhouette, notes, arrows
+// On desktop this fires at 800ms — eraser scrubs the scrawl while sketch draws in (overlap intentional)
+.hero[data-intro-stage="sketch"] {
+  // Grid fades in during sketch
+  .hero__intro-grid {
+    animation: heroGridFade 1200ms ease forwards;
+  }
+
+  .hero__intro-sketch {
+    opacity: 1;
+
+    // Crosshair lines draw from 0–180ms into the stage (overlap with eraser)
+    &__hline {
+      animation: heroLineDraw 180ms $intro-easing 50ms forwards;
+    }
+    &__vline {
+      animation: heroLineDraw 180ms $intro-easing 80ms forwards;
+    }
+
+    // Wobbly sketch circles draw 150–600ms (pathLength=1 in JSX makes this work)
+    circle:nth-child(3) {
+      animation: heroSketchDraw 450ms $intro-easing 150ms forwards;
+    }
+    circle:nth-child(4) {
+      animation: heroSketchDraw 430ms $intro-easing 200ms forwards;
+    }
+
+    // Silhouette placeholder draws 400–750ms
+    &__silhouette {
+      animation: heroSilhouetteDraw 350ms $intro-easing 400ms forwards;
+      opacity: 0;
+    }
+  }
+
+  // Crop marks appear with sketch
+  .hero__intro-crop span {
+    opacity: 1;
+    transition: opacity 200ms ease 150ms;
+  }
+
+  // Notes pop in with slight stagger 300–600ms
+  .hero__intro-note {
+    &--shell  { animation: heroNotePop $intro-note-pop $intro-easing 300ms forwards; }
+    &--radius { animation: heroNotePop $intro-note-pop $intro-easing 380ms forwards; }
+    &--mask   { animation: heroNotePop $intro-note-pop $intro-easing 460ms forwards; }
+    &--motion { animation: heroNotePop $intro-note-pop $intro-easing 540ms forwards; }
+  }
+
+  // Arrows draw in 450–650ms
+  .hero__intro-arrow {
+    &--1 path:first-child { animation: heroArrowDraw 150ms $intro-easing 450ms forwards; }
+    &--2 path:first-child { animation: heroArrowDraw 150ms $intro-easing 550ms forwards; }
+  }
+
+  // Eraser scrubs across the scrawl (420ms), starts at stage entry (0ms into sketch)
+  .hero__intro-eraser {
+    animation: heroEraserScrub 420ms cubic-bezier(0.2, 0.8, 0.2, 1) 0ms forwards;
+  }
+
+  // Scrawl wipes behind the eraser (mask sweeps 0→420ms, fully visible before wipe)
+  .hero__intro-scrawl {
+    opacity: 1;
+    -webkit-mask-image: linear-gradient(105deg, transparent 45%, black 55%);
+    -webkit-mask-size: 300% 100%;
+    -webkit-mask-position: 100% 0;
+    mask-image: linear-gradient(105deg, transparent 45%, black 55%);
+    mask-size: 300% 100%;
+    mask-position: 100% 0;
+    animation: heroScrawlWipe 420ms cubic-bezier(0.2, 0.8, 0.2, 1) 0ms forwards;
+    // All paths are already at dashoffset 0 from scrawl stage
+    .hero__intro-scrawl__blob,
+    .hero__intro-scrawl__squiggle-1,
+    .hero__intro-scrawl__squiggle-2,
+    .hero__intro-scrawl__arrow {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  // Tick remnant drops to remnant opacity from sketch stage onward
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    .hero__intro-scrawl__tick {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+// ── lowfi stage ───────────────────────────────────────────────────────────
+// Gray shell revealed, orange ring draws, notes 1+3 erase, selection ring + tag appear
+.hero[data-intro-stage="lowfi"] {
+  // Grid fades out
+  .hero__intro-grid {
+    opacity: 0;
+    transition: opacity 400ms ease;
+  }
+
+  // Sketch carries forward with circles visible, silhouette settled
+  .hero__intro-sketch {
+    opacity: 0.6;
+
+    &__hline,
+    &__vline {
+      stroke-dashoffset: 0;
+    }
+
+    circle:nth-child(3),
+    circle:nth-child(4) {
+      stroke-dashoffset: 0;
+    }
+
+    &__silhouette {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+
+  // Orange ring begins drawing (pathLength=1 in JSX enables dashoffset draw)
+  .hero__intro-ring {
+    animation: heroRingDraw $intro-ring $intro-easing 100ms forwards;
+  }
+
+  // Crop marks carried forward
+  .hero__intro-crop span {
+    opacity: 1;
+  }
+
+  // Notes 1 (shell) and 3 (mask) erase — pass 1
+  .hero__intro-note {
+    // Notes 2 + 4 remain visible (will erase at final)
+    &--radius { opacity: 1; clip-path: inset(0 0 0 0); }
+    &--motion { opacity: 1; clip-path: inset(0 0 0 0); }
+    // Notes 1 + 3 erase over 220ms, staggered 120ms
+    &--shell  { animation: heroNoteErase 220ms $intro-easing 0ms forwards; }
+    &--mask   { animation: heroNoteErase 220ms $intro-easing 120ms forwards; }
+  }
+
+  // Arrows carried at their settled drawn state
+  .hero__intro-arrow {
+    opacity: 1;
+    path:first-child { stroke-dashoffset: 0; }
+  }
+
+  // Dashed selection ring fades in
+  .hero__profile-selection {
+    animation: heroRingFadeIn 0.6s ease-out forwards;
+  }
+
+  // Tag card + layer pill pop at lowfi
+  .hero__ui-element--tag-indicator {
+    animation: heroLowfiPop 0.35s $intro-easing forwards;
+  }
+
+  .hero__profile-label--layer {
+    animation: heroLowfiPop 0.35s $intro-easing 80ms forwards;
+  }
+
+  // Scrawl wiped, eraser gone
+  .hero__intro-scrawl {
+    opacity: 0;
+  }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ── cursor stage ─────────────────────────────────────────────────────────
+// Cursor arcs in and right-click menu appears — photo NOT yet revealed (empty gray frame)
+// This is the beat BEFORE Paste, so no photo reveal here.
+.hero[data-intro-stage="cursor"] {
+  // Grid gone
+  .hero__intro-grid {
+    opacity: 0;
+  }
+
+  // Sketch settled from lowfi
+  .hero__intro-sketch {
+    opacity: 0.6;
+
+    &__hline,
+    &__vline {
+      stroke-dashoffset: 0;
+    }
+
+    circle:nth-child(3),
+    circle:nth-child(4) {
+      stroke-dashoffset: 0;
+    }
+
+    &__silhouette {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+
+  // Orange ring fully drawn (settled from lowfi draw)
+  .hero__intro-ring {
+    opacity: 1;
+    circle { stroke-dashoffset: 0; }
+  }
+
+  // Crop marks visible
+  .hero__intro-crop span {
+    opacity: 1;
+  }
+
+  // Notes — 1+3 at remnant, 2+4 visible
+  .hero__intro-note {
+    &--shell  { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--mask   { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--radius { opacity: 1; clip-path: inset(0 0 0 0); }
+    &--motion { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+
+  // Arrows at settled drawn state
+  .hero__intro-arrow {
+    opacity: 1;
+    path:first-child { stroke-dashoffset: 0; }
+  }
+
+  // Photo NOT revealed — still gray shell (Paste hasn't happened yet)
+  // profile-frame has no border-color here intentionally
+
+  // Selection ring + tag carried from lowfi
+  .hero__profile-selection {
+    opacity: 1;
+  }
+  .hero__ui-element--tag-indicator {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .hero__profile-label--layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Cursor choreography — total window 700ms (cursor stage: 2400→3100ms):
+  //   0–230ms   arc in to profile (heroCursorArc)
+  //   230–270ms right-click pulse (heroCursorRightClick)
+  //   280ms     menu pops (heroMenuPop, see below)
+  //   300–470ms cursor travels left to Paste row (heroCursorToPaste, delay 300ms, dur 170ms)
+  //   470–560ms Paste row hover tint appears (heroPasteHover, delay 470ms, dur 120ms)
+  //   560–680ms Paste row + cursor pressed state (heroPastePress / heroCursorPressTick, held forwards)
+  .hero__intro-cursor {
+    animation:
+      heroCursorArc       230ms $intro-easing   0ms   forwards,
+      heroCursorRightClick 60ms ease-out        240ms forwards,
+      heroCursorToPaste   170ms $intro-easing   300ms forwards,
+      heroCursorPressTick 110ms ease-in-out     560ms forwards;
+  }
+
+  // Menu pops at 280ms — single pop-in, stays held (close fires in final stage)
+  .hero__intro-menu {
+    animation: heroMenuPop 200ms $intro-easing 280ms forwards;
+  }
+
+  // Paste row: hover tint at cursor arrival (470ms), then pressed state (560ms) — held forwards
+  .hero__intro-menu__row--highlight {
+    transform-origin: center;
+    animation:
+      heroPasteHover 120ms ease-out   470ms forwards,
+      heroPastePress 110ms ease-in-out 560ms forwards;
+  }
+
+  // Scrawl wiped, eraser gone
+  .hero__intro-scrawl {
+    opacity: 0;
+  }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ── final stage ──────────────────────────────────────────────────────────
+// Paste moment: menu closes, photo reveals, sketch/silhouette erase, notes 2+4 erase
+.hero[data-intro-stage="final"] {
+  // Grid gone
+  .hero__intro-grid {
+    opacity: 0;
+  }
+
+  // Sketch + silhouette fade out as photo pastes in
+  .hero__intro-sketch {
+    opacity: 0;
+    transition: opacity 250ms ease;
+
+    &__silhouette {
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+  }
+
+  // Orange ring SVG hides — real border fades in below
+  .hero__intro-ring {
+    opacity: 0;
+    transition: opacity 200ms ease 200ms;
+  }
+
+  // Crop marks gone
+  .hero__intro-crop span {
+    opacity: 0;
+  }
+
+  // Notes — all at remnant: 1+3 already erased, 2+4 erase now (pass 2)
+  .hero__intro-note {
+    &--shell  { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--mask   { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--radius { animation: heroNoteErase 220ms $intro-easing 0ms forwards; }
+    &--motion { animation: heroNoteErase 220ms $intro-easing 120ms forwards; }
+  }
+
+  // Arrows erase as photo pastes
+  .hero__intro-arrow {
+    animation: heroArrowErase 200ms ease forwards;
+  }
+
+  // Cursor fades out (menu is closing)
+  .hero__intro-cursor {
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  // Menu closes with fast ~150ms Paste-dwell then close
+  .hero__intro-menu {
+    animation: heroMenuClose 300ms $intro-easing forwards;
+  }
+
+  // Real orange border fades in as SVG ring exits
+  .hero__profile-frame {
+    border-color: $color-primary;
+    transition: border-color 300ms ease;
+  }
+
+  // Photo reveals via clip-path + scale settle — the Paste moment (~550ms)
+  .hero__profile-img {
+    animation: heroPhotoReveal 550ms $intro-easing forwards;
+  }
+
+  // Selection ring carried forward
+  .hero__profile-selection {
+    opacity: 1;
+  }
+
+  // Tag + pill carried forward
+  .hero__ui-element--tag-indicator {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .hero__profile-label--layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Scrawl wiped, eraser gone
+  .hero__intro-scrawl {
+    opacity: 0;
+  }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ── panel stage ──────────────────────────────────────────────────────────
+.hero[data-intro-stage="panel"] {
+  // Carry all final-stage settled states
+  .hero__profile-frame {
+    border-color: $color-primary;
+  }
+  .hero__profile-img {
+    clip-path: circle(75% at 50% 43%);
+    transform: scale(1);
+  }
+  .hero__profile-selection {
+    opacity: 1;
+  }
+  .hero__ui-element--tag-indicator {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .hero__profile-label--layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Intro overlays all gone
+  .hero__intro-sketch { opacity: 0; }
+  .hero__intro-ring   { opacity: 0; }
+  .hero__intro-grid   { opacity: 0; }
+  .hero__intro-crop span { opacity: 0; }
+  .hero__intro-cursor { opacity: 0; }
+  .hero__intro-menu   { opacity: 0; }
+
+  // Remnant ghosts persist
+  .hero__intro-note {
+    &--shell  { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--mask   { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--radius { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--motion { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+  }
+  .hero__intro-arrow { opacity: 0; }
+
+  // Scrawl wiped, eraser gone, tick remnant persists
+  .hero__intro-scrawl { opacity: 0; }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+
+  // Panel docks in from the right — animationend triggers 'type' stage in JS
+  // Panel dock stays 650ms
+  .hero__ui-element--layers {
+    will-change: transform;
+    animation: heroPanelDock $intro-panel-dock $intro-easing forwards;
+  }
+}
+
+// ── type stage ───────────────────────────────────────────────────────────
+.hero[data-intro-stage="type"] {
+  // All visual elements in final settled state — type machine now running
+  .hero__profile-frame {
+    border-color: $color-primary;
+  }
+  .hero__profile-img {
+    clip-path: circle(75% at 50% 43%);
+    transform: scale(1);
+  }
+  .hero__profile-selection {
+    opacity: 1;
+  }
+  .hero__ui-element--tag-indicator {
+    opacity: 1;
+    transform: scale(1);
+    // Resume idle drift once docked
+    animation: uiDrift1 6s ease-in-out 0.5s infinite;
+  }
+  .hero__profile-label--layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .hero__ui-element--layers {
+    // Panel settled, will-change removed, idle drift starts
+    will-change: auto;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  // Intro overlays all gone
+  .hero__intro-sketch { opacity: 0; }
+  .hero__intro-ring   { opacity: 0; }
+  .hero__intro-grid   { opacity: 0; }
+  .hero__intro-crop span { opacity: 0; }
+  .hero__intro-cursor { opacity: 0; }
+  .hero__intro-menu   { opacity: 0; }
+
+  // Remnant pencil ghosts persist at dial opacity
+  .hero__intro-note {
+    &--shell  { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--mask   { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--radius { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--motion { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+  }
+  .hero__intro-arrow { opacity: 0; }
+
+  // Scrawl wiped, eraser gone, tick remnant persists
+  .hero__intro-scrawl { opacity: 0; }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ── done stage — type machine complete, everything settled ────────────────
+.hero[data-intro-stage="done"] {
+  .hero__profile-frame {
+    border-color: $color-primary;
+  }
+  .hero__profile-img {
+    clip-path: circle(75% at 50% 43%);
+    transform: scale(1);
+  }
+  .hero__profile-selection {
+    opacity: 1;
+  }
+  .hero__ui-element--tag-indicator {
+    opacity: 1;
+    transform: scale(1);
+    animation: uiDrift1 6s ease-in-out 0s infinite;
+  }
+  .hero__profile-label--layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .hero__ui-element--layers {
+    will-change: auto;
+    transform: translateX(0);
+    opacity: 1;
+    animation: uiDrift3 8s ease-in-out 0s infinite;
+  }
+
+  // Intro overlays all gone
+  .hero__intro-sketch { opacity: 0; }
+  .hero__intro-ring   { opacity: 0; }
+  .hero__intro-grid   { opacity: 0; }
+  .hero__intro-crop span { opacity: 0; }
+  .hero__intro-cursor { opacity: 0; }
+  .hero__intro-menu   { opacity: 0; }
+
+  // Remnant pencil ghosts persist
+  .hero__intro-note {
+    &--shell  { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--mask   { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--radius { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+    &--motion { opacity: var(--intro-remnant-opacity); clip-path: inset(0 0 0 65%); }
+  }
+  .hero__intro-arrow { opacity: 0; }
+
+  // Scrawl wiped, eraser gone, tick remnant persists
+  .hero__intro-scrawl { opacity: 0; }
+  .hero__intro-scrawl-remnant {
+    opacity: var(--intro-remnant-opacity);
+    path { stroke-dashoffset: 0; }
+  }
+  .hero__intro-eraser { opacity: 0; }
+}
+
+// ============================================
+// Reduced-motion overrides
+// ============================================
+@media (prefers-reduced-motion: reduce) {
+  // Hide all intro overlay elements unconditionally
+  .hero__intro-grid,
+  .hero__intro-sketch,
+  .hero__intro-ring,
+  .hero__intro-note,
+  .hero__intro-crop,
+  .hero__intro-cursor,
+  .hero__intro-menu,
+  .hero__intro-arrow,
+  .hero__intro-scrawl,
+  .hero__intro-scrawl-remnant,
+  .hero__intro-eraser {
+    display: none !important;
+  }
+
+  // Show all final-frame UI regardless of stage attribute
+  .hero[data-intro-stage] {
+    .hero__profile-frame {
+      border-color: $color-primary;
+    }
+    .hero__profile-img {
+      clip-path: circle(75% at 50% 43%) !important;
+      transform: scale(1) !important;
+      animation: none !important;
+      transition: none !important;
+    }
+    .hero__profile-selection {
+      opacity: 1 !important;
+      animation: none !important;
+    }
+    .hero__ui-element--tag-indicator {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      animation: none !important;
+    }
+    .hero__profile-label--layer {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      animation: none !important;
+    }
+    .hero__ui-element--layers {
+      transform: translateX(0) !important;
+      opacity: 1 !important;
+      animation: none !important;
+    }
+  }
+}
+
+// ============================================
+// Responsive breakpoints
+// ============================================
+
 @media (max-width: $breakpoint-lg) {
   .hero {
     --profile-size: clamp(228px, 26vw, 304px);
@@ -1037,6 +2052,7 @@
       &--prompt { width: 200px; right: -40px; }
       &--layers { width: 160px; }
     }
+    // hero__intro-ring is now inset:0/width:100%/height:100% inside image-container — no explicit sizing needed
   }
 }
 
@@ -1119,6 +2135,22 @@
       width: 100%;
       height: 1px;
     }
+
+    // Mobile intro: hide layout-only elements, keep sketch circle + ring + photo reveal
+    // scrawl/eraser never render on mobile (mobile starts at sketch)
+    .hero__intro-grid,
+    .hero__intro-note,
+    .hero__intro-crop,
+    .hero__intro-cursor,
+    .hero__intro-menu,
+    .hero__intro-arrow,
+    .hero__intro-scrawl,
+    .hero__intro-scrawl-remnant,
+    .hero__intro-eraser {
+      display: none;
+    }
+
+    // hero__intro-ring is inset:0/width:100%/height:100% inside image-container — sizes automatically
   }
 }
 
@@ -1131,18 +2163,18 @@
     }
 
     &__typed-wrap {
-      font-size: 32px;
+      font-size: 38px;
     }
   }
 }
 
-// At the narrowest phone widths, shrink the H1 once more so "Systems-First"
-// (which is forced to stay on one line so the highlight band lands correctly)
-// still fits without horizontal overflow.
+// At the narrowest phone widths the H1 still needs to stay on one line so the
+// selection highlight band covers "System-First" correctly. 32px bold ≈ 220px
+// which fits a 320px viewport's ~272px content width comfortably.
 @media (max-width: $breakpoint-xs) {
   .hero {
     &__typed-wrap {
-      font-size: 26px;
+      font-size: 32px;
     }
   }
 }

@@ -1,24 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/styles.scss';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
-
-// Pen-nib icon — Adobe-Illustrator-style anchor + slanted nib, oriented so
-// the tip sits at coordinate (0,0). offset-path travels the path under the
-// nib's origin, so anchoring the visual tip at 0,0 keeps the nib visually
-// "drawing" the leading edge of the stroke.
-const PenNib: React.FC = () => (
-  <svg viewBox="-1 -1 16 16" width="14" height="14" fill="none" aria-hidden="true">
-    <path
-      d="M0 0 L11 5 L5.5 6.2 L0 12 Z"
-      fill="#f03d01"
-      stroke="#c23001"
-      strokeWidth="0.6"
-      strokeLinejoin="round"
-    />
-    <circle cx="0" cy="0" r="1.3" fill="#ffffff" stroke="#c23001" strokeWidth="0.6" />
-  </svg>
-);
 
 const roles = [
   'Designer',
@@ -48,33 +31,37 @@ type Phase =
 // Inserted between "System" and " Builder" to evolve the last role into the final title.
 const FINAL_INSERTION = '-First';
 
+// ── Intro stage conductor ───────────────────────────────────────────────────
+// Single mount effect drives all stage advances from one t0, collected into
+// one timeout array. The type machine is gated behind 'type' | 'done'.
+// Stage order: scrawl → sketch → lowfi → cursor → final → panel → type → done
+// Desktop: sketch@800, lowfi@1700, cursor@2400, final@3200, panel@3750, type via animationend + 4800ms fallback
+// Mobile:  sketch@0 (initial), lowfi@400, final@800 (no cursor), type@1300
+type IntroStage = 'scrawl' | 'sketch' | 'lowfi' | 'cursor' | 'final' | 'panel' | 'type' | 'done';
+
 const Hero: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
+  // Pre-place "Designer" so the headline shows the role + cursor from page load.
+  // When introStage reaches 'type' the cycling machine sees displayText.length === target.length
+  // and schedules the hold → cycling transition automatically.
+  const [displayText, setDisplayText] = useState(roles[0]);
   const [phase, setPhase] = useState<Phase>('typing');
   const [showBBox, setShowBBox] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [typedInsertion, setTypedInsertion] = useState('');
+  const isMobileInitial = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  const [introStage, setIntroStage] = useState<IntroStage>(isMobileInitial ? 'sketch' : 'scrawl');
 
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLParagraphElement>(null);
-  const heroTextRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
+  const introTimeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
-
-  // ── Pen-tool border state ────────────────────────────────────────────────
-  // Three-step sequence after the title fully settles:
-  //   1. hold ~280ms (let the title register)
-  //   2. start the draw — nib fades in and travels the path (~1000ms)
-  //   3. nib fades out (~200ms), leaving a thin brand-gray stroke behind
-  // Runs once per session — does not replay on rerender or layer-click.
-  const [borderDrawn, setBorderDrawn] = useState(false);
-  const [nibFaded, setNibFaded] = useState(false);
-  const [boxSize, setBoxSize] = useState({ w: 0, h: 0 });
   const lastFlashedRef = useRef<string>('');
   const [flashKey, setFlashKey] = useState(0);
   const highlightsAppliedRef = useRef(false);
+  const panelAnimEndRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -93,6 +80,80 @@ const Hero: React.FC = () => {
     timeoutsRef.current.push(id);
     return id;
   }, []);
+
+  // ── Intro conductor — single mount effect ──────────────────────────────
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isReducedMotion) {
+      // Jump straight to done — everything renders as final frame immediately
+      setIntroStage('done');
+      return;
+    }
+
+    const ids: number[] = [];
+    const schedule = (stage: IntroStage, at: number) => {
+      const id = window.setTimeout(() => setIntroStage(stage), at);
+      ids.push(id);
+    };
+
+    if (isMobile) {
+      // Mobile: compact 3-beat build — no scrawl, no cursor stage, no menu, no panel dock
+      // sketch@0 (already mounted as initial), lowfi@400ms, final@800ms, type@1300ms
+      schedule('lowfi', 400);
+      schedule('final', 800);
+      schedule('type', 1300);
+    } else {
+      // Desktop: scrawl@0, sketch@800ms, lowfi@1700ms, cursor@2400ms, final@3200ms, panel@3750ms
+      // cursor stage window = 800ms (2400→3200): arc(230ms) + rightclick(60ms) + travel(170ms) + hover(120ms) + press(110ms) = 690ms, +110ms buffer
+      // 'type' is triggered by animationend on the panel dock, with a 4800ms fallback
+      schedule('sketch', 800);
+      schedule('lowfi', 1700);
+      schedule('cursor', 2400);
+      schedule('final', 3200);
+      schedule('panel', 3750);
+
+      // 4800ms fallback in case animationend doesn't fire
+      const fallbackId = window.setTimeout(() => {
+        setIntroStage((current) => {
+          if (current === 'panel' || current === 'cursor') return 'type';
+          return current;
+        });
+      }, 4800);
+      ids.push(fallbackId);
+    }
+
+    introTimeoutsRef.current = ids;
+    return () => {
+      ids.forEach((id) => window.clearTimeout(id));
+    };
+  }, []);
+
+  // Listen for the panel dock animationend to trigger the 'type' stage (desktop)
+  useEffect(() => {
+    if (introStage !== 'panel') return;
+    const panelWrapper = document.querySelector('.hero__ui-element--layers') as HTMLElement | null;
+    if (!panelWrapper) return;
+
+    const handler = () => {
+      setIntroStage('type');
+    };
+    panelWrapper.addEventListener('animationend', handler);
+    panelAnimEndRef.current = handler;
+
+    return () => {
+      panelWrapper.removeEventListener('animationend', handler);
+      panelAnimEndRef.current = null;
+    };
+  }, [introStage]);
+
+  // Mark 'done' once type machine reaches 'complete'
+  useEffect(() => {
+    if (phase === 'complete' && introStage === 'type') {
+      setIntroStage('done');
+    }
+  }, [phase, introStage]);
 
   // Pause when out of view or tab hidden
   useEffect(() => {
@@ -122,7 +183,7 @@ const Hero: React.FC = () => {
     };
   }, []);
 
-  // Reduced motion
+  // Reduced motion — jump type machine to complete and set intro to done
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (mq.matches) {
@@ -132,39 +193,45 @@ const Hero: React.FC = () => {
       setTypedInsertion(FINAL_INSERTION); // keep panel layer name in sync with final title
       setPhase('complete');
       setShowBBox(false);
+      setIntroStage('done');
     }
   }, []);
 
   // Flash an orange selection bbox whenever a new layer/role becomes active.
   // Mirrors Adobe/Figma's "I just clicked this layer" feedback before the cursor lands.
+  // Gated behind 'type'/'done' so the first flash fires only when the intro completes.
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'typing' && phase !== 'cycling' && phase !== 'typing-final') return;
     const key = `${activeIndex}-${phase === 'typing-final' ? 'edit' : 'sel'}`;
     if (key === lastFlashedRef.current) return;
     lastFlashedRef.current = key;
     setFlashKey((k) => k + 1);
-  }, [activeIndex, phase]);
+  }, [activeIndex, phase, introStage]);
 
-  // Typing first role — first character is delayed so the flash plays before the cursor appears
+  // Typing first role — gated behind intro stage, first character delayed so flash plays first.
+  // Timing compressed ~30% vs original (55ms per char, 200ms first-char delay).
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'typing' || isPaused) return;
     const target = roles[0];
 
     if (displayText.length === target.length) {
-      scheduleTimeout(() => setPhase('cycling'), 900);
+      scheduleTimeout(() => setPhase('cycling'), 600); // was 900ms
       return () => clearAllTimeouts();
     }
 
-    const delay = displayText.length === 0 ? 360 : 70;
+    const delay = displayText.length === 0 ? 200 : 55; // was 360 / 70ms
     scheduleTimeout(() => {
       setDisplayText(target.substring(0, displayText.length + 1));
     }, delay);
 
     return () => clearAllTimeouts();
-  }, [displayText, phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [displayText, phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
   // Cycle remaining roles once
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'cycling' || isPaused) return;
 
     const advance = () => {
@@ -174,44 +241,47 @@ const Hero: React.FC = () => {
       setDisplayText(roles[next]);
 
       if (next >= FINAL_INDEX) {
-        // Hold on "Systems Designer" briefly, then start typing the rename
+        // Hold on "System Builder" briefly, then start typing the rename
         scheduleTimeout(() => {
           setShowBBox(false);
           setTypedInsertion('');
           setPhase('typing-final');
-        }, 900);
+        }, 600); // was 900ms
         return;
       }
 
-      scheduleTimeout(advance, 1000);
+      scheduleTimeout(advance, 750); // was 1000ms
     };
 
-    scheduleTimeout(advance, 1000);
+    scheduleTimeout(advance, 750); // was 1000ms
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Designer-renaming-a-layer moment: type "-First Product" between "Systems" and " Designer"
+  // Designer-renaming-a-layer moment: type "-First" between "System" and " Builder"
+  // Timing compressed: 55ms per char, 200ms first-char delay, 350ms hold
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'typing-final' || isPaused) return;
 
     if (typedInsertion.length === FINAL_INSERTION.length) {
       // Typing done — hold briefly so the full title reads, then enter resolved state
-      scheduleTimeout(() => setPhase('paused-final'), 450);
+      scheduleTimeout(() => setPhase('paused-final'), 350); // was 450ms
       return () => clearAllTimeouts();
     }
 
     // First character is delayed so the bbox flash plays before the cursor lands
-    const delay = typedInsertion.length === 0 ? 360 : 70;
+    const delay = typedInsertion.length === 0 ? 200 : 55; // was 360 / 70ms
     scheduleTimeout(() => {
       setTypedInsertion(FINAL_INSERTION.substring(0, typedInsertion.length + 1));
     }, delay);
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, typedInsertion, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, typedInsertion, introStage, scheduleTimeout, clearAllTimeouts]);
 
   // Pause on final word, then show bbox and begin backtrack
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'paused-final' || isPaused) return;
 
     // Move H1 to the resolved final title
@@ -224,80 +294,46 @@ const Hero: React.FC = () => {
     }, 50);
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Cursor moves to start of Strategist
+  // Cursor moves to start of "System-First" — compressed 350ms (was 450ms)
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'cursor-backtrack' || isPaused) return;
 
     scheduleTimeout(() => {
       setPhase('editing-final');
-    }, 450);
+    }, 350); // was 450ms
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Selection drag across Strategist
+  // Selection drag across "System-First" — compressed 850ms (was 1100ms)
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'editing-final' || isPaused) return;
 
     scheduleTimeout(() => {
       setShowBBox(false);
       setPhase('gradient-final');
-    }, 1100);
+    }, 850); // was 1100ms
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Gradient reveal then complete
+  // Gradient reveal then complete — compressed 400ms (was 500ms)
   useEffect(() => {
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'gradient-final' || isPaused) return;
 
     scheduleTimeout(() => {
       setPhase('complete');
-    }, 500);
+    }, 400); // was 500ms
 
     return () => clearAllTimeouts();
-  }, [phase, isPaused, scheduleTimeout, clearAllTimeouts]);
+  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // ── Pen-tool border draw ────────────────────────────────────────────────
-  // Track hero__text dimensions so the border path can be computed in absolute
-  // pixel space. ResizeObserver covers content reflow (font load, viewport
-  // changes); the window resize handler is a safety net for older browsers.
-  useEffect(() => {
-    const el = heroTextRef.current;
-    if (!el) return;
-    const measure = () => {
-      const rect = el.getBoundingClientRect();
-      setBoxSize({ w: Math.round(rect.width), h: Math.round(rect.height) });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    window.addEventListener('resize', measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, []);
-
-  // After the title fully settles (phase === 'complete'), hold briefly so
-  // the viewer registers the resolved title, then trigger the border draw.
-  // Runs exactly once per session. Timing aligned with the SCSS draw +
-  // travel durations below.
-  useEffect(() => {
-    if (phase !== 'complete' || borderDrawn) return;
-    const ids: number[] = [];
-    ids.push(window.setTimeout(() => {
-      setBorderDrawn(true);
-      // After the full draw + travel completes, fade the nib out.
-      ids.push(window.setTimeout(() => setNibFaded(true), 1800));
-    }, 360));
-    return () => ids.forEach((id) => window.clearTimeout(id));
-  }, [phase, borderDrawn]);
-
-  // Brand-orange selection flash — fires when a new role layer becomes active,
-  // mirroring Adobe's brief bounding-box outline the instant a layer is selected.
+  // Brand-orange selection flash — fires when a new role layer becomes active
   useEffect(() => {
     const isCyclingNewRole = phase === 'cycling' && activeIndex > 0;
     const isTypingFinalStart = phase === 'typing-final';
@@ -357,6 +393,8 @@ const Hero: React.FC = () => {
   }, [phase]);
 
   const handleLayerClick = useCallback((index: number) => {
+    // Only allow clicks after the intro has handed control to the type machine
+    if (introStage !== 'type' && introStage !== 'done') return;
     if (phase === 'typing' || index === activeIndexRef.current) return;
 
     clearAllTimeouts();
@@ -375,7 +413,7 @@ const Hero: React.FC = () => {
       setDisplayText(roles[index]);
       setPhase('static');
     }
-  }, [phase, clearAllTimeouts]);
+  }, [phase, introStage, clearAllTimeouts]);
 
   useEffect(() => {
     return () => clearAllTimeouts();
@@ -401,34 +439,8 @@ const Hero: React.FC = () => {
   // from "System Builder" → "System-First Builder" as the rename plays.
   const dynamicRoles = [roles[0], roles[1], lastLayerName];
 
-  // Padding between hero__text content and the drawn border (in px).
-  // Border path is sized to the expanded box (content + padding on all sides)
-  // so the stroke + nib sit cleanly outside the text rather than touching it.
-  const BORDER_PAD_X = 32;
-  const BORDER_PAD_Y = 28;
-  const borderBoxW = boxSize.w + BORDER_PAD_X * 2;
-  const borderBoxH = boxSize.h + BORDER_PAD_Y * 2;
-
-  // Rounded-rectangle border path matching the padded box. Travels clockwise
-  // from the top-left corner so the nib enters where a designer would
-  // naturally place a first anchor point.
-  const borderPath = useMemo(() => {
-    if (!boxSize.w || !boxSize.h) return '';
-    const r = 14;
-    return (
-      `M ${r} 0 L ${borderBoxW - r} 0 ` +
-      `A ${r} ${r} 0 0 1 ${borderBoxW} ${r} ` +
-      `L ${borderBoxW} ${borderBoxH - r} ` +
-      `A ${r} ${r} 0 0 1 ${borderBoxW - r} ${borderBoxH} ` +
-      `L ${r} ${borderBoxH} ` +
-      `A ${r} ${r} 0 0 1 0 ${borderBoxH - r} ` +
-      `L 0 ${r} ` +
-      `A ${r} ${r} 0 0 1 ${r} 0 Z`
-    );
-  }, [boxSize.w, boxSize.h, borderBoxW, borderBoxH]);
-
   return (
-    <section className="hero" ref={sectionRef}>
+    <section className="hero" ref={sectionRef} data-intro-stage={introStage}>
       <nav className="hero__nav">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
@@ -441,35 +453,7 @@ const Hero: React.FC = () => {
 
       <div className="hero__content">
         <div className="hero__grid">
-          <div className="hero__text" ref={heroTextRef}>
-            {/* Pen-tool border — sized to hero__text's measured box, drawn
-                clockwise from the top-left corner via stroke-dashoffset.
-                The nib element follows the same path via offset-path so it
-                stays glued to the leading edge of the stroke. */}
-            {borderPath && (
-              <svg
-                className={`hero__text-border${borderDrawn ? ' hero__text-border--drawn' : ''}`}
-                width={borderBoxW}
-                height={borderBoxH}
-                viewBox={`0 0 ${borderBoxW} ${borderBoxH}`}
-                aria-hidden="true"
-              >
-                <path
-                  className="hero__text-border-path"
-                  d={borderPath}
-                  pathLength={1}
-                />
-              </svg>
-            )}
-            {borderPath && (
-              <span
-                className={`hero__nib${borderDrawn ? ' hero__nib--travel' : ''}${nibFaded ? ' hero__nib--done' : ''}`}
-                style={{ offsetPath: `path('${borderPath}')` }}
-                aria-hidden="true"
-              >
-                <PenNib />
-              </span>
-            )}
+          <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
               <span className="hero__eyebrow-title">16+ years as a senior designer working as a</span>
             </p>
@@ -578,7 +562,239 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="hero__visual">
+            {/* ── Intro-only overlay elements — aria-hidden + pointer-events:none ── */}
+            {/* Construction-line grid background */}
+            <div className="hero__intro-grid" aria-hidden="true" />
+
+            {/* Mono annotation notes — on .hero__visual, with per-note rotations */}
+            <div className="hero__intro-note hero__intro-note--shell" aria-hidden="true">.hero__profile-shell</div>
+            <div className="hero__intro-note hero__intro-note--radius" aria-hidden="true">--radius-full</div>
+            <div className="hero__intro-note hero__intro-note--mask" aria-hidden="true">image-mask: circle</div>
+            <div className="hero__intro-note hero__intro-note--motion" aria-hidden="true">motion: draw-in</div>
+
+            {/* Hand-drawn curved arrows — from notes toward the circle/ring */}
+            <svg
+              className="hero__intro-arrow hero__intro-arrow--1"
+              viewBox="0 0 40 40"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M4 8 C10 10, 20 12, 30 28"
+                fill="none"
+                stroke="rgba(0,0,0,0.30)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                pathLength={1}
+              />
+              <path
+                d="M28 24 L30 28 L26 26"
+                fill="none"
+                stroke="rgba(0,0,0,0.30)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <svg
+              className="hero__intro-arrow hero__intro-arrow--2"
+              viewBox="0 0 40 40"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M36 8 C28 12, 18 16, 8 28"
+                fill="none"
+                stroke="rgba(0,0,0,0.30)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                pathLength={1}
+              />
+              <path
+                d="M10 24 L8 28 L12 26"
+                fill="none"
+                stroke="rgba(0,0,0,0.30)"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            {/* Fake pointer cursor arc */}
+            <svg
+              className="hero__intro-cursor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M4 2L4 17L7.5 13.5L10.5 20L12.5 19L9.5 12.5L14 12.5Z"
+                fill="#1a1a1a"
+                stroke="#ffffff"
+                strokeWidth="0.8"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            {/* Right-click context menu — 5 rows, Paste highlighted */}
+            <div className="hero__intro-menu" aria-hidden="true">
+              <div className="hero__intro-menu__row">Cut<span>⌘X</span></div>
+              <div className="hero__intro-menu__row">Copy<span>⌘C</span></div>
+              <div className="hero__intro-menu__row hero__intro-menu__row--highlight">Paste<span>⌘V</span></div>
+              <div className="hero__intro-menu__row">Duplicate<span>⌘D</span></div>
+              <div className="hero__intro-menu__row">Delete<span>⌫</span></div>
+            </div>
+
             <div className="hero__image-container">
+              {/* Scrawl SVG — napkin-rough marker strokes, drawn during scrawl stage */}
+              <svg
+                className="hero__intro-scrawl"
+                viewBox="0 0 420 420"
+                aria-hidden="true"
+                focusable="false"
+                style={{ overflow: 'visible' }}
+              >
+                {/* Wobbly lumpy blob — one fast marker loop that overshoots */}
+                <path
+                  className="hero__intro-scrawl__blob"
+                  d="M120,180 C95,155 95,120 120,100 C148,78 185,72 210,75 C248,78 285,90 305,118 C330,150 338,185 325,215 C312,245 288,268 258,278 C228,288 192,285 165,268 C135,250 118,225 115,198 C112,185 115,182 120,180 Z"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.32)"
+                  strokeWidth="2.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                />
+                {/* Squiggle 1 — horizontal scribble below-left */}
+                <path
+                  className="hero__intro-scrawl__squiggle-1"
+                  d="M88,318 C93,314 98,322 103,315 C108,308 113,320 118,313 C123,306 128,318 133,312 C138,306 143,317 148,312 C153,307 158,318 163,315 C168,312 173,316 178,314"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.32)"
+                  strokeWidth="2.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                />
+                {/* Squiggle 2 — shorter scribble below squiggle 1 */}
+                <path
+                  className="hero__intro-scrawl__squiggle-2"
+                  d="M100,338 C105,333 110,342 116,336 C122,330 127,340 133,334 C139,328 144,338 150,334 C156,330 160,337 164,334"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.32)"
+                  strokeWidth="2.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                />
+                {/* Arrow — curved line from top-right toward blob edge, with arrowhead */}
+                <path
+                  className="hero__intro-scrawl__arrow"
+                  d="M395,60 C375,72 355,90 338,108 C328,118 324,130 330,140 M322,134 L330,140 L335,130"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.32)"
+                  strokeWidth="2.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                />
+              </svg>
+
+              {/* Scrawl tick remnant — isolated SVG so mask never touches it */}
+              <svg
+                className="hero__intro-scrawl-remnant"
+                viewBox="0 0 420 420"
+                aria-hidden="true"
+                focusable="false"
+                style={{ overflow: 'visible' }}
+              >
+                {/* Tick — short stray stroke near blob's top-left */}
+                <path
+                  className="hero__intro-scrawl__tick"
+                  d="M108,92 C112,88 117,94 122,90"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.32)"
+                  strokeWidth="2.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                />
+              </svg>
+
+              {/* Eraser block — sweeps across scrawl area at scrawl→sketch boundary */}
+              <div className="hero__intro-eraser" aria-hidden="true" />
+
+              {/* Sketch SVG INSIDE image-container — concentric with profile circle */}
+              <svg
+                className="hero__intro-sketch"
+                viewBox="0 0 420 420"
+                aria-hidden="true"
+                focusable="false"
+              >
+                {/* Crosshair construction lines */}
+                <line
+                  x1="0" y1="210" x2="420" y2="210"
+                  stroke="rgba(0,0,0,0.14)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                  className="hero__intro-sketch__hline"
+                />
+                <line
+                  x1="210" y1="0" x2="210" y2="420"
+                  stroke="rgba(0,0,0,0.14)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeDasharray="1"
+                  strokeDashoffset="1"
+                  pathLength={1}
+                  className="hero__intro-sketch__vline"
+                />
+                {/* Two wobbly sketch circles */}
+                <circle cx="212" cy="208" r="205" pathLength={1} />
+                <circle cx="208" cy="212" r="198" pathLength={1} />
+                {/* Pencil placeholder silhouette: head arc + shoulder curve */}
+                <path
+                  className="hero__intro-sketch__silhouette"
+                  d="M175 165 C175 135, 245 135, 245 165 C245 195, 230 210, 210 210 C190 210, 175 195, 175 165 Z M155 270 C160 235, 175 218, 210 215 C245 218, 260 235, 265 270"
+                  fill="none"
+                  stroke="rgba(0,0,0,0.18)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  pathLength={1}
+                />
+              </svg>
+
+              {/* Orange ring draw-in overlay — INSIDE image-container, inset:0 */}
+              <svg
+                className="hero__intro-ring"
+                viewBox="0 0 420 420"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle cx="210" cy="210" r="199" pathLength={1} />
+              </svg>
+
+              {/* Corner crop marks — INSIDE image-container */}
+              <div className="hero__intro-crop" aria-hidden="true">
+                <span className="hero__intro-crop__tl" />
+                <span className="hero__intro-crop__tr" />
+                <span className="hero__intro-crop__bl" />
+                <span className="hero__intro-crop__br" />
+              </div>
               <div className="hero__image-wrapper hero__profile">
                 <div className="hero__profile-shell">
                   <div className="hero__profile-selection" aria-hidden="true">
@@ -619,6 +835,7 @@ const Hero: React.FC = () => {
                   onLayerClick={handleLayerClick}
                   roles={dynamicRoles}
                   action={currentAction}
+                  showProfileGroup={true}
                 />
               </div>
             </div>

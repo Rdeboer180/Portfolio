@@ -16,6 +16,7 @@ interface LayersPanelProps {
   roles?: string[];
   grouping?: boolean;
   action?: LayerAction;
+  showProfileGroup?: boolean; // renders locked "Profile UI" folder + child rows above type layers
 }
 
 const EyeIcon = () => (
@@ -24,8 +25,24 @@ const EyeIcon = () => (
   </svg>
 );
 
+// Folder icon for the group row
+const FolderIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1H3V7z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round"/>
+    <path d="M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round"/>
+  </svg>
+);
+
+// Lock icon for locked rows
+const LockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.75"/>
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"/>
+  </svg>
+);
+
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, onLayerClick, roles = defaultRoles, grouping = false, action = null }, ref) => {
+  ({ activeIndex, onLayerClick, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
     return (
       <div
         className={`layers-panel${grouping ? ' layers-panel--grouping' : ''}`}
@@ -73,6 +90,41 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
 
         <div className={`layers-panel__layers${grouping ? ' layers-panel__layers--grouping' : ''}`}>
           {grouping && <span className="layers-panel__group-bracket" aria-hidden="true" />}
+
+          {/* Locked "Profile UI" folder group — non-interactive, always visible when showProfileGroup=true */}
+          {showProfileGroup && (
+            <>
+              <div className="layers-panel__group layers-panel__group--locked" aria-hidden="true">
+                <div className="layers-panel__eye">
+                  <EyeIcon />
+                </div>
+                <div className="layers-panel__thumb layers-panel__thumb--folder">
+                  <FolderIcon />
+                </div>
+                <div className="layers-panel__name">Profile UI</div>
+                <div className="layers-panel__lock layers-panel__lock--visible">
+                  <LockIcon />
+                </div>
+              </div>
+              <div className="layers-panel__layer layers-panel__layer--child" aria-hidden="true">
+                <div className="layers-panel__eye" />
+                <div className="layers-panel__thumb layers-panel__thumb--text">T</div>
+                <div className="layers-panel__name">01 Portfolio image</div>
+                <div className="layers-panel__lock layers-panel__lock--visible">
+                  <LockIcon />
+                </div>
+              </div>
+              <div className="layers-panel__layer layers-panel__layer--child" aria-hidden="true">
+                <div className="layers-panel__eye" />
+                <div className="layers-panel__thumb layers-panel__thumb--text">T</div>
+                <div className="layers-panel__name">UI construction</div>
+                <div className="layers-panel__lock layers-panel__lock--visible">
+                  <LockIcon />
+                </div>
+              </div>
+            </>
+          )}
+
           {roles.map((name, i) => {
             const isActive = i === activeIndex;
             const layerAction = isActive ? action : null;
