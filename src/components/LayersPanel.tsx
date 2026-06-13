@@ -128,6 +128,10 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           {roles.map((name, i) => {
             const isActive = i === activeIndex;
             const layerAction = isActive ? action : null;
+            const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.key === 'Enter') { onLayerClick?.(i); }
+              if (e.key === ' ') { e.preventDefault(); onLayerClick?.(i); }
+            };
             return (
               <div
                 key={i}
@@ -135,7 +139,11 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
                 className={`layers-panel__layer${
                   isActive || grouping ? ' layers-panel__layer--selected layers-panel__layer--active' : ''
                 }${layerAction ? ` layers-panel__layer--${layerAction}` : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isActive}
                 onClick={() => onLayerClick?.(i)}
+                onKeyDown={handleKeyDown}
               >
                 <div className="layers-panel__eye">
                   <EyeIcon />

@@ -69,19 +69,15 @@ const About: React.FC = () => {
             <SectionBadge icon={<UserIcon />} label="About Me" />
             <h2 className="about__title">Built For Where Design Is Heading</h2>
               <p className="about__body">
-                Part designer, part front-end thinker, part systems builder&mdash;I do my best work where high-fidelity product design, design systems, front-end implementation, and creative strategy meet.
+                I&rsquo;ve spent 16+ years pushing digital design through craft, brand systems, front-end constraints, and production realities. The tools have changed, but the responsibility has not: <span className="animated-bold">know what to design, why it matters, and how to make the work hold up</span> once real teams and real users touch it.
               </p>
 
               <p className="about__body">
-                The title may change depending on the team&mdash;Product Designer, UX Engineer, Systems Designer, Design Strategist, or Senior Web Designer&mdash;but the through-line is the same: <span className="animated-bold">I connect design, front-end logic, systems thinking, and practical implementation</span> so complex ideas become clearer, more scalable, and easier for teams to ship.
+                AI-native workflows are making the opportunity cost of exploration cheaper and faster. More people can now express ideas in higher fidelity, which makes senior design judgment even more valuable&mdash;not less. Through personal and volunteer projects, I&rsquo;ve been <span className="animated-bold">expanding my ability to build end-to-end experiences</span> and exploring what becomes possible when old barriers around full-stack execution start to fall away. That shift has helped me rediscover my love of design by getting closer to the full arc of the work: shaping the idea, building the interface, testing the system, and learning from what actually ships.
               </p>
 
               <p className="about__body">
-                Over 12 years at Tire Rack, I&rsquo;ve worked across research, accessibility, SEO, UX leadership, analytics, content, and engineering&mdash;using user insights, WCAG standards, content strategy, and technical constraints to make clearer, more user-focused decisions.
-              </p>
-
-              <p className="about__body">
-                My strongest work happens in the systems behind the experience: designing polished interfaces, defining scalable component patterns, and improving the process that governs how products are designed, documented, built, and improved. In a world where more people can build faster than ever, my edge is <span className="animated-bold">knowing what to design, why it matters, and how to make it hold up in the real world.</span>
+                Part of being senior is <span className="animated-bold">adding value beyond polished screens</span>. I care about the process around the work: the patterns, documentation, governance, accessibility, handoff, QA, and team clarity that help ideas survive past the first version. Design systems, to me, are not just the pixels on the page&mdash;they&rsquo;re the operating model that helps teams make better decisions and ship stronger work.
               </p>
             <div className="about__cta-links">
               <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>

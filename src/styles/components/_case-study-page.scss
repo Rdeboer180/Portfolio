@@ -619,6 +619,19 @@
     }
   }
 
+  // Image wrapper converted to <button> for keyboard a11y — reset UA button styles
+  // Only resets the properties that would break layout; background/padding are
+  // kept per-element by the existing rules below.
+  &__img-wrap[type="button"],
+  &__phone-frame[type="button"] {
+    appearance: none;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    display: block;
+    width: 100%;
+  }
+
   &__img-wrap {
     position: relative;
     overflow: hidden;

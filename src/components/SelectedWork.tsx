@@ -45,6 +45,9 @@ const SelectedWork: React.FC = () => {
                     ))}
                   </div>
                 )}
+                <span className="selected-work__card-cta" aria-hidden="true">
+                  View case study &rarr;
+                </span>
               </div>
               <div className="selected-work__card-visual">
                 <div className="selected-work__card-visual-inner">

@@ -112,21 +112,31 @@ function App() {
   }
 
   if (route.page === 'case-study' && route.slug) {
-    return <CaseStudyPage slug={route.slug} />;
+    return (
+      <>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        <main id="main-content" tabIndex={-1}>
+          <CaseStudyPage slug={route.slug} />
+        </main>
+      </>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Hero />
-      <About />
-      <SelectedWork />
-      <Skills />
-      <Testimonials />
-      <HowIWork />
-      <TechnicalAbilities />
-      <FAQ />
-      <Footer />
-    </div>
+    <>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-white">
+        <Hero />
+        <About />
+        <SelectedWork />
+        <Skills />
+        <Testimonials />
+        <HowIWork />
+        <TechnicalAbilities />
+        <FAQ />
+        <Footer />
+      </main>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface PasswordModalProps {
   onUnlock: () => void;
@@ -9,6 +9,46 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  // Store the element that had focus before the modal opened so we can restore it
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  // Ref for the primary button in the initial (two-button) state
+  const unlockBtnRef = useRef<HTMLButtonElement>(null);
+  // Container ref for Tab trapping
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Capture return target, set initial focus, and install Tab trap
+  useEffect(() => {
+    returnFocusRef.current = document.activeElement as HTMLElement;
+    // Initial state: focus the "Unlock Images" button
+    if (!showPassword) {
+      unlockBtnRef.current?.focus();
+    }
+    return () => {
+      returnFocusRef.current?.focus();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Tab-trap keydown handler
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab') return;
+    const el = contentRef.current;
+    if (!el) return;
+    const focusable = Array.from(
+      el.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((node) => !node.closest('[aria-hidden="true"]'));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  };
 
   const hashPassword = async (pwd: string): Promise<string> => {
     const encoder = new TextEncoder();
@@ -39,8 +79,15 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
   return (
     <div className="password-modal">
       <div className="password-modal__overlay" />
-      <div className="password-modal__content">
-        <h2>Protected Case Study Images</h2>
+      <div
+        className="password-modal__content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pwd-modal-title"
+        ref={contentRef}
+        onKeyDown={handleKeyDown}
+      >
+        <h2 id="pwd-modal-title">Protected Case Study Images</h2>
         <p>
           Some images in this case study are restricted due to proprietary work. Enter the password to view them, or continue reading without images. We won't ask again unless you choose to open a hidden image.
         </p>
@@ -48,6 +95,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
         {!showPassword ? (
           <div className="password-modal__buttons">
             <button
+              ref={unlockBtnRef}
               className="password-modal__button password-modal__button--primary"
               onClick={() => setShowPassword(true)}
             >

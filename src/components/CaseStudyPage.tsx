@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
@@ -13,12 +13,44 @@ const Lightbox: React.FC<{
   current: LightboxState;
   onClose: () => void;
   onNav: (index: number) => void;
-}> = ({ images, current, onClose, onNav }) => {
+  triggerRef?: React.RefObject<HTMLElement | null>;
+}> = ({ images, current, onClose, onNav, triggerRef }) => {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+
+  // Move focus to close button on open; restore to trigger on close
+  useEffect(() => {
+    closeRef.current?.focus();
+    return () => {
+      triggerRef?.current?.focus();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keyboard: Escape/Arrows + Tab trap
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') onNav((current.index + 1) % images.length);
-      if (e.key === 'ArrowLeft') onNav((current.index - 1 + images.length) % images.length);
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'ArrowRight') { onNav((current.index + 1) % images.length); return; }
+      if (e.key === 'ArrowLeft') { onNav((current.index - 1 + images.length) % images.length); return; }
+
+      if (e.key === 'Tab') {
+        // Collect focusable buttons inside the dialog
+        const focusable: HTMLButtonElement[] = [closeRef.current!].filter(Boolean);
+        if (images.length > 1) {
+          if (prevRef.current) focusable.push(prevRef.current);
+          if (nextRef.current) focusable.push(nextRef.current);
+        }
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      }
     };
     document.addEventListener('keydown', handler);
     document.body.style.overflow = 'hidden';
@@ -29,16 +61,22 @@ const Lightbox: React.FC<{
   }, [current.index, images.length, onClose, onNav]);
 
   return (
-    <div className="cs-lightbox" onClick={onClose}>
-      <button className="cs-lightbox__close" onClick={onClose} aria-label="Close">&#x2715;</button>
+    <div
+      className="cs-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image lightbox"
+      onClick={onClose}
+    >
+      <button ref={closeRef} className="cs-lightbox__close" onClick={onClose} aria-label="Close lightbox">&#x2715;</button>
       <div className="cs-lightbox__content" onClick={(e) => e.stopPropagation()}>
         <img src={current.src} alt={current.alt} className="cs-lightbox__img" />
       </div>
       {images.length > 1 && (
         <>
-          <button className="cs-lightbox__prev" onClick={(e) => { e.stopPropagation(); onNav((current.index - 1 + images.length) % images.length); }} aria-label="Previous">&#8592;</button>
-          <button className="cs-lightbox__next" onClick={(e) => { e.stopPropagation(); onNav((current.index + 1) % images.length); }} aria-label="Next">&#8594;</button>
-          <div className="cs-lightbox__counter">{current.index + 1} / {images.length}</div>
+          <button ref={prevRef} className="cs-lightbox__prev" onClick={(e) => { e.stopPropagation(); onNav((current.index - 1 + images.length) % images.length); }} aria-label="Previous image">&#8592;</button>
+          <button ref={nextRef} className="cs-lightbox__next" onClick={(e) => { e.stopPropagation(); onNav((current.index + 1) % images.length); }} aria-label="Next image">&#8594;</button>
+          <div className="cs-lightbox__counter" aria-live="polite" aria-atomic="true">{current.index + 1} / {images.length}</div>
         </>
       )}
     </div>
@@ -78,7 +116,7 @@ const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approac
 const SectionImages: React.FC<{
   images: ProjectImage[];
   allImages: { src: string; alt: string }[];
-  onOpen: (src: string, alt: string, index: number) => void;
+  onOpen: (src: string, alt: string, index: number, trigger?: React.RefObject<HTMLElement | null>) => void;
   isUnlocked?: boolean;
   onOverlayClick?: () => void;
 }> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick }) => {
@@ -100,7 +138,7 @@ const SectionImages: React.FC<{
     if (shouldSkipImage(img)) {
       return null;
     }
-    // Inline video — short prototype clips, muted autoplay loop
+    // Inline video — short prototype clips, muted autoplay loop (NOT clickable)
     if (img.isVideo) {
       const videoEl = (
         <video
@@ -123,17 +161,34 @@ const SectionImages: React.FC<{
         <div className="cs__img-wrap cs__img-wrap--video">{videoEl}</div>
       );
     }
-    // Render actual images
-    return img.mobile ? (
-      <div className="cs__phone-frame" onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!))}>
-        <div className="cs__phone-notch" />
-        <img src={img.src} alt={img.alt} />
-      </div>
-    ) : (
-      <div className="cs__img-wrap" onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!))}>
-        <img src={img.src} alt={img.alt} />
+    // Render actual images — wrapped in a button for keyboard accessibility
+    if (img.mobile) {
+      const btnRef = React.createRef<HTMLElement>();
+      return (
+        <button
+          type="button"
+          className="cs__phone-frame"
+          ref={btnRef as React.RefObject<HTMLButtonElement>}
+          aria-label={`Open ${img.alt} at full size`}
+          onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), btnRef)}
+        >
+          <div className="cs__phone-notch" />
+          <img src={img.src} alt="" />
+        </button>
+      );
+    }
+    const btnRef = React.createRef<HTMLElement>();
+    return (
+      <button
+        type="button"
+        className="cs__img-wrap"
+        ref={btnRef as React.RefObject<HTMLButtonElement>}
+        aria-label={`Open ${img.alt} at full size`}
+        onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), btnRef)}
+      >
+        <img src={img.src} alt="" />
         <span className="cs__zoom-hint">&#x26F6; View full</span>
-      </div>
+      </button>
     );
   };
 
@@ -253,8 +308,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     }
   };
 
+  const lbTriggerRef = useRef<HTMLElement | null>(null);
   const lbImages = useMemo(() => project ? allLightboxImages(project) : [], [project]);
-  const openLightbox = useCallback((src: string, alt: string, index: number) => setLightbox({ src, alt, index }), []);
+  const openLightbox = useCallback((src: string, alt: string, index: number, trigger?: React.RefObject<HTMLElement | null>) => {
+    if (trigger) {
+      // Copy the current element reference into our stable ref
+      (lbTriggerRef as React.MutableRefObject<HTMLElement | null>).current = trigger.current;
+    }
+    setLightbox({ src, alt, index });
+  }, []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
   const navLightbox = useCallback((index: number) => {
     const img = lbImages[index];
@@ -489,15 +551,24 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               {/* Outcome grid — scale wall */}
               {project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
                 <div className="cs__outcome-grid">
-                  {project.outcomeGridImages.filter(img => img.src).map((img, i) => (
-                    <figure key={i} className="cs__outcome-grid-item">
-                      <div className="cs__img-wrap" onClick={() => openLightbox(img.src!, img.alt, lbImages.findIndex((lb) => lb.src === img.src))}>
-                        <img src={img.src} alt={img.alt} />
-                        <span className="cs__zoom-hint">&#x26F6; View full</span>
-                      </div>
-                      {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
-                    </figure>
-                  ))}
+                  {project.outcomeGridImages.filter(img => img.src).map((img, i) => {
+                    const gridBtnRef = React.createRef<HTMLElement>();
+                    return (
+                      <figure key={i} className="cs__outcome-grid-item">
+                        <button
+                          type="button"
+                          className="cs__img-wrap"
+                          ref={gridBtnRef as React.RefObject<HTMLButtonElement>}
+                          aria-label={`Open ${img.alt} at full size`}
+                          onClick={() => openLightbox(img.src!, img.alt, lbImages.findIndex((lb) => lb.src === img.src), gridBtnRef)}
+                        >
+                          <img src={img.src} alt="" />
+                          <span className="cs__zoom-hint">&#x26F6; View full</span>
+                        </button>
+                        {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
+                      </figure>
+                    );
+                  })}
                 </div>
               )}
 
@@ -595,19 +666,32 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   let i = 0;
                   while (i < project.images.length) {
                     const img = project.images[i];
-                    const renderImg = (img: ProjectImage, idx: number) => (
-                      img.mobile ? (
-                        <div className="cs__phone-frame" onClick={() => openLightbox(img.src!, img.alt, idx)}>
+                    const renderImg = (img: ProjectImage, idx: number) => {
+                      const legacyBtnRef = React.createRef<HTMLElement>();
+                      return img.mobile ? (
+                        <button
+                          type="button"
+                          className="cs__phone-frame"
+                          ref={legacyBtnRef as React.RefObject<HTMLButtonElement>}
+                          aria-label={`Open ${img.alt} at full size`}
+                          onClick={() => openLightbox(img.src!, img.alt, idx, legacyBtnRef)}
+                        >
                           <div className="cs__phone-notch" />
-                          <img src={img.src} alt={img.alt} />
-                        </div>
+                          <img src={img.src} alt="" />
+                        </button>
                       ) : (
-                        <div className="cs__img-wrap" onClick={() => openLightbox(img.src!, img.alt, idx)}>
-                          <img src={img.src} alt={img.alt} />
+                        <button
+                          type="button"
+                          className="cs__img-wrap"
+                          ref={legacyBtnRef as React.RefObject<HTMLButtonElement>}
+                          aria-label={`Open ${img.alt} at full size`}
+                          onClick={() => openLightbox(img.src!, img.alt, idx, legacyBtnRef)}
+                        >
+                          <img src={img.src} alt="" />
                           <span className="cs__zoom-hint">&#x26F6; View full</span>
-                        </div>
-                      )
-                    );
+                        </button>
+                      );
+                    };
 
                     if (img.layout === 'full') {
                       elements.push(
@@ -699,6 +783,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           current={lightbox}
           onClose={closeLightbox}
           onNav={navLightbox}
+          triggerRef={lbTriggerRef}
         />
       )}
     </article>

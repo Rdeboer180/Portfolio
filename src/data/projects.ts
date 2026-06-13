@@ -129,7 +129,7 @@ const projects: Project[] = [
     ],
     gapsImages: [
       {
-        src: '/images/work/wheelrack/supporting/approach/wheelrack-ux-wireframe-02.png',
+        src: '/images/work/wheelrack/wheelrack-ux-wireframe-02_blurred.png',
         alt: 'Vehicle selector wireframe with annotated UI behavior specs for Make/Year/Model autocomplete flow',
         layout: 'full',
         caption: 'Early wireframe showing the complexity of the vehicle selector flow\u2014this wasn\u2019t just a UI cleanup',
@@ -173,7 +173,7 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/wheelrack/supporting/approach/wheelrack-ux-wireframe-03.png',
+            src: '/images/work/wheelrack/wheelrack-ux-wireframe-03_blurred.png',
             alt: 'Detailed wireframe with annotated UI behavior specs for vehicle selector and search flow',
             layout: 'full',
             caption: 'Wireframe with behavior specs\u2014autocomplete, dynamic selection, responsive breakpoints',
@@ -501,10 +501,11 @@ const projects: Project[] = [
         systemMarker: 'System decision',
         images: [
           {
-            src: '/images/work/tire-rack-winter/supporting/constraints/winter-confluence-docs.png',
-            alt: 'Confluence documentation for Experience Fragment workflows with Ryan DeBoer as primary contact',
+            alt: 'Placeholder for omitted internal documentation artifact',
             layout: 'full',
-            caption: 'Internal documentation\u2014system architecture and authoring workflows',
+            caption: 'Internal documentation available on request.',
+            isOverlay: true,
+            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail.",
           },
         ],
       },
@@ -516,13 +517,13 @@ const projects: Project[] = [
         gridColumns: 2,
         images: [
           {
-            src: '/images/work/tire-rack-winter/supporting/approach/winter-aem-authoring.png',
+            src: '/images/work/tire-rack-winter/winter-aem-authoring_blurred.png',
             alt: 'AEM authoring view with Teaser component edit dialog',
             layout: 'half',
             caption: 'Component authoring\u2014Teaser dialog with link behavior and CTA fields',
           },
           {
-            src: '/images/work/tire-rack-winter/supporting/approach/winter-aem-hero-detail.png',
+            src: '/images/work/tire-rack-winter/winter-aem-hero-detail_blurred.png',
             alt: 'Winter Hero fragment detail view with component variants',
             layout: 'half',
             caption: 'Hero fragment detail\u2014variant breakdown across component types',
@@ -587,10 +588,11 @@ const projects: Project[] = [
     ],
     problemImages: [
       {
-        src: '/images/work/heatherwood/supporting/Problem/Screenshot 2026-04-02 at 10.16.00 AM.png',
-        alt: 'Initial project scope and requirements for Heatherwood digital brand',
+        alt: 'Placeholder for omitted client project-scope artifact',
         layout: 'full',
-        caption: 'Project scope\u2014defining what the brand and site needed to accomplish',
+        caption: 'Project-scope detail available on request.',
+        isOverlay: true,
+        overlayText: "This artifact includes private client correspondence not publicly shareable. I'm happy to walk through the project scope in detail.",
       },
     ],
 
@@ -1499,6 +1501,83 @@ export const launchPacks = [
       { value: '3 / 6 / 8', label: 'Supported draft sizes (≤4 options per vote screen)' },
       { value: '5 × 9', label: 'Pack accent pairs × status pill states' },
       { value: 'v0.2', label: 'Foundation Locked design system (tokens + recipes)' },
+    ],
+  },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Internal agentic photography tool. Hidden (direct-link only) until a cover
+  // image lands and confidentiality framing is signed off — promote to the
+  // featured grid then. Framed at the workflow/process/AI-exploration level;
+  // no proprietary internals exposed.
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    slug: 'photography-workflow-agent',
+    hidden: true,
+    client: 'Internal Tool',
+    title: 'Photography Workflow Agent',
+    summary: 'An internal agentic workflow tool built to support photography team operations—combining practical interface design, workflow logic, and AI-assisted execution to reduce repetitive production steps and make image-related tasks easier to test, review, and act on.',
+    year: '2026',
+    tags: ['Agentic Workflow', 'Internal Tools', 'AI-Assisted Product', 'UX Engineering', 'Production Systems'],
+    role: 'Product Design · UX Engineering · AI-Assisted Build',
+    tools: ['Claude', 'Claude Code', 'HTML/CSS/JS', 'Design Tokens'],
+    timeline: 'Self-started internal build, 2026',
+    timeToLive: 'In use by the internal photography team; ongoing refinement.',
+
+    problemPunch: 'Repetitive, judgment-heavy image production steps were slowing a real team down.',
+    problem: [
+      'A photography team handled a recurring set of image-preparation and review tasks by hand—careful work, but repetitive enough to eat real time and invite small, late-caught mistakes.',
+      'The opportunity: package that judgment into a tool the team could run themselves, so the repetitive steps got faster and the review step got clearer.',
+    ],
+
+    gapsPunch: 'A tool, not a deck. Built to be used, not presented.',
+    gaps: [
+      'Off-the-shelf options didn’t fit the team’s actual workflow—the value was in matching their real steps, not a generic editor.',
+      'It needed to run with zero setup friction for non-technical users and produce output they could trust at a glance.',
+      'It was a chance to prove that AI-assisted, agentic workflows can solve a concrete internal problem—not just demo well in the abstract.',
+    ],
+
+    constraintsPunch: 'Self-started. Zero-install. Real users on day one.',
+    constraints: [
+      'Built as a self-started initiative alongside core work—scoped to ship something useful fast, not perfect.',
+      'Had to be usable by the photography team directly, with no install step and no technical onboarding.',
+      'Kept confidential operational specifics out of scope here—the story is the workflow and the build approach, not internal process detail.',
+    ],
+
+    insightCallout: 'AI didn’t replace the design work here—it expanded the surface area of what I could responsibly explore, build, and put in a real team’s hands. Design judgment decided what was worth shipping.',
+
+    approachSubsections: [
+      {
+        key: 'alignment',
+        label: 'Alignment',
+        description: 'Started from the team’s actual steps—what they did by hand, where time went, and what "good" looked like for a finished result. The tool’s job was to absorb the repetitive parts and make the judgment parts faster and clearer, not to take judgment away.',
+        images: [],
+      },
+      {
+        key: 'structure',
+        label: 'Structure',
+        description: 'Designed a single, self-contained interface the team could open and use immediately—inputs on one side, a live, trustworthy preview on the other—so the result of each decision was visible in real time instead of discovered later.',
+        images: [],
+      },
+      {
+        key: 'build',
+        label: 'Build',
+        description: 'Used AI-assisted, agentic workflows to move from idea to working tool quickly—pairing my design and front-end judgment with Claude to structure the logic, build the interface, and tighten the behavior. The design system mindset kept it consistent and legible as it grew.',
+        images: [],
+      },
+      {
+        key: 'iteration',
+        label: 'Iteration',
+        description: 'Tested it against real tasks, watched where it helped and where it got in the way, and refined the flow, the output, and the small clarity details that decide whether a team actually adopts a tool or quietly abandons it.',
+        images: [],
+      },
+    ],
+
+    outcomeNote: 'The tool put a faster, clearer version of a repetitive workflow directly in the photography team’s hands—turning judgment-heavy manual steps into something they can run, preview, and trust themselves. It’s also a concrete proof point for where my work is heading: using AI-assisted, agentic workflows to solve real internal problems end-to-end, not just talk about them. This entry is intentionally high-level; happy to walk through the build and the workflow in detail.',
+    metrics: [
+      { value: 'Self-started', label: 'Built alongside core work' },
+      { value: 'Zero-install', label: 'Runs for non-technical users day one' },
+      { value: 'In use', label: 'Adopted by a real internal team' },
+      { value: 'Agentic', label: 'AI-assisted, end-to-end build' },
     ],
   },
 ];

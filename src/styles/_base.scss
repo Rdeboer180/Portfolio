@@ -286,6 +286,31 @@ svg {
   border: 0;
 }
 
+// Skip link — visually hidden until focused (WCAG 2.4.1)
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: $spacing-xl;
+  z-index: 9999;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-white;
+  color: $color-neutral-dark;
+  font-family: $font-family-primary;
+  font-size: $font-size-body-sm;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-md;
+  border: 2px solid $color-primary;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: top 0.1s ease;
+
+  &:focus {
+    top: $spacing-md;
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
 // Focus visible for keyboard navigation
 *:focus-visible {
   outline: 2px solid $color-primary;

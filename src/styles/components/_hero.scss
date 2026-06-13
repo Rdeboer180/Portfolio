@@ -2028,6 +2028,20 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
       animation: none !important;
     }
   }
+
+  // Content reveals (eyebrow / headline / body / CTAs) appear instantly — no
+  // translateY/opacity entrance under reduced motion.
+  .hero__reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  // Stop the blinking type cursor (the type machine resolves to 'complete'
+  // immediately, but neutralize the blink for robustness).
+  .hero__cursor {
+    animation: none !important;
+  }
 }
 
 // ============================================
@@ -2164,17 +2178,22 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
 
     &__typed-wrap {
       font-size: 38px;
+      line-height: 1.12;
+      // Reserve two lines so a 4-word phrase ("Care for what ships") wrapping
+      // never shifts the paragraph below it. "Care for" stays together via
+      // hero__final-word-wrap nowrap, so the highlight band is always intact.
+      min-height: 2.3em;
     }
   }
 }
 
-// At the narrowest phone widths the H1 still needs to stay on one line so the
-// selection highlight band covers "System-First" correctly. 32px bold ≈ 220px
-// which fits a 320px viewport's ~272px content width comfortably.
+// At the narrowest phone widths, drop one more size step so the longest phrase
+// stays readable. "Care for" (2 words) never fragments — it's the highlighted unit.
 @media (max-width: $breakpoint-xs) {
   .hero {
     &__typed-wrap {
-      font-size: 32px;
+      font-size: 30px;
+      min-height: 2.3em;
     }
   }
 }

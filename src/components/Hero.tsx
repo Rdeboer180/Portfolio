@@ -3,33 +3,38 @@ import '../styles/styles.scss';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
+// Animated H1 sequence — a craft arc that resolves on the final, static line.
+// Each phrase is short (3–4 words) so it stays legible mid-swap on mobile.
 const roles = [
-  'Designer',
-  'UX Engineer',
-  'System Builder',
+  'Fluent in tools',
+  'Grounded in craft',
+  'Close to code',
+  'Care for what ships',
 ];
 const FINAL_INDEX = roles.length - 1;
 
+// The final phrase resolves with an orange highlight on its lead words only.
+// "Care for" gets the gradient treatment; " what ships" stays in normal H1 styling.
+const FINAL_HIGHLIGHT = 'Care for';
+const FINAL_TRAILING = ' what ships';
+
 // Subtle per-role tool action that maps to a CSS modifier on the bbox
 const roleActions: Array<'nudge' | 'align' | 'rename' | null> = [
-  'nudge', // Designer — gets selected and slightly nudged
-  'align', // UX Engineer — snaps to alignment guide
-  null,    // System Builder — leads into the typing-final rename
+  'nudge', // Fluent in tools — gets selected and slightly nudged
+  'align', // Grounded in craft — snaps to alignment guide
+  null,    // Close to code — clean swap
+  null,    // Care for what ships — leads into the final highlight reveal
 ];
 
 type Phase =
   | 'typing'
   | 'cycling'
-  | 'typing-final'
   | 'paused-final'
   | 'cursor-backtrack'
   | 'editing-final'
   | 'gradient-final'
   | 'complete'
   | 'static'; // user clicked a non-final layer post-load — render text, no animation
-
-// Inserted between "System" and " Builder" to evolve the last role into the final title.
-const FINAL_INSERTION = '-First';
 
 // ── Intro stage conductor ───────────────────────────────────────────────────
 // Single mount effect drives all stage advances from one t0, collected into
@@ -46,9 +51,9 @@ const Hero: React.FC = () => {
   // and schedules the hold → cycling transition automatically.
   const [displayText, setDisplayText] = useState(roles[0]);
   const [phase, setPhase] = useState<Phase>('typing');
+  // (the old "-First" rename insertion state has been removed)
   const [showBBox, setShowBBox] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [typedInsertion, setTypedInsertion] = useState('');
   const isMobileInitial = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const [introStage, setIntroStage] = useState<IntroStage>(isMobileInitial ? 'sketch' : 'scrawl');
 
@@ -100,27 +105,27 @@ const Hero: React.FC = () => {
 
     if (isMobile) {
       // Mobile: compact 3-beat build — no scrawl, no cursor stage, no menu, no panel dock
-      // sketch@0 (already mounted as initial), lowfi@400ms, final@800ms, type@1300ms
-      schedule('lowfi', 400);
-      schedule('final', 800);
-      schedule('type', 1300);
+      schedule('lowfi', 350);
+      schedule('final', 700);
+      schedule('type', 1100);
     } else {
-      // Desktop: scrawl@0, sketch@800ms, lowfi@1700ms, cursor@2400ms, final@3200ms, panel@3750ms
-      // cursor stage window = 800ms (2400→3200): arc(230ms) + rightclick(60ms) + travel(170ms) + hover(120ms) + press(110ms) = 690ms, +110ms buffer
-      // 'type' is triggered by animationend on the panel dock, with a 4800ms fallback
-      schedule('sketch', 800);
-      schedule('lowfi', 1700);
-      schedule('cursor', 2400);
-      schedule('final', 3200);
-      schedule('panel', 3750);
+      // Desktop: scrawl@0, sketch@600, lowfi@1400, cursor@2000, final@2750, panel@3250.
+      // Trimmed ~600ms vs the prior schedule so the resolved headline lands sooner;
+      // the eyebrow (positioning) + pre-placed first phrase are readable from ~0.5s
+      // regardless. cursor window = 750ms (2000→2750), covers the ~690ms cursor beat.
+      // 'type' is triggered by animationend on the panel dock, with a 4200ms fallback.
+      schedule('sketch', 600);
+      schedule('lowfi', 1400);
+      schedule('cursor', 2000);
+      schedule('final', 2750);
+      schedule('panel', 3250);
 
-      // 4800ms fallback in case animationend doesn't fire
       const fallbackId = window.setTimeout(() => {
         setIntroStage((current) => {
           if (current === 'panel' || current === 'cursor') return 'type';
           return current;
         });
-      }, 4800);
+      }, 4200);
       ids.push(fallbackId);
     }
 
@@ -190,7 +195,6 @@ const Hero: React.FC = () => {
       setDisplayText(roles[FINAL_INDEX]);
       setActiveIndex(FINAL_INDEX);
       activeIndexRef.current = FINAL_INDEX;
-      setTypedInsertion(FINAL_INSERTION); // keep panel layer name in sync with final title
       setPhase('complete');
       setShowBBox(false);
       setIntroStage('done');
@@ -202,8 +206,8 @@ const Hero: React.FC = () => {
   // Gated behind 'type'/'done' so the first flash fires only when the intro completes.
   useEffect(() => {
     if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'typing' && phase !== 'cycling' && phase !== 'typing-final') return;
-    const key = `${activeIndex}-${phase === 'typing-final' ? 'edit' : 'sel'}`;
+    if (phase !== 'typing' && phase !== 'cycling') return;
+    const key = `${activeIndex}-sel`;
     if (key === lastFlashedRef.current) return;
     lastFlashedRef.current = key;
     setFlashKey((k) => k + 1);
@@ -241,43 +245,22 @@ const Hero: React.FC = () => {
       setDisplayText(roles[next]);
 
       if (next >= FINAL_INDEX) {
-        // Hold on "System Builder" briefly, then start typing the rename
+        // Final phrase "Care for what ships" has landed plainly — hold a beat,
+        // then resolve it (selection sweep + orange highlight on "Care for").
         scheduleTimeout(() => {
           setShowBBox(false);
-          setTypedInsertion('');
-          setPhase('typing-final');
-        }, 600); // was 900ms
+          setPhase('paused-final');
+        }, 600);
         return;
       }
 
-      scheduleTimeout(advance, 750); // was 1000ms
+      scheduleTimeout(advance, 750);
     };
 
-    scheduleTimeout(advance, 750); // was 1000ms
+    scheduleTimeout(advance, 750);
 
     return () => clearAllTimeouts();
   }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Designer-renaming-a-layer moment: type "-First" between "System" and " Builder"
-  // Timing compressed: 55ms per char, 200ms first-char delay, 350ms hold
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'typing-final' || isPaused) return;
-
-    if (typedInsertion.length === FINAL_INSERTION.length) {
-      // Typing done — hold briefly so the full title reads, then enter resolved state
-      scheduleTimeout(() => setPhase('paused-final'), 350); // was 450ms
-      return () => clearAllTimeouts();
-    }
-
-    // First character is delayed so the bbox flash plays before the cursor lands
-    const delay = typedInsertion.length === 0 ? 200 : 55; // was 360 / 70ms
-    scheduleTimeout(() => {
-      setTypedInsertion(FINAL_INSERTION.substring(0, typedInsertion.length + 1));
-    }, delay);
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, typedInsertion, introStage, scheduleTimeout, clearAllTimeouts]);
 
   // Pause on final word, then show bbox and begin backtrack
   useEffect(() => {
@@ -296,7 +279,7 @@ const Hero: React.FC = () => {
     return () => clearAllTimeouts();
   }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Cursor moves to start of "System-First" — compressed 350ms (was 450ms)
+  // Cursor moves to the start of "Care for" — compressed 350ms
   useEffect(() => {
     if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'cursor-backtrack' || isPaused) return;
@@ -308,7 +291,7 @@ const Hero: React.FC = () => {
     return () => clearAllTimeouts();
   }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
 
-  // Selection drag across "System-First" — compressed 850ms (was 1100ms)
+  // Selection drag across "Care for" — compressed 850ms
   useEffect(() => {
     if (introStage !== 'type' && introStage !== 'done') return;
     if (phase !== 'editing-final' || isPaused) return;
@@ -336,8 +319,7 @@ const Hero: React.FC = () => {
   // Brand-orange selection flash — fires when a new role layer becomes active
   useEffect(() => {
     const isCyclingNewRole = phase === 'cycling' && activeIndex > 0;
-    const isTypingFinalStart = phase === 'typing-final';
-    if (!isCyclingNewRole && !isTypingFinalStart) return;
+    if (!isCyclingNewRole) return;
 
     const key = `${phase}-${activeIndex}`;
     if (lastFlashedRef.current === key) return;
@@ -403,10 +385,8 @@ const Hero: React.FC = () => {
     setShowBBox(false);
 
     if (index === FINAL_INDEX) {
-      // Final layer is permanent: jump straight to the resolved gradient title.
-      // typedInsertion is fixed at FINAL_INSERTION so the panel name stays "System-First Builder".
-      setTypedInsertion(FINAL_INSERTION);
-      setDisplayText(`System${FINAL_INSERTION} Builder`);
+      // Final layer is permanent: jump straight to the resolved highlighted title.
+      setDisplayText(roles[FINAL_INDEX]);
       setPhase('complete');
     } else {
       // Non-final click: just statically display the role text — no cycle, no flash, no action animation.
@@ -426,18 +406,12 @@ const Hero: React.FC = () => {
     phase === 'gradient-final' ||
     phase === 'complete';
   const showGradient = phase === 'gradient-final' || phase === 'complete';
-  const isTypingFinal = phase === 'typing-final';
   // Only animate the per-role tool action during the automatic cycle — never on user clicks.
   const isAutoCycle = phase === 'cycling';
-  const currentAction = isTypingFinal ? 'rename' : isAutoCycle ? roleActions[activeIndex] || null : null;
+  const currentAction = isAutoCycle ? roleActions[activeIndex] || null : null;
 
-  // Layer name in the panel evolves with the typed insertion so the rename reads as in-place editing.
-  // Once typing completes, the layer "saves" the full final title — preserved across scroll/replay.
-  const lastLayerName = `System${typedInsertion} Builder`;
-  // Panel layer list mirrors the role list 1:1 (no orphan undefined rows),
-  // with the last layer's name driven by the typed insertion so it evolves
-  // from "System Builder" → "System-First Builder" as the rename plays.
-  const dynamicRoles = [roles[0], roles[1], lastLayerName];
+  // Panel layer list mirrors the role list 1:1 — the four animated phrases.
+  const dynamicRoles = roles;
 
   return (
     <section className="hero" ref={sectionRef} data-intro-stage={introStage}>
@@ -455,23 +429,21 @@ const Hero: React.FC = () => {
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">16+ years as a senior designer working as a</span>
+              <span className="hero__eyebrow-title">Senior Product Designer bringing craft, code, and care into AI-native workflows</span>
             </p>
 
-            <div
-              className="hero__typed-wrap hero__reveal hero__reveal--2"
-              aria-live="polite"
-            >
+            <div className="hero__typed-wrap hero__reveal hero__reveal--2">
+              {/* Full sequence is available to screen readers immediately via this
+                  static h1; the visual animation below is decorative (aria-hidden),
+                  so no noisy character-by-character live-region announcements. */}
               <h1 className="hero__h1-sr-only">
-                Designer. UX Engineer. System Builder. System-First Builder.
+                Fluent in tools. Grounded in craft. Close to code. Care for what ships.
               </h1>
 
-              <div className={`hero__typed-group${isTypingFinal ? ' hero__typed-group--renaming' : ''}`}>
+              <div className="hero__typed-group">
                 <span
                   key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
-                  className={`hero__typed${
-                    phase !== 'typing' && phase !== 'typing-final' ? ' hero__typed--swap' : ''
-                  }`}
+                  className={`hero__typed${phase !== 'typing' ? ' hero__typed--swap' : ''}`}
                   aria-hidden="true"
                 >
                   {showResolved ? (
@@ -490,7 +462,7 @@ const Hero: React.FC = () => {
                               : 'hero__typed-final-word'
                           }
                         >
-                          System-First
+                          {FINAL_HIGHLIGHT}
                         </span>
                         <span
                           className={`hero__cursor hero__cursor--absolute${
@@ -502,14 +474,7 @@ const Hero: React.FC = () => {
                           }`}
                         />
                       </span>
-                      {' '}Builder
-                    </>
-                  ) : isTypingFinal ? (
-                    <>
-                      System
-                      <span className="hero__typed-insert">{typedInsertion}</span>
-                      {typedInsertion.length > 0 && <span className="hero__cursor" />}
-                      {' Builder'}
+                      {FINAL_TRAILING}
                     </>
                   ) : (
                     <>
@@ -519,7 +484,7 @@ const Hero: React.FC = () => {
                   )}
                 </span>
 
-                {(phase === 'typing' || phase === 'cycling' || phase === 'typing-final') && (
+                {(phase === 'typing' || phase === 'cycling') && (
                   <span
                     key={flashKey}
                     className="hero__bbox-flash"
@@ -541,15 +506,13 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            Product design, UX/UI, front-end logic, and design systems&mdash;<span className="animated-bold">connected by craft, care, and production-minded judgment.</span>
-            {' '}
-            Design is no longer just a handoff. My background in visual communication, front-end code, design systems, and AI-assisted workflows helps me move from idea to interface with more context and better judgment. <span className="animated-bold">I build beyond the artboard</span>&mdash;shaping the systems, details, and decisions that help teams ship stronger work.
+            Product design, UX/UI, front-end logic, and design systems&mdash;connected by <span className="animated-bold">craft, care, and production-minded judgment</span>. My background in visual communication, front-end code, design systems, and AI-assisted workflows helps me move from idea to interface with more context and better decisions. I build beyond the artboard&mdash;shaping the systems, details, and decisions that help teams <span className="animated-bold">ship stronger work</span>.
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">
               <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
                 <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
-                rdeboer180@gmail.com
+                Get in touch
               </a>
               <a href="#projects" className="btn btn--secondary btn--lg">
                 View my work

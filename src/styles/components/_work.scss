@@ -145,6 +145,22 @@
     font-weight: $font-weight-regular;
   }
 
+  // "View case study →" affordance label — decorative CTA, aria-hidden
+  &__card-cta {
+    display: inline-block;
+    margin-top: $spacing-md;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    letter-spacing: 0.01em;
+    transition: transform $transition-fast;
+  }
+
+  // Nudge the arrow on card hover via the parent card's :hover
+  &__card:hover &__card-cta {
+    transform: translateX(4px);
+  }
+
   // ==========================================
   // Card Visual (image area)
   // ==========================================

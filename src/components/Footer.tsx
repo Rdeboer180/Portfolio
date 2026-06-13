@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
           </div>
           <div className="footer__actions">
             <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--md">
-              rdeboer180@gmail.com
+              Get in touch
             </a>
             <a href="https://www.linkedin.com/in/ryandeboerdesigns" className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
