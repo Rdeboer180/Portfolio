@@ -19,11 +19,14 @@ const Lightbox: React.FC<{
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
 
-  // Move focus to close button on open; restore to trigger on close
+  // Move focus to close button on open; restore to trigger on close.
+  // Capture the trigger element at mount (it's stable for the lightbox's life)
+  // so the cleanup doesn't read a ref that may have changed.
   useEffect(() => {
     closeRef.current?.focus();
+    const trigger = triggerRef?.current;
     return () => {
-      triggerRef?.current?.focus();
+      trigger?.focus();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
