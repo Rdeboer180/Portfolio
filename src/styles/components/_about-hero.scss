@@ -1,0 +1,262 @@
+// ============================================
+// About Hero — text-first editorial intro
+// Reading column leads; craft marks sit in light margins.
+// ============================================
+
+@import '../variables';
+
+.about-hero {
+  padding: 150px 0 $spacing-4xl;
+  border-bottom: 1px solid $color-neutral-light;
+  background: $color-neutral-lightest ;
+
+  &__inner {
+    position: relative;
+    max-width: 1186px;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 236px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  // Left margin — faint vertical process words (decorative)
+  &__process {
+    position: absolute;
+    left: 6px;
+    top: 96px;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: $color-neutral-light;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // ── Reading column ───────────────────────────────────────────────────────
+  &__column {
+    padding-left: 26px;
+    min-width: 0;
+  }
+
+  &__eyebrow {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    color: $color-primary-dark;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 $spacing-xl;
+  }
+
+  &__headline {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-weight: $font-weight-extrabold;
+    font-size: clamp(2.4rem, 5.4vw, 3.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: $color-neutral-dark;
+  }
+
+  &__line {
+    display: block;
+
+    &--mark {
+      position: relative;
+      width: fit-content;
+    }
+  }
+
+  // Clips only the text for the upward reveal — never the underline below it
+  &__line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  &__line-inner {
+    display: inline-block;
+    will-change: transform;
+  }
+
+  // Hand-drawn underline under "through-line."
+  &__underline {
+    position: absolute;
+    left: 0;
+    bottom: -0.32em;
+    width: 100%;
+    height: 16px;
+    overflow: visible;
+  }
+
+  // ── Tool path ─────────────────────────────────────────────────────────────
+  &__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: $spacing-3xl;
+  }
+
+  &__tool {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: $color-neutral-standard;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-md;
+    padding: 6px 11px;
+    background: $color-white;
+    white-space: nowrap;
+
+    &--accent {
+      color: $color-white;
+      background: $color-primary;
+      border-color: $color-primary;
+    }
+  }
+
+  &__tool-arrow {
+    color: $color-primary-md;
+    font-size: 14px;
+  }
+
+  &__intro {
+    margin: $spacing-2xl 0 0;
+    max-width: 560px;
+
+    p {
+      font-family: $font-family-primary;
+      font-size: $font-size-body-lg;
+      line-height: 1.62;
+      color: $color-neutral-standard;
+      margin: 0 0 $spacing-lg;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // ── Right margin — artifact cluster (decoration) ─────────────────────────
+  &__artifacts {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+    padding-top: 6px;
+  }
+
+  &__note {
+    align-self: flex-start;
+    max-width: 210px;
+    background: $color-primary-light;
+    border: 1px solid $color-primary-md;
+    border-radius: $radius-lg;
+    padding: 14px 18px;
+    box-shadow: 0 10px 22px -16px rgba($color-primary, 0.6);
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.05;
+    color: $color-primary-dark;
+  }
+
+  &__checklist {
+    width: 188px;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-lg;
+    padding: 16px 18px;
+    box-shadow: 0 12px 26px -20px rgba(0, 0, 0, 0.4);
+    transform: rotate(1.5deg);
+  }
+
+  &__checklist-label {
+    font-family: $font-family-mono;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    margin-bottom: 11px;
+  }
+
+  &__checklist-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: $font-family-primary;
+      font-size: 13.5px;
+      color: $color-neutral-dark;
+    }
+
+    svg {
+      color: $color-primary; // check stroke uses currentColor
+      flex-shrink: 0;
+    }
+  }
+
+  &__comment {
+    text-align: right;
+    max-width: 210px;
+    align-self: flex-end;
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.1;
+    color: $color-neutral-muted;
+  }
+
+  &__comment-arrow {
+    display: block;
+    margin: 0 0 2px auto;
+    color: $color-neutral-light;
+    overflow: visible;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: $breakpoint-lg) {
+  .about-hero {
+    &__inner {
+      grid-template-columns: 1fr;
+      gap: $spacing-2xl;
+    }
+
+    &__process { display: none; }
+    &__column { padding-left: 0; }
+
+    // Keep only the handwritten note; drop the heavier artifacts on small widths
+    &__artifacts {
+      flex-direction: row;
+    }
+
+    &__note {
+      max-width: none;
+      font-size: 22px;
+    }
+
+    &__checklist,
+    &__comment {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .about-hero {
+    padding-top: 120px;
+  }
+}

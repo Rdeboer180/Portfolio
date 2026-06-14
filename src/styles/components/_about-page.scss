@@ -1,58 +1,46 @@
 // ============================================
-// About Page — Hero + collapsible AI panel
+// About Page — canvas, nav, hero, transition card
+// Chat/prompt/typing styles have been removed.
+// Story stack → _about-story.scss
+// Process principles → _process-principles.scss
 // ============================================
 
 @import '../variables';
 
-// ==========================================
-// Animations
-// ==========================================
-@keyframes aboutContentReveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes aboutPanelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes aboutPulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
-@keyframes aboutCursorBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes aboutContentReveal { from { opacity: 1; transform: none; } }
-  @keyframes aboutPanelReveal { from { opacity: 1; transform: none; } }
-  @keyframes aboutPulse { 0%, 100% { opacity: 1; } }
-}
+// ── Page shell — white canvas + faint construction grid ──────────────────────
 
 .about-page {
+  position: relative;
   min-height: 100vh;
   background: $color-white;
   font-family: $font-family-primary;
 
-  // ==========================================
-  // Navigation
-  // ==========================================
+  // Full-bleed construction grid — radial-masked to fade at edges
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    // Radial mask fades the grid toward all edges
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%,
+      black 30%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%,
+      black 30%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // All direct children sit above the grid
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  // ── Navigation ──────────────────────────────────────────────────────────────
+
   &__nav {
     position: fixed;
     top: 0;
@@ -76,6 +64,12 @@
     color: $color-neutral-dark;
     text-decoration: none;
     letter-spacing: -0.02em;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: $radius-sm;
+    }
   }
 
   &__nav-back {
@@ -87,448 +81,107 @@
     &:hover {
       color: $color-primary;
     }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: $radius-sm;
+    }
   }
 
-  // ==========================================
-  // Hero — static intro
-  // ==========================================
-  &__hero {
-    padding: 130px 0 $spacing-3xl;
-    background: $color-white;
-    border-bottom: 1px solid $color-neutral-light;
-  }
+  // ── Transition card — the single orange dot-matrix signature moment ───────────
 
-  &__hero-inner {
-    max-width: 960px;
+  &__transition-card {
+    max-width: 1186px;
     margin: 0 auto;
     padding: 0 $container-padding-x;
   }
 
-  &__hero-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-h1;
-    font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-
-  &__hero-role {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-lg;
-    color: $color-primary;
-    font-weight: $font-weight-medium;
-    margin-top: $spacing-sm;
-  }
-
-  &__hero-body {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-lg;
-    line-height: 1.75;
-    color: $color-neutral-standard;
-    margin-top: $spacing-xl;
-    max-width: 800px;
-  }
-
-  // ==========================================
-  // AI panel
-  // ==========================================
-  &__panel {
-    background: $color-neutral-lightest;
-    padding: 0 0 $spacing-3xl;
+  &__transition-inner {
     position: relative;
-    animation: aboutPanelReveal 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    background: $color-primary-muted;
+    border-radius: $radius-2xl;
+    padding: $spacing-3xl;
+    overflow: hidden;
 
+    // Dot-matrix overlay: white dots at low opacity over the orange fill
     &::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(circle, rgba($color-neutral-standard, 0.1) 1px, transparent 1px);
-      background-size: 24px 24px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+      background-size: 6px 6px;
+      opacity: 0.6;
       pointer-events: none;
+      border-radius: inherit;
     }
   }
 
-  &__panel-container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 $container-padding-x;
+  &__transition-label {
     position: relative;
     z-index: 1;
-  }
-
-  // ==========================================
-  // System bar
-  // ==========================================
-  &__system-bar {
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-    padding: $spacing-xl 0 $spacing-lg;
-  }
-
-  &__system-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $color-primary;
-    animation: aboutPulse 2s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-
-  &__system-label {
     font-family: $font-family-mono;
-    font-size: 11px;
+    font-size: $font-size-caption;
     font-weight: $font-weight-medium;
-    color: $color-neutral-muted;
-    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-  }
-
-  // ==========================================
-  // Prompt exchange
-  // ==========================================
-  &__prompt-exchange {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
-    margin-bottom: $spacing-xl;
-  }
-
-  &__msg {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    &--user {
-      align-items: flex-end;
-    }
-
-    &--ai {
-      align-items: flex-start;
-    }
-  }
-
-  &__msg-label {
-    font-family: $font-family-mono;
-    font-size: 11px;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 0 $spacing-sm;
-
-    .about-page__msg--user & {
-      color: $color-neutral-muted;
-    }
-
-    .about-page__msg--ai & {
-      color: $color-primary;
-    }
-  }
-
-  &__msg-bubble {
-    border-radius: $radius-lg;
-    padding: $spacing-lg $spacing-xl;
-
-    p {
-      font-family: $font-family-primary;
-      font-size: $font-size-body;
-      line-height: $line-height-body-relaxed;
-      margin: 0;
-    }
-
-    strong {
-      font-weight: $font-weight-semibold;
-      color: $color-neutral-dark;
-    }
-
-    &--user {
-      max-width: 85%;
-      border-radius: $radius-lg $radius-lg 4px $radius-lg;
-      background: $color-neutral-standard;
-      color: $color-white;
-
-      p { color: $color-white; }
-    }
-
-    &--ai {
-      background: $color-white;
-      border-left: 3px solid $color-primary;
-      color: $color-neutral-standard;
-      box-shadow: $shadow-sm;
-    }
-  }
-
-  &__typing-cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    background: currentColor;
-    margin-left: 2px;
-    vertical-align: text-bottom;
-    animation: aboutCursorBlink 0.9s steps(1) infinite;
-  }
-
-  // ==========================================
-  // Topic chips
-  // ==========================================
-  &__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-sm;
     margin-bottom: $spacing-lg;
   }
 
-  &__chip {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-medium;
-    color: $color-neutral-dark;
-    background: $color-white;
-    border: 1px solid $color-neutral-light;
-    border-radius: $radius-full;
-    padding: $spacing-sm $spacing-lg;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-
-    &:hover:not(:disabled):not(&--active) {
-      border-color: $color-primary;
-      color: $color-primary;
-      box-shadow: 0 1px 4px rgba($color-primary, 0.12);
-    }
-
-    &--active {
-      background: $color-primary;
-      border-color: $color-primary;
-      color: $color-white;
-      cursor: default;
-      box-shadow: 0 2px 8px rgba($color-primary, 0.25);
-    }
-
-    &--explored {
-      border-color: rgba($color-primary, 0.3);
-      color: $color-neutral-muted;
-    }
-
-    &:disabled {
-      cursor: default;
-      opacity: 0.6;
-    }
-  }
-
-  // ==========================================
-  // Session awareness
-  // ==========================================
-  &__session-note {
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    color: $color-neutral-muted;
-    margin-bottom: $spacing-xl;
-    letter-spacing: 0.02em;
-  }
-
-  // ==========================================
-  // Content display area
-  // ==========================================
-  &__content-area {
-    background: $color-white;
-    border-radius: $radius-lg;
-    padding: $spacing-2xl $spacing-3xl;
-    box-shadow: $shadow-sm;
-    border-left: 3px solid $color-primary;
-    transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-                transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-
-    &--visible {
-      animation: aboutContentReveal 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-
-    &--erasing {
-      opacity: 0;
-      transform: translateY(-8px) scale(0.98);
-    }
-  }
-
-  &__content-title {
+  &__transition-headline {
+    position: relative;
+    z-index: 1;
     font-family: $font-family-heading;
-    font-size: $font-size-h2;
+    font-size: $font-size-h3;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
-    line-height: 1.2;
+    color: $color-white;
     letter-spacing: -0.02em;
+    line-height: 1.2;
     margin-bottom: $spacing-xl;
-    padding-bottom: $spacing-lg;
-    border-bottom: 1px solid $color-neutral-light;
-    text-transform: none !important;
   }
 
-  &__content-body {
-    p {
-      font-family: $font-family-primary;
-      font-size: $font-size-body-lg;
-      line-height: 1.75;
-      color: $color-neutral-standard;
-      margin-bottom: $spacing-xl;
+  &__transition-body {
+    position: relative;
+    z-index: 1;
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 540px;
 
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      strong {
-        font-weight: $font-weight-semibold;
-        color: $color-neutral-dark;
-      }
+    & + & {
+      margin-top: $spacing-lg;
     }
   }
 }
 
-// ==========================================
-// Responsive
-// ==========================================
+// ── Responsive ───────────────────────────────────────────────────────────────
+
 @media (max-width: $breakpoint-md) {
   .about-page {
     &__nav {
       padding: $spacing-lg $spacing-xl;
     }
 
-    &__hero {
-      padding-top: 100px;
+    &__transition-inner {
+      padding: $spacing-2xl;
     }
 
-    &__hero-title {
-      font-size: $font-size-h2;
-    }
-
-    &__content-area {
-      padding: $spacing-xl $spacing-lg;
-    }
-
-    &__content-title {
-      font-size: $font-size-h3;
-    }
-
-    &__msg-bubble {
-      padding: $spacing-md $spacing-lg;
-
-      &--user {
-        max-width: 90%;
-      }
-    }
-
-    &__chips {
-      gap: $spacing-xs;
-    }
-
-    &__chip {
-      padding: $spacing-xs $spacing-md;
-      font-size: $font-size-caption;
-    }
-  }
-}
-
-// ==========================================
-// Standalone About Section (UX Variant)
-// ==========================================
-.about-page--standalone {
-  min-height: auto;
-  padding: $spacing-4xl $spacing-3xl;
-
-  @media (max-width: $breakpoint-md) {
-    padding: $spacing-3xl $spacing-2xl;
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    padding: $spacing-2xl $spacing-lg;
-  }
-}
-
-.about-page__container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.about-page__content {
-  display: flex;
-  flex-direction: column;
-}
-
-.about-page__heading {
-  font-family: $font-family-heading;
-  font-size: $font-size-h2;
-  font-weight: $font-weight-extrabold;
-  color: $color-neutral-dark;
-  margin-bottom: $spacing-3xl;
-  text-align: left;
-  letter-spacing: 0.035em;
-
-  @media (max-width: $breakpoint-sm) {
-    font-size: $font-size-h3;
-    margin-bottom: $spacing-2xl;
-  }
-}
-
-.about-page__body {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
-
-  p {
-    font-size: $font-size-body;
-    line-height: $line-height-body-relaxed;
-    color: $color-neutral-standard;
-    margin: 0;
-
-    strong {
-      font-weight: $font-weight-semibold;
-      color: $color-neutral-dark;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-      font-size: $font-size-body-sm;
-      line-height: 1.6;
+    &__transition-headline {
+      font-size: $font-size-h4;
     }
   }
 }
 
 @media (max-width: $breakpoint-sm) {
   .about-page {
-    &__hero-title {
-      font-size: $font-size-h3;
+    &__transition-inner {
+      padding: $spacing-xl $spacing-lg;
     }
 
-    &__content-title {
-      font-size: $font-size-h4;
-    }
-
-    &__content-area {
-      padding: $spacing-lg $spacing-md;
-    }
-
-    &__content-body p {
-      font-size: $font-size-body;
-      line-height: $line-height-body-relaxed;
-    }
-
-    &__panel {
-      padding-bottom: $spacing-2xl;
-    }
-
-    &__msg-bubble {
-      padding: $spacing-md;
-
-      p {
-        font-size: $font-size-body-sm;
-        line-height: $line-height-body-sm;
-      }
-
-      &--user {
-        max-width: 92%;
-      }
-    }
-
-    &__chip {
-      padding: $spacing-xs $spacing-sm;
+    &__transition-headline {
+      font-size: $font-size-h5;
     }
   }
 }

@@ -1,0 +1,108 @@
+// ============================================
+// About Story — text-first story flow (six beats, NOT tabs/cards)
+// Index · headline · paragraph · one orange handwritten annotation.
+// ============================================
+
+@import '../variables';
+
+.about-story {
+  padding: $spacing-4xl 0;
+
+  &__inner {
+    max-width: 1186px;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // ── One story beat ─────────────────────────────────────────────────────────
+  &__beat {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 236px;
+    gap: 28px;
+    align-items: start;
+    padding: $spacing-3xl 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__index {
+    font-family: $font-family-mono;
+    font-size: 13px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    padding-top: 6px;
+    user-select: none;
+  }
+
+  &__copy {
+    min-width: 0;
+    max-width: 560px;
+  }
+
+  &__heading {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    color: $color-neutral-dark;
+  }
+
+  &__para {
+    margin: $spacing-md 0 0;
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.7;
+    color: $color-neutral-standard;
+  }
+
+  // ── Margin annotation (the single craft mark per beat) ─────────────────────
+  &__aside {
+    padding-top: 4px;
+  }
+
+  &__annotation {
+    display: block;
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.15;
+    color: $color-primary-dark;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+
+@media (max-width: $breakpoint-md) {
+  .about-story {
+    padding: $spacing-2xl 0;
+
+    &__beat {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+      padding: $spacing-2xl 0;
+    }
+
+    &__index {
+      padding-top: 0;
+    }
+
+    &__copy {
+      max-width: none;
+    }
+
+    // Annotation becomes an inline aside under the paragraph, with a left rule
+    &__aside {
+      padding-top: $spacing-md;
+    }
+
+    &__annotation {
+      padding-left: $spacing-md;
+      border-left: 3px solid $color-primary;
+    }
+  }
+}
