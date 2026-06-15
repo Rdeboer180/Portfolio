@@ -1,0 +1,79 @@
+// ============================================
+// Reveal utilities — Waabi-inspired editorial copy reveal
+// Masked line reveal + block fade/rise + SVG stroke draw.
+// Toggle `is-visible` on a container (via useReveal); children stagger with
+// an inline `--reveal-delay`. Visual only — content stays in the DOM.
+// ============================================
+
+@import '../variables';
+
+$reveal-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+// ── Masked line reveal (headlines) ───────────────────────────────────────────
+.reveal-mask {
+  display: block;
+  overflow: hidden;
+  // breathing room so descenders are never clipped (offset so layout is unchanged)
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.reveal-mask__inner {
+  display: block;
+  transform: translateY(110%);
+  opacity: 0;
+  transition:
+    transform 640ms $reveal-ease var(--reveal-delay, 0ms),
+    opacity 420ms ease var(--reveal-delay, 0ms);
+  will-change: transform;
+}
+
+.is-visible .reveal-mask__inner,
+.reveal-mask.is-visible .reveal-mask__inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+// ── Block fade/rise (body, eyebrow, chips, annotations) ──────────────────────
+.reveal-fade {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    transform 560ms $reveal-ease var(--reveal-delay, 0ms),
+    opacity 520ms ease var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.is-visible .reveal-fade,
+.reveal-fade.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// ── SVG stroke draw (sketch underline) ───────────────────────────────────────
+// The path must carry pathLength="1" so dash math is normalized.
+.reveal-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 460ms ease var(--reveal-delay, 0ms);
+}
+
+.is-visible .reveal-draw,
+.reveal-draw.is-visible {
+  stroke-dashoffset: 0;
+}
+
+// ── Reduced motion: render everything final, no movement/draw ─────────────────
+@media (prefers-reduced-motion: reduce) {
+  .reveal-mask__inner,
+  .reveal-fade {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .reveal-draw {
+    transition: none;
+    stroke-dashoffset: 0;
+  }
+}

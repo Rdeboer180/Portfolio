@@ -315,6 +315,28 @@ export const storySections: StorySection[] = [
   },
   {
     num: '06',
+    title: 'Building better bridges',
+    body: [
+      'I believe the best work happens when people have enough space to think deeply and enough ' +
+        'connection to not work in isolation. Remote work has been a huge part of that for me. It ' +
+        'gives me the room to do focused design work, stay present for my family, and return to ' +
+        'the work with more energy — but I do not believe remote culture works by accident.',
+      'At Tire Rack, I’ve been a founding leader of MPG, an internal group built around ' +
+        'connection, shared learning, and cross-functional conversation. That work has shaped how ' +
+        'I think about team culture. Collaboration is not just being in the same room. It is ' +
+        'trust, context, shared language, and people choosing to keep professional relationships ' +
+        'strong even when the work happens across screens.',
+      'That is also why I’m interested in what tools like Claude can unlock for stakeholder ' +
+        'collaboration. When a product idea, rough thought, strategy note, or workflow problem can ' +
+        'be brought to higher fidelity faster, more people can participate earlier. A PM, designer, ' +
+        'developer, stakeholder, or subject-matter expert can get their idea into a shape the team ' +
+        'can actually react to. That does not replace design judgment. It creates a better starting ' +
+        'point for shared understanding.',
+    ],
+    annotation: 'Collaboration is not proximity. It is trust, context, and intent.',
+  },
+  {
+    num: '07',
     title: 'How I work',
     body: [
       'I start by defining the problem and aligning early, because a polished solution does not ' +
