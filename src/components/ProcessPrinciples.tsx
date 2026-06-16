@@ -1,89 +1,15 @@
 // ============================================
-// ProcessPrinciples — numbered accordion
-// 5 rows, one open at a time, first open by default
-// Full keyboard a11y + reduced-motion
+// ProcessPrinciples — "My Process" sticky stacking cards
+// Daydream-Method-style: each principle is a card whose title bar pins and
+// stacks at the top as you scroll; the active card shows its breakdown, the
+// next card slides up and covers it (pure-CSS sticky stack — opaque cards).
+// Mobile / reduced-motion → a plain readable list (no pinning).
 // ============================================
 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { principles } from '../data/about';
 
-// ── Reduced-motion detection ─────────────────────────────────────────────────
-
-function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(() =>
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : false
-  );
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-  return reduced;
-}
-
-// ── Animated expand/collapse using max-height ─────────────────────────────────
-// When reduced-motion is off, we animate max-height 0 → scrollHeight.
-// When reduced-motion is on, we rely on the `hidden` attribute for instant swap.
-
-interface AccordionBodyProps {
-  isOpen: boolean;
-  reducedMotion: boolean;
-  id: string;
-  labelledBy: string;
-  children: React.ReactNode;
-}
-
-const AccordionBody: React.FC<AccordionBodyProps> = ({
-  isOpen,
-  reducedMotion,
-  id,
-  labelledBy,
-  children,
-}) => {
-  const innerRef = useRef<HTMLDivElement>(null);
-
-  if (reducedMotion) {
-    // Instant: use `hidden` attribute — browser removes from layout entirely
-    return (
-      <div
-        id={id}
-        role="region"
-        aria-labelledby={labelledBy}
-        className="process-principles__body"
-        hidden={!isOpen}
-      >
-        <div className="process-principles__body-inner">{children}</div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      id={id}
-      role="region"
-      aria-labelledby={labelledBy}
-      className={`process-principles__body${isOpen ? ' process-principles__body--open' : ''}`}
-    >
-      <div ref={innerRef} className="process-principles__body-inner">
-        {children}
-      </div>
-    </div>
-  );
-};
-
-// ── Main component ────────────────────────────────────────────────────────────
-
 const ProcessPrinciples: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState(0); // first row open by default
-  const reducedMotion = useReducedMotion();
-
-  const toggle = (i: number) => {
-    setOpenIndex((prev) => (prev === i ? -1 : i));
-  };
-
   return (
     <section className="process-principles" aria-labelledby="process-heading">
       <div className="process-principles__inner">
@@ -97,55 +23,38 @@ const ProcessPrinciples: React.FC = () => {
           I start by defining the problem and aligning early, design with intent, ship
           confidently, and refine through reflection to make the next iteration better.
         </p>
+      </div>
 
-        {/* Accordion rows */}
-        <div className="process-principles__rows" role="list">
-          {principles.map((p, i) => {
-            const isOpen = openIndex === i;
-            const headerId = `process-header-${p.num}`;
-            const bodyId = `process-body-${p.num}`;
-            return (
-              <div
-                key={p.num}
-                className={`process-principles__row${isOpen ? ' process-principles__row--active' : ''}`}
-                role="listitem"
-                style={{ ['--stack-i' as string]: i }}
-              >
-                <button
-                  id={headerId}
-                  className="process-principles__row-header"
-                  aria-expanded={isOpen}
-                  aria-controls={bodyId}
-                  onClick={() => toggle(i)}
-                >
-                  <span className="process-principles__row-num" aria-hidden="true">
-                    {p.num}
-                  </span>
-                  <span className="process-principles__row-meta">
-                    <span className="process-principles__row-label">[ {p.label} ]</span>
-                    <span className="process-principles__row-title">{p.title}</span>
-                  </span>
-                  <span
-                    className={`process-principles__row-chevron${isOpen ? ' process-principles__row-chevron--open' : ''}`}
-                    aria-hidden="true"
-                  >
-                    +
-                  </span>
-                </button>
+      {/* Stacking deck */}
+      <div className="process-principles__deck" role="list">
+        {principles.map((p, i) => (
+          <article
+            key={p.num}
+            className="process-principles__card"
+            role="listitem"
+            style={{ ['--i' as string]: i }}
+          >
+            <header className="process-principles__bar">
+              <span className="process-principles__num" aria-hidden="true">
+                {p.num}
+              </span>
+              <h3 className="process-principles__bar-title">{p.title}</h3>
+            </header>
 
-                <AccordionBody
-                  id={bodyId}
-                  labelledBy={headerId}
-                  isOpen={isOpen}
-                  reducedMotion={reducedMotion}
-                >
-                  {p.body}
-                </AccordionBody>
+            <div className="process-principles__breakdown">
+              <div className="process-principles__tile" aria-hidden="true">
+                {p.num}
               </div>
-            );
-          })}
-        </div>
+              <div className="process-principles__breakdown-text">
+                <span className="process-principles__breakdown-label">[ {p.label} ]</span>
+                <div className="process-principles__breakdown-body">{p.body}</div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
 
+      <div className="process-principles__inner">
         {/* Closing statement */}
         <p className="process-principles__closing">
           The tools will keep changing. The expectations will keep rising. My process is built

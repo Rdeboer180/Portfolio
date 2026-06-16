@@ -16,7 +16,11 @@
 
 html,
 body {
-  overflow-x: hidden;
+  // `clip` prevents horizontal scroll WITHOUT creating a scroll container,
+  // so descendant `position: sticky` still pins to the viewport.
+  // (`hidden` would make body a scroller and break all sticky positioning.)
+  overflow-x: hidden; // fallback for browsers without `clip`
+  overflow-x: clip;
 }
 
 html {
