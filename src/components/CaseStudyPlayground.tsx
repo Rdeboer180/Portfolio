@@ -229,12 +229,32 @@ const coinVariantsReduced = {
   out: (c: Coin) => ({ y: 0, x: 0, rotate: c.rot, opacity: 0, transition: { duration: 0.2 } }),
 };
 
+// ── Touch detection ───────────────────────────────────────────────────────────
+// `(hover: none)` = the primary input can't hover (phones/tablets). On those
+// devices the coin drop is driven by scroll-into-view instead of hover.
+
+function useTouchDevice(): boolean {
+  const [isTouch, setIsTouch] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(hover: none)').matches
+      : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: none)');
+    const handler = (e: MediaQueryListEvent) => setIsTouch(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isTouch;
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 const EXIT_RESET_MS = 750; // out-animation length before coins re-park above
 
 const CaseStudyPlayground: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const isTouch = useTouchDevice();
   const [sectionRef, revealed] = useReveal<HTMLElement>(0.15);
   const gridRef = useRef<HTMLDivElement>(null);
   const [phases, setPhases] = useState<Record<string, CoinPhase>>({});
@@ -262,6 +282,43 @@ const CaseStudyPlayground: React.FC = () => {
       EXIT_RESET_MS
     );
   };
+
+  // Touch devices: drive the coin drop from visibility instead of hover.
+  // A card ≥60% in view drops its coins in; scrolling/swiping it out lets them
+  // fall away — so the animation replays as you move through the carousel.
+  useEffect(() => {
+    if (!isTouch) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const cardEls = Array.from(
+      grid.querySelectorAll<HTMLElement>('[data-slug]')
+    );
+    if (cardEls.length === 0) return;
+
+    const seen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const slug = (entry.target as HTMLElement).dataset.slug;
+          if (!slug) return;
+          if (entry.isIntersecting) {
+            seen.add(slug);
+            handleEnter(slug);
+          } else if (seen.has(slug)) {
+            // Only fall out after having been seen (avoids a mount-time flurry)
+            handleLeave(slug);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    cardEls.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+    // handleEnter/handleLeave are stable in behavior (setState + refs only)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTouch]);
 
   const scrollByCard = (dir: 1 | -1) => {
     const el = gridRef.current;
@@ -327,10 +384,11 @@ const CaseStudyPlayground: React.FC = () => {
                 key={card.slug}
                 href={`#/work/${card.slug}`}
                 className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}`}
-                onMouseEnter={() => handleEnter(card.slug)}
-                onMouseLeave={() => handleLeave(card.slug)}
-                onFocus={() => handleEnter(card.slug)}
-                onBlur={() => handleLeave(card.slug)}
+                data-slug={card.slug}
+                onMouseEnter={isTouch ? undefined : () => handleEnter(card.slug)}
+                onMouseLeave={isTouch ? undefined : () => handleLeave(card.slug)}
+                onFocus={isTouch ? undefined : () => handleEnter(card.slug)}
+                onBlur={isTouch ? undefined : () => handleLeave(card.slug)}
               >
                 {/* Top — preview */}
                 <div className="case-playground__preview">

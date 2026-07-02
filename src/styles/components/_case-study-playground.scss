@@ -398,6 +398,24 @@
   }
 }
 
+// ── Touch devices (no hover): CTA always drawn + orange ───────────────────────
+// Hover can't reveal the link affordance on touch, so the arrow renders fully
+// drawn and the CTA keeps the orange link styling at all times. The coin drop
+// is driven by scroll-into-view in CaseStudyPlayground.tsx.
+
+@media (hover: none) {
+  .case-playground {
+    &__cta {
+      color: $color-primary;
+    }
+
+    &__cta-arrow-svg path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+}
+
 // ── Reduced motion: no draw-in/spark/preview motion; coins fade via JS ────────
 
 @media (prefers-reduced-motion: reduce) {
