@@ -104,10 +104,12 @@ const Hero: React.FC = () => {
     };
 
     if (isMobile) {
-      // Mobile: compact 3-beat build — no scrawl, no cursor stage, no menu, no panel dock
-      schedule('lowfi', 350);
-      schedule('final', 700);
-      schedule('type', 1100);
+      // Mobile: compact 3-beat build — no scrawl, no cursor stage, no menu, no
+      // panel dock. Beats are long enough for the craft marks (crop corners,
+      // notes, arrows) to pop + draw before they erase to remnants at 'final'.
+      schedule('lowfi', 650);
+      schedule('final', 1250);
+      schedule('type', 1550);
     } else {
       // Desktop: scrawl@0, sketch@600, lowfi@1400, cursor@2000, final@2750, panel@3250.
       // Trimmed ~600ms vs the prior schedule so the resolved headline lands sooner;
@@ -439,6 +441,21 @@ const Hero: React.FC = () => {
               <h1 className="hero__h1-sr-only">
                 Fluent in tools. Grounded in craft. Close to code. Care for what ships.
               </h1>
+
+              {/* Invisible sizer — stacks every phrase in one grid cell so the
+                  wrap reserves exactly the tallest phrase's rendered height at
+                  the current width. Replaces the old fixed min-height, which
+                  left a large empty band under the H1 on phones where the
+                  final line didn't actually wrap. */}
+              <span className="hero__typed-sizer" aria-hidden="true">
+                {roles.slice(0, FINAL_INDEX).map((r) => (
+                  <span key={r}>{r}</span>
+                ))}
+                <span>
+                  <span className="hero__final-word-wrap">{FINAL_HIGHLIGHT}</span>
+                  {FINAL_TRAILING}
+                </span>
+              </span>
 
               <div className="hero__typed-group">
                 <span

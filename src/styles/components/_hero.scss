@@ -222,11 +222,35 @@
     color: $color-neutral-dark;
     letter-spacing: -0.02em;
     margin-bottom: $spacing-xs;
-    min-height: 1.2em;
+    // Sizer-stack layout: the invisible sizer and the live typed group share
+    // one grid cell, so the wrap's height always equals the tallest phrase's
+    // real rendered height at the current width — no fixed min-height, no
+    // layout shift while roles cycle, no dead band when nothing wraps.
+    display: grid;
+    justify-items: start;
+  }
+
+  // Invisible height reservation — every role phrase stacked in the same cell
+  &__typed-sizer {
+    grid-area: 1 / 1;
+    display: grid;
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+
+    > span {
+      grid-area: 1 / 1;
+      // Small allowance for the typing caret so a borderline phrase never
+      // wraps one line taller than the sizer reserved
+      padding-right: 0.5ch;
+    }
   }
 
   &__typed-group {
     position: relative;
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: start;
     display: inline-flex;
     align-items: flex-end;
   }
@@ -2091,6 +2115,11 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
 
     &__typed-wrap {
       font-size: 38px;
+      justify-items: center; // centered layout on mobile
+    }
+
+    &__typed-group {
+      justify-self: center;
     }
 
     &__headline {
@@ -2150,18 +2179,52 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
       height: 1px;
     }
 
-    // Mobile intro: hide layout-only elements, keep sketch circle + ring + photo reveal
-    // scrawl/eraser never render on mobile (mobile starts at sketch)
+    // Mobile intro: hide the desktop-layout-dependent machinery (cursor beat,
+    // context menu, grid, scrawl/eraser — mobile starts at sketch), but KEEP
+    // the compact craft marks: crop corners, two chicken-scratch notes, and
+    // both hand-drawn arrows. Their existing stage choreography (pop → draw →
+    // erase to remnant ghosts) plays inside the mobile 3-beat intro.
     .hero__intro-grid,
-    .hero__intro-note,
-    .hero__intro-crop,
     .hero__intro-cursor,
     .hero__intro-menu,
-    .hero__intro-arrow,
     .hero__intro-scrawl,
     .hero__intro-scrawl-remnant,
     .hero__intro-eraser {
       display: none;
+    }
+
+    // Two notes read better than four on a small centered canvas
+    .hero__intro-note {
+      &--shell,
+      &--motion {
+        display: none;
+      }
+
+      // Hug the centered photo (visual is full-width; the circle is ~280px)
+      &--radius {
+        top: 1%;
+        right: calc(50% - 170px);
+      }
+
+      &--mask {
+        bottom: 2%;
+        left: calc(50% - 178px);
+      }
+    }
+
+    // Arrows bridge each note toward the ring
+    .hero__intro-arrow {
+      &--1 {
+        top: 9%;
+        right: calc(50% - 128px);
+        transform: rotate(24deg);
+      }
+
+      &--2 {
+        bottom: 11%;
+        left: calc(50% - 132px);
+        transform: rotate(-14deg) scaleY(-1);
+      }
     }
 
     // hero__intro-ring is inset:0/width:100%/height:100% inside image-container — sizes automatically
@@ -2179,10 +2242,8 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     &__typed-wrap {
       font-size: 38px;
       line-height: 1.12;
-      // Reserve two lines so a 4-word phrase ("Care for what ships") wrapping
-      // never shifts the paragraph below it. "Care for" stays together via
-      // hero__final-word-wrap nowrap, so the highlight band is always intact.
-      min-height: 2.3em;
+      // No fixed reservation — the sizer stack inside the wrap reserves
+      // exactly the tallest phrase's height at this width, wrapped or not.
     }
   }
 }
@@ -2193,7 +2254,6 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
   .hero {
     &__typed-wrap {
       font-size: 30px;
-      min-height: 2.3em;
     }
   }
 }
