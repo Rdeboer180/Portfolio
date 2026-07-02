@@ -1,0 +1,437 @@
+// ============================================
+// Case Study Playground — shadowbox cards + tool coin tray
+// Scroll-snap carousel at every width (3-up on desktop, edge-peek below),
+// paged by hand-sketched arrows that draw in on scroll (hero-arrow language).
+// Coin motion lives in CaseStudyPlayground.tsx (framer-motion); this file owns
+// layout, the shadowbox look, the threshold rule, and reduced-motion overrides.
+// ============================================
+
+@import '../variables';
+
+.case-playground {
+  // ── Governance tokens (mapped to the existing system) ─────────────────────
+  --case-study-card-radius: var(--radius-2xl);
+  --case-study-card-border: 1px solid #{$color-neutral-light};
+  --case-study-card-bg: #{$color-white};
+  --case-study-card-shadow-rest: var(--shadow-md);
+  --case-study-card-shadow-hover: var(--shadow-xl);
+  --case-study-icon-size: 44px;
+  --case-study-tray-h: 92px;
+  --case-study-motion-fast: var(--transition-fast);
+  --case-study-motion-medium: var(--transition-base);
+  --case-study-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  padding: $spacing-4xl 0;
+
+  &__container {
+    max-width: 1186px;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // ── Intro ──────────────────────────────────────────────────────────────────
+
+  &__intro {
+    max-width: 640px;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: $spacing-lg 0 $spacing-md;
+  }
+
+  &__lede {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+    margin: 0;
+  }
+
+  // ── Threshold rule — the stage line into the playground ────────────────────
+
+  &__rule {
+    position: relative;
+    height: 1px;
+    background: $color-neutral-light;
+    margin: $spacing-2xl 0 $spacing-lg;
+    overflow: hidden;
+  }
+
+  &__rule-spark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 72px;
+    height: 100%;
+    background: $color-primary;
+    transform: translateX(-80px);
+    transition: transform 900ms var(--case-study-ease-out);
+  }
+
+  // Section hover sends the spark across the stage line
+  &:hover &__rule-spark,
+  &:focus-within &__rule-spark {
+    transform: translateX(calc(1186px - 72px));
+  }
+
+  // ── Sketch arrows (carousel paging) ────────────────────────────────────────
+
+  &__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  &__nav-btn {
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-neutral-dark;
+    transition: color var(--case-study-motion-fast),
+                transform var(--case-study-motion-fast);
+
+    &:hover {
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: var(--radius-md);
+    }
+  }
+
+  &__nav-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 1.8;
+      // Hidden until the section reveals — then the stroke draws in
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 650ms ease 250ms;
+    }
+  }
+
+  // Second arrow (and each arrowhead) draws slightly later — sketched, not stamped
+  &__nav-btn--next &__nav-svg path {
+    transition-delay: 480ms;
+  }
+
+  &__nav-svg path:nth-child(2) {
+    transition-delay: 620ms;
+  }
+
+  &__nav-btn--next &__nav-svg path:nth-child(2) {
+    transition-delay: 850ms;
+  }
+
+  &--revealed &__nav-svg path {
+    stroke-dashoffset: 0;
+  }
+
+  // ── Carousel (scroll-snap at every width) ──────────────────────────────────
+
+  &__grid {
+    display: flex;
+    gap: $spacing-xl;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: $spacing-sm;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // ── Card (the shadowbox) ───────────────────────────────────────────────────
+
+  &__card {
+    // 3-up on desktop; the snap row pages through the rest
+    flex: 0 0 calc((100% - #{$spacing-xl * 2}) / 3);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: var(--case-study-card-bg);
+    border: var(--case-study-card-border);
+    border-radius: var(--case-study-card-radius);
+    box-shadow: var(--case-study-card-shadow-rest);
+    overflow: hidden;
+    transform: translateY(0);
+    transition: transform var(--case-study-motion-medium),
+                box-shadow var(--case-study-motion-medium),
+                border-color var(--case-study-motion-medium);
+
+    &--active {
+      transform: translateY(-4px);
+      box-shadow: var(--case-study-card-shadow-hover);
+      border-color: rgba($color-primary, 0.35);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
+  // Top — preview
+  &__preview {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: $color-neutral-lightest;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.92);
+      transform: scale(1);
+      transition: transform 1200ms var(--case-study-ease-out),
+                  filter 600ms ease;
+    }
+  }
+
+  &__card--active &__preview img {
+    transform: scale(1.04);
+    filter: saturate(1);
+  }
+
+  // Middle — content
+  &__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: $spacing-md;
+    padding: $spacing-xl $spacing-xl $spacing-lg;
+  }
+
+  &__card-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 0;
+    transition: color var(--case-study-motion-fast);
+  }
+
+  &__card--active &__card-title {
+    color: $color-primary;
+  }
+
+  &__card-line {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+    margin: 0;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__tag {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    border: 1px solid $color-neutral-light;
+    border-radius: var(--radius-full);
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  &__metric {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    letter-spacing: 0.04em;
+    color: $color-primary-dark;
+    margin: 0;
+  }
+
+  &__cta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    margin-top: auto;
+    padding-top: $spacing-sm;
+    transition: color var(--case-study-motion-fast);
+  }
+
+  &__cta-arrow {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__cta-arrow-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 2.4;
+      // Undrawn at rest — the sketch draws in only on card hover/focus
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 420ms var(--case-study-ease-out);
+    }
+
+    // Arrowhead ticks finish just after the shaft, like the nav arrows
+    path:nth-child(2) {
+      transition-delay: 140ms;
+    }
+  }
+
+  &__card--active &__cta {
+    color: $color-primary;
+  }
+
+  &__card--active &__cta-arrow-svg path {
+    stroke-dashoffset: 0;
+  }
+
+  // Bottom — the coin tray (shadowbox floor). overflow:hidden clips the coins
+  // as they fall out through the card bottom on un-hover.
+  &__tray {
+    position: relative;
+    height: var(--case-study-tray-h);
+    background: $color-neutral-lightest;
+    border-top: 1px solid $color-neutral-light;
+    box-shadow: inset 0 6px 12px -10px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+  }
+
+  &__tray-label {
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-md;
+    font-family: $font-family-mono;
+    font-size: 9px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    user-select: none;
+  }
+
+  &__coin {
+    position: absolute;
+    width: var(--case-study-icon-size);
+    height: var(--case-study-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    // Parked above + invisible until the first hover drops them in
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+
+    img {
+      width: 62%;
+      height: 62%;
+      object-fit: contain;
+      display: block;
+    }
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .case-playground {
+    &__card {
+      flex: 0 0 46vw;
+    }
+
+    // Spark travel matches the narrower container
+    &:hover &__rule-spark,
+    &:focus-within &__rule-spark {
+      transform: translateX(calc(100vw - 72px));
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .case-playground {
+    padding: $spacing-3xl 0;
+
+    &__title {
+      font-size: $font-size-h3;
+    }
+
+    &__card {
+      flex: 0 0 82vw;
+    }
+  }
+}
+
+// ── Reduced motion: no draw-in/spark/preview motion; coins fade via JS ────────
+
+@media (prefers-reduced-motion: reduce) {
+  .case-playground {
+    &__rule-spark {
+      transition: none;
+      transform: none;
+      width: 48px;
+    }
+
+    &:hover &__rule-spark,
+    &:focus-within &__rule-spark {
+      transform: none;
+    }
+
+    &__nav-svg path,
+    &__cta-arrow-svg path {
+      transition: none;
+      stroke-dashoffset: 0; // arrows simply present, no draw-in
+    }
+
+    &__card,
+    &__preview img,
+    &__cta,
+    &__nav-btn {
+      transition: none;
+    }
+
+    &__card--active {
+      transform: none; // active state = shadow + border only
+    }
+
+    &__card--active &__preview img {
+      transform: none;
+    }
+  }
+}

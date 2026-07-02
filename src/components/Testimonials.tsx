@@ -32,11 +32,22 @@ const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
 );
 
+interface Testimonial {
+  title: string;
+  quote: React.ReactNode;
+  name: string;
+  role: string;
+  year: string;
+  // Set only for testimonials sourced from an external platform (e.g. LinkedIn)
+  source?: string;
+  sourceUrl?: string;
+}
+
 // Order locked by the case-study brief:
 // 1. Leadership & Team Impact (Adam) → 2. Cross-Functional & Human (Kokesh)
-// → 3. Craft & Standard-Setting (Adam) → 4. Systems Thinking (Kokesh)
+// → 3. Craft, Care, and Growth (LinkedIn) → 4. Systems Thinking (Kokesh)
 // → 5. Precision & Reasoning (Tim) → 6. Business Impact (Deborah)
-const testimonials = [
+const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Team Impact',
     quote: (
@@ -56,13 +67,15 @@ const testimonials = [
     year: '2024',
   },
   {
-    title: 'Craft & Standard-Setting',
+    title: 'Craft, Care, and Growth',
     quote: (
-      <>Ryan&rsquo;s work is great. He consistently <H>delivers designs that are thoughtful, intentional, and visually beautiful</H>. He is thorough and precise, and he makes sure that everyone&rsquo;s expectations are being met. Folks love working with Ryan because they know they can expect great communication, <H>attention to detail and strong visual design sense</H>. He helps to set a standard for our visual presentation on the marketing-oriented pages of the site, and does the same in his collaboration and documentation.</>
+      <>Ryan and I work closely together to support a professional development program that serves around 100 people within our department. The quality of the experience our participants receive is a <H>direct reflection of the effort and care he puts into it</H>. As a designer, he has an <H>exceptional eye for creating work that is clean, creative and visually engaging</H>. Most importantly, Ryan is one of the kindest and most professional people I&rsquo;ve worked with. He combines talent, humility and a genuine desire to help his teammates succeed.</>
     ),
-    name: 'Adam Payne',
-    role: 'Web Design Manager',
-    year: '2025',
+    name: 'Amanda Straup',
+    role: 'Assistant Vice President, Digital Operations at Tire Rack',
+    year: '2026',
+    source: 'See Full LinkedIn Recommendation',
+    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns',
   },
   {
     title: 'Systems Thinking',
@@ -243,6 +256,16 @@ const Testimonials: React.FC = () => {
               <cite className="testimonials__author">
                 <span className="testimonials__name">&mdash; {t.name}</span>
                 <span className="testimonials__role">{t.role}, {t.year}</span>
+                {t.sourceUrl && (
+                  <a
+                    href={t.sourceUrl}
+                    className="testimonials__source-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t.source ?? 'View source'}
+                  </a>
+                )}
               </cite>
             </blockquote>
           ))}

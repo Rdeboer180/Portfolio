@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
 import TechnicalAbilities from './components/TechnicalAbilities';
-import SelectedWork from './components/SelectedWork';
+import CaseStudyPlayground from './components/CaseStudyPlayground';
 import Footer from './components/Footer';
 import HowIWork from './components/HowIWork';
 import Testimonials from './components/Testimonials';
@@ -128,7 +128,7 @@ function App() {
       <main id="main-content" tabIndex={-1} className="min-h-screen bg-white">
         <Hero />
         <About />
-        <SelectedWork />
+        <CaseStudyPlayground />
         <Skills />
         <Testimonials />
         <HowIWork />

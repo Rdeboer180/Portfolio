@@ -1107,7 +1107,7 @@ $mobile-max-width: 768px;
     role: 'Product Design · UX · Front-End',
     tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'TestFlight'],
     timeline: 'Initial prototype ~3–4 weeks; pattern-intelligence build ongoing',
-    featured: '/images/work/loopstack/loopstack-cover-2026.png',
+    featured: '/images/work/loopstack/loopstack-portfolio-cover-2026-update.png',
     timeToLive: 'Initial concept to working prototype in ~3–4 weeks. Now running on device through TestFlight as a personal pattern-review tool. Continuing to evolve toward a broader consumer release.',
 
     // ── 01 Problem ──
