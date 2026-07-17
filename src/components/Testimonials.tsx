@@ -51,13 +51,17 @@ const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
     quote: (
-      <>Ryan is <H>one of the most helpful, industrious, passionate and dependable designers</H> I&rsquo;ve had the luck of serving as a manager. He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a <H>strong record of delivering large bodies of work without issue</H>. He writes good, clean code and cares passionately about making sure the vision gets realized. A team or role that lets him lead projects across technical and nontechnical teams would truly flourish with him in the seat.</>
+      <>
+        <p>Ryan is <H>one of the most helpful, industrious, passionate and dependable designers</H> I&rsquo;ve had the luck of serving as a manager.</p>
+        <p>He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a <H>strong record of delivering large bodies of work without issue</H>. He writes good, clean code and cares passionately about making sure the vision gets realized.</p>
+        <p>A team or role that lets him lead projects across technical and nontechnical teams would truly flourish with him in the seat.</p>
+      </>
     ),
     name: 'Adam Payne',
     role: 'Web Design Manager (Ryan’s direct manager)',
     year: '2026',
     source: 'See Full LinkedIn Recommendation',
-    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns/details/recommendations/',
+    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns',
   },
   {
     title: 'Cross-Functional & Human',
@@ -71,7 +75,11 @@ const testimonials: Testimonial[] = [
   {
     title: 'Craft, Care, and Growth',
     quote: (
-      <>Ryan and I work closely together to support a professional development program that serves around 100 people within our department. The quality of the experience our participants receive is a <H>direct reflection of the effort and care he puts into it</H>. As a designer, he has an <H>exceptional eye for creating work that is clean, creative and visually engaging</H>. Most importantly, Ryan is one of the kindest and most professional people I&rsquo;ve worked with. He combines talent, humility and a genuine desire to help his teammates succeed.</>
+      <>
+        <p>Ryan and I work closely together to support a professional development program that serves around 100 people within our department. The quality of the experience our participants receive is a <H>direct reflection of the effort and care he puts into it</H>.</p>
+        <p>As a designer, he has an <H>exceptional eye for creating work that is clean, creative and visually engaging</H>.</p>
+        <p>Most importantly, Ryan is one of the kindest and most professional people I&rsquo;ve worked with. He combines talent, humility and a genuine desire to help his teammates succeed.</p>
+      </>
     ),
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations at Tire Rack',
@@ -254,7 +262,7 @@ const Testimonials: React.FC = () => {
             >
               <QuoteMark />
               <span className="testimonials__card-title">{t.title}</span>
-              <p className="testimonials__quote">{t.quote}</p>
+              <div className="testimonials__quote">{t.quote}</div>
               <cite className="testimonials__author">
                 <span className="testimonials__name">&mdash; {t.name}</span>
                 <span className="testimonials__role">{t.role}, {t.year}</span>

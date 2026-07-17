@@ -392,6 +392,16 @@
     color: $color-neutral-standard;
     flex: 1;
     margin: 0;
+
+    // Multi-paragraph quotes (e.g. the longer LinkedIn recommendations) break
+    // into readable paragraphs with spacing; single-run quotes are unaffected.
+    p {
+      margin: 0 0 $spacing-md;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 
   // ==========================================
