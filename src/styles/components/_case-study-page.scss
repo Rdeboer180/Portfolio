@@ -1171,3 +1171,57 @@
     }
   }
 }
+
+// ============================================
+// Animation audit additions
+// ============================================
+
+// #1 — Scroll reveal for content sections. Same 520ms grammar as the homepage
+// reveals (testimonials/skills/etc.); class added by an IntersectionObserver
+// in CaseStudyPage.tsx, once per section.
+.cs .cs__section {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  &.cs__section--in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// #2 — Lightbox entrance: backdrop fades, image settles from a slight scale.
+// Mount-only keyframes (conditional render); close stays instant on purpose —
+// dismissal should never lag the user's intent to leave.
+.cs-lightbox {
+  animation: csLightboxBackdrop 200ms ease-out;
+
+  &__img {
+    animation: csLightboxImg 250ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@keyframes csLightboxBackdrop {
+  from { opacity: 0; }
+}
+
+@keyframes csLightboxImg {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs .cs__section {
+    transition: none;
+    transform: none;
+  }
+
+  // Gentler, not zero: keep the opacity fade, drop the scale
+  .cs-lightbox__img {
+    animation: csLightboxBackdrop 200ms ease-out;
+  }
+}

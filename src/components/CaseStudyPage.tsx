@@ -290,6 +290,37 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     }
   }, [project, hasOverlayImages]);
 
+  // Scroll-reveal for content sections — extends the homepage's 520ms reveal
+  // grammar to the case-study pages (they previously rendered flat). Each
+  // section fades up once as it enters the viewport; reduced-motion renders
+  // everything settled immediately. No markup changes — sections are queried.
+  useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>('.cs .cs__section')
+    );
+    if (sections.length === 0) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      sections.forEach((s) => s.classList.add('cs__section--in'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('cs__section--in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      // Low threshold — sections are tall; a sliver entering should reveal them
+      { threshold: 0.05, rootMargin: '0px 0px -8% 0px' }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [slug, isUnlocked]);
+
   const handleUnlock = () => {
     if (project) {
       localStorage.setItem(`project-unlocked-${project.slug}`, 'true');
