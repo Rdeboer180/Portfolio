@@ -44,18 +44,20 @@ interface Testimonial {
 }
 
 // Order locked by the case-study brief:
-// 1. Leadership & Team Impact (Adam) → 2. Cross-Functional & Human (Kokesh)
-// → 3. Craft, Care, and Growth (LinkedIn) → 4. Systems Thinking (Kokesh)
+// 1. Leadership & Delivery (Adam, LinkedIn) → 2. Cross-Functional & Human (Kokesh)
+// → 3. Craft, Care, and Growth (Amanda, LinkedIn) → 4. Systems Thinking (Kokesh)
 // → 5. Precision & Reasoning (Tim) → 6. Business Impact (Deborah)
 const testimonials: Testimonial[] = [
   {
-    title: 'Leadership & Team Impact',
+    title: 'Leadership & Delivery',
     quote: (
-      <>Ryan&rsquo;s <H>team mentality is unshakable</H>. He views every initiative as a group effort, and includes everyone from stakeholders to peer designers in his comms. He cares deeply about establishing a shared understanding, and genuinely works hard to create and maintain a sense of unity and community. This doesn&rsquo;t just help our team in terms of skill development and information sharing, it also strengthens our internal culture between the UX, UXR, Analytics and Web Design teams as a community of practice. He creates community not just for himself, but for those he welcomes in. Most importantly, Ryan <H>sets an example to the rest of the team for what great communication and collaboration looks like</H>.</>
+      <>Ryan is <H>one of the most helpful, industrious, passionate and dependable designers</H> I&rsquo;ve had the luck of serving as a manager. He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a <H>strong record of delivering large bodies of work without issue</H>. He writes good, clean code and cares passionately about making sure the vision gets realized. A team or role that lets him lead projects across technical and nontechnical teams would truly flourish with him in the seat.</>
     ),
     name: 'Adam Payne',
-    role: 'Web Design Manager',
-    year: '2025',
+    role: 'Web Design Manager (Ryan’s direct manager)',
+    year: '2026',
+    source: 'See Full LinkedIn Recommendation',
+    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns/details/recommendations/',
   },
   {
     title: 'Cross-Functional & Human',
