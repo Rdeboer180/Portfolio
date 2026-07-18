@@ -131,6 +131,19 @@ interface PlaygroundCard {
 
 const CARDS: PlaygroundCard[] = [
   {
+    slug: 'playdraft',
+    title: 'PlayDraft',
+    line: 'A social drafting game taken 0 → 1 solo — brand to TestFlight in 12 weeks.',
+    tags: ['0 → 1 Product', 'Game Design', 'React Native', 'Design System'],
+    metric: '12 weeks · solo build · TestFlight',
+    coins: [
+      { icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
+      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },
+    ],
+  },
+  {
     slug: 'wheelrack',
     title: 'WheelRack Design System',
     line: 'A scalable wholesale platform foundation built through tokens, components, and implementation.',
@@ -142,19 +155,6 @@ const CARDS: PlaygroundCard[] = [
       { icon: 'github.svg', name: 'GitHub', x: 41, rot: -14, lift: 0, z: 1 },
       { icon: 'workfront.svg', name: 'Workfront', x: 57, rot: 11, lift: 5, z: 2 },
       { icon: 'slack.svg', name: 'Slack', x: 75, rot: -6, lift: 0, z: 1 },
-    ],
-  },
-  {
-    slug: 'playdraft',
-    title: 'PlayDraft',
-    line: 'A social drafting game taken 0 → 1 solo — brand to TestFlight in 12 weeks.',
-    tags: ['0 → 1 Product', 'Game Design', 'React Native', 'Design System'],
-    metric: '12 weeks · solo build · TestFlight',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
-      { icon: 'Claude-ai-icon.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },
     ],
   },
   {
@@ -178,7 +178,7 @@ const CARDS: PlaygroundCard[] = [
     tags: ['Product Design', 'React', 'AI-Assisted Build', 'Health Data'],
     metric: '7,817 CGM points analyzed',
     coins: [
-      { icon: 'Claude-ai-icon.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 24, rot: 8, lift: 4, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -5, lift: 0, z: 1 },
       { icon: 'github.svg', name: 'GitHub', x: 59, rot: 13, lift: 2, z: 2 },
@@ -193,7 +193,7 @@ const CARDS: PlaygroundCard[] = [
     metric: '3 connected tools · Design, UX & Photography',
     coins: [
       { icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
-      { icon: 'Claude-ai-icon.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
+      { icon: 'claude.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: 6, lift: 0, z: 1 },
       { icon: 'workfront.svg', name: 'Workfront', x: 59, rot: -12, lift: 2, z: 2 },
       { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },
