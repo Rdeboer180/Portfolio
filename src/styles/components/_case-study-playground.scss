@@ -257,38 +257,6 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   }
 
-  // ── Intro additions: stream legend + thesis line ───────────────────────────
-
-  &__streams-note {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: $spacing-sm;
-    margin: $spacing-lg 0 0;
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    letter-spacing: 0.04em;
-    color: $color-neutral-standard;
-  }
-
-  &__streams-dot {
-    color: $color-neutral-muted;
-    padding: 0 $spacing-xs;
-  }
-
-  &__thesis {
-    margin: $spacing-lg 0 0;
-    font-family: $font-family-heading;
-    font-size: $font-size-body-lg;
-    font-weight: $font-weight-semibold;
-    font-style: italic;
-    line-height: 1.5;
-    letter-spacing: -0.01em;
-    color: $color-neutral-dark;
-    max-width: 560px;
-    padding-left: $spacing-lg;
-    border-left: 3px solid $color-primary;
-  }
 
   // Middle — content
   &__body {

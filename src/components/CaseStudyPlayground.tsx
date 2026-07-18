@@ -407,12 +407,18 @@ const CaseStudyPlayground: React.FC = () => {
   // stream + optional cover-loop video)
   const cards = CARDS.map((card) => {
     const project = projects.find((p) => p.slug === card.slug);
+    const video = project?.featuredVideo;
+    // For video cards the still IS the video's first frame (poster), so the
+    // resting card matches what the loop shows; non-video cards keep `featured`.
+    const still = video
+      ? video.replace(/\.mp4$/, '-poster.jpg')
+      : project?.featured ?? '';
     return {
       ...card,
-      image: project?.featured ?? '',
+      image: still,
       alt: project?.title ?? card.title,
       stream: project?.stream,
-      video: project?.featuredVideo,
+      video,
     };
   });
 
@@ -432,23 +438,6 @@ const CaseStudyPlayground: React.FC = () => {
           <p className="case-playground__lede">
             A closer look at the systems, interfaces, and product thinking I've shaped from
             concept through implementation.
-          </p>
-          {/* Two-stream legend — full names live here; cards carry the short chips */}
-          <p className="case-playground__streams-note">
-            <span className="case-playground__stream case-playground__stream--professional">
-              {STREAM_LABEL.professional}
-            </span>{' '}
-            Professional &amp; Published
-            <span className="case-playground__streams-dot">·</span>
-            <span className="case-playground__stream case-playground__stream--passion">
-              {STREAM_LABEL.passion}
-            </span>{' '}
-            Passion-Driven Self Creation
-          </p>
-          {/* Thesis — one per surface */}
-          <p className="case-playground__thesis">
-            AI can show us what could exist. Design judgment is still responsible for
-            deciding what should exist.
           </p>
         </div>
 
