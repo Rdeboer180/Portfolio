@@ -391,7 +391,21 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       <div className="cs__container">
         {/* ==================== Header ==================== */}
         <header className="cs__header">
-          <span className="cs__eyebrow">Case Study</span>
+          <span className="cs__eyebrow">
+            Case Study
+            {project.stream && (
+              <span className={`cs__stream-chip cs__stream-chip--${project.stream}`}>
+                {project.stream === 'professional' ? '[ Shipped ]' : '[ Self-Built ]'}
+              </span>
+            )}
+            {project.stream && (
+              <span className="cs__stream-name">
+                {project.stream === 'professional'
+                  ? 'Professional & Published'
+                  : 'Passion-Driven Self Creation'}
+              </span>
+            )}
+          </span>
           <span className="cs__client">{project.client}</span>
           <h1 className="cs__title">{project.title}</h1>
           {project.summary && (
@@ -615,6 +629,20 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="cs__live-link">
                         {link.label} &rarr;
                       </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Artifacts — internal work with nothing public to link */}
+              {project.outcomeArtifacts && project.outcomeArtifacts.length > 0 && (
+                <div className="cs__live-links">
+                  <span className="cs__live-links-label">Artifacts</span>
+                  <div className="cs__live-links-list">
+                    {project.outcomeArtifacts.map((artifact) => (
+                      <span key={artifact} className="cs__artifact-chip">
+                        {artifact}
+                      </span>
                     ))}
                   </div>
                 </div>

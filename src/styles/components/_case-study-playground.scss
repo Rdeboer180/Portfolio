@@ -193,14 +193,17 @@
 
   // Top — preview
   &__preview {
+    position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: $color-neutral-lightest;
 
-    img {
+    img,
+    video {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
       filter: saturate(0.92);
       transform: scale(1);
       transition: transform 1200ms var(--case-study-ease-out),
@@ -211,6 +214,80 @@
   &__card--active &__preview img {
     transform: scale(1.04);
     filter: saturate(1);
+  }
+
+  // Videos never zoom — the motion IS the animation; zooming crops the walkthrough
+  &__card--active &__preview video {
+    transform: none;
+    filter: saturate(1);
+  }
+
+  // ── Stream chips — treatment-based, both orange ────────────────────────────
+  // professional = solid filled pill; passion = dashed outline pill.
+
+  &__stream {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: var(--radius-full);
+    padding: 3px 9px;
+    white-space: nowrap;
+
+    &--professional {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+      border: 1px solid rgba($color-primary, 0.35);
+    }
+
+    &--passion {
+      background: $color-white;
+      color: $color-primary;
+      border: 1px dashed $color-primary;
+    }
+  }
+
+  // Chip overlaid on the card preview
+  &__preview &__stream {
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  }
+
+  // ── Intro additions: stream legend + thesis line ───────────────────────────
+
+  &__streams-note {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin: $spacing-lg 0 0;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    letter-spacing: 0.04em;
+    color: $color-neutral-standard;
+  }
+
+  &__streams-dot {
+    color: $color-neutral-muted;
+    padding: 0 $spacing-xs;
+  }
+
+  &__thesis {
+    margin: $spacing-lg 0 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-semibold;
+    font-style: italic;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+    max-width: 560px;
+    padding-left: $spacing-lg;
+    border-left: 3px solid $color-primary;
   }
 
   // Middle — content

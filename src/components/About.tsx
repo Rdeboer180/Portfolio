@@ -73,7 +73,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                AI-native workflows are making the opportunity cost of exploration cheaper and faster. More people can now express ideas in higher fidelity, which makes senior design judgment even more valuable&mdash;not less. Through personal and volunteer projects, I&rsquo;ve been <span className="animated-bold">expanding my ability to build end-to-end experiences</span> and exploring what becomes possible when old barriers around full-stack execution start to fall away. That shift has helped me rediscover my love of design by getting closer to the full arc of the work: shaping the idea, building the interface, testing the system, and learning from what actually ships.
+                AI-native workflows are making the opportunity cost of exploration cheaper and faster. More people can now express ideas in higher fidelity, which makes senior design judgment even more valuable&mdash;not less. Through personal and volunteer projects, I&rsquo;ve been <span className="animated-bold">expanding my ability to build end-to-end experiences</span> and exploring what becomes possible when old barriers around full-stack execution start to fall away. That shift has helped me rediscover my love of design by getting closer to the full arc of the work: shaping the idea, building the interface, testing the system, and learning from what actually ships. <span className="animated-bold">My value isn&rsquo;t generating more output with AI</span>&mdash;it&rsquo;s directing the work, encoding judgment, and building systems that preserve quality.
               </p>
 
               <p className="about__body">

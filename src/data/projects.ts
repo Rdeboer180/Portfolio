@@ -49,6 +49,12 @@ export interface Project {
   tools: string[];
   timeline: string;
   featured?: string;
+  // Optional muted looping cover video (compressed web loop); `featured` doubles
+  // as its poster. Rendered on homepage playground cards when present.
+  featuredVideo?: string;
+  // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
+  // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
+  stream?: 'professional' | 'passion';
   metrics: ProjectMetric[];
   hidden?: boolean;
   timeToLive?: string;
@@ -68,6 +74,9 @@ export interface Project {
   outcomeImages?: ProjectImage[];
   outcomeGridImages?: ProjectImage[];
   outcomeLiveLinks?: { label: string; url: string }[];
+  // Internal work with nothing public to link: named artifacts render as a
+  // mono chip list where live links would otherwise go.
+  outcomeArtifacts?: string[];
   insightCallout?: string;
 
   // Legacy approach steps (kept for other projects during transition)
@@ -91,6 +100,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'wheelrack',
+    stream: 'professional',
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
     summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
@@ -100,6 +110,7 @@ const projects: Project[] = [
     tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS', 'JavaScript', 'Jira'],
     timeline: '~4 months dedicated (12+ months total with API delays)',
     featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
+    featuredVideo: '/assets/portfolio-safe/wheelrack/cover-loop.mp4',
     timeToLive: 'Live as of June 4, 2026 at wheelrack.com/pitstop/search. System and partner brand builds complete; rollout continuing across additional retailers.',
 
     // ── 01 Problem ──
@@ -256,6 +267,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-categories',
+    stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
     summary: 'Redesigned 30+ tire category pages into a scalable system of iconography, data visualization, and content structure. Top-performing category pages saw up to +50% conversion lift in the first month after launch.',
@@ -265,6 +277,7 @@ const projects: Project[] = [
     tools: ['Figma', 'FigJam', 'HTML/CSS', 'Adobe Creative Suite'],
     timeline: '2 months',
     featured: '/images/work/tire-categories/CS_thumbnail_TireCategories_safe.jpg',
+    featuredVideo: '/assets/portfolio-safe/tire-categories/cover-loop.mp4',
     timeToLive: '~2 months from brief to system launch across 30+ category pages',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -421,6 +434,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-rack-winter',
+    stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Rack Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
     summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season. Seasonal winterization has been associated with stronger annual winter conversion lift compared with pre-winterization periods.',
@@ -568,6 +582,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'heatherwood',
+    stream: 'passion',
     client: 'Heatherwood Equestrian Academy',
     title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
     summary: 'End-to-end rebrand and rebuild for a family-owned equestrian academy\u2014brand identity, IA, WordPress CMS, and SEO architecture. Inquiries moved from ~3\u20134 per month pre-launch to 4\u20135 form submissions daily in the weeks after launch.',
@@ -710,6 +725,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'landing-pages',
+    stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
     summary: 'Designed 50+ landing pages personally, then built the governed AEM template system that two junior designers now use\u2014shifting turnaround from ~1 month to 1\u20132 weeks for complex pages and 1\u20132 days for simple launches.',
@@ -719,6 +735,7 @@ const projects: Project[] = [
     tools: ['AEM', 'Figma', 'HTML/CSS', 'Adobe Creative Suite', 'ChatGPT'],
     timeline: 'Ongoing (50+ landing pages)',
     featured: '/images/work/landing-pages/CS_thumbnail_landing-pages_safe.jpg',
+    featuredVideo: '/assets/portfolio-safe/landing-pages/cover-loop.mp4',
     timeToLive: '~1 month \u2192 1\u20132 weeks for complex pages, 1 week for standard, 1\u20132 days for simple launches.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -902,6 +919,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'aem-component-system',
+    stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
     summary: 'Partnered with Tire Rack\u2019s new AEM dev team to rebuild the authoring system around reusable core components. Shipped 10+ live components powering homepage, tires hub, events, and packages\u201460% faster page loads (WebPageTest) and a shared foundation for design, dev, SEO, and accessibility.',
@@ -911,6 +929,7 @@ const projects: Project[] = [
     tools: ['AEM', 'Figma', 'Sass', 'HTML/CSS', 'Git'],
     timeline: '~12 months (ongoing)',
     featured: '/images/work/aem-component-system/CS_thumbnail_AEM_componentSystemRebuild_safe.jpg',
+    featuredVideo: '/assets/portfolio-safe/aem-component-system/cover-loop.mp4',
     timeToLive: '12 months from kickoff to live components\u2014core variants and templates now powering the homepage and tires hub.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -1095,10 +1114,145 @@ $mobile-max-width: 768px;
   },
 
   // =============================================
+  // 5b. Design Enablement Platform — internal tooling  [agentic build]
+  // =============================================
+  {
+    slug: 'design-enablement',
+    stream: 'professional',
+    client: 'Tire Rack — Internal Tooling',
+    title: 'Scaling Design Through Internal Tooling',
+    summary:
+      'Agentic internal application development: a connected layer of plugins and web applications that streamlined repetitive design work, standardized project communication, and reduced manual review cycles across the Design, UX, and Photography teams.',
+    year: '2025–2026',
+    tags: [
+      'Design Enablement',
+      'Internal Tooling',
+      'Figma Plugin',
+      'AI-Assisted Build',
+      'Workflow Automation',
+      'Design Systems',
+    ],
+    role: 'Product Design · UX Engineering · AI-Assisted Build',
+    tools: ['Figma', 'Claude', 'TypeScript', 'React', 'VS Code', 'Workfront'],
+    timeline: 'Ongoing — tools shipped iteratively alongside production work',
+    featured: '/assets/portfolio-safe/web-apps/cover-poster.jpg',
+    featuredVideo: '/assets/portfolio-safe/web-apps/cover-loop.mp4',
+
+    // ── 01 Problem ──
+    problemPunch:
+      'The team’s biggest friction wasn’t the work — it was the process around the work.',
+    problem: [
+      'Repetitive design tasks, manual review cycles, and inconsistent project communication were absorbing time across the Design, UX, and Photography teams.',
+      'Project context lived in exported spreadsheets and tribal knowledge. With hundreds of active design files, finding ownership, business context, and planning metadata meant hunting — not designing.',
+      'Hero imagery couldn’t be validated until it was placed into AEM, pushing crop and safe-zone problems to the end of the workflow, where they were slowest to fix.',
+    ],
+
+    // ── 02 Gaps & Opportunity ──
+    gapsPunch: 'Each problem had a point solution. Nobody was designing the workflow itself.',
+    gaps: [
+      'Tools existed in isolation — nothing connected project metadata, image validation, and stakeholder communication into one consistent layer.',
+      'AI and MCP-based tools can generate and infer a great deal, but not internal project identifiers, business context, ownership, or planning metadata. That context had to be engineered into the workflow deliberately.',
+      'Every stakeholder review was assembled from scratch, so presentation quality depended on who built the deck and how much time they had.',
+    ],
+
+    // ── 03 Constraints ──
+    constraintsPunch: 'Built inside a production team’s real cadence — not a lab.',
+    constraints: [
+      'Internal tools earn adoption or die. Every tool had to beat the workaround it replaced from its first release.',
+      'The Hero Crop Simulator had to reproduce production behavior exactly — the same responsive CSS, gradients, safe zones, and breakpoint-specific crop logic used across Tire Rack’s website — or its previews couldn’t be trusted.',
+      'Everything was built alongside normal production workload, in partnership with our Lead Product Manager, so scope had to stay surgical.',
+    ],
+
+    // ── Key Insight (portable-governance thesis) ──
+    insightCallout:
+      'The next evolution of design systems may not be contained inside a component library. It can live across Markdown files, agent skills, plugins, code, and documentation — portable forms of governance that help teams make good decisions even when the designer isn’t in the room.',
+
+    // ── 04 Approach — one subsection per tool ──
+    approachSubsections: [
+      {
+        key: 'metadata',
+        label: 'Figma Project Metadata Plugin',
+        systemMarker: 'CONTEXT LAYER',
+        description:
+          'An internal Figma plugin that connects project metadata from an exported Workfront spreadsheet directly into design files. Working alongside our Lead Product Manager, we built a workflow that auto-generates standardized project title cards while pre-populating the information AI or MCP-based tools cannot reliably infer — internal project identifiers, business context, ownership, and planning metadata. The result is a searchable, standardized project framework that gives designers and stakeholders immediate context when navigating hundreds of active design files.',
+        // TODO(Ryan): re-export the plugin screenshot and drop it at
+        // /assets/portfolio-safe/web-apps/figma_Organization_tool.png, then
+        // uncomment:
+        // images: [
+        //   {
+        //     src: '/assets/portfolio-safe/web-apps/figma_Organization_tool.png',
+        //     alt: 'Figma project metadata plugin generating a standardized project title card',
+        //     layout: 'full',
+        //     caption: 'Workfront metadata flowing into a standardized, searchable title card inside Figma.',
+        //   },
+        // ],
+      },
+      {
+        key: 'crop-simulator',
+        label: 'Hero Crop Simulator',
+        systemMarker: 'VALIDATION LAYER',
+        description:
+          'A browser-based application that lets Design and Photography validate hero imagery before implementation. It recreates our production hero components with the same responsive CSS behavior, gradients, safe zones, and breakpoint-specific crop logic used on the live site — instant desktop, tablet, and mobile previews without placing assets into AEM or waiting on engineering. Moving crop validation earlier in the workflow eliminated multiple review cycles between Design and Photography, and the tool exports crop reports for implementation and handoff.',
+        images: [
+          {
+            src: '/assets/portfolio-safe/web-apps/cover-loop.mp4',
+            alt: 'Hero Crop Simulator previewing responsive hero crops across breakpoints',
+            layout: 'full',
+            isVideo: true,
+            videoPoster: '/assets/portfolio-safe/web-apps/cover-poster.jpg',
+            caption:
+              'Production-accurate hero previews across breakpoints — validated before anything touches AEM.',
+          },
+        ],
+      },
+      {
+        key: 'presentation',
+        label: 'Component-Based Presentation System',
+        systemMarker: 'COMMUNICATION LAYER',
+        description:
+          'A fully componentized presentation framework in Figma that gives Design and UX teams one consistent visual language for communicating project progress. Every layout, chart, callout, status indicator, and content block is a reusable component, so teams assemble stakeholder presentations quickly while reviews stay clear, professional, and easy to maintain — presentation setup time dropped significantly.',
+        // TODO(Ryan): re-export the presentation-system frame and drop it at
+        // /assets/portfolio-safe/web-apps/figma-slides-doc.png, then uncomment:
+        // images: [
+        //   {
+        //     src: '/assets/portfolio-safe/web-apps/figma-slides-doc.png',
+        //     alt: 'Componentized Figma presentation system with reusable layouts, charts, and callouts',
+        //     layout: 'full',
+        //     caption: 'Every layout, chart, and callout is a component — decks assemble instead of being rebuilt.',
+        //   },
+        // ],
+      },
+      {
+        key: 'connected-layer',
+        label: 'One Connected Layer, Not Isolated Tools',
+        systemMarker: 'PLATFORM',
+        description:
+          'Rather than treating each tool as an isolated solution, they were designed as a connected layer of workflow automation — shared context in, standardized artifacts out. The same pattern extends to an agentic workflow tool built for the Photography team, and to the design system itself: the tokens, components, and documentation these tools speak are the same ones that power the shipped work. Sometimes the highest-leverage design isn’t another interface for customers — it’s removing friction for the people building those experiences every day.',
+      },
+    ],
+
+    // ── 05 Outcome ──
+    outcomeNote:
+      'This work reflects how I increasingly think about design systems — not simply as component libraries, but as platforms that improve how teams work together. These tools focused on eliminating repetitive work, preserving context, and creating consistent workflows so the team could spend more time solving problems and less time managing process.',
+    outcomeArtifacts: [
+      'Figma Project Metadata Plugin',
+      'Hero Crop Simulator',
+      'Component-Based Presentation System',
+    ],
+    metrics: [
+      { value: '3', label: 'Connected internal tools shipped' },
+      { value: '3 teams', label: 'Design, UX & Photography workflows served' },
+      { value: '100s', label: 'Of active design files given searchable context' },
+      { value: 'Zero', label: 'AEM placements needed to validate hero crops' },
+    ],
+  },
+
+  // =============================================
   // 6. LoopStack → CarbCurve  [personal project, in progress]
   // =============================================
   {
     slug: 'loopstack',
+    stream: 'passion',
     client: 'LoopStack (personal project)',
     title: 'LoopStack: Meal Memory + Insulin Timing Intelligence',
     summary: 'A Type 1 diabetes prototype that turns meal history and glucose response into pattern review — comparing what Loop predicted with what actually happened, then surfacing patterns worth reviewing with a care team. Pattern evidence and discussion points, not dosing advice.',
@@ -1293,214 +1447,200 @@ Frame every output as:
   // the app is still in active prototype. Direct-link only: #/work/playdraft.
   {
     slug: 'playdraft',
-    hidden: true,
+    stream: 'passion',
     client: 'PlayDraft (personal product)',
-    title: 'PlayDraft: A Social Drafting App, Built System-First with AI-Assisted Execution',
-    summary: 'An in-progress 0 → 1 mobile product that turns Candy, Movies, Songs, Fast Food, Super Powers, and GOAT Athletes into quick competitive draft experiences. Built on Expo + Supabase with a token-driven design system as the harness for AI-assisted execution.',
+    title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
+    summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic — Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution: product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight — with AI-assisted workflows as the execution multiplier.',
     year: '2026',
-    tags: ['0 → 1 Product Design', 'Mobile (iOS)', 'Design System', 'AI-Assisted Workflow', 'Brand System', 'Prototype'],
-    role: 'Product Design · Brand · UX/UI · Design System · AI-Assisted Prototyping · QA',
-    tools: ['Figma', 'Figma MCP', 'Claude', 'Claude Design', 'Claude Code', 'Expo / React Native', 'TypeScript', 'Expo Router', 'Supabase', 'Cursor', 'Xcode / TestFlight'],
-    timeline: 'In active prototype — ongoing since April 2026',
-    // PlayDraft intentionally has no featured/hero image — direct-link only;
-    // the page leads with the title + summary, then drops into the prototype videos.
-    timeToLive: 'Active prototype. Core product system, visual language, major flows, and app structure in place. Ongoing refinement across voting logic, topic content, reward mechanics, UI polish, and TestFlight readiness.',
+    tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
+    role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',
+    tools: ['Figma', 'Figma MCP', 'Claude Code', 'Expo / React Native', 'TypeScript', 'Expo Router', 'Supabase', 'RevenueCat', 'Maestro', 'Xcode / TestFlight'],
+    timeline: 'April → July 2026 · TestFlight',
+    featured: '/images/work/playdraft/playdraft-cover-v2.png',
+    featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
+    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Currently in App Store submission prep — coins-only economy at launch, cash purchases gated behind a feature flag until counsel review.',
 
     // ── 01 Problem ──
     problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports — but it has stayed locked to sports.',
     problem: [
       'The rituals of a fantasy draft—on-the-clock pressure, sleeper picks, post-draft debates, the group chat after—work because the format is competitive, social, and replayable. Outside of fantasy sports, that same mechanic almost never gets used.',
-      'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic—Candy, Movies, Songs, Super Powers, GOAT Athletes, Fast Food—could be drafted with friends in under five minutes?',
+      'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic—Snacks, Movies, Super Powers, GOAT Athletes, or a written-in "Best road trip snacks"—could be drafted with friends and settled in one session?',
     ],
-    // Two short prototype clips placed right after the intro so the page proves
-    // PlayDraft is already moving — not just a design concept — before the
-    // deeper system/process sections.
+    // The 68-second product reel sits right after the intro — it IS the
+    // 60-second scan. Every frame is the real app captured on-simulator
+    // (Maestro-scripted flows + simctl recordings), not a motion mockup.
     problemImages: [
       {
-        src: '/images/work/playdraft/playdraft-draft-flow-demo.mp4',
-        alt: 'Short looping prototype clip of the PlayDraft draft flow — navigating from the My Drafts hub into a live draft board and adding picks to the queue',
-        layout: 'half',
-        caption: 'Draft Flow Prototype — early loop showing the app moving beyond static screens into real draft behavior',
-        mobile: true,
+        src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
+        alt: 'PlayDraft product reel — authoring a custom draft topic, browsing and searching packs, live snake-draft picks on the clock, the winner ceremony scored by the DraftLab confidence pool, and sharing the final board to X',
+        layout: 'full',
+        caption: 'The product in 72 seconds — real app, captured on-simulator with scripted flows: author a topic → draft on the clock → banter in the room chat → instant winner → post the board to X',
         isVideo: true,
-        videoPoster: '/images/work/playdraft/playdraft-draft-hub-screen.png',
-      },
-      {
-        src: '/images/work/playdraft/playdraft-voting-flow-demo.mp4',
-        alt: 'Short looping prototype clip of the PlayDraft voting flow — bracketed vote sessions sized to fit a phone screen, with confidence updates after each round',
-        layout: 'half',
-        caption: 'Voting Flow Prototype — bracketed vote sessions and confidence updates in motion',
-        mobile: true,
-        isVideo: true,
-        videoPoster: '/images/work/playdraft/playdraft-draft-hub-screen.png',
+        videoPoster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
       },
     ],
 
     // ── 02 Gaps & Opportunity ──
     gapsPunch: 'The mechanic is universal. The product to host it casually wasn’t.',
     gaps: [
-      'Fantasy apps assume rosters, scoring, and weekly commitment. PlayDraft needed the opposite: 3-, 6-, or 8-player quick drafts that resolve in one session with community voting.',
-      'Voting on a full bracket is a UX problem. Asking outside users to review every team at once doesn’t scale—so the system needed bracketed vote sessions sized to fit a phone screen (≤4 options per screen).',
-      'Topic content needs to grow without flattening personality. A Scary Movie draft, a Super Powers draft, and a GOAT Athletes draft should feel like the same product but read very differently.',
+      'Fantasy apps assume rosters, scoring, and weekly commitment. PlayDraft needed the opposite: quick drafts among friends that resolve in one session—no league dues, no season.',
+      'A casual draft still needs a verdict. The interaction model had to deliver a credible winner fast, keep the group debating after, and hand them something worth posting—the share card is part of the game loop, not marketing.',
+      'Topic content needs to grow without flattening personality. A Scary Movies draft, a Super Powers draft, and a GOAT Athletes draft should feel like the same product but read very differently.',
       'AI-assisted prototyping can produce a lot of screens fast—and just as easily produce inconsistent ones. The project needed a design system strong enough to act as a constraint layer, not a style guide tacked on later.',
     ],
     gapsImages: [
       {
-        src: '/images/work/playdraft/playdraft-icon-pack-system.png',
-        alt: 'PlayDraft pack icon system — a grid of category marks (Candy, Ice Cream, Songs, Movies, Soda, Super Powers, Fast Food, Recess Games, plus premium Scary Movies, Video Games, GOAT Athletes), each pulling from one of five pack accent color pairs',
+        src: '/images/work/playdraft/playdraft-pack-shields.png',
+        alt: 'Ten PlayDraft pack shields on navy — GOAT Athletes, Fast Food, Candy, Soda, Music, Movies, Scary Movies, Recess Games, Video Games, and Ice Cream — sharing one silhouette language with distinct glyphs',
         layout: 'full',
-        caption: 'Pack/category icons — a flexible brand language that lets candy, music, movies, sports, and games read as the same product while keeping their own personalities',
+        caption: 'Pack shields — one silhouette system, distinct glyphs and accents, so every topic reads as the same product with its own personality',
       },
       {
-        src: '/images/work/playdraft/playdraft-mascot.png',
-        alt: 'PlayDraft mascot — a friendly blue robot with a gold crown and a coin-shaped chest plate, framed in a circular gold-ringed badge',
-        layout: 'half',
-        caption: 'Mascot exploration—the brand had to read competitive without becoming aggressive, and game-like without becoming childish',
+        src: '/images/work/playdraft/playdraft-avatar-emblems.png',
+        alt: 'Eight of the sixteen illustrated PlayDraft avatar emblems — including Drafternaut, Draft Fox, Fantasy Reaper, Owl Borland, The Gremlin, and Arcade Apparition — drawn in a shared grayscale style tinted per-player in-app',
+        layout: 'full',
+        caption: 'Avatar emblems (8 of 16) — a cast of illustrated drafter personas; grayscale base art gets tinted in-app, and rarity tiers hook into the prestige system',
       },
     ],
 
     // ── 03 Constraints ──
-    constraintsPunch: 'Solo designer-builder. Real mobile stack. Family-friendly. No copyrighted rosters.',
+    constraintsPunch: 'Solo designer-builder. Real mobile stack. Real App Store rules. No lawyer on retainer.',
     constraints: [
-      'Solo product design and build—no engineering team, no design partner, no UX research budget. Needed a workflow that compressed system design, screen design, and implementation into a single loop.',
-      'Real production stack from day one: Expo Router, React Native, TypeScript, Supabase (auth, DB, realtime, RLS), Expo Notifications, RevenueCat-ready monetization rails. UI not coupled to provider SDKs—everything routes through /src/services/*.service.ts.',
-      'Family-friendly content rules: no copyrighted characters, no franchise-specific rosters, no gambling or loot-box patterns. Coins are not redeemable for money; premium topics are paid or coin-unlocked, not randomized.',
-      'Mobile-first surface area only. Three supported draft sizes (3 / 6 / 8) chosen specifically so vote brackets stay ≤4 options per screen—an interface constraint that drove the entire voting feature.',
+      'Solo product design and build—no engineering team, no design partner, no research budget. Needed a workflow that compressed system design, screen design, and implementation into a single loop.',
+      'Real production stack from day one: Expo Router, React Native, TypeScript, Supabase (auth, DB, realtime, RLS, edge functions), RevenueCat rails. UI never touches provider SDKs directly—everything routes through /src/services/*.service.ts.',
+      'App Store guidelines shaped real product decisions: UGC moderation (block / report / eject) for guideline 1.2, a wager token renamed from “Bet on Myself” to “Podium Boost” and made coin-only for 5.3, and non-functional cash UI stripped for 2.1.',
+      'Pack content that references real brands, shows, and athletes ran through a purpose-built legal-safety framework: names-only rosters, no likenesses, trademarked nicknames scrubbed, one pack renamed, a remote kill switch so any pack can be disabled without an app release—and a documented, conscious decision to launch free-tier-only on the riskiest content instead of paying for counsel first.',
     ],
 
-    insightCallout: 'The design system became the product’s operating layer. It gave the app a consistent visual voice—but more importantly, it gave every new feature, every new topic, and every AI-assisted screen a place to belong.',
+    insightCallout: 'The design system became the product’s operating layer—and the governance layer for AI throughput. Tokens, recipes, and a “no screen without a reference” red line meant every AI-assisted screen, new pack, and new feature had a place to belong before it was built.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Wrote the project brief and core product loop before any UI: Create/Join Draft → Snake-style picks → Voting → Confidence builds → Winner finalized → Daily coin reward. Locked the tone (family-friendly, competitive, social, replayable) and explicitly ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. Influences were studied (fantasy draft tools, social voting interfaces, mobile reward systems, draft-room interaction patterns) but translated, not lifted.',
+        description: 'Wrote the project brief and core loop before any UI: Create/Join Draft → snake-style picks → a verdict → reward. Locked the tone (family-friendly, competitive, social, replayable) and explicitly ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. The same discipline applied to process: from day one the repo carried a memory protocol (an append-only progress log and a numbered architecture-decision record) so every later decision—by me or by an AI agent—had context to reason against. The identity went through a real pivot at this stage: the first mark was “DraftPack,” a wolf-and-card collector identity, retired within days because it pulled the product toward the TCG framing the brief had banned. PlayDraft’s D-with-a-play-cut shield replaced it, tested at 29 px and against the App Store grid it would actually sit in.',
         images: [
           {
-            src: '/images/work/playdraft/playdraft-app-icon-mark.png',
-            alt: 'PlayDraft app icon mark — gold and navy shield with a stylized D and play triangle, the visual condensation of the brief and tone',
+            src: '/images/work/playdraft/playdraft-brand-evolution.jpg',
+            alt: 'Brand evolution board — top: five DraftPack app-icon variants built on a wolf mark and trading-card frames; bottom: five PlayDraft icon color variations tested at 60/40/29 px and beside PrizePicks, Sleeper, and FastDraft in an App Store grid',
             layout: 'full',
-            maxWidth: 120,
-            caption: 'App icon mark — the brief condensed into a single shape: competitive, playful, social, badge-worthy',
+            caption: 'The identity pivot — DraftPack’s wolf-and-card direction (top) was retired for pulling toward collector framing; the PlayDraft mark (bottom) was chosen by testing at small sizes and against real competitors’ icons',
           },
         ],
       },
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Mapped the app around drafts as the primary noun. The home surface is a single live “My Drafts” feed segmented by state (drafting / pre-draft / results pending) with quick-join slots for drafts looking for one more player. Below that, a “Join a New Draft” section lists open public drafts with sizes (3/6/8) and pack accents. Status pills carry nine states (filling / predraft / drafting / pending / ready / locked / joined / eliminated / winner). The bottom nav holds five tabs—Drafts, Results, Packs, Shop, Profile—with the active tab in gold to mark progress and reward moments.',
+        description: 'Mapped the app around drafts as the primary noun, as one connected flow map rather than a stack of screens. The shipped information architecture settled on four surfaces—Home (wallet, live drafts, results), Packs (browse, search, favorites), Lab (DraftLab solo modes that feed the scoring pool), and Store—with the draft room as the product’s centerpiece: live board, pick clock, queue, roster, and chat in one screen. Two structural bets defined the room: every pack draft supports in-draft search that understands intent (typing “lay” surfaces every Lay’s flavor), and Custom Drafts make every pick a free-text write-in—the group authors the topic, duplicates bounce, and the payoff is deliberately social rather than a scored winner.',
         systemMarker: 'Pattern introduced',
         images: [
           {
-            src: '/images/work/playdraft/playdraft-draft-hub-screen.png',
-            alt: 'PlayDraft home / My Drafts hub showing three active drafts (Drafting, Pre-Draft, Results Pending), six open public drafts with join states, and the five-tab bottom navigation with Drafts selected in gold',
+            src: '/images/work/playdraft/playdraft-core-app-flows-overview.png',
+            alt: 'Core app flow overview — onboarding, account entry, hub, choosing a draft pack, draft setup, lobby, chat, draft board, queueing picks, results, and profile laid out as one connected map',
             layout: 'full',
-            caption: 'My Drafts hub—the home surface is a live feed of drafts in flight, not a marketing landing page',
-            mobile: true,
+            caption: 'Core flow overview — onboarding through draft → results → profile, mapped as one connected product before screens were built',
           },
           {
-            src: '/images/work/playdraft/playdraft-core-app-flows-overview.png',
-            alt: 'Core app flow overview — onboarding, account entry, My Drafts hub, choosing a draft pack, draft setup, draft lobby, draft chat, draft board, queueing picks, voting, champion selection, results, profile/stats, and settings laid out as one connected map',
+            src: '/images/work/playdraft/playdraft-figma-product-screens.png',
+            alt: 'PlayDraft working Figma canvas — draft-room and onboarding screen references, GOAT Bundle promo iterations, a “UI Observations from testing” annotation board, notification components, and avatar rarity-tier explorations (stroke and effect-aura treatments from Basic to Epic)',
             layout: 'full',
-            caption: 'Core flow overview — onboarding through draft → voting → results → profile, mapped as one connected product, not a stack of standalone screens',
+            caption: 'The working Figma canvas — screen references, bundle-promo iterations, testing observations, and avatar rarity-tier explorations; the build protocol’s red line: no screen gets built without a reference here first',
           },
         ],
       },
       {
         key: 'system',
         label: 'System',
-        description: 'Built the design system as the constraint layer first, screens second. Foundation Locked v0.2 ships as tokens.json + tokens.css + a TypeScript design system in /src/design-system/—colors, typography (Rajdhani + Inter + JetBrains Mono), spacing (12-step scale), radius, shadows, sizes, motion, packs, and component recipes—all source-of-truth from Figma. Five pack accent pairs (green / yellow / plum / red / blue) × twelve launch topics so a Candy draft and a GOAT Athletes draft pull from the same color logic but feel distinct. Nine status pill states with required leading icons. A five-mascot system for profiles—pack-goblin, draft-dragon, pick-knight, card-critter, draft-fox—each tied to a pack accent without inventing new tokens.',
+        description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system in /src/design-system/—color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, sizes, pack accents, and component recipes. Governance is written down, not implied: no hex literals or magic numbers in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to nine as content scaled—new accents were added by decision record (rust for a shield that baked in its own hue, ink teal reserved for player-authored Custom Drafts because gold stays reserved for winners), never by improvisation. That’s what let 121 components and 40+ screens ship solo without drifting.',
         systemMarker: 'System decision',
-        gridColumns: 2,
         images: [
           {
-            src: '/images/work/playdraft/playdraft-token-reference-v02.png',
-            alt: 'PlayDraft token reference board v0.2 — color scales, semantic states, gradients, shadows, spacing, radius, and component sizing all on one board',
+            src: '/images/work/playdraft/playdraft-design-system-v01-board.png',
+            alt: 'PlayDraft design-system one-pager — brand emblem and app icon variants, primary blue and secondary gold color ramps, semantic tokens, gradients, Rajdhani and Inter type ramp, custom icon library, pack category glyphs, and status indicators',
             layout: 'full',
-            caption: 'Token reference v0.2 — color, semantic state, gradient, shadow, spacing, radius, and sizing tokens all source-of-truth from a single board',
-          },
-          {
-            src: '/images/work/playdraft/playdraft-component-primitives.png',
-            alt: 'PlayDraft component primitives — inputs, draft pick chips, buttons (primary gold, primary blue, secondary, ghost), and draft cards rendered with the v0.2 tokens',
-            layout: 'half',
-            caption: 'Primitives — inputs, draft picks, buttons, and draft cards built directly from the token recipes',
-          },
-          {
-            src: '/images/work/playdraft/playdraft-status-navigation-system.png',
-            alt: 'PlayDraft status pills and bottom navigation system — nine status states (filling, predraft, drafting, pending, ready, locked, joined, eliminated, winner) and the five-tab nav with the active tab in gold',
-            layout: 'half',
-            caption: 'Status + navigation — nine status pill states and a five-tab nav that keeps draft progress legible from anywhere in the app',
+            caption: 'The v0.1 system board — emblem, ramps, semantic tokens, type, custom icon set, and status indicators on one sheet; v0.2 later re-tuned the palette cool and expanded the type ramp',
           },
         ],
       },
       {
         key: 'build',
         label: 'Build',
-        description: 'Working stack: Expo Router for navigation, TypeScript end-to-end, Supabase for auth + DB + realtime + RLS, Expo Notifications and RevenueCat as provider-agnostic rails accessed only through /src/services/*.service.ts. The voting + draft engine is eight pure-function modules in /src/features/: draft state machine, snake-order generator, vote-session builder (deterministic shuffled brackets for 3/6/8), submitVote / leadingOptions / promoteWinnersToFinal, confidence math (+1 finalist, +2 winner), daily 5-coin reward cap, 24-hour pre-draft vote gate, and a session prioritizer that ranks open votes by confidence + age. Pure logic on the inside, providers at the edge. AI-assisted execution slots in as the loop accelerator—component scaffolding, recipe variants, QA prompts, missing-state audits—always against the system, never against a blank canvas.',
+        description: 'The shipped app is a real production build, not a prototype shell: 40+ Expo Router screens, 121 components, 30 feature modules (drafts, draftlab, leagues, engagement, monetization, moderation, referral), 24 provider-agnostic services, 11 Supabase migrations, and 5 edge functions (draft resolution, confidence recompute, push, account deletion). Pure game logic lives inside—snake-order generation, pick-clock state, confidence-pool scoring—with providers at the edge, so the engine is testable without the network. AI-assisted execution slots in as the loop accelerator: component scaffolding against the token recipes, pack-content authoring through a dedicated curator agent with a legal-safety skill applied to every audit, missing-state reviews, and a weekly report-only audit harness that flags design-system drift and pack data-quality issues without ever modifying app code. The design-to-code workflow shows in the source itself—design tokens, product decisions, and legal posture live in the same annotated file:',
         systemMarker: 'Scalability consideration',
         codeBlock: {
           language: 'ts',
-          filename: 'src/design-system/packs.ts (excerpt)',
-          code: `// Five pack accent pairs × twelve launch topics — the topic catalog
-// pulls a tier + glyph + accent from the same source the components do.
+          filename: 'src/design-system/packs.ts (excerpt, real file)',
+          code: `/** \`ink\` was added 2026-07-14 for the Custom Draft tile — the one pack
+ *  the player authors. Primary = the system's existing "authored by
+ *  humans / the community" hue — NOT gold, which stays reserved for
+ *  premium/winner (Custom has no winner). */
 export const packAccents = {
-  green:  { primary: '...', secondary: '...' },
-  yellow: { primary: '...', secondary: '...' },
-  plum:   { primary: '...', secondary: '...' },
-  red:    { primary: '...', secondary: '...' },
-  blue:   { primary: '...', secondary: '...' },
+  green:  { primary: '#35d68a', secondary: '#163e41' },
+  yellow: { primary: '#ffd23f', secondary: '#403d31' },
+  // …6 more pairs, each added by decision record…
+  ink:    { primary: '#5ad1c2', secondary: '#0c2a2e' },
 } as const;
 
-export const launchPacks = [
-  { id: 'candy',          tier: 'free',    accent: 'red',    glyph: 'candy' },
-  { id: 'ice-cream',      tier: 'free',    accent: 'plum',   glyph: 'cone' },
-  { id: 'recess-games',   tier: 'free',    accent: 'green',  glyph: 'whistle' },
-  { id: 'soda',           tier: 'free',    accent: 'red',    glyph: 'bottle' },
-  { id: 'super-powers',   tier: 'free',    accent: 'blue',   glyph: 'bolt' },
-  { id: 'fast-food',      tier: 'free',    accent: 'yellow', glyph: 'burger' },
-  { id: 'movies',         tier: 'free',    accent: 'plum',   glyph: 'clapper' },
-  { id: 'songs',          tier: 'free',    accent: 'green',  glyph: 'note' },
-  { id: 'comedy-movies',  tier: 'premium', accent: 'yellow', glyph: 'mic' },
-  { id: 'scary-movies',   tier: 'premium', accent: 'plum',   glyph: 'ghost' },
-  { id: 'video-games',    tier: 'premium', accent: 'blue',   glyph: 'pad' },
-  { id: 'goat-athletes',  tier: 'premium', accent: 'red',    glyph: 'crown' },
-] as const;`,
-          caption: 'Pack accents and the launch topic catalog live in one file so the design system, the topic surface, and the monetization rails read from the same source.',
+export const packs = {
+  // GOAT Athletes — free launch pack (2026-07-13). Names-only editorial
+  // sports-history collection: no likenesses/logos, not coin-purchasable,
+  // never in paid marketing. See PACK_LEGAL_AVAILABILITY + synopses.
+  'goat-athletes': { name: 'GOAT Athletes', accent: 'plum', glyph: 'goat', tier: 'free' },
+  // Sitcoms — fills the slot held by the retired Reality Show Castaways
+  // pack; ships its own TV-set-with-comedy-mask shield.
+  sitcoms: { name: 'Sitcoms', accent: 'cyan', glyph: 'sitcom', tier: 'free' },
+  // …
+} as const;`,
+          caption: 'Real source: the pack registry carries its own decision history — why ink teal exists, why gold is off-limits, and the legal posture of every third-party topic, in the file the components actually read.',
         },
         images: [],
       },
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'Testing forced the product out of presentation mode and into product mode. Once the flows were moving, the work shifted from judging screens to testing behavior—queue logic, voting paths, state changes, navigation, and the smaller polish issues that only show up when a prototype starts acting like a product. Voting brackets were resized to keep ≤4 options per screen so finalist rounds always fit a phone viewport. Confidence triggers landed at 50% / 75% / 100% so notifications didn’t fire on weak signals. Bug + QA passes lived in /docs/qa-checklist.md and the /memories/progress-log.md—an append-only working journal that surfaces flow bugs, state bugs, missing icons, inconsistent pack accents, and TestFlight prep items as design work, not engineering chores. AI-assisted reviews helped expose missing empty / locked / unlocked / completed states the eye misses on a single screen but a state matrix catches every time.',
+        description: 'The defining pivot came from playing the game, not reviewing screens. The original loop resolved drafts through community voting—bracketed vote sessions, a 24-hour pre-draft vote gate, daily coins for voters. It was the app’s reason to exist, and it was wrong: a casual group wants a verdict tonight, not after a day of strangers voting. In June the public-voting system was retired entirely, pressure-tested first through a structured research workflow (a Bayesian cold-start scoring model, a tournament-loop scorecard, and a codebase audit) before any code changed. Its replacement: the DraftLab confidence pool—solo mini-games that rank every item in a pack—plus a transparent launch prior, so every finished draft gets an instant, explainable winner, with an in-room peer vote kept for bragging rights. The economy was rebuilt around the same finding (dailies pay XP, coins come from leveling, a win always funds the next ticket), and the QA loop kept paying: scripting the demo reel with Maestro surfaced a real shipping bug—the pick clock never auto-picked at zero, stalling rooms forever—that became a fix, not a caption.',
         images: [
           {
-            src: '/images/work/playdraft/playdraft-login-onboarding-exploration.png',
-            alt: 'PlayDraft login + onboarding exploration board — earlier iterations of the entry, login, and account creation flow tested against the v0.2 token system',
-            layout: 'full',
-            caption: 'Login + onboarding exploration — earlier iterations tested against the v0.2 tokens; small-flow polish surfaces friction the hero screens never catch',
+            src: '/images/work/playdraft/playdraft-results-ceremony.png',
+            alt: 'PlayDraft winner ceremony screen — a gold crown over the champion’s tinted avatar emblem, “The crown goes elsewhere” headline, the winning five-pick board outlined in gold, and +20 XP toward the season bar',
+            layout: 'half',
+            caption: 'The pivot, visible — every draft now ends in an instant ceremony: crowned winner, the winning board, XP into the season bar',
+            mobile: true,
+          },
+          {
+            src: '/images/work/playdraft/playdraft-custom-draft-writein.png',
+            alt: 'Custom Draft room — a teal write-in pick (“Gas Station Slushie”) landing on the live board next to the gold on-the-clock cell, with the write-in field and “anything on-topic goes — duplicates bounce” helper below',
+            layout: 'half',
+            caption: 'Custom Drafts, the second big swing — every pick is a write-in, the group authors the topic, and the payoff is deliberately social',
+            mobile: true,
           },
         ],
       },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'PlayDraft is in active prototype. The core product system, voting + draft engine, brand and design system, major flows, mascot identity, and Expo + Supabase stack are in place. Ongoing work covers topic content expansion (beyond the 12 launch packs), reward mechanic polish, paywall + RevenueCat wiring, push notifications via Expo, TestFlight readiness, and the closing rounds of UI consistency. The bigger takeaway sits one level up: PlayDraft is a working proof of how my process now operates—define the system, build the experience, test the behavior, and use AI-assisted workflows as an execution multiplier, not as the author of the work.',
+    outcomeNote: 'PlayDraft is a working product on TestFlight, in App Store submission prep. The full loop runs end to end on device: author or pick a topic, draft on the clock with friends, get an instant scored winner, share the board, level up. Launch posture is deliberate—coins-only economy first (cash purchases behind a feature flag until counsel review), third-party topic packs free-tier-only under the legal-safety framework, and a handful of promo surfaces that are UI-complete but not yet wired. No launch metrics exist yet, and none are claimed here. The bigger takeaway sits one level up: PlayDraft is working proof of how my process operates at product scope—define the system, build the experience, test the behavior, kill the parts that don’t survive play, and use AI-assisted workflows as an execution multiplier, not as the author of the work.',
     outcomeImages: [
       {
-        src: '/images/work/playdraft/playdraft-draft-hub-screen.png',
-        alt: 'Current end-state of the PlayDraft home / My Drafts hub running in the working prototype',
-        layout: 'full',
-        caption: 'Current end-state of the prototype—My Drafts hub running on the live Expo build',
+        src: '/images/work/playdraft/playdraft-home-draft-leagues.png',
+        alt: 'Current PlayDraft home screen on TestFlight — level and wallet header, Draft Leagues carousel panel with crown illustration and Create a League button, live-drafts row, and coins / active / tickets stat tiles above the Home / Packs / Lab / Store tab bar',
+        layout: 'half',
+        caption: 'The shipped home surface — wallet, feature carousel, live-draft rows, and the four-tab IA running on TestFlight',
         mobile: true,
+      },
+      {
+        src: '/images/work/playdraft/playdraft-share-card.jpg',
+        alt: 'Exported PlayDraft share board card — “Snacks Royale · Final Board” with a gold CHAMPION banner capping the winner’s block, every pick rendered as a full-width legible chip, and a “Think you’d draft better? Get PlayDraft.” wordmark footer',
+        layout: 'half',
+        caption: 'The real exported share card (3× capture from the working app) — the champion’s board reads gold, every pick reads in full, and the download hook rides along',
       },
     ],
     metrics: [
-      { value: '12', label: 'Launch topics: 8 free + 4 premium' },
-      { value: '3 / 6 / 8', label: 'Supported draft sizes (≤4 options per vote screen)' },
-      { value: '5 × 9', label: 'Pack accent pairs × status pill states' },
-      { value: 'v0.2', label: 'Foundation Locked design system (tokens + recipes)' },
+      { value: '12 wks', label: 'First logo sketch → TestFlight (Apr–Jul 2026, solo)' },
+      { value: '121', label: 'Components on a token-governed design system' },
+      { value: '40+', label: 'Screens & routes across the shipped Expo Router app' },
+      { value: '17', label: 'Draft packs in the launch catalog — every third-party topic cleared through a legal-safety framework' },
     ],
   },
 
@@ -1512,6 +1652,7 @@ export const launchPacks = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'photography-workflow-agent',
+    stream: 'professional',
     hidden: true,
     client: 'Internal Tool',
     title: 'Photography Workflow Agent',

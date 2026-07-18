@@ -14,6 +14,54 @@ import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
 
+// ── Stream chips — two-stream taxonomy ──────────────────────────────────────
+// Treatment-based, both orange (no second hue): professional = solid filled
+// pill, passion = dashed outline pill. Labels stay short; full stream names
+// live in the section intro + case-study hero.
+
+const STREAM_LABEL: Record<'professional' | 'passion', string> = {
+  professional: '[ Shipped ]',
+  passion: '[ Self-Built ]',
+};
+
+// ── Card cover video — plays only while its card is active ──────────────────
+// Poster (the featured image) everywhere else. Reduced-motion renders the
+// plain image; playback is driven by the same phase machine as the coin tray
+// (hover/focus on desktop, in-view on touch).
+
+const CardVideo: React.FC<{ src: string; poster: string; alt: string; playing: boolean }> = ({
+  src,
+  poster,
+  alt,
+  playing,
+}) => {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (playing) {
+      const p = el.play();
+      if (p) p.catch(() => {}); // autoplay guard — poster remains
+    } else {
+      el.pause();
+    }
+  }, [playing]);
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-label={alt}
+    />
+  );
+};
+
 const BriefcaseIcon = () => (
   <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
     <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a5.275,5.275,0,0,0,5.26,5.27H54.41A5.601,5.601,0,0,0,60,54.02V32.52A5.595,5.595,0,0,0,55.44,27.02ZM12.53,54.35A3.265,3.265,0,0,1,6,54.35V31.92a1.739,1.739,0,0,1,1.73-1.74H12.53Z" />
@@ -97,6 +145,19 @@ const CARDS: PlaygroundCard[] = [
     ],
   },
   {
+    slug: 'playdraft',
+    title: 'PlayDraft',
+    line: 'A social drafting game taken 0 → 1 solo — brand to TestFlight in 12 weeks.',
+    tags: ['0 → 1 Product', 'Game Design', 'React Native', 'Design System'],
+    metric: '12 weeks · solo build · TestFlight',
+    coins: [
+      { icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+      { icon: 'Claude-ai-icon.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
+      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },
+    ],
+  },
+  {
     slug: 'tire-categories',
     title: 'Tire Category Redesign',
     line: 'A clearer shopping experience shaped through education, iconography, and reusable CMS patterns.',
@@ -122,6 +183,20 @@ const CARDS: PlaygroundCard[] = [
       { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -5, lift: 0, z: 1 },
       { icon: 'github.svg', name: 'GitHub', x: 59, rot: 13, lift: 2, z: 2 },
       { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },
+    ],
+  },
+  {
+    slug: 'design-enablement',
+    title: 'Scaling Design Through Internal Tooling',
+    line: 'A connected layer of internal plugins and web apps that removed friction for the teams building the work.',
+    tags: ['Design Enablement', 'Figma Plugin', 'AI-Assisted Build', 'Automation'],
+    metric: '3 connected tools · Design, UX & Photography',
+    coins: [
+      { icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
+      { icon: 'Claude-ai-icon.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: 6, lift: 0, z: 1 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 59, rot: -12, lift: 2, z: 2 },
+      { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },
     ],
   },
   {
@@ -328,10 +403,17 @@ const CaseStudyPlayground: React.FC = () => {
     el.scrollBy({ left: dir * step, behavior: reduceMotion ? 'auto' : 'smooth' });
   };
 
-  // Join playground config to the canonical projects data (image + route source)
+  // Join playground config to the canonical projects data (image + route +
+  // stream + optional cover-loop video)
   const cards = CARDS.map((card) => {
     const project = projects.find((p) => p.slug === card.slug);
-    return { ...card, image: project?.featured ?? '', alt: project?.title ?? card.title };
+    return {
+      ...card,
+      image: project?.featured ?? '',
+      alt: project?.title ?? card.title,
+      stream: project?.stream,
+      video: project?.featuredVideo,
+    };
   });
 
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
@@ -350,6 +432,23 @@ const CaseStudyPlayground: React.FC = () => {
           <p className="case-playground__lede">
             A closer look at the systems, interfaces, and product thinking I've shaped from
             concept through implementation.
+          </p>
+          {/* Two-stream legend — full names live here; cards carry the short chips */}
+          <p className="case-playground__streams-note">
+            <span className="case-playground__stream case-playground__stream--professional">
+              {STREAM_LABEL.professional}
+            </span>{' '}
+            Professional &amp; Published
+            <span className="case-playground__streams-dot">·</span>
+            <span className="case-playground__stream case-playground__stream--passion">
+              {STREAM_LABEL.passion}
+            </span>{' '}
+            Passion-Driven Self Creation
+          </p>
+          {/* Thesis — one per surface */}
+          <p className="case-playground__thesis">
+            AI can show us what could exist. Design judgment is still responsible for
+            deciding what should exist.
           </p>
         </div>
 
@@ -390,9 +489,25 @@ const CaseStudyPlayground: React.FC = () => {
                 onFocus={isTouch ? undefined : () => handleEnter(card.slug)}
                 onBlur={isTouch ? undefined : () => handleLeave(card.slug)}
               >
-                {/* Top — preview */}
+                {/* Top — preview (cover loop plays only while the card is active) */}
                 <div className="case-playground__preview">
-                  <img src={card.image} alt={card.alt} loading="lazy" />
+                  {card.stream && (
+                    <span
+                      className={`case-playground__stream case-playground__stream--${card.stream}`}
+                    >
+                      {STREAM_LABEL[card.stream]}
+                    </span>
+                  )}
+                  {card.video && !reduceMotion ? (
+                    <CardVideo
+                      src={card.video}
+                      poster={card.image}
+                      alt={card.alt}
+                      playing={phase === 'in'}
+                    />
+                  ) : (
+                    <img src={card.image} alt={card.alt} loading="lazy" />
+                  )}
                 </div>
 
                 {/* Middle — minimal content */}

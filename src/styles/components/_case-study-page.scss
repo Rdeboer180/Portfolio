@@ -1225,3 +1225,58 @@
     animation: csLightboxBackdrop 200ms ease-out;
   }
 }
+
+// ============================================
+// Two-stream taxonomy (hero) + internal artifacts
+// ============================================
+
+// Eyebrow row grows a stream chip + full stream name beside "Case Study"
+.cs .cs__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.cs__stream-chip {
+  font-family: $font-family-mono;
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: $radius-full;
+  padding: 3px 9px;
+  white-space: nowrap;
+
+  &--professional {
+    background: $color-primary-light;
+    color: $color-primary-dark;
+    border: 1px solid rgba($color-primary, 0.35);
+  }
+
+  &--passion {
+    background: $color-white;
+    color: $color-primary;
+    border: 1px dashed $color-primary;
+  }
+}
+
+.cs__stream-name {
+  font-family: $font-family-mono;
+  font-size: $font-size-caption;
+  letter-spacing: 0.06em;
+  color: $color-neutral-muted;
+  text-transform: none;
+}
+
+// Non-link artifact chips (internal tooling — nothing public to link)
+.cs__artifact-chip {
+  font-family: $font-family-primary;
+  font-size: $font-size-body-sm;
+  font-weight: $font-weight-medium;
+  color: $color-primary-dark;
+  padding: $spacing-xs $spacing-md;
+  border: 1px dashed rgba($color-primary, 0.55);
+  border-radius: $radius-full;
+  white-space: nowrap;
+}
