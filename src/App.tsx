@@ -5,7 +5,7 @@ import Skills from './components/Skills';
 import TechnicalAbilities from './components/TechnicalAbilities';
 import CaseStudyPlayground from './components/CaseStudyPlayground';
 import Footer from './components/Footer';
-import HowIWork from './components/HowIWork';
+import ProcessPlayground from './components/ProcessPlayground';
 import Testimonials from './components/Testimonials';
 
 import FAQ from './components/FAQ';
@@ -28,7 +28,7 @@ function getRoute(hash: string): { page: string; slug?: string; anchor?: string 
   const anchor = anchorMatch ? anchorMatch[1].slice(1) : undefined;
 
   if (hash === '#/design-system') return { page: 'design-system' };
-  if (hash === '#/about') return { page: 'about' };
+  if (hash === '#/about' || hash.startsWith('#/about#')) return { page: 'about', anchor };
   if (hash === '#/resume') return { page: 'resume' };
   if (hash === '#/homepage_ux' || hash.startsWith('#/homepage_ux#')) return { page: 'homepage_ux', anchor };
   if (hash === '#/homepage_sleeper' || hash.startsWith('#/homepage_sleeper#')) return { page: 'homepage_sleeper', anchor };
@@ -131,7 +131,7 @@ function App() {
         <CaseStudyPlayground />
         <Skills />
         <Testimonials />
-        <HowIWork />
+        <ProcessPlayground />
         <TechnicalAbilities />
         <FAQ />
         <Footer />

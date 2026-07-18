@@ -1,0 +1,521 @@
+// ============================================
+// Process Playground — "From sketch to shipped"
+// Five process beats whose cards render at increasing fidelity:
+// f1 pencil sketch → f2 wireframe → f3 lo-fi → f4 hi-fi → f5 shipped.
+// Staggered reveal + hand-drawn connector path, both gated on --revealed.
+// ============================================
+
+@import '../variables';
+
+.process-playground {
+  padding: $spacing-4xl 0;
+
+  &__container {
+    max-width: 1186px;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // ── Intro ──────────────────────────────────────────────────────────────────
+
+  &__intro {
+    max-width: 640px;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: $spacing-lg 0 $spacing-md;
+  }
+
+  &__lede {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-lg;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+    margin: 0;
+  }
+
+  // ── Track: journey line + steps ────────────────────────────────────────────
+
+  &__track {
+    position: relative;
+    margin-top: $spacing-2xl;
+  }
+
+  &__path {
+    position: absolute;
+    top: -18px;
+    left: 2%;
+    width: 96%;
+    height: 32px;
+    overflow: visible;
+    pointer-events: none;
+
+    path {
+      stroke: rgba(0, 0, 0, 0.3);
+      stroke-width: 1.4;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+  }
+
+  // Line draws after the cards land; arrowhead flicks in last
+  &--revealed &__path-line {
+    transition: stroke-dashoffset 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 550ms;
+    stroke-dashoffset: 0;
+  }
+
+  &--revealed &__path-head {
+    transition: stroke-dashoffset 200ms cubic-bezier(0.2, 0.8, 0.2, 1) 1450ms;
+    stroke-dashoffset: 0;
+  }
+
+  &__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: $spacing-lg;
+    align-items: stretch;
+  }
+
+  // ── Step card bones (fidelity tiers style the shell below) ─────────────────
+
+  &__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+    border-radius: $radius-lg;
+    // Reveal: fade up, staggered per card via --pp-delay
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 520ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--pp-delay, 0ms),
+      transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--pp-delay, 0ms),
+      box-shadow 250ms ease;
+  }
+
+  &--revealed &__step {
+    opacity: 1;
+    transform: none;
+  }
+
+  &__artifact {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-md;
+
+    svg {
+      width: 96px;
+      height: 44px;
+      overflow: visible;
+    }
+  }
+
+  &__num {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.1em;
+    color: $color-neutral-muted;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__step-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__step-line {
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+    margin: 0;
+  }
+
+  // Handwritten aside — hidden until hover/focus on pointer devices
+  &__note {
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 19px;
+    line-height: 1;
+    color: $color-primary-dark;
+    margin-top: $spacing-md;
+    transform: rotate(-2deg);
+    align-self: flex-start;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &__note {
+      opacity: 0;
+      transform: rotate(1deg) translateY(4px);
+      transition: opacity 200ms ease, transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    &__step:hover &__note,
+    &__step:focus-within &__note {
+      opacity: 1;
+      transform: rotate(-2deg) translateY(0);
+    }
+  }
+
+  // ── Fidelity tiers ─────────────────────────────────────────────────────────
+
+  // f1 — pencil sketch: dashed hand border, faint tilt, paper-flat
+  &__step--f1 {
+    border: 2px dashed rgba(0, 0, 0, 0.35);
+    background: transparent;
+    transform: translateY(10px) rotate(-0.8deg);
+  }
+
+  &--revealed &__step--f1 {
+    transform: rotate(-0.8deg);
+  }
+
+  // f2 — wireframe: thin dashed border, white, still flat
+  &__step--f2 {
+    border: 1px dashed rgba(0, 0, 0, 0.3);
+    background: $color-white;
+  }
+
+  // f3 — lo-fi: solid hairline, neutral fill
+  &__step--f3 {
+    border: 1px solid $color-neutral-light;
+    background: $color-neutral-lightest;
+  }
+
+  // f4 — hi-fi: real card, elevation appears
+  &__step--f4 {
+    border: 1px solid $color-neutral-light;
+    background: $color-white;
+    border-radius: $radius-xl;
+    box-shadow: var(--shadow-md);
+  }
+
+  // f5 — shipped: polished, orange accent bar, strongest elevation
+  &__step--f5 {
+    border: 1px solid $color-neutral-light;
+    background: $color-white;
+    border-radius: $radius-xl;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: $color-primary;
+    }
+  }
+
+  // Hover lift — grows with fidelity (sketches don't cast shadows)
+  @media (hover: hover) and (pointer: fine) {
+    &__step:hover {
+      transform: translateY(-3px);
+    }
+
+    &__step--f1:hover {
+      transform: translateY(-3px) rotate(-0.8deg);
+    }
+
+    &__step--f4:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    &__step--f5:hover {
+      box-shadow: var(--shadow-xl);
+    }
+  }
+
+  // ── Artifact internals ─────────────────────────────────────────────────────
+
+  // Wireframe: dashed outline box + bars
+  &__wf {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__wf-box {
+    width: 34px;
+    height: 34px;
+    border: 1.5px dashed rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  &__wf-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    span {
+      display: block;
+      height: 6px;
+      border: 1px dashed rgba(0, 0, 0, 0.25);
+      border-radius: 3px;
+
+      &:first-child { width: 44px; }
+      &:last-child { width: 30px; }
+    }
+  }
+
+  // Lo-fi: solid neutral blocks
+  &__lofi {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__lofi-box {
+    width: 34px;
+    height: 34px;
+    background: $color-neutral-light;
+    border-radius: 4px;
+  }
+
+  &__lofi-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    span {
+      display: block;
+      height: 6px;
+      background: $color-neutral-light;
+      border-radius: 3px;
+
+      &:first-child { width: 44px; }
+      &:last-child { width: 30px; }
+    }
+  }
+
+  // Hi-fi: brand tints, refined radii
+  &__hifi {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__hifi-box {
+    width: 34px;
+    height: 34px;
+    background: $color-primary-light;
+    border: 1px solid $color-primary-md;
+    border-radius: 6px;
+  }
+
+  &__hifi-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    span {
+      display: block;
+      height: 6px;
+      border-radius: 3px;
+
+      &:nth-child(1) { width: 46px; background: $color-neutral-dark; }
+      &:nth-child(2) { width: 34px; background: $color-neutral-light; }
+      &:nth-child(3) { width: 24px; background: $color-primary-muted; }
+    }
+  }
+
+  // Shipped: mini browser card with chrome dots + orange hero bar
+  &__shipped {
+    width: 84px;
+    background: $color-white;
+    border: 1px solid $color-neutral-light;
+    border-radius: 6px;
+    box-shadow: var(--shadow-sm);
+    padding: 5px 6px 6px;
+  }
+
+  &__shipped-chrome {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 5px;
+
+    span {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: $color-neutral-light;
+
+      &:first-child { background: $color-primary-muted; }
+    }
+  }
+
+  &__shipped-hero {
+    display: block;
+    height: 12px;
+    border-radius: 3px;
+    background: $color-primary;
+    margin-bottom: 4px;
+  }
+
+  &__shipped-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    span {
+      display: block;
+      height: 4px;
+      border-radius: 2px;
+      background: $color-neutral-light;
+
+      &:first-child { width: 85%; }
+      &:last-child { width: 60%; }
+    }
+  }
+
+  // ── CTA — anchors to the full process on the About page ────────────────────
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: $spacing-2xl;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+
+    &:hover,
+    &:focus-visible {
+      color: $color-primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+      border-radius: $radius-sm;
+    }
+  }
+
+  &__cta-arrow {
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    path:nth-child(2) {
+      transition-delay: 140ms;
+    }
+  }
+
+  &__cta:hover &__cta-arrow path,
+  &__cta:focus-visible &__cta-arrow path {
+    stroke-dashoffset: 0;
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .process-playground {
+    &__path {
+      display: none; // the journey line only reads when the five sit in a row
+    }
+
+    &__steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    // Odd count: let the shipped card span the last row
+    &__step--f5 {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .process-playground {
+    padding: $spacing-3xl 0;
+
+    &__title {
+      font-size: $font-size-h3;
+    }
+
+    &__steps {
+      grid-template-columns: 1fr;
+    }
+
+    &__step--f5 {
+      grid-column: auto;
+    }
+  }
+}
+
+// ── Touch devices: no hover — notes + CTA arrow always present ────────────────
+
+@media (hover: none) {
+  .process-playground {
+    &__cta {
+      color: $color-primary;
+    }
+
+    &__cta-arrow path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+}
+
+// ── Reduced motion: everything settled, no draw-in or lift ────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .process-playground {
+    &__step {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    &__step--f1 {
+      transform: rotate(-0.8deg);
+    }
+
+    &__path path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+
+    &__note {
+      opacity: 1;
+      transform: rotate(-2deg);
+      transition: none;
+    }
+
+    &__cta-arrow path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+}

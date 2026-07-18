@@ -11,7 +11,7 @@ import { principles } from '../data/about';
 
 const ProcessPrinciples: React.FC = () => {
   return (
-    <section className="process-principles" aria-labelledby="process-heading">
+    <section id="process" className="process-principles" aria-labelledby="process-heading">
       <div className="process-principles__inner">
         {/* Section header */}
         <div className="process-principles__section-label">[ Process ]</div>
