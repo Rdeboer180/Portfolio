@@ -431,7 +431,7 @@ const Hero: React.FC = () => {
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">Senior Product Designer bringing craft, code, and care to AI-assisted product work</span>
+              <span className="hero__eyebrow-title">Senior Product Designer · Systems · Front-End Fluency</span>
             </p>
 
             <div className="hero__typed-wrap hero__reveal hero__reveal--2">
@@ -523,7 +523,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            Product design, UX/UI, front-end logic, and design systems, connected by <span className="animated-bold">craft, care, and production-minded judgment</span>. My background in visual communication, front-end code, and AI-assisted workflows lets me move from idea to interface with more context behind each decision. I work past the artboard, into the <span className="animated-bold">systems and details that help teams ship</span>.
+            I work across product strategy, UX/UI, design systems and front-end implementation, with a <span className="animated-bold">focus on craft, care, and production-minded judgment</span>. My background in visual communication and code helps me carry ideas beyond the artboard, while AI speeds up exploration. <span className="animated-bold">I stay responsible for the judgment, details and systems behind what ships.</span>
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">
