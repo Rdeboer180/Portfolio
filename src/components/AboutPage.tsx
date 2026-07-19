@@ -43,8 +43,8 @@ const AboutPage: React.FC = () => {
             release to make the next one stronger.
           </p>
           <p className="about-page__transition-body">
-            That is the through-line from visual design to front-end logic, from systems thinking
-            to AI-assisted workflows. The tools keep changing. The standard does not.
+            That thread runs from visual design to front-end code to design systems to AI-assisted
+            work. The tools change; the standard doesn&rsquo;t.
           </p>
         </div>
       </div>

@@ -166,7 +166,7 @@ const projects: Project[] = [
       },
     ],
 
-    insightCallout: 'Built 200+ tokens and 50+ components from scratch\u2014establishing a shared language between design and engineering that eliminated ambiguity in the React build.',
+    insightCallout: 'Built 200+ tokens and 50+ components from scratch, giving design and engineering one shared vocabulary to build the React app against.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
@@ -236,7 +236,7 @@ const projects: Project[] = [
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'Now live at wheelrack.com/pitstop/search. Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI\u2014the redesign helped influence buy-in, though final adoption reflects broader business factors too. The Storybook-integrated component library gave the React team an unambiguous source of truth, and the token system established a shared language between design and engineering. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
+    outcomeNote: 'Now live at wheelrack.com/pitstop/search. Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI, which helped influence buy-in (final adoption reflects broader business factors too). The Storybook-integrated component library gave the React team one source of truth to build against. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
     outcomeLiveLinks: [
       { label: 'View the live WheelRack PitStop experience', url: 'https://wheelrack.com/pitstop/search' },
     ],
@@ -595,7 +595,7 @@ const projects: Project[] = [
     timeToLive: '~4 months from first meeting to full brand + site launch',
 
     // \u2500\u2500 01 Problem \u2500\u2500
-    problemPunch: 'An outdated brand and website that wasn\u2019t converting\u2014after 12+ years, the digital presence no longer matched the quality of the program.',
+    problemPunch: 'An outdated brand and website that wasn\u2019t converting. After 12+ years, the digital presence no longer matched the quality of the program.',
     problem: [
       'Heatherwood had operated under the same brand and website for 12+ years. Core issues: outdated look, weak brand continuity, no logical UX path, and a trust/conversion structure that wasn\u2019t supporting inquiries.',
       'Families search for specific activities ("horseback riding lessons South Bend"), not the brand name. Each service needed its own search entry point.',
@@ -612,7 +612,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'An aging identity competing against polished commercial programs\u2014without the SEO or conversion infrastructure to back it up.',
+    gapsPunch: 'An aging identity up against polished commercial programs, with none of the SEO or conversion infrastructure to compete.',
     gaps: [
       'The existing brand felt dated and lacked the polish needed to compete with larger commercial programs\u2014needed a full rebrand that feels warm and family-oriented but holds its own visually.',
       'Brand work started from a phone-image dump and required curation, aesthetic research, and regional positioning before a usable visual system could take shape.',
@@ -991,7 +991,7 @@ const projects: Project[] = [
       },
     ],
 
-    insightCallout: 'The win wasn\u2019t any single component\u2014it was establishing a shared system of variables, variants, and documentation that the design, dev, SEO, and accessibility teams could all build against. Shipped real Sass, not just specs.',
+    insightCallout: 'The value was the shared system rather than any one component: variables, variants, and documentation the design, dev, SEO, and accessibility teams build against. I shipped production Sass, not just specs.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -1099,7 +1099,7 @@ $mobile-max-width: 768px;
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system\u2014faster page loads (60% improvement measured in WebPageTest), cleaner authoring, and a shared foundation across design, dev, SEO, and accessibility. The new core components now power the homepage, tires landing, events and sponsorship pages, and packages page in production. The authoring experience is night-and-day better for junior designers; combined with my documentation, it lets design and SEO use the CMS much more like a true CMS. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed\u2014happy to walk through them in detail in conversation.',
+    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system: 60% faster page loads (measured in WebPageTest), cleaner authoring, and one foundation the design, dev, SEO, and accessibility teams share. The new core components now power the homepage, tires landing, events and sponsorship pages, and packages page in production. The authoring experience is far better for junior designers, and combined with my documentation it lets design and SEO use the CMS the way a CMS is meant to work. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed. I\u2019m happy to walk through them in conversation.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
@@ -1140,7 +1140,7 @@ $mobile-max-width: 768px;
 
     // ── 01 Problem ──
     problemPunch:
-      'The team’s biggest friction wasn’t the work — it was the process around the work.',
+      'The team’s biggest friction wasn’t the work. It was the process around the work.',
     problem: [
       'Repetitive design tasks, manual review cycles, and inconsistent project communication were absorbing time across the Design, UX, and Photography teams.',
       'Project context lived in exported spreadsheets and tribal knowledge. With hundreds of active design files, finding ownership, business context, and planning metadata meant hunting — not designing.',
@@ -1165,7 +1165,7 @@ $mobile-max-width: 768px;
 
     // ── Key Insight (portable-governance thesis) ──
     insightCallout:
-      'The next evolution of design systems may not be contained inside a component library. It can live across Markdown files, agent skills, plugins, code, and documentation — portable forms of governance that help teams make good decisions even when the designer isn’t in the room.',
+      'A design system doesn’t have to live inside a component library. It can live in Markdown files, agent skills, plugins, code, and documentation: governance that travels with the work, so teams keep making good calls when I’m not in the room.',
 
     // ── 04 Approach — one subsection per tool ──
     approachSubsections: [
@@ -1227,13 +1227,13 @@ $mobile-max-width: 768px;
         label: 'One Connected Layer, Not Isolated Tools',
         systemMarker: 'PLATFORM',
         description:
-          'Rather than treating each tool as an isolated solution, they were designed as a connected layer of workflow automation — shared context in, standardized artifacts out. The same pattern extends to an agentic workflow tool built for the Photography team, and to the design system itself: the tokens, components, and documentation these tools speak are the same ones that power the shipped work. Sometimes the highest-leverage design isn’t another interface for customers — it’s removing friction for the people building those experiences every day.',
+          'Rather than treating each tool as an isolated solution, they were designed as a connected layer of workflow automation: shared context in, standardized artifacts out. The same pattern extends to an agentic workflow tool I built for the Photography team, and to the design system itself, since the tokens, components, and documentation these tools speak are the same ones that power the shipped work. Sometimes the best design work isn’t another customer-facing screen. It’s taking friction out of the day for the people who build those screens.',
       },
     ],
 
     // ── 05 Outcome ──
     outcomeNote:
-      'This work reflects how I increasingly think about design systems — not simply as component libraries, but as platforms that improve how teams work together. These tools focused on eliminating repetitive work, preserving context, and creating consistent workflows so the team could spend more time solving problems and less time managing process.',
+      'This work reflects how I think about design systems now: not just component libraries, but platforms that change how a team works together. These tools took repetitive work off the team, kept project context in one place, and made the workflow consistent, so people spent more time solving problems and less time managing process.',
     outcomeArtifacts: [
       'Figma Project Metadata Plugin',
       'Hero Crop Simulator',
@@ -1290,7 +1290,7 @@ $mobile-max-width: 768px;
       'AI-assisted workflow had to match the complexity of the domain: prompt → output → critique → refine, with safety framing pressure-tested at every step.',
     ],
 
-    insightCallout: 'Confidence is the safety mechanism. LoopStack separates “ready to review” patterns from “building evidence” signals — so a single odd meal never becomes a recommendation, and the system stays a tool for review, not a dosing engine.',
+    insightCallout: 'Confidence is the safety mechanism. LoopStack separates “ready to review” patterns from “still building evidence,” so one odd meal never turns into a recommendation and the app stays a review tool rather than a dosing engine.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
@@ -1450,7 +1450,7 @@ Frame every output as:
     stream: 'passion',
     client: 'PlayDraft (personal product)',
     title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
-    summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic — Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution: product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight — with AI-assisted workflows as the execution multiplier.',
+    summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic: Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution across product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight, with AI-assisted workflows moving it faster.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',
@@ -1474,7 +1474,7 @@ Frame every output as:
         src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
         alt: 'PlayDraft product reel — authoring a custom draft topic, browsing and searching packs, live snake-draft picks on the clock, the winner ceremony scored by the DraftLab confidence pool, and sharing the final board to X',
         layout: 'full',
-        caption: 'The product in 72 seconds — real app, captured on-simulator with scripted flows: author a topic → draft on the clock → banter in the room chat → instant winner → post the board to X',
+        caption: 'The product in 66 seconds — real app, captured on-simulator with scripted flows: settle any debate → choose a topic → set the rules → invite the group → take turns drafting → reveal the lineups → vote and react → post it to X',
         isVideo: true,
         videoPoster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
       },
@@ -1512,7 +1512,7 @@ Frame every output as:
       'Pack content that references real brands, shows, and athletes ran through a purpose-built legal-safety framework: names-only rosters, no likenesses, trademarked nicknames scrubbed, one pack renamed, a remote kill switch so any pack can be disabled without an app release—and a documented, conscious decision to launch free-tier-only on the riskiest content instead of paying for counsel first.',
     ],
 
-    insightCallout: 'The design system became the product’s operating layer—and the governance layer for AI throughput. Tokens, recipes, and a “no screen without a reference” red line meant every AI-assisted screen, new pack, and new feature had a place to belong before it was built.',
+    insightCallout: 'The design system doubled as the guardrail for AI output. Tokens, recipes, and a “no screen without a reference” rule meant every AI-assisted screen or new pack had somewhere to belong before it was built.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
@@ -1620,7 +1620,7 @@ export const packs = {
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'PlayDraft is a working product on TestFlight, in App Store submission prep. The full loop runs end to end on device: author or pick a topic, draft on the clock with friends, get an instant scored winner, share the board, level up. Launch posture is deliberate—coins-only economy first (cash purchases behind a feature flag until counsel review), third-party topic packs free-tier-only under the legal-safety framework, and a handful of promo surfaces that are UI-complete but not yet wired. No launch metrics exist yet, and none are claimed here. The bigger takeaway sits one level up: PlayDraft is working proof of how my process operates at product scope—define the system, build the experience, test the behavior, kill the parts that don’t survive play, and use AI-assisted workflows as an execution multiplier, not as the author of the work.',
+    outcomeNote: 'PlayDraft is a working product on TestFlight, in App Store submission prep. The full loop runs end to end on device: author or pick a topic, draft on the clock with friends, get an instant scored winner, share the board, level up. Launch posture is deliberate: coins-only economy first (cash purchases behind a feature flag until counsel review), third-party topic packs free-tier-only under the legal-safety framework, and a handful of promo surfaces that are UI-complete but not yet wired. No launch metrics exist yet, and none are claimed here. The bigger takeaway sits one level up. PlayDraft is working proof of how my process operates at product scope: define the system, build the experience, test the behavior, cut the parts that don’t survive play, and let AI move the work faster without handing it the final call.',
     outcomeImages: [
       {
         src: '/images/work/playdraft/playdraft-home-draft-leagues.png',

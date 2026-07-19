@@ -120,7 +120,7 @@ const teamScoreTags = [
   'Systems thinker',
   'Remote teammate',
   'Design → code bridge',
-  'AI-forward builder',
+  'AI-assisted delivery',
 ];
 
 const Testimonials: React.FC = () => {
