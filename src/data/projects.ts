@@ -1262,6 +1262,7 @@ $mobile-max-width: 768px;
     tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'TestFlight'],
     timeline: 'Initial prototype ~3–4 weeks; pattern-intelligence build ongoing',
     featured: '/images/work/loopstack/loopstack-portfolio-cover-2026-update.png',
+    featuredVideo: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
     timeToLive: 'Initial concept to working prototype in ~3–4 weeks. Now running on device through TestFlight as a personal pattern-review tool. Continuing to evolve toward a broader consumer release.',
 
     // ── 01 Problem ──
@@ -1298,7 +1299,17 @@ $mobile-max-width: 768px;
         key: 'alignment',
         label: 'Alignment',
         description: 'Scoped LoopStack as a personal prototype with one priority above all others: explore a real T1D problem through design without ever drifting into medical advice. Reframed the product thesis from “smarter dosing” to “safer pattern review” — comparing what Loop predicted with what actually happened, and surfacing observations worth discussing with a care team. Chose an AI-augmented workflow (Claude + ChatGPT for system logic and safety framing, Figma for structure, Cursor for the working prototype) so I could pressure-test copy and clinician-safe wording at every iteration.',
-        images: [],
+        images: [
+          {
+            src: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
+            alt: 'Ten-second LoopStack overview — the Trends dashboard and favorite-meal report card, fed by Loop, Apple Health, and Apple Watch data, ending on an evidence-gated confidence ring',
+            layout: 'full',
+            isVideo: true,
+            videoPoster: '/assets/portfolio-safe/loopstack/cover-loop-poster.jpg',
+            caption:
+              'Ten seconds of LoopStack: real data in from Loop, Apple Health, and Apple Watch — metrics studied into evidence-gated confidence reports.',
+          },
+        ],
       },
       {
         key: 'structure',
