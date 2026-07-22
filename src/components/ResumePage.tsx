@@ -60,7 +60,7 @@ const ResumePage: React.FC = () => {
             <a href="mailto:rdeboer180@gmail.com">rdeboer180@gmail.com</a>
             <span className="resume-page__contact-sep">&bull;</span>
             <span className="resume-page__contact-portfolio">
-              Portfolio Site: <a href="https://rdeboerdesigns.com" target="_blank" rel="noopener noreferrer">RDeboerDesigns.com</a>
+              Portfolio Site: <a href="https://www.rdeboerdesigns.com" target="_blank" rel="noopener noreferrer">RDeboerDesigns.com</a>
             </span>
           </div>
         </header>

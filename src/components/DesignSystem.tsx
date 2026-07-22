@@ -522,7 +522,7 @@ const CardsContent: React.FC = () => (
 {`import TestimonialCard from './components/TestimonialCard';
 
 <TestimonialCard
-  avatarSrc="/images/avatar.jpg"
+  avatarSrc="/images/hero/ryan-deboer.jpeg"
   name="Paul Bennett"
   role="Founder"
   company="Acme Corp"
@@ -606,7 +606,7 @@ const CardsContent: React.FC = () => (
   description="Enhancing user confidence..."
   tags={['Gen AI', 'iOS & Android']}
   metrics={[{ value: '+1.1%', label: 'ATC Conversion' }]}
-  imageSrc="/images/case-study.png"
+  imageSrc="/images/work/loopstack/loopstack-portfolio-cover-2026-update.png"
   ctaPrimaryLabel="View Case Study"
   variant="horizontal"
 />`}
