@@ -9,6 +9,7 @@ import { getHomeHref } from '../utils/homeSession';
 import AboutHero from './AboutHero';
 import AboutStorySections from './AboutStorySections';
 import ProcessPrinciples from './ProcessPrinciples';
+import LinkedInLink from './LinkedInLink';
 import '../styles/styles.scss';
 
 const AboutPage: React.FC = () => {
@@ -46,6 +47,15 @@ const AboutPage: React.FC = () => {
             That thread runs from visual design to front-end code to design systems to AI-assisted
             work. The tools change; the standard doesn&rsquo;t.
           </p>
+          <p className="about-page__transition-note">
+            The finished version of that standard is this site. Between releases, I think out loud
+            on LinkedIn.
+          </p>
+          <LinkedInLink
+            label="Read along"
+            surface="about_bridge"
+            className="about-page__transition-link"
+          />
         </div>
       </div>
 

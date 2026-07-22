@@ -448,42 +448,11 @@
     color: $color-neutral-muted;
   }
 
+  // Composes the shared atom (_linkedin-link.scss); only the
+  // card-local spacing lives here.
   &__source-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+    @include linkedin-glyph;
     margin-top: $spacing-xs;
-    font-family: $font-family-primary;
-    font-size: $font-size-caption;
-    font-weight: $font-weight-semibold;
-    color: $color-primary;
-    text-decoration: none;
-    width: fit-content;
-
-    &::before {
-      content: '';
-      width: 12px;
-      height: 12px;
-      flex-shrink: 0;
-      background-color: currentColor;
-      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-    }
-
-    &:hover,
-    &:focus-visible {
-      text-decoration: underline;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $color-primary;
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
   }
 
   // ==========================================

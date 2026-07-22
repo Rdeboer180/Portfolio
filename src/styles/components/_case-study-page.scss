@@ -907,6 +907,61 @@
   }
 
   // ==========================================
+  // Continue on LinkedIn — quiet close rail
+  // ==========================================
+  &__continue {
+    max-width: 720px;
+    margin-top: $spacing-4xl;
+    padding-top: $spacing-2xl;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  &__continue-label {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    color: $color-primary;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: $spacing-md;
+  }
+
+  &__continue-body {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-muted;
+    max-width: 54ch;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__continue-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-xl;
+  }
+
+  &__continue-mail {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-primary;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+
+  // ==========================================
   // Next Project
   // ==========================================
   &__next {

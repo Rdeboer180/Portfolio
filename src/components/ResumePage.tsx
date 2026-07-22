@@ -62,6 +62,12 @@ const ResumePage: React.FC = () => {
             <span className="resume-page__contact-portfolio">
               Portfolio Site: <a href="https://www.rdeboerdesigns.com" target="_blank" rel="noopener noreferrer">RDeboerDesigns.com</a>
             </span>
+            <span className="resume-page__contact-sep">&bull;</span>
+            {/* Plain text link on purpose: the visible URL must survive the
+                html2pdf export (CSS-mask glyphs may not render in the canvas). */}
+            <span className="resume-page__contact-linkedin">
+              LinkedIn: <a href="https://www.linkedin.com/in/ryandeboerdesigns/" target="_blank" rel="noopener noreferrer">linkedin.com/in/ryandeboerdesigns</a>
+            </span>
           </div>
         </header>
 

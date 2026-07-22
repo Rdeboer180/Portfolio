@@ -3,6 +3,7 @@ import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import PasswordModal from './PasswordModal';
+import LinkedInLink from './LinkedInLink';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -835,6 +836,18 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 </ul>
               </section>
             )}
+
+            {/* ==================== Continue on LinkedIn — quiet close rail ==================== */}
+            <aside className="cs__continue">
+              <span className="cs__continue-label">[ In Progress ]</span>
+              <p className="cs__continue-body">
+                Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
+              </p>
+              <div className="cs__continue-actions">
+                <a href="mailto:rdeboer180@gmail.com" className="cs__continue-mail">Get in touch</a>
+                <LinkedInLink label="Follow the work in progress" surface="case_study_close" />
+              </div>
+            </aside>
           </>
         )}
 

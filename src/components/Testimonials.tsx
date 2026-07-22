@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import SectionBadge from './SectionBadge';
+import LinkedInLink from './LinkedInLink';
 
 const QuoteIcon = () => (
   <svg viewBox="0 0 180 169.8" fill="currentColor" stroke="none">
@@ -267,14 +268,11 @@ const Testimonials: React.FC = () => {
                 <span className="testimonials__name">&mdash; {t.name}</span>
                 <span className="testimonials__role">{t.role}, {t.year}</span>
                 {t.sourceUrl && (
-                  <a
-                    href={t.sourceUrl}
+                  <LinkedInLink
+                    label={t.source ?? 'View source'}
+                    surface="testimonial_source"
                     className="testimonials__source-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t.source ?? 'View source'}
-                  </a>
+                  />
                 )}
               </cite>
             </blockquote>

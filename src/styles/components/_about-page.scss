@@ -155,6 +155,33 @@
       margin-top: $spacing-lg;
     }
   }
+
+  &__transition-note {
+    position: relative;
+    z-index: 1;
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 540px;
+    margin-top: $spacing-lg;
+  }
+
+  // White variant of the shared LinkedIn atom — the card is orange, so the
+  // atom's default $color-primary would vanish. Compound selector keeps the
+  // override winning regardless of import order; glyph follows currentColor.
+  &__transition-link {
+    &.linkedin-link {
+      position: relative;
+      z-index: 1;
+      margin-top: $spacing-sm;
+      color: $color-white;
+
+      &:focus-visible {
+        outline-color: $color-white;
+      }
+    }
+  }
 }
 
 // ── Responsive ───────────────────────────────────────────────────────────────
