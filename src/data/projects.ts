@@ -52,6 +52,10 @@ export interface Project {
   // Optional muted looping cover video (compressed web loop); `featured` doubles
   // as its poster. Rendered on homepage playground cards when present.
   featuredVideo?: string;
+  // When true, the homepage playground card treats the cover loop as its
+  // primary media — autoplay/loop/muted from mount, not hover-to-play.
+  // Reduced motion still renders the poster still.
+  featuredVideoPrimary?: boolean;
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
   // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
@@ -1255,15 +1259,16 @@ $mobile-max-width: 768px;
     stream: 'passion',
     client: 'LoopStack (personal project)',
     title: 'LoopStack: Meal Memory + Insulin Timing Intelligence',
-    summary: 'A Type 1 diabetes prototype that turns meal history and glucose response into pattern review — comparing what Loop predicted with what actually happened, then surfacing patterns worth reviewing with a care team. Pattern evidence and discussion points, not dosing advice.',
+    summary: 'A Type 1 diabetes pattern-review app that turns meal history and glucose response into pattern review — comparing what Loop predicted with what actually happened, then surfacing patterns worth reviewing with a care team. Live on TestFlight, wired to 90 days of real HealthKit CGM data. Pattern evidence and discussion points, not dosing advice.',
     year: '2026',
-    tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'Prototype'],
+    tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'HealthKit'],
     role: 'Product Design · UX · Front-End',
-    tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'TestFlight'],
-    timeline: 'Initial prototype ~3–4 weeks; pattern-intelligence build ongoing',
+    tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'HealthKit', 'Vitest', 'TestFlight'],
+    timeline: 'Initial build ~3–4 weeks; HealthKit wiring and pattern intelligence ongoing',
     featured: '/images/work/loopstack/loopstack-portfolio-cover-2026-update.png',
     featuredVideo: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
-    timeToLive: 'Initial concept to working prototype in ~3–4 weeks. Now running on device through TestFlight as a personal pattern-review tool. Continuing to evolve toward a broader consumer release.',
+    featuredVideoPrimary: true,
+    timeToLive: 'Initial concept to a working build in ~3–4 weeks. Now on TestFlight — build 2 live, build 3 in flight — running against 90 days of real HealthKit CGM data as a personal pattern-review tool. Continuing to evolve toward a broader consumer release.',
 
     // ── 01 Problem ──
     problemPunch: 'Most T1D tools treat meals as one-time entries. Real meals behave like curves.',
@@ -1285,7 +1290,7 @@ $mobile-max-width: 768px;
     constraintsPunch: 'Solo 0 → 1. High-stakes domain. Pattern review and care-team discussion — never dosing advice.',
     constraints: [
       'Solo designer and builder — no research budget, no clinical team, no user panel. Needed a workflow that compressed research, system design, and prototyping.',
-      'Type 1 physiology is individual. The prototype had to ground patterns in one user’s real Loop history before it could ever be useful more broadly.',
+      'Type 1 physiology is individual. The app had to ground patterns in one user’s real Loop history before it could ever be useful more broadly.',
       'Highest-stakes constraint: LoopStack must never present itself as giving medical advice. No exact dosing instructions, no exact carb-entry numbers, no pump-setting changes. Every output is framed as pattern evidence, confidence level, or a suggested point for care-team discussion.',
       'Mobile-first (iOS), running on device through TestFlight. Surfaces had to be scannable in the moments between meals — not deep dashboards.',
       'AI-assisted workflow had to match the complexity of the domain: prompt → output → critique → refine, with safety framing pressure-tested at every step.',
@@ -1298,7 +1303,7 @@ $mobile-max-width: 768px;
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Scoped LoopStack as a personal prototype with one priority above all others: explore a real T1D problem through design without ever drifting into medical advice. Reframed the product thesis from “smarter dosing” to “safer pattern review” — comparing what Loop predicted with what actually happened, and surfacing observations worth discussing with a care team. Chose an AI-augmented workflow (Claude + ChatGPT for system logic and safety framing, Figma for structure, Cursor for the working prototype) so I could pressure-test copy and clinician-safe wording at every iteration.',
+        description: 'Scoped LoopStack as a personal build with one priority above all others: explore a real T1D problem through design without ever drifting into medical advice. Reframed the product thesis from “smarter dosing” to “safer pattern review” — comparing what Loop predicted with what actually happened, and surfacing observations worth discussing with a care team. Chose an AI-augmented workflow (Claude + ChatGPT for system logic and safety framing, Figma for structure, Cursor for the working app) so I could pressure-test copy and clinician-safe wording at every iteration.',
         images: [
           {
             src: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
@@ -1314,14 +1319,21 @@ $mobile-max-width: 768px;
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Mapped the product as a continuous review loop — Input → Compare → Cluster → Review → Refine. Every surface has a single job in that loop. The Trends meal trace is the primary entry point: a 6–8 hour view comparing modeled carb absorption, insulin activity, and observed glucose response, with an alignment indicator instead of a directive. The point isn’t to tell the user what to do — it’s to make “did the meal behave like Loop predicted?” legible at a glance.',
+        description: 'Mapped the product as a continuous review loop — Input → Compare → Cluster → Review → Refine — where every surface has a single job. Logging starts with the inputs that actually move a glucose curve: the meal builder orders ingredients by absorption impact, and context capture — meal time, activity window, setting — gives pattern-matching what it needs to cluster a meal with the right past meals. Evidence stays optional and lightweight: drop in a Loop screenshot when a meal runs 6–8 hours and it pairs with the entry automatically.',
         systemMarker: 'Loop introduced',
         images: [
           {
-            src: '/images/work/loopstack/loopstack-trends-latest-meal.png',
-            alt: 'Latest meal view comparing modeled carb absorption, insulin activity, upfront/extended split, and an alignment indicator over an 8-hour window',
-            layout: 'full',
-            caption: 'Latest meal view comparing modeled carb absorption, insulin activity, suggested split, and alignment confidence.',
+            src: '/images/work/loopstack/02_memory_pattern.png',
+            alt: 'Build your meal — guided meal builder ordering grains, proteins and legumes, and nuts or seeds by their effect on absorption timing and insulin disruption',
+            layout: 'half',
+            caption: 'Input, structured — the builder orders ingredients by how much they move the curve.',
+            mobile: true,
+          },
+          {
+            src: '/images/work/loopstack/03_insight_isf.png',
+            alt: 'Meal context capture — meal time, activity window, and setting chips, with optional meal-photo and Loop-screenshot evidence uploads before requesting a strategy',
+            layout: 'half',
+            caption: 'Context and evidence — what’s around the meal lets pattern-matching cluster it correctly.',
             mobile: true,
           },
         ],
@@ -1329,36 +1341,21 @@ $mobile-max-width: 768px;
       {
         key: 'system',
         label: 'System',
-        description: 'Built the input and memory surfaces as a connected system, mobile-first. Meal Memories cluster repeated meals by glucose-response shape rather than by name, so the same chicken bowl over nine logs becomes a single pattern with a confidence ring. Lower-confidence signals stay in a “building evidence” state until enough data accumulates — that confidence gate is the difference between a tool that reviews patterns and one that pretends to prescribe. Dietary profile and health-source context sit alongside the curve as explanatory factors, not as inputs to a dose calculation.',
-        systemMarker: 'Confidence gate',
-        gridColumns: 2,
+        description: 'Grounded the system in real data instead of hand entry. HealthKit wiring pulls 90 days of CGM metrics — time in range across five bands, GMI, and glucose variability — and composite exercise tracking folds workouts, elevated heart rate, and step bursts into one fitness trend, correlated to glucose response and applied as a visible sensitivity multiplier, never a dose. Dietary profile and health connections sit alongside the curve as explanatory factors, and the app is honest about its sources: wherever real history hasn’t accumulated yet, sample values are labeled as sample — computed and demonstrated are never blended.',
+        systemMarker: 'Real data in',
         images: [
           {
-            src: '/images/work/loopstack/loopstack-memories-ready-pattern.png',
-            alt: 'Meal Memories surface — recognized chicken bowl lunches pattern showing flattened curve, 88% ready confidence ring, and 9 meals over 28 days',
+            src: '/images/work/loopstack/01_strategy_hero.png',
+            alt: 'Dietary profile — primary eating pattern, fat sensitivity, protein impact, and typical food mix setting a background sensitivity baseline that never overrides meal-specific data',
             layout: 'half',
-            caption: 'Meal memories cluster repeated meals by glucose response shape, not just food name.',
+            caption: 'Personal context as explanatory factors — a baseline, never an override.',
             mobile: true,
           },
           {
-            src: '/images/work/loopstack/loopstack-memories-building-evidence.png',
-            alt: 'Building evidence state — late pasta nights biphasic pattern at 64% actionable, six meals over a 30-day window with contributing factors',
+            src: '/images/work/loopstack/06_profile_calibration.png',
+            alt: 'Health connections — Apple Health, Dexcom, and Loop connected, with a current fitness trend applying a ×0.92 sensitivity multiplier explained in plain language',
             layout: 'half',
-            caption: 'Not every signal becomes a recommendation — lower-confidence patterns stay in evidence-building mode.',
-            mobile: true,
-          },
-          {
-            src: '/images/work/loopstack/loopstack-profile-dietary-profile.png',
-            alt: 'Dietary profile personalization — Mediterranean pattern, high fat sensitivity, protein impact toggle, and typical food mix sliders',
-            layout: 'half',
-            caption: 'Dietary profile settings help shape absorption assumptions without overriding meal-specific evidence.',
-            mobile: true,
-          },
-          {
-            src: '/images/work/loopstack/loopstack-profile-health-connections.png',
-            alt: 'Health connections surface — Apple Health, Dexcom, Loop, and Nightscout source status, with a current fitness trend explaining an x0.92 applied ISF multiplier',
-            layout: 'half',
-            caption: 'Health connections show how Apple Health, Dexcom, Loop, and Nightscout could support richer pattern context.',
+            caption: 'Real sources in — fitness load shifts the sensitivity baseline, visibly and explainably.',
             mobile: true,
           },
         ],
@@ -1366,7 +1363,7 @@ $mobile-max-width: 768px;
       {
         key: 'build',
         label: 'Build',
-        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. Prototyping in Cursor and shipping to my own device through TestFlight let me stress-test that framing meal after meal, against real Loop data, and adjust copy whenever a screen drifted toward sounding like dosing advice.',
+        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 39-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. Shipping through TestFlight keeps the loop honest on device — build 2 is live, build 3 in flight — stress-tested against real Loop data meal after meal, with copy adjusted whenever a screen drifted toward sounding like dosing advice.',
         codeBlock: {
           language: 'text',
           filename: 'pattern-review-system-prompt.md',
@@ -1392,34 +1389,19 @@ Frame every output as:
 - a setting category that may be worth reviewing — never a directive`,
           caption: 'Representative prompt used to keep every generated surface inside clinician-safe boundaries — pattern review and discussion points, not dosing directives.',
         },
-        images: [
-          {
-            src: '/images/work/loopstack/loopstack-ios-home-icon.jpeg',
-            alt: 'LoopStack app icon on the iOS home screen alongside Fitness, Watch, Contacts, and Files',
-            layout: 'full',
-            caption: 'The prototype is currently running on device through TestFlight.',
-            mobile: true,
-          },
-        ],
+        images: [],
       },
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'The most valuable UX moment in this product is deciding whether a pattern is even worth reviewing yet. Confidence, direction of change, contributing factors, and sample size sit alongside every observation — never behind it. The Insights surface separates “ready to review” patterns from “building evidence” signals so the user can judge reliability before opening a conversation with their care team. Timing insights extend the same logic to absorption tails and protein/fat windows, with a discussion-first tone instead of an instruction-first one.',
-        gridColumns: 2,
+        description: 'The most valuable UX moment in this product is deciding whether a pattern is even worth reviewing yet. Every observation carries its evidence — how many meals, which direction it’s trending, what confidence tier it has earned — and tiers are gated by evidence, not enthusiasm. Favorite meals grow into report cards: repeated logs land as observations in a Fix Log, and only graduate to the Commit Log when the pattern holds. Loop calibration works the same way — full 6–8-hour outcomes build toward sensitivity tuning one upload at a time, and until the bar is met the app keeps calling it evidence, not an answer.',
+        systemMarker: 'Confidence gate',
         images: [
           {
-            src: '/images/work/loopstack/loopstack-insights-sensitivity-drift.png',
-            alt: 'Insights screen — sensitivity section showing base ISF may under-estimate sensitivity at 82% ready, with observed ISF 8% above base and contributing dietary factors',
-            layout: 'half',
-            caption: 'Insights compare observed sensitivity against base Loop settings while preserving a review-first workflow.',
-            mobile: true,
-          },
-          {
-            src: '/images/work/loopstack/loopstack-insights-insulin-meets-food.png',
-            alt: 'Timing insights — when insulin meets food: high-protein-tail and shorten-default-absorption observations with separate building / actionable confidence states',
-            layout: 'half',
-            caption: 'Timing insights surface where absorption curves and insulin action appear misaligned.',
+            src: '/images/work/loopstack/05_meal_builder.png',
+            alt: 'Loop calibration — uploading current therapy settings, absorption model, and favorite meals, with full 6–8h outcome slots; screenshots stay on-device',
+            layout: 'full',
+            caption: 'Calibration mirrors what Loop is actually running — screenshots stay on-device, and favorite meals accumulate toward report cards.',
             mobile: true,
           },
         ],
@@ -1427,26 +1409,19 @@ Frame every output as:
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'LoopStack reframes this space from carb counting to pattern review. The prototype is now running on my own device through TestFlight, where it compares Loop predictions against observed glucose response meal after meal, clusters repeated meals by curve shape, and surfaces patterns at the right confidence level to bring to a care team. Loop calibration screens mirror existing therapy settings so observed values stay alongside — never on top of — what the pump is actually doing, and insulin-strategy defaults act as starting points that dietary, fitness, and pattern context shift from. The next chapter focuses on broader testing, clinician-facing review modes, and tightening the safety framing further before any wider release.',
+    outcomeNote: 'LoopStack reframes this space from carb counting to pattern review. It runs on TestFlight against 90 days of real HealthKit CGM data, comparing what Loop predicted with what actually happened meal after meal, clustering repeated meals by curve shape, and surfacing patterns at the right confidence level to bring to a care team. Observed values stay alongside — never on top of — what the pump is actually running, sample data is disclosed wherever real history hasn’t accumulated yet, and a 39-test suite covers the confidence logic that decides what the app may claim. The next chapter is clinician-facing review modes and tightening the safety framing further before any wider release.',
     outcomeImages: [
       {
-        src: '/images/work/loopstack/loopstack-profile-targets-isf.png',
-        alt: 'Profile calibration — target range, base ISF from Loop therapy settings, observed ISF of 54 mg/dL per 1U at 72% actionable trending up over 18 meals',
-        layout: 'half',
-        caption: 'LoopStack mirrors Loop settings while keeping observed values separate for review.',
-        mobile: true,
-      },
-      {
-        src: '/images/work/loopstack/loopstack-profile-insulin-strategy-defaults.png',
-        alt: 'Insulin strategy defaults — upfront portion and extended window starting points that dietary, fitness, and pattern context shift from',
-        layout: 'half',
-        caption: 'Defaults act as starting points; dietary, fitness, and pattern context shift suggestions from there.',
+        src: '/images/work/loopstack/04_fix_log.png',
+        alt: 'Targets and sensitivity — observed ISF of 54 mg/dL per 1U at 72% actionable across 18 meals, shown alongside the base ISF from Loop therapy settings',
+        layout: 'full',
+        caption: 'The payoff — observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.',
         mobile: true,
       },
     ],
     metrics: [
-      { value: 'TestFlight', label: 'Running on device, used personally' },
-      { value: 'Pattern-first', label: 'Review surfaces, not a dose calculator' },
+      { value: '90 days', label: 'Real HealthKit CGM history — time in range, GMI, variability' },
+      { value: '39 tests', label: 'Vitest suite around the pattern-confidence logic' },
       { value: '0 directives', label: 'Every output frames as evidence or discussion point' },
     ],
   },

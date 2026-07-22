@@ -24,39 +24,60 @@ const STREAM_LABEL: Record<'professional' | 'passion', string> = {
   passion: '[ Self-Built ]',
 };
 
-// ── Card cover video — plays only while its card is active ──────────────────
-// Poster (the featured image) everywhere else. Reduced-motion renders the
-// plain image; playback is driven by the same phase machine as the coin tray
+// ── Card cover video ─────────────────────────────────────────────────────────
+// Default: plays only while its card is active — poster (the featured image)
+// everywhere else, playback driven by the same phase machine as the coin tray
 // (hover/focus on desktop, in-view on touch).
+// Primary (`featuredVideoPrimary`): the loop IS the card's media — plays
+// whenever the card is on screen, pauses off-screen (WCAG 2.2.2 / battery).
+// Reduced-motion renders the plain poster image for both (handled by caller).
 
-const CardVideo: React.FC<{ src: string; poster: string; alt: string; playing: boolean }> = ({
-  src,
-  poster,
-  alt,
-  playing,
-}) => {
+const CardVideo: React.FC<{
+  src: string;
+  poster: string;
+  alt: string;
+  playing: boolean;
+  primary?: boolean;
+}> = ({ src, poster, alt, playing, primary }) => {
   const ref = useRef<HTMLVideoElement>(null);
+  const [inView, setInView] = useState(false);
+
+  // Primary loops drive themselves from visibility, not hover
+  useEffect(() => {
+    if (!primary) return;
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.25 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [primary]);
+
+  const shouldPlay = primary ? inView : playing;
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (playing) {
+    if (shouldPlay) {
       const p = el.play();
       if (p) p.catch(() => {}); // autoplay guard — poster remains
     } else {
       el.pause();
     }
-  }, [playing]);
+  }, [shouldPlay]);
 
   return (
     <video
       ref={ref}
+      className={primary ? 'case-playground__video--primary' : undefined}
       src={src}
       poster={poster}
       muted
       loop
       playsInline
-      preload="metadata"
+      preload={primary ? 'auto' : 'metadata'}
       aria-label={alt}
     />
   );
@@ -174,9 +195,9 @@ const CARDS: PlaygroundCard[] = [
   {
     slug: 'loopstack',
     title: 'LoopStack',
-    line: 'A trends-first diabetes data product built through personal product thinking and implementation.',
+    line: 'A trends-first diabetes data product wired to real HealthKit data and live on TestFlight.',
     tags: ['Product Design', 'React', 'AI-Assisted Build', 'Health Data'],
-    metric: '7,817 CGM points analyzed',
+    metric: '90 days of real CGM data · TestFlight',
     coins: [
       { icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 24, rot: 8, lift: 4, z: 3 },
@@ -419,6 +440,7 @@ const CaseStudyPlayground: React.FC = () => {
       alt: project?.title ?? card.title,
       stream: project?.stream,
       video,
+      videoPrimary: Boolean(video && project?.featuredVideoPrimary),
     };
   });
 
@@ -478,7 +500,7 @@ const CaseStudyPlayground: React.FC = () => {
                 onFocus={isTouch ? undefined : () => handleEnter(card.slug)}
                 onBlur={isTouch ? undefined : () => handleLeave(card.slug)}
               >
-                {/* Top — preview (cover loop plays only while the card is active) */}
+                {/* Top — preview (cover loop plays while active; primary loops always) */}
                 <div className="case-playground__preview">
                   {card.stream && (
                     <span
@@ -493,6 +515,7 @@ const CaseStudyPlayground: React.FC = () => {
                       poster={card.image}
                       alt={card.alt}
                       playing={phase === 'in'}
+                      primary={card.videoPrimary}
                     />
                   ) : (
                     <img src={card.image} alt={card.alt} loading="lazy" />

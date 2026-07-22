@@ -143,6 +143,21 @@ const SectionImages: React.FC<{
     }
     // Inline video — short prototype clips, muted autoplay loop (NOT clickable)
     if (img.isVideo) {
+      // Reduced motion: show the poster still instead of autoplaying motion
+      const reduceMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion && img.videoPoster) {
+        const stillEl = <img src={img.videoPoster} alt={img.alt} />;
+        return img.mobile ? (
+          <div className="cs__phone-frame cs__phone-frame--video">
+            <div className="cs__phone-notch" />
+            {stillEl}
+          </div>
+        ) : (
+          <div className="cs__img-wrap cs__img-wrap--video">{stillEl}</div>
+        );
+      }
       const videoEl = (
         <video
           src={img.src}

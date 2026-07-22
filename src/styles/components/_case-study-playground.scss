@@ -222,6 +222,12 @@
     filter: saturate(1);
   }
 
+  // Primary cover loops (autoplay cards) skip the resting desaturation — the
+  // loop IS the card's media, not a hover reveal.
+  &__preview &__video--primary {
+    filter: saturate(1);
+  }
+
   // ── Stream chips — treatment-based, both orange ────────────────────────────
   // professional = solid filled pill; passion = dashed outline pill.
 

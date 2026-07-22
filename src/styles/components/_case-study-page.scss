@@ -1133,6 +1133,12 @@
       &--col-4 .cs__section-images {
         grid-template-columns: 1fr;
       }
+
+      // col-2 pairs must also collapse — the desktop col-2 rule outranks the
+      // generic &__image-pair override below
+      &--col-2 .cs__image-pair {
+        grid-template-columns: 1fr;
+      }
     }
 
     &__time-to-live {
