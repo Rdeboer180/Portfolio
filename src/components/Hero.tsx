@@ -783,7 +783,7 @@ const Hero: React.FC = () => {
                   </div>
                   <div className="hero__profile-frame">
                     <img
-                      src="/images/hero/ryan-deboer.jpeg"
+                      src="/images/hero/ryan-deboer-2026.jpeg"
                       alt="Ryan Deboer"
                       className="hero__profile-img"
                     />

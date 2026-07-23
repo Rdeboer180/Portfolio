@@ -522,7 +522,7 @@ const CardsContent: React.FC = () => (
 {`import TestimonialCard from './components/TestimonialCard';
 
 <TestimonialCard
-  avatarSrc="/images/hero/ryan-deboer.jpeg"
+  avatarSrc="/images/hero/ryan-deboer-2026.jpeg"
   name="Paul Bennett"
   role="Founder"
   company="Acme Corp"
