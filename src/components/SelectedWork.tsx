@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
 
@@ -24,9 +25,9 @@ const SelectedWork: React.FC = () => {
 
         <div className="selected-work__list">
           {projects.filter(p => !p.hidden).map((project, index) => (
-            <a
+            <Link
               key={project.slug}
-              href={`#/work/${project.slug}`}
+              to={`/work/${project.slug}`}
               className={`selected-work__card ${['wheelrack', 'tire-rack-winter', 'landing-pages'].includes(project.slug) ? 'selected-work__card--reverse' : ''}`}
             >
               <div className="selected-work__card-body">
@@ -54,7 +55,7 @@ const SelectedWork: React.FC = () => {
                   <img src={project.featured} alt={project.title} />
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

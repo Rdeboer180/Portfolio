@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { SITE, EMAIL_HREF } from '../data/site';
 
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
@@ -37,7 +38,7 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
     question: 'How was my portfolio built?',
     answer: (
       <>
-        <p>This portfolio was built through an iterative design-to-code workflow combining Figma, Claude AI, and hands-on front-end development. I started by establishing a full design system in Figma defining color tokens, typography scales, spacing values, and component patterns then used that system as the single source of truth while building out each section in React and SCSS. You can explore the <a href="#/design-system">design system here</a>.</p>
+        <p>This portfolio was built through an iterative design-to-code workflow combining Figma, Claude AI, and hands-on front-end development. I started by establishing a full design system in Figma defining color tokens, typography scales, spacing values, and component patterns then used that system as the single source of truth while building out each section in React and SCSS. You can explore the <Link to="/design-system">design system here</Link>.</p>
         <p>The process was genuinely collaborative: I worked back and forth between Figma mockups and live code, using Claude as a development partner to scaffold components, refine styling logic, audit token consistency, and generate a complete Figma-ready specification from the finished codebase. Every section went through multiple rounds of visual review, brand alignment checks, and responsive refinement &mdash; the same rigor I apply to client work, applied to my own. I write about this workflow as it evolves on <a href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" data-li-surface="faq_build">LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>.</p>
       </>
     ),

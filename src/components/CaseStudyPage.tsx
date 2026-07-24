@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import PasswordModal from './PasswordModal';
 import LinkedInLink from './LinkedInLink';
-import { EMAIL_HREF } from '../data/site';
+import { SITE, EMAIL_HREF } from '../data/site';
+import { usePageMeta } from '../hooks/usePageMeta';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -303,6 +305,34 @@ interface CaseStudyPageProps {
 const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
+
+  const pageUrl = `${SITE.portfolioUrl}/work/${slug}`;
+  const socialImage = `${SITE.portfolioUrl}/images/social/cs-${slug}.jpg`;
+  usePageMeta(
+    project
+      ? {
+          title: `${project.seoTitle ?? project.title} — Ryan DeBoer`,
+          description: project.summary,
+          canonical: pageUrl,
+          ogImage: socialImage,
+          ogType: 'article',
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: project.seoTitle ?? project.title,
+            headline: project.title,
+            description: project.summary,
+            url: pageUrl,
+            image: socialImage,
+            temporalCoverage: project.year,
+            keywords: project.tags,
+            creator: { '@type': 'Person', name: 'Ryan DeBoer', url: `${SITE.portfolioUrl}/` },
+            author: { '@type': 'Person', name: 'Ryan DeBoer', url: `${SITE.portfolioUrl}/` },
+          },
+        }
+      : { title: 'Case study — Ryan DeBoer' }
+  );
+
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -407,7 +437,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       <div className="cs">
         <div className="cs__container">
           <p>Project not found.</p>
-          <a href={getProjectsHref()} className="cs__back">&larr; Back to all work</a>
+          <Link to={getProjectsHref()} className="cs__back">&larr; Back to all work</Link>
         </div>
       </div>
     );
@@ -429,8 +459,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       {showPasswordModal && <PasswordModal onUnlock={handleUnlock} onDismiss={handleDismiss} />}
       {/* Fixed nav */}
       <nav className="cs__nav" aria-label="Case study">
-        <a href={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</a>
-        <a href={getProjectsHref()} className="cs__nav-back">&larr; All Projects</a>
+        <Link to={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</Link>
+        <Link to={getProjectsHref()} className="cs__nav-back">&larr; All Projects</Link>
       </nav>
 
       <div className="cs__container">
@@ -808,7 +838,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
         {/* ==================== Next Project ==================== */}
         {nextProject && nextProject.slug !== project.slug && (
-          <a href={`#/work/${nextProject.slug}`} className="cs__next">
+          <Link to={`/work/${nextProject.slug}`} className="cs__next">
             <span className="cs__next-label">Next Project</span>
             <div className="cs__next-card">
               <img src={nextProject.featured} alt={nextProject.title} className="cs__next-image" loading="lazy" />
@@ -818,7 +848,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <span className="cs__next-arrow">View project &rarr;</span>
               </div>
             </div>
-          </a>
+          </Link>
         )}
       </div>
 

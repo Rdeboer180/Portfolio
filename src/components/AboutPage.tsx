@@ -4,6 +4,7 @@
 // ============================================
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import { getHomeHref } from '../utils/homeSession';
 import AboutHero from './AboutHero';
@@ -11,19 +12,29 @@ import AboutStorySections from './AboutStorySections';
 import ProcessPrinciples from './ProcessPrinciples';
 import LinkedInLink from './LinkedInLink';
 import CandidateSnapshot from './CandidateSnapshot';
+import { SITE } from '../data/site';
+import { usePageMeta } from '../hooks/usePageMeta';
 import '../styles/styles.scss';
 
 const AboutPage: React.FC = () => {
+  usePageMeta({
+    title: 'About — Ryan DeBoer, Senior Product Designer & Design Engineer',
+    description:
+      '16+ years turning craft, front-end constraints, and production realities into design systems that ship. Ryan DeBoer is a Senior Product Designer and Design Engineer in South Bend, Indiana, open to remote roles.',
+    canonical: `${SITE.portfolioUrl}/about`,
+    ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
+    ogType: 'profile',
+  });
   return (
     <article className="about-page">
       {/* Nav — fixed, logo + Back to Home */}
       <nav className="about-page__nav" aria-label="Primary">
-        <a href={getHomeHref()} className="about-page__nav-logo">
+        <Link to={getHomeHref()} className="about-page__nav-logo">
           Ryan DeBoer
-        </a>
-        <a href={getHomeHref()} className="about-page__nav-back">
+        </Link>
+        <Link to={getHomeHref()} className="about-page__nav-back">
           &larr; Back to Home
-        </a>
+        </Link>
       </nav>
 
       {/* ── Hero — text-first editorial intro ─────────────────────────────── */}

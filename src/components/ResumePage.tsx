@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 // Shared contact details come from data/site.ts; the resume adds its own
 // display fields (name split for the vCard, address parts, link labels).
@@ -19,7 +21,7 @@ const CONTACT = {
 };
 
 // Absolute links (not bare #hashes) so they stay clickable from an exported PDF.
-const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/#/work/${slug}`;
+const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/work/${slug}`;
 
 const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
   { name: 'WheelRack Design System', slug: 'wheelrack', note: '200+ tokens, 50+ Storybook components; full customer-journey redesign' },
@@ -29,6 +31,15 @@ const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
 ];
 
 const ResumePage: React.FC = () => {
+  usePageMeta({
+    title: 'Résumé — Ryan DeBoer, Senior Product Designer & Design Engineer',
+    description:
+      'Résumé of Ryan DeBoer — systems-focused product designer with 16+ years building scalable, token-driven design systems across high-traffic web and native platforms.',
+    canonical: `${SITE.portfolioUrl}/resume`,
+    ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
+    ogType: 'profile',
+  });
+
   // Native print produces a PDF with clickable links and selectable, ATS-readable
   // text (unlike a rasterized canvas export), using the @media print styles.
   const handleExportPDF = () => {
@@ -66,7 +77,7 @@ const ResumePage: React.FC = () => {
     <div className="resume-page">
       {/* Screen-only nav */}
       <nav className="resume-page__nav" aria-label="Primary">
-        <a href={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</a>
+        <Link to={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</Link>
         <div className="resume-page__nav-actions">
           <button className="resume-page__vcard-btn" onClick={handleDownloadVCard}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
@@ -85,7 +96,7 @@ const ResumePage: React.FC = () => {
             </svg>
             Save as PDF
           </button>
-          <a href={getHomeHref()} className="resume-page__nav-back">Back to Portfolio</a>
+          <Link to={getHomeHref()} className="resume-page__nav-back">Back to Portfolio</Link>
         </div>
       </nav>
 

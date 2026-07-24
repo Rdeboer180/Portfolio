@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import UserIcon from './icons/UserIcon';
 import CandidateSnapshot from './CandidateSnapshot';
@@ -36,7 +37,7 @@ const About: React.FC = () => {
                 Part of being senior is <span className="animated-bold">adding value beyond polished screens</span>. I care about the process around the work: the patterns, documentation, governance, accessibility, handoff, QA, and team clarity that help ideas survive past the first version. Design systems, to me, aren&rsquo;t just the pixels on the page. They&rsquo;re the operating model that helps a team make better calls and ship stronger work.
               </p>
             <div className="about__cta-links">
-              <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
+              <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>
             </div>
           </div>
         </div>

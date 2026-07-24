@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import SectionBadge from './SectionBadge';
 import HowIWork from './HowIWork';
@@ -188,7 +189,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         <div className="hero__nav-links">
           <a href={`#/${slug}#about`}>About Me</a>
           <a href={`#/${slug}#projects`}>My Work</a>
-          <a href="#/resume">Resume</a>
+          <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
@@ -326,7 +327,7 @@ const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content
               There's more to how I think&mdash;and how I help teams do better work&mdash;than what fits here.
             </p>
             <div className="about__cta-links">
-              <a href="#/about" className="about__read-more">Go deeper on my approach &rarr;</a>
+              <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>
               <span className="about__link-separator">or</span>
               <a href={`#/${meta.slug}#testimonials`} className="about__read-more">see what it's like to work with me &rarr;</a>
             </div>

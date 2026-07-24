@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
@@ -421,9 +422,9 @@ const Hero: React.FC = () => {
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
-          <a href="#/about">About Me</a>
+          <Link to="/about">About Me</Link>
           <a href="#projects">My Work</a>
-          <a href="#/resume">Resume</a>
+          <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>

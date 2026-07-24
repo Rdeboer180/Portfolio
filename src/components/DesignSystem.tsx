@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import Tabs from './Tabs';
 import SectionBadge from './SectionBadge';
@@ -684,7 +685,7 @@ const DesignSystem: React.FC = () => {
   return (
     <div className="ds">
       <header className="ds__header">
-        <a href={getHomeHref()} className="ds__back">&larr; Back to Portfolio</a>
+        <Link to={getHomeHref()} className="ds__back">&larr; Back to Portfolio</Link>
         <h1 className="ds__title">Design System</h1>
         <p className="ds__subtitle">
           Living reference of design tokens, typography, and component patterns.

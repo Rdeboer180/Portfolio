@@ -10,6 +10,7 @@
 // ============================================
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
 
@@ -201,10 +202,10 @@ const ProcessPlayground: React.FC = () => {
           </ol>
         </div>
 
-        <a className="process-playground__cta" href="#/about#process">
+        <Link className="process-playground__cta" to="/about#process">
           Read more about my process
           <SketchArrow />
-        </a>
+        </Link>
       </div>
     </section>
   );
