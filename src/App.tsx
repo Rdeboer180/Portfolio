@@ -25,6 +25,7 @@ const CaseStudyPage = lazy(() => import('./components/CaseStudyPage'));
 const AboutPage = lazy(() => import('./components/AboutPage'));
 const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
+const SitemapPage = lazy(() => import('./components/SitemapPage'));
 
 // Redirect legacy hash URLs (#/work/x, #/about, …) to their real paths, and
 // scroll to the anchored section (or top) on every navigation.
@@ -102,6 +103,7 @@ function AppRoutes() {
             additional routes rendering <HomepageTargeted content={...} />. */}
         <Route path="/homepage_template" element={<PageShell><HomepageTargeted content={templateContent} /></PageShell>} />
         <Route path="/work/:slug" element={<CaseStudyRoute />} />
+        <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

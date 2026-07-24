@@ -51,6 +51,10 @@
   // Bottom row — copyright
   // ==========================================
   &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-lg;
     border-top: 1px solid $color-border-default;
     padding: $spacing-lg 0;
   }
@@ -59,6 +63,19 @@
     font-family: $font-family-primary;
     font-size: $font-size-caption;
     color: $color-neutral-muted;
+    margin: 0;
+  }
+
+  &__site-index {
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+    }
   }
 }
 

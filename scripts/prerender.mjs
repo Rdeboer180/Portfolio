@@ -15,7 +15,7 @@ const ORIGIN = `http://localhost:${PORT}`;
 
 // Unlinked routes the crawler won't reach on its own but we still want covered.
 // (homepage_template is intentionally excluded — it stays out of the index.)
-const EXTRA_ROUTES = ['/design-system'];
+const EXTRA_ROUTES = ['/design-system', '/sitemap'];
 
 const MIME = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',

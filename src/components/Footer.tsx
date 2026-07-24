@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { SITE, EMAIL_HREF } from '../data/site';
 
 const Footer: React.FC = () => {
@@ -23,6 +24,7 @@ const Footer: React.FC = () => {
           <p className="footer__copy">
             &copy; {new Date().getFullYear()} Ryan DeBoer
           </p>
+          <Link to="/sitemap" className="footer__site-index">Site index</Link>
         </div>
       </div>
     </footer>
