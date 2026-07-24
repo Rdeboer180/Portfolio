@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/styles.scss';
+import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 
@@ -417,13 +418,13 @@ const Hero: React.FC = () => {
 
   return (
     <section className="hero" ref={sectionRef} data-intro-stage={introStage}>
-      <nav className="hero__nav">
+      <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
           <a href="#/about">About Me</a>
           <a href="#projects">My Work</a>
           <a href="#/resume">Resume</a>
-          <a href="mailto:rdeboer180@gmail.com" className="hero__nav-cta">Get in touch</a>
+          <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
 
@@ -527,7 +528,7 @@ const Hero: React.FC = () => {
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">
-              <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
+              <a href={EMAIL_HREF} className="btn btn--primary btn--lg">
                 <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
                 Get in touch
               </a>
@@ -786,6 +787,9 @@ const Hero: React.FC = () => {
                       src="/images/hero/ryan-deboer-2026.jpeg"
                       alt="Ryan Deboer"
                       className="hero__profile-img"
+                      width={1600}
+                      height={1600}
+                      fetchPriority="high"
                     />
                   </div>
                 </div>

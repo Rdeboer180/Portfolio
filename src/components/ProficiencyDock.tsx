@@ -206,6 +206,35 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
     row.scrollTo({ left: clamped, behavior: 'smooth' });
   }, [activeId]);
 
+  // Roving tabindex: arrow/Home/End move focus and selection across the tablist
+  // (WAI-ARIA tabs pattern) so keyboard users don't Tab through every proficiency.
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    const count = proficiencies.length;
+    let nextIndex: number;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        nextIndex = (index + 1) % count;
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        nextIndex = (index - 1 + count) % count;
+        break;
+      case 'Home':
+        nextIndex = 0;
+        break;
+      case 'End':
+        nextIndex = count - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    const next = proficiencies[nextIndex];
+    setActiveId(next.id);
+    itemRefs.current[next.id]?.focus();
+  };
+
   return (
     <div className="proficiency-dock">
       <div className="proficiency-dock__left">
@@ -223,7 +252,7 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
             aria-label="Select a proficiency"
             ref={rowRef}
           >
-            {proficiencies.map((p) => {
+            {proficiencies.map((p, index) => {
               const isActive = p.id === activeId;
 
               return (
@@ -237,8 +266,10 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
                   aria-selected={isActive}
                   aria-controls="proficiency-dock-panel"
                   id={`proficiency-dock-tab-${p.id}`}
+                  tabIndex={isActive ? 0 : -1}
                   className={`proficiency-dock__item${isActive ? ' proficiency-dock__item--active' : ''}`}
                   onClick={() => setActiveId(p.id)}
+                  onKeyDown={(e) => handleTabKeyDown(e, index)}
                   title={p.label}
                 >
                   {p.icon}

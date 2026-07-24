@@ -30,8 +30,9 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Tab-trap keydown handler
+  // Escape-to-dismiss + Tab-trap keydown handler
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape') { e.preventDefault(); onDismiss(); return; }
     if (e.key !== 'Tab') return;
     const el = contentRef.current;
     if (!el) return;
@@ -115,6 +116,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
+              aria-label="Password"
               autoFocus
             />
             <button type="submit" className="password-modal__button password-modal__button--primary">
@@ -127,7 +129,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
             >
               Back
             </button>
-            {error && <p className="password-modal__error">{error}</p>}
+            {error && <p className="password-modal__error" role="alert">{error}</p>}
           </form>
         )}
       </div>

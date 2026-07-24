@@ -90,7 +90,6 @@ export interface Project {
   // Legacy fields (kept for backward compat during transition)
   brief?: string;
   challenge?: string;
-  images?: ProjectImage[];
   resultsNote?: string;
   ownership?: string[];
   approach?: string;

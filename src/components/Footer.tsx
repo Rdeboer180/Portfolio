@@ -1,4 +1,5 @@
 import React from 'react';
+import { SITE, EMAIL_HREF } from '../data/site';
 
 const Footer: React.FC = () => {
   return (
@@ -9,11 +10,12 @@ const Footer: React.FC = () => {
             <span className="footer__eyebrow">Get in touch</span>
           </div>
           <div className="footer__actions">
-            <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--md">
+            <a href={EMAIL_HREF} className="btn btn--primary btn--md">
               Get in touch
             </a>
-            <a href="https://www.linkedin.com/in/ryandeboerdesigns" className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
+            <a href={SITE.linkedinUrl} className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </div>
         </div>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import PasswordModal from './PasswordModal';
 import LinkedInLink from './LinkedInLink';
+import { EMAIL_HREF } from '../data/site';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -107,23 +109,71 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
   addSection(project.approachImages);
   addSection(project.outcomeImages);
   addSection(project.outcomeGridImages);
-  // Legacy images
-  if (project.images) project.images.forEach((img) => {
-    if (img.src) imgs.push({ src: img.src, alt: img.alt });
-  });
   return imgs;
 };
 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
 
 /* ─── Section Image Renderer ─── */
+// Muted autoplay loop clip with a pause/play control (WCAG 2.2.2).
+const InlineVideo: React.FC<{ src: string; poster?: string; alt: string }> = ({ src, poster, alt }) => {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = React.useState(true);
+
+  const toggle = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        src={src}
+        poster={poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-label={alt}
+      />
+      <button
+        type="button"
+        className="cs__video-toggle"
+        onClick={toggle}
+        aria-label={playing ? 'Pause video' : 'Play video'}
+      >
+        {playing ? (
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+            <rect x="2.5" y="2" width="3" height="10" rx="1" fill="currentColor" />
+            <rect x="8.5" y="2" width="3" height="10" rx="1" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+            <path d="M3.5 2.2v9.6a.6.6 0 0 0 .92.5l7.2-4.8a.6.6 0 0 0 0-1l-7.2-4.8a.6.6 0 0 0-.92.5z" fill="currentColor" />
+          </svg>
+        )}
+      </button>
+    </>
+  );
+};
+
 const SectionImages: React.FC<{
   images: ProjectImage[];
   allImages: { src: string; alt: string }[];
-  onOpen: (src: string, alt: string, index: number, trigger?: React.RefObject<HTMLElement | null>) => void;
+  onOpen: (src: string, alt: string, index: number, trigger?: HTMLElement | null) => void;
   isUnlocked?: boolean;
   onOverlayClick?: () => void;
 }> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick }) => {
+  const reduceMotion = useReducedMotion();
   if (!images || images.length === 0) return null;
 
   const findGlobalIndex = (src: string) => allImages.findIndex((img) => img.src === src);
@@ -145,9 +195,6 @@ const SectionImages: React.FC<{
     // Inline video — short prototype clips, muted autoplay loop (NOT clickable)
     if (img.isVideo) {
       // Reduced motion: show the poster still instead of autoplaying motion
-      const reduceMotion =
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduceMotion && img.videoPoster) {
         const stillEl = <img src={img.videoPoster} alt={img.alt} />;
         return img.mobile ? (
@@ -159,18 +206,7 @@ const SectionImages: React.FC<{
           <div className="cs__img-wrap cs__img-wrap--video">{stillEl}</div>
         );
       }
-      const videoEl = (
-        <video
-          src={img.src}
-          poster={img.videoPoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label={img.alt}
-        />
-      );
+      const videoEl = <InlineVideo src={img.src!} poster={img.videoPoster} alt={img.alt} />;
       return img.mobile ? (
         <div className="cs__phone-frame cs__phone-frame--video">
           <div className="cs__phone-notch" />
@@ -182,30 +218,26 @@ const SectionImages: React.FC<{
     }
     // Render actual images — wrapped in a button for keyboard accessibility
     if (img.mobile) {
-      const btnRef = React.createRef<HTMLElement>();
       return (
         <button
           type="button"
           className="cs__phone-frame"
-          ref={btnRef as React.RefObject<HTMLButtonElement>}
           aria-label={`Open ${img.alt} at full size`}
-          onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), btnRef)}
+          onClick={(e) => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), e.currentTarget)}
         >
           <div className="cs__phone-notch" />
-          <img src={img.src} alt="" />
+          <img src={img.src} alt="" loading="lazy" />
         </button>
       );
     }
-    const btnRef = React.createRef<HTMLElement>();
     return (
       <button
         type="button"
         className="cs__img-wrap"
-        ref={btnRef as React.RefObject<HTMLButtonElement>}
         aria-label={`Open ${img.alt} at full size`}
-        onClick={() => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), btnRef)}
+        onClick={(e) => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), e.currentTarget)}
       >
-        <img src={img.src} alt="" />
+        <img src={img.src} alt="" loading="lazy" />
         <span className="cs__zoom-hint">&#x26F6; View full</span>
       </button>
     );
@@ -282,7 +314,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       ...(proj.constraintsImages || []),
       ...(proj.outcomeImages || []),
       ...(proj.outcomeGridImages || []),
-      ...(proj.images || []),
     ];
     if (proj.approachSubsections) {
       proj.approachSubsections.forEach((sub) => {
@@ -360,11 +391,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
   const lbTriggerRef = useRef<HTMLElement | null>(null);
   const lbImages = useMemo(() => project ? allLightboxImages(project) : [], [project]);
-  const openLightbox = useCallback((src: string, alt: string, index: number, trigger?: React.RefObject<HTMLElement | null>) => {
-    if (trigger) {
-      // Copy the current element reference into our stable ref
-      (lbTriggerRef as React.MutableRefObject<HTMLElement | null>).current = trigger.current;
-    }
+  const openLightbox = useCallback((src: string, alt: string, index: number, trigger?: HTMLElement | null) => {
+    // Stash the triggering element so focus can return to it when the lightbox closes.
+    lbTriggerRef.current = trigger ?? null;
     setLightbox({ src, alt, index });
   }, []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
@@ -399,7 +428,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     <article className="cs">
       {showPasswordModal && <PasswordModal onUnlock={handleUnlock} onDismiss={handleDismiss} />}
       {/* Fixed nav */}
-      <nav className="cs__nav">
+      <nav className="cs__nav" aria-label="Case study">
         <a href={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</a>
         <a href={getProjectsHref()} className="cs__nav-back">&larr; All Projects</a>
       </nav>
@@ -437,7 +466,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
         {/* ==================== Featured Image (optional) ==================== */}
         {project.featured && (
           <div className="cs__featured-image">
-            <img src={project.featured} alt={project.title} />
+            {/* Above-the-fold hero image — prioritize as the likely LCP element. */}
+            <img src={project.featured} alt={project.title} fetchPriority="high" />
           </div>
         )}
 
@@ -616,17 +646,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               {project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
                 <div className="cs__outcome-grid">
                   {project.outcomeGridImages.filter(img => img.src).map((img, i) => {
-                    const gridBtnRef = React.createRef<HTMLElement>();
                     return (
                       <figure key={i} className="cs__outcome-grid-item">
                         <button
                           type="button"
                           className="cs__img-wrap"
-                          ref={gridBtnRef as React.RefObject<HTMLButtonElement>}
                           aria-label={`Open ${img.alt} at full size`}
-                          onClick={() => openLightbox(img.src!, img.alt, lbImages.findIndex((lb) => lb.src === img.src), gridBtnRef)}
+                          onClick={(e) => openLightbox(img.src!, img.alt, lbImages.findIndex((lb) => lb.src === img.src), e.currentTarget)}
                         >
-                          <img src={img.src} alt="" />
+                          <img src={img.src} alt="" loading="lazy" />
                           <span className="cs__zoom-hint">&#x26F6; View full</span>
                         </button>
                         {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
@@ -644,6 +672,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     {project.outcomeLiveLinks.map((link, i) => (
                       <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="cs__live-link">
                         {link.label} &rarr;
+                        <span className="sr-only"> (opens in a new tab)</span>
                       </a>
                     ))}
                   </div>
@@ -737,80 +766,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </section>
             )}
 
-            {project.images && project.images.length > 0 && (
-              <section className="cs__images">
-                {(() => {
-                  const elements: React.ReactNode[] = [];
-                  let i = 0;
-                  while (i < project.images.length) {
-                    const img = project.images[i];
-                    const renderImg = (img: ProjectImage, idx: number) => {
-                      const legacyBtnRef = React.createRef<HTMLElement>();
-                      return img.mobile ? (
-                        <button
-                          type="button"
-                          className="cs__phone-frame"
-                          ref={legacyBtnRef as React.RefObject<HTMLButtonElement>}
-                          aria-label={`Open ${img.alt} at full size`}
-                          onClick={() => openLightbox(img.src!, img.alt, idx, legacyBtnRef)}
-                        >
-                          <div className="cs__phone-notch" />
-                          <img src={img.src} alt="" />
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="cs__img-wrap"
-                          ref={legacyBtnRef as React.RefObject<HTMLButtonElement>}
-                          aria-label={`Open ${img.alt} at full size`}
-                          onClick={() => openLightbox(img.src!, img.alt, idx, legacyBtnRef)}
-                        >
-                          <img src={img.src} alt="" />
-                          <span className="cs__zoom-hint">&#x26F6; View full</span>
-                        </button>
-                      );
-                    };
-
-                    if (img.layout === 'full') {
-                      elements.push(
-                        <figure key={i} className={`cs__figure cs__figure--full${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                          {renderImg(img, i)}
-                          {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
-                        </figure>
-                      );
-                      i++;
-                    } else {
-                      const next = project.images[i + 1];
-                      if (next && next.layout === 'half') {
-                        elements.push(
-                          <div key={i} className="cs__image-pair">
-                            <figure className={`cs__figure cs__figure--half${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                              {renderImg(img, i)}
-                              {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
-                            </figure>
-                            <figure className={`cs__figure cs__figure--half${next.mobile ? ' cs__figure--mobile' : ''}`}>
-                              {renderImg(next, i + 1)}
-                              {next.caption && <figcaption className="cs__caption">{next.caption}</figcaption>}
-                            </figure>
-                          </div>
-                        );
-                        i += 2;
-                      } else {
-                        elements.push(
-                          <figure key={i} className={`cs__figure cs__figure--half cs__figure--solo${img.mobile ? ' cs__figure--mobile' : ''}`}>
-                            {renderImg(img, i)}
-                            {img.caption && <figcaption className="cs__caption">{img.caption}</figcaption>}
-                          </figure>
-                        );
-                        i++;
-                      }
-                    }
-                  }
-                  return elements;
-                })()}
-              </section>
-            )}
-
             <section className="cs__results">
               <h2 className="cs__results-heading">Results</h2>
               <div className="cs__results-grid">
@@ -844,7 +799,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
               </p>
               <div className="cs__continue-actions">
-                <a href="mailto:rdeboer180@gmail.com" className="cs__continue-mail">Get in touch</a>
+                <a href={EMAIL_HREF} className="cs__continue-mail">Get in touch</a>
                 <LinkedInLink label="Follow the work in progress" surface="case_study_close" />
               </div>
             </aside>
@@ -856,7 +811,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           <a href={`#/work/${nextProject.slug}`} className="cs__next">
             <span className="cs__next-label">Next Project</span>
             <div className="cs__next-card">
-              <img src={nextProject.featured} alt={nextProject.title} className="cs__next-image" />
+              <img src={nextProject.featured} alt={nextProject.title} className="cs__next-image" loading="lazy" />
               <div className="cs__next-overlay">
                 <span className="cs__next-client">{nextProject.client}</span>
                 <span className="cs__next-title">{nextProject.title}</span>

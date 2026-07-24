@@ -65,6 +65,32 @@
     }
   }
 
+  // Secondary action — outline button that sits beside the primary "Save as PDF"
+  &__vcard-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $button-padding-y-sm $button-padding-x-md;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    background: transparent;
+    border: 1px solid $color-border-default;
+    border-radius: $button-radius;
+    cursor: pointer;
+    transition: border-color $transition-fast, color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+      border-color: $color-primary;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
   &__nav-back {
     font-size: $font-size-body-sm;
     color: $color-neutral-muted;
@@ -285,6 +311,43 @@
         color: $color-neutral-dark;
       }
     }
+  }
+
+  // ==========================================
+  // Selected Work
+  // ==========================================
+  &__work-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__work-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  &__work-link {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    text-decoration: none;
+    width: fit-content;
+
+    &:hover {
+      color: $color-primary-dark;
+      text-decoration: underline;
+    }
+  }
+
+  &__work-note {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+    line-height: 1.4;
   }
 
   // ==========================================
@@ -555,6 +618,20 @@
     &__edu {
       strong { font-size: 10px; }
       p { font-size: 9px; }
+    }
+
+    &__work-list {
+      gap: 6px;
+    }
+
+    &__work-link {
+      font-size: 10px;
+      color: $color-neutral-dark;
+    }
+
+    &__work-note {
+      font-size: 9px;
+      line-height: 1.35;
     }
 
     &__job {

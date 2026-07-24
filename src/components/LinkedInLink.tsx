@@ -1,11 +1,12 @@
 import React from 'react';
+import { SITE } from '../data/site';
 
 /**
  * Canonical LinkedIn profile URL — every LinkedIn link on the site points at
  * the profile root. Activity-feed / post deep links are auth-walled for
- * logged-out visitors, so they are never used.
+ * logged-out visitors, so they are never used. Sourced from data/site.ts.
  */
-export const LINKEDIN_PROFILE_URL = 'https://www.linkedin.com/in/ryandeboerdesigns/';
+export const LINKEDIN_PROFILE_URL = SITE.linkedinUrl;
 
 interface LinkedInLinkProps {
   /** Visible link text. */
@@ -34,6 +35,7 @@ const LinkedInLink: React.FC<LinkedInLinkProps> = ({ label, surface, className }
     data-li-surface={surface}
   >
     {label}
+    <span className="sr-only"> (opens in a new tab)</span>
   </a>
 );
 

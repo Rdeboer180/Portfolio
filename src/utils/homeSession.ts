@@ -1,6 +1,6 @@
 const SESSION_KEY = 'homepage_variant';
 
-/** Store the current homepage variant slug (e.g. "homepage_t1d") */
+/** Store the current homepage variant slug (e.g. "homepage_template") */
 export function setHomeVariant(slug: string): void {
   sessionStorage.setItem(SESSION_KEY, slug);
 }

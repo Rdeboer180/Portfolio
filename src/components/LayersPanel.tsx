@@ -49,17 +49,19 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
         ref={ref}
         aria-label="Photoshop layers panel mockup"
       >
-        <div className="layers-panel__top">
+        {/* Decorative Photoshop chrome — hidden from assistive tech; only the
+            layer rows below are meaningful/interactive. */}
+        <div className="layers-panel__top" aria-hidden="true">
           <span>&times;</span>
           <span>&laquo;</span>
         </div>
 
-        <div className="layers-panel__titlebar">
+        <div className="layers-panel__titlebar" aria-hidden="true">
           <div className="layers-panel__title">Layers</div>
           <div className="layers-panel__menu">&equiv;</div>
         </div>
 
-        <div className="layers-panel__toolbar">
+        <div className="layers-panel__toolbar" aria-hidden="true">
           <div className="layers-panel__search">&lceil; <span>Kind</span></div>
           <div className="layers-panel__dropdown">&darr;</div>
           <div className="layers-panel__icon-btn">◐</div>
@@ -69,12 +71,12 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           <div className="layers-panel__icon-btn">●</div>
         </div>
 
-        <div className="layers-panel__modebar">
+        <div className="layers-panel__modebar" aria-hidden="true">
           <div className="layers-panel__mode-select"><span>Normal</span><span>&darr;</span></div>
           <div className="layers-panel__stat"><span>Opacity:</span><span className="layers-panel__stat-field">100%</span></div>
         </div>
 
-        <div className="layers-panel__lockbar">
+        <div className="layers-panel__lockbar" aria-hidden="true">
           <div className="layers-panel__lockbar-left">
             <span>Lock:</span>
             <div className="layers-panel__lockbar-icons">
@@ -156,7 +158,7 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           })}
         </div>
 
-        <div className="layers-panel__footer">
+        <div className="layers-panel__footer" aria-hidden="true">
           <div className="layers-panel__footer-left">
             <span className="layers-panel__footer-icon" title="Link layers">
               <svg viewBox="0 0 24 24" fill="none">

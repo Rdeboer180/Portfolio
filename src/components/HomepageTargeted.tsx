@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import SectionBadge from './SectionBadge';
 import HowIWork from './HowIWork';
 import TechnicalAbilities from './TechnicalAbilities';
@@ -7,33 +7,17 @@ import SelectedWork from './SelectedWork';
 import Testimonials from './Testimonials';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
-import type { TargetedHomepageContent } from '../data/homepage-sleeper';
+import type { TargetedHomepageContent } from '../data/targetedHomepage';
 import { setHomeVariant } from '../utils/homeSession';
+import { SITE, EMAIL_HREF } from '../data/site';
+import UserIcon from './icons/UserIcon';
+import LayersIcon from './icons/LayersIcon';
+import { useHighlightSweep } from '../hooks/useHighlightSweep';
 import uiPromptSvg from '../assets/ui/ui_prompt.svg';
 
 type HeroPhase = 'typing' | 'looping';
 
-/* ─── Shared Icons ─── */
-
-const UserIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-    <path d="M12,1C5.93,1,1,5.93,1,12s4.93,11,11,11,11-4.93,11-11S18.07,1,12,1ZM12,21.5c-5.25,0-9.5-4.25-9.5-9.5S6.75,2.5,12,2.5s9.5,4.25,9.5,9.5-4.25,9.5-9.5,9.5Z" />
-    <circle cx="12" cy="12" r="8.8" />
-    <path d="M12,4.2l-3.8,9.6c-.3.7-.1,1.2.1,1.6.4.7,1.2,1.3,2.2,1.7h3c1-.4,1.8-1,2.2-1.7.2-.4.4-.9.1-1.6L12,4.2Z" fill="#fff" />
-    <line x1="12" y1="4.8" x2="12" y2="11.5" stroke="#fff" strokeWidth="0.5" />
-    <circle cx="12" cy="12" r="0.7" />
-    <rect x="10.2" y="17.3" width="3.6" height="1.4" rx="0.2" fill="#fff" />
-  </svg>
-);
-
-const LayersIcon = () => (
-  <svg viewBox="0 0 449.81 688.24" fill="currentColor" stroke="none">
-    <path d="M252.1,416.74l-27.21-55.13-27.17,55.13c-1.9,3.83-5.58,6.47-9.81,7.1l-60.82,8.85,44.01,42.9c3.09,2.98,4.46,7.29,3.75,11.52l-10.41,60.56,54.42-28.59c1.89-1,3.98-1.52,6.02-1.52s4.16.52,6.06,1.52l54.42,28.59-10.41-60.56c-.71-4.24.67-8.55,3.76-11.52l44.01-42.9-60.82-8.85c-4.24-.63-7.92-3.27-9.81-7.1Z" opacity="0.35" />
-    <path d="M421.1,353.59c-7.9-14.07-17.33-27.34-28.14-39.52-5.73-6.38-11.82-12.55-18.27-18.27-12.11-10.8-25.45-20.45-39.95-28.5-.29-.22-.51-.36-.8-.51-7.03-3.99-14.5-7.69-22.26-10.88-16.9-7.11-34.59-12.11-52.43-14.79-9.21-1.45-18.64-2.25-28.14-2.54-2.03-.07-4.14-.15-6.24-.15-18.34,0-36.26,2.17-53.73,6.53-11.24,2.68-22.26,6.38-33,10.88-1.38.58-2.83,1.23-4.21,1.88-6.24,2.76-12.4,5.8-18.13,8.99C44.38,306.52,0,381.87,0,463.38c0,53.88,19.07,103.41,50.76,142.2,9.57,11.67,20.3,22.41,31.98,31.91,38.79,31.69,88.25,50.76,142.13,50.76,91.66,0,170.7-55.11,205.66-133.94,5.36-11.89,9.65-24.29,12.76-37.2,4.28-17.19,6.53-35.24,6.53-53.73,0-39.09-10.23-76.8-28.72-109.79ZM334.08,457.86l-32.34,31.54,13.71,79.84c.87,4.86-1.16,9.86-5.15,12.76-2.32,1.59-4.93,2.46-7.61,2.46-2.1,0-4.21-.51-6.09-1.52l-71.72-37.64-71.64,37.64c-4.42,2.32-9.65,1.96-13.7-.94-3.99-2.9-6.02-7.9-5.22-12.76l13.78-79.84-58.01-56.49c-3.55-3.48-4.86-8.63-3.34-13.34,1.52-4.71,5.66-8.12,10.52-8.85l80.2-11.67,32.35-65.48,3.48-7.11c2.17-4.42,6.67-7.25,11.6-7.25s9.5,2.83,11.68,7.25l32.99,66.86,2.83,5.73,3.41.51,58.44,8.48,18.35,2.68c4.86.73,8.99,4.14,10.51,8.85,1.53,4.71.22,9.86-3.34,13.34l-.36.29-25.31,24.65Z" />
-    <path d="M243.15,216.82c-3.77-.29-7.62-.44-11.32-.58-2.24-.07-4.64-.07-6.96-.07-24.65,0-48.66,3.55-71.86,10.66-7.98,2.39-15.81,5.22-23.5,8.48-4.2,1.81-8.34,3.7-12.4,5.58-.44.22-.8.36-1.23.58l-1.38-3.19-37.56-87.53L18.85,15.45v-.07C15.74,8.05,21.03,0,29.01,0h39.23l.58,1.31,49.82,116.02c0,.07.07.15.07.22l13.85,32.2c2.1,4.86,6.89,7.83,11.96,7.83,1.67,0,3.48-.36,5.15-1.01,6.53-2.83,9.57-10.52,6.74-17.12l-13.92-32.41-24.15-56.13-8.55-20.01-6.24-14.58-2.97-6.89-3.99-9.43h46.19c.73,0,1.38.07,2.1.22,3.55.65,6.6,3.05,8.05,6.45l1.23,2.83,28.28,64.83h-.44l7.83,18.27,7.54,17.55,6.24,14.58,8.55,19.94,2.47,5.8,14.14,33,14.36,33.36Z" opacity="0.65" />
-    <path d="M431.25,15.52l-18.71,43.15-6.82,15.66-56.13,130.6-14.21,33.21-1.45,3.34c-3.12-1.52-6.38-3.05-9.65-4.43-1.3-.58-2.61-1.16-3.99-1.74-3.34-1.38-6.67-2.75-10.08-3.99-5.59-2.03-11.24-3.92-16.9-5.51-8.12-2.39-16.25-4.28-24.51-5.73l-14.14-32.92-5.37-12.47-3.19-7.47-6.24-14.57-2.83-6.6,1.89-4.35,14.21-33.21,14.72-34.16h-.15l8.48-19.51,17.55-40.83c.15-.29.36-.51.51-.65l2.9-6.67c1.81-4.06,5.8-6.67,10.15-6.67h47.21l-.22.51-3.84,8.99-38.22,88.91-17.62,41.04c-1.52,3.56-1.3,7.47.22,10.74,1.23,2.61,3.34,4.78,6.09,6.09.15.15.36.22.51.29,1.67.65,3.41,1.01,5.15,1.01,5.07,0,9.86-2.97,11.96-7.83l17.62-41.04,37.93-88.4.22-.44,8.48-19.87h38.29c2.18,0,4.14.58,5.8,1.67,1.52.87,2.75,2.18,3.63,3.63,1.81,2.9,2.25,6.67.72,10.23Z" opacity="0.65" />
-  </svg>
-);
+/* ─── Template-specific icon (UserIcon / LayersIcon are shared, see ./icons) ─── */
 
 const FootballIcon = () => (
   <svg viewBox="0 0 800 600.7" fill="currentColor" stroke="none">
@@ -51,6 +35,13 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
   const headlineRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const loopRef = useRef<number>(0);
+  // Transient sub-timeouts (bbox hide / stretch) tied to the current loop step,
+  // cleared alongside loopRef on step change, click, or unmount.
+  const subTimeoutsRef = useRef<number[]>([]);
+  const clearSubTimeouts = () => {
+    subTimeoutsRef.current.forEach((id) => window.clearTimeout(id));
+    subTimeoutsRef.current = [];
+  };
   const isFirstRunRef = useRef(true);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -121,14 +112,14 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
             setIsStretching(false);
           }, 2500);
           loopRef.current = window.setTimeout(advance, 4000);
-          (loopRef as any)._subs = [t1, t2];
+          subTimeoutsRef.current = [t1, t2];
         } else {
           setHeadlineScale(1);
           setIsStretching(false);
           setShowBBox(true);
           const t1 = window.setTimeout(() => setShowBBox(false), 500);
           loopRef.current = window.setTimeout(advance, 3000);
-          (loopRef as any)._subs = [t1];
+          subTimeoutsRef.current = [t1];
         }
 
         if (next === 0 && prev === 2) {
@@ -142,8 +133,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
 
     return () => {
       window.clearTimeout(loopRef.current);
-      const subs = (loopRef as any)._subs;
-      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+      clearSubTimeouts();
     };
   }, [phase, roles]);
 
@@ -152,8 +142,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
     if (phase !== 'looping' || index === activeIndex) return;
 
     window.clearTimeout(loopRef.current);
-    const subs = (loopRef as any)._subs;
-    if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+    clearSubTimeouts();
 
     setActiveIndex(index);
     setDisplayText(roles[index]);
@@ -173,21 +162,20 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
           setShowBBox(true);
           const hide = window.setTimeout(() => setShowBBox(false), 500);
           loopRef.current = window.setTimeout(advanceFromClick, 5000);
-          (loopRef as any)._subs = [hide];
+          subTimeoutsRef.current = [hide];
           return next;
         });
       };
       loopRef.current = window.setTimeout(advanceFromClick, 5000);
     }, 0);
 
-    (loopRef as any)._subs = [t1];
+    subTimeoutsRef.current = [t1];
   }, [phase, activeIndex, roles]);
 
   useEffect(() => {
     return () => {
       window.clearTimeout(loopRef.current);
-      const subs = (loopRef as any)._subs;
-      if (subs) subs.forEach((id: number) => window.clearTimeout(id));
+      clearSubTimeouts();
     };
   }, []);
 
@@ -201,7 +189,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
           <a href={`#/${slug}#about`}>About Me</a>
           <a href={`#/${slug}#projects`}>My Work</a>
           <a href="#/resume">Resume</a>
-          <a href="mailto:rdeboer180@gmail.com" className="hero__nav-cta">Get in touch</a>
+          <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
         </div>
       </nav>
 
@@ -246,9 +234,9 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
 
             <p className="hero__body hero__reveal hero__reveal--4">{hero.body}</p>
             <div className="hero__actions hero__reveal hero__reveal--5">
-              <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--lg">
+              <a href={EMAIL_HREF} className="btn btn--primary btn--lg">
                 <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
-                rdeboer180@gmail.com
+                {SITE.email}
               </a>
               <a href={`#/${slug}#projects`} className="btn btn--secondary btn--lg">
                 View my work
@@ -301,42 +289,15 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
 
 const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content }) => {
   const { about, meta } = content;
-  const sectionRef = React.useRef<HTMLElement>(null);
-
-  React.useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const highlights = section.querySelectorAll('.about__highlight');
-    if (highlights.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const sweepDuration = 600;
-            const holdDuration = 400;
-            const cycleTime = sweepDuration + holdDuration + 500 + 200;
-            highlights.forEach((el, i) => {
-              const baseDelay = i * cycleTime;
-              setTimeout(() => {
-                el.classList.add('about__highlight--active');
-              }, baseDelay);
-              setTimeout(() => {
-                el.classList.add('about__highlight--bold');
-                el.classList.remove('about__highlight--active');
-              }, baseDelay + sweepDuration + holdDuration);
-            });
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
+  const reduceMotion = useReducedMotion();
+  // settleOffset = sweep(600) + hold(400); cycleTime adds fade(500) + gap(200).
+  const sectionRef = useHighlightSweep<HTMLElement>({
+    selector: '.about__highlight',
+    activeClass: 'about__highlight--active',
+    settledClass: 'about__highlight--bold',
+    settleOffset: 1000,
+    cycleTime: 1700,
+  });
 
   return (
     <section id="about" className="about about--wide" ref={sectionRef}>
@@ -350,12 +311,12 @@ const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content
                 {i === 1 && about.titleImage && (
                   <motion.img
                     src={about.titleImage}
-                    alt="Grandville Gremlins"
+                    alt={`${meta.company} mark`}
                     className="about__inline-image"
-                    initial={{ scale: 0, opacity: 0, rotate: -15 }}
-                    whileInView={{ scale: 1, opacity: 1, rotate: 0 }}
+                    initial={reduceMotion ? false : { scale: 0, opacity: 0, rotate: -15 }}
+                    whileInView={reduceMotion ? undefined : { scale: 1, opacity: 1, rotate: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
-                    transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.3 }}
+                    transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 120, damping: 14, delay: 0.3 }}
                   />
                 )}
                 <p className="about__body">{p}</p>
@@ -487,11 +448,12 @@ const TargetedFooter: React.FC<{ content: TargetedHomepageContent }> = ({ conten
             <span className="footer__eyebrow">{footer.eyebrow}</span>
           </div>
           <div className="footer__actions">
-            <a href="mailto:rdeboer180@gmail.com" className="btn btn--primary btn--md">
-              rdeboer180@gmail.com
+            <a href={EMAIL_HREF} className="btn btn--primary btn--md">
+              {SITE.email}
             </a>
-            <a href="https://www.linkedin.com/in/ryandeboerdesigns" className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
+            <a href={SITE.linkedinUrl} className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </div>
         </div>

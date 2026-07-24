@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import SectionBadge from './SectionBadge';
 import LinkedInLink from './LinkedInLink';
+import { SITE } from '../data/site';
 
 const QuoteIcon = () => (
   <svg viewBox="0 0 180 169.8" fill="currentColor" stroke="none">
@@ -62,7 +63,7 @@ const testimonials: Testimonial[] = [
     role: 'Web Design Manager (Ryan’s direct manager)',
     year: '2026',
     source: 'See Full LinkedIn Recommendation',
-    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns',
+    sourceUrl: SITE.linkedinUrl,
   },
   {
     title: 'Cross-Functional & Human',
@@ -86,7 +87,7 @@ const testimonials: Testimonial[] = [
     role: 'Assistant Vice President, Digital Operations at Tire Rack',
     year: '2026',
     source: 'See Full LinkedIn Recommendation',
-    sourceUrl: 'https://www.linkedin.com/in/ryandeboerdesigns',
+    sourceUrl: SITE.linkedinUrl,
   },
   {
     title: 'Systems Thinking',

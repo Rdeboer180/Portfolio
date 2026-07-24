@@ -8,7 +8,7 @@
 // framer-motion only. Reduced-motion → fade in/out, no physics.
 // ============================================
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
@@ -425,24 +425,28 @@ const CaseStudyPlayground: React.FC = () => {
   };
 
   // Join playground config to the canonical projects data (image + route +
-  // stream + optional cover-loop video)
-  const cards = CARDS.map((card) => {
-    const project = projects.find((p) => p.slug === card.slug);
-    const video = project?.featuredVideo;
-    // For video cards the still IS the video's first frame (poster), so the
-    // resting card matches what the loop shows; non-video cards keep `featured`.
-    const still = video
-      ? video.replace(/\.mp4$/, '-poster.jpg')
-      : project?.featured ?? '';
-    return {
-      ...card,
-      image: still,
-      alt: project?.title ?? card.title,
-      stream: project?.stream,
-      video,
-      videoPrimary: Boolean(video && project?.featuredVideoPrimary),
-    };
-  });
+  // stream + optional cover-loop video). CARDS and projects are module
+  // constants, so this only needs to run once — not on every hover re-render.
+  const cards = useMemo(() => {
+    const bySlug = new Map(projects.map((p) => [p.slug, p]));
+    return CARDS.map((card) => {
+      const project = bySlug.get(card.slug);
+      const video = project?.featuredVideo;
+      // For video cards the still IS the video's first frame (poster), so the
+      // resting card matches what the loop shows; non-video cards keep `featured`.
+      const still = video
+        ? video.replace(/\.mp4$/, '-poster.jpg')
+        : project?.featured ?? '';
+      return {
+        ...card,
+        image: still,
+        alt: project?.title ?? card.title,
+        stream: project?.stream,
+        video,
+        videoPrimary: Boolean(video && project?.featuredVideoPrimary),
+      };
+    });
+  }, []);
 
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
 

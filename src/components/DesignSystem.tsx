@@ -476,14 +476,14 @@ const CardsContent: React.FC = () => (
               name="Paul Bennett"
               role="Founder"
               rating={5}
-              quote="Michael's been a pleasure to work with. His attention to detail, UX design and design expertise has helped us push the limits on various mobile apps."
+              quote="Ryan's been a pleasure to work with. His attention to detail, UX design and design expertise has helped us push the limits on various mobile apps."
             />
             <TestimonialCard
               name="Fawn Rolands"
               role="Sr. Product Manager"
               company="Acme Corp"
               rating={5}
-              quote="I've worked with Michael on a couple of projects now and really value his skills and abilities. He is confident and capable."
+              quote="I've worked with Ryan on a couple of projects now and really value his skills and abilities. He is confident and capable."
             />
           </div>
         </div>

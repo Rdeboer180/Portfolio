@@ -16,7 +16,7 @@ const AboutPage: React.FC = () => {
   return (
     <article className="about-page">
       {/* Nav — fixed, logo + Back to Home */}
-      <nav className="about-page__nav">
+      <nav className="about-page__nav" aria-label="Primary">
         <a href={getHomeHref()} className="about-page__nav-logo">
           Ryan DeBoer
         </a>

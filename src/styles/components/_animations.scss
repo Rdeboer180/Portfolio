@@ -165,6 +165,14 @@
   opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
   animation-delay: $delay;
+
+  // Reduced-motion: skip the slide/fade but keep the element visible.
+  // (Without restoring opacity, cancelling the animation would leave it at 0.)
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
 }
 
 // UI element drift animations (subtle floating for hero overlays)

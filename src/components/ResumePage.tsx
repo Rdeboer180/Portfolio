@@ -1,39 +1,82 @@
-import React, { useRef } from 'react';
-// @ts-ignore — html2pdf.js has no type declarations
-import html2pdf from 'html2pdf.js';
+import React from 'react';
 import { getHomeHref } from '../utils/homeSession';
+import { SITE } from '../data/site';
+
+// Shared contact details come from data/site.ts; the resume adds its own
+// display fields (name split for the vCard, address parts, link labels).
+const CONTACT = {
+  firstName: 'Ryan',
+  lastName: 'DeBoer',
+  title: 'Senior Product Designer · Design Systems · Front-End',
+  email: SITE.email,
+  city: 'South Bend',
+  region: 'Indiana',
+  country: 'USA',
+  portfolioUrl: SITE.portfolioUrl,
+  portfolioLabel: 'RDeboerDesigns.com',
+  linkedinUrl: SITE.linkedinUrl,
+  linkedinLabel: 'linkedin.com/in/ryandeboerdesigns',
+};
+
+// Absolute links (not bare #hashes) so they stay clickable from an exported PDF.
+const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/#/work/${slug}`;
+
+const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
+  { name: 'WheelRack Design System', slug: 'wheelrack', note: '200+ tokens, 50+ Storybook components; full customer-journey redesign' },
+  { name: 'Tire Category Redesign', slug: 'tire-categories', note: 'Up to +50% conversion lift, +400% category-entry growth (first month)' },
+  { name: 'AEM Landing Page System', slug: 'landing-pages', note: '50+ pages; turnaround cut from weeks to days, <1 QA issue per page' },
+  { name: 'PlayDraft', slug: 'playdraft', note: '0→1 social drafting game — brand to TestFlight in 12 weeks (React Native)' },
+];
 
 const ResumePage: React.FC = () => {
-  const paperRef = useRef<HTMLDivElement>(null);
-
+  // Native print produces a PDF with clickable links and selectable, ATS-readable
+  // text (unlike a rasterized canvas export), using the @media print styles.
   const handleExportPDF = () => {
-    if (!paperRef.current) return;
-    const el = paperRef.current;
-    // Measure the element to create a single-page PDF that fits the full content
-    const widthIn = 8.5;
-    const margin = 0.4;
-    const contentWidthIn = widthIn - margin * 2;
-    const contentWidthPx = el.scrollWidth;
-    const contentHeightPx = el.scrollHeight;
-    const scale = contentWidthIn / (contentWidthPx / 96); // 96px = 1in
-    const heightIn = (contentHeightPx / 96) * scale + margin * 2;
+    window.print();
+  };
 
-    const opt = {
-      margin: [margin, margin, margin, margin],
-      filename: 'Ryan_DeBoer_Resume.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: [widthIn, heightIn] as any, orientation: 'portrait' },
-    };
-    (html2pdf() as any).set(opt).from(el).save();
+  // Downloadable vCard so recruiters can add Ryan to their contacts in one click.
+  const handleDownloadVCard = () => {
+    const { firstName, lastName, title, email, city, region, country, portfolioUrl, linkedinUrl } = CONTACT;
+    const vcard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `N:${lastName};${firstName};;;`,
+      `FN:${firstName} ${lastName}`,
+      `TITLE:${title}`,
+      `EMAIL;TYPE=INTERNET,PREF:${email}`,
+      `URL:${portfolioUrl}`,
+      `X-SOCIALPROFILE;TYPE=linkedin:${linkedinUrl}`,
+      `ADR;TYPE=HOME:;;;${city};${region};;${country}`,
+      'END:VCARD',
+    ].join('\r\n');
+
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${firstName}_${lastName}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
     <div className="resume-page">
       {/* Screen-only nav */}
-      <nav className="resume-page__nav">
+      <nav className="resume-page__nav" aria-label="Primary">
         <a href={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</a>
         <div className="resume-page__nav-actions">
+          <button className="resume-page__vcard-btn" onClick={handleDownloadVCard}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+            Save contact
+          </button>
           <button className="resume-page__print-btn" onClick={handleExportPDF}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
               <polyline points="6 9 6 2 18 2 18 9" />
@@ -47,26 +90,25 @@ const ResumePage: React.FC = () => {
       </nav>
 
       {/* Resume document */}
-      <div className="resume-page__paper" ref={paperRef}>
+      <div className="resume-page__paper">
         {/* Header */}
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
           <p className="resume-page__tagline">
-            Design Strategist / Systems-Focused Product Designer
+            Senior Product Designer · Design Systems · Front-End
           </p>
           <div className="resume-page__contact">
-            <span>South Bend, Indiana</span>
+            <span>{CONTACT.city}, {CONTACT.region}</span>
             <span className="resume-page__contact-sep">&bull;</span>
-            <a href="mailto:rdeboer180@gmail.com">rdeboer180@gmail.com</a>
+            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             <span className="resume-page__contact-sep">&bull;</span>
             <span className="resume-page__contact-portfolio">
-              Portfolio Site: <a href="https://www.rdeboerdesigns.com" target="_blank" rel="noopener noreferrer">RDeboerDesigns.com</a>
+              Portfolio Site: <a href={CONTACT.portfolioUrl} target="_blank" rel="noopener noreferrer">{CONTACT.portfolioLabel}<span className="sr-only"> (opens in a new tab)</span></a>
             </span>
             <span className="resume-page__contact-sep">&bull;</span>
-            {/* Plain text link on purpose: the visible URL must survive the
-                html2pdf export (CSS-mask glyphs may not render in the canvas). */}
+            {/* Full URL shown as text so the link is also readable on a printed page. */}
             <span className="resume-page__contact-linkedin">
-              LinkedIn: <a href="https://www.linkedin.com/in/ryandeboerdesigns/" target="_blank" rel="noopener noreferrer">linkedin.com/in/ryandeboerdesigns</a>
+              LinkedIn: <a href={CONTACT.linkedinUrl} target="_blank" rel="noopener noreferrer">{CONTACT.linkedinLabel}<span className="sr-only"> (opens in a new tab)</span></a>
             </span>
           </div>
         </header>
@@ -76,14 +118,12 @@ const ResumePage: React.FC = () => {
         {/* Summary */}
         <section className="resume-page__summary-section">
           <p className="resume-page__summary">
-            Design systems–focused web and product designer with 10+ years of experience building scalable, token-driven
-            systems across web and native platforms. Combines deep expertise in Figma variables, design tokens, and
-            design-to-code workflows with strong engineering collaboration to deliver accessible, high-quality experiences
-            that scale.
+            Systems-focused product designer with 10+ years building scalable, token-driven design systems across
+            high-traffic web and native platforms.
           </p>
           <p className="resume-page__summary">
-            I bridge design, engineering, and business priorities to create systems that drive adoption, improve consistency,
-            and accelerate delivery—turning complex ecosystems into cohesive products that ship.
+            I work at the seam of design and engineering—owning component libraries, design tokens, and design-to-code
+            workflows that improve consistency, speed delivery, and hold up in production.
           </p>
         </section>
 
@@ -153,6 +193,19 @@ const ResumePage: React.FC = () => {
 
           {/* Main content */}
           <div className="resume-page__main">
+            {/* Selected Work */}
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Selected Work</h2>
+              <ul className="resume-page__work-list">
+                {SELECTED_WORK.map((w) => (
+                  <li key={w.slug} className="resume-page__work-item">
+                    <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>
+                    <span className="resume-page__work-note">{w.note}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
             {/* Education */}
             <section className="resume-page__section">
               <h2 className="resume-page__section-title">Education</h2>
@@ -177,17 +230,12 @@ const ResumePage: React.FC = () => {
                   <span className="resume-page__job-date">2021&ndash;Present</span>
                 </div>
                 <ul className="resume-page__job-list">
-                  <li>Led end-to-end design across ecommerce and acquisition flows, improving discovery, comparison, and conversion experiences across high-traffic customer journeys</li>
-                  <li>Operated as the bridge between UX, product, and engineering—translating ambiguous concepts into scalable, production-ready solutions</li>
-                  <li>Built and evolved component-driven systems within AEM, improving consistency, reusability, and implementation speed</li>
-                  <li>Partnered closely with developers to ensure design-to-code alignment, grounding decisions in real technical constraints and long-term maintainability</li>
-                  <li>Contributed to frontend implementation strategy by aligning component structure, states, and behaviors with scalable development patterns</li>
-                  <li>Designed and optimized acquisition-focused experiences including landing pages, promotional surfaces, and conversion flows</li>
-                  <li>Led rapid prototyping efforts to validate concepts early and accelerate stakeholder alignment</li>
-                  <li>Introduced AI-assisted workflows (Claude, LLM tooling) to accelerate ideation, generate variations, and improve team efficiency</li>
-                  <li>Collaborated with SEO and analytics teams to improve performance through A/B testing and experimentation</li>
-                  <li>Optimized UI patterns for accessibility (WCAG), performance, and responsive behavior</li>
-                  <li>Mentored teammates on design systems, component thinking, and design-to-code best practices</li>
+                  <li>Built and shipped WheelRack, a token-driven design system—200+ design tokens and 50+ Storybook-integrated components—giving the React team one source of truth, and extended it into Tire Rack's Wholesale platform within 6 months</li>
+                  <li>Redesigned high-traffic tire category pages, driving up to +50% conversion lift on top pages and up to +400% category-entry traffic growth in the first month, and scaled a 32→100+ characteristic-icon library governed sitewide</li>
+                  <li>Turned one-off landing-page production into a governed AEM template system—50+ pages personally designed, turnaround cut from ~1 month to days, with under one QA issue per page on average</li>
+                  <li>Operated as the bridge between UX, product, and engineering—translating ambiguous concepts into production-ready components with states and behaviors aligned to scalable front-end patterns</li>
+                  <li>Own a decade-long AEM Experience Fragment system—20+ swappable components across 6 high-traffic pages with geo-targeting via Adobe Target—now authored by 2 junior designers under my governance</li>
+                  <li>Introduced AI-assisted design workflows (Claude, LLM tooling) to accelerate ideation and prototyping, and mentored teammates on design systems and design-to-code practices</li>
                 </ul>
               </div>
 

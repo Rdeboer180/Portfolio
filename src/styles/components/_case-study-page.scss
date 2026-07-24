@@ -676,6 +676,36 @@
     backdrop-filter: blur(4px);
   }
 
+  // Pause/play control for inline autoplay videos (WCAG 2.2.2)
+  &__video-toggle {
+    position: absolute;
+    bottom: $spacing-md;
+    right: $spacing-md;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: $radius-full;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.78);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
   &__phone-frame {
     position: relative;
     width: 100%;
