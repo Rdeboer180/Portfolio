@@ -21,7 +21,7 @@ const AboutPage: React.FC = () => {
     title: 'About — Ryan DeBoer, Senior Product Designer & Design Engineer',
     description:
       '16+ years turning craft, front-end constraints, and production realities into design systems that ship. Ryan DeBoer is a Senior Product Designer and Design Engineer in South Bend, Indiana, open to remote roles.',
-    canonical: `${SITE.portfolioUrl}/about`,
+    canonical: `${SITE.portfolioUrl}/about/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
   });

@@ -109,7 +109,9 @@ async function main() {
     .filter((r) => r !== '/design-system')
     .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)))
     .map((r) => {
-      const loc = r === '/' ? `${ORIGIN_URL}/` : `${ORIGIN_URL}${r}`;
+      // Trailing slash = the URL nginx serves directly over https (slashless
+      // paths 301 to the slash form and downgrade to http).
+      const loc = r === '/' ? `${ORIGIN_URL}/` : `${ORIGIN_URL}${r}/`;
       const priority = r === '/' ? '1.0' : r.startsWith('/work/') ? '0.8' : '0.7';
       return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${priority}</priority>\n  </url>`;
     })

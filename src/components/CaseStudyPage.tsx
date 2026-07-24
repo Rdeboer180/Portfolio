@@ -306,7 +306,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
 
-  const pageUrl = `${SITE.portfolioUrl}/work/${slug}`;
+  // Trailing slash matches the URL nginx serves directly over https (a slashless
+  // /work/x 301-redirects and downgrades to http), so it's the clean canonical.
+  const pageUrl = `${SITE.portfolioUrl}/work/${slug}/`;
   const socialImage = `${SITE.portfolioUrl}/images/social/cs-${slug}.jpg`;
   usePageMeta(
     project

@@ -21,7 +21,7 @@ const CONTACT = {
 };
 
 // Absolute links (not bare #hashes) so they stay clickable from an exported PDF.
-const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/work/${slug}`;
+const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/work/${slug}/`;
 
 const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
   { name: 'WheelRack Design System', slug: 'wheelrack', note: '200+ tokens, 50+ Storybook components; full customer-journey redesign' },
@@ -35,7 +35,7 @@ const ResumePage: React.FC = () => {
     title: 'Résumé — Ryan DeBoer, Senior Product Designer & Design Engineer',
     description:
       'Résumé of Ryan DeBoer — systems-focused product designer with 16+ years building scalable, token-driven design systems across high-traffic web and native platforms.',
-    canonical: `${SITE.portfolioUrl}/resume`,
+    canonical: `${SITE.portfolioUrl}/resume/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
   });
