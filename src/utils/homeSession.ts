@@ -5,14 +5,14 @@ export function setHomeVariant(slug: string): void {
   sessionStorage.setItem(SESSION_KEY, slug);
 }
 
-/** Get the hash route for the user's session homepage */
+/** Path to the visitor's session homepage (a targeted variant, or the default). */
 export function getHomeHref(): string {
   const slug = sessionStorage.getItem(SESSION_KEY);
-  return slug ? `#/${slug}` : '#/';
+  return slug ? `/${slug}` : '/';
 }
 
-/** Get the hash route for the projects section on the user's session homepage */
+/** Path to the projects section on the visitor's session homepage. */
 export function getProjectsHref(): string {
   const slug = sessionStorage.getItem(SESSION_KEY);
-  return slug ? `#/${slug}#projects` : '#projects';
+  return slug ? `/${slug}#projects` : '/#projects';
 }

@@ -1,4 +1,5 @@
 import React, { useId, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LinkedInLink from './LinkedInLink';
 
@@ -34,7 +35,7 @@ const Facts: React.FC = () => (
 const Links: React.FC = () => (
   <div className="candidate-snapshot__links">
     <a href={EMAIL_HREF} className="candidate-snapshot__link">Email</a>
-    <a href="#/resume" className="candidate-snapshot__link">Résumé</a>
+    <Link to="/resume" className="candidate-snapshot__link">Résumé</Link>
     <LinkedInLink label="LinkedIn" surface="candidate_snapshot" className="candidate-snapshot__link" />
   </div>
 );

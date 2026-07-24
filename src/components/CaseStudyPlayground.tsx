@@ -10,6 +10,7 @@
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
@@ -494,9 +495,9 @@ const CaseStudyPlayground: React.FC = () => {
           {cards.map((card) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
             return (
-              <a
+              <Link
                 key={card.slug}
-                href={`#/work/${card.slug}`}
+                to={`/work/${card.slug}`}
                 className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}`}
                 data-slug={card.slug}
                 onMouseEnter={isTouch ? undefined : () => handleEnter(card.slug)}
@@ -562,7 +563,7 @@ const CaseStudyPlayground: React.FC = () => {
                     </motion.span>
                   ))}
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

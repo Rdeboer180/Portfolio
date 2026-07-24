@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Proficiency {
   id: string;
@@ -10,7 +11,7 @@ interface Proficiency {
 
 // Shared inline CTA arrow link used across panel copy
 const InlineCTA: React.FC<{ href: string; label: string }> = ({ href, label }) => (
-  <a href={href} className="proficiency-dock__panel-inline-cta">
+  <Link to={href} className="proficiency-dock__panel-inline-cta">
     {label}
     <svg
       width="12"
@@ -26,7 +27,7 @@ const InlineCTA: React.FC<{ href: string; label: string }> = ({ href, label }) =
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
     </svg>
-  </a>
+  </Link>
 );
 
 const proficienciesByIdRaw: Proficiency[] = [
@@ -51,7 +52,7 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Building token-driven systems and component libraries that scale across teams, products,
         and platforms.{' '}
-        <InlineCTA href="#/work/wheelrack" label="See my Figma Design System" />
+        <InlineCTA href="/work/wheelrack" label="See my Figma Design System" />
       </>
     ),
     icon: <img src="/images/proficiencies/figma-dark.svg" alt="" />,
@@ -72,7 +73,7 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Using AI to rapidly prototype, test variations, and push ideas further&mdash;while
         applying judgment to shape what&rsquo;s worth shipping.{' '}
-        <InlineCTA href="#/work/wheelrack" label="See how I built this portfolio" />
+        <InlineCTA href="/work/wheelrack" label="See how I built this portfolio" />
       </>
     ),
     icon: <img src="/images/proficiencies/claude.svg" alt="" />,
@@ -85,7 +86,7 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Using ChatGPT to speed up SEO support, alt text, presentation drafts, and documentation
         that makes systems, components, and tokens easier for teams to understand and use.{' '}
-        <InlineCTA href="#/about" label="Read how I think about AI" />
+        <InlineCTA href="/about" label="Read how I think about AI" />
       </>
     ),
     icon: <img src="/images/proficiencies/openai-chatgpt.svg" alt="" />,
@@ -98,8 +99,8 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Not just designing interfaces, but validating them in code&mdash;bridging design and
         implementation to ensure ideas hold up in real environments.{' '}
-        <InlineCTA href="#/work/aem-component-system" label="AEM Core" />{' '}
-        <InlineCTA href="#/work/tire-categories" label="Tire Categories" />
+        <InlineCTA href="/work/aem-component-system" label="AEM Core" />{' '}
+        <InlineCTA href="/work/tire-categories" label="Tire Categories" />
       </>
     ),
     icon: <img src="/images/proficiencies/vscode.svg" alt="" />,
@@ -112,7 +113,7 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Led and contributed to design patterns powering 80%+ of Tire Rack landing pages&mdash;building
         reusable components that balance flexibility, performance, and consistency at scale.{' '}
-        <InlineCTA href="#/work/aem-component-system" label="View AEM Core rebuild" />
+        <InlineCTA href="/work/aem-component-system" label="View AEM Core rebuild" />
       </>
     ),
     icon: <img src="/images/proficiencies/experience-manager.svg" alt="" />,
@@ -126,7 +127,7 @@ const proficienciesByIdRaw: Proficiency[] = [
         Adobe tools were the first applications that unlocked my craft. Illustrator still feels like
         home&mdash;especially in SVG, iconography, and brand systems&mdash;and that foundation still shapes how I
         think about polish and visual precision.{' '}
-        <InlineCTA href="#/work/tire-categories" label="View the tire category page" />
+        <InlineCTA href="/work/tire-categories" label="View the tire category page" />
       </>
     ),
     icon: <img src="/images/proficiencies/adobe cc.svg" alt="" />,
@@ -140,7 +141,7 @@ const proficienciesByIdRaw: Proficiency[] = [
         Analytics helps me understand what users are actually doing&mdash;not just what we assume. On Tire
         Rack&rsquo;s winterization work, it helped shape region-specific experiences based on real seasonal
         behavior.{' '}
-        <InlineCTA href="#/work/tire-rack-winter" label="View the winterization case study" />
+        <InlineCTA href="/work/tire-rack-winter" label="View the winterization case study" />
       </>
     ),
     icon: <img src="/images/proficiencies/adobe-analytics.svg" alt="" />,
@@ -153,7 +154,7 @@ const proficienciesByIdRaw: Proficiency[] = [
       <>
         Comfortable working in shared repos, reviewing implementations, and contributing
         directly&mdash;ensuring design intent survives through development.{' '}
-        <InlineCTA href="#/work/aem-component-system" label="Explore implementation" />
+        <InlineCTA href="/work/aem-component-system" label="Explore implementation" />
       </>
     ),
     icon: <img src="/images/proficiencies/github.svg" alt="" />,
