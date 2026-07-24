@@ -42,6 +42,9 @@ export interface Project {
   slug: string;
   client: string;
   title: string;
+  /** Descriptive, search-oriented title for the case-study page <title>/H1 and
+   *  sitemap. Keeps the branded `title` while adding the searchable problem. */
+  seoTitle?: string;
   summary?: string;
   year: string;
   tags: string[];
@@ -106,6 +109,7 @@ const projects: Project[] = [
     stream: 'professional',
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
+    seoTitle: 'WheelRack — Enterprise React Design System for a Wholesale Ecommerce Platform',
     summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
@@ -273,6 +277,7 @@ const projects: Project[] = [
     stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
+    seoTitle: 'Automotive Ecommerce Category UX Redesign — +400% Category Entry',
     summary: 'Redesigned 30+ tire category pages into a scalable system of iconography, data visualization, and content structure. Top-performing category pages saw up to +50% conversion lift in the first month after launch.',
     year: '2024',
     tags: ['UX/UI Design', 'Wireframing', 'Component Design', 'Modular Design', 'SEO Optimization', 'Icon System Implementation'],
@@ -440,6 +445,7 @@ const projects: Project[] = [
     stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Rack Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
+    seoTitle: 'Seasonal Ecommerce Content System \u2014 AEM Experience Fragments & Adobe Target',
     summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season. Seasonal winterization has been associated with stronger annual winter conversion lift compared with pre-winterization periods.',
     year: '2013\u2013Present',
     tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'CMS', 'Component Design', 'Modular Design', 'Adobe Target'],
@@ -588,6 +594,7 @@ const projects: Project[] = [
     stream: 'passion',
     client: 'Heatherwood Equestrian Academy',
     title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
+    seoTitle: 'Brand Identity & WordPress Site for a Local Equestrian Academy',
     summary: 'End-to-end rebrand and rebuild for a family-owned equestrian academy\u2014brand identity, IA, WordPress CMS, and SEO architecture. Inquiries moved from ~3\u20134 per month pre-launch to 4\u20135 form submissions daily in the weeks after launch.',
     year: '2025',
     tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
@@ -731,6 +738,7 @@ const projects: Project[] = [
     stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
+    seoTitle: 'AEM Landing-Page & SEO Template System for Ecommerce',
     summary: 'Designed 50+ landing pages personally, then built the governed AEM template system that two junior designers now use\u2014shifting turnaround from ~1 month to 1\u20132 weeks for complex pages and 1\u20132 days for simple launches.',
     year: '2023\u2013Present',
     tags: ['UX/UI Design', 'Front-End Development', 'CMS'],
@@ -925,6 +933,7 @@ const projects: Project[] = [
     stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
+    seoTitle: 'Adobe Experience Manager Design System & Storefront Performance Rebuild',
     summary: 'Partnered with Tire Rack\u2019s new AEM dev team to rebuild the authoring system around reusable core components. Shipped 10+ live components powering homepage, tires hub, events, and packages\u201460% faster page loads (WebPageTest) and a shared foundation for design, dev, SEO, and accessibility.',
     year: '2024\u20132025',
     tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
@@ -1124,6 +1133,7 @@ $mobile-max-width: 768px;
     stream: 'professional',
     client: 'Tire Rack — Internal Tooling',
     title: 'Scaling Design Through Internal Tooling',
+    seoTitle: 'Design Enablement — Internal Figma Plugins & AI-Assisted Tooling',
     summary:
       'Agentic internal application development: a connected layer of plugins and web applications that streamlined repetitive design work, standardized project communication, and reduced manual review cycles across the Design, UX, and Photography teams.',
     year: '2025–2026',
@@ -1258,6 +1268,7 @@ $mobile-max-width: 768px;
     stream: 'passion',
     client: 'LoopStack (personal project)',
     title: 'LoopStack: Meal Memory + Insulin Timing Intelligence',
+    seoTitle: 'LoopStack — Trends-First Health-Data UX for Type 1 Diabetes (React/TypeScript)',
     summary: 'A Type 1 diabetes pattern-review app that turns meal history and glucose response into pattern review — comparing what Loop predicted with what actually happened, then surfacing patterns worth reviewing with a care team. Live on TestFlight, wired to 90 days of real HealthKit CGM data. Pattern evidence and discussion points, not dosing advice.',
     year: '2026',
     tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'HealthKit'],
@@ -1435,6 +1446,7 @@ Frame every output as:
     stream: 'passion',
     client: 'PlayDraft (personal product)',
     title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
+    seoTitle: 'PlayDraft — a 0→1 Social Mobile Game Designed & Built in React Native',
     summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic: Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution across product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight, with AI-assisted workflows moving it faster.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
@@ -1641,6 +1653,7 @@ export const packs = {
     hidden: true,
     client: 'Internal Tool',
     title: 'Photography Workflow Agent',
+    seoTitle: 'Photography Workflow Agent — AI-Assisted Internal Design Tooling',
     summary: 'An internal agentic workflow tool built to support photography team operations—combining practical interface design, workflow logic, and AI-assisted execution to reduce repetitive production steps and make image-related tasks easier to test, review, and act on.',
     year: '2026',
     tags: ['Agentic Workflow', 'Internal Tools', 'AI-Assisted Product', 'UX Engineering', 'Production Systems'],

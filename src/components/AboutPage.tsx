@@ -10,6 +10,7 @@ import AboutHero from './AboutHero';
 import AboutStorySections from './AboutStorySections';
 import ProcessPrinciples from './ProcessPrinciples';
 import LinkedInLink from './LinkedInLink';
+import CandidateSnapshot from './CandidateSnapshot';
 import '../styles/styles.scss';
 
 const AboutPage: React.FC = () => {
@@ -27,6 +28,9 @@ const AboutPage: React.FC = () => {
 
       {/* ── Hero — text-first editorial intro ─────────────────────────────── */}
       <AboutHero />
+
+      {/* ── At a glance — factual candidate snapshot for recruiters + AI ───── */}
+      <CandidateSnapshot variant="full" />
 
       {/* ── Story — six text-first beats (career evolution, not tabs) ─────── */}
       <AboutStorySections />

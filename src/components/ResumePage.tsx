@@ -118,8 +118,8 @@ const ResumePage: React.FC = () => {
         {/* Summary */}
         <section className="resume-page__summary-section">
           <p className="resume-page__summary">
-            Systems-focused product designer with 10+ years building scalable, token-driven design systems across
-            high-traffic web and native platforms.
+            Systems-focused product designer with 16+ years across high-traffic web and native platforms,
+            building scalable, token-driven design systems that ship.
           </p>
           <p className="resume-page__summary">
             I work at the seam of design and engineering—owning component libraries, design tokens, and design-to-code

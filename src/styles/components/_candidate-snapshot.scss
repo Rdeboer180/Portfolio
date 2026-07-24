@@ -1,0 +1,236 @@
+// ============================================
+// Candidate snapshot — factual recruiter/AI card
+// `--full` (About page) and `--compact` (homepage band)
+// ============================================
+
+@import '../variables';
+
+.candidate-snapshot {
+  display: flex;
+  justify-content: center;
+
+  &__inner {
+    width: 100%;
+    max-width: $container-text-width;
+  }
+
+  &__eyebrow {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $color-primary;
+    margin: 0 0 $spacing-sm;
+  }
+
+  &__name {
+    font-family: $font-family-heading;
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+    color: $color-neutral-dark;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xl;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__fact {
+    dt {
+      font-size: $font-size-caption;
+      font-weight: $font-weight-semibold;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: $color-neutral-muted;
+      margin-bottom: 2px;
+    }
+
+    dd {
+      margin: 0;
+      font-size: $font-size-body;
+      font-weight: $font-weight-medium;
+      color: $color-neutral-dark;
+    }
+  }
+
+  &__summary {
+    font-size: $font-size-body;
+    line-height: $line-height-body-relaxed;
+    color: $color-neutral-standard;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__stack {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__stack-label {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $color-neutral-muted;
+  }
+
+  &__chips {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin: 0;
+    padding: 0;
+
+    li {
+      font-size: $font-size-body-sm;
+      color: $color-neutral-standard;
+      background: $color-neutral-lightest;
+      border: 1px solid $color-border-default;
+      border-radius: $radius-full;
+      padding: 4px $spacing-md;
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xl;
+  }
+
+  &__link {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-primary-dark;
+      text-decoration: underline;
+    }
+  }
+
+  // ── Full: bordered card (About page) ──────────────────────────────────
+  &--full {
+    padding: $spacing-2xl $container-padding-x;
+
+    .candidate-snapshot__inner {
+      // Match the width of the About-page sections below it.
+      max-width: $container-max-width;
+      background: $color-white;
+      border: 1px solid $color-border-default;
+      border-radius: $radius-2xl;
+      padding: $spacing-2xl;
+    }
+
+    .candidate-snapshot__name {
+      font-size: $font-size-h4;
+    }
+
+    .candidate-snapshot__facts {
+      padding: $spacing-lg 0;
+      border-top: 1px solid $color-neutral-light;
+      border-bottom: 1px solid $color-neutral-light;
+    }
+  }
+
+  // ── Compact: borderless collapsible disclosure, inline in the About text ──
+  &--compact {
+    display: block;
+    margin: $spacing-3xl 0 0;
+
+    .candidate-snapshot__inner {
+      max-width: none;
+    }
+
+    .candidate-snapshot__name {
+      font-size: $font-size-h5;
+      margin: 0;
+    }
+
+    .candidate-snapshot__toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $spacing-md;
+      width: 100%;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+
+      &:focus-visible {
+        outline: 2px solid $color-primary;
+        outline-offset: 4px;
+        border-radius: $radius-sm;
+      }
+    }
+
+    .candidate-snapshot__chevron {
+      flex-shrink: 0;
+      color: $color-neutral-muted;
+      transition: transform $transition-base;
+    }
+
+    .candidate-snapshot__toggle[aria-expanded='true'] .candidate-snapshot__chevron {
+      transform: rotate(180deg);
+    }
+
+    .candidate-snapshot__panel {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height $transition-base ease;
+
+      &[data-open='true'] {
+        max-height: 340px;
+      }
+    }
+
+    .candidate-snapshot__panel-inner {
+      padding-top: $spacing-lg;
+    }
+
+    .candidate-snapshot__facts {
+      gap: $spacing-lg $spacing-2xl;
+      margin-bottom: $spacing-lg;
+    }
+
+    .candidate-snapshot__fact {
+      dt { font-size: 11px; }
+      dd { font-size: $font-size-body-sm; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &--compact {
+      .candidate-snapshot__chevron,
+      .candidate-snapshot__panel {
+        transition: none;
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    &--full {
+      padding: $spacing-xl $spacing-lg;
+
+      .candidate-snapshot__inner { padding: $spacing-xl; }
+    }
+
+    &--compact {
+      padding: $spacing-xl $spacing-lg;
+    }
+
+    &__facts {
+      gap: $spacing-lg;
+    }
+  }
+}

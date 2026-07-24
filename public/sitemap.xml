@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Only genuinely indexable URLs belong here. Today that's the homepage:
+  About / résumé / case studies are client-side hash routes (not distinct URLs)
+  and the /share/ stubs are noindex. When real, prerendered pages ship
+  (/work/<slug>, /about, /resume), add them below with their own lastmod.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.rdeboerdesigns.com/</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
