@@ -8,6 +8,7 @@ import PasswordModal from './PasswordModal';
 import LinkedInLink from './LinkedInLink';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { useReveal } from '../hooks/useReveal';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -338,6 +339,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [thesisRef, thesisVisible] = useReveal<HTMLDivElement>(0.3);
 
   const hasOverlayImages = useCallback((proj: Project) => {
     const allImages = [
@@ -485,6 +487,30 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           </span>
           <span className="cs__client">{project.client}</span>
           <h1 className="cs__title">{project.title}</h1>
+          {project.thesis && (
+            <div ref={thesisRef} className={`cs__thesis${thesisVisible ? ' is-visible' : ''}`}>
+              <p className="cs__thesis-text">{project.thesis}</p>
+              <svg
+                className="cs__thesis-underline"
+                width="240"
+                height="14"
+                viewBox="0 0 240 14"
+                fill="none"
+                aria-hidden="true"
+                preserveAspectRatio="none"
+              >
+                <path
+                  className="reveal-draw"
+                  style={{ ['--reveal-delay' as string]: '160ms' }}
+                  d="M3 8 C 60 3, 180 3, 237 7"
+                  stroke="var(--color-primary, #f03d01)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  pathLength={1}
+                />
+              </svg>
+            </div>
+          )}
           {project.summary && (
             <p className="cs__summary">{project.summary}</p>
           )}
@@ -533,6 +559,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <span className="cs__section-number">01</span>
                   <span className="cs__micro-label">The Problem</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[0]}</h2>
+                  {project.annotations?.problem && (
+                    <p className="cs__section-aside">{project.annotations.problem}</p>
+                  )}
                 </div>
                 {project.problemPunch && (
                   <p className="cs__punch">{project.problemPunch}</p>
@@ -553,6 +582,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <span className="cs__section-number">02</span>
                   <span className="cs__micro-label">What Was Missing</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[1]}</h2>
+                  {project.annotations?.gaps && (
+                    <p className="cs__section-aside">{project.annotations.gaps}</p>
+                  )}
                 </div>
                 {project.gapsPunch && (
                   <p className="cs__punch">{project.gapsPunch}</p>
@@ -573,6 +605,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <span className="cs__section-number">03</span>
                   <span className="cs__micro-label">Real-World Context</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[2]}</h2>
+                  {project.annotations?.constraints && (
+                    <p className="cs__section-aside">{project.annotations.constraints}</p>
+                  )}
                 </div>
                 {project.constraintsPunch && (
                   <p className="cs__punch">{project.constraintsPunch}</p>
@@ -601,6 +636,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <span className="cs__section-number">04</span>
                   <span className="cs__micro-label">How It Came Together</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
+                  {project.annotations?.approach && (
+                    <p className="cs__section-aside">{project.annotations.approach}</p>
+                  )}
                 </div>
                 <div className="cs__approach-subs">
                   {project.approachSubsections.map((sub) => (
@@ -638,6 +676,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <span className="cs__section-number">04</span>
                   <span className="cs__micro-label">How It Came Together</span>
                   <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
+                  {project.annotations?.approach && (
+                    <p className="cs__section-aside">{project.annotations.approach}</p>
+                  )}
                 </div>
                 <ol className="cs__approach-steps">
                   {project.approachSteps.map((step, i) => (
@@ -660,6 +701,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <span className="cs__section-number">05</span>
                 <span className="cs__micro-label">What Changed</span>
                 <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
+                {project.annotations?.outcome && (
+                  <p className="cs__section-aside">{project.annotations.outcome}</p>
+                )}
               </div>
               <div className="cs__results-grid">
                 {project.metrics.map((metric) => (

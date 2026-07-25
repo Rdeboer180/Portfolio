@@ -89,7 +89,32 @@
     font-weight: $font-weight-bold;
     color: $color-neutral-dark;
     letter-spacing: -0.02em;
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-lg;
+  }
+
+  // Thesis — the case study's argument in one line, with a hand-drawn underline
+  &__thesis {
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__thesis-text {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-semibold;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+    margin: 0;
+    max-width: 34ch;
+  }
+
+  &__thesis-underline {
+    display: block;
+    margin-top: 4px;
+    width: min(240px, 70%);
+    height: 14px;
+    overflow: visible;
   }
 
   &__summary {
@@ -192,6 +217,31 @@
     flex-direction: column;
     gap: $spacing-xs;
     margin-bottom: $spacing-xl;
+    position: relative; // anchors the margin annotation
+  }
+
+  // Margin annotation — the point-of-view aside per section (About-story voice)
+  &__section-aside {
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.15;
+    color: $color-primary-dark;
+    margin: $spacing-sm 0 0;
+    padding-left: $spacing-md;
+    border-left: 3px solid $color-primary;
+
+    // On wide screens it lives in the right margin, aligned to the heading.
+    @media (min-width: $breakpoint-lg) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 240px;
+      margin: 0;
+      padding-left: 0;
+      border-left: none;
+      text-align: right;
+    }
   }
 
   &__section-number {
