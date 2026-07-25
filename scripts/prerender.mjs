@@ -84,7 +84,9 @@ async function main() {
     const links = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
     for (const href of links) {
       if (!isInternalRoute(href)) continue;
-      const clean = href.split('#')[0].split('?')[0];
+      // Normalize trailing slashes so /work/x and /work/x/ are one route (some
+      // links use the slash form, some don't) — otherwise every page dupes.
+      const clean = (href.split('#')[0].split('?')[0].replace(/\/+$/, '')) || '/';
       if (!seen.has(clean) && !queue.includes(clean)) queue.push(clean);
     }
 

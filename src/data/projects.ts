@@ -292,6 +292,14 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-categories',
+    thesis: 'Turn 40 confusing categories into choices people can actually make.',
+    annotations: {
+      problem: 'Too many choices, too much text. People couldn’t decide.',
+      gaps: 'No visual language existed yet. I had to build the system and the vocabulary.',
+      constraints: '40+ categories, 80+ products each, SEO fighting usability.',
+      approach: 'Eight core icons, not ninety one-offs.',
+      outcome: 'Category entry jumped, and the icon system went sitewide.',
+    },
     stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
@@ -460,6 +468,14 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-rack-winter',
+    thesis: 'One system that serves winter and the Sun Belt from the same page.',
+    annotations: {
+      problem: 'Manual seasonal updates, and everyone saw the same content.',
+      gaps: 'No way to serve different regions without duplicating pages.',
+      constraints: 'Google can’t see duplicate pages. The content still has to change.',
+      approach: 'Twenty swappable fragments, targeted by audience.',
+      outcome: 'A decade in, two junior designers author it under my governance.',
+    },
     stream: 'professional',
     client: 'Tire Rack',
     title: 'Tire Rack Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
@@ -609,6 +625,14 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'heatherwood',
+    thesis: 'A brand and a site the owner could actually run herself.',
+    annotations: {
+      problem: 'A twelve-year-old brand that no longer matched the program.',
+      gaps: 'An aging identity against polished competitors, with no SEO to compete.',
+      constraints: 'Non-technical owner, real photography, every page a search entry point.',
+      approach: 'Every service page is its own landing page with a contact form.',
+      outcome: 'Inquiries went from a few a month to a few a day.',
+    },
     stream: 'passion',
     client: 'Heatherwood Equestrian Academy',
     title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
@@ -753,6 +777,14 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'landing-pages',
+    thesis: 'Make landing pages a system, not a fire drill.',
+    annotations: {
+      problem: 'Every landing page started from scratch. No templates, no patterns.',
+      gaps: 'Speed and quality were treated as a tradeoff.',
+      constraints: 'Thin briefs, two audiences, AEM’s limits, and speed as the expectation.',
+      approach: 'Invest in the system, and speed stops costing quality.',
+      outcome: 'Turnaround went from a month to days, under one QA issue per page.',
+    },
     stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
@@ -948,6 +980,14 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'aem-component-system',
+    thesis: 'Stop authoring and engineering from solving the same problem twice.',
+    annotations: {
+      problem: 'A decade of AEM authoring with no core system underneath.',
+      gaps: 'No reusable patterns, no variables. The same work, done twice.',
+      constraints: 'A live enterprise CMS and a dev team still learning the codebase.',
+      approach: 'I shipped production Sass, not just specs.',
+      outcome: 'One system design, dev, SEO, and accessibility all build against.',
+    },
     stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
@@ -1148,6 +1188,14 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'design-enablement',
+    thesis: 'Design the workflow itself, not another one-off tool.',
+    annotations: {
+      problem: 'Repetitive design work and messy handoffs slowed the team down.',
+      gaps: 'Every problem had a point solution. Nobody was designing the workflow.',
+      constraints: 'Built inside a production team’s real cadence, not a lab.',
+      approach: 'Connected plugins and apps into one workflow layer.',
+      outcome: 'Fewer manual review cycles across design, UX, and photography.',
+    },
     stream: 'professional',
     client: 'Tire Rack — Internal Tooling',
     title: 'Scaling Design Through Internal Tooling',
@@ -1283,6 +1331,14 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'loopstack',
+    thesis: 'Meals behave like curves, so the app should too.',
+    annotations: {
+      problem: 'Most diabetes tools treat a meal as one entry. Real meals are curves.',
+      gaps: 'Curves over entries. Confidence over recommendations.',
+      constraints: 'High-stakes domain. A review tool, never dosing advice.',
+      approach: 'Confidence is the safety mechanism, not a feature.',
+      outcome: 'Patterns ready to review stay separate from patterns still forming.',
+    },
     stream: 'passion',
     client: 'LoopStack (personal project)',
     title: 'LoopStack: Meal Memory + Insulin Timing Intelligence',
@@ -1461,6 +1517,14 @@ Frame every output as:
   // the app is still in active prototype. Direct-link only: #/work/playdraft.
   {
     slug: 'playdraft',
+    thesis: 'Take the best mechanic in fantasy sports and set it loose on anything.',
+    annotations: {
+      problem: 'Drafting is the most fun part of fantasy sports, and it’s stuck there.',
+      gaps: 'The mechanic is universal. A casual product to host it wasn’t.',
+      constraints: 'Solo builder, real App Store rules, no lawyer on retainer.',
+      approach: 'No screen without a reference, even for AI output.',
+      outcome: 'Brand to TestFlight in twelve weeks, solo.',
+    },
     stream: 'passion',
     client: 'PlayDraft (personal product)',
     title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
