@@ -145,16 +145,6 @@ const projects: Project[] = [
       'Dealers use it on tablets in-store. No responsive design, clunky dropdowns, visually inconsistent across partner brands.',
       'Business goal: modernize as a proof-of-concept for Tire Rack\u2019s future tech stack (React + Microservices).',
     ],
-    problemImages: [
-      {
-        alt: 'Placeholder for omitted legacy site screenshot',
-        layout: 'full',
-        caption: 'Legacy state available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     // ── 02 Gaps & Opportunity ──
     gapsPunch: 'Every partner was a one-off. No tokens, no components, no shared language between design and engineering.',
     gaps: [
@@ -163,15 +153,6 @@ const projects: Project[] = [
       'Partnered with senior React developer Cheryl Carpenter to build the system from the ground up. I owned system design, component logic, token structure, edge cases, responsive behavior, and design\u2013dev alignment. Cheryl owned React implementation, component integration, and viewport/behavior stress testing. Work moved Figma \u2192 Tokens Studio \u2192 Storybook \u2192 React, tracked in Jira.',
       'Chose Tokens Studio because this work predated Figma Variables. It better supported structured token sets, sync, export/import, and the React/Storybook pipeline. Today I\u2019d start in Figma Variables and evaluate an external pipeline from there.',
     ],
-    gapsImages: [
-      {
-        src: '/images/work/wheelrack/wheelrack-ux-wireframe-02_blurred.png',
-        alt: 'Vehicle selector wireframe with annotated UI behavior specs for Make/Year/Model autocomplete flow',
-        layout: 'full',
-        caption: 'Early wireframe showing the complexity of the vehicle selector flow\u2014this wasn\u2019t just a UI cleanup',
-      },
-    ],
-
     // ── 03 Constraints ──
     constraintsPunch: 'Waterfall to Agile mid-project. Split attention. Six partners with different rules.',
     constraints: [
@@ -181,16 +162,6 @@ const projects: Project[] = [
       'Custom headers/footers per partner with additional filters or cart integration.',
       'Coordinated with in-house photography team for vehicle and wheel images at specific angles.',
     ],
-    constraintsImages: [
-      {
-        alt: 'Placeholder for omitted internal discovery artifact',
-        layout: 'full',
-        caption: 'Discovery/learning detail available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     insightCallout: 'Built 200+ tokens and 50+ components from scratch, giving design and engineering one shared vocabulary to build the React app against.',
 
     // ── 04 Approach (subsections) ──
@@ -225,9 +196,9 @@ const projects: Project[] = [
         images: [
           {
             src: '/images/work/wheelrack/supporting/opportunity/wheelrack-design-system-02.png',
-            alt: 'Figma typography token definitions with heading and body text styles',
+            alt: 'Color token ramps for neutral, primary, secondary, success, warning, and error roles with documented usage notes',
             layout: 'half',
-            caption: 'Typography tokens\u2014source of truth across Figma and code',
+            caption: 'Color tokens\u2014every ramp documented with its role, the source of truth across Figma and code',
           },
           {
             src: '/images/work/wheelrack/supporting/opportunity/wheelrack-design-system-05.png',
@@ -268,15 +239,9 @@ const projects: Project[] = [
     outcomeImages: [
       {
         src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',
-        alt: 'Final WheelRack landing page with wheel visualizer, vehicle image, filters, and search results',
+        alt: 'Annotated WheelRack proof page \u2014 numbered UI callouts mapped to written behavior specs for the visualizer, filters, and product grid',
         layout: 'full',
-        caption: 'Shipped landing page\u2014vehicle visualizer, filter system, and responsive product grid',
-      },
-      {
-        src: '/images/work/wheelrack/supporting/approach/wheelrack-final-desktop-05.png',
-        alt: 'Wheel details page with annotated UI behavior callouts for fitment, finish selector, and product tabs',
-        layout: 'full',
-        caption: 'Product detail page\u2014annotated specs for engineering handoff',
+        caption: 'The annotated proof\u2014numbered callouts mapped to behavior specs, the exact document engineering built from',
       },
     ],
     metrics: [
@@ -321,31 +286,12 @@ const projects: Project[] = [
       'The existing experience was text-heavy and inconsistent\u2014no visual system to differentiate 40+ tire categories, each supporting 80+ products.',
       'Design needed to define both the structure and the visual language from scratch.',
     ],
-    problemImages: [
-      {
-        alt: 'Placeholder for omitted internal project-notes artifact',
-        layout: 'full',
-        caption: 'Project notes available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No visual language existed. Design had to define both the system and the vocabulary.',
     gaps: [
       'No existing framework to visually represent differences between categories.',
       'Each category needed to communicate distinct performance characteristics clearly while maintaining consistency across 40+ variations.',
       'SEO-driven content requirements competing with usability and clarity\u2014no balance had been struck.',
-    ],
-    gapsImages: [
-      {
-        alt: 'Placeholder for omitted internal process-notes artifact',
-        layout: 'full',
-        caption: 'Early-process notes available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
@@ -388,20 +334,12 @@ const projects: Project[] = [
         label: 'System',
         description: 'Developed 8 primary category icons and 24 supporting characteristic icons\u2014a deliberate scaling move against a proposed 90 one-offs. Designed a CSS-animated bar chart system for performance comparison, shipped with reduced-motion support, text fallback, and screen-reader labeling. Sourced photography inspiration, aligned category/vehicle/product fit with specialists, and worked with in-house photography on location, weather, tone, and composition\u2014joining two specialized shoots for the trailer and classic tire categories.',
         systemMarker: 'System decision',
-        gridColumns: 2,
         images: [
           {
-            alt: 'Placeholder for omitted internal file-system artifact',
-            layout: 'full',
-            caption: 'Working files available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-          {
             src: '/images/work/tire-categories/primaryHome+icons_safe.png',
-            alt: 'Primary category landing page with 8 category icons and visual hierarchy',
-            layout: 'half',
-            caption: 'Category hub\u20148 primary icons enabling quick visual scanning across tire types',
+            alt: 'Annotated category-page proof \u2014 mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal',
+            layout: 'full',
+            caption: 'The annotated proof\u2014category layouts with numbered callouts mapped to written UI behavior specs',
           },
         ],
       },
@@ -410,23 +348,7 @@ const projects: Project[] = [
         label: 'Build',
         description: 'Worked with engineering to define reusable AEM components with admin-controlled fields for performance data. Contributed directly to page structure, CSS chart animations, SVG icon creation, and scalable styling patterns.',
         systemMarker: 'Scalability consideration',
-        gridColumns: 2,
-        images: [
-          {
-            alt: 'Placeholder for omitted internal design-proof artifact',
-            layout: 'full',
-            caption: 'Pre-dev proof available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-          {
-            alt: 'Placeholder for omitted internal version-control artifact',
-            layout: 'full',
-            caption: 'Versioning detail available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-        ],
+        images: [],
       },
       {
         key: 'iteration',
@@ -495,31 +417,12 @@ const projects: Project[] = [
       'Since 2013, Tire Rack needed a winterized version of its high-traffic landing pages each fall\u2014homepage, tire pages, delivery, research, and wheel adjustment pages.',
       'Early seasonal updates were manual and time-intensive. As the digital footprint grew, the process needed to scale without duplicating pages or confusing search engines.',
     ],
-    problemImages: [
-      {
-        alt: 'Placeholder for omitted internal release-notes artifact',
-        layout: 'full',
-        caption: 'Release notes available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No fragment library, no audience targeting, no way to serve different content to different regions without page duplication.',
     gaps: [
       'No existing system to serve meaningfully different content to winter-climate and southern-states customers.',
       'Needed new fragment types, accessible component variants, and Adobe Target audience rules.',
       'Close collaboration required across Analytics, Photography, and SEO teams to ensure consistency and conversion.',
-    ],
-    gapsImages: [
-      {
-        alt: 'Placeholder for omitted internal photography-ideation artifact',
-        layout: 'full',
-        caption: 'Photography ideation available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
@@ -531,16 +434,6 @@ const projects: Project[] = [
       'System needed to be documented clearly enough for two junior designers to author seasonally alongside me, with my oversight on approvals, governance, and design-system alignment.',
       'When breaks happen, they\u2019re usually tied to Experience Fragment / Adobe Target sync issues\u2014resolved through coordinated fixes across authoring, analytics, and targeting.',
     ],
-    constraintsImages: [
-      {
-        alt: 'Placeholder for omitted internal authoring-notes artifact',
-        layout: 'full',
-        caption: 'Authoring contingencies available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     insightCallout: 'Evolved from manual content updates into a 20+ component Experience Fragment library\u2014audience-targeted, SEO-safe, and mentor-ready for junior designers.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
@@ -571,19 +464,12 @@ const projects: Project[] = [
         label: 'System',
         description: 'Built reusable fragment types: Hero, Teaser, Entertainment, Video Center, Category Bar. Each with content fields, link behavior, and CTA configuration authored directly in AEM.',
         systemMarker: 'Pattern introduced',
-        gridColumns: 2,
         images: [
           {
-            src: '/images/work/tire-rack-winter/winter-aem-authoring_blurred.png',
-            alt: 'AEM authoring view with Teaser component edit dialog',
-            layout: 'half',
-            caption: 'Component authoring\u2014Teaser dialog with link behavior and CTA fields',
-          },
-          {
             src: '/images/work/tire-rack-winter/winter-aem-hero-detail_blurred.png',
-            alt: 'Winter Hero fragment detail view with component variants',
-            layout: 'half',
-            caption: 'Hero fragment detail\u2014variant breakdown across component types',
+            alt: 'AEM Experience Fragment library \u2014 winter, non-winter, and A/B test variants organized by component type',
+            layout: 'full',
+            caption: 'The fragment library\u2014winter, non-winter, and A/B variants organized for same-day swaps',
           },
         ],
       },
@@ -653,16 +539,6 @@ const projects: Project[] = [
       'Families search for specific activities ("horseback riding lessons South Bend"), not the brand name. Each service needed its own search entry point.',
       'The system had to be fully owner-managed with zero ongoing agency dependency.',
     ],
-    problemImages: [
-      {
-        alt: 'Placeholder for omitted client project-scope artifact',
-        layout: 'full',
-        caption: 'Project-scope detail available on request.',
-        isOverlay: true,
-        overlayText: "This artifact includes private client correspondence not publicly shareable. I'm happy to walk through the project scope in detail.",
-      },
-    ],
-
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'An aging identity up against polished commercial programs, with none of the SEO or conversion infrastructure to compete.',
     gaps: [
@@ -704,14 +580,7 @@ const projects: Project[] = [
         label: 'Structure',
         description: 'Architected the site so each service functions as an independent SEO entry point. FAQ content structured around real parent questions. Conversion path routes every visitor to a form submission.',
         systemMarker: 'Pattern introduced',
-        images: [
-          {
-            src: '/images/work/heatherwood/supporting/approach/heatherwood-notes-05.png',
-            alt: 'WordPress CMS dashboard with analytics, forms, and SEO scoring',
-            layout: 'full',
-            caption: 'CMS architecture\u2014owner-managed dashboard with analytics, forms, and SEO',
-          },
-        ],
+        images: [],
       },
       {
         key: 'system',
@@ -823,16 +692,6 @@ const projects: Project[] = [
       'Heading hierarchy wasn\u2019t mapped to keyword intent, missing long-tail SEO opportunities.',
       'No AI-assisted workflow for content generation or QA.',
     ],
-    gapsImages: [
-      {
-        alt: 'Placeholder for omitted internal copy spec',
-        layout: 'full',
-        caption: 'Copy spec available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     // \u2500\u2500 03 Constraints \u2500\u2500
     constraintsPunch: 'Minimal briefs. Two audiences (users + search engines). AEM component limitations. Speed is the expectation.',
     constraints: [
@@ -840,15 +699,6 @@ const projects: Project[] = [
       'Minimal direction per request\u2014often just a tire type, target keywords, and a product photo.',
       'AEM component system with specific authoring constraints and structured field requirements.',
       'SEO, analytics, and merchandising teams all have input on structure and content.',
-    ],
-    constraintsImages: [
-      {
-        alt: 'Placeholder for omitted internal project-management artifact',
-        layout: 'full',
-        caption: 'Project-management surface available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
     ],
 
     insightCallout: 'Speed and quality aren\u2019t tradeoffs when you invest in systems. QA now surfaces under one issue per landing page on average\u2014fast turnaround without cutting corners.',
@@ -866,45 +716,14 @@ const projects: Project[] = [
         label: 'Component-Based Planning',
         description: 'In Figma, I map each landing page using reusable components sourced from across the site\u2014hero patterns, product feature sections, FAQ modules, promotional and linking sections. Consistency while allowing flexibility for different page types.',
         systemMarker: 'Pattern introduced',
-        images: [
-          {
-            alt: 'Placeholder for omitted internal roadmap artifact',
-            layout: 'full',
-            caption: 'Program roadmap available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-        ],
+        images: [],
       },
       {
         key: 'system',
         label: 'AEM System Development',
         description: 'Built and established a system of reusable component patterns: rapid page creation from pre-defined layouts to start from.',
         systemMarker: 'System decision',
-        images: [
-          {
-            alt: 'Placeholder for omitted internal review/communication artifact',
-            layout: 'full',
-            caption: 'Review and iteration detail available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-        ],
-      },
-      {
-        key: 'build',
-        label: 'AI-Assisted Workflow',
-        description: 'AI is used to standardize repetitive content-ops and production tasks\u2014not to replace strategy. Practical uses: SEO-friendly image naming, alt text generation, release-note drafting, and documentation assistance that helps junior designers navigate the system. LLM assistance is layered on top of the internal wiki I govern, not instead of it.',
-        systemMarker: 'Scalability consideration',
-        images: [
-          {
-            alt: 'Placeholder for omitted internal testing-notes artifact',
-            layout: 'full',
-            caption: 'Testing notes available on request.',
-            isOverlay: true,
-            overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-          },
-        ],
+        images: [],
       },
       {
         key: 'iteration',
@@ -926,12 +745,6 @@ const projects: Project[] = [
     ],
     outcomeGridImages: [
       {
-        src: '/images/work/landing-pages/supporting/landing-pages-20-inch.jpg',
-        alt: '20-Inch Tires landing page with product hero and responsive layout',
-        layout: 'half',
-        caption: '20-Inch Tires',
-      },
-      {
         src: '/images/work/landing-pages/supporting/landing-pages-classic-tires.jpg',
         alt: 'Classic Car Tires category landing page with brand carousel',
         layout: 'half',
@@ -948,18 +761,6 @@ const projects: Project[] = [
         alt: 'Product page mobile views with video, specs, and FAQ sections',
         layout: 'half',
         caption: 'Mobile Variations',
-      },
-      {
-        src: '/images/work/landing-pages/supporting/landing-pages-responsive-preview.jpg',
-        alt: 'Product landing page shown across desktop and mobile breakpoints',
-        layout: 'half',
-        caption: 'Responsive Preview',
-      },
-      {
-        src: '/images/work/landing-pages/supporting/landing-pages-classic-full.jpg',
-        alt: 'Classic Car Tires full page with FAQ, featured brands, and testimonials',
-        layout: 'half',
-        caption: 'Classic Full Page',
       },
     ],
     outcomeLiveLinks: [
@@ -1009,15 +810,6 @@ const projects: Project[] = [
       'Every page was stitched together from aging custom components, one-off overrides, and asset dumps that slowed authoring and hurt page performance.',
       'In 2025 we finally hired a dedicated AEM dev team\u2014the moment to rebuild the foundation, not just patch what was there.',
     ],
-    problemImages: [
-      {
-        src: '/images/work/aem-component-system/AEM_CoreComponents_blurred.jpeg',
-        alt: 'Existing AEM component inventory showing fragmented, aging custom components',
-        layout: 'full',
-        caption: 'Starting point\u2014fragmented custom components built up over a decade of authoring decisions',
-      },
-    ],
-
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No reusable patterns. No variable system. Authoring and engineering solving the same problems twice.',
     gaps: [
@@ -1026,23 +818,6 @@ const projects: Project[] = [
       'No shared Sass variables or authoring defaults\u2014every new page meant re-deciding spacing, type scale, and responsive behavior.',
       'Design team had no documentation on when to use which component or how variants were meant to behave.',
     ],
-    gapsImages: [
-      {
-        alt: 'Placeholder for omitted internal solution-notes artifact',
-        layout: 'full',
-        caption: 'Solution write-up available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-      {
-        alt: 'Placeholder for omitted internal component-requirements artifact',
-        layout: 'full',
-        caption: 'Requirements doc available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     // \u2500\u2500 03 Constraints \u2500\u2500
     constraintsPunch: 'Live enterprise CMS. SEO-critical surfaces. A new dev team still learning the codebase.',
     constraints: [
@@ -1051,16 +826,6 @@ const projects: Project[] = [
       'Invested deliberately in technical fluency: completed AEM authoring certification, finished the weekend AEM tutorial, and leveled up on Sass structure so I could contribute real code alongside the dev team, not just hand off specs.',
       'Led 15 years of DAM cleanup\u2014tagging, alt text, file naming, and asset governance across 100+ images. The operational win (discoverability, consistency, authoring speed) was as important as the performance win.',
     ],
-    constraintsImages: [
-      {
-        alt: 'Placeholder for omitted internal documentation artifact',
-        layout: 'full',
-        caption: 'DAM cleanup process available on request.',
-        isOverlay: true,
-        overlayText: "This portion of the work includes internal tooling and workflows not publicly shareable. I'm happy to walk through it in detail."
-      },
-    ],
-
     insightCallout: 'The value was the shared system rather than any one component: variables, variants, and documentation the design, dev, SEO, and accessibility teams build against. I shipped production Sass, not just specs.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
@@ -1403,7 +1168,7 @@ $mobile-max-width: 768px;
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Mapped the product as a continuous review loop — Input → Compare → Cluster → Review → Refine — where every surface has a single job. Logging starts with the inputs that actually move a glucose curve: the meal builder orders ingredients by absorption impact, and context capture — meal time, activity window, setting — gives pattern-matching what it needs to cluster a meal with the right past meals. Evidence stays optional and lightweight: drop in a Loop screenshot when a meal runs 6–8 hours and it pairs with the entry automatically.',
+        description: 'Mapped the loop as Input → Compare → Cluster → Review → Refine — every surface has a single job. The meal builder orders ingredients by absorption impact; context chips (meal time, activity, setting) let pattern-matching cluster a meal with the right past ones. Evidence stays optional — a meal photo or Loop screenshot pairs with the entry automatically.',
         systemMarker: 'Loop introduced',
         images: [
           {
@@ -1447,7 +1212,7 @@ $mobile-max-width: 768px;
       {
         key: 'build',
         label: 'Build',
-        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 39-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. Shipping through TestFlight keeps the loop honest on device — build 2 is live, build 3 in flight — stress-tested against real Loop data meal after meal, with copy adjusted whenever a screen drifted toward sounding like dosing advice.',
+        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 39-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. TestFlight keeps the loop honest on device — build 2 live, build 3 in flight, stress-tested against real Loop data meal after meal.',
         codeBlock: {
           language: 'text',
           filename: 'pattern-review-system-prompt.md',
@@ -1574,12 +1339,6 @@ Frame every output as:
         layout: 'full',
         caption: 'Pack shields — one silhouette system, distinct glyphs and accents, so every topic reads as the same product with its own personality',
       },
-      {
-        src: '/images/work/playdraft/playdraft-avatar-emblems.png',
-        alt: 'Eight of the sixteen illustrated PlayDraft avatar emblems — including Drafternaut, Draft Fox, Fantasy Reaper, Owl Borland, The Gremlin, and Arcade Apparition — drawn in a shared grayscale style tinted per-player in-app',
-        layout: 'full',
-        caption: 'Avatar emblems (8 of 16) — a cast of illustrated drafter personas; grayscale base art gets tinted in-app, and rarity tiers hook into the prestige system',
-      },
     ],
 
     // ── 03 Constraints ──
@@ -1598,7 +1357,7 @@ Frame every output as:
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Wrote the project brief and core loop before any UI: Create/Join Draft → snake-style picks → a verdict → reward. Locked the tone (family-friendly, competitive, social, replayable) and explicitly ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. The same discipline applied to process: from day one the repo carried a memory protocol (an append-only progress log and a numbered architecture-decision record) so every later decision—by me or by an AI agent—had context to reason against. The identity went through a real pivot at this stage: the first mark was “DraftPack,” a wolf-and-card collector identity, retired within days because it pulled the product toward the TCG framing the brief had banned. PlayDraft’s D-with-a-play-cut shield replaced it, tested at 29 px and against the App Store grid it would actually sit in.',
+        description: 'Wrote the project brief and core loop before any UI: Create/Join Draft → snake-style picks → a verdict → reward. Locked the tone (family-friendly, competitive, social, replayable) and ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. From day one the repo carried a memory protocol: an append-only progress log and numbered architecture decisions. The identity went through a real pivot at this stage—the first mark, “DraftPack,” a wolf-and-card collector identity, was retired within days for pulling toward the TCG framing the brief had banned. PlayDraft’s D-with-a-play-cut shield replaced it, tested at 29 px and against the App Store grid it would actually sit in.',
         images: [
           {
             src: '/images/work/playdraft/playdraft-brand-evolution.jpg',
@@ -1615,12 +1374,6 @@ Frame every output as:
         systemMarker: 'Pattern introduced',
         images: [
           {
-            src: '/images/work/playdraft/playdraft-core-app-flows-overview.png',
-            alt: 'Core app flow overview — onboarding, account entry, hub, choosing a draft pack, draft setup, lobby, chat, draft board, queueing picks, results, and profile laid out as one connected map',
-            layout: 'full',
-            caption: 'Core flow overview — onboarding through draft → results → profile, mapped as one connected product before screens were built',
-          },
-          {
             src: '/images/work/playdraft/playdraft-figma-product-screens.png',
             alt: 'PlayDraft working Figma canvas — draft-room and onboarding screen references, GOAT Bundle promo iterations, a “UI Observations from testing” annotation board, notification components, and avatar rarity-tier explorations (stroke and effect-aura treatments from Basic to Epic)',
             layout: 'full',
@@ -1631,7 +1384,7 @@ Frame every output as:
       {
         key: 'system',
         label: 'System',
-        description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system in /src/design-system/—color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, sizes, pack accents, and component recipes. Governance is written down, not implied: no hex literals or magic numbers in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to nine as content scaled—new accents were added by decision record (rust for a shield that baked in its own hue, ink teal reserved for player-authored Custom Drafts because gold stays reserved for winners), never by improvisation. That’s what let 121 components and 40+ screens ship solo without drifting.',
+        description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system—color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, and component recipes. Governance is written down, not implied: no hex literals in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to nine by decision record, never improvisation—that’s what let 121 components and 40+ screens ship solo without drifting.',
         systemMarker: 'System decision',
         images: [
           {
@@ -1645,7 +1398,7 @@ Frame every output as:
       {
         key: 'build',
         label: 'Build',
-        description: 'The shipped app is a real production build, not a prototype shell: 40+ Expo Router screens, 121 components, 30 feature modules (drafts, draftlab, leagues, engagement, monetization, moderation, referral), 24 provider-agnostic services, 11 Supabase migrations, and 5 edge functions (draft resolution, confidence recompute, push, account deletion). Pure game logic lives inside—snake-order generation, pick-clock state, confidence-pool scoring—with providers at the edge, so the engine is testable without the network. AI-assisted execution slots in as the loop accelerator: component scaffolding against the token recipes, pack-content authoring through a dedicated curator agent with a legal-safety skill applied to every audit, missing-state reviews, and a weekly report-only audit harness that flags design-system drift and pack data-quality issues without ever modifying app code. The design-to-code workflow shows in the source itself—design tokens, product decisions, and legal posture live in the same annotated file:',
+        description: 'The shipped app is a real production build, not a prototype shell: 40+ Expo Router screens, 121 components, 30 feature modules, 24 provider-agnostic services, 11 Supabase migrations, and 5 edge functions. Pure game logic lives inside—snake-order generation, pick-clock state, confidence-pool scoring—with providers at the edge, so the engine is testable without the network. AI slots in as the loop accelerator: scaffolding against the token recipes, pack authoring through a curator agent with a legal-safety check, and a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself—design tokens, product decisions, and legal posture live in the same annotated file:',
         systemMarker: 'Scalability consideration',
         codeBlock: {
           language: 'ts',
@@ -1678,7 +1431,7 @@ export const packs = {
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'The defining pivot came from playing the game, not reviewing screens. The original loop resolved drafts through community voting—bracketed vote sessions, a 24-hour pre-draft vote gate, daily coins for voters. It was the app’s reason to exist, and it was wrong: a casual group wants a verdict tonight, not after a day of strangers voting. In June the public-voting system was retired entirely, pressure-tested first through a structured research workflow (a Bayesian cold-start scoring model, a tournament-loop scorecard, and a codebase audit) before any code changed. Its replacement: the DraftLab confidence pool—solo mini-games that rank every item in a pack—plus a transparent launch prior, so every finished draft gets an instant, explainable winner, with an in-room peer vote kept for bragging rights. The economy was rebuilt around the same finding (dailies pay XP, coins come from leveling, a win always funds the next ticket), and the QA loop kept paying: scripting the demo reel with Maestro surfaced a real shipping bug—the pick clock never auto-picked at zero, stalling rooms forever—that became a fix, not a caption.',
+        description: 'The defining pivot came from playing the game, not reviewing screens. The original loop resolved drafts through community voting—bracketed vote sessions, a 24-hour pre-draft gate, daily coins for voters. It was the app’s reason to exist, and it was wrong: a casual group wants a verdict tonight, not after a day of strangers voting. In June the voting system was retired—pressure-tested through structured research before any code changed—and replaced with the DraftLab confidence pool: solo mini-games that rank every item in a pack, so every finished draft gets an instant, explainable winner, with an in-room peer vote kept for bragging rights. The economy was rebuilt around the same finding: dailies pay XP, coins come from leveling, a win always funds the next ticket. And the QA loop kept paying—scripting the demo reel with Maestro surfaced a real shipping bug, a pick clock that never auto-picked at zero, that became a fix instead of a caption.',
         images: [
           {
             src: '/images/work/playdraft/playdraft-results-ceremony.png',
@@ -1712,7 +1465,7 @@ export const packs = {
         src: '/images/work/playdraft/playdraft-share-card.jpg',
         alt: 'Exported PlayDraft share board card — “Snacks Royale · Final Board” with a gold CHAMPION banner capping the winner’s block, every pick rendered as a full-width legible chip, and a “Think you’d draft better? Get PlayDraft.” wordmark footer',
         layout: 'half',
-        caption: 'The real exported share card (3× capture from the working app) — the champion’s board reads gold, every pick reads in full, and the download hook rides along',
+        caption: 'The real exported share card from the working app — the champion’s board reads gold, every pick reads in full, and the download hook rides along',
       },
     ],
     metrics: [
