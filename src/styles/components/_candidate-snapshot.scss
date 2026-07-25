@@ -187,6 +187,8 @@
     .candidate-snapshot__panel {
       overflow: hidden;
       max-height: 0;
+      // Prevent the collapsed panel's clipped content from extending scrollHeight.
+      contain: content;
       transition: max-height $transition-base ease;
 
       &[data-open='true'] {

@@ -46,6 +46,16 @@ export interface Project {
    *  sitemap. Keeps the branded `title` while adding the searchable problem. */
   seoTitle?: string;
   summary?: string;
+  /** One-sentence argument shown under the hero title, with a drawn underline. */
+  thesis?: string;
+  /** Short point-of-view asides shown in each section's margin (About-story style). */
+  annotations?: {
+    problem?: string;
+    gaps?: string;
+    constraints?: string;
+    approach?: string;
+    outcome?: string;
+  };
   year: string;
   tags: string[];
   role: string;
@@ -110,6 +120,14 @@ const projects: Project[] = [
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
     seoTitle: 'WheelRack — Enterprise React Design System for a Wholesale Ecommerce Platform',
+    thesis: 'A design system built so engineering never had to guess.',
+    annotations: {
+      problem: 'Every team kept rebuilding the same thing, a little differently.',
+      gaps: 'Design and dev were describing the same button two different ways.',
+      constraints: 'Dealers on tablets, real fitment data, no room to guess.',
+      approach: 'Design it in Figma, then prove every state in Storybook.',
+      outcome: 'The framework outlived the project. Wholesale picked it up next.',
+    },
     summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],

@@ -131,6 +131,9 @@
   &__answer-wrapper {
     max-height: 0;
     overflow: hidden;
+    // Layout/paint containment: without it, the tall clipped answer still extends
+    // document scrollHeight on mobile, adding phantom whitespace below the footer.
+    contain: content;
     transition: max-height 0.35s ease;
 
     .faq__item--open & {
