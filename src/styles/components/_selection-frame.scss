@@ -1,0 +1,70 @@
+// ============================================
+// Selection Frame — Figma-style selected-frame card border
+// A hairline border with square corner "handles," the way a frame reads
+// when selected on the canvas. Static by design — the craft signal is the
+// vernacular, not motion. Handles fade in once when the grid reveals
+// (staggered per card via --frame-delay); hover/focus "selects" the card:
+// border and handles tint primary, like selecting a layer.
+// Shared by .skills__card and .technical__column.
+// ============================================
+
+@import '../variables';
+
+// Registered so the handle color can interpolate inside the gradient fills
+// (hover tint animates in browsers with @property; elsewhere it just swaps).
+@property --frame-handle {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #8f9daf;
+}
+
+@mixin selection-frame($radius: $card-border-radius, $handle: 7px) {
+  position: relative;
+  border: 1px solid $color-border-default;
+  border-radius: $radius;
+  --frame-handle: #{$color-secondary};
+  transition:
+    border-color $transition-base,
+    box-shadow $transition-base,
+    --frame-handle $transition-base;
+
+  // Four corner handles — solid squares centered on the frame's bounding
+  // corners (Figma places handles on the bounding box, radius or not).
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(#{$handle} / -2);
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--frame-handle) 0 0),
+      linear-gradient(var(--frame-handle) 0 0),
+      linear-gradient(var(--frame-handle) 0 0),
+      linear-gradient(var(--frame-handle) 0 0);
+    background-size: $handle $handle;
+    background-repeat: no-repeat;
+    background-position: top left, top right, bottom left, bottom right;
+    opacity: 0;
+    transition: opacity 400ms ease var(--frame-delay, 0ms);
+  }
+
+  &:hover,
+  &:focus-within {
+    border-color: rgba($color-primary, 0.45);
+    box-shadow: $shadow-sm;
+    --frame-handle: #{$color-primary};
+  }
+
+  // The reveal is opacity-only; under reduced motion it appears instantly.
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      transition: none;
+    }
+  }
+}
+
+// Applied by the consumer once its grid reveals (.is-visible).
+@mixin selection-frame-revealed {
+  &::before {
+    opacity: 1;
+  }
+}

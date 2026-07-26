@@ -17,7 +17,7 @@
 @import 'base';
 
 // Shared mixins (must precede components that @include them)
-@import 'components/marquee-box';
+@import 'components/selection-frame';
 
 // Import component styles
 @import 'components/hero';

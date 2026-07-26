@@ -57,14 +57,14 @@
   }
 
   &__card {
-    @include marquee-box;
+    @include selection-frame;
     background: $color-secondary-lightest;
     padding: $spacing-2xl;
   }
 
-  // Comet traces once as the grid scrolls into view, staggered per card.
-  &__grid.is-visible &__card::before {
-    animation: marquee-trace 1300ms linear var(--marquee-delay, 0ms);
+  // Corner handles appear once the grid scrolls into view, staggered per card.
+  &__grid.is-visible &__card {
+    @include selection-frame-revealed;
   }
 
   &__card-title {

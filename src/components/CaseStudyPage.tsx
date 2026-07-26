@@ -117,6 +117,10 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
 
+// Site-wide unlock for confidential case-study artifacts — one successful
+// password entry unlocks every case study for the browser session.
+const UNLOCK_SESSION_KEY = 'cs-unlocked';
+
 /* ─── Section Image Renderer ─── */
 // Muted autoplay loop clip with a pause/play control (WCAG 2.2.2).
 const InlineVideo: React.FC<{ src: string; poster?: string; alt: string }> = ({ src, poster, alt }) => {
@@ -359,9 +363,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
   useEffect(() => {
     if (project) {
-      const unlockedKey = `project-unlocked-${project.slug}`;
+      // One unlock covers every case study for the browser session —
+      // the password gates the person, not the individual page.
       const dismissedKey = `project-dismissed-${project.slug}`;
-      const unlocked = localStorage.getItem(unlockedKey) === 'true';
+      const unlocked = sessionStorage.getItem(UNLOCK_SESSION_KEY) === 'true';
       const dismissed = localStorage.getItem(dismissedKey) === 'true';
 
       setIsUnlocked(unlocked);
@@ -404,7 +409,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
   const handleUnlock = () => {
     if (project) {
-      localStorage.setItem(`project-unlocked-${project.slug}`, 'true');
+      sessionStorage.setItem(UNLOCK_SESSION_KEY, 'true');
       setIsUnlocked(true);
       setShowPasswordModal(false);
     }

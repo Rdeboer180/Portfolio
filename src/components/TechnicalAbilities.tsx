@@ -105,7 +105,7 @@ const TechnicalAbilities: React.FC = () => {
             <div
               key={category}
               className="technical__column"
-              style={{ '--marquee-delay': `${i * 60}ms` } as React.CSSProperties}
+              style={{ '--frame-delay': `${i * 60}ms` } as React.CSSProperties}
             >
               <h3 className="technical__column-title">{category}</h3>
               <ul className="technical__list">

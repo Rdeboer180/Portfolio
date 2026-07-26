@@ -59,7 +59,7 @@ const Skills: React.FC = () => {
             <div
               key={cat.title}
               className="skills__card"
-              style={{ '--marquee-delay': `${i * 60}ms` } as React.CSSProperties}
+              style={{ '--frame-delay': `${i * 60}ms` } as React.CSSProperties}
             >
               <h3 className="skills__card-title">{cat.title}</h3>
               <ul className="skills__card-list">
