@@ -51,26 +51,26 @@
     margin-bottom: $spacing-lg;
   }
 
-  // Signature: inline hand-drawn "?" ringed in brand orange — the FAQ's
-  // one memorable mark, echoing the Caveat annotations used elsewhere.
+  // Signature: inline ringed "?" drawn as SVG so it never depends on font
+  // metrics or load timing — perfectly centered vector, tilted for play.
   &__mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 0.92em;
-    height: 0.92em;
-    margin: 0 0.04em;
-    vertical-align: -0.06em;
-    border: 2.5px solid $color-primary;
-    border-radius: $radius-full;
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    margin: 0 0.08em;
+    vertical-align: -0.08em;
     color: $color-primary;
-    font-family: $font-family-hand;
-    font-size: 0.82em;
+    transform: rotate(-4deg);
+    overflow: visible;
+  }
+
+  &__mark-glyph {
+    font-family: $font-family-heading;
     font-weight: $font-weight-bold;
-    line-height: 1;
-    transform: rotate(-5deg);
-    // Nudge the glyph to sit optically centered inside the ring.
-    padding-bottom: 0.06em;
+    font-size: 19px;
+    fill: currentColor;
+    text-anchor: middle;
+    dominant-baseline: central;
   }
 
   &__intro {

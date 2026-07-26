@@ -58,7 +58,12 @@ const FAQ: React.FC = () => {
         <div className="faq__left">
           <span className="faq__eyebrow">FAQ</span>
           <h2 className="faq__title">
-            Got <span className="faq__mark" aria-hidden="true">?</span> questions?
+            Got{' '}
+            <svg className="faq__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="2.75" />
+              <text x="16" y="16" className="faq__mark-glyph">?</text>
+            </svg>{' '}
+            questions?
           </h2>
           <p className="faq__intro">
             Here&rsquo;s what collaborators usually want to know before we start working together.
