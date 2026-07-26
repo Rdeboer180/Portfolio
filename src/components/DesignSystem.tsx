@@ -44,7 +44,7 @@ const colorGroups = [
 ];
 
 const typeScale = [
-  { name: 'H1', size: '38px', leading: '45.6px', weight: 700, font: 'heading', sample: 'Senior Product Designer' },
+  { name: 'H1', size: '38px', leading: '45.6px', weight: 700, font: 'heading', sample: 'Product Designer Engineer' },
   { name: 'H2', size: '34px', leading: '40.8px', weight: 700, font: 'heading', sample: 'Section Heading' },
   { name: 'H3', size: '30px', leading: '36px', weight: 700, font: 'heading', sample: 'Card Title' },
   { name: 'H4', size: '26px', leading: '31.2px', weight: 700, font: 'heading', sample: 'Subsection' },

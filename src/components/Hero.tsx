@@ -433,7 +433,7 @@ const Hero: React.FC = () => {
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">Senior Product Designer · Systems · Front-End Fluency</span>
+              <span className="hero__eyebrow-title">Product Designer Engineer · Systems · Front-End</span>
             </p>
 
             <div className="hero__typed-wrap hero__reveal hero__reveal--2">

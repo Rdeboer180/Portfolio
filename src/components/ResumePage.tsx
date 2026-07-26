@@ -9,7 +9,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: 'Senior Product Designer · Design Systems · Front-End',
+  title: 'Product Designer Engineer · Systems · Front-End',
   email: SITE.email,
   city: 'South Bend',
   region: 'Indiana',
@@ -32,7 +32,7 @@ const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
 
 const ResumePage: React.FC = () => {
   usePageMeta({
-    title: 'Résumé — Ryan DeBoer, Senior Product Designer & Design Engineer',
+    title: 'Résumé — Ryan DeBoer, Product Designer Engineer',
     description:
       'Résumé of Ryan DeBoer — systems-focused product designer with 16+ years building scalable, token-driven design systems across high-traffic web and native platforms.',
     canonical: `${SITE.portfolioUrl}/resume/`,
@@ -106,7 +106,7 @@ const ResumePage: React.FC = () => {
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
           <p className="resume-page__tagline">
-            Senior Product Designer · Design Systems · Front-End
+            Product Designer Engineer · Systems · Front-End
           </p>
           <div className="resume-page__contact">
             <span>{CONTACT.city}, {CONTACT.region}</span>

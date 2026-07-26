@@ -58,7 +58,7 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
               aria-controls={panelId}
               onClick={() => setOpen((o) => !o)}
             >
-              <span>Ryan DeBoer — Senior Product Designer &amp; Design Engineer</span>
+              <span>Ryan DeBoer — Product Designer Engineer</span>
               <svg
                 className="candidate-snapshot__chevron"
                 viewBox="0 0 16 16"
@@ -93,7 +93,7 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
       <div className="candidate-snapshot__inner">
         <p className="candidate-snapshot__eyebrow">At a glance</p>
         <h2 id={headingId} className="candidate-snapshot__name">
-          Ryan DeBoer — Senior Product Designer &amp; Design Engineer
+          Ryan DeBoer — Product Designer Engineer
         </h2>
         <Facts />
         <p className="candidate-snapshot__summary">

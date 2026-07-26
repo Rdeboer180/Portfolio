@@ -58,11 +58,11 @@ function RouteEffects() {
 
 function HomeRoute() {
   usePageMeta({
-    title: 'Ryan DeBoer | Senior Product Designer · Design Systems · Front-End',
+    title: 'Ryan DeBoer | Product Designer Engineer · Systems · Front-End',
     description:
-      'Ryan DeBoer | Senior Product Designer · Design Systems · Front-End. Design engineer bridging UX, systems thinking, and real-world shipping. 16+ years in design systems, ecommerce, and high-impact product work.',
+      'Ryan DeBoer | Product Designer Engineer · Systems · Front-End. Design engineer bridging UX, systems thinking, and real-world shipping. 16+ years in design systems, ecommerce, and high-impact product work.',
     canonical: `${SITE.portfolioUrl}/`,
-    ogDescription: 'Senior Product Designer + Design Engineer. I bridge the gap between ambitious UX and buildable systems.',
+    ogDescription: 'Product Designer Engineer. I bridge the gap between ambitious UX and buildable systems.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   });
