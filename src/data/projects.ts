@@ -1019,17 +1019,14 @@ $mobile-max-width: 768px;
         systemMarker: 'CONTEXT LAYER',
         description:
           'An internal Figma plugin that connects project metadata from an exported Workfront spreadsheet directly into design files. Working alongside our Lead Product Manager, we built a workflow that auto-generates standardized project title cards while pre-populating the information AI or MCP-based tools cannot reliably infer — internal project identifiers, business context, ownership, and planning metadata. The result is a searchable, standardized project framework that gives designers and stakeholders immediate context when navigating hundreds of active design files.',
-        // TODO(Ryan): re-export the plugin screenshot and drop it at
-        // /assets/portfolio-safe/web-apps/figma_Organization_tool.png, then
-        // uncomment:
-        // images: [
-        //   {
-        //     src: '/assets/portfolio-safe/web-apps/figma_Organization_tool.png',
-        //     alt: 'Figma project metadata plugin generating a standardized project title card',
-        //     layout: 'full',
-        //     caption: 'Workfront metadata flowing into a standardized, searchable title card inside Figma.',
-        //   },
-        // ],
+        images: [
+          {
+            src: '/assets/portfolio-safe/web-apps/internalTool_figmaPlugin.png',
+            alt: 'Figma project metadata plugin generating a standardized project title card',
+            layout: 'full',
+            caption: 'Workfront metadata flowing into a standardized, searchable title card inside Figma.',
+          },
+        ],
       },
       {
         key: 'crop-simulator',
@@ -1055,16 +1052,14 @@ $mobile-max-width: 768px;
         systemMarker: 'COMMUNICATION LAYER',
         description:
           'A fully componentized presentation framework in Figma that gives Design and UX teams one consistent visual language for communicating project progress. Every layout, chart, callout, status indicator, and content block is a reusable component, so teams assemble stakeholder presentations quickly while reviews stay clear, professional, and easy to maintain — presentation setup time dropped significantly.',
-        // TODO(Ryan): re-export the presentation-system frame and drop it at
-        // /assets/portfolio-safe/web-apps/figma-slides-doc.png, then uncomment:
-        // images: [
-        //   {
-        //     src: '/assets/portfolio-safe/web-apps/figma-slides-doc.png',
-        //     alt: 'Componentized Figma presentation system with reusable layouts, charts, and callouts',
-        //     layout: 'full',
-        //     caption: 'Every layout, chart, and callout is a component — decks assemble instead of being rebuilt.',
-        //   },
-        // ],
+        images: [
+          {
+            src: '/assets/portfolio-safe/web-apps/internalTool_SlidesTemplate.png',
+            alt: 'Componentized Figma presentation system with reusable project deck templates, layouts, charts, and callouts',
+            layout: 'full',
+            caption: 'Every layout, chart, and callout is a component — decks assemble instead of being rebuilt.',
+          },
+        ],
       },
       {
         key: 'connected-layer',
