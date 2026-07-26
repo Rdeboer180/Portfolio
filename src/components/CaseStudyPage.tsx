@@ -456,6 +456,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     visibleIndex >= 0
       ? visibleProjects[(visibleIndex + 1) % visibleProjects.length]
       : undefined;
+  const prevProject: Project | undefined =
+    visibleIndex >= 0
+      ? visibleProjects[(visibleIndex - 1 + visibleProjects.length) % visibleProjects.length]
+      : undefined;
   const hasNewFormat = !!(project.problem || project.gaps || project.constraints || project.approachSteps || project.approachSubsections);
 
   return (
@@ -882,19 +886,37 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           </>
         )}
 
-        {/* ==================== Next Project ==================== */}
-        {nextProject && nextProject.slug !== project.slug && (
-          <Link to={`/work/${nextProject.slug}`} className="cs__next">
-            <span className="cs__next-label">Next Project</span>
-            <div className="cs__next-card">
-              <img src={nextProject.featured} alt={nextProject.title} className="cs__next-image" loading="lazy" />
-              <div className="cs__next-overlay">
-                <span className="cs__next-client">{nextProject.client}</span>
-                <span className="cs__next-title">{nextProject.title}</span>
-                <span className="cs__next-arrow">View project &rarr;</span>
-              </div>
+        {/* ==================== Keep exploring — prev/next pager ==================== */}
+        {(prevProject || nextProject) && (
+          <nav className="cs__pager" aria-label="More case studies">
+            <p className="cs__pager-heading">Keep exploring the work</p>
+            <div className="cs__pager-links">
+              {prevProject && prevProject.slug !== project.slug && (
+                <Link to={`/work/${prevProject.slug}/`} className="cs__pager-link cs__pager-link--prev">
+                  <svg className="cs__pager-arrow" width="54" height="24" viewBox="0 0 54 24" fill="none" aria-hidden="true">
+                    <path d="M51 13 C 36 10, 18 12, 5 11" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5 11 L13 5 M5 11 L14 16" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="cs__pager-copy">
+                    <span className="cs__pager-eyebrow">Previous</span>
+                    <span className="cs__pager-name">{prevProject.title}</span>
+                  </span>
+                </Link>
+              )}
+              {nextProject && nextProject.slug !== project.slug && (
+                <Link to={`/work/${nextProject.slug}/`} className="cs__pager-link cs__pager-link--next">
+                  <span className="cs__pager-copy">
+                    <span className="cs__pager-eyebrow">Next</span>
+                    <span className="cs__pager-name">{nextProject.title}</span>
+                  </span>
+                  <svg className="cs__pager-arrow" width="54" height="24" viewBox="0 0 54 24" fill="none" aria-hidden="true">
+                    <path d="M3 13 C 18 10, 36 12, 49 11" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M49 11 L41 5 M49 11 L40 16" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              )}
             </div>
-          </Link>
+          </nav>
         )}
       </div>
 

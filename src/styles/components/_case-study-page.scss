@@ -1042,71 +1042,113 @@
   }
 
   // ==========================================
-  // Next Project
+  // Keep exploring — prev/next pager (hand-drawn arrows, legible text)
   // ==========================================
-  &__next {
-    display: block;
-    text-decoration: none;
+  &__pager {
     margin-top: $spacing-4xl;
   }
 
-  &__next-label {
-    display: block;
-    font-size: $font-size-caption;
+  &__pager-heading {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
     font-weight: $font-weight-bold;
-    color: $color-neutral-muted;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: $spacing-lg;
+    color: $color-neutral-dark;
+    text-align: center;
+    margin: 0 0 $spacing-xl;
   }
 
-  &__next-card {
-    position: relative;
-    border-radius: $card-border-radius-lg;
-    overflow: hidden;
-    height: 280px;
-    transition: transform $transition-base;
+  &__pager-links {
+    display: flex;
+    gap: $spacing-lg;
+  }
 
-    &:hover {
-      transform: translateY(-4px);
+  &__pager-link {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding: $spacing-xl;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-2xl;
+    background: $color-white;
+    text-decoration: none;
+    transition: border-color $transition-fast, background-color $transition-fast;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
     }
   }
 
-  &__next-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  &__pager-link--next {
+    justify-content: flex-end;
+    text-align: right;
+
+    .cs__pager-copy {
+      align-items: flex-end;
+    }
   }
 
-  &__next-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+  &__pager-copy {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: $spacing-2xl;
+    gap: 4px;
+    min-width: 0;
   }
 
-  &__next-client {
+  &__pager-eyebrow {
     font-size: $font-size-caption;
-    color: rgba(255, 255, 255, 0.7);
+    font-weight: $font-weight-semibold;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
   }
 
-  &__next-title {
+  &__pager-name {
     font-family: $font-family-heading;
-    font-size: $font-size-h4;
-    font-weight: $font-weight-bold;
-    color: $color-white;
-    margin-bottom: $spacing-sm;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-semibold;
+    line-height: 1.25;
+    color: $color-neutral-dark;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color $transition-fast;
   }
 
-  &__next-arrow {
-    font-size: $font-size-body-sm;
-    color: $color-primary-light;
-    font-weight: $font-weight-medium;
+  &__pager-arrow {
+    flex-shrink: 0;
+    color: $color-neutral-standard;
+    transition: transform $transition-base, color $transition-fast;
+  }
+
+  // Hover (pointer devices only): tint the card, nudge the sketch arrow, name → accent
+  @media (hover: hover) and (pointer: fine) {
+    &__pager-link:hover {
+      border-color: $color-primary-muted;
+      background: $color-neutral-lightest;
+
+      .cs__pager-name,
+      .cs__pager-arrow {
+        color: $color-primary;
+      }
+    }
+
+    &__pager-link--next:hover .cs__pager-arrow {
+      transform: translateX(5px);
+    }
+
+    &__pager-link--prev:hover .cs__pager-arrow {
+      transform: translateX(-5px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__pager-arrow {
+      transition: color $transition-fast;
+    }
   }
 }
 
@@ -1307,8 +1349,17 @@
       grid-template-columns: 1fr;
     }
 
-    &__next-card {
-      height: 200px;
+    &__pager-links {
+      flex-direction: column;
+    }
+
+    &__pager-link--next {
+      justify-content: space-between;
+      text-align: left;
+
+      .cs__pager-copy {
+        align-items: flex-start;
+      }
     }
   }
 }
