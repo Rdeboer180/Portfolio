@@ -35,7 +35,7 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
     ),
   },
   {
-    question: 'How was my portfolio built?',
+    question: 'How was this portfolio built?',
     answer: (
       <>
         <p>This portfolio was built through an iterative design-to-code workflow combining Figma, Claude AI, and hands-on front-end development. I started by establishing a full design system in Figma defining color tokens, typography scales, spacing values, and component patterns then used that system as the single source of truth while building out each section in React and SCSS. You can explore the <Link to="/design-system">design system here</Link>.</p>
@@ -57,9 +57,11 @@ const FAQ: React.FC = () => {
       <div className="faq__container">
         <div className="faq__left">
           <span className="faq__eyebrow">FAQ</span>
-          <h2 className="faq__title">Common questions</h2>
+          <h2 className="faq__title">
+            Got <span className="faq__mark" aria-hidden="true">?</span> questions?
+          </h2>
           <p className="faq__intro">
-            Answers to the things collaborators usually ask before we start working together.
+            Here&rsquo;s what collaborators usually want to know before we start working together.
           </p>
         </div>
 
@@ -69,11 +71,13 @@ const FAQ: React.FC = () => {
               key={i}
               className={`faq__item ${openIndex === i ? 'faq__item--open' : ''}`}
             >
-              <button className="faq__question" onClick={() => toggle(i)}>
+              <button
+                className="faq__question"
+                onClick={() => toggle(i)}
+                aria-expanded={openIndex === i}
+              >
                 <span className="faq__question-text">{item.question}</span>
-                <span className="faq__toggle">
-                  {openIndex === i ? '\u00d7' : '+'}
-                </span>
+                <span className="faq__toggle" aria-hidden="true">+</span>
               </button>
               <div className="faq__answer-wrapper">
                 {typeof item.answer === 'string' ? (

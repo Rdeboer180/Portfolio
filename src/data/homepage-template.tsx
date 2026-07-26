@@ -19,7 +19,7 @@ const templateContent: TargetedHomepageContent = {
 
   hero: {
     eyebrow: 'Senior Web Designer by title.',
-    roles: ['Design Strategist', 'Product Designer', 'UX Engineer'],
+    roles: ['Product Designer', 'Design Engineer', 'UX Engineer'],
     headline: '',
     body: (
       <>
