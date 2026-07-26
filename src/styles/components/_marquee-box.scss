@@ -1,0 +1,79 @@
+// ============================================
+// Marquee Box — animated card border
+// A soft orange "comet" traces the perimeter once when the card scrolls
+// into view (staggered across a grid), then rests as a clean hairline.
+// Shared by .skills__card and .technical__column. Restrained on purpose —
+// one-time, not perpetual, so it never competes with the homepage motion.
+// ============================================
+
+@import '../variables';
+
+// Registered so the conic-gradient's start angle can be interpolated in
+// @keyframes (drives the comet around the ring). Defined once, globally.
+@property --marquee-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+// Constant motion → linear. The comet appears, circles once, fades out —
+// leaving only the rest-state hairline.
+@keyframes marquee-trace {
+  0% {
+    --marquee-angle: 0deg;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    --marquee-angle: 360deg;
+    opacity: 0;
+  }
+}
+
+@mixin marquee-box($radius: $card-border-radius) {
+  position: relative;
+  border: 1px solid $color-border-default;
+  border-radius: $radius;
+  transition: border-color $transition-base, box-shadow $transition-base;
+
+  // The traveling comet, masked to a hairline ring around the border.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px; // ring thickness
+    background: conic-gradient(
+      from var(--marquee-angle, 0deg),
+      rgba($color-primary, 0) 0deg,
+      rgba($color-primary, 0) 250deg,
+      rgba($color-primary, 0.9) 320deg,
+      rgba($color-primary, 0) 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: rgba($color-primary, 0.45);
+    box-shadow: $shadow-sm;
+  }
+
+  // Movement is decorative — drop it entirely, keep the resting hairline.
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}

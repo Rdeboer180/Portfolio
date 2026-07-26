@@ -262,7 +262,7 @@ const projects: Project[] = [
       problem: 'Too many choices, too much text. People couldn’t decide.',
       gaps: 'No visual language existed yet. I had to build the system and the vocabulary.',
       constraints: '40+ categories, 80+ products each, SEO fighting usability.',
-      approach: 'Eight core icons, not ninety one-offs.',
+      approach: 'Balancing data with intuition: eight core icons, not ninety.',
       outcome: 'Category entry jumped, and the icon system went sitewide.',
     },
     stream: 'professional',

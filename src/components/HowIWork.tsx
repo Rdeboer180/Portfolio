@@ -57,7 +57,7 @@ const steps = [
       </svg>
     ),
     annotations: ['A/B testing', 'SEO analysis', 'Conversion tracking'],
-    body: 'I design for outcomes, not deliverables. A/B testing, usability reviews, SEO-informed information architecture, and post-launch analysis aren\u2019t afterthoughts \u2014 they\u2019re built into how I work, with every release feeding directly back into the next iteration to protect conversion and drive measurable impact.',
+    body: 'I design for outcomes, not deliverables. A/B testing, usability reviews, SEO-informed information architecture, and post-launch analysis aren\u2019t afterthoughts \u2014 they\u2019re built into how I work. It\u2019s a constant balance of data and intuition: the numbers show what\u2019s happening, judgment reads why and decides what to try next \u2014 and every release feeds back into the one after it to protect conversion and drive measurable impact.',
   },
   {
     label: 'Putting in the reps',
@@ -68,7 +68,7 @@ const steps = [
       </svg>
     ),
     annotations: ['AI workflows', 'Certifications', 'Emerging tools'],
-    body: 'I treat my craft the way an athlete treats performance \u2014 deliberately. That means ongoing certifications, continuous refinement of soft skills like facilitation and storytelling, and staying ahead of the tools redefining the field. I was an early adopter of AI-augmented workflows and I actively integrate emerging tools to work faster, communicate more clearly, and deliver at a higher level.',
+    body: 'I treat my craft the way an athlete treats performance \u2014 deliberately. Design intuition is really just an accumulation of pattern recognition, and the reps are how you build it: ongoing certifications, continuous refinement of soft skills like facilitation and storytelling, and staying ahead of the tools redefining the field. I was an early adopter of AI-augmented workflows and I actively integrate emerging tools to work faster, communicate more clearly, and deliver at a higher level.',
   },
 ];
 

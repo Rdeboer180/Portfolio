@@ -2,6 +2,7 @@ import React from 'react';
 import SectionBadge from './SectionBadge';
 import LayersIcon from './icons/LayersIcon';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
+import { useReveal } from '../hooks/useReveal';
 
 const skillCategories = [
   {
@@ -37,6 +38,8 @@ const Skills: React.FC = () => {
     threshold: 0.3,
   });
 
+  const [gridRef, gridVisible] = useReveal<HTMLDivElement>();
+
   return (
     <section id="skills" className="skills" ref={sectionRef}>
       <div className="skills__container">
@@ -51,9 +54,13 @@ const Skills: React.FC = () => {
           </p>
         </div>
 
-        <div className="skills__grid">
-          {skillCategories.map((cat) => (
-            <div key={cat.title} className="skills__card">
+        <div className={`skills__grid${gridVisible ? ' is-visible' : ''}`} ref={gridRef}>
+          {skillCategories.map((cat, i) => (
+            <div
+              key={cat.title}
+              className="skills__card"
+              style={{ '--marquee-delay': `${i * 60}ms` } as React.CSSProperties}
+            >
               <h3 className="skills__card-title">{cat.title}</h3>
               <ul className="skills__card-list">
                 {cat.skills.map((skill) => (

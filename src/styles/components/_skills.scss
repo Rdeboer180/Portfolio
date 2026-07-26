@@ -57,15 +57,14 @@
   }
 
   &__card {
+    @include marquee-box;
     background: $color-secondary-lightest;
-    border: 1px solid $color-border-default;
-    border-radius: $card-border-radius;
     padding: $spacing-2xl;
-    transition: box-shadow $transition-base;
+  }
 
-    &:hover {
-      box-shadow: $shadow-sm;
-    }
+  // Comet traces once as the grid scrolls into view, staggered per card.
+  &__grid.is-visible &__card::before {
+    animation: marquee-trace 1300ms linear var(--marquee-delay, 0ms);
   }
 
   &__card-title {

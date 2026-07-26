@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionBadge from './SectionBadge';
+import { useReveal } from '../hooks/useReveal';
 
 const CodeIcon = () => (
   <svg viewBox="0 0 22 26.7" fill="currentColor" stroke="none">
@@ -86,6 +87,8 @@ const abilities: { category: string; skills: Skill[] }[] = [
 ];
 
 const TechnicalAbilities: React.FC = () => {
+  const [gridRef, gridVisible] = useReveal<HTMLDivElement>();
+
   return (
     <section id="technical" className="technical">
       <div className="technical__container">
@@ -97,9 +100,13 @@ const TechnicalAbilities: React.FC = () => {
           </p>
         </div>
 
-        <div className="technical__grid">
-          {abilities.map(({ category, skills }) => (
-            <div key={category} className="technical__column">
+        <div className={`technical__grid${gridVisible ? ' is-visible' : ''}`} ref={gridRef}>
+          {abilities.map(({ category, skills }, i) => (
+            <div
+              key={category}
+              className="technical__column"
+              style={{ '--marquee-delay': `${i * 60}ms` } as React.CSSProperties}
+            >
               <h3 className="technical__column-title">{category}</h3>
               <ul className="technical__list">
                 {skills.map((skill) => (

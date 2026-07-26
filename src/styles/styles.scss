@@ -16,6 +16,9 @@
 // Import base styles and resets
 @import 'base';
 
+// Shared mixins (must precede components that @include them)
+@import 'components/marquee-box';
+
 // Import component styles
 @import 'components/hero';
 @import 'components/about';

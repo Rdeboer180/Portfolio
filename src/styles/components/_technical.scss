@@ -48,6 +48,17 @@
     margin-bottom: $spacing-2xl;
   }
 
+  &__column {
+    @include marquee-box;
+    background: $color-white;
+    padding: $spacing-2xl;
+  }
+
+  // Comet traces once as the grid scrolls into view, staggered per column.
+  &__grid.is-visible &__column::before {
+    animation: marquee-trace 1300ms linear var(--marquee-delay, 0ms);
+  }
+
   &__column-title {
     font-family: $font-family-heading;
     font-size: $font-size-body;
