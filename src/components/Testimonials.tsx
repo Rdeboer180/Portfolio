@@ -48,7 +48,8 @@ interface Testimonial {
 // Order locked by the case-study brief:
 // 1. Leadership & Delivery (Adam, LinkedIn) → 2. Cross-Functional & Human (Kokesh)
 // → 3. Craft, Care, and Growth (Amanda, LinkedIn) → 4. Systems Thinking (Kokesh)
-// → 5. Precision & Reasoning (Tim) → 6. Business Impact (Deborah)
+// → 5. Design–Engineering Partnership (Cheryl) → 6. Precision & Reasoning (Tim)
+// → 7. Business Impact (Deborah)
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -97,6 +98,19 @@ const testimonials: Testimonial[] = [
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
+  },
+  {
+    title: 'Design–Engineering Partnership',
+    quote: (
+      <>
+        <p>He owned the design side; I owned the build, and it was <H>one of the best collaborations I&rsquo;ve had</H>. Ryan doesn&rsquo;t just design screens&mdash;he <H>designs the whole experience</H>.</p>
+        <p>WheelRack had no shared foundation when we started, so Ryan built one from scratch&mdash;a full token set for color, spacing, and typography that grew into a documented component library. That gave us <H>one vocabulary to work from instead of two</H>, and it made my half of the work a lot easier to do well.</p>
+        <p><H>Any product team would be better with him on it.</H></p>
+      </>
+    ),
+    name: 'Cheryl Carpenter',
+    role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
+    year: '2026',
   },
   {
     title: 'Precision & Reasoning',
