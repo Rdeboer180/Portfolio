@@ -62,40 +62,59 @@ const NotesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Stream 1 — the LinkedIn-born thoughts: loose on purpose, the way
-          design notes actually accumulate. Cards sit slightly askew and
-          straighten when you reach for them. */}
-      <section className="notes__list notes__list--stream" aria-label="Notes from LinkedIn">
-        <div className="notes__stream-head">
-          <span className="notes__stream-label">[ Thinking Out Loud ]</span>
-          <p className="notes__stream-sub">
-            Blog-like thoughts that started as public LinkedIn posts. Lightly edited, still warm.
-          </p>
-          <LinkedInLink label="Read them as they land" surface="notes_stream" />
-        </div>
-        {essays.map((note) => (
-          <Link key={note.slug} to={`/notes/${note.slug}/`} className="notes__row notes__row--loose">
-            <div className="notes__row-meta">
-              <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
-              <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
-                {KIND_LABEL[note.kind]}
-              </span>
-            </div>
-            <h2 className="notes__row-title">{note.title}</h2>
-            <p className="notes__row-dek">{note.dek}</p>
-          </Link>
-        ))}
-      </section>
+      {/* Two streams, both case-study grammar: a numbered rule opens the
+          section, a rail carries its identity (ReadMe-style split), and the
+          entries are hairline rows with a read-time + sketch-arrow aside. */}
+      <NoteStream
+        index="01"
+        label="Thinking Out Loud"
+        ariaLabel="Notes from LinkedIn"
+        sub="Blog-like thoughts that started as public LinkedIn posts. Lightly edited, still warm."
+        count={essays.length}
+        notes={essays}
+        rail={<LinkedInLink label="Read them as they land" surface="notes_stream" />}
+      />
+      <NoteStream
+        index="02"
+        label="Resolved"
+        ariaLabel="Systems and skills"
+        sub="The settled artifacts: how things work, and the skills that encode the judgment."
+        count={resolved.length}
+        notes={resolved}
+      />
 
-      {/* Stream 2 — the resolved artifacts, ruler-straight by contrast */}
-      <section className="notes__list notes__list--resolved" aria-label="Systems and skills">
-        <div className="notes__stream-head">
-          <span className="notes__stream-label">[ Resolved ]</span>
-          <p className="notes__stream-sub">
-            The settled artifacts: how things work, and the skills that encode the judgment.
-          </p>
-        </div>
-        {resolved.map((note) => (
+      <Footer />
+    </article>
+  );
+};
+
+// ── Stream section — numbered rule + identity rail + entry rows ─────────────
+const NoteStream: React.FC<{
+  index: string;
+  label: string;
+  ariaLabel: string;
+  sub: string;
+  count: number;
+  notes: typeof NOTES_BY_DATE;
+  rail?: React.ReactNode;
+}> = ({ index, label, ariaLabel, sub, count, notes, rail }) => (
+  <section className="notes__section" aria-label={ariaLabel}>
+    <div className="notes__rule" aria-hidden="true">
+      <span className="notes__rule-handle" />
+      <span className="notes__rule-label">{index} / {label}</span>
+      <span className="notes__rule-line" />
+      <span className="notes__rule-handle" />
+    </div>
+    <div className="notes__section-grid">
+      <div className="notes__section-rail">
+        <p className="notes__stream-sub">{sub}</p>
+        <span className="notes__section-count">
+          {count} {count === 1 ? 'entry' : 'entries'}
+        </span>
+        {rail}
+      </div>
+      <div className="notes__section-rows">
+        {notes.map((note) => (
           <Link key={note.slug} to={`/notes/${note.slug}/`} className="notes__row">
             <div className="notes__row-meta">
               <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
@@ -103,15 +122,23 @@ const NotesPage: React.FC = () => {
                 {KIND_LABEL[note.kind]}
               </span>
             </div>
-            <h2 className="notes__row-title">{note.title}</h2>
-            <p className="notes__row-dek">{note.dek}</p>
+            <div className="notes__row-main">
+              <h2 className="notes__row-title">{note.title}</h2>
+              <p className="notes__row-dek">{note.dek}</p>
+            </div>
+            <div className="notes__row-aside">
+              <span className="notes__row-read">{note.read} read</span>
+              {/* Hand-sketched arrow — the case-study CTA vocabulary, drawn in on row hover */}
+              <svg className="notes__row-arrow" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+                <path d="M6 23 C 14 19, 26 19, 37 22" fill="none" strokeLinecap="round" pathLength={1} />
+                <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
+              </svg>
+            </div>
           </Link>
         ))}
-      </section>
-
-      <Footer />
-    </article>
-  );
-};
+      </div>
+    </div>
+  </section>
+);
 
 export default NotesPage;

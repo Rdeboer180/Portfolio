@@ -27,6 +27,7 @@ export interface Note {
   dateISO: string;   // for <time> + sorting, e.g. '2026-07'
   title: string;
   dek: string;       // one-line summary — index row + meta description
+  read: string;      // estimated read time, e.g. '3 min' — index + article meta
   body: React.ReactNode;
   /** Optional downloadable artifact shown in the note header. */
   artifact?: { label: string; href: string };
@@ -43,6 +44,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'how-this-site-works',
+    read: '3 min',
     kind: 'system',
     date: 'July 2026',
     dateISO: '2026-07-30',
@@ -109,6 +111,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'ryan-design-taste-skill',
+    read: '4 min',
     kind: 'skill',
     date: 'July 2026',
     dateISO: '2026-07-28',
@@ -186,6 +189,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'walking-in-with-the-question',
+    read: '2 min',
     kind: 'essay',
     date: 'July 2026',
     dateISO: '2026-07-23',
@@ -235,6 +239,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'where-is-my-role-moving',
+    read: '3 min',
     kind: 'essay',
     date: 'July 2026',
     dateISO: '2026-07-21',
@@ -300,6 +305,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'studying-the-tape',
+    read: '2 min',
     kind: 'essay',
     date: 'July 2026',
     dateISO: '2026-07-19',
@@ -353,6 +359,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'ai-doesnt-care-about-your-customers',
+    read: '2 min',
     kind: 'essay',
     date: 'July 2026',
     dateISO: '2026-07-15',
@@ -406,6 +413,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'systems-that-make-better-decisions-easier',
+    read: '3 min',
     kind: 'essay',
     date: 'July 2026',
     dateISO: '2026-07-13',
@@ -485,6 +493,7 @@ description: Conservative product-risk framework for DraftPacks
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'photoshop-taught-me-composition',
+    read: '2 min',
     kind: 'essay',
     date: 'June 2026',
     dateISO: '2026-06-24',

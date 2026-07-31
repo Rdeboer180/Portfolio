@@ -208,66 +208,89 @@
     transition: color $transition-fast;
   }
 
-  // ── Index rows ────────────────────────────────────────────────────────────
-  &__list {
+  // ── Stream sections — numbered rule + identity rail + entry rows ─────────
+  &__section {
     width: 100%;
     max-width: $container-max-width;
-    margin: $spacing-2xl auto 0;
+    margin: $spacing-3xl auto 0;
     padding: 0 $container-padding-x;
 
-    // Loose stream becomes a two-up card field at the wide container — the
-    // homepage's card-grid rhythm. Cards keep readable proportions instead of
-    // stretching to 1100px of empty box.
-    &--stream {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: $spacing-xl;
-      align-items: start;
-
-      .notes__stream-head {
-        grid-column: 1 / -1;
-      }
-    }
-
-    // Resolved stays a structured list: one hierarchy, scanned top to bottom
-    &--resolved {
-      margin-top: $spacing-3xl;
-      // Section-to-footer rhythm matches the homepage's between-section cadence
+    // Last stream carries the homepage's between-section cadence to the footer
+    &:last-of-type {
       padding-bottom: $section-pad-y;
     }
   }
 
-  // Stream headers — one per group, mono label + one-line framing
-  &__stream-head {
-    padding: $spacing-lg 0 $spacing-xl;
-    border-bottom: 1px solid $color-neutral-light;
-    margin-bottom: $spacing-sm;
+  // Quiet numbered rule — the homepage section-rule recipe in editorial tone:
+  // mono label seated on a hairline, selection handles bookending it.
+  &__rule {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-2xl;
   }
 
-  &__stream-label {
-    display: block;
+  &__rule-label {
     font-family: $font-family-mono;
     font-size: $font-size-caption;
     font-weight: $font-weight-medium;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: $color-primary;
-    margin-bottom: $spacing-sm;
+    color: $color-neutral-standard;
+  }
+
+  &__rule-line {
+    flex: 1;
+    height: 1px;
+    background: $color-neutral-light;
+  }
+
+  &__rule-handle {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    background: $color-secondary;
+  }
+
+  // ReadMe-style split: identity rail left, entries right
+  &__section-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    column-gap: $spacing-3xl;
+    align-items: start;
+  }
+
+  &__section-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+  }
+
+  &__section-count {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
   }
 
   &__stream-sub {
     font-size: $font-size-body-sm;
     line-height: $line-height-body-sm;
-    color: $color-neutral-muted;
-    max-width: 54ch;
-    margin: 0 0 $spacing-sm;
+    color: $color-neutral-standard;
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  // First row aligns to the rail's first line — no top padding on the group
+  &__section-rows .notes__row:first-child {
+    padding-top: 0;
   }
 
   // Two-column editorial row on desktop: mono meta rail left, content right —
   // the case-study meta-bar rhythm applied to a list.
   &__row {
     display: grid;
-    grid-template-columns: 132px 1fr;
+    grid-template-columns: 132px 1fr auto;
     column-gap: $spacing-2xl;
     padding: $spacing-xl 0;
     border-bottom: 1px solid $color-neutral-light;
@@ -276,6 +299,12 @@
     &:hover .notes__row-title,
     &:focus-visible .notes__row-title {
       color: $color-primary-dark;
+    }
+
+    // Sketch arrow draws in on hover/focus — case-study CTA vocabulary
+    &:hover .notes__row-arrow path,
+    &:focus-visible .notes__row-arrow path {
+      stroke-dashoffset: 0;
     }
   }
 
@@ -286,9 +315,48 @@
     padding-top: 5px; // optically align mono meta with the title cap height
   }
 
-  &__row-title,
-  &__row-dek {
-    grid-column: 2;
+  &__row-main {
+    min-width: 0;
+  }
+
+  &__row-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: $spacing-xs;
+    padding-top: 5px;
+  }
+
+  &__row-read {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    white-space: nowrap;
+  }
+
+  &__row-arrow {
+    width: 32px;
+    height: 32px;
+    overflow: visible;
+    color: $color-primary;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 450ms ease;
+    }
+
+    path:nth-child(2) {
+      transition-delay: 120ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      path {
+        transition: none;
+      }
+    }
   }
 
   &__row-date {
@@ -325,56 +393,6 @@
     line-height: $line-height-body-sm;
     color: $color-neutral-muted;
     max-width: 60ch;
-    margin: 0;
-  }
-
-  // Loose cards — the LinkedIn stream sits slightly askew, the way notes
-  // actually pile up. Reaching for one straightens it. Rotation is static
-  // (safe under reduced motion); only the straightening transitions.
-  &__row--loose {
-    // Card, not row: meta stacks above the title inside the two-up field
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-    background: $color-secondary-lightest;
-    border: 1px solid $color-border-default;
-    border-bottom: 1px solid $color-border-default;
-    border-radius: $card-border-radius;
-    padding: $spacing-xl;
-    margin: 0; // grid gap owns the spacing
-    height: 100%;
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease;
-
-    &:nth-child(odd) {
-      transform: rotate(-0.5deg) translateX(-3px);
-    }
-
-    &:nth-child(even) {
-      transform: rotate(0.4deg) translateX(5px);
-    }
-
-    &:hover,
-    &:focus-visible {
-      transform: rotate(0) translateX(0);
-      box-shadow: $shadow-sm;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-
-  // Row-grid overrides inside loose cards (they're flex, not the 2-col grid)
-  &__row--loose &__row-meta {
-    flex-direction: row;
-    align-items: center;
-    gap: $spacing-md;
-    padding-top: 0;
-  }
-
-  &__row--loose &__row-title,
-  &__row--loose &__row-dek {
-    grid-column: auto;
     margin: 0;
   }
 
@@ -544,8 +562,32 @@
       padding-right: $spacing-lg;
     }
 
-    &__list--stream {
+    &__section-grid {
       grid-template-columns: 1fr;
+      row-gap: $spacing-xl;
+    }
+
+    &__row {
+      grid-template-columns: 1fr;
+      row-gap: $spacing-sm;
+    }
+
+    &__row-meta {
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-md;
+      padding-top: 0;
+    }
+
+    &__row-aside {
+      flex-direction: row;
+      align-items: center;
+      padding-top: 0;
+    }
+
+    &__section {
+      padding-left: $spacing-lg;
+      padding-right: $spacing-lg;
     }
 
     &__pinned {

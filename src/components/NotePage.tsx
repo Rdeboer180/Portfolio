@@ -46,6 +46,8 @@ const NotePage: React.FC = () => {
             {KIND_LABEL[note.kind]}
           </span>
           <time dateTime={note.dateISO}>{note.date}</time>
+          <span>·</span>
+          <span>{note.read} read</span>
           {note.kind === 'essay' && (
             <span className="notes__meta-source">· first thought out loud on LinkedIn</span>
           )}
