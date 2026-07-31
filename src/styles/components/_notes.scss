@@ -1,0 +1,376 @@
+// ============================================
+// Notes — writing stream (index + single note)
+// Editorial mode: structured rows over cards, mono meta vocabulary
+// ([ Essay ] / [ Agent Skill ] / [ System ]), selection-frame on the
+// pinned start-here block, ~68ch reading measure on articles.
+// ============================================
+
+@import '../variables';
+@import 'selection-frame';
+
+.notes {
+  min-height: 100vh;
+  background: $color-white;
+  padding-bottom: $spacing-4xl;
+
+  // ── Nav — mirrors the about-page pattern (logo + back) ────────────────────
+  &__nav {
+    position: sticky;
+    top: 0;
+    z-index: $z-index-sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xl $spacing-2xl;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  &__nav-logo {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  &__nav-back {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-neutral-dark;
+    }
+  }
+
+  // ── Header ────────────────────────────────────────────────────────────────
+  &__header {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: $spacing-4xl $spacing-2xl $spacing-2xl;
+  }
+
+  &__eyebrow {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    line-height: 1.15;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin: 0 0 $spacing-lg;
+    letter-spacing: -0.02em;
+  }
+
+  &__lede,
+  &__dek {
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    color: $color-neutral-standard;
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__artifact {
+    display: inline-block;
+    margin-top: $spacing-xl;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
+    text-decoration: none;
+    padding: $spacing-sm $spacing-lg;
+    border: 1px solid rgba($color-primary, 0.35);
+    border-radius: $radius-full;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:hover,
+    &:focus-visible {
+      background: $color-primary;
+      color: $color-white;
+    }
+  }
+
+  // ── Pinned start-here block — wears the selection frame ──────────────────
+  &__pinned {
+    @include selection-frame;
+    // Static handles — the frame is always "selected" here; no reveal gating.
+    &::before {
+      opacity: 1;
+    }
+    max-width: 720px;
+    margin: $spacing-2xl auto;
+    padding: $spacing-xl $spacing-2xl;
+    background: $color-secondary-lightest;
+  }
+
+  &__pinned-label {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  &__pinned-links {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__pinned-link {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
+    padding: $spacing-md 0;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover .notes__pinned-title,
+    &:focus-visible .notes__pinned-title {
+      color: $color-primary-dark;
+    }
+  }
+
+  &__pinned-kind {
+    flex-shrink: 0;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  &__pinned-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    transition: color $transition-fast;
+  }
+
+  // ── Index rows ────────────────────────────────────────────────────────────
+  &__list {
+    max-width: 720px;
+    margin: $spacing-2xl auto 0;
+    padding: 0 $spacing-2xl;
+  }
+
+  &__row {
+    display: block;
+    padding: $spacing-xl 0;
+    border-bottom: 1px solid $color-neutral-light;
+    text-decoration: none;
+
+    &:hover .notes__row-title,
+    &:focus-visible .notes__row-title {
+      color: $color-primary-dark;
+    }
+  }
+
+  &__row-meta {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__row-date {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+  }
+
+  &__row-kind {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+
+    &--skill {
+      color: $color-primary-dark;
+    }
+  }
+
+  &__row-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    line-height: 1.25;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin: 0 0 $spacing-sm;
+    transition: color $transition-fast;
+  }
+
+  &__row-dek {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-muted;
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  // ── Article body ──────────────────────────────────────────────────────────
+  &__body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: $spacing-lg $spacing-2xl 0;
+
+    p,
+    li {
+      font-size: $font-size-body;
+      line-height: 1.7;
+      color: $color-neutral-standard;
+      max-width: 68ch;
+    }
+
+    p {
+      margin: 0 0 $spacing-xl;
+    }
+
+    h2 {
+      font-family: $font-family-heading;
+      font-size: $font-size-h5;
+      font-weight: $font-weight-bold;
+      color: $color-neutral-dark;
+      margin: $spacing-2xl 0 $spacing-lg;
+    }
+
+    ul {
+      margin: 0 0 $spacing-xl;
+      padding-left: $spacing-xl;
+    }
+
+    li {
+      margin-bottom: $spacing-sm;
+    }
+
+    a {
+      color: $color-primary-dark;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover,
+      &:focus-visible {
+        color: $color-primary;
+      }
+    }
+
+    pre {
+      background: $color-neutral-dark;
+      color: #e8e8e8;
+      border-radius: $radius-md;
+      padding: $spacing-xl;
+      overflow-x: auto;
+      margin: 0 0 $spacing-xl;
+
+      code {
+        font-family: $font-family-mono;
+        font-size: 13px;
+        line-height: 1.6;
+        white-space: pre;
+      }
+    }
+  }
+
+  // ── Close rail — mirrors the case-study continue block ───────────────────
+  &__close {
+    max-width: 720px;
+    margin: $spacing-3xl auto 0;
+    padding: $spacing-2xl $spacing-2xl 0;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  &__close-label {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  &__close-body {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-muted;
+    max-width: 54ch;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__close-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-xl;
+  }
+
+  &__close-mail {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-primary;
+      text-decoration: underline;
+    }
+  }
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: $breakpoint-md) {
+  .notes {
+    &__header {
+      padding: $spacing-3xl $spacing-xl $spacing-xl;
+    }
+
+    &__pinned,
+    &__list,
+    &__body,
+    &__close {
+      margin-left: $spacing-lg;
+      margin-right: $spacing-lg;
+      padding-left: $spacing-lg;
+      padding-right: $spacing-lg;
+    }
+
+    &__title {
+      font-size: $font-size-h3;
+    }
+  }
+}

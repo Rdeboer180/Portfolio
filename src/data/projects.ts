@@ -91,6 +91,8 @@ export interface Project {
   outcomeImages?: ProjectImage[];
   outcomeGridImages?: ProjectImage[];
   outcomeLiveLinks?: { label: string; url: string }[];
+  // Optional heading over the live-links list (default: 'Select pages are live')
+  outcomeLiveLinksLabel?: string;
   // Internal work with nothing public to link: named artifacts render as a
   // mono chip list where live links would otherwise go.
   outcomeArtifacts?: string[];
@@ -1262,6 +1264,12 @@ Frame every output as:
         caption: 'The payoff — observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.',
         mobile: true,
       },
+    ],
+    // Same code the iOS build wraps (Capacitor) — served on sample data,
+    // since HealthKit only exists on device. The disclosure system labels it.
+    outcomeLiveLinksLabel: 'Use the working product',
+    outcomeLiveLinks: [
+      { label: 'Try the live demo — real app, sample data', url: '/loopstack-demo/' },
     ],
     metrics: [
       { value: '90 days', label: 'Real HealthKit CGM history — time in range, GMI, variability' },

@@ -49,6 +49,9 @@ function isInternalRoute(href) {
   if (!path || path === '/') return false;
   if (/\.[a-z0-9]+$/i.test(path)) return false; // skip files
   if (path.startsWith('/homepage_template')) return false;
+  // Standalone static apps hosted under public/ — they ship their own
+  // index.html; prerendering would overwrite it with the portfolio shell.
+  if (path.startsWith('/loopstack-demo')) return false;
   return true;
 }
 

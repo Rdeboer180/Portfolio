@@ -16,6 +16,7 @@ const PAGES = [
   { to: '/', title: 'Home', sub: 'Hero, selected work, and how the work gets made.' },
   { to: '/about/', title: 'About', sub: 'Career arc, point of view, and process principles.' },
   { to: '/resume/', title: 'Résumé', sub: 'Experience and skills, with a printable PDF and vCard.' },
+  { to: '/notes/', title: 'Notes', sub: 'Writing from the work — essays, published agent skills, and how this site is built.' },
   { to: '/design-system/', title: 'Design System', sub: 'The tokens and components this site is built on.' },
 ];
 

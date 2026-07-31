@@ -434,6 +434,7 @@ const Hero: React.FC = () => {
         <div className="hero__nav-links">
           <Link to="/about">About Me</Link>
           <a href="#projects">My Work</a>
+          <Link to="/notes">Notes</Link>
           <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
           {/* Mobile-only menu toggle — inline links hide below $breakpoint-sm */}
@@ -451,6 +452,7 @@ const Hero: React.FC = () => {
           <div id="hero-nav-menu" className="hero__nav-menu">
             <Link to="/about" onClick={() => setNavOpen(false)}>About Me</Link>
             <a href="#projects" onClick={() => setNavOpen(false)}>My Work</a>
+            <Link to="/notes" onClick={() => setNavOpen(false)}>Notes</Link>
             <Link to="/resume" onClick={() => setNavOpen(false)}>Resume</Link>
           </div>
         )}

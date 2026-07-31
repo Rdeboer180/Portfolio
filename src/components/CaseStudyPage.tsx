@@ -769,7 +769,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               {/* Live links */}
               {project.outcomeLiveLinks && project.outcomeLiveLinks.length > 0 && (
                 <div className="cs__live-links">
-                  <span className="cs__live-links-label">Select pages are live</span>
+                  <span className="cs__live-links-label">{project.outcomeLiveLinksLabel ?? 'Select pages are live'}</span>
                   <div className="cs__live-links-list">
                     {project.outcomeLiveLinks.map((link, i) => (
                       <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="cs__live-link">

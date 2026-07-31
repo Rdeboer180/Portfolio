@@ -1,0 +1,73 @@
+import React from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { SITE, EMAIL_HREF } from '../data/site';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { getNote, KIND_LABEL } from '../data/notes';
+import LinkedInLink from './LinkedInLink';
+import '../styles/styles.scss';
+
+// ============================================
+// Single note — clean reading layout: mono meta, title, dek, ~68ch body.
+// Skill entries surface their downloadable artifact in the header.
+// ============================================
+
+const NotePage: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const note = slug ? getNote(slug) : undefined;
+
+  usePageMeta(
+    note
+      ? {
+          title: `${note.title} — Notes — Ryan DeBoer`,
+          description: note.dek,
+          canonical: `${SITE.portfolioUrl}/notes/${note.slug}/`,
+          ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
+          ogType: 'article',
+        }
+      : { title: 'Notes — Ryan DeBoer' }
+  );
+
+  if (!note) return <Navigate to="/notes" replace />;
+
+  return (
+    <article className="notes notes--single">
+      <nav className="notes__nav" aria-label="Primary">
+        <Link to="/notes" className="notes__nav-logo">Ryan DeBoer</Link>
+        <Link to="/notes" className="notes__nav-back">&larr; All notes</Link>
+      </nav>
+
+      <header className="notes__header notes__header--article">
+        <p className="notes__meta">
+          <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
+            {KIND_LABEL[note.kind]}
+          </span>
+          <time dateTime={note.dateISO}>{note.date}</time>
+        </p>
+        <h1 className="notes__title">{note.title}</h1>
+        <p className="notes__dek">{note.dek}</p>
+        {note.artifact && (
+          <a href={note.artifact.href} className="notes__artifact" target="_blank" rel="noopener noreferrer">
+            {note.artifact.label}
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        )}
+      </header>
+
+      <div className="notes__body">{note.body}</div>
+
+      <aside className="notes__close">
+        <span className="notes__close-label">[ In Progress ]</span>
+        <p className="notes__close-body">
+          These notes are the resolved version. The thinking in progress lands on LinkedIn first.
+        </p>
+        <div className="notes__close-actions">
+          <a href={EMAIL_HREF} className="notes__close-mail">Get in touch</a>
+          <LinkedInLink label="Follow the work in progress" surface="notes_close" />
+          <Link to="/notes" className="notes__close-mail">All notes</Link>
+        </div>
+      </aside>
+    </article>
+  );
+};
+
+export default NotePage;
