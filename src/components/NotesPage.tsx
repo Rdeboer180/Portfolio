@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { NOTES, KIND_LABEL } from '../data/notes';
+import { NOTES_BY_DATE, KIND_LABEL } from '../data/notes';
 import '../styles/styles.scss';
 
 // ============================================
@@ -57,7 +57,7 @@ const NotesPage: React.FC = () => {
       </section>
 
       <section className="notes__list" aria-label="All notes">
-        {NOTES.map((note) => (
+        {NOTES_BY_DATE.map((note) => (
           <Link key={note.slug} to={`/notes/${note.slug}/`} className="notes__row">
             <div className="notes__row-meta">
               <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
