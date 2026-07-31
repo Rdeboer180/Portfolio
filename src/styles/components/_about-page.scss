@@ -92,7 +92,7 @@
   // ── Transition card — the single orange dot-matrix signature moment ───────────
 
   &__transition-card {
-    max-width: 1186px;
+    max-width: $container-max-width;
     margin: 0 auto;
     padding: 0 $container-padding-x;
     z-index: 2;

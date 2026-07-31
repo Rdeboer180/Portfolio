@@ -17,7 +17,7 @@ $proc-stack-top: 92px; // clears the fixed nav
   margin-top: -3em;
 
   &__inner {
-    max-width: 1186px;
+    max-width: $container-max-width;
     margin: 0 auto;
     padding: $spacing-2xl 0 0 $container-padding-x;
   }
@@ -62,7 +62,7 @@ $proc-stack-top: 92px; // clears the fixed nav
   // ── Stacking deck ──────────────────────────────────────────────────────────
 
   &__deck {
-    max-width: 1186px;
+    max-width: $container-max-width;
     margin: $spacing-2xl auto 0;
     padding: 0 $container-padding-x;
   }

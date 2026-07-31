@@ -11,6 +11,15 @@ import { Link } from 'react-router-dom';
 
 export type NoteKind = 'essay' | 'skill' | 'system';
 
+// Moment frame — the case-study insight-callout vocabulary, carried into
+// notes: one marked, quotable judgment per piece.
+const Callout: React.FC<{ marker: string; children: React.ReactNode }> = ({ marker, children }) => (
+  <aside className="notes__callout">
+    <span className="notes__callout-marker">{marker}</span>
+    <p className="notes__callout-text">{children}</p>
+  </aside>
+);
+
 export interface Note {
   slug: string;
   kind: NoteKind;
@@ -71,8 +80,11 @@ export const NOTES: Note[] = [
           empty div. Instead of migrating frameworks, the build renders every route in a real
           browser at deploy time and writes the finished HTML to disk — each case study is a
           crawlable page with its own title, meta, and structured data, while visitors still get
-          the client-side app. Boring architecture, applied carefully, beats a rewrite.
+          the client-side app.
         </p>
+        <Callout marker="Decision">
+          Boring architecture, applied carefully, beats a rewrite.
+        </Callout>
         <h2>Where AI sits</h2>
         <p>
           Agents audit this site continuously — accessibility passes, copy passes against a
@@ -148,9 +160,11 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   ambient animated blobs, scroll hijacking.`}</code>
         </pre>
         <h2>Why publish it</h2>
+        <Callout marker="Position">
+          Taste is usually claimed, rarely shown. A skill file is taste in a verifiable form.
+        </Callout>
         <p>
-          Taste is usually claimed, rarely shown. A skill file is taste in a verifiable form:
-          you can read the rules, then look at{' '}
+          You can read the rules, then look at{' '}
           <Link to="/design-system">the system this site runs on</Link> and the{' '}
           <Link to="/work/playdraft/">products built under it</Link> and check whether the
           output matches the standard. The selection-frame cards and the text-selection
@@ -197,10 +211,10 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
           <Link to="/notes/ryan-design-taste-skill">an installable skill</Link> and the token
           layer as <Link to="/design-system">a live page</Link>.
         </p>
-        <p>
+        <Callout marker="Working theory">
           Maybe the next evolution of design systems is not another component library. Maybe it
           is making everything we have learned portable.
-        </p>
+        </Callout>
       </>
     ),
   },
@@ -214,10 +228,10 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dek: 'A design system succeeds when teams make better decisions without the original designer present.',
     body: (
       <>
-        <p>
+        <Callout marker="The test">
           A design system is not successful because the original designer can explain it. It is
           successful when teams can make better decisions without that designer present.
-        </p>
+        </Callout>
         <p>
           That&rsquo;s the test I hold my own work to, and it changes what you build. The best
           systems reduce ambiguity after handoff. Documentation stops being an afterthought and
@@ -271,10 +285,9 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
           stakes, and deciding what the product should be — then using AI to explore the space
           inside that boundary faster than I could alone.
         </p>
-        <p>
-          That&rsquo;s the division of labor I trust: AI widens the field of what could exist.
-          Judgment narrows it to what should.
-        </p>
+        <Callout marker="Division of labor">
+          AI widens the field of what could exist. Judgment narrows it to what should.
+        </Callout>
       </>
     ),
   },
@@ -319,9 +332,11 @@ logos, packaging, uniforms, title treatments, or trade dress.`}</code>
         <p>
           The full story, including the App Store decisions it shaped, is in{' '}
           <Link to="/work/playdraft/">the PlayDraft case study</Link>. I treat this file the
-          same way I treat a token system: it&rsquo;s design work. It just happens to be made
-          of rules instead of rectangles.
+          same way I treat a token system.
         </p>
+        <Callout marker="Position">
+          It&rsquo;s design work. It just happens to be made of rules instead of rectangles.
+        </Callout>
       </>
     ),
   },
@@ -354,10 +369,12 @@ logos, packaging, uniforms, title treatments, or trade dress.`}</code>
           in all of it — it&rsquo;s the part I&rsquo;d never give up — but it was never the
           job. It was the surface of the job.
         </p>
+        <Callout marker="The point">
+          Titles lag reality. Portfolios don&rsquo;t have to.
+        </Callout>
         <p>
-          Titles lag reality. Portfolios don&rsquo;t have to. That&rsquo;s why this site leads
-          with systems, implementation, and outcomes, and why the title on it now says what
-          the work says: product design engineer.
+          That&rsquo;s why this site leads with systems, implementation, and outcomes, and why
+          the title on it now says what the work says: product design engineer.
         </p>
       </>
     ),

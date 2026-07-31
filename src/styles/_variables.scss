@@ -162,6 +162,8 @@ $card-border: 1px solid $color-border-default;
 
 $container-max-width: 1186px;
 $container-text-width: 720px;
+// Wide content column — case-study shells, about proof blocks, resume paper
+$container-wide: 960px;
 $container-padding-x: $spacing-2xl;
 
 $grid-columns: 12;

@@ -51,7 +51,7 @@
 
   // ── Header ────────────────────────────────────────────────────────────────
   &__header {
-    max-width: 720px;
+    max-width: $container-text-width;
     margin: 0 auto;
     padding: $spacing-4xl $spacing-2xl $spacing-2xl;
   }
@@ -121,7 +121,7 @@
     &::before {
       opacity: 1;
     }
-    max-width: 720px;
+    max-width: $container-text-width;
     margin: $spacing-2xl auto;
     padding: $spacing-xl $spacing-2xl;
     background: $color-secondary-lightest;
@@ -180,13 +180,17 @@
 
   // ── Index rows ────────────────────────────────────────────────────────────
   &__list {
-    max-width: 720px;
+    max-width: $container-text-width;
     margin: $spacing-2xl auto 0;
     padding: 0 $spacing-2xl;
   }
 
+  // Two-column editorial row on desktop: mono meta rail left, content right —
+  // the case-study meta-bar rhythm applied to a list.
   &__row {
-    display: block;
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    column-gap: $spacing-2xl;
     padding: $spacing-xl 0;
     border-bottom: 1px solid $color-neutral-light;
     text-decoration: none;
@@ -199,9 +203,14 @@
 
   &__row-meta {
     display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-sm;
+    flex-direction: column;
+    gap: $spacing-xs;
+    padding-top: 5px; // optically align mono meta with the title cap height
+  }
+
+  &__row-title,
+  &__row-dek {
+    grid-column: 2;
   }
 
   &__row-date {
@@ -243,9 +252,10 @@
 
   // ── Article body ──────────────────────────────────────────────────────────
   &__body {
-    max-width: 720px;
+    max-width: $container-text-width;
     margin: 0 auto;
     padding: $spacing-lg $spacing-2xl 0;
+    counter-reset: note-section;
 
     p,
     li {
@@ -259,12 +269,24 @@
       margin: 0 0 $spacing-xl;
     }
 
+    // Numbered section heads — the case-study section-number vocabulary.
+    // Sections in a piece are a real sequence; the number encodes it.
     h2 {
       font-family: $font-family-heading;
       font-size: $font-size-h5;
       font-weight: $font-weight-bold;
       color: $color-neutral-dark;
       margin: $spacing-2xl 0 $spacing-lg;
+
+      &::before {
+        counter-increment: note-section;
+        content: counter(note-section, decimal-leading-zero) ' — ';
+        font-size: $font-size-caption;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
+        letter-spacing: 0.04em;
+        vertical-align: 2px;
+      }
     }
 
     ul {
@@ -310,9 +332,40 @@
     }
   }
 
+  // ── Callout — the case-study insight-callout moment frame ────────────────
+  &__callout {
+    background: $color-primary-light;
+    border-left: 3px solid $color-primary;
+    border-radius: 0 $card-border-radius-lg $card-border-radius-lg 0;
+    padding: $spacing-xl $spacing-2xl;
+    margin: $spacing-2xl 0;
+    max-width: 68ch;
+  }
+
+  &__callout-marker {
+    display: block;
+    font-family: $font-family-primary;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__callout-text {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    line-height: $line-height-body-lg;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-dark;
+    margin: 0;
+    max-width: none;
+  }
+
   // ── Close rail — mirrors the case-study continue block ───────────────────
   &__close {
-    max-width: 720px;
+    max-width: $container-text-width;
     margin: $spacing-3xl auto 0;
     padding: $spacing-2xl $spacing-2xl 0;
     border-top: 1px solid $color-neutral-light;
@@ -377,6 +430,24 @@
 
     &__title {
       font-size: $font-size-h3;
+    }
+
+    // Meta rail stacks above the title on small screens
+    &__row {
+      grid-template-columns: 1fr;
+      row-gap: $spacing-sm;
+    }
+
+    &__row-meta {
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-md;
+      padding-top: 0;
+    }
+
+    &__row-title,
+    &__row-dek {
+      grid-column: 1;
     }
   }
 }

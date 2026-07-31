@@ -106,7 +106,7 @@
   // Paper — the resume document
   // ==========================================
   &__paper {
-    max-width: 960px;
+    max-width: $container-wide;
     margin: $spacing-2xl auto;
     padding: $spacing-3xl;
     background: $color-white;
