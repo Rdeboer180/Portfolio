@@ -28,8 +28,10 @@ const NotesPage: React.FC = () => {
   return (
     <article className="notes">
       <nav className="notes__nav" aria-label="Primary">
+        <div className="notes__nav-inner">
         <Link to={getHomeHref()} className="notes__nav-logo">Ryan DeBoer</Link>
         <Link to={getHomeHref()} className="notes__nav-back">&larr; Back to Home</Link>
+        </div>
       </nav>
 
       <header className="notes__header">

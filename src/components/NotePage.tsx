@@ -33,9 +33,11 @@ const NotePage: React.FC = () => {
   return (
     <article className="notes notes--single">
       <nav className="notes__nav" aria-label="Primary">
+        <div className="notes__nav-inner">
         {/* Logo always goes home; "All notes" is the section breadcrumb */}
         <Link to={getHomeHref()} className="notes__nav-logo">Ryan DeBoer</Link>
         <Link to="/notes" className="notes__nav-back">&larr; All notes</Link>
+        </div>
       </nav>
 
       <header className="notes__header notes__header--article">

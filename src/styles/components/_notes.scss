@@ -35,6 +35,15 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   }
 
+  &__nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: $container-max-width;
+    margin: 0 auto;
+  }
+
   &__nav-logo {
     font-family: $font-family-heading;
     font-size: $font-size-body;
@@ -58,9 +67,10 @@
 
   // ── Header ────────────────────────────────────────────────────────────────
   &__header {
-    max-width: $container-text-width;
+    width: 100%;
+    max-width: $container-wide;
     margin: 0 auto;
-    padding: $spacing-4xl $spacing-2xl $spacing-2xl;
+    padding: $section-pad-y $spacing-2xl $spacing-2xl;
   }
 
   &__eyebrow {
@@ -121,6 +131,12 @@
     }
   }
 
+  // Article pages keep the 720 reading measure — the wide tier is index chrome
+  &--single &__header {
+    max-width: $container-text-width;
+    padding-top: $spacing-4xl;
+  }
+
   // ── Pinned start-here block — wears the selection frame ──────────────────
   &__pinned {
     @include selection-frame;
@@ -128,7 +144,8 @@
     &::before {
       opacity: 1;
     }
-    max-width: $container-text-width;
+    width: 100%;
+    max-width: $container-wide;
     margin: $spacing-2xl auto;
     padding: $spacing-xl $spacing-2xl;
     background: $color-secondary-lightest;
@@ -187,7 +204,8 @@
 
   // ── Index rows ────────────────────────────────────────────────────────────
   &__list {
-    max-width: $container-text-width;
+    width: 100%;
+    max-width: $container-wide;
     margin: $spacing-2xl auto 0;
     padding: 0 $spacing-2xl;
 
@@ -326,6 +344,7 @@
 
   // ── Article body ──────────────────────────────────────────────────────────
   &__body {
+    width: 100%;
     max-width: $container-text-width;
     margin: 0 auto;
     padding: $spacing-lg $spacing-2xl 0;
@@ -439,6 +458,7 @@
 
   // ── Close rail — mirrors the case-study continue block ───────────────────
   &__close {
+    width: 100%;
     max-width: $container-text-width;
     margin: $spacing-3xl auto 0;
     padding: $spacing-2xl $spacing-2xl $spacing-4xl;
@@ -477,10 +497,13 @@
     &__list,
     &__body,
     &__close {
-      margin-left: $spacing-lg;
-      margin-right: $spacing-lg;
       padding-left: $spacing-lg;
       padding-right: $spacing-lg;
+    }
+
+    &__pinned {
+      // The framed block keeps a visible inset from the viewport edge
+      width: calc(100% - #{$spacing-lg * 2});
     }
 
     &__title {
