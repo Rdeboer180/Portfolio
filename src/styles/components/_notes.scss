@@ -300,6 +300,12 @@
         font-size: 13px;
         line-height: 1.6;
         white-space: pre;
+        // Reset the global inline-code chip (light bg + padding) — inside a
+        // dark pre it renders as a light band behind every line of code.
+        background: none;
+        color: inherit;
+        padding: 0;
+        border-radius: 0;
       }
     }
   }
