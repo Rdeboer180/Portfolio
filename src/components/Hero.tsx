@@ -56,6 +56,16 @@ const Hero: React.FC = () => {
   // (the old "-First" rename insertion state has been removed)
   const [showBBox, setShowBBox] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  // Mobile nav menu (inline links hide below $breakpoint-sm)
+  const [navOpen, setNavOpen] = useState(false);
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setNavOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [navOpen]);
   const isMobileInitial = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const [introStage, setIntroStage] = useState<IntroStage>(isMobileInitial ? 'sketch' : 'scrawl');
 
@@ -426,7 +436,24 @@ const Hero: React.FC = () => {
           <a href="#projects">My Work</a>
           <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
+          {/* Mobile-only menu toggle — inline links hide below $breakpoint-sm */}
+          <button
+            type="button"
+            className="hero__nav-toggle"
+            aria-expanded={navOpen}
+            aria-controls="hero-nav-menu"
+            onClick={() => setNavOpen((o) => !o)}
+          >
+            {navOpen ? '[ Close ]' : '[ Menu ]'}
+          </button>
         </div>
+        {navOpen && (
+          <div id="hero-nav-menu" className="hero__nav-menu">
+            <Link to="/about" onClick={() => setNavOpen(false)}>About Me</Link>
+            <a href="#projects" onClick={() => setNavOpen(false)}>My Work</a>
+            <Link to="/resume" onClick={() => setNavOpen(false)}>Resume</Link>
+          </div>
+        )}
       </nav>
 
       <div className="hero__content">

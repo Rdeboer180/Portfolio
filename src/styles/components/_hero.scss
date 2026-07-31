@@ -126,6 +126,61 @@
         border-color: $color-neutral-dark !important;
       }
     }
+
+    // Mobile menu toggle — [ Menu ] / [ Close ] mono chip, hidden on desktop
+    &-toggle {
+      display: none;
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: $spacing-sm 0;
+      font-family: $font-family-mono;
+      font-size: $font-size-caption;
+      font-weight: $font-weight-medium;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: $color-neutral-standard;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid $color-primary;
+        outline-offset: 3px;
+        border-radius: $radius-sm;
+      }
+    }
+
+    // Mobile menu panel — slides under the nav bar
+    &-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding: $spacing-sm $spacing-2xl $spacing-lg;
+
+      a {
+        display: block;
+        padding: $spacing-md 0;
+        font-size: $font-size-body;
+        color: $color-neutral-standard;
+        text-decoration: none;
+        border-bottom: 1px solid $color-neutral-lightest;
+
+        &:last-child {
+          border-bottom: 0;
+        }
+
+        &:hover,
+        &:focus-visible {
+          color: $color-neutral-dark;
+        }
+      }
+    }
   }
 
   &__content {
@@ -2236,6 +2291,11 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     &__nav {
       &-links a:not(.hero__nav-cta) {
         display: none;
+      }
+
+      // Inline links collapse into the [ Menu ] toggle at this width
+      &-toggle {
+        display: inline-block;
       }
     }
 

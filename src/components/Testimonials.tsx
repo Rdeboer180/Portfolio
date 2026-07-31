@@ -49,7 +49,6 @@ interface Testimonial {
 // 1. Leadership & Delivery (Adam, LinkedIn) → 2. Cross-Functional & Human (Kokesh)
 // → 3. Craft, Care, and Growth (Amanda, LinkedIn) → 4. Systems Thinking (Kokesh)
 // → 5. Design–Engineering Partnership (Cheryl) → 6. Precision & Reasoning (Tim)
-// → 7. Business Impact (Deborah)
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -120,15 +119,6 @@ const testimonials: Testimonial[] = [
     name: 'Tim Joines',
     role: 'Tire Rack Senior Management',
     year: '2021',
-  },
-  {
-    title: 'Business Impact',
-    quote: (
-      <>The new site has been amazing&mdash;we&rsquo;re <H>getting new inquiries every day</H>, and <H>clients have been loving it</H>. It&rsquo;s made it so much easier to connect and respond, and I couldn&rsquo;t be happier with how it&rsquo;s working for us.</>
-    ),
-    name: 'Deborah Clements',
-    role: 'Owner & Operator, Heatherwood Equestrian Academy',
-    year: '2025',
   },
 ];
 

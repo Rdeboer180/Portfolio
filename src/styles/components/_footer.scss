@@ -66,6 +66,12 @@
     margin: 0;
   }
 
+  &__meta-links {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xl;
+  }
+
   &__site-index {
     font-family: $font-family-primary;
     font-size: $font-size-caption;

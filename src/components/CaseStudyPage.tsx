@@ -362,18 +362,35 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   }, []);
 
   useEffect(() => {
-    if (project) {
-      // One unlock covers every case study for the browser session —
-      // the password gates the person, not the individual page.
-      const dismissedKey = `project-dismissed-${project.slug}`;
-      const unlocked = sessionStorage.getItem(UNLOCK_SESSION_KEY) === 'true';
-      const dismissed = localStorage.getItem(dismissedKey) === 'true';
+    if (!project) return;
+    // One unlock covers every case study for the browser session —
+    // the password gates the person, not the individual page.
+    const dismissedKey = `project-dismissed-${project.slug}`;
+    const unlocked = sessionStorage.getItem(UNLOCK_SESSION_KEY) === 'true';
+    const dismissed = localStorage.getItem(dismissedKey) === 'true';
 
-      setIsUnlocked(unlocked);
+    setIsUnlocked(unlocked);
+    setShowPasswordModal(false);
 
-      const hasOverlay = hasOverlayImages(project);
-      setShowPasswordModal(hasOverlay && !unlocked && !dismissed);
-    }
+    // Deferred prompt: don't interrupt a cold visitor on page load — wait
+    // until the first locked overlay actually scrolls into view (clicking an
+    // overlay still opens the modal immediately via onOverlayClick).
+    if (!hasOverlayImages(project) || unlocked || dismissed) return;
+
+    const cards = Array.from(document.querySelectorAll('.overlay-card'));
+    if (cards.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowPasswordModal(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    cards.forEach((c) => observer.observe(c));
+    return () => observer.disconnect();
   }, [project, hasOverlayImages]);
 
   // Scroll-reveal for content sections — extends the homepage's 520ms reveal
@@ -877,19 +894,23 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </section>
             )}
 
-            {/* ==================== Continue on LinkedIn — quiet close rail ==================== */}
-            <aside className="cs__continue">
-              <span className="cs__continue-label">[ In Progress ]</span>
-              <p className="cs__continue-body">
-                Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
-              </p>
-              <div className="cs__continue-actions">
-                <a href={EMAIL_HREF} className="cs__continue-mail">Get in touch</a>
-                <LinkedInLink label="Follow the work in progress" surface="case_study_close" />
-              </div>
-            </aside>
           </>
         )}
+
+        {/* ==================== Continue — quiet close rail (every layout) ==================== */}
+        <aside className="cs__continue">
+          <span className="cs__continue-label">[ In Progress ]</span>
+          <p className="cs__continue-body">
+            Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
+          </p>
+          <div className="cs__continue-actions">
+            <a href={EMAIL_HREF} className="cs__continue-mail">Get in touch</a>
+            <LinkedInLink label="Follow the work in progress" surface="case_study_close" />
+            <Link to="/design-system" className="cs__continue-mail">
+              See this site&rsquo;s own design system
+            </Link>
+          </div>
+        </aside>
 
         {/* ==================== Keep exploring — prev/next pager ==================== */}
         {(prevProject || nextProject) && (

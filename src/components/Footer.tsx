@@ -24,7 +24,10 @@ const Footer: React.FC = () => {
           <p className="footer__copy">
             &copy; {new Date().getFullYear()} Ryan DeBoer
           </p>
-          <Link to="/sitemap" className="footer__site-index">Site index</Link>
+          <div className="footer__meta-links">
+            <Link to="/design-system" className="footer__site-index">Design system</Link>
+            <Link to="/sitemap" className="footer__site-index">Site index</Link>
+          </div>
         </div>
       </div>
     </footer>
