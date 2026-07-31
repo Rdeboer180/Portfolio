@@ -71,17 +71,13 @@ function HomeRoute() {
   return (
     <PageShell className="min-h-screen bg-white">
       <Hero />
-      {/* Rails: continuous hairlines at the container edges frame everything
-          below the hero — separation by structure, not background bands. */}
-      <div className="home-rails">
-        <About />
-        <CaseStudyPlayground />
-        <Skills />
-        <Testimonials />
-        <ProcessPlayground />
-        <TechnicalAbilities />
-        <FAQ />
-      </div>
+      <About />
+      <CaseStudyPlayground />
+      <Skills />
+      <Testimonials />
+      <ProcessPlayground />
+      <TechnicalAbilities />
+      <FAQ />
       <Footer />
     </PageShell>
   );

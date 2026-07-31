@@ -6,18 +6,11 @@
 @import '../variables';
 
 .testimonials {
-  // The page's one dark band — structural punctuation on the longest proof
-  // section (Stripe places its dark bands on the same job: social proof at
-  // 50-75% of the page). Cards stay white so the in-quote highlight system
-  // is untouched; only the shell re-tones.
-  background: $color-neutral-dark;
+  // Light-gray band — same ground as the Strengths section, so the page's
+  // two gray moments bracket the white case-study and process stretches.
+  // White cards lift naturally off it.
+  background: $color-secondary-lightest;
   padding: $section-pad-y 0;
-
-  // Section rule re-tones for the dark ground
-  .section-rule {
-    --rule-line: rgba(255, 255, 255, 0.14);
-    --rule-handle: rgba(255, 255, 255, 0.4);
-  }
 
   &__container {
     max-width: $container-max-width;
@@ -50,7 +43,7 @@
     font-family: $font-family-heading;
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;
-    color: $color-white;
+    color: $color-neutral-dark;
     line-height: $line-height-h2;
     letter-spacing: -0.02em;
     margin: $spacing-sm 0 0;
@@ -60,7 +53,7 @@
     font-family: $font-family-primary;
     font-size: $font-size-body-lg;
     line-height: 1.55;
-    color: rgba(255, 255, 255, 0.78);
+    color: $color-neutral-standard;
     margin: 0;
   }
 
@@ -69,7 +62,7 @@
     font-size: $font-size-caption;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: $color-primary-muted; // lighter orange clears contrast on #1b1b1b
+    color: $color-primary;
     margin: 0;
   }
 
@@ -80,8 +73,8 @@
     align-self: flex-start;
     margin-top: $spacing-sm;
     padding: $spacing-sm $spacing-lg;
-    background: $color-white;
-    color: $color-neutral-dark;
+    background: $color-neutral-dark;
+    color: $color-white;
     font-family: $font-family-heading;
     font-size: $font-size-body-sm;
     font-weight: $font-weight-bold;
@@ -296,7 +289,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: rgba(255, 255, 255, 0.14);
+      background: $color-neutral-light;
     }
 
     &::before { margin-right: $spacing-md; }
@@ -308,10 +301,10 @@
     font-size: $font-size-caption;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.85);
+    color: $color-neutral-muted;
     margin: 0;
     padding: $spacing-xs $spacing-md;
-    background: $color-neutral-dark;
+    background: $color-secondary-lightest;
     font-weight: $font-weight-medium;
   }
 
