@@ -43,10 +43,12 @@ const NotesPage: React.FC = () => {
         </p>
       </header>
 
-      {/* Pinned — the system + the skill, front and center */}
-      <section className="notes__pinned" aria-label="Start here">
-        <span className="notes__pinned-label">[ Start Here ]</span>
-        <div className="notes__pinned-links">
+      {/* Pinned — the system + the skill, front and center. The frame caps at
+          the text column and left-aligns with the header copy above it. */}
+      <section className="notes__pinned-wrap" aria-label="Start here">
+        <div className="notes__pinned">
+          <span className="notes__pinned-label">[ Start Here ]</span>
+          <div className="notes__pinned-links">
           <Link to="/notes/how-this-site-works" className="notes__pinned-link">
             <span className="notes__pinned-kind">{KIND_LABEL.system}</span>
             <span className="notes__pinned-title">How this site works</span>
@@ -59,6 +61,7 @@ const NotesPage: React.FC = () => {
             <span className="notes__pinned-kind">{KIND_LABEL.skill}</span>
             <span className="notes__pinned-title">The taste skill my agents load</span>
           </Link>
+          </div>
         </div>
       </section>
 

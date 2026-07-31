@@ -144,15 +144,22 @@
   }
 
   // ── Pinned start-here block — wears the selection frame ──────────────────
+  // Wrapper carries the page container; the framed box caps at the text
+  // column and left-aligns with the header copy above it.
+  &__pinned-wrap {
+    width: 100%;
+    max-width: $container-max-width;
+    margin: $spacing-2xl auto;
+    padding: 0 $container-padding-x;
+  }
+
   &__pinned {
     @include selection-frame;
     // Static handles — the frame is always "selected" here; no reveal gating.
     &::before {
       opacity: 1;
     }
-    width: 100%;
-    max-width: $container-max-width;
-    margin: $spacing-2xl auto;
+    max-width: $container-text-width;
     padding: $spacing-xl $spacing-2xl;
     background: $color-secondary-lightest;
   }
@@ -554,8 +561,7 @@
       padding: $spacing-3xl $spacing-xl $spacing-xl;
     }
 
-    &__pinned,
-    &__list,
+    &__pinned-wrap,
     &__body,
     &__close {
       padding-left: $spacing-lg;
@@ -588,11 +594,6 @@
     &__section {
       padding-left: $spacing-lg;
       padding-right: $spacing-lg;
-    }
-
-    &__pinned {
-      // The framed block keeps a visible inset from the viewport edge
-      width: calc(100% - #{$spacing-lg * 2});
     }
 
     &__title {
