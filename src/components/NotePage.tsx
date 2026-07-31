@@ -4,7 +4,6 @@ import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getNote, KIND_LABEL } from '../data/notes';
-import LinkedInLink from './LinkedInLink';
 import Footer from './Footer';
 import '../styles/styles.scss';
 
@@ -61,17 +60,14 @@ const NotePage: React.FC = () => {
 
       <div className="notes__body">{note.body}</div>
 
-      {/* Close rail keeps one job: route to the in-progress stream. Contact
-          lives in the shared footer below, same as home and about. */}
+      {/* Close rail is a statement, not a nav. "All notes" lives in the header
+          and contact lives in the shared footer below. */}
       <aside className="notes__close">
         <span className="notes__close-label">[ In Progress ]</span>
         <p className="notes__close-body">
-          These notes are the resolved version. The thinking in progress lands on LinkedIn first.
+          Most of these start as a half-formed thought on LinkedIn and get cleaned up on the way
+          here. If you want the rough cut, that&rsquo;s where it shows up first.
         </p>
-        <div className="notes__close-actions">
-          <LinkedInLink label="Follow the work in progress" surface="notes_close" />
-          <Link to="/notes" className="notes__close-mail">All notes</Link>
-        </div>
       </aside>
 
       <Footer />

@@ -8,10 +8,17 @@
 @import '../variables';
 @import 'selection-frame';
 
+// Page column: content grows, the shared footer sits flush at the end (and is
+// pushed to the viewport bottom on short pages).
 .notes {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: $color-white;
-  padding-bottom: $spacing-4xl;
+
+  .footer {
+    margin-top: auto;
+  }
 
   // ── Nav — mirrors the about-page pattern (logo + back) ────────────────────
   &__nav {
@@ -434,7 +441,7 @@
   &__close {
     max-width: $container-text-width;
     margin: $spacing-3xl auto 0;
-    padding: $spacing-2xl $spacing-2xl 0;
+    padding: $spacing-2xl $spacing-2xl $spacing-4xl;
     border-top: 1px solid $color-neutral-light;
   }
 
@@ -457,25 +464,6 @@
     margin: 0 0 $spacing-lg;
   }
 
-  &__close-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: $spacing-xl;
-  }
-
-  &__close-mail {
-    font-size: $font-size-caption;
-    font-weight: $font-weight-semibold;
-    color: $color-neutral-dark;
-    text-decoration: none;
-
-    &:hover,
-    &:focus-visible {
-      color: $color-primary;
-      text-decoration: underline;
-    }
-  }
 }
 
 // ── Responsive ──────────────────────────────────────────────────────────────
