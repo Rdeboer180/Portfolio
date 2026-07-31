@@ -68,9 +68,15 @@
   // ── Header ────────────────────────────────────────────────────────────────
   &__header {
     width: 100%;
-    max-width: $container-wide;
+    max-width: $container-max-width; // mirrors the homepage container
     margin: 0 auto;
-    padding: $section-pad-y $spacing-2xl $spacing-2xl;
+    padding: $section-pad-y $container-padding-x $spacing-2xl;
+  }
+
+  // Text keeps its own measure inside the wide container — the same
+  // container/content split the homepage uses (.about__container + __content)
+  &__header > * {
+    max-width: $container-text-width;
   }
 
   &__eyebrow {
@@ -145,7 +151,7 @@
       opacity: 1;
     }
     width: 100%;
-    max-width: $container-wide;
+    max-width: $container-max-width;
     margin: $spacing-2xl auto;
     padding: $spacing-xl $spacing-2xl;
     background: $color-secondary-lightest;
@@ -205,12 +211,29 @@
   // ── Index rows ────────────────────────────────────────────────────────────
   &__list {
     width: 100%;
-    max-width: $container-wide;
+    max-width: $container-max-width;
     margin: $spacing-2xl auto 0;
-    padding: 0 $spacing-2xl;
+    padding: 0 $container-padding-x;
 
+    // Loose stream becomes a two-up card field at the wide container — the
+    // homepage's card-grid rhythm. Cards keep readable proportions instead of
+    // stretching to 1100px of empty box.
+    &--stream {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: $spacing-xl;
+      align-items: start;
+
+      .notes__stream-head {
+        grid-column: 1 / -1;
+      }
+    }
+
+    // Resolved stays a structured list: one hierarchy, scanned top to bottom
     &--resolved {
       margin-top: $spacing-3xl;
+      // Section-to-footer rhythm matches the homepage's between-section cadence
+      padding-bottom: $section-pad-y;
     }
   }
 
@@ -218,6 +241,7 @@
   &__stream-head {
     padding: $spacing-lg 0 $spacing-xl;
     border-bottom: 1px solid $color-neutral-light;
+    margin-bottom: $spacing-sm;
   }
 
   &__stream-label {
@@ -308,12 +332,17 @@
   // actually pile up. Reaching for one straightens it. Rotation is static
   // (safe under reduced motion); only the straightening transitions.
   &__row--loose {
+    // Card, not row: meta stacks above the title inside the two-up field
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
     background: $color-secondary-lightest;
     border: 1px solid $color-border-default;
     border-bottom: 1px solid $color-border-default;
     border-radius: $card-border-radius;
     padding: $spacing-xl;
-    margin: $spacing-lg 0;
+    margin: 0; // grid gap owns the spacing
+    height: 100%;
     transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease;
 
     &:nth-child(odd) {
@@ -333,6 +362,20 @@
     @media (prefers-reduced-motion: reduce) {
       transition: none;
     }
+  }
+
+  // Row-grid overrides inside loose cards (they're flex, not the 2-col grid)
+  &__row--loose &__row-meta {
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-md;
+    padding-top: 0;
+  }
+
+  &__row--loose &__row-title,
+  &__row--loose &__row-dek {
+    grid-column: auto;
+    margin: 0;
   }
 
   &__meta-source {
@@ -499,6 +542,10 @@
     &__close {
       padding-left: $spacing-lg;
       padding-right: $spacing-lg;
+    }
+
+    &__list--stream {
+      grid-template-columns: 1fr;
     }
 
     &__pinned {
