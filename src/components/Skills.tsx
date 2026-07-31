@@ -44,7 +44,7 @@ const Skills: React.FC = () => {
     <section id="skills" className="skills" ref={sectionRef}>
       <div className="skills__container">
         <div className="skills__header">
-          <SectionBadge icon={<LayersIcon />} label="Strengths" />
+          <SectionBadge icon={<LayersIcon />} label="Strengths" index="03" />
           <h2 className="skills__title">What I bring beyond the tools</h2>
           <p className="skills__subtitle">
             <span className="about__highlight">AI is changing how quickly ideas can be explored and shipped—but without strategy behind the work and the prompt, the product won’t stand out.</span> The real separation comes from designers who can think beyond the output—who know how to guide the tools, pressure test what they produce, and push the work further than expected.

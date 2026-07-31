@@ -38,3 +38,39 @@
     color: $color-primary;
   }
 }
+
+// ============================================
+// Section rule — numbered badge seated on a full-width hairline with
+// selection handles at both ends (where the rule meets the page rails).
+// Tells the reader where they are on a long page; the accent variant is
+// reserved for exactly one section (current work — orange = active).
+// Colors ride on custom properties so dark bands can re-tone the rule.
+// ============================================
+.section-rule {
+  --rule-line: #{$color-neutral-light};
+  --rule-handle: #{$color-secondary};
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  width: 100%;
+  margin-bottom: $spacing-lg;
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule-line);
+  }
+
+  &__handle {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    background: var(--rule-handle);
+  }
+
+  &--accent {
+    --rule-line: #{rgba($color-primary, 0.35)};
+    --rule-handle: #{$color-primary};
+  }
+}

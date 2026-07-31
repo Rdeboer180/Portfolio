@@ -460,7 +460,7 @@ const CaseStudyPlayground: React.FC = () => {
       <div className="case-playground__container">
         {/* ── Intro ── */}
         <div className="case-playground__intro">
-          <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" />
+          <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" index="02" tone="accent" />
           <h2 className="case-playground__title">What I've designed recently</h2>
           <p className="case-playground__lede">
             A closer look at the systems, interfaces, and product thinking I've shaped from

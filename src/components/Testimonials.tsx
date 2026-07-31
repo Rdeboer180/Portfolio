@@ -164,7 +164,7 @@ const Testimonials: React.FC = () => {
         {/* ==== Zone A — Hero proof area ==================================== */}
         <div className="testimonials__hero">
           <div className="testimonials__hero-text">
-            <SectionBadge icon={<QuoteIcon />} label="Peer Reviewed" />
+            <SectionBadge icon={<QuoteIcon />} label="Peer Reviewed" index="04" />
             <h2 className="testimonials__lede">
               Hear from the people I build with
             </h2>

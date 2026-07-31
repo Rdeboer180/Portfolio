@@ -296,7 +296,7 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
             <span className="proficiency-dock__panel-eyebrow-tool">{active.label}</span>
             {' '}&rarr; Capability &rarr; Outcome
           </p>
-          <h3 className="proficiency-dock__panel-headline">{active.headline}</h3>
+          <p className="proficiency-dock__panel-headline">{active.headline}</p>
           <p className="proficiency-dock__panel-copy">
             {active.copy({ testimonialsHref })}
           </p>

@@ -150,7 +150,7 @@ const ProcessPlayground: React.FC = () => {
     >
       <div className="process-playground__container">
         <div className="process-playground__intro">
-          <SectionBadge icon={<ProcessIcon />} label="My Process" />
+          <SectionBadge icon={<ProcessIcon />} label="My Process" index="05" />
           <h2 className="process-playground__title">From sketch to shipped</h2>
           <p className="process-playground__lede">
             Five beats behind every project &mdash; the same craft arc, whether

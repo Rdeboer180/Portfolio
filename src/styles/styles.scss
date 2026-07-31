@@ -18,6 +18,7 @@
 
 // Shared mixins (must precede components that @include them)
 @import 'components/selection-frame';
+@import 'components/home-rails';
 
 // Import component styles
 @import 'components/hero';

@@ -21,7 +21,7 @@
   --case-study-motion-medium: var(--transition-base);
   --case-study-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  padding: $spacing-4xl 0;
+  padding: $section-pad-y 0;
 
   &__container {
     max-width: 1186px;

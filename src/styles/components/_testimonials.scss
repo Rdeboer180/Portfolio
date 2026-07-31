@@ -6,8 +6,18 @@
 @import '../variables';
 
 .testimonials {
-  background: $color-white;
-  padding: $spacing-4xl 0;
+  // The page's one dark band — structural punctuation on the longest proof
+  // section (Stripe places its dark bands on the same job: social proof at
+  // 50-75% of the page). Cards stay white so the in-quote highlight system
+  // is untouched; only the shell re-tones.
+  background: $color-neutral-dark;
+  padding: $section-pad-y 0;
+
+  // Section rule re-tones for the dark ground
+  .section-rule {
+    --rule-line: rgba(255, 255, 255, 0.14);
+    --rule-handle: rgba(255, 255, 255, 0.4);
+  }
 
   &__container {
     max-width: $container-max-width;
@@ -40,7 +50,7 @@
     font-family: $font-family-heading;
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
+    color: $color-white;
     line-height: $line-height-h2;
     letter-spacing: -0.02em;
     margin: $spacing-sm 0 0;
@@ -50,7 +60,7 @@
     font-family: $font-family-primary;
     font-size: $font-size-body-lg;
     line-height: 1.55;
-    color: $color-neutral-standard;
+    color: rgba(255, 255, 255, 0.78);
     margin: 0;
   }
 
@@ -59,7 +69,7 @@
     font-size: $font-size-caption;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: $color-primary;
+    color: $color-primary-muted; // lighter orange clears contrast on #1b1b1b
     margin: 0;
   }
 
@@ -70,8 +80,8 @@
     align-self: flex-start;
     margin-top: $spacing-sm;
     padding: $spacing-sm $spacing-lg;
-    background: $color-neutral-dark;
-    color: $color-white;
+    background: $color-white;
+    color: $color-neutral-dark;
     font-family: $font-family-heading;
     font-size: $font-size-body-sm;
     font-weight: $font-weight-bold;
@@ -84,6 +94,7 @@
     &:hover,
     &:focus-visible {
       background: $color-primary;
+      color: $color-white;
       transform: translateY(-1px);
       outline: none;
       svg { transform: translateX(3px); }
@@ -277,14 +288,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: $spacing-2xl 0 $spacing-2xl;
+    // Mid-tier gap — internal punctuation inside the page's longest section
+    margin: $spacing-3xl 0;
 
     &::before,
     &::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: $color-neutral-light;
+      background: rgba(255, 255, 255, 0.14);
     }
 
     &::before { margin-right: $spacing-md; }
@@ -296,10 +308,10 @@
     font-size: $font-size-caption;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: $color-neutral-muted;
+    color: rgba(255, 255, 255, 0.85);
     margin: 0;
     padding: $spacing-xs $spacing-md;
-    background: $color-secondary-lightest;
+    background: $color-neutral-dark;
     font-weight: $font-weight-medium;
   }
 

@@ -20,7 +20,7 @@ const About: React.FC = () => {
       <div className="about__container">
         <div className="about__content">
           <div className="about__text">
-            <SectionBadge icon={<UserIcon />} label="About Me" />
+            <SectionBadge icon={<UserIcon />} label="About Me" index="01" />
             <h2 className="about__title">Built For Where Design Is Heading</h2>
               <p className="about__body">
                 I&rsquo;ve spent 16+ years pushing digital design through craft, brand systems, front-end constraints, and production realities. The tools have changed, but the responsibility has not: <span className="animated-bold">know what to design, why it matters, and how to make the work hold up</span> once real teams and real users touch it.

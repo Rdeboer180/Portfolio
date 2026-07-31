@@ -93,7 +93,7 @@ $select-b: blue($color-primary-light);
 
 .about {
   background: $color-white;
-  padding: calc(#{$spacing-4xl} + 24px) 0 $spacing-4xl;
+  padding: $section-pad-y 0;
 
   &__container {
     max-width: $container-max-width;

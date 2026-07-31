@@ -165,6 +165,8 @@ $container-text-width: 720px;
 // Wide content column — case-study shells, about proof blocks, resume paper
 $container-wide: 960px;
 $container-padding-x: $spacing-2xl;
+// Uniform vertical rhythm for homepage sections (Layer 3 of the rhythm plan)
+$section-pad-y: 96px;
 
 $grid-columns: 12;
 $grid-gutter: $spacing-xl;
