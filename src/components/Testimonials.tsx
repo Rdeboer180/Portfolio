@@ -173,7 +173,7 @@ const Testimonials: React.FC = () => {
               and easy to work with&mdash;but the people I&rsquo;ve partnered with
               probably say it better.
             </p>
-            <p className="testimonials__micro">Straight from my year-end reviews</p>
+            <p className="testimonials__micro">Managers, peers, and the developers who built the work</p>
             <a href="#peer-reviews" className="testimonials__cta">
               Read the feedback
               <svg
@@ -253,7 +253,7 @@ const Testimonials: React.FC = () => {
         {/* ==== Zone B — Divider =========================================== */}
         <div className="testimonials__divider">
           <h3 id="peer-reviews" className="testimonials__divider-label">
-            Year-end review highlights
+            What the people I work with say
           </h3>
         </div>
 
