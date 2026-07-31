@@ -156,6 +156,18 @@
     }
   }
 
+  &__transition-notes-link {
+    color: $color-white;
+    font-weight: $font-weight-semibold;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration-thickness: 2px;
+    }
+  }
+
   &__transition-note {
     position: relative;
     z-index: 1;

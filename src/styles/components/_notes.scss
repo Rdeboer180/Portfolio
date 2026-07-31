@@ -183,6 +183,35 @@
     max-width: $container-text-width;
     margin: $spacing-2xl auto 0;
     padding: 0 $spacing-2xl;
+
+    &--resolved {
+      margin-top: $spacing-3xl;
+    }
+  }
+
+  // Stream headers — one per group, mono label + one-line framing
+  &__stream-head {
+    padding: $spacing-lg 0 $spacing-xl;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  &__stream-label {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__stream-sub {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-muted;
+    max-width: 54ch;
+    margin: 0 0 $spacing-sm;
   }
 
   // Two-column editorial row on desktop: mono meta rail left, content right —
@@ -248,6 +277,44 @@
     color: $color-neutral-muted;
     max-width: 60ch;
     margin: 0;
+  }
+
+  // Loose cards — the LinkedIn stream sits slightly askew, the way notes
+  // actually pile up. Reaching for one straightens it. Rotation is static
+  // (safe under reduced motion); only the straightening transitions.
+  &__row--loose {
+    background: $color-secondary-lightest;
+    border: 1px solid $color-border-default;
+    border-bottom: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    padding: $spacing-xl;
+    margin: $spacing-lg 0;
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease;
+
+    &:nth-child(odd) {
+      transform: rotate(-0.5deg) translateX(-3px);
+    }
+
+    &:nth-child(even) {
+      transform: rotate(0.4deg) translateX(5px);
+    }
+
+    &:hover,
+    &:focus-visible {
+      transform: rotate(0) translateX(0);
+      box-shadow: $shadow-sm;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &__meta-source {
+    font-family: $font-family-primary;
+    text-transform: none;
+    letter-spacing: 0;
+    color: $color-neutral-muted;
   }
 
   // ── Article body ──────────────────────────────────────────────────────────

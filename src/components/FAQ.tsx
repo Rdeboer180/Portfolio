@@ -9,7 +9,17 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   },
   {
     question: 'Can you work within an existing design system?',
-    answer: 'Absolutely. I\u2019ve contributed to and extended large-scale design systems at enterprise companies. I\u2019m comfortable working within existing token structures, component libraries, and governance models \u2014 or building them from scratch if none exist.',
+    answer: (
+      <p>
+        Absolutely. I&rsquo;ve contributed to and extended large-scale design systems at
+        enterprise companies. I&rsquo;m comfortable working within existing token structures,
+        component libraries, and governance models &mdash; or building them from scratch if none
+        exist. My bar for that work is written up in the notes:{' '}
+        <Link to="/notes/systems-that-make-better-decisions-easier">
+          a good design system makes better decisions easier
+        </Link>.
+      </p>
+    ),
   },
   {
     question: 'How do you handle projects that need both brand and UX work?',
@@ -29,7 +39,7 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
     answer: (
       <>
         <p>People first. I married my high school sweetheart Stephanie — we've now spent more than half our lives together — and our two kids are the center of everything. Weekends usually mean the park, the zoo, or wherever the next national park road trip takes us.</p>
-        <p>Outside of family, a lot of what I do for fun still involves building things. I manage my Type 1 diabetes using a custom-coded branch of the Loop app — a closed-loop insulin delivery system I've configured and maintained myself. It's equal parts health management and engineering hobby, and it's given me a deep appreciation for how thoughtful software design can have real, daily impact on someone's quality of life.</p>
+        <p>Outside of family, a lot of what I do for fun still involves building things. I manage my Type 1 diabetes using a custom-coded branch of the Loop app — a closed-loop insulin delivery system I've configured and maintained myself. It's equal parts health management and engineering hobby, and it eventually became a product: <Link to="/work/loopstack/">LoopStack</Link>, a pattern-review app built on my own data.</p>
         <p>Football Sundays are sacred. I've run a dynasty fantasy football league — the Grandville Gremlins — for about a decade, and every team has a custom mascot and logo I designed. It keeps a tight group of high school and college friends connected year-round. And like most people, I unwind with good TV and film. Always watching something.</p>
       </>
     ),
@@ -39,7 +49,8 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
     answer: (
       <>
         <p>This portfolio was built through an iterative design-to-code workflow combining Figma, Claude AI, and hands-on front-end development. I started by establishing a full design system in Figma defining color tokens, typography scales, spacing values, and component patterns then used that system as the single source of truth while building out each section in React and SCSS. You can explore the <Link to="/design-system">design system here</Link>.</p>
-        <p>The process was genuinely collaborative: I worked back and forth between Figma mockups and live code, using Claude as a development partner to scaffold components, refine styling logic, audit token consistency, and generate a complete Figma-ready specification from the finished codebase. Every section went through multiple rounds of visual review, brand alignment checks, and responsive refinement &mdash; the same rigor I apply to client work, applied to my own. I write about this workflow as it evolves on <a href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" data-li-surface="faq_build">LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>.</p>
+        <p>The process was genuinely collaborative: I worked back and forth between Figma mockups and live code, using Claude as a development partner to scaffold components, refine styling logic, audit token consistency, and generate a complete Figma-ready specification from the finished codebase. Every section went through multiple rounds of visual review, brand alignment checks, and responsive refinement &mdash; the same rigor I apply to client work, applied to my own.</p>
+        <p>The full breakdown is a note of its own: <Link to="/notes/how-this-site-works">How this site works</Link>. The workflow keeps evolving, and that thinking lands first on <a href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" data-li-surface="faq_build">LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>.</p>
       </>
     ),
   },

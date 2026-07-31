@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { SITE, EMAIL_HREF } from '../data/site';
+import { getHomeHref } from '../utils/homeSession';
+import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getNote, KIND_LABEL } from '../data/notes';
 import LinkedInLink from './LinkedInLink';
+import Footer from './Footer';
 import '../styles/styles.scss';
 
 // ============================================
@@ -32,7 +34,8 @@ const NotePage: React.FC = () => {
   return (
     <article className="notes notes--single">
       <nav className="notes__nav" aria-label="Primary">
-        <Link to="/notes" className="notes__nav-logo">Ryan DeBoer</Link>
+        {/* Logo always goes home; "All notes" is the section breadcrumb */}
+        <Link to={getHomeHref()} className="notes__nav-logo">Ryan DeBoer</Link>
         <Link to="/notes" className="notes__nav-back">&larr; All notes</Link>
       </nav>
 
@@ -42,6 +45,9 @@ const NotePage: React.FC = () => {
             {KIND_LABEL[note.kind]}
           </span>
           <time dateTime={note.dateISO}>{note.date}</time>
+          {note.kind === 'essay' && (
+            <span className="notes__meta-source">· first thought out loud on LinkedIn</span>
+          )}
         </p>
         <h1 className="notes__title">{note.title}</h1>
         <p className="notes__dek">{note.dek}</p>
@@ -55,17 +61,20 @@ const NotePage: React.FC = () => {
 
       <div className="notes__body">{note.body}</div>
 
+      {/* Close rail keeps one job: route to the in-progress stream. Contact
+          lives in the shared footer below, same as home and about. */}
       <aside className="notes__close">
         <span className="notes__close-label">[ In Progress ]</span>
         <p className="notes__close-body">
           These notes are the resolved version. The thinking in progress lands on LinkedIn first.
         </p>
         <div className="notes__close-actions">
-          <a href={EMAIL_HREF} className="notes__close-mail">Get in touch</a>
           <LinkedInLink label="Follow the work in progress" surface="notes_close" />
           <Link to="/notes" className="notes__close-mail">All notes</Link>
         </div>
       </aside>
+
+      <Footer />
     </article>
   );
 };

@@ -63,11 +63,12 @@ const AboutPage: React.FC = () => {
             work. The tools change; the standard doesn&rsquo;t.
           </p>
           <p className="about-page__transition-note">
-            The finished version of that standard is this site. Between releases, I think out loud
-            on LinkedIn.
+            The finished version of that standard is this site &mdash; and the thinking behind it
+            lives in <Link to="/notes" className="about-page__transition-notes-link">the notes</Link>,
+            where essays start as LinkedIn posts and the systems behind the work get written up.
           </p>
           <LinkedInLink
-            label="Read along"
+            label="Read along as it happens"
             surface="about_bridge"
             className="about-page__transition-link"
           />

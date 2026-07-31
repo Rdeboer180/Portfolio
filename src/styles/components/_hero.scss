@@ -127,25 +127,85 @@
       }
     }
 
-    // Mobile menu toggle — [ Menu ] / [ Close ] mono chip, hidden on desktop
+    // Mobile menu toggle — three layer rows morph to an X; open = selected
+    // (corner handles snap on, lines tint primary). Hidden on desktop.
     &-toggle {
       display: none;
       appearance: none;
       background: none;
       border: 0;
-      padding: $spacing-sm 0;
-      font-family: $font-family-mono;
-      font-size: $font-size-caption;
-      font-weight: $font-weight-medium;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: $color-neutral-standard;
+      padding: 11px; // 22px glyph + padding = 44px tap target
+      margin: -2px 0;
       cursor: pointer;
 
       &:focus-visible {
         outline: 2px solid $color-primary;
-        outline-offset: 3px;
+        outline-offset: 2px;
         border-radius: $radius-sm;
+      }
+    }
+
+    &-toggle-box {
+      position: relative;
+      display: block;
+      width: 22px;
+      height: 16px;
+    }
+
+    &-toggle-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 1px;
+      background: $color-neutral-dark;
+      transition:
+        transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+
+      &:nth-child(1) { top: 0; }
+      &:nth-child(2) { top: 7px; }
+      &:nth-child(3) { top: 14px; }
+    }
+
+    // Selection handles — appear only in the open (selected) state
+    &-toggle-handle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: $color-primary;
+      opacity: 0;
+      transform: scale(0.5);
+      transition:
+        opacity 0.2s ease 0.12s,
+        transform 0.2s cubic-bezier(0.25, 1, 0.5, 1) 0.12s;
+
+      &--tl { top: -6px; left: -6px; }
+      &--tr { top: -6px; right: -6px; }
+      &--bl { bottom: -8px; left: -6px; }
+      &--br { bottom: -8px; right: -6px; }
+    }
+
+    &-toggle--open {
+      .hero__nav-toggle-line {
+        background: $color-primary;
+
+        &:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        &:nth-child(2) { opacity: 0; transform: scaleX(0.4); }
+        &:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      }
+
+      .hero__nav-toggle-handle {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &-toggle-line,
+      &-toggle-handle {
+        transition: none;
       }
     }
 
@@ -180,6 +240,12 @@
           color: $color-neutral-dark;
         }
       }
+    }
+
+    // Contact lives inside the menu on mobile — emphasized closing row
+    &-menu-cta {
+      font-weight: $font-weight-semibold;
+      color: $color-primary-dark !important;
     }
   }
 
@@ -2289,13 +2355,14 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
 @media (max-width: $breakpoint-sm) {
   .hero {
     &__nav {
-      &-links a:not(.hero__nav-cta) {
+      // All inline links (CTA included) collapse into the menu at this width —
+      // the bar reduces to logo + toggle, contact becomes the menu's last row
+      &-links a {
         display: none;
       }
 
-      // Inline links collapse into the [ Menu ] toggle at this width
       &-toggle {
-        display: inline-block;
+        display: block;
       }
     }
 

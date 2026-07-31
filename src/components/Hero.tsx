@@ -437,15 +437,26 @@ const Hero: React.FC = () => {
           <Link to="/notes">Notes</Link>
           <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
-          {/* Mobile-only menu toggle — inline links hide below $breakpoint-sm */}
+          {/* Mobile-only menu toggle — three "layer rows" that morph to an X;
+              the open state reads as selected (corner handles + orange), the
+              same grammar as the selection-frame cards. */}
           <button
             type="button"
-            className="hero__nav-toggle"
+            className={`hero__nav-toggle${navOpen ? ' hero__nav-toggle--open' : ''}`}
             aria-expanded={navOpen}
             aria-controls="hero-nav-menu"
+            aria-label={navOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setNavOpen((o) => !o)}
           >
-            {navOpen ? '[ Close ]' : '[ Menu ]'}
+            <span className="hero__nav-toggle-box" aria-hidden="true">
+              <span className="hero__nav-toggle-line" />
+              <span className="hero__nav-toggle-line" />
+              <span className="hero__nav-toggle-line" />
+              <span className="hero__nav-toggle-handle hero__nav-toggle-handle--tl" />
+              <span className="hero__nav-toggle-handle hero__nav-toggle-handle--tr" />
+              <span className="hero__nav-toggle-handle hero__nav-toggle-handle--bl" />
+              <span className="hero__nav-toggle-handle hero__nav-toggle-handle--br" />
+            </span>
           </button>
         </div>
         {navOpen && (
@@ -454,6 +465,9 @@ const Hero: React.FC = () => {
             <a href="#projects" onClick={() => setNavOpen(false)}>My Work</a>
             <Link to="/notes" onClick={() => setNavOpen(false)}>Notes</Link>
             <Link to="/resume" onClick={() => setNavOpen(false)}>Resume</Link>
+            <a href={EMAIL_HREF} className="hero__nav-menu-cta" onClick={() => setNavOpen(false)}>
+              Get in touch
+            </a>
           </div>
         )}
       </nav>
