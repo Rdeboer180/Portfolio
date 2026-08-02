@@ -781,6 +781,35 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 </div>
               )}
 
+              {/* Scan to install — the QR is decorative to AT; the link
+                  beside it carries the same destination for everyone else. */}
+              {project.outcomeInstall && (
+                <div className="cs__install">
+                  <img
+                    className="cs__install-qr"
+                    src={`/images/qr/${project.outcomeInstall.qr}.svg`}
+                    alt=""
+                    aria-hidden="true"
+                    width="120"
+                    height="120"
+                    loading="lazy"
+                  />
+                  <div className="cs__install-copy">
+                    <span className="cs__install-label">{project.outcomeInstall.label}</span>
+                    <a
+                      href={project.outcomeInstall.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cs__install-link"
+                    >
+                      {project.outcomeInstall.linkText} &rarr;
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    <p className="cs__install-caption">{project.outcomeInstall.caption}</p>
+                  </div>
+                </div>
+              )}
+
               {/* Artifacts — internal work with nothing public to link */}
               {project.outcomeArtifacts && project.outcomeArtifacts.length > 0 && (
                 <div className="cs__live-links">
