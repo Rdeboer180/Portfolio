@@ -19,8 +19,8 @@ const OUT_DIR = 'public/images/qr';
 // external group → Enable Public Link) and re-run to activate that code.
 const TARGETS = {
   'loopstack-demo': 'https://www.rdeboerdesigns.com/loopstack-demo/',
+  'playdraft-testflight': 'https://testflight.apple.com/join/swanYSs1',
   // 'loopstack-testflight': 'https://testflight.apple.com/join/XXXXXXXX',
-  // 'playdraft-testflight': 'https://testflight.apple.com/join/XXXXXXXX',
 };
 
 // Rendered small (roughly 120px) — high error correction keeps it scannable

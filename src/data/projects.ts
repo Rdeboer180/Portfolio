@@ -1492,6 +1492,17 @@ export const packs = {
         caption: 'The real exported share card from the working app — the champion’s board reads gold, every pick reads in full, and the download hook rides along',
       },
     ],
+    outcomeLiveLinksLabel: 'Install the build',
+    outcomeLiveLinks: [
+      { label: 'Join the TestFlight beta', url: 'https://testflight.apple.com/join/swanYSs1' },
+    ],
+    outcomeInstall: {
+      label: 'Scan to install on iPhone',
+      url: 'https://testflight.apple.com/join/swanYSs1',
+      linkText: 'testflight.apple.com/join/swanYSs1',
+      caption: 'Opens TestFlight and installs the current build. Drafting works best with a friend.',
+      qr: 'playdraft-testflight',
+    },
     metrics: [
       { value: '12 wks', label: 'First logo sketch → TestFlight (Apr–Jul 2026, solo)' },
       { value: '121', label: 'Components on a token-governed design system' },
