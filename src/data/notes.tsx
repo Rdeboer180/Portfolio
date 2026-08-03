@@ -445,7 +445,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
         <p>
           No model proposed that. It came from being the user and understanding the stakes. Every
           generated surface got rewritten until observations read as evidence rather than
-          instruction, and a 39-test suite now guards the language the app is allowed to use.
+          instruction, and a 460-test suite now guards the language the app is allowed to use.
           Care, made operational.
         </p>
         <h2>Care is a practice, not a feeling</h2>

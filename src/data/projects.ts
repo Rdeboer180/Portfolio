@@ -1219,7 +1219,7 @@ $mobile-max-width: 768px;
       {
         key: 'build',
         label: 'Build',
-        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 39-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. TestFlight keeps the loop honest on device — build 2 live, build 3 in flight, stress-tested against real Loop data meal after meal.',
+        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 460-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. TestFlight keeps the loop honest on device — build 2 live, build 3 in flight, stress-tested against real Loop data meal after meal.',
         codeBlock: {
           language: 'text',
           filename: 'pattern-review-system-prompt.md',
@@ -1265,7 +1265,7 @@ Frame every output as:
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'LoopStack reframes this space from carb counting to pattern review. It runs on TestFlight against 90 days of real HealthKit CGM data, comparing what Loop predicted with what actually happened meal after meal, clustering repeated meals by curve shape, and surfacing patterns at the right confidence level to bring to a care team. Observed values stay alongside — never on top of — what the pump is actually running, sample data is disclosed wherever real history hasn’t accumulated yet, and a 39-test suite covers the confidence logic that decides what the app may claim. The next chapter is clinician-facing review modes and tightening the safety framing further before any wider release.',
+    outcomeNote: 'LoopStack reframes this space from carb counting to pattern review. It runs on TestFlight against 90 days of real HealthKit CGM data, comparing what Loop predicted with what actually happened meal after meal, clustering repeated meals by curve shape, and surfacing patterns at the right confidence level to bring to a care team. Observed values stay alongside — never on top of — what the pump is actually running, sample data is disclosed wherever real history hasn’t accumulated yet, and a 460-test suite covers the confidence logic that decides what the app may claim. The next chapter is clinician-facing review modes and tightening the safety framing further before any wider release.',
     outcomeImages: [
       {
         src: '/images/work/loopstack/04_fix_log.png',
@@ -1294,7 +1294,7 @@ Frame every output as:
     },
     metrics: [
       { value: '90 days', label: 'Real HealthKit CGM history — time in range, GMI, variability' },
-      { value: '39 tests', label: 'Vitest suite around the pattern-confidence logic' },
+      { value: '460 tests', label: 'Vitest suite across 28 files, guarding what the app may claim' },
       { value: '0 directives', label: 'Every output frames as evidence or discussion point' },
     ],
   },
