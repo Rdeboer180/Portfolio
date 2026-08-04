@@ -111,7 +111,7 @@ const AboutHero: React.FC = () => {
               I’ve spent 16+ years evolving through the tools, constraints, and expectations of
               digital design. I started with visual craft, moved closer to front-end
               implementation, built systems that help teams ship consistently, and now I’m
-              exploring how AI-native workflows can make the path from idea to product faster,
+              exploring how AI-assisted workflows can make the path from idea to product faster,
               clearer, and more creative.
             </p>
             <p>

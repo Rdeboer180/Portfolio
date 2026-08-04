@@ -54,7 +54,7 @@ export const storySections: StorySection[] = [
       'My strongest work often happens in the structure behind the interface: components, ' +
         'documentation, accessibility, governance, reusable templates, CMS logic, and the ' +
         'decisions that help teams move with more confidence.',
-      'Over more than 12 years at Tire Rack, that mindset grew across UX strategy, A/B testing, ' +
+      'Across twelve years at Tire Rack, that mindset grew across UX strategy, A/B testing, ' +
         'analytics, SEO-informed information architecture, AEM component systems, front-end ' +
         'collaboration, and pattern documentation. I became a lead for building and maintaining ' +
         'component templates and styles because I care about the work lasting after the first ' +
@@ -106,10 +106,10 @@ export const storySections: StorySection[] = [
         'the work with more energy — but I do not believe remote culture works by accident.',
       'At Tire Rack, I’ve been a founding leader of MPG, an internal group built around ' +
         'connection, shared learning, and cross-functional conversation. That work has shaped how ' +
-        'I think about team culture. Collaboration is not just being in the same room. It is ' +
+        'I think about team culture. Collaboration takes more than proximity. It is ' +
         'trust, context, shared language, and people choosing to keep professional relationships ' +
         'strong even when the work happens across screens.',
-      'That is also why I’m interested in what tools like Claude can unlock for stakeholder ' +
+      'That is also why I’m interested in what tools like Claude can open up for stakeholder ' +
         'collaboration. When a product idea, rough thought, strategy note, or workflow problem can ' +
         'be brought to higher fidelity faster, more people can participate earlier. A PM, designer, ' +
         'developer, stakeholder, or subject-matter expert can get their idea into a shape the team ' +
@@ -129,7 +129,7 @@ export const storySections: StorySection[] = [
       'I value craft, clarity, and ownership. Craft means the work holds up under scrutiny. ' +
         'Clarity means the team can extend it without me in the room. Ownership means I do not ' +
         'wait to be told what needs doing.',
-      'The best teams I’ve worked with were not just talented. They were honest, aligned, willing ' +
+      'The best teams I’ve worked with were more than talented. They were honest, aligned, willing ' +
         'to give and receive feedback, and committed to making each other better. That is the kind ' +
         'of environment I try to help build.',
     ],
@@ -208,7 +208,7 @@ export const principles: Principle[] = [
         I treat growth deliberately. Photoshop to Illustrator, front-end code to Figma systems,
         certification to AI-assisted workflows — I keep evolving because the industry keeps
         moving. I follow the communities and voices shaping modern design, systems, and AI
-        workflows — Drive Club, UI Collective Design, Tommy Geoco, Michael Riddering (Rid),
+        workflows — Dive Club, UI Collective Design, Tommy Geoco, Michael Riddering (Rid),
         Jenny Wen, and Brad Frost&rsquo;s Atomic Design among them — not to chase every trend,
         but to keep testing what actually makes the work better.
       </p>

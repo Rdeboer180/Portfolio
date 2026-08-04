@@ -568,7 +568,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            My official title has been Senior Web Designer, but my work extends well beyond the web. I work across product strategy, UX/UI, design systems, and front-end implementation, bringing <span className="animated-bold">craft, care, and production-minded judgment</span> to every stage. My background in visual communication and code helps me carry ideas beyond the artboard and into working products. AI speeds up exploration, but <span className="animated-bold">I remain responsible for the decisions, details, and systems behind what ships.</span>
+            I work across product strategy, UX/UI, design systems, and front-end implementation, bringing <span className="animated-bold">craft, care, and production-minded judgment</span> to every stage. My official title has been Senior Web Designer, but the work runs well past the web: my background in visual communication and code carries ideas beyond the artboard and into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">
