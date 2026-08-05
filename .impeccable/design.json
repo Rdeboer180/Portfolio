@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-05T00:00:00Z",
+  "title": "Design System: Ryan DeBoer Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "signal-orange": {
+        "role": "primary",
+        "displayName": "Signal Orange",
+        "canonical": "#f03d01",
+        "tonalRamp": ["#7a1e00", "#a52800", "#c23001", "#f03d01", "#f07654", "#f9c4b0", "#fdede9", "#fff6f3"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1b1b1b",
+        "tonalRamp": ["#1b1b1b", "#333333", "#4a4a4a", "#707070", "#9a9a9a", "#c5c5c5", "#e5e5e5", "#f5f5f5"]
+      },
+      "steel": {
+        "role": "secondary",
+        "displayName": "Steel Blue-Gray",
+        "canonical": "#8f9daf",
+        "tonalRamp": ["#3c4653", "#5e6c7c", "#8f9daf", "#aab4c1", "#c2cad4", "#d6dce4", "#e8ecf0", "#f4f6f7"]
+      },
+      "cool-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "#f4f6f7",
+        "tonalRamp": ["#c9d2d6", "#d6dce4", "#e2e8ec", "#eef1f3", "#f4f6f7", "#f8fafb", "#fbfcfd", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page and hero headlines; Hubot Sans 800 with negative tracking." },
+      "body": { "displayName": "Body", "purpose": "Reading text; Inter 400 at ~720px column width." },
+      "annotation": { "displayName": "Annotation", "purpose": "Caveat hand marks only; never UI, labels, or body." },
+      "mono": { "displayName": "Mono", "purpose": "System markers, status chips, and code blocks; Menlo." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 2px 4px 0 rgba(0,0,0,0.15)", "purpose": "Default hover lift for cards and buttons; the only step most surfaces ever use." },
+      { "name": "shadow-md", "value": "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.2)", "purpose": "Raised UI and popovers." },
+      { "name": "shadow-lg", "value": "0 6px 8px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.25)", "purpose": "Modals and floating panels." },
+      { "name": "shadow-xl", "value": "0 8px 10px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.3)", "purpose": "Image lightbox and topmost layers." }
+    ],
+    "motion": [
+      { "name": "transition-fast", "value": "150ms ease-in-out", "purpose": "Buttons, links, small hover/color changes." },
+      { "name": "transition-base", "value": "250ms ease-in-out", "purpose": "Card border/shadow state, toggles." },
+      { "name": "transition-slow", "value": "350ms ease-in-out", "purpose": "Larger reveals and expansions." },
+      { "name": "marquee-trace", "value": "1300ms linear", "purpose": "One-time Signal Orange comet that traces a card perimeter on scroll-into-view, staggered across a grid, then settles to the hairline." }
+    ],
+    "breakpoints": [
+      { "name": "xs", "value": "480px" },
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main call-to-action; Signal Orange, used for 'Get in touch' and primary actions.",
+      "html": "<button class=\"ds-btn-primary\">Get in touch</button>",
+      "css": ".ds-btn-primary { font-family: var(--font-heading); font-weight: 800; font-size: 14px; background: var(--color-primary); color: #fff; border: none; border-radius: 10px; height: 48px; padding: 0 32px; display: inline-flex; align-items: center; cursor: pointer; transition: all 150ms ease-in-out; } .ds-btn-primary:hover { background: var(--color-primary-dark); color: var(--color-primary-light); transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Lower-emphasis action; paper with an ink border that inverts on hover.",
+      "html": "<button class=\"ds-btn-secondary\">View my work</button>",
+      "css": ".ds-btn-secondary { font-family: var(--font-heading); font-weight: 800; font-size: 14px; background: #fff; color: var(--color-neutral-dark); border: 1px solid var(--color-neutral-dark); border-radius: 10px; height: 48px; padding: 0 32px; display: inline-flex; align-items: center; cursor: pointer; transition: all 150ms ease-in-out; } .ds-btn-secondary:hover { background: var(--color-neutral-dark); color: #fff; transform: translateY(-1px); }"
+    },
+    {
+      "name": "Section Badge",
+      "kind": "chip",
+      "refersTo": "badge-eyebrow",
+      "description": "Uppercase eyebrow pill with an icon; anchors the top of most sections.",
+      "html": "<span class=\"ds-badge\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2 2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/></svg><span class=\"ds-badge__label\">About Me</span></span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--color-primary-light); border: 1.5px solid var(--color-primary); border-radius: 9999px; padding: 8px 24px; } .ds-badge svg { width: 24px; height: 24px; color: var(--color-primary); } .ds-badge__label { font-family: var(--font-heading); font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary); }"
+    },
+    {
+      "name": "Selection-Frame Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat card defined by a hairline; on hover the border warms to a 45% Signal Orange tint (the comet-trace runs once on scroll-into-view in-app).",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card__title\">UX &amp; Design Practice</h3><p class=\"ds-card__body\">Accessibility-first design, systems thinking, and the governance that keeps them honest.</p></div>",
+      "css": ".ds-card { position: relative; background: #fff; border: 1px solid rgba(27,27,27,0.1); border-radius: 12px; padding: 32px; transition: border-color 250ms ease-in-out, box-shadow 250ms ease-in-out; } .ds-card:hover { border-color: rgba(240,61,1,0.45); box-shadow: 0 2px 4px 0 rgba(0,0,0,0.15); } .ds-card__title { font-family: var(--font-heading); font-weight: 700; font-size: 17px; color: var(--color-neutral-dark); margin: 0 0 16px; } .ds-card__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--color-neutral-standard); margin: 0; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Paper field with a hairline border that shifts to Signal Orange on focus (no glow).",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"you@example.com\" />",
+      "css": ".ds-input { font-family: var(--font-body); font-size: 16px; color: var(--color-neutral-dark); background: #fff; border: 1px solid rgba(27,27,27,0.1); border-radius: 8px; padding: 8px 12px; } .ds-input:focus { outline: none; border-color: var(--color-primary); }"
+    },
+    {
+      "name": "Section Rule",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Signature divider: a numbered marker on a hairline, bookended by 5px square selection handles (the Figma bounding-box motif).",
+      "html": "<div class=\"ds-rule\"><span class=\"ds-rule__handle\"></span><span class=\"ds-rule__line\"></span><span class=\"ds-rule__num\">04</span><span class=\"ds-rule__line\"></span><span class=\"ds-rule__handle\"></span></div>",
+      "css": ".ds-rule { display: flex; align-items: center; gap: 12px; width: 100%; } .ds-rule__line { flex: 1; height: 1px; background: var(--color-neutral-light); } .ds-rule__handle { flex-shrink: 0; width: 5px; height: 5px; background: var(--color-secondary); } .ds-rule__num { font-family: var(--font-mono); font-size: 12px; color: var(--color-neutral-muted); }"
+    },
+    {
+      "name": "Accordion Toggle",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Circular +/x chip used on the FAQ; the '+' rotates 135deg and fills Signal Orange when its item opens.",
+      "html": "<span class=\"ds-toggle\">+</span>",
+      "css": ".ds-toggle { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; background: var(--color-primary-light); color: var(--color-primary); font-family: var(--font-heading); font-size: 22px; line-height: 0; cursor: pointer; transition: transform 250ms ease-in-out, background 150ms ease-in-out, color 150ms ease-in-out; } .ds-toggle:hover { background: var(--color-primary-muted); color: #fff; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Craft Workbench",
+    "overview": "The site looks like the surface of someone who builds, and it leaves the construction visible on purpose: hand-drawn Caveat annotations in the margins, numbered section rules, small selection handles bookending dividers, and cards that wear Figma-style selection frames. Underneath the marks, the system is disciplined and flat. Surfaces are paper-white or a cool off-white separated by hairline borders rather than shadows, type carries the hierarchy (a tight Hubot Sans over a calm Inter), and Signal Orange is the one voice that carries emphasis and state. Depth is earned, not ambient: a card lifts, a border lights, a comet traces once, only on interaction or scroll-into-view. Density is editorial, with 96px section rhythm and a 720px reading column keeping long pages calm.",
+    "keyCharacteristics": [
+      "Visible construction: Caveat annotations, numbered rules, selection handles, tool-vernacular marks",
+      "Flat by default; hairline borders carry structure, shadow or motion only on state",
+      "Hubot Sans headings over Inter body, with Signal Orange as the single accent",
+      "Editorial rhythm: 96px section spacing, 720px reading column, 1186px max width",
+      "Evidence-first, calm, and honest about the making"
+    ],
+    "rules": [
+      { "name": "The Signal Orange Rule", "body": "Orange is the only chromatic voice on the page. It may carry both emphasis and state, but it is the sole accent: never introduce a second hue to compete with it, and never let a screen turn orange-heavy. When orange appears, it should mean something.", "section": "colors" },
+      { "name": "The Ink-on-Paper Rule", "body": "Depth and grouping come from paper vs. cool-paper grounds and hairline borders, not from gray boxes or tinted panels. Reach for a background change or a hairline before a fill.", "section": "colors" },
+      { "name": "The Annotation Rule", "body": "Caveat is reserved exclusively for hand-drawn craft marks and never sets UI, labels, or body copy. Its rarity is what makes it read as a human mark.", "section": "typography" },
+      { "name": "The Title Case Rule", "body": "Headings render in Title Case as intentional house style. Keep it consistent; do not mix sentence-case headings into the same hierarchy.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. A shadow, a border-color shift, a 1px lift, or the marquee comet appears only in response to state, and then settles back. Ambient shadows and floating cards are out of language.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do set headings in Hubot Sans (Title Case, negative tracking) over Inter body, and hold reading columns near 720px.",
+      "Do keep surfaces flat and let hairline borders and paper/cool-paper grounds carry structure; reach for a shadow only as a state response.",
+      "Do treat Signal Orange as the single accent for both emphasis and state, and make each orange mean something.",
+      "Do reserve Caveat for hand-drawn craft marks and Menlo for system markers and code.",
+      "Do reuse the selection-frame vernacular (5px square handles, corner frames, the comet) when an element should read as an actionable object.",
+      "Do respect reduced-motion and keep visible keyboard focus on every interactive element."
+    ],
+    "donts": [
+      "Don't introduce a second accent hue, or let a screen become orange-heavy.",
+      "Don't add ambient shadows, floating cards, or glassmorphism.",
+      "Don't use purple-to-blue SaaS gradients, icons inside decorative circles, pill-shaped everything, or ambient animated blobs.",
+      "Don't add motion that exists only to be noticed; if it does not mark state or reveal once, cut it.",
+      "Don't replace this visual world; all work extends the existing system and connects to its tokens/components (ryan-design-taste + apply-design-system are binding)."
+    ]
+  }
+}

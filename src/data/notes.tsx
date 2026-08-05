@@ -69,16 +69,18 @@ export const NOTES: Note[] = [
         </p>
         <h2>The selection vernacular</h2>
         <p>
-          The homepage used to have more motion in it. An orange comet traced the card borders.
-          A paintbrush stroke swept across key phrases before they bolded. Both were built
-          carefully and both got cut, because motion that exists to be noticed competes with work
-          that exists to be read.
+          The homepage went on a motion diet. An orange comet used to run around every card
+          border, ambient and always on. A paintbrush stroke swept across key phrases before they
+          bolded. The always-on versions got cut, because motion that exists to be noticed competes
+          with work that exists to be read.
         </p>
         <p>
-          What replaced them is quieter and says more. Cards wear Figma-style selection frames
-          with corner handles. Key copy gets selected the way a cursor drags across text, then
-          bolds, then releases. The interface speaks the language of the tools it was made in.
-          Hover a card on the homepage and orange means exactly one thing: selected.
+          What came back is quieter and says more. Cards wear Figma-style selection frames, key
+          copy gets selected the way a cursor drags across text before it bolds, and the comet
+          earned its way back &mdash; but only as a single pass. It traces a card&rsquo;s border
+          once as the card scrolls into view, staggered down the grid, then settles to a hairline.
+          The interface speaks the language of the tools it was made in, and orange means one
+          thing: selected.
         </p>
         <h2>Crawlable without a framework migration</h2>
         <p>
