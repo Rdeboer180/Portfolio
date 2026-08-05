@@ -691,6 +691,10 @@ const DesignSystem: React.FC = () => {
           Living reference of design tokens, typography, and component patterns.
           Sourced from the Figma design system file.
         </p>
+        <p className="ds__subtitle">
+          Documented for people and agents in two files at the repo root.{' '}
+          <Link to="/notes/governance-in-markdown">Why the brand lives in PRODUCT.md and DESIGN.md &rarr;</Link>
+        </p>
       </header>
 
       <div className="ds__nav">

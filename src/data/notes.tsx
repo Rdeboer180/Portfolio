@@ -41,6 +41,56 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
+  {
+    slug: 'governance-in-markdown',
+    read: '2 min',
+    kind: 'system',
+    date: 'August 2026',
+    dateISO: '2026-08-05',
+    title: 'Two files keep the brand from drifting',
+    dek: 'PRODUCT.md and DESIGN.md turn my design judgment into a record any agent or teammate builds from, so the site stays consistent when I move fast.',
+    body: (
+      <>
+        <p>
+          Two files sit at the root of this repo doing quiet work: PRODUCT.md and DESIGN.md. One
+          records who the site is for and what it has to prove. The other records the visual
+          system it runs on: the tokens, the single accent, the rule that surfaces stay flat until
+          you touch them.
+        </p>
+        <p>
+          They exist because I build fast, often with agents, and speed is where brand consistency
+          usually breaks. A generated screen looks plausible and quietly reaches for a purple
+          gradient, a floating card, a second accent color. These files are the guardrail. Before
+          anything gets designed, the agent, or me, reads the rules and builds from my tokens
+          instead of its defaults.
+        </p>
+        <Callout marker="The point">
+          A style guide only governs if something reads it. These are built to be read, by a person
+          and an agent.
+        </Callout>
+        <h2>Consistency you can verify</h2>
+        <p>
+          This is the same move as the rest of the site. The{' '}
+          <Link to="/design-system">design system</Link> renders every token on a live page. The{' '}
+          <Link to="/notes/ryan-design-taste-skill">design-taste skill</Link> encodes the judgment
+          behind it. PRODUCT.md and DESIGN.md close the loop: the record a person reads and the
+          record an agent reads are the same record. If a value isn&rsquo;t in them, new work
+          doesn&rsquo;t get to use it.
+        </p>
+        <h2>The cost is keeping them true</h2>
+        <p>
+          A rulebook only helps if it stays current, and a stale DESIGN.md is worse than none
+          because it lies with confidence. So I treat these like code. When the system changes, the
+          file changes in the same commit, and an agent can audit the site against them without me
+          in the room.
+        </p>
+        <p>
+          None of this shows on the page, which is the point of governance. You feel it in what
+          stays consistent, not in anything you can see.
+        </p>
+      </>
+    ),
+  },
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'how-this-site-works',
@@ -100,7 +150,8 @@ export const NOTES: Note[] = [
           every visual direction starts from a reference I picked, every finding gets verified
           before it ships, and the judgment layer is written down as{' '}
           <Link to="/notes/ryan-design-taste-skill">an installable skill</Link> so the tools
-          inherit my standards instead of their defaults.
+          inherit my standards instead of their defaults. The brand rules themselves live in{' '}
+          <Link to="/notes/governance-in-markdown">two files an agent reads before it builds</Link>.
         </p>
         <p>
           AI speeds up exploration. I stay responsible for the decisions, the details, and the
