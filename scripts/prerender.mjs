@@ -6,7 +6,7 @@
 // build/<route>/index.html. Runs at build time; the client bundle hydrates.
 import { chromium } from 'playwright';
 import http from 'node:http';
-import { createReadStream, existsSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
+import { createReadStream, existsSync, statSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join, extname, dirname } from 'node:path';
 
 const BUILD_DIR = join(process.cwd(), 'build');
@@ -16,6 +16,21 @@ const ORIGIN = `http://localhost:${PORT}`;
 // Unlinked routes the crawler won't reach on its own but we still want covered.
 // (homepage_template is intentionally excluded — it stays out of the index.)
 const EXTRA_ROUTES = ['/design-system', '/sitemap'];
+
+// Content routes seeded deterministically from the data files so the sitemap
+// never depends on link-discovery timing. The /notes children were occasionally
+// missed by the crawler, truncating the sitemap between deploys; seeding them
+// guarantees a complete, stable sitemap for search engines every build.
+function contentRoutes() {
+  try {
+    const notesSrc = readFileSync(join(process.cwd(), 'src/data/notes.tsx'), 'utf8');
+    const slugs = [...notesSrc.matchAll(/slug:\s*'([^']+)'/g)].map((m) => m[1]);
+    if (slugs.length) return ['/notes', ...slugs.map((s) => `/notes/${s}`)];
+  } catch {
+    // Fall back to link discovery if the data file can't be read.
+  }
+  return [];
+}
 
 const MIME = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
@@ -74,7 +89,7 @@ async function main() {
   const page = await context.newPage();
 
   const seen = new Set();
-  const queue = ['/', ...EXTRA_ROUTES];
+  const queue = ['/', ...EXTRA_ROUTES, ...contentRoutes()];
 
   while (queue.length) {
     const route = queue.shift();
