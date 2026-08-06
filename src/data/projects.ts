@@ -542,6 +542,7 @@ const projects: Project[] = [
     tools: ['Figma', 'WordPress', 'Elementor', 'WPForms', 'Yoast SEO', 'Adobe Illustrator'],
     timeline: '4 months',
     featured: '/images/work/heatherwood/CS_thumbnail_Heatherwood_safe.jpg',
+    featuredVideo: '/assets/portfolio-safe/heatherwood/cover-loop.mp4',
     timeToLive: '~4 months from first meeting to full brand + site launch',
 
     // \u2500\u2500 01 Problem \u2500\u2500
