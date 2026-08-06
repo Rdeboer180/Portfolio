@@ -45,10 +45,22 @@ interface Testimonial {
   sourceUrl?: string;
 }
 
-// Order locked by the case-study brief:
-// 1. Leadership & Delivery (Adam, LinkedIn) → 2. Cross-Functional & Human (Kokesh)
-// → 3. Craft, Care, and Growth (Amanda, LinkedIn) → 4. Systems Thinking (Kokesh)
-// → 5. Design–Engineering Partnership (Cheryl) → 6. Precision & Reasoning (Tim)
+// Order runs the seniority spread on purpose — manager → cross-team engineer →
+// AVP → UX manager → build partner → the junior designer he mentored. A reader
+// scanning top to bottom sees the same person vouched for from every direction:
+// 1. Leadership & Delivery (Adam) → 2. Cross-Team Trust (Urbano)
+// → 3. Craft, Care, and Growth (Amanda) → 4. Systems Thinking (Kokesh)
+// → 5. Design–Engineering Partnership (Cheryl) → 6. Mentorship & Confidence (Gina)
+//
+// Every card carries the same source link. The destination is the LinkedIn
+// profile root, not a recommendations deep link — see LinkedInLink for why.
+// One universal source link, spread onto every card — a reader can verify any
+// quote from any card, and they all land in the same place.
+const SOURCE = {
+  source: 'See all recommendations',
+  sourceUrl: SITE.linkedinUrl,
+} as const;
+
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -62,17 +74,17 @@ const testimonials: Testimonial[] = [
     name: 'Adam Payne',
     role: 'Web Design Manager (Ryan’s direct manager)',
     year: '2026',
-    source: 'See Full LinkedIn Recommendation',
-    sourceUrl: SITE.linkedinUrl,
+    ...SOURCE,
   },
   {
-    title: 'Cross-Functional & Human',
+    title: 'Cross-Team Trust',
     quote: (
-      <>Ryan consistently takes the initiative to engage with relevant teams&mdash;such as UX, UXR, Analytics, Imaging, and SEO&mdash;whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. Moreover, it is evident that he genuinely <H>values and cares for his colleagues</H>.</>
+      <>Ryan is a super talented design professional. It has truly been amazing to work with him at Tire Rack over the last 3 years and <H>he has made my job a lot easier on many occasions</H>. <H>His eye for design and communication skills are top notch</H>. More importantly to me is that he&rsquo;s a great person and <H>cares about the people he works with and the work he does</H>.</>
     ),
-    name: 'Ryan Kokesh',
-    role: 'Senior UX Manager (overseeing design 2022-2024)',
-    year: '2024',
+    name: 'Urbano Baz',
+    role: 'Software Engineer, Tire Rack (partner team)',
+    year: '2026',
+    ...SOURCE,
   },
   {
     title: 'Craft, Care, and Growth',
@@ -86,8 +98,7 @@ const testimonials: Testimonial[] = [
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations at Tire Rack',
     year: '2026',
-    source: 'See Full LinkedIn Recommendation',
-    sourceUrl: SITE.linkedinUrl,
+    ...SOURCE,
   },
   {
     title: 'Systems Thinking',
@@ -97,6 +108,7 @@ const testimonials: Testimonial[] = [
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
+    ...SOURCE,
   },
   {
     title: 'Design–Engineering Partnership',
@@ -110,15 +122,21 @@ const testimonials: Testimonial[] = [
     name: 'Cheryl Carpenter',
     role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
     year: '2026',
+    ...SOURCE,
   },
   {
-    title: 'Precision & Reasoning',
+    title: 'Mentorship & Confidence',
     quote: (
-      <><H>Always very high quality work.</H> Has always thought through even the minor details, with <H>specific reasoning for most all choices</H>.</>
+      <>
+        <p>Since I started at Tire Rack almost 5 years ago, Ryan has always been <H>a kind and thoughtful mentor</H> to me as a Senior Designer on the Web Design team.</p>
+        <p>He is a very intuitive and collaborative teammate, and <H>always looks for ways that we can improve our design system and user experience</H> throughout our sites.</p>
+        <p>I know that whenever we are paired together on a project, Ryan will <H>go out of his way to ensure the junior designer (me in this case) has the confidence they need</H> in order to make the project a success.</p>
+      </>
     ),
-    name: 'Tim Joines',
-    role: 'Tire Rack Senior Management',
-    year: '2021',
+    name: 'Gina Saucedo',
+    role: 'Web Designer, Tire Rack (Web Design team)',
+    year: '2026',
+    ...SOURCE,
   },
 ];
 
@@ -173,7 +191,7 @@ const Testimonials: React.FC = () => {
               and easy to work with&mdash;but the people I&rsquo;ve partnered with
               probably say it better.
             </p>
-            <p className="testimonials__micro">Managers, peers, and the developers who built the work</p>
+            <p className="testimonials__micro">Managers, peers, the engineers who built the work, and the designers I&rsquo;ve mentored</p>
             <a href="#peer-reviews" className="testimonials__cta">
               Read the feedback
               <svg
