@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import projects, { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
-import PasswordModal from './PasswordModal';
 import LinkedInLink from './LinkedInLink';
+import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
@@ -116,10 +116,6 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
 };
 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
-
-// Site-wide unlock for confidential case-study artifacts — one successful
-// password entry unlocks every case study for the browser session.
-const UNLOCK_SESSION_KEY = 'cs-unlocked';
 
 /* ─── Section Image Renderer ─── */
 // Muted autoplay loop clip with a pause/play control (WCAG 2.2.2).
@@ -341,57 +337,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   );
 
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
-  const [isUnlocked, setIsUnlocked] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [thesisRef, thesisVisible] = useReveal<HTMLDivElement>(0.3);
 
-  const hasOverlayImages = useCallback((proj: Project) => {
-    const allImages = [
-      ...(proj.problemImages || []),
-      ...(proj.gapsImages || []),
-      ...(proj.constraintsImages || []),
-      ...(proj.outcomeImages || []),
-      ...(proj.outcomeGridImages || []),
-    ];
-    if (proj.approachSubsections) {
-      proj.approachSubsections.forEach((sub) => {
-        if (sub.images) allImages.push(...sub.images);
-      });
-    }
-    return allImages.some((img) => img.isOverlay);
-  }, []);
-
-  useEffect(() => {
-    if (!project) return;
-    // One unlock covers every case study for the browser session —
-    // the password gates the person, not the individual page.
-    const dismissedKey = `project-dismissed-${project.slug}`;
-    const unlocked = sessionStorage.getItem(UNLOCK_SESSION_KEY) === 'true';
-    const dismissed = localStorage.getItem(dismissedKey) === 'true';
-
-    setIsUnlocked(unlocked);
-    setShowPasswordModal(false);
-
-    // Deferred prompt: don't interrupt a cold visitor on page load — wait
-    // until the first locked overlay actually scrolls into view (clicking an
-    // overlay still opens the modal immediately via onOverlayClick).
-    if (!hasOverlayImages(project) || unlocked || dismissed) return;
-
-    const cards = Array.from(document.querySelectorAll('.overlay-card'));
-    if (cards.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setShowPasswordModal(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 }
-    );
-    cards.forEach((c) => observer.observe(c));
-    return () => observer.disconnect();
-  }, [project, hasOverlayImages]);
+  // One unlock covers every protected surface on the site — the password gates
+  // the person, not the page. The prompt itself is raised once on first load by
+  // UnlockChrome; here a locked overlay only needs to be able to re-open it.
+  const { unlocked: isUnlocked, openPrompt } = useUnlock();
 
   // Scroll-reveal for content sections — extends the homepage's 520ms reveal
   // grammar to the case-study pages (they previously rendered flat). Each
@@ -424,25 +375,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     return () => observer.disconnect();
   }, [slug, isUnlocked]);
 
-  const handleUnlock = () => {
-    if (project) {
-      sessionStorage.setItem(UNLOCK_SESSION_KEY, 'true');
-      setIsUnlocked(true);
-      setShowPasswordModal(false);
-    }
-  };
-
-  const handleDismiss = () => {
-    if (project) {
-      localStorage.setItem(`project-dismissed-${project.slug}`, 'true');
-      setShowPasswordModal(false);
-    }
-  };
-
   const handleOverlayClick = () => {
-    if (!isUnlocked) {
-      setShowPasswordModal(true);
-    }
+    if (!isUnlocked) openPrompt();
   };
 
   const lbTriggerRef = useRef<HTMLElement | null>(null);
@@ -486,7 +420,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
   return (
     <article className="cs">
-      {showPasswordModal && <PasswordModal onUnlock={handleUnlock} onDismiss={handleDismiss} />}
       {/* Fixed nav */}
       <nav className="cs__nav" aria-label="Case study">
         <Link to={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</Link>

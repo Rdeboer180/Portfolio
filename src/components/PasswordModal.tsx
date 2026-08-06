@@ -1,14 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { verifyPassword } from '../utils/unlock';
+
+type Variant = 'case-study' | 'site';
 
 interface PasswordModalProps {
   onUnlock: () => void;
   onDismiss: () => void;
+  /**
+   * 'case-study' — raised from a locked overlay inside one case study.
+   * 'site'       — raised once on first load; covers every protected surface.
+   */
+  variant?: Variant;
 }
 
-const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) => {
+const COPY: Record<Variant, {
+  title: string; body: string; primary: string; secondary: string;
+}> = {
+  'case-study': {
+    title: 'Protected Case Study Images',
+    body: 'Some images in this case study are restricted due to proprietary work. Enter the password to view them, or continue reading without images. We won’t ask again unless you choose to open a hidden image.',
+    primary: 'Unlock Images',
+    secondary: 'No Thanks, View Without Images',
+  },
+  site: {
+    title: 'See the full case studies',
+    body: 'Parts of this work are client- and employer-confidential, so the protected images and product demos stay locked by default. Enter the password to unlock them on this device — you’ll only be asked once. Everything else on the site is open either way.',
+    primary: 'Unlock the work',
+    secondary: 'Keep browsing without it',
+  },
+};
+
+const CloseIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+       strokeLinecap="round" aria-hidden="true">
+    <line x1="6" y1="6" x2="18" y2="18" />
+    <line x1="18" y1="6" x2="6" y2="18" />
+  </svg>
+);
+
+const PasswordModal: React.FC<PasswordModalProps> = ({
+  onUnlock, onDismiss, variant = 'case-study',
+}) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const copy = COPY[variant];
 
   // Store the element that had focus before the modal opened so we can restore it
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -20,7 +56,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
   // Capture return target, set initial focus, and install Tab trap
   useEffect(() => {
     returnFocusRef.current = document.activeElement as HTMLElement;
-    // Initial state: focus the "Unlock Images" button
+    // Initial state: focus the "Unlock" button
     if (!showPassword) {
       unlockBtnRef.current?.focus();
     }
@@ -51,21 +87,10 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
     }
   };
 
-  const hashPassword = async (pwd: string): Promise<string> => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(pwd);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const hash = await hashPassword(password);
-      const correctHash = process.env.REACT_APP_PROJECT_PASSWORD_HASH;
-
-      if (hash === correctHash) {
+      if (await verifyPassword(password)) {
         setError('');
         onUnlock();
       } else {
@@ -88,10 +113,17 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
         ref={contentRef}
         onKeyDown={handleKeyDown}
       >
-        <h2 id="pwd-modal-title">Protected Case Study Images</h2>
-        <p>
-          Some images in this case study are restricted due to proprietary work. Enter the password to view them, or continue reading without images. We won't ask again unless you choose to open a hidden image.
-        </p>
+        <button
+          type="button"
+          className="password-modal__close"
+          onClick={onDismiss}
+          aria-label="Close and keep browsing without the protected work"
+        >
+          <CloseIcon />
+        </button>
+
+        <h2 id="pwd-modal-title">{copy.title}</h2>
+        <p>{copy.body}</p>
 
         {!showPassword ? (
           <div className="password-modal__buttons">
@@ -100,13 +132,13 @@ const PasswordModal: React.FC<PasswordModalProps> = ({ onUnlock, onDismiss }) =>
               className="password-modal__button password-modal__button--primary"
               onClick={() => setShowPassword(true)}
             >
-              Unlock Images
+              {copy.primary}
             </button>
             <button
               className="password-modal__button password-modal__button--secondary"
               onClick={onDismiss}
             >
-              No Thanks, View Without Images
+              {copy.secondary}
             </button>
           </div>
         ) : (

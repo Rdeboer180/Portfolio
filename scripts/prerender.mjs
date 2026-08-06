@@ -84,7 +84,9 @@ async function main() {
   // hydration; initial render state matches, so hydration stays clean.
   await context.addInitScript(() => {
     const orig = localStorage.getItem.bind(localStorage);
-    localStorage.getItem = (key) => (key.startsWith('project-dismissed-') ? 'true' : orig(key));
+    const stubbed = (key) =>
+      key.startsWith('project-dismissed-') || key === 'rd-unlock-dismissed';
+    localStorage.getItem = (key) => (stubbed(key) ? 'true' : orig(key));
   });
   const page = await context.newPage();
 

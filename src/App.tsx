@@ -14,6 +14,9 @@ import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import { usePageMeta } from './hooks/usePageMeta';
 import { SITE } from './data/site';
+import { UnlockProvider, useUnlock } from './context/UnlockContext';
+import SiteUnlockBar from './components/SiteUnlockBar';
+import PasswordModal from './components/PasswordModal';
 
 // Targeted-homepage template. Duplicate homepage-template.tsx per deployment and
 // add a route below. See src/data/targetedHomepage.ts for the contract.
@@ -92,10 +95,27 @@ function CaseStudyRoute() {
   );
 }
 
+/**
+ * Site-wide unlock chrome: the first-load prompt, and the standing bar a visitor
+ * gets if they close it. Rendered outside <Routes> so both survive navigation.
+ */
+function UnlockChrome() {
+  const { promptOpen, unlock, dismissPrompt } = useUnlock();
+  return (
+    <>
+      <SiteUnlockBar />
+      {promptOpen && (
+        <PasswordModal variant="site" onUnlock={unlock} onDismiss={dismissPrompt} />
+      )}
+    </>
+  );
+}
+
 function AppRoutes() {
   return (
     <>
       <RouteEffects />
+      <UnlockChrome />
       <Routes>
         <Route path="/" element={<HomeRoute />} />
         <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
@@ -117,7 +137,9 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <UnlockProvider>
+        <AppRoutes />
+      </UnlockProvider>
     </BrowserRouter>
   );
 }

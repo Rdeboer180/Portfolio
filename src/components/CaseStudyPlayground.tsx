@@ -14,6 +14,15 @@ import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
+import { useUnlock } from '../context/UnlockContext';
+
+const PreviewLockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="4" y="10.5" width="16" height="10.5" rx="2" />
+    <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+  </svg>
+);
 
 // ── Stream chips — two-stream taxonomy ──────────────────────────────────────
 // Treatment-based, both orange (no second hue): professional = solid filled
@@ -449,6 +458,13 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
+  const { unlocked } = useUnlock();
+
+  // Only the employer/client stream is treated as protected. The self-built work
+  // and Heatherwood's live public site are Ryan's to show, so veiling them would
+  // signal a restriction that isn't real — and the badge has to stay truthful.
+  const isLocked = (stream?: string) => !unlocked && stream === 'professional';
+
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
 
   return (
@@ -506,7 +522,17 @@ const CaseStudyPlayground: React.FC = () => {
                 onBlur={isTouch ? undefined : () => handleLeave(card.slug)}
               >
                 {/* Top — preview (cover loop plays while active; primary loops always) */}
-                <div className="case-playground__preview">
+                <div
+                  className={`case-playground__preview${
+                    isLocked(card.stream) ? ' case-playground__preview--locked' : ''
+                  }`}
+                >
+                  {isLocked(card.stream) && (
+                    <p className="case-playground__lock">
+                      <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
+                      Password protected
+                    </p>
+                  )}
                   {card.stream && (
                     <span
                       className={`case-playground__stream case-playground__stream--${card.stream}`}
