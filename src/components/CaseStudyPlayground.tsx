@@ -458,19 +458,30 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
-  const { unlocked } = useUnlock();
+  const { unlocked, resolving, openPrompt } = useUnlock();
 
   // Only the employer/client stream is treated as protected. The self-built work
   // and Heatherwood's live public site are Ryan's to show, so veiling them would
   // signal a restriction that isn't real — and the badge has to stay truthful.
-  const isLocked = (stream?: string) => !unlocked && stream === 'professional';
+  const isProtected = (stream?: string) => stream === 'professional';
+  const isLocked = (stream?: string) => !unlocked && isProtected(stream);
+
+  // Reaching for a locked case study is what raises the prompt — not arrival.
+  // The href rides along so the unlock lands on the study they actually wanted.
+  const handleCardClick = (e: React.MouseEvent, card: { slug: string; stream?: string }) => {
+    if (!isLocked(card.stream)) return;
+    e.preventDefault();
+    openPrompt(`/work/${card.slug}`);
+  };
 
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
 
   return (
     <section
       id="projects"
-      className={`case-playground${revealed ? ' case-playground--revealed' : ''}`}
+      className={`case-playground${revealed ? ' case-playground--revealed' : ''}${
+        resolving ? ' case-playground--resolving' : ''
+      }`}
       ref={sectionRef}
     >
       <div className="case-playground__container">
@@ -508,14 +519,17 @@ const CaseStudyPlayground: React.FC = () => {
 
         {/* ── Carousel ── */}
         <div className="case-playground__grid" ref={gridRef}>
-          {cards.map((card) => {
+          {cards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
+            const locked = isLocked(card.stream);
             return (
               <Link
                 key={card.slug}
                 to={`/work/${card.slug}`}
                 className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}`}
                 data-slug={card.slug}
+                aria-describedby={locked ? `lock-${card.slug}` : undefined}
+                onClick={(e) => handleCardClick(e, card)}
                 onMouseEnter={isTouch ? undefined : () => handleEnter(card.slug)}
                 onMouseLeave={isTouch ? undefined : () => handleLeave(card.slug)}
                 onFocus={isTouch ? undefined : () => handleEnter(card.slug)}
@@ -524,11 +538,16 @@ const CaseStudyPlayground: React.FC = () => {
                 {/* Top — preview (cover loop plays while active; primary loops always) */}
                 <div
                   className={`case-playground__preview${
-                    isLocked(card.stream) ? ' case-playground__preview--locked' : ''
+                    locked ? ' case-playground__preview--locked' : ''
                   }`}
+                  style={{ ['--resolve-delay' as string]: `${i * 70}ms` }}
                 >
-                  {isLocked(card.stream) && (
-                    <p className="case-playground__lock">
+                  {isProtected(card.stream) && (
+                    <p
+                      id={`lock-${card.slug}`}
+                      className="case-playground__lock"
+                      aria-hidden={!locked}
+                    >
                       <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
                       Password protected
                     </p>

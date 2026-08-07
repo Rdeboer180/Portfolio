@@ -1,51 +1,61 @@
 import React, {
-  createContext, useCallback, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
-import {
-  isPromptDismissed, isUnlocked, persistDismissal, persistUnlock,
-} from '../utils/unlock';
+import { useNavigate } from 'react-router-dom';
+import { isUnlocked, persistUnlock } from '../utils/unlock';
 
 interface UnlockValue {
   /** Protected media and case-study overlays are visible. */
   unlocked: boolean;
   /** The password modal is on screen. */
   promptOpen: boolean;
-  /** Locked, and the visitor has closed the prompt — the top bar is showing. */
+  /** Locked, hydrated, and not currently prompting — the top bar is showing. */
   barVisible: boolean;
-  openPrompt: () => void;
+  /**
+   * True for one beat after a successful unlock, so the locked cards can play
+   * their resolve instead of snapping. Cleared automatically.
+   */
+  resolving: boolean;
+  /**
+   * Open the prompt. Pass the route the visitor was reaching for and they'll be
+   * taken there once they unlock — the click isn't wasted.
+   */
+  openPrompt: (pendingHref?: string) => void;
   unlock: () => void;
   dismissPrompt: () => void;
 }
 
 const UnlockContext = createContext<UnlockValue | null>(null);
 
+const RESOLVE_MS = 1200;
+
 /**
  * Site-wide unlock state.
  *
- * The site is fully readable while locked — this only governs protected media.
- * A first-time visitor gets the prompt once; closing it swaps in a persistent
- * bar above the nav rather than asking again. Unlocking is remembered per
- * device (localStorage), so it is asked for exactly once.
+ * The site is fully readable while locked — this governs protected media and
+ * the gated case-study routes. There is deliberately NO prompt on arrival: the
+ * homepage hero is the best thing on the site and a modal over it on first
+ * paint wastes it. The standing bar carries the offer instead, and the prompt
+ * is raised only when a visitor reaches for something that's actually locked.
  *
- * Initial state is deliberately "locked, no prompt": that is what the build-time
- * prerender captures, so the static HTML never ships a modal and hydration has
- * nothing to correct. The real decision is made in the effect below, client-side.
+ * Nothing renders until `ready`, so the build-time prerender captures neither
+ * bar nor modal and hydration has nothing to correct.
  */
 export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
-  const [dismissed, setDismissed] = useState(true);
+  const [resolving, setResolving] = useState(false);
+  const pendingHref = useRef<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (isUnlocked()) {
-      setUnlocked(true);
-      return;
-    }
-    if (isPromptDismissed()) {
-      setDismissed(true);
-      return;
-    }
-    setDismissed(false);
+    if (isUnlocked()) setUnlocked(true);
+    setReady(true);
+  }, []);
+
+  const openPrompt = useCallback((href?: string) => {
+    pendingHref.current = href ?? null;
     setPromptOpen(true);
   }, []);
 
@@ -53,17 +63,22 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     persistUnlock();
     setUnlocked(true);
     setPromptOpen(false);
-  }, []);
+    setResolving(true);
+    window.setTimeout(() => setResolving(false), RESOLVE_MS);
+
+    // Honour the click that raised the prompt, but let the resolve play first —
+    // navigating instantly would throw away the moment the visitor just paid for.
+    const href = pendingHref.current;
+    pendingHref.current = null;
+    if (href) window.setTimeout(() => navigate(href), RESOLVE_MS * 0.55);
+  }, [navigate]);
 
   const dismissPrompt = useCallback(() => {
-    persistDismissal();
-    setDismissed(true);
+    pendingHref.current = null;
     setPromptOpen(false);
   }, []);
 
-  const openPrompt = useCallback(() => setPromptOpen(true), []);
-
-  const barVisible = !unlocked && dismissed && !promptOpen;
+  const barVisible = ready && !unlocked && !promptOpen;
 
   // The page navs are `position: fixed; top: 0`, so the bar can't simply sit
   // above them in flow — it publishes its height and they offset by it.
@@ -74,8 +89,8 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [barVisible]);
 
   const value = useMemo<UnlockValue>(
-    () => ({ unlocked, promptOpen, barVisible, openPrompt, unlock, dismissPrompt }),
-    [unlocked, promptOpen, barVisible, openPrompt, unlock, dismissPrompt]
+    () => ({ unlocked, promptOpen, barVisible, resolving, openPrompt, unlock, dismissPrompt }),
+    [unlocked, promptOpen, barVisible, resolving, openPrompt, unlock, dismissPrompt]
   );
 
   return <UnlockContext.Provider value={value}>{children}</UnlockContext.Provider>;

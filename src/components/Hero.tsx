@@ -4,6 +4,7 @@ import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
+import { useUnlock } from '../context/UnlockContext';
 
 // Animated H1 sequence — a craft arc that resolves on the final, static line.
 // Each phrase is short (3–4 words) so it stays legible mid-swap on mobile.
@@ -58,6 +59,14 @@ const Hero: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   // Mobile nav menu (inline links hide below $breakpoint-sm)
   const [navOpen, setNavOpen] = useState(false);
+
+  // "My Work" raises the prompt for a locked visitor. The anchor still resolves,
+  // so the section is already in place behind the modal when it's dismissed.
+  const { unlocked, openPrompt } = useUnlock();
+  const handleWorkNav = () => {
+    setNavOpen(false);
+    if (!unlocked) openPrompt();
+  };
   useEffect(() => {
     if (!navOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -433,7 +442,7 @@ const Hero: React.FC = () => {
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
           <Link to="/about">About Me</Link>
-          <a href="#projects">My Work</a>
+          <a href="#projects" onClick={handleWorkNav}>My Work</a>
           <Link to="/notes">Notes</Link>
           <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
@@ -462,7 +471,7 @@ const Hero: React.FC = () => {
         {navOpen && (
           <div id="hero-nav-menu" className="hero__nav-menu">
             <Link to="/about" onClick={() => setNavOpen(false)}>About Me</Link>
-            <a href="#projects" onClick={() => setNavOpen(false)}>My Work</a>
+            <a href="#projects" onClick={handleWorkNav}>My Work</a>
             <Link to="/notes" onClick={() => setNavOpen(false)}>Notes</Link>
             <Link to="/resume" onClick={() => setNavOpen(false)}>Resume</Link>
             <a href={EMAIL_HREF} className="hero__nav-menu-cta" onClick={() => setNavOpen(false)}>

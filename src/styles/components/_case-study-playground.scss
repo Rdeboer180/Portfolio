@@ -226,15 +226,22 @@
   // Employer/client footage stays veiled until the site password is entered:
   // a soft blur plus a paper scrim, so the composition still reads as work
   // without any of it being legible. Purely a signal — see utils/unlock.ts.
+  // The scrim is always in the tree at zero opacity so unlocking can transition
+  // it away. Rendering it only while locked would make the reveal a hard cut.
+  &__preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.62);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 620ms var(--case-study-ease-out);
+  }
+
   &__preview--locked {
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.62);
-      pointer-events: none;
-      z-index: 1;
-    }
+    &::after { opacity: 1; }
+    .case-playground__lock { opacity: 1; }
 
     img,
     video {
@@ -251,12 +258,35 @@
     transform: scale(1.06);
   }
 
+  // ── Unlock resolve ─────────────────────────────────────────────────────────
+  // On a successful password the veil doesn't vanish, it resolves: blur lifts,
+  // scrim clears, badge fades, card by card down the row. Borrowed from the way
+  // a checkout summary populates — content settling in rather than appearing.
+  // The delay is scoped to this transient class so it never lags an ordinary hover.
+  &--resolving &__preview::after,
+  &--resolving &__preview img,
+  &--resolving &__preview video,
+  &--resolving &__lock {
+    transition-delay: var(--resolve-delay, 0ms);
+  }
+
+  &--resolving &__preview img,
+  &--resolving &__preview video {
+    transition-property: filter, transform;
+    transition-duration: 700ms;
+    transition-timing-function: var(--case-study-ease-out);
+  }
+
   &__lock {
     position: absolute;
     inset: auto 0 0 0;
     z-index: 2;
     margin: 0;
     padding: 0 0 $spacing-lg;
+    // Stays mounted while unlocked so it can fade on resolve rather than
+    // disappearing mid-animation; visibility is CSS's job here, not React's.
+    opacity: 0;
+    transition: opacity 420ms var(--case-study-ease-out);
 
     display: flex;
     align-items: center;

@@ -16,8 +16,6 @@
 
 /** Unlock persists across browser sessions — enter it once per device. */
 const UNLOCK_KEY = 'rd-unlocked';
-/** Set when a visitor closes the prompt; suppresses the modal, shows the bar. */
-const DISMISSED_KEY = 'rd-unlock-dismissed';
 /** Legacy per-session key from the old case-study-only gate. Read for migration. */
 const LEGACY_SESSION_KEY = 'cs-unlocked';
 
@@ -69,7 +67,3 @@ export const persistUnlock = (): void => {
   // Keep the legacy key in step so a mid-session reload can't re-lock.
   write(sessionStorage, LEGACY_SESSION_KEY);
 };
-
-export const isPromptDismissed = (): boolean => read(localStorage, DISMISSED_KEY);
-
-export const persistDismissal = (): void => write(localStorage, DISMISSED_KEY);

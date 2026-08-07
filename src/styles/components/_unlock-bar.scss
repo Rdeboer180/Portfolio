@@ -18,6 +18,39 @@
   }
 }
 
+// One-shot attention sweep, played when the work section first scrolls into
+// view. Signal Orange at low alpha over cool paper — a tint passing through,
+// not a white glare. Fires once per page load; never loops.
+@keyframes unlockBarSweep {
+  from { transform: translateX(-60%); }
+  to   { transform: translateX(160%); }
+}
+
+// A single 2px lift on the CTA as the sweep crosses it — enough to read as
+// "this is the thing to press", gone before it registers as a bounce.
+@keyframes unlockBarActionLift {
+  0%, 22%   { transform: translateY(0); }
+  38%       { transform: translateY(-2px); }
+  58%, 100% { transform: translateY(0); }
+}
+
+// Reduced motion keeps the cue but drops the travel: the bar warms once and
+// settles, no sweeping element, no lift.
+@media (prefers-reduced-motion: reduce) {
+  @keyframes unlockBarSweep { from, to { transform: none; } }
+  @keyframes unlockBarActionLift { from, to { transform: none; } }
+
+  .unlock-bar--sweep::before {
+    width: 100%;
+    animation: unlockBarFade 1400ms ease-in-out both;
+  }
+}
+
+@keyframes unlockBarFade {
+  0%, 100% { opacity: 0; }
+  40%, 60% { opacity: 1; }
+}
+
 .unlock-bar {
   position: fixed;
   top: 0;
@@ -25,6 +58,7 @@
   right: 0;
   z-index: $z-index-fixed;
   height: var(--unlock-bar-h);
+  overflow: hidden;   // clips the sweep to the bar
 
   display: flex;
   align-items: center;
@@ -34,6 +68,36 @@
 
   background: $color-secondary-lightest;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  // The sweep itself — inert until --sweep is applied, so the bar costs nothing
+  // to render in its resting state.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 45%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      100deg,
+      rgba($color-primary, 0) 0%,
+      rgba($color-primary, 0.09) 45%,
+      rgba($color-primary, 0.14) 55%,
+      rgba($color-primary, 0) 100%
+    );
+  }
+
+  &--sweep {
+    &::before {
+      opacity: 1;
+      animation: unlockBarSweep 1150ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both;
+    }
+
+    // The action picks up the accent as the sweep passes, then settles back.
+    .unlock-bar__action {
+      animation: unlockBarActionLift 1400ms ease-out both;
+    }
+  }
 
   &__text {
     display: flex;
