@@ -1537,3 +1537,74 @@
   border-radius: $radius-full;
   white-space: nowrap;
 }
+
+// ── Locked middle ────────────────────────────────────────────────────────────
+// Stands in for sections 02–04 on employer/client studies. Deliberately quiet:
+// a hairline card on cool paper, not an alarm. The problem and the outcome are
+// still readable above and below it, so this reads as a seam in the page rather
+// than a wall across it.
+.cs__locked {
+  &.cs__section { padding-top: $spacing-3xl; padding-bottom: $spacing-3xl; }
+
+  .cs__locked-inner {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: $spacing-3xl $spacing-xl;
+    text-align: center;
+    background: $color-secondary-lightest;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+  }
+
+  .cs__locked-icon {
+    display: inline-flex;
+    width: 26px;
+    height: 26px;
+    margin-bottom: $spacing-lg;
+    color: $color-primary;
+
+    svg { width: 100%; height: 100%; }
+  }
+
+  .cs__locked-heading {
+    margin: 0 0 $spacing-sm;
+    font-family: $font-family-heading;
+    font-size: 20px;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  .cs__locked-body {
+    margin: 0 auto $spacing-xl;
+    max-width: 46ch;
+    font-family: $font-family-primary;
+    font-size: 15px;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+
+  .cs__locked-action {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    height: 44px;
+    padding: 0 28px;
+    border-radius: 10px;
+    background: $color-primary;
+    color: #fff;
+    font-family: $font-family-heading;
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background-color 160ms ease;
+
+    &:hover { background: $color-primary-dark; }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+}

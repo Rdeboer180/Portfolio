@@ -117,6 +117,41 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
 
+/**
+ * Stands in for the gated middle of a locked case study.
+ *
+ * The problem and the outcome stay readable — those are the parts worth finding
+ * in search, and they say enough to be worth the click. What sits between them
+ * is the process: how the constraints were read, what the approach was, the
+ * component work. That's the employer's, not the portfolio's, so it's the part
+ * that locks.
+ *
+ * Rendered identically at prerender time, so a crawler sees exactly what a
+ * logged-out visitor sees. No cloaking.
+ */
+const CaseStudyLocked: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => (
+  <section className="cs__section cs__locked">
+    <div className="cs__locked-inner">
+      <span className="cs__locked-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"
+             strokeLinecap="round" strokeLinejoin="round">
+          <rect x="4" y="10.5" width="16" height="10.5" rx="2" />
+          <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+        </svg>
+      </span>
+      <h2 className="cs__locked-heading">The approach is password protected</h2>
+      <p className="cs__locked-body">
+        This is client and employer work, so the process behind it &mdash; the gaps,
+        the constraints, the approach, and every screen &mdash; stays locked. The
+        problem and the outcome are above. Enter the password to read the rest.
+      </p>
+      <button type="button" className="cs__locked-action" onClick={onUnlock}>
+        Enter password
+      </button>
+    </div>
+  </section>
+);
+
 /* ─── Section Image Renderer ─── */
 // Muted autoplay loop clip with a pause/play control (WCAG 2.2.2).
 const InlineVideo: React.FC<{ src: string; poster?: string; alt: string }> = ({ src, poster, alt }) => {
@@ -175,8 +210,11 @@ const SectionImages: React.FC<{
   onOpen: (src: string, alt: string, index: number, trigger?: HTMLElement | null) => void;
   isUnlocked?: boolean;
   onOverlayClick?: () => void;
-}> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick }) => {
+  /** Whole study is gated — render no imagery at all, not even the safe frames. */
+  locked?: boolean;
+}> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick, locked }) => {
   const reduceMotion = useReducedMotion();
+  if (locked) return null;
   if (!images || images.length === 0) return null;
 
   const findGlobalIndex = (src: string) => allImages.findIndex((img) => img.src === src);
@@ -343,6 +381,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   // the person, not the page. The prompt itself is raised once on first load by
   // UnlockChrome; here a locked overlay only needs to be able to re-open it.
   const { unlocked: isUnlocked, openPrompt } = useUnlock();
+
+  // Employer/client studies gate their middle sections and all imagery. The
+  // self-built work is Ryan's to publish, so it never locks.
+  const locked = !isUnlocked && project?.stream === 'professional';
 
   // Scroll-reveal for content sections — extends the homepage's 520ms reveal
   // grammar to the case-study pages (they previously rendered flat). Each
@@ -530,9 +572,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     <li key={i}>{item}</li>
                   ))}
                 </ul>
-                <SectionImages images={project.problemImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
+                <SectionImages images={project.problemImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} locked={locked} />
               </section>
             )}
+
+            {/* --- 02–04: the process. Locked on employer/client studies. --- */}
+            {locked ? <CaseStudyLocked onUnlock={openPrompt} /> : (<>
 
             {/* --- 02 Gaps & Opportunity --- */}
             {project.gaps && project.gaps.length > 0 && (
@@ -654,6 +699,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </section>
             ) : null}
 
+            </>)}
+
             {/* --- 05 Outcome --- */}
             <section className="cs__section cs__section--outcome">
               <div className="cs__section-header">
@@ -675,10 +722,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               {(project.outcomeNote || project.resultsNote) && (
                 <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
               )}
-              <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
+              <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} locked={locked} />
 
               {/* Outcome grid — scale wall */}
-              {project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
+              {!locked && project.outcomeGridImages && project.outcomeGridImages.length > 0 && (
                 <div className="cs__outcome-grid">
                   {project.outcomeGridImages.filter(img => img.src).map((img, i) => {
                     return (
