@@ -79,7 +79,11 @@ const testimonials: Testimonial[] = [
   {
     title: 'Cross-Team Trust',
     quote: (
-      <>Ryan is a super talented design professional. It has truly been amazing to work with him at Tire Rack over the last 3 years and <H>he has made my job a lot easier on many occasions</H>. <H>His eye for design and communication skills are top notch</H>. More importantly to me is that he&rsquo;s a great person and <H>cares about the people he works with and the work he does</H>.</>
+      <>
+        <p>Ryan is a super talented design professional. It has truly been amazing to work with him at Tire Rack over the last 3 years and <H>he has made my job a lot easier on many occasions</H>.</p>
+        <p><H>His eye for design and communication skills are top notch</H>.</p>
+        <p>More importantly to me is that he&rsquo;s a great person and <H>cares about the people he works with and the work he does</H>.</p>
+      </>
     ),
     name: 'Urbano Baz',
     role: 'Software Engineer, Tire Rack (partner team)',
@@ -130,6 +134,7 @@ const testimonials: Testimonial[] = [
       <>
         <p>Since I started at Tire Rack almost 5 years ago, Ryan has always been <H>a kind and thoughtful mentor</H> to me as a Senior Designer on the Web Design team.</p>
         <p>He is a very intuitive and collaborative teammate, and <H>always looks for ways that we can improve our design system and user experience</H> throughout our sites.</p>
+        <p>He is a seasoned pro with Adobe Creative Suite and <H>took the time to teach me a few tricks</H> with Illustrator and Photoshop to improve my design output and workflow. He is also skilled with AEM and is <H>a great knowledge resource</H> for this platform as well.</p>
         <p>I know that whenever we are paired together on a project, Ryan will <H>go out of his way to ensure the junior designer (me in this case) has the confidence they need</H> in order to make the project a success.</p>
       </>
     ),

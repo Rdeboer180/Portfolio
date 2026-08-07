@@ -540,7 +540,7 @@ const CaseStudyPlayground: React.FC = () => {
                   className={`case-playground__preview${
                     locked ? ' case-playground__preview--locked' : ''
                   }`}
-                  style={{ ['--resolve-delay' as string]: `${i * 70}ms` }}
+                  style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
                   {isProtected(card.stream) && (
                     <p

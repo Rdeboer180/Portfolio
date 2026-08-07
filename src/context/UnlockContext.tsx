@@ -27,7 +27,13 @@ interface UnlockValue {
 
 const UnlockContext = createContext<UnlockValue | null>(null);
 
-const RESOLVE_MS = 1200;
+/**
+ * How long the --resolving class stays on. Must outlast the slowest card:
+ * an 80ms stagger across 9 cards (640ms) plus the 1100ms media transition.
+ */
+const RESOLVE_MS = 2000;
+/** Beat before honouring a pending navigation — long enough to watch the reveal land. */
+const NAVIGATE_AFTER_MS = 1150;
 
 /**
  * Site-wide unlock state.
@@ -70,7 +76,7 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // navigating instantly would throw away the moment the visitor just paid for.
     const href = pendingHref.current;
     pendingHref.current = null;
-    if (href) window.setTimeout(() => navigate(href), RESOLVE_MS * 0.55);
+    if (href) window.setTimeout(() => navigate(href), NAVIGATE_AFTER_MS);
   }, [navigate]);
 
   const dismissPrompt = useCallback(() => {

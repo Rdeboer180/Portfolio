@@ -9,8 +9,11 @@ const LockIcon = () => (
   </svg>
 );
 
-/** One sweep, then done. Long enough to notice, short enough to forget. */
-const SWEEP_MS = 1700;
+/**
+ * One sweep, then done. Long enough to notice, short enough to forget.
+ * Must outlast the CSS: 1800ms sweep + 200ms delay, and a 2000ms CTA lift.
+ */
+const SWEEP_MS = 2300;
 
 // Module scope, not a ref: the sweep is once per visit. A ref resets when the
 // homepage remounts, so bouncing back from a case study would replay it — which

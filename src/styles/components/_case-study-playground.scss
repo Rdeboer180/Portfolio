@@ -236,7 +236,7 @@
     pointer-events: none;
     opacity: 0;
     z-index: 1;
-    transition: opacity 620ms var(--case-study-ease-out);
+    transition: opacity 900ms var(--case-study-ease-out);
   }
 
   &__preview--locked {
@@ -273,8 +273,22 @@
   &--resolving &__preview img,
   &--resolving &__preview video {
     transition-property: filter, transform;
-    transition-duration: 700ms;
+    transition-duration: 1100ms;
     transition-timing-function: var(--case-study-ease-out);
+  }
+
+  // Reduced motion keeps the reveal but drops the choreography: everything
+  // clears at once, quickly, with no stagger to sit through.
+  @media (prefers-reduced-motion: reduce) {
+    &__preview::after { transition-duration: 240ms; }
+
+    &--resolving &__preview::after,
+    &--resolving &__preview img,
+    &--resolving &__preview video,
+    &--resolving &__lock {
+      transition-delay: 0ms;
+      transition-duration: 240ms;
+    }
   }
 
   &__lock {
@@ -286,7 +300,7 @@
     // Stays mounted while unlocked so it can fade on resolve rather than
     // disappearing mid-animation; visibility is CSS's job here, not React's.
     opacity: 0;
-    transition: opacity 420ms var(--case-study-ease-out);
+    transition: opacity 650ms var(--case-study-ease-out);
 
     display: flex;
     align-items: center;
