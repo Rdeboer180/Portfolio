@@ -100,12 +100,17 @@ function CaseStudyRoute() {
  * gets if they close it. Rendered outside <Routes> so both survive navigation.
  */
 function UnlockChrome() {
-  const { promptOpen, unlock, dismissPrompt } = useUnlock();
+  const { promptOpen, unlock, dismissPrompt, continueLocked } = useUnlock();
   return (
     <>
       <SiteUnlockBar />
       {promptOpen && (
-        <PasswordModal variant="site" onUnlock={unlock} onDismiss={dismissPrompt} />
+        <PasswordModal
+          variant="site"
+          onUnlock={unlock}
+          onDismiss={dismissPrompt}
+          onContinue={continueLocked}
+        />
       )}
     </>
   );

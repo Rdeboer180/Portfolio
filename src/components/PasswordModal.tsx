@@ -5,7 +5,14 @@ type Variant = 'case-study' | 'site';
 
 interface PasswordModalProps {
   onUnlock: () => void;
+  /** Cancel: close and stay put. Wired to the X and to Escape. */
   onDismiss: () => void;
+  /**
+   * Declining on purpose, via the secondary button. Distinct from onDismiss
+   * because continuing to the locked page is a choice, not a cancel.
+   * Falls back to onDismiss when the caller doesn't need the distinction.
+   */
+  onContinue?: () => void;
   /**
    * 'case-study' — raised from a locked overlay inside one case study.
    * 'site'       — raised once on first load; covers every protected surface.
@@ -39,8 +46,9 @@ const CloseIcon = () => (
 );
 
 const PasswordModal: React.FC<PasswordModalProps> = ({
-  onUnlock, onDismiss, variant = 'case-study',
+  onUnlock, onDismiss, onContinue, variant = 'case-study',
 }) => {
+  const decline = onContinue ?? onDismiss;
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -136,7 +144,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             </button>
             <button
               className="password-modal__button password-modal__button--secondary"
-              onClick={onDismiss}
+              onClick={decline}
             >
               {copy.secondary}
             </button>

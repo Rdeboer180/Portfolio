@@ -22,7 +22,14 @@ interface UnlockValue {
    */
   openPrompt: (pendingHref?: string) => void;
   unlock: () => void;
+  /** Cancel — close and stay put. The X and Escape. */
   dismissPrompt: () => void;
+  /**
+   * "Keep browsing without it" — an explicit choice to continue, so it honours
+   * the click that raised the prompt and opens the study in its locked state.
+   * Cancelling and declining aren't the same gesture and shouldn't land alike.
+   */
+  continueLocked: () => void;
 }
 
 const UnlockContext = createContext<UnlockValue | null>(null);
@@ -84,6 +91,15 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setPromptOpen(false);
   }, []);
 
+  const continueLocked = useCallback(() => {
+    const href = pendingHref.current;
+    pendingHref.current = null;
+    setPromptOpen(false);
+    // No pending href means the prompt came from the bar or the nav — there's
+    // nowhere to continue to, so closing is the whole action.
+    if (href) navigate(href);
+  }, [navigate]);
+
   const barVisible = ready && !unlocked && !promptOpen;
 
   // The page navs are `position: fixed; top: 0`, so the bar can't simply sit
@@ -95,8 +111,12 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [barVisible]);
 
   const value = useMemo<UnlockValue>(
-    () => ({ unlocked, promptOpen, barVisible, resolving, openPrompt, unlock, dismissPrompt }),
-    [unlocked, promptOpen, barVisible, resolving, openPrompt, unlock, dismissPrompt]
+    () => ({
+      unlocked, promptOpen, barVisible, resolving,
+      openPrompt, unlock, dismissPrompt, continueLocked,
+    }),
+    [unlocked, promptOpen, barVisible, resolving,
+     openPrompt, unlock, dismissPrompt, continueLocked]
   );
 
   return <UnlockContext.Provider value={value}>{children}</UnlockContext.Provider>;
