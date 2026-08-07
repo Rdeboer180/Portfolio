@@ -118,6 +118,26 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
 
 /**
+ * Employer and product names, stripped from any copy still visible while locked.
+ *
+ * Gating the sections wasn't enough on its own — the problem statement and the
+ * next/prev pager both name the client in their own prose. Rather than gate the
+ * last readable section too (which would leave the page with nothing to index),
+ * the name is swapped for a neutral stand-in and the narrative survives intact.
+ */
+// Only the employer's own name. "WheelRack" is deliberately NOT in here: it's a
+// publicly launched product at wheelrack.com, so redacting it would mangle
+// titles and page identity to hide something that isn't hidden.
+const CLIENT_PATTERN = /\bTire\s?Rack(?:’s|'s)?/g;
+
+const redactClient = (text: string, locked: boolean): string => {
+  if (!locked) return text;
+  return text.replace(CLIENT_PATTERN, (match) =>
+    /(’s|'s)$/.test(match) ? 'the client’s' : 'the client'
+  );
+};
+
+/**
  * Stands in for the gated middle of a locked case study.
  *
  * The problem and the outcome stay readable — those are the parts worth finding
@@ -139,11 +159,11 @@ const CaseStudyLocked: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => (
           <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
         </svg>
       </span>
-      <h2 className="cs__locked-heading">The approach is password protected</h2>
+      <h2 className="cs__locked-heading">The rest is password protected</h2>
       <p className="cs__locked-body">
-        This is client and employer work, so the process behind it &mdash; the gaps,
-        the constraints, the approach, and every screen &mdash; stays locked. The
-        problem and the outcome are above. Enter the password to read the rest.
+        This is client and employer work, so everything past the problem &mdash; the
+        constraints, the approach, the results, and every screen &mdash; stays
+        locked, along with who it was for. Enter the password to read it.
       </p>
       <button type="button" className="cs__locked-action" onClick={onUnlock}>
         Enter password
@@ -486,11 +506,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </span>
             )}
           </span>
-          <span className="cs__client">{project.client}</span>
+          {/* The client is the thing under NDA — withheld until unlock. Every
+              seoTitle is already client-neutral, so nothing indexable is lost. */}
+          <span className="cs__client">
+            {locked ? 'Confidential client' : project.client}
+          </span>
           <h1 className="cs__title">{project.title}</h1>
           {project.thesis && (
             <div ref={thesisRef} className={`cs__thesis${thesisVisible ? ' is-visible' : ''}`}>
-              <p className="cs__thesis-text">{project.thesis}</p>
+              <p className="cs__thesis-text">{redactClient(project.thesis, locked)}</p>
               <svg
                 className="cs__thesis-underline"
                 width="240"
@@ -513,7 +537,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             </div>
           )}
           {project.summary && (
-            <p className="cs__summary">{project.summary}</p>
+            <p className="cs__summary">{redactClient(project.summary, locked)}</p>
           )}
           <div className="cs__tags">
             {project.tags.map((tag) => (
@@ -523,7 +547,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
         </header>
 
         {/* ==================== Featured Image (optional) ==================== */}
-        {project.featured && (
+        {!locked && project.featured && (
           <div className="cs__featured-image">
             {/* Above-the-fold hero image — prioritize as the likely LCP element. */}
             <img src={project.featured} alt={project.title} fetchPriority="high" />
@@ -565,18 +589,21 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   )}
                 </div>
                 {project.problemPunch && (
-                  <p className="cs__punch">{project.problemPunch}</p>
+                  <p className="cs__punch">{redactClient(project.problemPunch, locked)}</p>
                 )}
                 <ul className="cs__section-bullets">
                   {project.problem.map((item, i) => (
-                    <li key={i}>{item}</li>
+                    <li key={i}>{redactClient(item, locked)}</li>
                   ))}
                 </ul>
                 <SectionImages images={project.problemImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} locked={locked} />
               </section>
             )}
 
-            {/* --- 02–04: the process. Locked on employer/client studies. --- */}
+            {/* --- 02–05: process AND outcome. Locked on employer/client studies.
+                    The outcome carries live client URLs, partner-adoption figures,
+                    and the metrics — the parts a client is least likely to want
+                    public — so it locks with the rest. --- */}
             {locked ? <CaseStudyLocked onUnlock={openPrompt} /> : (<>
 
             {/* --- 02 Gaps & Opportunity --- */}
@@ -699,8 +726,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </section>
             ) : null}
 
-            </>)}
-
             {/* --- 05 Outcome --- */}
             <section className="cs__section cs__section--outcome">
               <div className="cs__section-header">
@@ -804,6 +829,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 </div>
               )}
             </section>
+
+            </>)}
 
             {/* --- Time to Live --- */}
             {project.timeToLive && (
@@ -934,7 +961,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   </svg>
                   <span className="cs__pager-copy">
                     <span className="cs__pager-eyebrow">Previous</span>
-                    <span className="cs__pager-name">{prevProject.title}</span>
+                    <span className="cs__pager-name">{redactClient(prevProject.title, locked)}</span>
                   </span>
                 </Link>
               )}
@@ -942,7 +969,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <Link to={`/work/${nextProject.slug}/`} className="cs__pager-link cs__pager-link--next">
                   <span className="cs__pager-copy">
                     <span className="cs__pager-eyebrow">Next</span>
-                    <span className="cs__pager-name">{nextProject.title}</span>
+                    <span className="cs__pager-name">{redactClient(nextProject.title, locked)}</span>
                   </span>
                   <svg className="cs__pager-arrow" width="54" height="24" viewBox="0 0 54 24" fill="none" aria-hidden="true">
                     <path d="M3 13 C 18 10, 36 12, 49 11" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />

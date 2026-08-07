@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import SectionBadge from './SectionBadge';
-import LinkedInLink from './LinkedInLink';
 import { SITE } from '../data/site';
 
 const QuoteIcon = () => (
@@ -40,9 +39,6 @@ interface Testimonial {
   name: string;
   role: string;
   year: string;
-  // Set only for testimonials sourced from an external platform (e.g. LinkedIn)
-  source?: string;
-  sourceUrl?: string;
 }
 
 // Order runs the seniority spread on purpose — manager → cross-team engineer →
@@ -52,15 +48,9 @@ interface Testimonial {
 // → 3. Craft, Care, and Growth (Amanda) → 4. Systems Thinking (Kokesh)
 // → 5. Design–Engineering Partnership (Cheryl) → 6. Mentorship & Confidence (Gina)
 //
-// Every card carries the same source link. The destination is the LinkedIn
-// profile root, not a recommendations deep link — see LinkedInLink for why.
-// One universal source link, spread onto every card — a reader can verify any
-// quote from any card, and they all land in the same place.
-const SOURCE = {
-  source: 'See all recommendations',
-  sourceUrl: SITE.linkedinUrl,
-} as const;
-
+// Cards carry no per-quote links. Six identical "see all recommendations" links
+// was repetition pretending to be evidence — the section CTA now does that job
+// once, pointing at the LinkedIn recommendations tab.
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -74,7 +64,6 @@ const testimonials: Testimonial[] = [
     name: 'Adam Payne',
     role: 'Web Design Manager (Ryan’s direct manager)',
     year: '2026',
-    ...SOURCE,
   },
   {
     title: 'Cross-Team Trust',
@@ -88,7 +77,6 @@ const testimonials: Testimonial[] = [
     name: 'Urbano Baz',
     role: 'Software Engineer, Tire Rack (partner team)',
     year: '2026',
-    ...SOURCE,
   },
   {
     title: 'Craft, Care, and Growth',
@@ -102,7 +90,6 @@ const testimonials: Testimonial[] = [
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations at Tire Rack',
     year: '2026',
-    ...SOURCE,
   },
   {
     title: 'Systems Thinking',
@@ -112,7 +99,6 @@ const testimonials: Testimonial[] = [
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
-    ...SOURCE,
   },
   {
     title: 'Design–Engineering Partnership',
@@ -126,7 +112,6 @@ const testimonials: Testimonial[] = [
     name: 'Cheryl Carpenter',
     role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
     year: '2026',
-    ...SOURCE,
   },
   {
     title: 'Mentorship & Confidence',
@@ -141,7 +126,6 @@ const testimonials: Testimonial[] = [
     name: 'Gina Saucedo',
     role: 'Web Designer, Tire Rack (Web Design team)',
     year: '2026',
-    ...SOURCE,
   },
 ];
 
@@ -197,8 +181,13 @@ const Testimonials: React.FC = () => {
               probably say it better.
             </p>
             <p className="testimonials__micro">Managers, peers, the engineers who built the work, and the designers I&rsquo;ve mentored</p>
-            <a href="#peer-reviews" className="testimonials__cta">
-              Read the feedback
+            <a
+              href={SITE.linkedinRecommendationsUrl}
+              className="testimonials__cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read my LinkedIn recommendations
               <svg
                 width="14"
                 height="14"
@@ -295,13 +284,6 @@ const Testimonials: React.FC = () => {
               <cite className="testimonials__author">
                 <span className="testimonials__name">&mdash; {t.name}</span>
                 <span className="testimonials__role">{t.role}, {t.year}</span>
-                {t.sourceUrl && (
-                  <LinkedInLink
-                    label={t.source ?? 'View source'}
-                    surface="testimonial_source"
-                    className="testimonials__source-link"
-                  />
-                )}
               </cite>
             </blockquote>
           ))}
