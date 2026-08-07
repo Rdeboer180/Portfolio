@@ -38,12 +38,36 @@ jobs:
           REACT_APP_PROJECT_PASSWORD_HASH: 18a45c7fec0bb00024f3c06a777a56e3917031c18bb58a04ea078f58512e18c8
         run: npm run build
 
+      # Guard for the step below. The deploy uses --delete, so if prerendering
+      # ever fails while the build still succeeds, an un-prerendered build/
+      # would wipe every route page off production. Fail loudly here instead.
+      - name: Verify prerender produced route pages
+        run: |
+          missing=0
+          for route in work/wheelrack work/tire-categories about notes; do
+            if [ ! -f "build/$route/index.html" ]; then
+              echo "::error::prerender missing build/$route/index.html"
+              missing=1
+            fi
+          done
+          count=$(find build -name index.html | wc -l)
+          echo "prerendered index.html files: $count"
+          if [ "$count" -lt 10 ]; then
+            echo "::error::only $count index.html files — prerender did not run properly"
+            missing=1
+          fi
+          exit $missing
+
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
+      # --delete keeps the server mirroring build/. Without it, anything ever
+      # deployed stayed forever: two confidentiality-pipeline JSON files and a
+      # renamed case study's assets were still being served long after they were
+      # removed from the repo. Deleting from git has to mean deleting from prod.
       - name: Deploy via rsync with sshpass
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlvzO \
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlvzO --delete \
             --no-perms --no-owner --no-group \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./build/ \
