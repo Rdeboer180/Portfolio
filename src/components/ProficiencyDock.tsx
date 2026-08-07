@@ -141,7 +141,7 @@ const proficienciesByIdRaw: Proficiency[] = [
         Analytics helps me understand what users are actually doing&mdash;not just what we assume. On Tire
         Rack&rsquo;s winterization work, it helped shape region-specific experiences based on real seasonal
         behavior.{' '}
-        <InlineCTA href="/work/tire-rack-winter" label="View the winterization case study" />
+        <InlineCTA href="/work/seasonal-content-system" label="View the winterization case study" />
       </>
     ),
     icon: <img src="/images/proficiencies/adobe-analytics.svg" alt="" />,

@@ -25,3 +25,8 @@ yarn-error.log*
 # Claude Code local settings
 .claude/settings.local.json
 assets-raw/
+
+# Confidentiality-pipeline artifacts — these document what was REMOVED and why,
+# so they must never ship from a public directory.
+public/assets/portfolio-safe/*.json
+.DS_Store

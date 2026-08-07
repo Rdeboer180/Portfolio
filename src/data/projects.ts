@@ -401,7 +401,7 @@ const projects: Project[] = [
   // 2. Tire Rack — AEM Seasonal Content Strategy  [image LEFT]
   // =============================================
   {
-    slug: 'tire-rack-winter',
+    slug: 'seasonal-content-system',
     thesis: 'One system that serves winter and the Sun Belt from the same page.',
     annotations: {
       problem: 'Manual seasonal updates, and everyone saw the same content.',
@@ -420,7 +420,7 @@ const projects: Project[] = [
     role: 'Senior Web Designer / AEM Content Strategist',
     tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
     timeline: '10+ years',
-    featured: '/images/work/tire-rack-winter/CS_thumbnail_AEM_Winterization_safe.jpg',
+    featured: '/images/work/seasonal-content-system/CS_thumbnail_AEM_Winterization_safe.jpg',
     timeToLive: '10+ years of continuous ownership\u2014system deployed seasonally each fall with same-day content swaps',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -478,7 +478,7 @@ const projects: Project[] = [
         systemMarker: 'Pattern introduced',
         images: [
           {
-            src: '/images/work/tire-rack-winter/winter-aem-hero-detail_blurred.png',
+            src: '/images/work/seasonal-content-system/winter-aem-hero-detail_blurred.png',
             alt: 'AEM Experience Fragment library \u2014 winter, non-winter, and A/B test variants organized by component type',
             layout: 'full',
             caption: 'The fragment library\u2014winter, non-winter, and A/B variants organized for same-day swaps',
@@ -504,7 +504,7 @@ const projects: Project[] = [
     outcomeNote: 'Over a decade of continuous ownership, this system evolved into a scalable AEM Experience Fragment library\u201420+ component types, geo-based audience targeting via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Seasonal winterization has been associated with stronger annual winter conversion lift than pre-winterization periods\u2014though that outcome reflects product, marketing, and climate factors alongside the system itself. Two junior designers now author seasonal content under my governance, with documentation, approvals, and design-system alignment owned by me. The 10+ year arc is less about repetition and more about long-term system governance, documentation leadership, and strategic refinement.',
     outcomeImages: [
       {
-        src: '/images/work/tire-rack-winter/supporting/outcome/winter-homepage-desktop.png',
+        src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
         alt: 'Winterized Tire Rack homepage with seasonal hero, editorial blocks, and category grid',
         layout: 'full',
         caption: 'Winterized homepage\u2014full Experience Fragment swap across all above-the-fold sections',

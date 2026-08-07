@@ -129,6 +129,15 @@ function AppRoutes() {
         {/* Targeted-homepage template preview (unlinked). Add real deployments as
             additional routes rendering <HomepageTargeted content={...} />. */}
         <Route path="/homepage_template" element={<PageShell><HomepageTargeted content={templateContent} /></PageShell>} />
+        {/* Renamed 2026-08-07: the old slug named the client in the URL, which
+            leaked past the page's own redaction and into the sitemap and OG
+            tags. Kept as a redirect so existing links and index entries don't
+            break. Client-side, not a 301 — a server rule would be better if the
+            host ever allows one. */}
+        <Route
+          path="/work/tire-rack-winter"
+          element={<Navigate to="/work/seasonal-content-system" replace />}
+        />
         <Route path="/work/:slug" element={<CaseStudyRoute />} />
         <Route path="/notes" element={<PageShell><NotesPage /></PageShell>} />
         <Route path="/notes/:slug" element={<PageShell><NotePage /></PageShell>} />

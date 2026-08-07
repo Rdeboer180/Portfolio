@@ -130,12 +130,24 @@ const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approac
 // titles and page identity to hide something that isn't hidden.
 const CLIENT_PATTERN = /\bTire\s?Rack(?:’s|'s)?/g;
 
+/**
+ * What stands in for the client on a locked page.
+ *
+ * A descriptor rather than a blackout bar or a bare "Confidential client". A bar
+ * removes information without substituting any; a descriptor withholds the name
+ * while still telling a reader what kind of company and what scale of problem
+ * this was, which is what makes an anonymised case study credible instead of
+ * evasive. Deliberately claims no ranking — nothing here needs substantiating.
+ */
+const ANON_CLIENT = 'A national US online tire & wheel retailer';
+
 const redactClient = (text: string, locked: boolean): string => {
   if (!locked) return text;
   return text.replace(CLIENT_PATTERN, (match) =>
     /(’s|'s)$/.test(match) ? 'the client’s' : 'the client'
   );
 };
+
 
 /**
  * Stands in for the gated middle of a locked case study.
@@ -509,7 +521,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           {/* The client is the thing under NDA — withheld until unlock. Every
               seoTitle is already client-neutral, so nothing indexable is lost. */}
           <span className="cs__client">
-            {locked ? 'Confidential client' : project.client}
+            {locked ? ANON_CLIENT : project.client}
           </span>
           <h1 className="cs__title">{project.title}</h1>
           {project.thesis && (

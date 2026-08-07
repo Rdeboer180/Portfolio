@@ -245,7 +245,7 @@ const CARDS: PlaygroundCard[] = [
     ],
   },
   {
-    slug: 'tire-rack-winter',
+    slug: 'seasonal-content-system',
     title: 'Seasonal Content Swap',
     line: 'A scalable AEM system swapping 20+ components across the winter funnel every season.',
     tags: ['AEM', 'Content Strategy', 'Adobe Target', 'CMS'],
