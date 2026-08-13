@@ -15,7 +15,10 @@ const ORIGIN = `http://localhost:${PORT}`;
 
 // Unlinked routes the crawler won't reach on its own but we still want covered.
 // (homepage_template is intentionally excluded — it stays out of the index.)
-const EXTRA_ROUTES = ['/design-system', '/sitemap'];
+// Hidden case studies live here too: `hidden: true` keeps them out of Selected
+// Work and prev/next, which also keeps the crawler from ever finding them, so
+// without an explicit entry a direct link would 404 on the host.
+const EXTRA_ROUTES = ['/design-system', '/sitemap', '/work/bolus-binder'];
 
 // Content routes seeded deterministically from the data files so the sitemap
 // never depends on link-discovery timing. The /notes children were occasionally

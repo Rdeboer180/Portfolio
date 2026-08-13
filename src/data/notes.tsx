@@ -318,18 +318,20 @@ excluded    Angle brackets, pixel grids, terminal type,
             Social drafting product with its own brand and design-system foundation, built in
             React Native and Expo.
           </StackItem>
-          <StackItem name="Recipe project" status="Still being named">
+          <StackItem
+            name={<Link to="/work/bolus-binder/">Bolus Binder</Link>}
+            status="In TestFlight"
+          >
             Recipe storage where the nutrition leads: carbohydrate breakdown, ingredient
-            composition, expected glucose behavior. Working names so far: Afterbite, Bolus,
-            mealCurve, Bolus Binder.
+            composition, expected glucose behavior. Afterbite, Bolus and mealCurve lost to it.
           </StackItem>
           <StackItem name="The next one" status="Open" open>
             Whatever the next question turns out to be worth building.
           </StackItem>
         </Umbrella>
         <p>
-          The recipe project is the clearest test of whether the umbrella works. It has nothing to
-          do with PlayDraft, and under a name like Playgrove it would have needed an explanation.{' '}
+          Bolus Binder is the clearest test of whether the umbrella works. It has nothing to do
+          with PlayDraft, and under a name like Playgrove it would have needed an explanation.{' '}
           <Link to="/work/loopstack/">LoopStack</Link> predates all of this, and I haven&rsquo;t
           worked out whether it wants a parent.
         </p>
