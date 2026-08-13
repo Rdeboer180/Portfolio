@@ -12,15 +12,18 @@ import '../styles/styles.scss';
 // Notes index — the writing stream. Editorial list (rows, not cards):
 // date · kind chip · title · dek. A pinned "start here" block wears the
 // selection frame and puts the design system + taste skill front and center.
+// Three streams, ordered by how settled the thinking is: raw thought (essays
+// off LinkedIn), work still moving (build logs), then the resolved artifacts.
 // ============================================
 
 const NotesPage: React.FC = () => {
   const essays = NOTES_BY_DATE.filter((n) => n.kind === 'essay');
-  const resolved = NOTES_BY_DATE.filter((n) => n.kind !== 'essay');
+  const logs = NOTES_BY_DATE.filter((n) => n.kind === 'log');
+  const resolved = NOTES_BY_DATE.filter((n) => n.kind === 'skill' || n.kind === 'system');
   usePageMeta({
     title: 'Notes — Ryan DeBoer on craft, systems, and care',
     description:
-      'Writing from the work: design systems that outlive their designer, AI with human judgment, published agent skills, and how this site is built.',
+      'Writing from the work: design systems that outlive their designer, AI with human judgment, published agent skills, naming an LLC, and how this site is built.',
     canonical: `${SITE.portfolioUrl}/notes/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
   });
@@ -38,8 +41,8 @@ const NotesPage: React.FC = () => {
         <p className="notes__eyebrow">[ Notes ]</p>
         <h1 className="notes__title">Writing from the work</h1>
         <p className="notes__lede">
-          Craft is the through-line. Essays argue a judgment, skill entries publish the actual
-          artifact that encodes it, and system entries point at the running proof.
+          Craft is the through-line. Essays argue a judgment, build logs follow a decision while
+          it is still moving, and skill and system entries publish the artifact that encodes it.
         </p>
       </header>
 
@@ -65,7 +68,7 @@ const NotesPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Two streams, both case-study grammar: a numbered rule opens the
+      {/* Every stream uses case-study grammar: a numbered rule opens the
           section, a rail carries its identity (ReadMe-style split), and the
           entries are hairline rows with a read-time + sketch-arrow aside. */}
       <NoteStream
@@ -79,6 +82,14 @@ const NotesPage: React.FC = () => {
       />
       <NoteStream
         index="02"
+        label="In Progress"
+        ariaLabel="Build logs"
+        sub="Work that isn't settled. Published while the decisions are still moving, discarded directions included."
+        count={logs.length}
+        notes={logs}
+      />
+      <NoteStream
+        index="03"
         label="Resolved"
         ariaLabel="Systems and skills"
         sub="The settled artifacts: how things work, and the skills that encode the judgment."

@@ -65,12 +65,22 @@ const NotePage: React.FC = () => {
       <div className="notes__body">{note.body}</div>
 
       {/* Close rail is a statement, not a nav. "All notes" lives in the header
-          and contact lives in the shared footer below. */}
+          and contact lives in the shared footer below. Build logs get their own
+          close, because the LinkedIn-rough-cut line isn't true of them. */}
       <aside className="notes__close">
         <span className="notes__close-label">[ In Progress ]</span>
         <p className="notes__close-body">
-          Most of these start as a half-formed thought on LinkedIn and get cleaned up on the way
-          here. If you want the rough cut, that&rsquo;s where it shows up first.
+          {note.kind === 'log' ? (
+            <>
+              This one is still moving. The decisions above aren&rsquo;t final, and the entry gets
+              updated as they land rather than rewritten once it looks tidy.
+            </>
+          ) : (
+            <>
+              Most of these start as a half-formed thought on LinkedIn and get cleaned up on the
+              way here. If you want the rough cut, that&rsquo;s where it shows up first.
+            </>
+          )}
         </p>
       </aside>
 
