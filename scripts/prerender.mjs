@@ -20,6 +20,17 @@ const ORIGIN = `http://localhost:${PORT}`;
 // without an explicit entry a direct link would 404 on the host.
 const EXTRA_ROUTES = ['/design-system', '/sitemap', '/work/bolus-binder'];
 
+// Rendered so a direct link resolves, but kept out of the sitemap and marked
+// noindex. Rendering a route and publishing it are two decisions, and hidden
+// case studies need the first without the second: a real file on the host for
+// anyone holding the link, and no invitation to index it.
+//
+// Sitemap exclusion on its own would not hold. The Overscroll Tactics note
+// links to /work/bolus-binder/ from a public, indexed page, so a crawler
+// reaches it regardless of what the sitemap lists — the meta tag is what
+// actually carries the instruction.
+const NOINDEX_ROUTES = new Set(['/design-system', '/work/bolus-binder']);
+
 // Content routes seeded deterministically from the data files so the sitemap
 // never depends on link-discovery timing. The /notes children were occasionally
 // missed by the crawler, truncating the sitemap between deploys; seeding them
@@ -111,7 +122,10 @@ async function main() {
       if (!seen.has(clean) && !queue.includes(clean)) queue.push(clean);
     }
 
-    const html = '<!doctype html>\n' + (await page.evaluate(() => document.documentElement.outerHTML));
+    let html = '<!doctype html>\n' + (await page.evaluate(() => document.documentElement.outerHTML));
+    if (NOINDEX_ROUTES.has(route)) {
+      html = html.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>');
+    }
     const outPath = route === '/' ? join(BUILD_DIR, 'index.html') : join(BUILD_DIR, route, 'index.html');
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, html);
@@ -124,12 +138,12 @@ async function main() {
   fs.rmSync(join(BUILD_DIR, '__shell.html'));
   console.log(`\n✓ prerendered ${seen.size} routes`);
 
-  // Emit sitemap.xml from the routes we actually rendered (excluding the
-  // dev-facing design system). Keeps the sitemap in lockstep with real pages.
+  // Emit sitemap.xml from the routes we actually rendered, minus the noindex
+  // set. Keeps the sitemap in lockstep with the pages we want found.
   const ORIGIN_URL = 'https://www.rdeboerdesigns.com';
   const today = new Date().toISOString().slice(0, 10);
   const urls = [...seen]
-    .filter((r) => r !== '/design-system')
+    .filter((r) => !NOINDEX_ROUTES.has(r))
     .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)))
     .map((r) => {
       // Trailing slash = the URL nginx serves directly over https (slashless
@@ -141,7 +155,7 @@ async function main() {
     .join('\n');
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
   writeFileSync(join(BUILD_DIR, 'sitemap.xml'), sitemap);
-  console.log(`✓ wrote sitemap.xml (${[...seen].filter((r) => r !== '/design-system').length} urls)`);
+  console.log(`✓ wrote sitemap.xml (${[...seen].filter((r) => !NOINDEX_ROUTES.has(r)).length} urls)`);
 }
 
 main().catch((err) => {
