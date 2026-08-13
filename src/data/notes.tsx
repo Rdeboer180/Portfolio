@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 // site's own vocabulary. Newest first in the NOTES array.
 // ============================================
 
-export type NoteKind = 'essay' | 'skill' | 'system';
+export type NoteKind = 'essay' | 'log' | 'skill' | 'system';
 
 // Moment frame — the case-study insight-callout vocabulary, carried into
 // notes: one marked, quotable judgment per piece.
@@ -18,6 +18,107 @@ const Callout: React.FC<{ marker: string; children: React.ReactNode }> = ({ mark
     <span className="notes__callout-marker">{marker}</span>
     <p className="notes__callout-text">{children}</p>
   </aside>
+);
+
+// Naming graveyard — the exploration tree, left visible. Each branch is a
+// theme that produced names; the verdict is why it died. Dead names are <s>,
+// so the state survives without color. Only the surviving branch is orange.
+const Branch: React.FC<{
+  theme: string;
+  names: string[];
+  verdict: string;
+  kept?: boolean;
+}> = ({ theme, names, verdict, kept }) => (
+  <li className={`notes__branch${kept ? ' notes__branch--kept' : ''}`}>
+    <span className="notes__branch-theme">{theme}</span>
+    <ul className="notes__branch-names">
+      {names.map((name) => (
+        <li key={name} className="notes__branch-name">
+          {kept ? name : <s>{name}</s>}
+        </li>
+      ))}
+    </ul>
+    <p className="notes__branch-verdict">{verdict}</p>
+  </li>
+);
+
+const Graveyard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <ul className="notes__graveyard">{children}</ul>
+);
+
+// Turn frame — two readings of the same problem side by side. Used once, at
+// the point where the naming criteria changed.
+const Turn: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="notes__turn">{children}</div>
+);
+
+const TurnSide: React.FC<{
+  label: string;
+  question: string;
+  kept?: boolean;
+  children: React.ReactNode;
+}> = ({ label, question, kept, children }) => (
+  <div className={`notes__turn-side${kept ? ' notes__turn-side--kept' : ''}`}>
+    <span className="notes__turn-label">{label}</span>
+    <p className="notes__turn-q">{question}</p>
+    <p className="notes__turn-body">{children}</p>
+  </div>
+);
+
+// Term split — dictionary-entry treatment for a two-part name. The summation
+// line is deliberately quieter than a Callout; a piece only gets one of those.
+const Split: React.FC<{ sum: string; children: React.ReactNode }> = ({ sum, children }) => (
+  <div className="notes__split">
+    {children}
+    <p className="notes__split-sum">
+      <span className="notes__split-sum-marker" aria-hidden="true">=</span>
+      <span>{sum}</span>
+    </p>
+  </div>
+);
+
+const Term: React.FC<{ word: string; gloss: string; children: React.ReactNode }> = ({
+  word,
+  gloss,
+  children,
+}) => (
+  <div className="notes__term">
+    <span className="notes__term-head">
+      <span className="notes__term-word">{word}</span>
+      <span className="notes__term-gloss">{gloss}</span>
+    </span>
+    <p className="notes__term-def">{children}</p>
+  </div>
+);
+
+// Umbrella — parent identity over the products it attributes. Shares the
+// graveyard's rail geometry on purpose: same relationship, drawn the same way.
+// The open slot renders as a hollow node, an honest empty state rather than a
+// tidier list of two.
+const Umbrella: React.FC<{ parent: string; children: React.ReactNode }> = ({
+  parent,
+  children,
+}) => (
+  <div className="notes__umbrella">
+    <p className="notes__umbrella-head">
+      <span className="notes__umbrella-parent">{parent}</span>
+      <span className="notes__umbrella-kind">[ Parent ]</span>
+    </p>
+    <ul className="notes__stack">{children}</ul>
+  </div>
+);
+
+const StackItem: React.FC<{
+  name: React.ReactNode;
+  status: string;
+  open?: boolean;
+  children: React.ReactNode;
+}> = ({ name, status, open, children }) => (
+  <li className={`notes__stack-item${open ? ' notes__stack-item--open' : ''}`}>
+    <span className="notes__stack-name">{name}</span>
+    <span className="notes__stack-status">{status}</span>
+    <p className="notes__stack-desc">{children}</p>
+  </li>
 );
 
 export interface Note {
@@ -35,11 +136,220 @@ export interface Note {
 
 export const KIND_LABEL: Record<NoteKind, string> = {
   essay: '[ Essay ]',
+  log: '[ Build Log ]',
   skill: '[ Agent Skill ]',
   system: '[ System ]',
 };
 
 export const NOTES: Note[] = [
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    slug: 'overscroll-tactics',
+    read: '6 min',
+    kind: 'log',
+    date: 'August 2026',
+    dateISO: '2026-08-12',
+    title: 'I needed an LLC. I ended up naming my design practice.',
+    dek: 'Six weeks of naming an umbrella for PlayDraft and everything after it. Playgrove, then Imaginefield, then Overscroll Tactics, including the branch I threw away and had to go back for.',
+    artifact: { label: 'overscrolltactics.com', href: 'https://overscrolltactics.com/' },
+    body: (
+      <>
+        <p>
+          I set out to name a company. Six weeks later I had a name for the way I work, which is
+          not the same thing and turned out to be more useful.
+        </p>
+        <p>
+          <Link to="/work/playdraft/">PlayDraft</Link> stopped being a portfolio mockup around the
+          first TestFlight build, and a working product with a domain attached needs somewhere to
+          legally live. The filing was the easy part. Deciding what name went on it took the rest
+          of the summer.
+        </p>
+
+        <h2>PlayDraft could have been the company</h2>
+        <p>
+          It has its own brand, and naming the LLC after it would have taken ten minutes. It would
+          also have been wrong for everything after it: a recipe tool for diabetics is not a
+          PlayDraft spinoff. Product is not studio, and the parent had to hold PlayDraft without
+          making the rest look like it came out of PlayDraft.
+        </p>
+
+        <h2>The naming graveyard</h2>
+        <p>
+          Everything that didn&rsquo;t make it, grouped the way the exploration actually branched.
+        </p>
+        <Graveyard>
+          <Branch
+            theme="Play"
+            names={[
+              'Playgrove Studios',
+              'Playcraft Studios',
+              'Playlab',
+              'Field Play',
+              'Field of Play',
+              'PlayWard',
+              'PlayTapir Studio',
+              'Playmorrow Labs',
+            ]}
+            verdict="Every one turned the company into a game studio. PlayDraft is a game; the company holding it is not."
+          />
+          <Branch
+            theme="Craft"
+            names={['CraftGrove', 'Craft Labs', 'Craftmorrow Labs']}
+            verdict="True and unownable at once. Craft is the most crowded word in design naming."
+          />
+          <Branch
+            theme="Tactical"
+            names={['Tactical Grove', 'Tactical Labs', 'Tactical Studios']}
+            verdict="Killed early for sounding like a defense contractor. The call I got wrong, and I didn't find out for a month."
+          />
+          <Branch
+            theme="Imagination"
+            names={[
+              'Imagine Apps',
+              'Imaginefield',
+              'Imaginefield Works',
+              'Imaginefield Labs',
+              'Imaginefield Foundry',
+              'Imaginefield Collective',
+              'Imaginefield Product Co.',
+              'Imaginefield Games',
+            ]}
+            verdict="The best of the safe answers."
+          />
+          <Branch
+            theme="Behavior"
+            names={['Overscroll Tactics']}
+            kept
+            verdict="Kept. The only one that described the work instead of the output."
+          />
+        </Graveyard>
+        <p>
+          Imaginefield led for two weeks and got close enough that I pictured the letterhead. The
+          problem was subtler than availability: it described where the ideas would happen and said
+          nothing about what I do once they show up.
+        </p>
+
+        <h2>The paperwork was never the hard part</h2>
+        <p>
+          A single-member, member-managed Indiana LLC, filed online through INBiz. Roughly $95 to
+          file, about $98 all-in, around $32 for the biennial report. Formation services were
+          selling convenience I didn&rsquo;t need, and acting as my own registered agent trades a
+          little address privacy for not paying someone yearly to receive mail. One evening for all
+          of it, against six weeks on the name.
+        </p>
+
+        <h2>Every name answered the wrong question</h2>
+        <p>
+          Somewhere in the Imaginefield stretch the side projects stopped looking like unrelated
+          apps. The same questions kept surfacing:
+        </p>
+        <ul>
+          <li>How far into implementation can a designer actually go?</li>
+          <li>How should a design system work when both people and agents read it?</li>
+        </ul>
+        <p>
+          The projects were the lab. I had been trying to name the equipment.
+        </p>
+        <Callout marker="The turn">
+          Every name on my list described what I make. Not one of them described how I work.
+        </Callout>
+        <Turn>
+          <TurnSide label="Was asking" question="What do I build?">
+            Produces studio names. Playgrove, Imaginefield Works. Category labels that age badly
+            the moment I build outside the category.
+          </TurnSide>
+          <TurnSide label="Should ask" question="How do I work?" kept>
+            Produces a name for a method, which survives a change of subject. What sits underneath
+            can be anything, as long as it was made the same way.
+          </TurnSide>
+        </Turn>
+
+        <h2>Overscroll. Tactics.</h2>
+        <p>
+          The definition arrived before I was sure about the name: thinking beyond conventional
+          patterns and executing with precision.
+        </p>
+        <Split sum="Go past the expected stopping point. Have a reason.">
+          <Term word="overscroll" gloss="[ the behavior ]">
+            The part of an interface that keeps moving after it has technically hit its edge. Read
+            as a working method, it&rsquo;s the decision not to stop where the discipline says
+            you&rsquo;re finished. The design isn&rsquo;t the end. Neither is the prototype, or the
+            system.
+          </Term>
+          <Term word="tactics" gloss="[ the constraint ]">
+            The counterweight. Exploration that doesn&rsquo;t produce better decisions is a hobby
+            with good taste. Go past the boundary because something on the other side is worth
+            having.
+          </Term>
+        </Split>
+        <p>
+          Both halves are load-bearing. &ldquo;Overscroll&rdquo; alone is an art project;
+          &ldquo;Tactics&rdquo; alone is the defense contractor I talked myself out of in July.
+        </p>
+
+        <h2>Negative space does the joining</h2>
+        <p>
+          One non-negotiable: an O and a T combined, where the gap between the letters carries the
+          relationship instead of a third shape. A later pass pushed toward a cursor silhouette,
+          which reads as digital interaction without the usual tells. Not purely design, not purely
+          engineering, not a game studio, not an agency.
+        </p>
+        <pre>
+          <code>{`OVERSCROLL TACTICS / IDENTITY BRIEF v0
+
+mark        O + T combined. Negative space does the joining.
+validate    One color first, before any gradient or texture.
+scale       Emblem and wordmark each work alone, down to
+            favicon size.
+excluded    Angle brackets, pixel grids, terminal type,
+            anything that reads "developer logo."`}</code>
+        </pre>
+        <p>
+          The marks aren&rsquo;t public yet; they&rsquo;re still one-color tests on a black
+          artboard. The deliverable was never a logo. A parent with too much character turns every
+          product underneath it into a variant of itself, which is{' '}
+          <Link to="/work/wheelrack/">partner theming in a token architecture</Link> at a much
+          smaller scale.
+        </p>
+
+        <h2>Two products and an empty slot</h2>
+        <Umbrella parent="Overscroll Tactics">
+          <StackItem name={<Link to="/work/playdraft/">PlayDraft</Link>} status="In TestFlight">
+            Social drafting product with its own brand and design-system foundation, built in
+            React Native and Expo.
+          </StackItem>
+          <StackItem
+            name={<Link to="/work/bolus-binder/">Bolus Binder</Link>}
+            status="In TestFlight"
+          >
+            Recipe storage where the nutrition leads: carbohydrate breakdown, ingredient
+            composition, expected glucose behavior. Afterbite, Bolus and mealCurve lost to it.
+          </StackItem>
+          <StackItem name="The next one" status="Open" open>
+            Whatever the next question turns out to be worth building.
+          </StackItem>
+        </Umbrella>
+        <p>
+          Bolus Binder is the clearest test of whether the umbrella works. It has nothing to do
+          with PlayDraft, and under a name like Playgrove it would have needed an explanation.{' '}
+          <Link to="/work/loopstack/">LoopStack</Link> predates all of this, and I haven&rsquo;t
+          worked out whether it wants a parent.
+        </p>
+
+        <h2>Nothing here is finished</h2>
+        <p>
+          My strongest professional work lives inside proprietary enterprise systems. I can
+          describe it and I can&rsquo;t open the repo, so independent products are the second proof
+          layer: systems work and architecture decisions in public, nothing redacted.
+        </p>
+        <p>
+          The mark isn&rsquo;t final and the sub-brand rules haven&rsquo;t been tested against a
+          second product. I spent six weeks trying to name what I build. The answer was to name how
+          I work, and it had been sitting in a branch I&rsquo;d already thrown away.
+        </p>
+      </>
+    ),
+  },
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'governance-in-markdown',

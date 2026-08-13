@@ -1512,6 +1512,117 @@ export const packs = {
     ],
   },
 
+  // =============================================
+  // Bolus Binder — diabetes-aware recipe keeper + T1D Hub identity  [passion]
+  // Hidden (direct-link only): the app is an early TestFlight build and the
+  // T1D Hub engagement is still running, so this stays off the homepage
+  // carousel and out of Selected Work until there's more to show. It may also
+  // want splitting in two later — the clinic identity work and the app are
+  // separate stories sharing a visual language.
+  // =============================================
+  {
+    slug: 'bolus-binder',
+    hidden: true,
+    client: 'Bolus Binder (personal product) · T1D Hub (local clinic)',
+    title: 'Bolus Binder: A Recipe Keeper That Remembers What Your Blood Sugar Did',
+    seoTitle: 'Bolus Binder — a diabetes-aware recipe app in React Native, on the T1D Hub design system',
+    summary:
+      'A recipe keeper for Type 1 diabetes. Nutrition leads instead of hiding in a footer, and every meal builds a glucose history.',
+    thesis: 'A recipe ends when the instructions stop. A glucose response does not.',
+    year: '2026',
+    tags: ['Product Design', 'Mobile (iOS)', 'Brand System', 'Design System', 'Health Data', 'React Native'],
+    role: 'Product Design · Brand & Design System · Front-End (React Native)',
+    tools: ['Figma', 'React Native', 'Expo', 'Claude', 'VS Code'],
+    timeline: 'April → August 2026 · TestFlight',
+    stream: 'passion',
+    featured: '/images/work/bolus-binder/t1dhub-cover.png',
+    timeToLive:
+      'Concept in April, named in August, TestFlight build running now.',
+    metrics: [
+      { value: 'In TestFlight', label: 'Current build, React Native + Expo' },
+      { value: 'v1.0', label: 'T1D Hub design system, delivered June 2026 for a local Type 1 clinic' },
+      { value: '12', label: 'Color tokens carrying clinical semantics: in range, above range, urgent low' },
+      { value: '3', label: 'Type roles: Sora for display, Inter for body, JetBrains Mono for data' },
+    ],
+
+    problemPunch: 'Every recipe app remembers the ingredients. None remembers what happened after I ate them.',
+    problem: [
+      'Managing T1D means re-deriving the same math every time: carbs, serving size, whether fat delays the rise. That lives in my head.',
+    ],
+
+    gapsPunch: 'Nutrition treated as metadata.',
+    gaps: [
+      'Recipe apps collapse nutrition below the fold and discard the outcome. The data that decides my dose is what they throw away.',
+    ],
+
+    constraintsPunch: 'Describe behavior, never prescribe a dose.',
+    constraints: [
+      'The app reports what happened after a meal. It never tells anyone how much insulin to take, and the copy holds that line.',
+    ],
+
+    approachSubsections: [
+      {
+        key: 'model',
+        label: 'Recipe, meal event, memory',
+        systemMarker: 'DATA MODEL',
+        description:
+          'A recipe is stable. A meal event is what happened when it was eaten. Repeats accumulate into a per-person history, so one recipe behaves differently for two people.',
+      },
+      {
+        key: 'system',
+        label: 'Built on the T1D Hub system',
+        systemMarker: 'BRAND + SYSTEM',
+        description:
+          'The visual language comes from the identity system I built for a local Type 1 clinic: navy for stability, sky for data, a CGM trace through the wordmark.',
+        gridColumns: 2,
+        images: [
+          {
+            src: '/images/work/bolus-binder/supporting/approach/t1dhub-mark.png',
+            alt: 'T1D Hub wordmark: T1D set in navy, HUB in sky blue, with a CGM trace line and data points running through the letterforms.',
+            layout: 'half',
+            maxWidth: 420,
+            caption: 'The CGM trace connects through the wordmark. It is the one rule the mark cannot lose.',
+          },
+          {
+            src: '/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png',
+            alt: 'T1D Hub logo system page showing primary and reversed lockups alongside five usage rules.',
+            layout: 'half',
+            caption: 'Four approved configurations, with the constraints written next to them.',
+          },
+          {
+            src: '/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png',
+            alt: 'T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.',
+            layout: 'half',
+            caption: 'Alert red, amber and green carry clinical meaning, so they are never used decoratively.',
+          },
+          {
+            src: '/images/work/bolus-binder/supporting/approach/t1dhub-type-system.png',
+            alt: 'T1D Hub type system: Sora ExtraBold for display, Inter for body, JetBrains Mono for glucose readings.',
+            layout: 'half',
+            caption: 'Mono is reserved for data, so a glucose number never reads as body copy.',
+          },
+        ],
+      },
+    ],
+
+    outcomeNote:
+      'In TestFlight now, built in React Native. Brand application and web land later in 2026.',
+    outcomeImages: [
+      {
+        src: '/images/work/bolus-binder/supporting/outcome/t1dhub-cgm-visual-language.png',
+        alt: 'CGM visual language: a 24-hour glucose trace with in-range, above and below bands, beside a Time In Range summary.',
+        layout: 'full',
+        caption: 'The chart language Bolus Binder inherits: green in range, amber above, red urgent low.',
+      },
+    ],
+    outcomeInstall: {
+      label: 'Scan to install on iPhone',
+      url: 'https://testflight.apple.com/join/YSyjkS3k',
+      linkText: 'testflight.apple.com/join/YSyjkS3k',
+      caption: 'Opens TestFlight and installs the current build.',
+      qr: 'bolus-binder-testflight',
+    },
+  },
   // ──────────────────────────────────────────────────────────────────────────
   // Internal agentic photography tool. Hidden (direct-link only) until a cover
   // image lands and confidentiality framing is signed off — promote to the

@@ -554,6 +554,352 @@
 
 }
 
+// ============================================
+// In-body modules — the long-form note vocabulary
+// Scoped under .notes__body so they out-specify the prose defaults
+// (.notes__body p / ul / li) on specificity and source order — no !important.
+// All four share the same geometry family as the rest of the site: hairline
+// structure, 5px selection-handle squares, mono system markers, and the accent
+// used only where it means something.
+// ============================================
+.notes__body {
+
+  // ── Exploration tree — the naming graveyard, kept visible ────────────────
+  // A trunk hairline with a node at each branch. Dead branches take steel (the
+  // system's quiet-furniture color); only the surviving branch gets the accent.
+  // The <s> on each dead name carries the state without relying on color.
+  .notes__graveyard {
+    list-style: none;
+    max-width: 68ch;
+    margin: $spacing-2xl 0;
+    padding: 0 0 0 $spacing-xl;
+    border-left: 1px solid $color-neutral-light;
+  }
+
+  .notes__branch {
+    position: relative;
+    margin: 0;
+    max-width: none;
+    padding-bottom: $spacing-xl;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    // Node — centered across the trunk's 1px
+    &::before {
+      content: '';
+      position: absolute;
+      left: -($spacing-xl + 3px);
+      top: 6px;
+      width: 5px;
+      height: 5px;
+      background: $color-secondary;
+    }
+  }
+
+  .notes__branch--kept::before {
+    background: $color-primary;
+  }
+
+  .notes__branch-theme {
+    display: block;
+    margin-bottom: $spacing-sm;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  .notes__branch--kept .notes__branch-theme {
+    color: $color-primary;
+  }
+
+  // Gap does the separating, not punctuation. A middot between names left a
+  // dangling separator whenever the list wrapped mid-row.
+  .notes__branch-names {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $spacing-lg;
+    row-gap: 2px;
+    margin: 0 0 $spacing-sm;
+    padding: 0;
+  }
+
+  .notes__branch-name {
+    margin: 0;
+    max-width: none;
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+
+    s {
+      text-decoration-line: line-through;
+      text-decoration-color: $color-secondary;
+      text-decoration-thickness: 1px;
+    }
+  }
+
+  .notes__branch--kept .notes__branch-name {
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  .notes__branch-verdict {
+    margin: 0;
+    max-width: 60ch;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+
+  // ── Turn frame — two readings of the same problem, side by side ──────────
+  .notes__turn {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 68ch;
+    margin: $spacing-2xl 0;
+    background: $color-secondary-lightest;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    overflow: hidden;
+  }
+
+  .notes__turn-side {
+    padding: $spacing-xl;
+  }
+
+  .notes__turn-side + .notes__turn-side {
+    border-left: 1px solid $color-border-default;
+  }
+
+  .notes__turn-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+
+    &::before {
+      content: '';
+      flex: 0 0 auto;
+      width: 5px;
+      height: 5px;
+      background: $color-secondary;
+    }
+  }
+
+  .notes__turn-side--kept .notes__turn-label {
+    color: $color-primary;
+
+    &::before {
+      background: $color-primary;
+    }
+  }
+
+  .notes__turn-q {
+    margin: 0 0 $spacing-md;
+    max-width: none;
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  .notes__turn-body {
+    margin: 0;
+    max-width: none;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+
+  // ── Term split — dictionary treatment for a two-part name ────────────────
+  .notes__split {
+    max-width: 68ch;
+    margin: $spacing-2xl 0;
+    border-top: 2px solid $color-neutral-dark;
+  }
+
+  .notes__term {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: $spacing-xl;
+    padding: $spacing-xl 0;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  .notes__term-word {
+    display: block;
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    font-weight: $font-weight-extrabold;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  .notes__term-gloss {
+    display: block;
+    margin-top: $spacing-xs;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  .notes__term-def {
+    margin: 0;
+    max-width: none;
+    font-size: $font-size-body;
+    line-height: 1.7;
+    color: $color-neutral-standard;
+  }
+
+  // Summation — deliberately quieter than a Callout. One piece, one Callout.
+  .notes__split-sum {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
+    margin: 0;
+    max-width: none;
+    padding-top: $spacing-lg;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-semibold;
+    line-height: 1.4;
+    color: $color-neutral-dark;
+  }
+
+  .notes__split-sum-marker {
+    font-family: $font-family-mono;
+    font-size: $font-size-body;
+    font-weight: $font-weight-regular;
+    color: $color-primary;
+  }
+
+  // ── Umbrella — parent identity over the products it attributes ───────────
+  // Reuses the graveyard's rail geometry on purpose: same kind of
+  // relationship, drawn the same way. The open slot is a hollow node — an
+  // honest empty state instead of a tidier list of two.
+  .notes__umbrella {
+    max-width: 68ch;
+    margin: $spacing-2xl 0;
+  }
+
+  .notes__umbrella-head {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
+    margin: 0 0 $spacing-lg;
+    max-width: none;
+  }
+
+  .notes__umbrella-parent {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  .notes__umbrella-kind {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary;
+  }
+
+  .notes__stack {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 $spacing-xl;
+    border-left: 1px solid $color-neutral-light;
+  }
+
+  .notes__stack-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: $spacing-lg;
+    margin: 0;
+    max-width: none;
+    padding: $spacing-lg 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -($spacing-xl + 3px);
+      top: $spacing-lg + 8px;
+      width: 5px;
+      height: 5px;
+      background: $color-secondary;
+    }
+  }
+
+  // Not built yet — hollow node, muted name, no link
+  .notes__stack-item--open::before {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px $color-secondary;
+  }
+
+  .notes__stack-name {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  .notes__stack-item--open .notes__stack-name {
+    color: $color-neutral-muted;
+  }
+
+  .notes__stack-status {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: right;
+    color: $color-neutral-muted;
+  }
+
+  .notes__stack-desc {
+    grid-column: 1 / -1;
+    margin: $spacing-xs 0 0;
+    max-width: 56ch;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+}
+
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: $breakpoint-md) {
   .notes {
@@ -616,6 +962,36 @@
     &__row-title,
     &__row-dek {
       grid-column: 1;
+    }
+  }
+}
+
+// ── In-body modules, small screens ──────────────────────────────────────────
+// The two-up frames become sequences; the status chip stops right-aligning
+// once the row is a single column.
+@media (max-width: $breakpoint-md) {
+  .notes__body {
+    .notes__turn {
+      grid-template-columns: 1fr;
+    }
+
+    .notes__turn-side + .notes__turn-side {
+      border-left: 0;
+      border-top: 1px solid $color-border-default;
+    }
+
+    .notes__term {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+
+    .notes__stack-item {
+      grid-template-columns: 1fr;
+      row-gap: $spacing-xs;
+    }
+
+    .notes__stack-status {
+      text-align: left;
     }
   }
 }

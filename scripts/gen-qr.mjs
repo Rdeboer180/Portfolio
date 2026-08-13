@@ -20,6 +20,7 @@ const OUT_DIR = 'public/images/qr';
 const TARGETS = {
   'loopstack-demo': 'https://www.rdeboerdesigns.com/loopstack-demo/',
   'playdraft-testflight': 'https://testflight.apple.com/join/swanYSs1',
+  'bolus-binder-testflight': 'https://testflight.apple.com/join/YSyjkS3k',
   // 'loopstack-testflight': 'https://testflight.apple.com/join/XXXXXXXX',
 };
 
