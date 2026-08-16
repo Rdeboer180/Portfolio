@@ -889,35 +889,6 @@
     }
   }
 
-  &__ownership-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 $spacing-xl;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-sm;
-
-    li {
-      position: relative;
-      padding-left: $spacing-xl;
-      font-family: $font-family-primary;
-      font-size: $font-size-body;
-      line-height: $line-height-body;
-      color: $color-neutral-standard;
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 10px;
-        width: 8px;
-        height: 2px;
-        background: $color-primary;
-        border-radius: 1px;
-      }
-    }
-  }
-
   &__overview-meta {
     display: flex;
     flex-direction: column;

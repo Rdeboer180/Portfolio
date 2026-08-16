@@ -373,6 +373,34 @@ interface CaseStudyPageProps {
   slug: string;
 }
 
+/**
+ * The results grid and its qualifying note.
+ *
+ * Pulled out of the Outcome section because it has to render on both sides of
+ * the password gate. Employer studies used to lock sections 02-05 wholesale,
+ * which took the metrics with them — so a visitor arriving from LinkedIn saw a
+ * homepage card advertising "+50% conversion lift", clicked it, and hit a wall
+ * where the number should have been. The gate was scoped to `stream`, not to
+ * sensitivity: if a figure is safe enough to publish on the card, it is safe on
+ * the page. What stays gated is what the gate was actually for — client
+ * imagery, process detail, live URLs, and the named client.
+ */
+const OutcomeMetrics: React.FC<{ project: Project }> = ({ project }) => (
+  <>
+              <div className="cs__results-grid">
+                {project.metrics.map((metric) => (
+                  <div key={metric.label} className="cs__result-card">
+                    <span className="cs__result-value">{metric.value}</span>
+                    <span className="cs__result-label">{metric.label}</span>
+                  </div>
+                ))}
+              </div>
+              {(project.outcomeNote || project.resultsNote) && (
+                <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
+              )}
+  </>
+);
+
 const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
@@ -619,7 +647,22 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     The outcome carries live client URLs, partner-adoption figures,
                     and the metrics — the parts a client is least likely to want
                     public — so it locks with the rest. --- */}
-            {locked ? <CaseStudyLocked onUnlock={openPrompt} /> : (<>
+            {locked ? (
+              <>
+                <CaseStudyLocked onUnlock={openPrompt} />
+                {/* Outcome survives the gate — see OutcomeMetrics. The heading
+                    is kept so the numbers arrive with their context instead of
+                    floating under the lock panel. */}
+                <section className="cs__section cs__section--outcome">
+                  <div className="cs__section-header">
+                    <span className="cs__section-number">05</span>
+                    <span className="cs__micro-label">What Changed</span>
+                    <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
+                  </div>
+                  <OutcomeMetrics project={project} />
+                </section>
+              </>
+            ) : (<>
 
             {/* --- 02 Gaps & Opportunity --- */}
             {project.gaps && project.gaps.length > 0 && (
@@ -751,17 +794,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <p className="cs__section-aside">{project.annotations.outcome}</p>
                 )}
               </div>
-              <div className="cs__results-grid">
-                {project.metrics.map((metric) => (
-                  <div key={metric.label} className="cs__result-card">
-                    <span className="cs__result-value">{metric.value}</span>
-                    <span className="cs__result-label">{metric.label}</span>
-                  </div>
-                ))}
-              </div>
-              {(project.outcomeNote || project.resultsNote) && (
-                <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
-              )}
+              <OutcomeMetrics project={project} />
               <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} locked={locked} />
 
               {/* Outcome grid — scale wall */}

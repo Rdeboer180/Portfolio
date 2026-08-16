@@ -498,12 +498,24 @@ const Hero: React.FC = () => {
             </p>
 
             <div className="hero__typed-wrap hero__reveal hero__reveal--2">
-              {/* Full sequence is available to screen readers immediately via this
-                  static h1; the visual animation below is decorative (aria-hidden),
-                  so no noisy character-by-character live-region announcements. */}
+              {/* The h1 makes the claim; the phrases support it.
+                  It used to be the four animated aphorisms verbatim — "Fluent in
+                  tools. Grounded in craft. …" — which is a mood, not a subject.
+                  Anything reading the page structurally (a crawler, a screen
+                  reader pulling a heading list, a preview card) got four
+                  sentences with no subject in them, while the one line that
+                  actually said what Ryan does sat above in a 12px eyebrow. The
+                  visual sequence below is untouched; only what the h1 asserts
+                  has changed. */}
               <h1 className="hero__h1-sr-only">
-                Fluent in tools. Grounded in craft. Close to code. Care for what ships.
+                Ryan DeBoer &mdash; Product Design Engineer bridging ambitious UX and buildable systems
               </h1>
+
+              {/* The animated phrases still reach assistive tech: the visual
+                  sequence is aria-hidden, so without this they'd be lost. */}
+              <p className="sr-only">
+                Fluent in tools. Grounded in craft. Close to code. Care for what ships.
+              </p>
 
               {/* Invisible sizer — stacks every phrase in one grid cell so the
                   wrap reserves exactly the tallest phrase's rendered height at

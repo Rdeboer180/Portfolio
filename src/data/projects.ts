@@ -116,7 +116,6 @@ export interface Project {
   brief?: string;
   challenge?: string;
   resultsNote?: string;
-  ownership?: string[];
   approach?: string;
   process?: { label: string; description: string }[];
   takeaways?: string[];
