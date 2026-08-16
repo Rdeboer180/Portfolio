@@ -58,7 +58,10 @@
   left: 0;
   right: 0;
   z-index: $z-index-fixed;
-  height: var(--unlock-bar-h);
+  // A floor, not a fixed box: at 200% zoom the sentence wraps and the bar
+  // grows to fit. The height is measured back into --unlock-bar-h by
+  // SiteUnlockBar, so the fixed navs below offset by the real value.
+  min-height: var(--unlock-bar-h);
   overflow: hidden;   // clips the sweep to the bar
 
   display: flex;
@@ -130,14 +133,21 @@
     appearance: none;
     background: none;
     border: 0;
-    padding: 4px 2px;
+    // Never inherit the UA's `line-height: normal` on a button: with only 4px
+    // of vertical padding that produced a 23.6px target (14.4px at <=640),
+    // under the 24px AA floor — on the one control that unlocks the work.
+    min-height: 44px;
+    line-height: $line-height-body-sm;
+    padding: $spacing-sm $spacing-md;
     cursor: pointer;
 
     font-family: $font-family-heading;
     font-size: 13px;
     font-weight: $font-weight-bold;
     letter-spacing: 0.02em;
-    color: $color-primary;
+    // 5.21:1 on the bar's tint. $color-primary is 3.61:1 there — below AA on
+    // the only control that unlocks the protected work.
+    color: $color-primary-dark;
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
@@ -161,14 +171,22 @@
     padding: 0 $spacing-lg;
 
     &__text { font-size: 12px; text-align: center; }
-    &__action { font-size: 12px; padding: 0; }
+    &__action { font-size: 12px; padding: $spacing-xs $spacing-sm; }
   }
 }
 
 // Push the fixed page navs below the bar.
+// Every fixed/sticky page nav has to clear the bar. The three below were
+// listed; .notes__nav, .resume-page__nav and .sitemap-page__nav were not, and
+// they sit at z-index 1020 against the bar's 1030 — so once the visitor
+// scrolled, those pages' only navigation pinned to y=0 underneath the bar and
+// disappeared. For anyone who hasn't entered a password, that is everyone.
 .hero__nav,
 .about-page__nav,
-.cs__nav {
+.cs__nav,
+.notes__nav,
+.resume-page__nav,
+.sitemap-page__nav {
   top: var(--unlock-bar-h, 0px);
 }
 

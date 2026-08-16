@@ -99,6 +99,18 @@
     transition: color $transition-fast;
   }
 
+  // Sits between the italic title and the tag row. Reads as body, not as a
+  // second heading — the title keeps the emphasis, the summary just answers
+  // what the project is. Capped to the comfortable measure so a long summary
+  // doesn't run the full card width.
+  &__card-summary {
+    margin: $spacing-xs 0 0;
+    max-width: 52ch;
+    font-size: $font-size-body;
+    line-height: $line-height-body;
+    color: $color-text-secondary;
+  }
+
   &__card-tags {
     display: flex;
     flex-wrap: wrap;

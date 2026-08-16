@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mentor Taste"
+  short_description: "Shape posts for elite design leaders"
+  default_prompt: "Use $mentor-taste to turn this work into a LinkedIn post that demonstrates judgment, craft, and credible agentic practice."

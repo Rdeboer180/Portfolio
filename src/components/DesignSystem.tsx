@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import Tabs from './Tabs';
@@ -27,7 +28,7 @@ const colorGroups = [
     colors: [
       { name: 'neutral-lightest', value: '#f5f5f5', css: '--color-neutral-lightest' },
       { name: 'neutral-light', value: '#e5e5e5', css: '--color-neutral-light' },
-      { name: 'neutral-muted', value: '#7a7a7a', css: '--color-neutral-muted', light: true },
+      { name: 'neutral-muted', value: '#707070', css: '--color-neutral-muted', light: true },
       { name: 'neutral-standard', value: '#4a4a4a', css: '--color-neutral-standard', light: true },
       { name: 'neutral-dark', value: '#1b1b1b', css: '--color-neutral-dark', light: true },
     ],
@@ -261,35 +262,35 @@ const AtomsContent: React.FC = () => (
     {/* ======================== ACCESSIBILITY ======================== */}
     <section className="ds__section">
       <h2 className="ds__section-title">Accessibility</h2>
+      {/* Ratios are computed from the token values at render time, not typed
+          in. Two of these were previously hand-written and wrong — "Primary on
+          White" published 4.6:1 for a pair that measures 3.91:1, and "Muted on
+          White" published 4.5:1 against a #7a7a7a that isn't even a token
+          (the real one, #707070, passes at 4.95:1). A design-system page that
+          certifies a failing ratio is worse than one that says nothing. */}
       <div className="ds__a11y-grid">
-        <div className="ds__a11y-card">
-          <div className="ds__a11y-contrast" style={{ backgroundColor: '#1b1b1b', color: '#ffffff' }}>
-            Aa
-          </div>
-          <span>Dark on White</span>
-          <code>13.5:1 ✓</code>
-        </div>
-        <div className="ds__a11y-card">
-          <div className="ds__a11y-contrast" style={{ backgroundColor: '#f03d01', color: '#ffffff' }}>
-            Aa
-          </div>
-          <span>Primary on White</span>
-          <code>4.6:1 ✓</code>
-        </div>
-        <div className="ds__a11y-card">
-          <div className="ds__a11y-contrast" style={{ backgroundColor: '#4a4a4a', color: '#ffffff' }}>
-            Aa
-          </div>
-          <span>Neutral on White</span>
-          <code>7.2:1 ✓</code>
-        </div>
-        <div className="ds__a11y-card">
-          <div className="ds__a11y-contrast" style={{ backgroundColor: '#ffffff', color: '#7a7a7a', border: '1px solid #e5e5e5' }}>
-            Aa
-          </div>
-          <span>Muted on White</span>
-          <code>4.5:1 ✓</code>
-        </div>
+        {A11Y_PAIRS.map((pair) => {
+          const ratio = contrastRatio(pair.fg, pair.bg);
+          const passes = ratio >= (pair.large ? 3 : 4.5);
+          return (
+            <div className="ds__a11y-card" key={pair.label}>
+              <div
+                className="ds__a11y-contrast"
+                style={{
+                  backgroundColor: pair.bg,
+                  color: pair.fg,
+                  border: pair.bg === '#ffffff' ? '1px solid #e5e5e5' : undefined,
+                }}
+              >
+                Aa
+              </div>
+              <span>{pair.label}</span>
+              <code>
+                {ratio.toFixed(2)}:1 {passes ? '✓' : '✗'}
+              </code>
+            </div>
+          );
+        })}
       </div>
       <p className="ds__a11y-note">Minimum contrast ratio: 4.5:1 (WCAG AA)</p>
     </section>
@@ -384,7 +385,7 @@ const NavigationContent: React.FC = () => {
               </div>
               <div className="ds__spec-row">
                 <span className="ds__spec-label">Subtitle</span>
-                <code className="ds__spec-value">Inter · 18px / 28px · #7a7a7a · max-width: 600px</code>
+                <code className="ds__spec-value">Inter · 18px / 28px · #707070 · max-width: 600px</code>
               </div>
               <div className="ds__spec-row">
                 <span className="ds__spec-label">Back link</span>
@@ -423,7 +424,7 @@ const NavigationContent: React.FC = () => {
             <div className="ds__spec-table">
               <div className="ds__spec-row">
                 <span className="ds__spec-label">Container</span>
-                <code className="ds__spec-value">bg: white · border: 0.5px solid #7a7a7a · radius: 12px · padding: 4.5px</code>
+                <code className="ds__spec-value">bg: white · border: 0.5px solid #707070 · radius: 12px · padding: 4.5px</code>
               </div>
               <div className="ds__spec-row">
                 <span className="ds__spec-label">Tab</span>
@@ -473,18 +474,23 @@ const CardsContent: React.FC = () => (
       <div className="ds__component-showcase">
         <div className="ds__component-preview">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', width: '100%' }}>
+            {/* Placeholder content, deliberately generic. This page is a
+                component gallery, not a portfolio surface — inventing a named
+                reviewer or a real employer here would read as an endorsement
+                or as employment history, which PRODUCT.md forbids outright.
+                The real, attributed testimonials live in Testimonials.tsx. */}
             <TestimonialCard
-              name="Paul Bennett"
-              role="Founder"
+              name="Reviewer Name"
+              role="Job Title"
               rating={5}
-              quote="Ryan's been a pleasure to work with. His attention to detail, UX design and design expertise has helped us push the limits on various mobile apps."
+              quote="Placeholder quote text showing how a testimonial wraps across two or three lines inside the card at its default width."
             />
             <TestimonialCard
-              name="Fawn Rolands"
-              role="Sr. Product Manager"
-              company="Acme Corp"
-              rating={5}
-              quote="I've worked with Ryan on a couple of projects now and really value his skills and abilities. He is confident and capable."
+              name="Reviewer Name"
+              role="Job Title"
+              company="Company Name"
+              rating={4}
+              quote="Shorter placeholder quote, included so the card's vertical rhythm can be checked against an uneven pair."
             />
           </div>
         </div>
@@ -505,7 +511,7 @@ const CardsContent: React.FC = () => (
             </div>
             <div className="ds__spec-row">
               <span className="ds__spec-label">Role</span>
-              <code className="ds__spec-value">Inter · 12px · #7a7a7a</code>
+              <code className="ds__spec-value">Inter · 12px · #707070</code>
             </div>
             <div className="ds__spec-row">
               <span className="ds__spec-label">Rating</span>
@@ -523,12 +529,12 @@ const CardsContent: React.FC = () => (
 {`import TestimonialCard from './components/TestimonialCard';
 
 <TestimonialCard
-  avatarSrc="/images/hero/ryan-deboer-2026.jpeg"
-  name="Paul Bennett"
-  role="Founder"
-  company="Acme Corp"
-  rating={5}
-  quote="Great experience working together..."
+  avatarSrc={author.avatar}
+  name={author.name}
+  role={author.role}
+  company={author.company}
+  rating={author.rating}
+  quote={author.quote}
 />`}
           </pre>
         </div>
@@ -540,26 +546,30 @@ const CardsContent: React.FC = () => (
       <h2 className="ds__section-title">Case Study Card</h2>
       <div className="ds__component-showcase">
         <div className="ds__component-preview" style={{ flexDirection: 'column', gap: '24px' }}>
+          {/* Placeholder content. A real company name with real-looking
+              metrics on a public page reads as employment history — see the
+              note above the testimonial previews. Actual case studies are
+              driven from src/data/projects.ts. */}
           <CaseStudyCard
-            company="Walmart"
-            title="Empowering item discovery with Gen AI summaries"
-            description="Enhancing user confidence with concise item and review summaries that reduce cognitive load and support faster, informed evaluation."
-            tags={['0 to 1 Design', 'Gen AI', 'iOS & Android']}
+            company="Company Name"
+            title="Case study title, long enough to wrap onto a second line"
+            description="Placeholder description showing how supporting copy sits under the title in the horizontal variant."
+            tags={['Tag One', 'Tag Two', 'Tag Three']}
             metrics={[
-              { value: '+1.1%', label: 'ATC Conversion' },
-              { value: '75%', label: 'Found Helpful' },
+              { value: '00%', label: 'Metric Label' },
+              { value: '000', label: 'Metric Label' },
             ]}
             ctaPrimaryLabel="View Case Study"
-            ctaSecondaryLabel="View Live (In App)"
+            ctaSecondaryLabel="View Live"
             variant="horizontal"
           />
           <CaseStudyCard
-            company="DemocracyOS"
-            title="Turns representative SMS feedback into AI-synthesized insights"
-            description="Helping governments make smarter, more trusted decisions."
-            tags={['Product Leadership', 'UX Research', 'AI-Driven Insight']}
-            role="Product Designer & Founder"
-            year="2025"
+            company="Company Name"
+            title="Stacked variant title, shown for comparison"
+            description="Placeholder description for the stacked layout."
+            tags={['Tag One', 'Tag Two', 'Tag Three']}
+            role="Role Title"
+            year="Year"
             variant="stacked"
           />
         </div>
@@ -576,7 +586,7 @@ const CardsContent: React.FC = () => (
             </div>
             <div className="ds__spec-row">
               <span className="ds__spec-label">Company</span>
-              <code className="ds__spec-value">12px · uppercase · #7a7a7a · letter-spacing: 0.06em</code>
+              <code className="ds__spec-value">12px · uppercase · #707070 · letter-spacing: 0.06em</code>
             </div>
             <div className="ds__spec-row">
               <span className="ds__spec-label">Title</span>
@@ -602,12 +612,12 @@ const CardsContent: React.FC = () => (
 {`import CaseStudyCard from './components/CaseStudyCard';
 
 <CaseStudyCard
-  company="Walmart"
-  title="Empowering item discovery"
-  description="Enhancing user confidence..."
-  tags={['Gen AI', 'iOS & Android']}
-  metrics={[{ value: '+1.1%', label: 'ATC Conversion' }]}
-  imageSrc="/images/work/loopstack/loopstack-portfolio-cover-2026-update.png"
+  company={project.company}
+  title={project.title}
+  description={project.summary}
+  tags={project.tags}
+  metrics={project.metrics}
+  imageSrc={project.coverImage}
   ctaPrimaryLabel="View Case Study"
   variant="horizontal"
 />`}
@@ -679,7 +689,38 @@ const MoleculesContent: React.FC = () => {
 // Main Component
 // ============================================
 
+// WCAG relative luminance, so the page cannot drift from the tokens it shows.
+function channel(c: number): number {
+  const v = c / 255;
+  return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+}
+function luminance(hex: string): number {
+  const h = hex.replace('#', '');
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+function contrastRatio(a: string, b: string): number {
+  const [la, lb] = [luminance(a), luminance(b)];
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+const A11Y_PAIRS: { label: string; fg: string; bg: string; large?: boolean }[] = [
+  { label: 'Ink on White', fg: '#1b1b1b', bg: '#ffffff' },
+  { label: 'Neutral on White', fg: '#4a4a4a', bg: '#ffffff' },
+  { label: 'Muted on White', fg: '#707070', bg: '#ffffff' },
+  { label: 'Link accent on White', fg: '#c23001', bg: '#ffffff' },
+  { label: 'White on Brand Orange (display only)', fg: '#ffffff', bg: '#f03d01', large: true },
+];
+
 const DesignSystem: React.FC = () => {
+  // The only page component that never set its own meta, so the built file
+  // shipped the homepage's <title> and a canonical pointing at "/".
+  usePageMeta({
+    title: 'Design system — Ryan DeBoer',
+    description:
+      'The tokens, type scale, colour roles, and components this site is actually built on.',
+    canonical: 'https://www.rdeboerdesigns.com/design-system/',
+  });
   const [activeSection, setActiveSection] = useState('atoms');
 
   return (

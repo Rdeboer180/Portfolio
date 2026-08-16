@@ -18,7 +18,13 @@ const ORIGIN = `http://localhost:${PORT}`;
 // Hidden case studies live here too: `hidden: true` keeps them out of Selected
 // Work and prev/next, which also keeps the crawler from ever finding them, so
 // without an explicit entry a direct link would 404 on the host.
-const EXTRA_ROUTES = ['/design-system', '/sitemap', '/work/bolus-binder'];
+// Derived, not hand-listed: `photography-workflow-agent` was hidden but absent
+// from this array, so it had no prerendered file and a direct link 404'd on any
+// host without an SPA fallback — the exact failure the comment above warns of.
+const HIDDEN_WORK_ROUTES = [...readFileSync(new URL('../src/data/projects.ts', import.meta.url), 'utf8')
+  .matchAll(/slug: '([^']+)'[\s\S]{0,4000}?hidden: true/g)]
+  .map((m) => `/work/${m[1]}`);
+const EXTRA_ROUTES = ['/design-system', '/sitemap', ...new Set(HIDDEN_WORK_ROUTES)];
 
 // Rendered so a direct link resolves, but kept out of the sitemap and marked
 // noindex. Rendering a route and publishing it are two decisions, and hidden
@@ -91,7 +97,11 @@ async function main() {
 
   const server = await startServer();
   const browser = await chromium.launch();
-  const context = await browser.newContext();
+  // Reduced motion makes Hero.tsx jump its intro straight to `done`, so the
+  // serialized HTML captures the settled hero instead of freezing at
+  // data-intro-stage="sketch" — which is what a JS-disabled visitor, and every
+  // crawler, was being served.
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
   // Prerender protected case studies as "dismissed" so the static HTML shows the
   // clean content (protected images stay as locked overlays, never revealed) with
   // no password modal on top. Real first-time visitors still get the modal after
@@ -122,7 +132,20 @@ async function main() {
       if (!seen.has(clean) && !queue.includes(clean)) queue.push(clean);
     }
 
-    let html = '<!doctype html>\n' + (await page.evaluate(() => document.documentElement.outerHTML));
+    let html = '<!doctype html>\n' + (await page.evaluate(() => {
+      // The client's FIRST render omits the unlock bar (UnlockContext gates it
+      // behind a `ready` flag set in an effect). Serializing it produced a
+      // structural mismatch at the root of #root: on a matched route React
+      // threw the prerender away, and on a fallback route it appended a whole
+      // second copy of the page — leaving a dead, half-animated hero on top of
+      // the live one. Stripping it here makes the static HTML match what the
+      // client renders first.
+      const clone = document.documentElement.cloneNode(true);
+      clone.classList.remove('has-unlock-bar');
+      clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay')
+        .forEach((el) => el.remove());
+      return clone.outerHTML;
+    }));
     if (NOINDEX_ROUTES.has(route)) {
       html = html.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>');
     }

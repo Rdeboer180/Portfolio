@@ -89,7 +89,6 @@
       background: $color-primary;
       color: $color-white;
       transform: translateY(-1px);
-      outline: none;
       svg { transform: translateX(3px); }
     }
   }
@@ -427,7 +426,6 @@
     &:hover,
     &:focus-visible {
       background-color: $color-primary-md;
-      outline: none;
     }
   }
 

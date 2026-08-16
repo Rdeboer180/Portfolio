@@ -26,10 +26,10 @@ Ryan designs systems and then helps build them, the implementation half most des
 
 ## Capabilities and Constraints
 
-- React single-page app, prerendered to static HTML at build time so every route is crawlable with its own title, meta, and structured data; trailing-slash canonical; sitemap generated from the prerender crawl. This SEO/crawlability architecture is a binding constraint future work must preserve. (Known issue to harden: the crawler sometimes under-discovers /notes links, so the sitemap can vary between deploys.)
+- React single-page app, prerendered to static HTML at build time so every route is crawlable with its own title, meta, and structured data; trailing-slash canonical; sitemap generated from the prerender crawl. This SEO/crawlability architecture is a binding constraint future work must preserve. (Known issue to harden: RESOLVED — /notes routes are now seeded deterministically from src/data/notes.tsx, so the sitemap is stable between deploys.)
 - Confidential case-study gating: one password unlocks confidential artifacts for the browser session; overlay images stay hidden until unlocked. Employer/client-sensitive detail must never be exposed; only portfolio-safe assets are public.
 - Deploy is push-to-main to CI to host, with a cache purge.
-- Terminology the site owns: "notes" (the writing stream, tagged essay / agent-skill / system), "field notes" (per-section margin annotations on case studies), "portfolio-safe assets," the installable "design-taste skill."
+- Terminology the site owns: "notes" (the writing stream, tagged essay / log (Build Log) / skill (Agent Skill) / system), "field notes" (per-section margin annotations on case studies), "portfolio-safe assets," the installable "design-taste skill."
 
 ## Brand Commitments
 
@@ -39,9 +39,9 @@ Ryan designs systems and then helps build them, the implementation half most des
 
 ## Evidence on Hand
 
-- Nine case studies at /work/* (WheelRack, Tire Categories, AEM component system, Tire Rack Winter, Heatherwood, Landing Pages, Design Enablement, LoopStack, PlayDraft), several with real metrics (e.g. +400% category entry and +50% conversion; 200+ design tokens and 50+ Storybook components; partner adoption 6 to 10).
+- Eleven case studies at /work/* (WheelRack, Tire Categories, AEM component system, Tire Rack Winter, Heatherwood, Landing Pages, Design Enablement, LoopStack, PlayDraft), several with real metrics (e.g. +400% category entry and +50% conversion; 200+ design tokens and 50+ Storybook components; partner adoption 6 to 10).
 - Named, attributed testimonials from managers, peers, and a principal front-end developer.
-- Eight published notes; a live /design-system token page; the ryan-design-taste skill published as a downloadable Markdown artifact.
+- Ten published notes; a live /design-system token page; the ryan-design-taste skill published as a downloadable Markdown artifact.
 - Real metrics and quotes only. Future work must never fabricate numbers, testimonials, or endorsements, and must keep every quote attributable.
 
 ## Product Principles

@@ -17,7 +17,7 @@ interface SectionBadgeProps {
 const SectionBadge: React.FC<SectionBadgeProps> = ({ icon, label, className, index, tone }) => {
   const badge = (
     <div className={`section-badge ${index ? '' : className ?? ''}`}>
-      <span className="section-badge__icon">{icon}</span>
+      <span className="section-badge__icon" aria-hidden="true">{icon}</span>
       <span className="section-badge__label">
         {index ? `${index} / ${label}` : label}
       </span>

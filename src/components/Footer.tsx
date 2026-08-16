@@ -4,7 +4,7 @@ import { SITE, EMAIL_HREF } from '../data/site';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" role="contentinfo">
       <div className="footer__container">
         <div className="footer__top">
           <div className="footer__cta">

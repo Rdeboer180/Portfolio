@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "MSG=$(jq -r '.message // empty'); if echo \"$MSG\" | grep -iqE \"^let'?s push this( update)?[.!]?$\"; then RESULT=$(cd \"/Users/ryandeboer/Ryan's Folder/Claude/portfolio-site\" && sshpass -p 'OBDev123' git push production main 2>&1); printf '{\"hookSpecificOutput\":{\"hookEventName\":\"UserPromptSubmit\",\"additionalContext\":\"%s\"}}' \"$(echo \"$RESULT\" | jq -sRr @json | sed 's/^\"//' | sed 's/\"$//')\"; fi",
+            "timeout": 300,
+            "statusMessage": "Deploying to production..."
+          }
+        ]
+      }
+    ]
+  }
+}

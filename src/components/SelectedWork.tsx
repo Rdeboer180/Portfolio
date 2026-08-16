@@ -32,6 +32,13 @@ const SelectedWork: React.FC = () => {
             >
               <div className="selected-work__card-body">
                 <h3 className="selected-work__card-title">{project.title}</h3>
+                {/* The card carried a title, tags and metrics but never said
+                    what the project *was*. Tags name the surface and metrics
+                    name the result; the summary is the only line that answers
+                    "what is this" before the click. */}
+                {project.summary && (
+                  <p className="selected-work__card-summary">{project.summary}</p>
+                )}
                 <div className="selected-work__card-tags">
                   {project.tags.map((tag) => (
                     <span key={tag} className="selected-work__card-tag">{tag}</span>

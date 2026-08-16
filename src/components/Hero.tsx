@@ -437,7 +437,16 @@ const Hero: React.FC = () => {
   const dynamicRoles = roles;
 
   return (
-    <section className="hero" ref={sectionRef} data-intro-stage={introStage}>
+    // suppressHydrationWarning: `data-intro-stage` legitimately differs between
+    // server and client. The prerender runs under reduced motion so the static
+    // HTML serialises the settled hero ("done"); the client begins its intro
+    // from the first stage. The attribute drives CSS only.
+    <section
+      className="hero"
+      ref={sectionRef}
+      data-intro-stage={introStage}
+      suppressHydrationWarning
+    >
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
@@ -501,7 +510,7 @@ const Hero: React.FC = () => {
                   the current width. Replaces the old fixed min-height, which
                   left a large empty band under the H1 on phones where the
                   final line didn't actually wrap. */}
-              <span className="hero__typed-sizer" aria-hidden="true">
+              <span className="hero__typed-sizer" aria-hidden="true" suppressHydrationWarning>
                 {roles.slice(0, FINAL_INDEX).map((r) => (
                   <span key={r}>{r}</span>
                 ))}
@@ -511,11 +520,21 @@ const Hero: React.FC = () => {
                 </span>
               </span>
 
+              {/* suppressHydrationWarning: this span's content is deliberately
+                  different on server and client. The prerender runs with
+                  reduced motion so the static HTML captures the RESOLVED
+                  headline (a crawler and a JS-disabled visitor should see the
+                  finished sentence, not animation frame one), while the client
+                  starts the sequence from the top. The real <h1> above carries
+                  the full sentence for AT either way, and this node is
+                  aria-hidden. Without this, React logs a text mismatch (#418)
+                  on every load. */}
               <div className="hero__typed-group">
                 <span
                   key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
                   className={`hero__typed${phase !== 'typing' ? ' hero__typed--swap' : ''}`}
                   aria-hidden="true"
+                  suppressHydrationWarning
                 >
                   {showResolved ? (
                     <>
@@ -838,7 +857,7 @@ const Hero: React.FC = () => {
                   <div className="hero__profile-frame">
                     <img
                       src="/images/hero/ryan-deboer-2026.jpeg"
-                      alt="Ryan Deboer"
+                      alt="Ryan DeBoer, Product Design Engineer"
                       className="hero__profile-img"
                       width={1600}
                       height={1600}

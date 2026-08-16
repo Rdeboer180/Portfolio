@@ -1084,6 +1084,7 @@ $mobile-max-width: 768px;
     ],
 
     // ── 05 Outcome ──
+    timeToLive: 'Shipped internally and in daily use by the design team — three connected tools, maintained alongside core project work rather than as a separate initiative.',
     outcomeNote:
       'This work reflects how I think about design systems now: not just component libraries, but platforms that change how a team works together. These tools took repetitive work off the team, kept project context in one place, and made the workflow consistent, so people spent more time solving problems and less time managing process.',
     outcomeArtifacts: [

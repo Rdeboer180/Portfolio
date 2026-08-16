@@ -177,7 +177,7 @@
     transition: max-height 0.35s ease;
 
     .faq__item--open & {
-      max-height: 600px;
+      max-height: 2000px; // was 600px, which clipped the two longest answers
     }
   }
 
@@ -247,4 +247,13 @@
       transition: none;
     }
   }
+}
+
+
+// The trigger is wrapped in an h3 for heading navigation; the heading itself
+// carries no visual weight of its own.
+.faq__question-heading {
+  margin: 0;
+  font: inherit;
+  text-transform: none;
 }

@@ -87,15 +87,35 @@ const FAQ: React.FC = () => {
               key={i}
               className={`faq__item ${openIndex === i ? 'faq__item--open' : ''}`}
             >
-              <button
-                className="faq__question"
-                onClick={() => toggle(i)}
-                aria-expanded={openIndex === i}
+              {/* h3 so the six questions are reachable by heading navigation —
+                  they were bare buttons, invisible to a screen-reader's
+                  heading list. */}
+              <h3 className="faq__question-heading">
+                <button
+                  type="button"
+                  className="faq__question"
+                  onClick={() => toggle(i)}
+                  aria-expanded={openIndex === i}
+                  aria-controls={`faq-panel-${i}`}
+                  id={`faq-trigger-${i}`}
+                >
+                  <span className="faq__question-text">{item.question}</span>
+                  <span className="faq__toggle" aria-hidden="true">+</span>
+                </button>
+              </h3>
+              {/* `inert` on the collapsed panel. It was hidden with
+                  max-height:0 + overflow:hidden only, which does not remove
+                  anything from the a11y tree or the tab order — so five links
+                  inside the closed answers stayed focusable, and keyboard
+                  focus landed in a zero-height box with the ring off-screen.
+                  Same pattern CandidateSnapshot already uses. */}
+              <div
+                className="faq__answer-wrapper"
+                id={`faq-panel-${i}`}
+                role="region"
+                aria-labelledby={`faq-trigger-${i}`}
+                inert={openIndex !== i ? true : undefined}
               >
-                <span className="faq__question-text">{item.question}</span>
-                <span className="faq__toggle" aria-hidden="true">+</span>
-              </button>
-              <div className="faq__answer-wrapper">
                 {typeof item.answer === 'string' ? (
                   <p className="faq__answer">{item.answer}</p>
                 ) : (

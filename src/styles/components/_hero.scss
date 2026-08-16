@@ -1524,7 +1524,10 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     gap: 16px;
 
     span {
-      color: rgba(0, 0, 0, 0.4);
+      // Was rgba(0, 0, 0, 0.4) — 2.85:1 on paper, and at 0.62rem (~10px) this
+      // is the smallest type on the page. $color-neutral-muted is the token
+      // that already carries an AA guarantee (4.95:1).
+      color: $color-neutral-muted;
       font-size: 0.62rem;
     }
 

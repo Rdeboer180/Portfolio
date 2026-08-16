@@ -24,6 +24,10 @@ body {
 }
 
 html {
+  // Up to 119px of fixed chrome (unlock bar + nav) sits at top:0, so an
+  // in-page anchor used to land its target underneath it — the #projects
+  // heading arrived 8px behind the nav with its badge fully hidden.
+  scroll-padding-top: calc(var(--unlock-bar-h, 0px) + 96px);
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -49,7 +53,12 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   color: $color-text-primary;
   margin: 0;
-  text-transform: capitalize;
+  // No global text-transform. `capitalize` was rewriting every authored
+  // heading — Notes essay titles rendered Title Cased against what was
+  // written, and browsers treat an apostrophe as a word break, so
+  // "What I've designed recently" came out "What I'Ve Designed Recently".
+  // Casing is applied per-role instead, where 53 `uppercase` rules already do
+  // it deliberately.
 }
 
 h1 {
@@ -85,13 +94,29 @@ p {
 }
 
 a {
-  color: $color-primary;
+  // 5.65:1 on white. The brand orange is 3.91:1 — below AA for body text, and
+  // with text-decoration off it also made colour the only link cue (1.4.1).
+  color: $color-primary-text;
   text-decoration: none;
   transition: color $transition-fast;
 
   &:hover {
     color: $color-primary-dark;
   }
+}
+
+// Links inside running prose carry an underline, so they are distinguishable
+// without relying on colour. Nav, buttons and card links are excluded — they
+// have their own affordances and would look broken underlined.
+.cs__section-bullets a,
+.cs__section-body a,
+.faq__answer a,
+.notes__body a,
+.about__body a,
+.about-story a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
 }
 
 strong, b {
@@ -156,7 +181,10 @@ button {
   border: none;
 
   &--primary {
-    background: $color-primary;
+    // White 14px/800 on #f03d01 is 3.91:1 — the CTA failed at rest and only
+    // passed on hover, which is backwards. #c23001 puts the resting state at
+    // 5.65:1 and leaves the hover state unchanged.
+    background: $color-primary-dark;
     color: $color-white;
 
     &:hover {
@@ -319,4 +347,24 @@ svg {
 *:focus-visible {
   outline: 2px solid $color-primary;
   outline-offset: 2px;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────
+   A global floor, not a per-component opt-in. Anything decorative added later
+   inherits it automatically; the 0.01ms (rather than 0) keeps transitionend /
+   animationend listeners firing, so JS that waits on them doesn't deadlock.
+   Smooth scrolling goes too — it is motion the visitor didn't ask for. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

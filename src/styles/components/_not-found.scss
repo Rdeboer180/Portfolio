@@ -1,0 +1,46 @@
+// 404. Quiet on purpose — the visitor is already mildly annoyed; the page's
+// job is to be legible and hand them three real exits, not to perform.
+.not-found {
+  max-width: $container-text-width;
+  margin: 0 auto;
+  padding: $spacing-4xl $spacing-lg;
+  text-align: center;
+
+  &__eyebrow {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+    margin: 0 0 $spacing-sm;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    line-height: $line-height-h2;
+    color: $color-text-primary;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__body {
+    font-size: $font-size-body;
+    line-height: $line-height-body;
+    color: $color-neutral-muted;
+    margin: 0 auto $spacing-2xl;
+    max-width: 44ch;
+  }
+
+  &__exits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__contact {
+    font-size: $font-size-body-sm;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}

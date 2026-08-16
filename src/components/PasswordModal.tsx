@@ -74,9 +74,29 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Escape-to-dismiss + Tab-trap keydown handler
+  // Scroll lock. Without it the page keeps scrolling under the overlay — on
+  // iOS especially, a flick on the dimmed area moves the article behind a modal
+  // that isn't going anywhere, which reads as the modal being broken.
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, []);
+
+  // Escape at the document level, not just inside the dialog. The React
+  // onKeyDown below only fires while focus is within the modal — click the
+  // dimmed backdrop and focus lands on <body>, after which Escape did nothing
+  // and the only way out was finding the small X.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.preventDefault(); onDismiss(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onDismiss]);
+
+  // Tab-trap keydown handler. Escape is handled at the document level above.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Escape') { e.preventDefault(); onDismiss(); return; }
     if (e.key !== 'Tab') return;
     const el = contentRef.current;
     if (!el) return;
@@ -112,7 +132,11 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
 
   return (
     <div className="password-modal">
-      <div className="password-modal__overlay" />
+      {/* Dismiss on backdrop click — the gesture every visitor already tries
+          first. Not a focusable control: the X button and Escape are the
+          keyboard paths, so exposing this as a second tab stop would only add
+          an unlabelled one. */}
+      <div className="password-modal__overlay" onClick={onDismiss} />
       <div
         className="password-modal__content"
         role="dialog"

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { scrollBehavior } from '../utils/motion';
 
 interface Proficiency {
   id: string;
@@ -204,7 +205,7 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
     const maxScroll = row.scrollWidth - row.clientWidth;
     const clamped = Math.max(0, Math.min(targetScroll, maxScroll));
 
-    row.scrollTo({ left: clamped, behavior: 'smooth' });
+    row.scrollTo({ left: clamped, behavior: scrollBehavior() });
   }, [activeId]);
 
   // Roving tabindex: arrow/Home/End move focus and selection across the tablist

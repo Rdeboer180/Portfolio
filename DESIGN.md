@@ -145,7 +145,7 @@ Density is editorial. Generous vertical rhythm (96px between sections), a 720px 
 A near-monochrome bench (ink on paper, cool off-whites for depth) with a single warm-red-orange accent doing all the signaling. A blue-gray steel family plays the quiet supporting role for rules, handles, and muted UI.
 
 ### Primary
-- **Signal Orange** (#f03d01): The one accent. Carries emphasis, calls-to-action, links, active/selected state, the marquee comet, and the highlight-sweep. Warm red-orange, not amber.
+- **Signal Orange** (#f03d01): The one accent. Carries emphasis, calls-to-action, links, active/selected state, the marquee accent, and the highlight-sweep. Warm red-orange, not amber.
 - **Orange Deep** (#c23001): Pressed and hover state for primary buttons; the deeper end of the accent.
 - **Orange Muted** (#f07654): Softer accent for secondary emphasis and mid-tint marks.
 - **Orange Soft** (#f9c4b0): Tint for gradient stops and gentle accent fills.
@@ -211,7 +211,7 @@ Flat by default. Surfaces rest with no shadow; structure comes from hairline bor
 - **Shadow XL** (`0 8px 10px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.3)`): The image lightbox and topmost layers.
 
 ### Named Rules
-**The Flat-By-Default Rule.** Surfaces are flat at rest. A shadow, a border-color shift, a lift (`translateY(-1px)`), or the marquee comet appears only in response to state (hover, focus, active, or scroll-into-view), and then settles back. Ambient shadows and floating cards are out of language.
+**The Flat-By-Default Rule.** Surfaces are flat at rest. A shadow, a border-color shift, a lift (`translateY(-1px)`), or the marquee accent appears only in response to state (hover, focus, active, or scroll-into-view), and then settles back. Ambient shadows and floating cards are out of language.
 
 ## Shapes
 
@@ -233,7 +233,7 @@ The signature silhouette is the **selection frame**: 5px square handles that boo
 - **Border:** 1px Border Hairline (`rgba(27,27,27,0.1)`).
 - **Shadow Strategy:** none at rest; Shadow SM on hover (see Elevation).
 - **Internal Padding:** 24px-32px (`$spacing-xl` to `$spacing-2xl`).
-- **Selection-frame variant:** on scroll-into-view, a Signal Orange comet traces the perimeter once (staggered across a grid) then settles back to the hairline; on hover the border warms to a 45%-orange tint. This is the card expression of the selection-frame vernacular.
+- **Selection-frame variant:** on scroll-into-view, the four corner handles fade in once (staggered across a grid) and then stay put. The perimeter itself does not animate — the craft signal is the vernacular, not motion (see _selection-frame.scss, which says the same thing); on hover the border warms to a 45%-orange tint. This is the card expression of the selection-frame vernacular.
 
 ### Inputs / Fields
 - **Style:** Paper fill, 1px Border Hairline, 8px radius, 8px/12px padding, inherited body type.
@@ -249,7 +249,7 @@ The signature silhouette is the **selection frame**: 5px square handles that boo
 - Top bar: wordmark left ("Ryan DeBoer"), text links, and a primary "Get in touch" pill right. Links are ink, hover to Signal Orange. Mobile collapses to a toggle that animates a selection-frame box. Nav is quiet and lets the hero lead.
 
 ### Motion
-- Purposeful and reduced-motion-safe. The vocabulary: a highlight-sweep that "selects" then bolds key phrases, masked reveal-ins, the one-time card comet, a hero typing/selection intro, and hand-drawn underline draws. Motion marks state or reveals once; it does not loop for attention.
+- Purposeful and reduced-motion-safe. The vocabulary: a highlight-sweep that "selects" then bolds key phrases, masked reveal-ins, the one-time card reveal, a hero typing/selection intro, and hand-drawn underline draws. Motion marks state or reveals once; it does not loop for attention.
 
 ## Do's and Don'ts
 

@@ -1,46 +1,69 @@
-# Getting Started with Create React App
+# rdeboerdesigns.com
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ryan DeBoer's portfolio: case studies, notes, résumé, and the design system the
+site is built on. React + TypeScript + SCSS, prerendered to static HTML.
 
-## Available Scripts
+## Quick start
 
-In the project directory, you can run:
+```bash
+npm install
+npm start
+```
 
-### `npm start`
+Dev server on http://localhost:3000.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Scripts
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+| Command | What it does |
+| --- | --- |
+| `npm start` | Dev server with hot reload. |
+| `npm run build` | Production bundle, then prerender every route to static HTML and emit `sitemap.xml`. |
+| `npm test` | Content-invariant suite (`src/data/content.test.ts`). |
 
-### `npm test`
+`npm run build` is two steps, not one. After CRA emits the bundle,
+`scripts/prerender.mjs` drives a headless browser over every route and writes
+the resulting DOM to `build/<route>/index.html`. That is what makes the site
+crawlable and what makes a shared link show the right title and preview image —
+the client-side app alone would ship an empty `<div id="root">` to every crawler.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## How it fits together
 
-### `npm run build`
+```
+src/
+  data/          Content. projects.ts and notes.tsx are the source of truth —
+                 pages read from them, nothing is hardcoded in components.
+  components/    One file per surface. PageShell wraps every route with the
+                 skip link, the <main> landmark, and route-change announcements.
+  hooks/         usePageMeta sets each route's <head>; the prerender step
+                 serializes whatever it produces.
+  styles/        SCSS. _variables.scss holds every token; components/ mirrors
+                 the component tree. All colour goes through a token.
+scripts/
+  prerender.mjs  Route discovery, static render, noindex handling, sitemap.
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Content rules
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Two constraints that are easy to break and expensive to break:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Real metrics and quotes only.** No fabricated numbers, testimonials, or
+   endorsements; every quote stays attributable. Metrics carry a label that
+   scopes them, so a page-level lift can't be read as a business-level one.
+2. **Protected work stays protected.** Client- and employer-confidential images
+   sit behind the unlock flow. Hidden case studies are prerendered so a direct
+   link resolves, but are kept out of `sitemap.xml` and marked `noindex`.
 
-### `npm run eject`
+`npm test` enforces the mechanical half of both. The judgment half is yours.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Adding a case study
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Add an entry to `src/data/projects.ts`. Required: `slug`, `title`, `summary`,
+`year`, `tags`, `role`, `tools`, `timeline`, `metrics`, `timeToLive`. The build
+picks it up automatically — route, prerendered page, and sitemap entry. Set
+`hidden: true` to keep it off the index while leaving the URL live.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Deploying
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+`npm run build` produces a fully static `build/`. Serve it from any static host;
+the only server requirement is an SPA fallback to `index.html` for routes that
+were not prerendered.

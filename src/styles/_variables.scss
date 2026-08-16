@@ -15,6 +15,13 @@ $color-primary-muted: #f07654;
 $color-primary: #f03d01;
 $color-primary-dark: #c23001;
 
+// Text-safe accent. #f03d01 is 3.91:1 on white — below the 4.5:1 AA floor for
+// normal text, and it fails in both directions (white on it is also 3.91:1).
+// #c23001 is 5.65:1 on white and 5.18:1 on the grey surfaces. The brand orange
+// stays valid for fills, rules, and >=24px display type, where 3.91:1 clears
+// the 3:1 non-text bar — so this is a separate ROLE, not a rebrand.
+$color-primary-text: $color-primary-dark;
+
 // Neutral Colors
 $color-neutral-lightest: #f5f5f5;
 $color-neutral-light: #e5e5e5;

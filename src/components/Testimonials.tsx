@@ -249,7 +249,7 @@ const Testimonials: React.FC = () => {
                   <span className="sr-only"> — 4.9 out of 5</span>
                 </p>
                 <p className="testimonials__team-score-basis">
-                  Built from 12+ years of design systems, production handoff, remote
+                  Built from 16+ years of design systems, production handoff, remote
                   teamwork, and cross-functional problem solving.
                 </p>
                 <ul className="testimonials__team-score-tags">

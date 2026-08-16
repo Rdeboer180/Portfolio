@@ -14,6 +14,7 @@ import { SITE, EMAIL_HREF } from '../data/site';
 import UserIcon from './icons/UserIcon';
 import LayersIcon from './icons/LayersIcon';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
+import { usePageMeta } from '../hooks/usePageMeta';
 import uiPromptSvg from '../assets/ui/ui_prompt.svg';
 
 type HeroPhase = 'typing' | 'looping';
@@ -258,7 +259,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
                 </div>
                 <div className="hero__border-ring" />
                 <div className="hero__profile-circle">
-                  <img src="/images/hero/ryan-deboer.png" alt="Ryan Deboer" className="hero__profile-img" />
+                  <img src="/images/hero/ryan-deboer.png" alt="Ryan DeBoer, Product Design Engineer" className="hero__profile-img" />
                 </div>
               </div>
 
@@ -442,7 +443,7 @@ const TargetedFAQ: React.FC<{ content: TargetedHomepageContent }> = ({ content }
 const TargetedFooter: React.FC<{ content: TargetedHomepageContent }> = ({ content }) => {
   const { footer } = content;
   return (
-    <footer className="footer">
+    <footer className="footer" role="contentinfo">
       <div className="footer__container">
         <div className="footer__top">
           <div className="footer__cta">
@@ -475,6 +476,18 @@ interface HomepageTargetedProps {
 }
 
 const HomepageTargeted: React.FC<HomepageTargetedProps> = ({ content }) => {
+  // The only route that never set its own head. Without this it inherited
+  // whatever the previous route left behind — including that route's canonical,
+  // which is the one tag you never want wrong on a variant page. These routes
+  // are not prerendered and never reach the sitemap, so the canonical is the
+  // only head tag that has to be right — it points at the variant's own URL.
+  usePageMeta({
+    title: `Ryan DeBoer — Product Design Engineer for ${content.meta.company}`,
+    description: `A portfolio tailored for ${content.meta.company}: selected work, how I work, and what I'd bring to the team.`,
+    canonical: `${SITE.portfolioUrl}/${content.meta.slug}`,
+    ogType: 'profile',
+  });
+
   useEffect(() => {
     setHomeVariant(content.meta.slug);
   }, [content.meta.slug]);

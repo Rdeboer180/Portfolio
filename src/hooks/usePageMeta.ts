@@ -29,6 +29,10 @@ function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   el.setAttribute('content', content);
 }
 
+function removeMeta(attr: 'name' | 'property', key: string) {
+  document.head.querySelector(`meta[${attr}="${key}"]`)?.remove();
+}
+
 function upsertLink(rel: string, href: string) {
   let el = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
   if (!el) {
@@ -49,21 +53,35 @@ export function usePageMeta(meta: PageMeta): void {
     upsertMeta('name', 'twitter:title', ogTitle);
     upsertMeta('property', 'og:type', meta.ogType ?? 'website');
 
+    // Each branch clears its tags when the new route omits the field. Without
+    // the else, tags are upserted but never removed, so a route with no image
+    // keeps the *previous* route's og:image — share a link to /sitemap after
+    // visiting a case study and the card shows the case study's cover.
     if (meta.description) {
       const ogDesc = meta.ogDescription ?? meta.description;
       upsertMeta('name', 'description', meta.description);
       upsertMeta('property', 'og:description', ogDesc);
       upsertMeta('name', 'twitter:description', ogDesc);
+    } else {
+      removeMeta('name', 'description');
+      removeMeta('property', 'og:description');
+      removeMeta('name', 'twitter:description');
     }
 
     if (meta.canonical) {
       upsertLink('canonical', meta.canonical);
       upsertMeta('property', 'og:url', meta.canonical);
+    } else {
+      document.head.querySelector('link[rel="canonical"]')?.remove();
+      removeMeta('property', 'og:url');
     }
 
     if (meta.ogImage) {
       upsertMeta('property', 'og:image', meta.ogImage);
       upsertMeta('name', 'twitter:image', meta.ogImage);
+    } else {
+      removeMeta('property', 'og:image');
+      removeMeta('name', 'twitter:image');
     }
 
     // Page-specific JSON-LD (tagged so it can be removed on route change).

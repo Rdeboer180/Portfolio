@@ -490,7 +490,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
     visibleIndex >= 0
       ? visibleProjects[(visibleIndex - 1 + visibleProjects.length) % visibleProjects.length]
       : undefined;
-  const hasNewFormat = !!(project.problem || project.gaps || project.constraints || project.approachSteps || project.approachSubsections);
 
   return (
     <article className="cs">
@@ -587,7 +586,11 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
         </div>
 
         {/* ==================== NEW SECTION LAYOUT ==================== */}
-        {hasNewFormat ? (
+        {/* The only case-study layout. The pre-2026 "Brief / Challenge /
+            Solution" arm lived here behind a `hasNewFormat` ternary until the
+            last project migrated; it had been unreachable ever since, which is
+            the worst state for a branch to be in — still compiled, still read
+            during every edit, never rendered. */}
           <>
             {/* --- 01 Problem --- */}
             {project.problem && project.problem.length > 0 && (
@@ -852,98 +855,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
               </div>
             )}
           </>
-        ) : (
-          /* ==================== LEGACY LAYOUT ==================== */
-          <>
-            <section className="cs__overview">
-              <div className="cs__overview-text">
-                <h2 className="cs__section-heading">The Brief</h2>
-                <p>{project.brief}</p>
-                <h2 className="cs__section-heading">The Challenge</h2>
-                <p>{project.challenge}</p>
-                {project.ownership && project.ownership.length > 0 && (
-                  <>
-                    <h2 className="cs__section-heading">What I Owned</h2>
-                    <ul className="cs__ownership-list">
-                      {project.ownership.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </div>
-              <aside className="cs__overview-meta">
-                <div className="cs__meta-block">
-                  <h4 className="cs__meta-label">Role</h4>
-                  <p className="cs__meta-value">{project.role}</p>
-                </div>
-                <div className="cs__meta-block">
-                  <h4 className="cs__meta-label">Tools</h4>
-                  <p className="cs__meta-value">{project.tools.join(', ')}</p>
-                </div>
-                <div className="cs__meta-block">
-                  <h4 className="cs__meta-label">Timeline</h4>
-                  <p className="cs__meta-value">{project.timeline}</p>
-                </div>
-                <div className="cs__meta-block">
-                  <h4 className="cs__meta-label">Year</h4>
-                  <p className="cs__meta-value">{project.year}</p>
-                </div>
-              </aside>
-            </section>
-
-            {project.approach && (
-              <section className="cs__approach">
-                <h2 className="cs__section-heading">The Approach</h2>
-                <p>{project.approach}</p>
-              </section>
-            )}
-
-            {project.process && project.process.length > 0 && (
-              <section className="cs__process">
-                <h2 className="cs__section-heading">How I Work</h2>
-                <ol className="cs__process-steps">
-                  {project.process.map((step, i) => (
-                    <li key={i} className="cs__process-step">
-                      <span className="cs__process-number">{String(i + 1).padStart(2, '0')}</span>
-                      <div className="cs__process-content">
-                        <h4 className="cs__process-label">{step.label}</h4>
-                        <p className="cs__process-desc">{step.description}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            )}
-
-            <section className="cs__results">
-              <h2 className="cs__results-heading">Results</h2>
-              <div className="cs__results-grid">
-                {project.metrics.map((metric) => (
-                  <div key={metric.label} className="cs__result-card">
-                    <span className="cs__result-value">{metric.value}</span>
-                    <span className="cs__result-label">{metric.label}</span>
-                  </div>
-                ))}
-              </div>
-              {project.resultsNote && (
-                <p className="cs__results-note">{project.resultsNote}</p>
-              )}
-            </section>
-
-            {project.takeaways && project.takeaways.length > 0 && (
-              <section className="cs__takeaways">
-                <h2 className="cs__section-heading">Key Takeaways</h2>
-                <ul className="cs__ownership-list">
-                  {project.takeaways.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </section>
-            )}
-
-          </>
-        )}
 
         {/* ==================== Continue — quiet close rail (every layout) ==================== */}
         <aside className="cs__continue">

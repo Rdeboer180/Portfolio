@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useUnlock } from '../context/UnlockContext';
 
 const LockIcon = () => (
@@ -34,6 +34,41 @@ let hasSwept = false;
 const SiteUnlockBar: React.FC = () => {
   const { barVisible, openPrompt } = useUnlock();
   const [sweeping, setSweeping] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Publish the bar's real height as --unlock-bar-h.
+   *
+   * _unlock-bar.scss has claimed since it was written that UnlockProvider sets
+   * this on <html>. Nothing ever did — the value came from a static 40px (56px
+   * under 640px) on `.has-unlock-bar`, and the bar was pinned to exactly that
+   * with `overflow: hidden`. At 200% zoom, or with a large system text size,
+   * the sentence needed a second line and got cut in half instead (WCAG 1.4.4).
+   *
+   * Raising the constant would only move the breaking point. Measuring is the
+   * fix: the bar sizes to its content, and because every fixed page nav offsets
+   * by this same variable, they all move down with it instead of being overlapped.
+   * The static values stay as the pre-measurement fallback so nothing jumps on
+   * first paint.
+   */
+  useEffect(() => {
+    const el = barRef.current;
+    const root = document.documentElement;
+    if (!el) {
+      root.style.removeProperty('--unlock-bar-h');
+      return;
+    }
+    const publish = () => {
+      root.style.setProperty('--unlock-bar-h', `${Math.ceil(el.getBoundingClientRect().height)}px`);
+    };
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty('--unlock-bar-h');
+    };
+  }, [barVisible]);
 
   useEffect(() => {
     if (!barVisible || hasSwept) return;
@@ -60,6 +95,7 @@ const SiteUnlockBar: React.FC = () => {
 
   return (
     <div
+      ref={barRef}
       className={`unlock-bar${sweeping ? ' unlock-bar--sweep' : ''}`}
       role="region"
       aria-label="Protected content"

@@ -17,7 +17,7 @@ module.exports = {
         'neutral': {
           lightest: '#f5f5f5',
           light: '#e5e5e5',
-          muted: '#7a7a7a',
+          muted: '#707070',
           DEFAULT: '#4a4a4a',
           dark: '#1b1b1b',
         },

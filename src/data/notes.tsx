@@ -150,7 +150,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-12',
     title: 'I needed an LLC. I ended up naming my design practice.',
-    dek: 'Six weeks of naming an umbrella for PlayDraft and everything after it. Playgrove, then Imaginefield, then Overscroll Tactics, including the branch I threw away and had to go back for.',
+    dek: 'Six weeks naming an umbrella for PlayDraft: Playgrove, then Imaginefield, then Overscroll Tactics — including the branch I threw away and went back for.',
     artifact: { label: 'overscrolltactics.com', href: 'https://overscrolltactics.com/' },
     body: (
       <>
@@ -435,12 +435,13 @@ excluded    Angle brackets, pixel grids, terminal type,
           with work that exists to be read.
         </p>
         <p>
-          What came back is quieter and says more. Cards wear Figma-style selection frames, key
-          copy gets selected the way a cursor drags across text before it bolds, and the comet
-          earned its way back &mdash; but only as a single pass. It traces a card&rsquo;s border
-          once as the card scrolls into view, staggered down the grid, then settles to a hairline.
-          The interface speaks the language of the tools it was made in, and orange means one
-          thing: selected.
+          What came back is quieter and says more. Cards wear Figma-style selection frames and key
+          copy gets selected the way a cursor drags across text before it bolds. The comet did not
+          earn its way back: what ships is the frame itself, with four corner handles that fade in
+          once as the grid reveals and then stay put. The border never animates. That was the
+          right call &mdash; a perimeter tracing itself is exactly the kind of motion that competes
+          with the work. The interface speaks the language of the tools it was made in, and orange
+          means one thing: selected.
         </p>
         <h2>Crawlable without a framework migration</h2>
         <p>

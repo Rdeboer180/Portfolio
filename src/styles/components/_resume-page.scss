@@ -183,8 +183,17 @@
       height: 3px;
       background: $color-primary;
       border-radius: 2px;
+      // The +-48px full bleed is a desktop flourish. The responsive blocks
+      // below reset the section's padding but never this, so at <=640 the
+      // divider ran 24px past each viewport edge — and with
+      // `overflow-x: clip` on html/body there was no scrollbar to recover it.
       margin-left: (-$spacing-3xl);
       margin-right: (-$spacing-3xl);
+
+      @media (max-width: $breakpoint-md) {
+        margin-left: 0;
+        margin-right: 0;
+      }
     }
   }
 
@@ -684,5 +693,29 @@
   @page {
     margin: 0.3in;
     size: letter;
+  }
+}
+
+
+// At <=480 the nav row could not fit the logo, "Save contact", "Save as PDF"
+// and the back link on one line: the logo wrapped under the buttons and the
+// back link was sliced by the viewport edge — unreachable, because
+// `overflow-x: clip` removes the scrollbar that would have recovered it.
+@media (max-width: $breakpoint-sm) {
+  .resume-page__nav {
+    flex-wrap: wrap;
+    row-gap: $spacing-sm;
+  }
+
+  .resume-page__nav-actions {
+    flex-wrap: wrap;
+    row-gap: $spacing-sm;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .resume-page__print-btn,
+  .resume-page__vcard-btn {
+    white-space: nowrap;
   }
 }

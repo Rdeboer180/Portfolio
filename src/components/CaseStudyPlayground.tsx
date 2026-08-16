@@ -153,136 +153,78 @@ interface Coin {
 
 interface PlaygroundCard {
   slug: string;
-  title: string;
-  line: string;
-  tags: string[];
-  metric: string;
   coins: Coin[];
 }
 
 const CARDS: PlaygroundCard[] = [
   {
     slug: 'playdraft',
-    title: 'PlayDraft',
-    line: 'A social drafting game taken 0 → 1 solo — brand to TestFlight in 12 weeks.',
-    tags: ['0 → 1 Product', 'Game Design', 'React Native', 'Design System'],
-    metric: '12 weeks · solo build · TestFlight',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
       { icon: 'claude.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },
-    ],
+      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
   },
   {
     slug: 'wheelrack',
-    title: 'WheelRack Design System',
-    line: 'A scalable wholesale platform foundation built through tokens, components, and implementation.',
-    tags: ['Design Systems', 'Tokens', 'Storybook', 'React'],
-    metric: '200+ tokens · 50+ components',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 6, rot: -9, lift: 0, z: 2 },
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 6, rot: -9, lift: 0, z: 2 },
       { icon: 'vscode.svg', name: 'VS Code', x: 22, rot: 7, lift: 3, z: 3 },
       { icon: 'github.svg', name: 'GitHub', x: 41, rot: -14, lift: 0, z: 1 },
       { icon: 'workfront.svg', name: 'Workfront', x: 57, rot: 11, lift: 5, z: 2 },
-      { icon: 'slack.svg', name: 'Slack', x: 75, rot: -6, lift: 0, z: 1 },
-    ],
+      { icon: 'slack.svg', name: 'Slack', x: 75, rot: -6, lift: 0, z: 1 },],
   },
   {
     slug: 'aem-component-system',
-    title: 'AEM Component System Rebuild',
-    line: 'A rebuilt authoring foundation of reusable core components across the storefront.',
-    tags: ['Design Systems', 'AEM', 'UX Engineering', 'CMS'],
-    metric: '10+ live components · 60% faster loads',
-    coins: [
-      { icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
       { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
-      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },
-    ],
+      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
   },
   {
     slug: 'loopstack',
-    title: 'LoopStack',
-    line: 'A trends-first diabetes data product wired to real HealthKit data and live on TestFlight.',
-    tags: ['Product Design', 'React', 'AI-Assisted Build', 'Health Data'],
-    metric: '90 days of real CGM data · TestFlight',
-    coins: [
-      { icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
+    coins: [{ icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 24, rot: 8, lift: 4, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -5, lift: 0, z: 1 },
       { icon: 'github.svg', name: 'GitHub', x: 59, rot: 13, lift: 2, z: 2 },
-      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },
-    ],
+      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },],
   },
   {
     slug: 'design-enablement',
-    title: 'Scaling Design Through Internal Tooling',
-    line: 'A connected layer of internal plugins and web apps that removed friction for the teams building the work.',
-    tags: ['Design Enablement', 'Figma Plugin', 'AI-Assisted Build', 'Automation'],
-    metric: '3 connected tools · Design, UX & Photography',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
       { icon: 'claude.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: 6, lift: 0, z: 1 },
       { icon: 'workfront.svg', name: 'Workfront', x: 59, rot: -12, lift: 2, z: 2 },
-      { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },
-    ],
+      { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },],
   },
   {
     slug: 'tire-categories',
-    title: 'Tire Category Redesign',
-    line: 'A clearer shopping experience shaped through education, iconography, and reusable CMS patterns.',
-    tags: ['UX/UI', 'CMS', 'Icon System', 'Conversion'],
-    metric: '+400% category entries · +50% key conversion',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: 12, lift: 0, z: 1 },
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: 12, lift: 0, z: 1 },
       { icon: 'illustrator.svg', name: 'Adobe Illustrator', x: 25, rot: -8, lift: 4, z: 3 },
       { icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 44, rot: 6, lift: 0, z: 2 },
       { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 60, rot: -12, lift: 2, z: 1 },
-      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 77, rot: 9, lift: 0, z: 2 },
-    ],
+      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 77, rot: 9, lift: 0, z: 2 },],
   },
   {
     slug: 'seasonal-content-system',
-    title: 'Seasonal Content Swap',
-    line: 'A scalable AEM system swapping 20+ components across the winter funnel every season.',
-    tags: ['AEM', 'Content Strategy', 'Adobe Target', 'CMS'],
-    metric: '20+ components · 6 landing pages per season',
-    coins: [
-      { icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -10, lift: 0, z: 2 },
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -10, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 27, rot: 8, lift: 3, z: 3 },
       { icon: 'photoshop.svg', name: 'Photoshop', x: 47, rot: -7, lift: 0, z: 1 },
-      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 66, rot: 12, lift: 2, z: 2 },
-    ],
+      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 66, rot: 12, lift: 2, z: 2 },],
   },
   {
     slug: 'heatherwood',
-    title: 'Heatherwood Equestrian',
-    line: 'An end-to-end rebrand and CMS rebuild for a family-owned equestrian academy.',
-    tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
-    metric: '3–4 inquiries/mo → 4–5 per day',
-    coins: [
-      { icon: 'figma-dark.svg', name: 'Figma', x: 9, rot: 10, lift: 0, z: 1 },
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 9, rot: 10, lift: 0, z: 1 },
       { icon: 'illustrator.svg', name: 'Adobe Illustrator', x: 28, rot: -9, lift: 4, z: 3 },
       { icon: 'photoshop.svg', name: 'Photoshop', x: 48, rot: 6, lift: 0, z: 2 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 67, rot: -12, lift: 2, z: 1 },
-    ],
+      { icon: 'vscode.svg', name: 'VS Code', x: 67, rot: -12, lift: 2, z: 1 },],
   },
   {
     slug: 'landing-pages',
-    title: 'AEM Landing Page System',
-    line: 'A governed template framework that turned month-long builds into week-long launches.',
-    tags: ['UX/UI', 'Front-End', 'CMS', 'SEO'],
-    metric: '50+ pages · ~1 month → 1–2 weeks',
-    coins: [
-      { icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 7, rot: 9, lift: 0, z: 2 },
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 7, rot: 9, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 25, rot: -11, lift: 3, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 44, rot: 7, lift: 0, z: 1 },
       { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 61, rot: -6, lift: 4, z: 2 },
-      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 78, rot: 10, lift: 0, z: 1 },
-    ],
+      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 78, rot: 10, lift: 0, z: 1 },],
   },
 ];
 
@@ -439,22 +381,37 @@ const CaseStudyPlayground: React.FC = () => {
   // constants, so this only needs to run once — not on every hover re-render.
   const cards = useMemo(() => {
     const bySlug = new Map(projects.map((p) => [p.slug, p]));
-    return CARDS.map((card) => {
+    return CARDS.flatMap((card) => {
       const project = bySlug.get(card.slug);
-      const video = project?.featuredVideo;
+      // A slug with no project, or one marked hidden, renders nothing. Every
+      // other surface already honours `hidden`; this one used to be the
+      // exception, which is how a "direct-link only" project ended up as
+      // homepage card #1.
+      if (!project || project.hidden) return [];
+      const video = project.featuredVideo;
       // For video cards the still IS the video's first frame (poster), so the
       // resting card matches what the loop shows; non-video cards keep `featured`.
       const still = video
         ? video.replace(/\.mp4$/, '-poster.jpg')
-        : project?.featured ?? '';
-      return {
+        : project.featured ?? '';
+      // Copy comes from projects.ts, never from a local duplicate. The card
+      // used to restate the metric by hand and had drifted: it showed
+      // "+400%" where the case study says "Up to +400%", scoped to the month
+      // prior. Deriving it means the hedge the case study was careful to
+      // write survives onto the homepage.
+      const headline = project.metrics?.[0];
+      return [{
         ...card,
+        title: project.title,
+        line: project.summary ?? '',
+        tags: project.tags ?? [],
+        metric: headline ? `${headline.value} ${headline.label}` : '',
         image: still,
-        alt: project?.title ?? card.title,
-        stream: project?.stream,
+        alt: project.title,
+        stream: project.stream,
         video,
-        videoPrimary: Boolean(video && project?.featuredVideoPrimary),
-      };
+        videoPrimary: Boolean(video && project.featuredVideoPrimary),
+      }];
     });
   }, []);
 

@@ -147,12 +147,17 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
                 onClick={() => onLayerClick?.(i)}
                 onKeyDown={handleKeyDown}
               >
-                <div className="layers-panel__eye">
+                {/* The eye, the "T" thumbnail and the lock slot are Figma
+                    vernacular, not information — but a role="button" takes its
+                    accessible name from its contents, so a screen reader read
+                    every row as "T <layer name>". Marking the decoration as
+                    decoration leaves the name as just the layer. */}
+                <div className="layers-panel__eye" aria-hidden="true">
                   <EyeIcon />
                 </div>
-                <div className="layers-panel__thumb layers-panel__thumb--text">T</div>
+                <div className="layers-panel__thumb layers-panel__thumb--text" aria-hidden="true">T</div>
                 <div className="layers-panel__name">{name}</div>
-                <div className="layers-panel__lock"></div>
+                <div className="layers-panel__lock" aria-hidden="true"></div>
               </div>
             );
           })}
