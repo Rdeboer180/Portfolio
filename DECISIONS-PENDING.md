@@ -1,130 +1,133 @@
 # Tabled — decisions that need Ryan
 
-Last updated 2026-08-16. Everything here is **parked, not blocked**: the work
-around each item shipped, and each one is written so it can be picked up cold
-months from now. Nothing in this file is waiting on more analysis — each is a
-judgment call that is genuinely yours.
+Last updated 2026-08-16. **All eight tabled items are answered and implemented.**
+Kept as the record of what was decided and why, so none of it has to be
+re-litigated later.
 
-Answer any single item and the work behind it can proceed on its own.
-
----
-
-## LoopStack
-
-### L1 · TestFlight uploads need a credential path
-**The only item here that is operational rather than a taste call.**
-
-Build 20 is archived, signed, validated for the store, and staged in Xcode
-Organizer. It is not uploaded, because this machine has no App Store Connect
-credentials stored anywhere — no API key (`~/.appstoreconnect/private_keys/`
-is empty), no app-specific password in the keychain, no Transporter config.
-Earlier builds went up through Organizer's UI, which uses Xcode's own signed-in
-account.
-
-I can't authenticate as you, so every future build stops at the same place
-unless you pick one:
-
-- **(a) Keep using Organizer.** Two clicks per build, nothing to set up, and
-  nothing changes. Fine if builds stay occasional.
-- **(b) Create an App Store Connect API key** (App Store Connect → Users and
-  Access → Integrations → Keys), drop the `.p8` in
-  `~/.appstoreconnect/private_keys/`, and every future build can go end-to-end
-  from the terminal with no password anywhere. **Recommended** — it is the
-  option that removes you from the loop rather than adding a step.
-- **(c) Store an app-specific password** once via `xcrun notarytool
-  store-credentials`, same effect, slightly less clean than a key.
-
-Under (b) or (c), a build becomes one command instead of a handoff.
-
-### L2 · How much of Loop's settings surface should the inbox actually cover?
-`changeSurface.ts` now sorts every suggestion into `settings` (type it into
-Loop), `code` (for Loop's own repo), or `behaviour` (nothing to change, just
-know). The engine can produce far more `code`-surface items than are worth
-reading — every carb-absorption curve mismatch could become one.
-
-Open question: should `code` items be **rare and high-confidence only**, or
-should the inbox show everything and let you triage? This decides whether the
-Claude handoff is a considered request or a firehose. My read is rare and
-high-confidence, but the whole point of the hub is that you use it, so it's
-your call how much noise is tolerable.
-
-### L3 · What counts as "enough" evidence to surface a trend?
-Confidence is currently computed with the **week as the unit of evidence**, not
-the reading. That is the right unit, and it means a genuine pattern needs
-several weeks before it surfaces. On a fast-changing month that may be too slow
-to be useful; on a stable month it is exactly right.
-
-Do you want a lower-confidence "early signal" tier that is clearly labelled as
-provisional, or does anything below the current bar stay invisible? Adding a
-tier is easy; deciding whether provisional information helps or misleads you is
-not something I should decide.
+Open items, if any, are listed at the bottom under **Still open**.
 
 ---
 
-## Portfolio
+## Answered 2026-08-16
 
-Full detail in `portfolio-site/AUDIT-TODO.md`. Summarised here so both projects'
-open calls live in one place.
+### LoopStack
 
-### P1 · 229.7 MB of images ship unreferenced — archive or delete?
-**Biggest single win available, by an order of magnitude.** 205 of 316 image
-files in `public/` are referenced by nothing; only 98.9 MB is live. Mostly exact
-duplicates between `images/work/<slug>/` and `assets/portfolio-safe/<slug>/`,
-and often *neither* copy is used. CRA copies `public/` wholesale, so all of it
-deploys.
+**L1 · TestFlight uploads — (a) keep using Organizer.**
+No credential is stored on this machine and none will be. Each build is
+archived, signed, validated, and staged into Xcode Organizer; you press
+Distribute. Current staged build: **21**.
 
-The real question before deleting anything: **is `assets/portfolio-safe/` a
-deliberate archive?** If it is, it should move out of `public/` rather than be
-deleted — it is only a problem because `public/` means "ship this". `public/` is
-fully git-tracked either way, so nothing is unrecoverable.
+The consequence worth remembering: the terminal can take a build all the way to
+a validated `.ipa` and no further. If that handoff ever becomes annoying,
+L1(b) — an App Store Connect API key in `~/.appstoreconnect/private_keys/` —
+is still the escape hatch, and nothing about (a) forecloses it.
 
-### P2 · The metrics gate — deliberate, or an accident of `stream`?
-`CaseStudyPage` locks on `stream === 'professional'` and swaps out the entire
-outcome block **and metrics grid**. A cold visitor from LinkedIn sees title,
-thesis, summary, Problem, then a password wall — while the homepage card for the
-same project shows its metrics in the open. If a metric is safe on the card it
-is safe in the outcome block. Proposed: ungate `metrics` and `outcomeNote`, keep
-gating imagery and process detail. This changes your protection posture, so it
-is yours.
+**L2 · Inbox scope — both.**
+Show everything; lead with the few that earned it. Implemented as a split in the
+Fix Log rather than a filter, because a filter hides things and the point was
+not to hide anything:
 
-### P3 · `ownership` — revive as a structured field, or delete?
-Declared at `projects.ts:119`, populated 0/11. The dead layout that referenced
-it is now gone, so the field is inert. Revive it as a "what I owned / what was
-given" block — two audits called this the biggest process-clarity gap, and it
-costs authoring across 11 case studies — or delete it and keep attribution in
-prose. Doing neither is the current state and the worst of the three.
+- **Staged** — items that clear the promotion bar. Settings and habit changes
+  promote at the normal evidence bar (60). Code-surface changes need **75**,
+  because each one is a request to edit Loop's source and rebuild, and the
+  absorption engine can raise one for every curve mismatch it notices.
+- **Worth a look** — everything else, rendered in full, one heading down, with
+  the same Implement and Remove actions. Nothing is filtered away.
 
-### P4 · The hero `<h1>` — how far to go?
-The `<h1>` is visually hidden and reads as four subject-less aphorisms; the
-actual positioning is a 12px eyebrow.
+Verified in the browser: a code item at 81 and a settings item at 61 lead; a
+code item at 64 sits under "Worth a look" with its card and actions intact.
 
-- **(a)** A real claim in the `<h1>`, animation untouched.
-- **(b)** (a) plus cut the intro to ≤3s, final phrase as the initial render.
-- **(c)** (b) plus move Work above the 330-word About.
+**L3 · Provisional confidence tier — yes, with a hard rule.**
+My call, per your "you decide". Three tiers now live in
+`src/lib/loop/signalTier.ts`:
 
-The craft audit's view is that (c) is the highest-leverage change on the site.
-It is also the most entangled with taste, which is why it is here.
+| Tier | Score | Visible | Can become a therapy change |
+| --- | --- | --- | --- |
+| Established | ≥ 60 | yes | **yes** |
+| Early signal | 35–59 | yes, labelled provisional | **no** |
+| Noise | < 35 | no | no |
 
-### P5 · Tailwind — remove it?
-`src/index.css` holds the `@tailwind` directives and is never imported;
-`tailwind.config.js` sits beside it. The dead utility classes are already gone.
-It is a third token system with zero live effect. **Recommend removing both
-files** — this is the closest thing here to a formality.
+The reasoning, since this is the one you delegated: the old single threshold was
+deciding two unrelated questions at once — whether a finding is worth *showing*
+and whether it is worth *acting on*. Those come apart. A pattern in three of the
+last five weeks is exactly what you want to watch and nowhere near enough to
+move a basal rate over. Collapsing them meant the only way to notice a pattern
+forming was to already know it was there, which is backwards for absorption work
+where watching the curve take shape across weeks *is* the work.
+
+So the tiers separate visibility from permission, and the second tier's rule is
+absolute: **an early signal informs, it never authorises.** `canStage()` is the
+single predicate every stage/commit path consults — one bar, one file, so a new
+surface added later cannot accidentally route around it. A test asserts the
+invariant across the whole 35–59 range, and another asserts that nothing which
+could be committed before became uncommittable.
+
+The established bar is unchanged at 60. Nothing lost permission; some things
+gained visibility.
+
+### Portfolio
+
+**P1 · Unreferenced assets — delete.** `public/` 330 MB → 108 MB, 177 files.
+
+Worth recording how close this came to going wrong, because the same trap is
+still there for anything similar. Two of three scans were unsafe:
+
+1. Reading only `src/` missed `public/share/*/index.html` and the built
+   `loopstack-demo` bundle — 33 live files would have been deleted.
+2. A literal-string scan still missed paths the code *builds*: `/images/social/
+   cs-${slug}.jpg` (every case study's OG image), `/images/qr/${qr}.svg`, and a
+   poster derived by swapping `.mp4` for `-poster.jpg`. Deleting the social
+   images would have broken every share card on the site while every page still
+   looked perfectly fine.
+
+The third pass resolves all three patterns against `projects.ts`. One poster
+still slipped through and was caught by a 404 sweep. Final state verified across
+17 routes: zero 404s, zero broken images.
+
+**P2 · The metrics gate — an accident, so ungated.** Employer studies locked
+sections 02–05 wholesale, which swept the metrics grid and outcome note along
+with them. A visitor from LinkedIn saw a card advertising "+50% conversion lift",
+clicked it, and hit a wall where the number should have been. `OutcomeMetrics`
+now renders on both sides of the gate. Still gated: client imagery, process
+detail, live URLs, and the client's name.
+
+**P3 · `ownership` — deleted.** Declared, populated 0/11, and its only consumer
+died with the legacy layout. Orphaned styles removed with it.
+
+**P4 · Hero `<h1>` — (a), a real claim, animation untouched.** It now reads
+"Ryan DeBoer — Product Design Engineer bridging ambitious UX and buildable
+systems" instead of the four animated aphorisms verbatim. The phrases remain
+available to assistive tech; the visual sequence is unchanged.
+
+**P5 · Tailwind — removed.** `index.css` was never imported and everything in it
+already lived in `styles.scss`. Config, postcss config, and all three packages
+went with it.
 
 ---
 
-## Not decisions — known and parked
+## Still open
+
+**Two case studies have no social image.** `cs-bolus-binder.jpg` and
+`cs-photography-workflow-agent.jpg` do not exist, so those two fall back to no
+OG image when shared. Found while resolving P1's dynamic paths. Needs artwork,
+not a decision.
+
+---
+
+## Known and parked — not decisions
 
 Recorded so they aren't rediscovered as new findings.
 
-- **React #418 on all 27 prerendered portfolio routes.** Transient first-render
-  mismatch; the prerendered `#root` is byte-identical to the settled client
-  tree. Ruled out lazy chunks and unlock chrome. Costs a wasted hydration per
-  page; nothing visibly broken, CLS stays good. Pinning it needs a
-  development-React build served against prerendered HTML.
+- **React #418 on all 27 prerendered portfolio routes.** A transient
+  first-render mismatch; the prerendered `#root` is byte-identical to the
+  settled client tree. Lazy chunks and unlock chrome were both ruled out by
+  experiment. Costs a wasted hydration per page; nothing visibly broken, CLS
+  stays good (0.031). Pinning it needs a development-React build served against
+  prerendered HTML.
 - **Deploy config must not blanket-rewrite to `/index.html`.** `serve -s` does,
-  and it made every route return the homepage. If the host is configured that
-  way, all 27 prerendered pages are void and crawlers get the homepage for every
-  URL. Fallback must apply only to paths with no prerendered file.
+  and it made every route return the homepage during testing. If the host is
+  configured that way, all 27 prerendered pages are void and crawlers get the
+  homepage for every URL. The fallback must apply only to paths with no
+  prerendered file.
 - **LoopStack has no git remote.** Committed locally only. Add one when you want
   it backed up off this machine.
