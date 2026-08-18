@@ -9,6 +9,7 @@ import Footer from './Footer';
 import { getHomeHref } from '../utils/homeSession';
 import AboutHero from './AboutHero';
 import AboutStorySections from './AboutStorySections';
+import AboutBench from './AboutBench';
 import ProcessPrinciples from './ProcessPrinciples';
 import LinkedInLink from './LinkedInLink';
 import CandidateSnapshot from './CandidateSnapshot';
@@ -45,6 +46,9 @@ const AboutPage: React.FC = () => {
 
       {/* ── Story — six text-first beats (career evolution, not tabs) ─────── */}
       <AboutStorySections />
+
+      {/* ── The bench — the person by their objects, drawn ────────────────── */}
+      <AboutBench />
 
       {/* ── Transition — single orange dot-matrix card ─────────────────────── */}
       <div className="about-page__transition-card">

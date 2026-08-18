@@ -142,3 +142,71 @@
 .case-playground--resolving .cover-schematic {
   transition-delay: var(--resolve-delay, 0ms);
 }
+
+// ── Plate contexts on the study page (the opener) ───────────────────────────
+// Locked: the plate IS the featured frame — the study opens drawn, never
+// absent. At page scale the annotations are content, so they render resolved.
+.cs__featured-image--plate {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: $color-white;
+  border: 1px solid $color-border-default;
+
+  .cover-schematic { opacity: 1; }
+  .cover-schematic__handle { opacity: 1; }
+
+  .cover-schematic__callout {
+    line,
+    path { stroke-dashoffset: 0; }
+    text { opacity: 1; }
+  }
+}
+
+// Unlocked: the plate covers the real hero media on arrival and resolves
+// within the 700ms budget (200ms hold + 500ms fade) — the card the visitor
+// clicked becoming the frame that opens. Pointer-events none throughout, so
+// the resolve can never block a click or a scroll.
+.cs__featured-image--opener {
+  position: relative;
+}
+
+.cs__opener-plate {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: csOpenerResolve 500ms var(--case-study-ease-out, cubic-bezier(0.2, 0.8, 0.2, 1)) 200ms both;
+
+  .cover-schematic { opacity: 1; }
+}
+
+@keyframes csOpenerResolve {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+// After the resolve, the working stays one glance away. Decorative at this
+// scale: callouts and annotations are unreadable at 88px and don't try.
+.cs__opener-tab {
+  position: absolute;
+  right: $spacing-md;
+  bottom: $spacing-md;
+  width: 88px;
+  aspect-ratio: 16 / 10;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  background: $color-white;
+
+  .cover-schematic { opacity: 1; }
+  .cover-schematic__handle { opacity: 1; }
+  .cover-schematic__callout,
+  .cs-caveat { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // Arrives resolved; the tab still carries the schematic.
+  .cs__opener-plate {
+    animation: none;
+    opacity: 0;
+  }
+}

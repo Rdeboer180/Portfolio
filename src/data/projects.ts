@@ -111,6 +111,13 @@ export interface Project {
   metrics: ProjectMetric[];
   /** See ProjectBeat — at most one per study, by design. */
   beat?: ProjectBeat;
+  /**
+   * The study opens on its cover schematic: locked visitors get the plate as
+   * the featured frame (drawn, never absent), unlocked visitors watch it
+   * resolve into the real hero media within 700ms of arrival — the card they
+   * clicked becoming the frame that opens. Flagship-only until it earns more.
+   */
+  openerSchematic?: boolean;
   hidden?: boolean;
   timeToLive?: string;
 
@@ -179,6 +186,7 @@ const projects: Project[] = [
     },
     summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
     cardHook: 'A 20-year-old dealer platform had no design system behind it. One was built from scratch\u2014and partner adoption grew from 6 to 10 while the redesign was still in progress.',
+    openerSchematic: true,
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
     role: 'Senior Web Designer / UX Engineer',

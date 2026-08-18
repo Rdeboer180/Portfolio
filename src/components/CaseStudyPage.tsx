@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import projects, { Project, ProjectBeat, ProjectImage } from '../data/projects';
+import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import LinkedInLink from './LinkedInLink';
@@ -614,10 +615,38 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
         </header>
 
         {/* ==================== Featured Image (optional) ==================== */}
+        {/* Opener studies keep the visual thread from the index: the card the
+            visitor clicked becomes the frame that opens. Unlocked, the plate
+            resolves into the real media within 700ms of arrival — pure CSS,
+            pointer-events none, so it never blocks a click or a scroll.
+            Reduced motion arrives resolved. The corner tab keeps the working
+            one glance away after the resolve. */}
         {!locked && project.featured && (
-          <div className="cs__featured-image">
+          <div
+            className={`cs__featured-image${
+              project.openerSchematic && hasSchematic(project.slug) ? ' cs__featured-image--opener' : ''
+            }`}
+          >
             {/* Above-the-fold hero image — prioritize as the likely LCP element. */}
             <img src={project.featured} alt={project.title} fetchPriority="high" />
+            {project.openerSchematic && hasSchematic(project.slug) && (
+              <>
+                <div className="cs__opener-plate" aria-hidden="true">
+                  <CoverSchematic slug={project.slug} />
+                </div>
+                <div className="cs__opener-tab" aria-hidden="true">
+                  <CoverSchematic slug={project.slug} />
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {/* Locked opener studies had no featured frame at all — the plate is
+            pure gain: the study opens drawn, never absent. Annotations render
+            resolved here; at page scale they are content, not a hover reward. */}
+        {locked && project.openerSchematic && hasSchematic(project.slug) && (
+          <div className="cs__featured-image cs__featured-image--plate" aria-hidden="true">
+            <CoverSchematic slug={project.slug} />
           </div>
         )}
 
