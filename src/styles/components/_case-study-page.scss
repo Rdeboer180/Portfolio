@@ -1579,3 +1579,85 @@
     }
   }
 }
+
+// ── The beat ─────────────────────────────────────────────────────────────────
+// The one full-bleed moment a study earns: the headline metric set enormous, or
+// the strongest artifact at viewport width. Placed after the approach that
+// earns it; exactly one per study, because a second beat makes both ordinary.
+// The 100vw breakout is safe — html clips horizontal overflow (see _base.scss).
+.cs__beat {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  margin: $spacing-4xl 0;
+}
+
+// Metric — Signal Orange gets its one loud moment on the page, inside a tint
+// band bounded by warm hairlines. Display-scale type, so the 3:1 large-text
+// contrast floor is the one that applies; the context line stays in slate at
+// body contrast.
+.cs__beat--metric {
+  padding: $spacing-4xl $container-padding-x;
+  background: $color-primary-light;
+  border-top: 1px solid rgba($color-primary, 0.35);
+  border-bottom: 1px solid rgba($color-primary, 0.35);
+  text-align: center;
+
+  .cs__beat-value {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: clamp(56px, 11vw, 148px);
+    font-weight: $font-weight-extrabold;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: $color-primary;
+  }
+
+  .cs__beat-label {
+    margin: $spacing-md 0 0;
+    font-family: $font-family-heading;
+    font-size: clamp(17px, 2.2vw, 24px);
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  .cs__beat-context {
+    margin: $spacing-md auto 0;
+    max-width: 52ch;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+}
+
+// Image — the artifact at full width; the caption returns to the reading
+// column, because captions are prose.
+.cs__beat--image {
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    // Full-page captures are tall portraits; unconstrained at viewport width
+    // they become skyscrapers. The cap with a top crop shows the above-the-fold
+    // composition — which is what a beat caption should be claiming anyway.
+    max-height: min(80vh, 720px);
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .cs__beat-caption {
+    max-width: $container-text-width;
+    margin: $spacing-md auto 0;
+    padding: 0 $container-padding-x;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .cs__beat { margin: $spacing-3xl 0; }
+  .cs__beat--metric { padding: $spacing-3xl $spacing-xl; }
+}

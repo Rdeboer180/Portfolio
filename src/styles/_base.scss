@@ -24,10 +24,10 @@ body {
 }
 
 html {
-  // Up to 119px of fixed chrome (unlock bar + nav) sits at top:0, so an
-  // in-page anchor used to land its target underneath it — the #projects
-  // heading arrived 8px behind the nav with its badge fully hidden.
-  scroll-padding-top: calc(var(--unlock-bar-h, 0px) + 96px);
+  // The fixed nav sits at top:0, so an in-page anchor used to land its target
+  // underneath it — the #projects heading arrived behind the nav with its
+  // badge fully hidden. (Was nav + unlock bar; the bar is gone.)
+  scroll-padding-top: 96px;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

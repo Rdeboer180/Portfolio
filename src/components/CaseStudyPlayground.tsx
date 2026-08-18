@@ -15,6 +15,7 @@ import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
+import CoverSchematic, { hasSchematic } from './CoverSchematic';
 
 const PreviewLockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
@@ -402,9 +403,14 @@ const CaseStudyPlayground: React.FC = () => {
       const headline = project.metrics?.[0];
       return [{
         ...card,
-        title: project.title,
-        line: project.summary ?? '',
-        tags: project.tags ?? [],
+        title: project.cardTitle ?? project.title,
+        // The proof formula (problem, then the shipped thing and what it did)
+        // when a project defines one; the study summary otherwise.
+        line: project.cardHook ?? project.summary ?? '',
+        // Four tags is the card's budget — the full list belongs to the study.
+        // Order in projects.ts is curation order, so the first four are the
+        // four that matter.
+        tags: (project.tags ?? []).slice(0, 4),
         metric: headline ? `${headline.value} ${headline.label}` : '',
         image: still,
         alt: project.title,
@@ -415,7 +421,7 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
-  const { unlocked, resolving, openPrompt } = useUnlock();
+  const { unlocked, resolving, openPrompt, lockedReady } = useUnlock();
 
   // Only the employer/client stream is treated as protected. The self-built work
   // and Heatherwood's live public site are Ryan's to show, so veiling them would
@@ -450,6 +456,19 @@ const CaseStudyPlayground: React.FC = () => {
             A closer look at the systems, interfaces, and product thinking I've shaped from
             concept through implementation.
           </p>
+          {/* The unlock affordance lives here now — beside the locked objects —
+              instead of as a site-wide bar above every page's nav. Same prompt,
+              same password; only the address changed. */}
+          {lockedReady && (
+            <button
+              type="button"
+              className="case-playground__unlock"
+              onClick={() => openPrompt()}
+            >
+              <span className="case-playground__unlock-icon"><PreviewLockIcon /></span>
+              Unlock the professional stream
+            </button>
+          )}
         </div>
 
         {/* The threshold — stage line into the playground */}
@@ -479,11 +498,19 @@ const CaseStudyPlayground: React.FC = () => {
           {cards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
             const locked = isLocked(card.stream);
+            // Drawn cover in place of the blur. The plate stays mounted for any
+            // protected card that has one (like the scrim, so unlocking can
+            // fade it rather than cut); --plated gates the hover grammar and
+            // only applies while actually locked.
+            const hasPlate = isProtected(card.stream) && hasSchematic(card.slug);
+            const plated = locked && hasPlate;
             return (
               <Link
                 key={card.slug}
                 to={`/work/${card.slug}`}
-                className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}`}
+                className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}${
+                  plated ? ' case-playground__card--plated' : ''
+                }`}
                 data-slug={card.slug}
                 aria-describedby={locked ? `lock-${card.slug}` : undefined}
                 onClick={(e) => handleCardClick(e, card)}
@@ -496,9 +523,10 @@ const CaseStudyPlayground: React.FC = () => {
                 <div
                   className={`case-playground__preview${
                     locked ? ' case-playground__preview--locked' : ''
-                  }`}
+                  }${hasPlate ? ' case-playground__preview--plate' : ''}`}
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
+                  {hasPlate && <CoverSchematic slug={card.slug} />}
                   {isProtected(card.stream) && (
                     <p
                       id={`lock-${card.slug}`}

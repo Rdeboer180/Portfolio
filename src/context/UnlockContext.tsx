@@ -9,8 +9,8 @@ interface UnlockValue {
   unlocked: boolean;
   /** The password modal is on screen. */
   promptOpen: boolean;
-  /** Locked, hydrated, and not currently prompting — the top bar is showing. */
-  barVisible: boolean;
+  /** Locked and hydrated — surfaces offering an unlock affordance may show it. */
+  lockedReady: boolean;
   /**
    * True for one beat after a successful unlock, so the locked cards can play
    * their resolve instead of snapping. Cleared automatically.
@@ -100,22 +100,17 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (href) navigate(href);
   }, [navigate]);
 
-  const barVisible = ready && !unlocked && !promptOpen;
-
-  // The page navs are `position: fixed; top: 0`, so the bar can't simply sit
-  // above them in flow — it publishes its height and they offset by it.
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle('has-unlock-bar', barVisible);
-    return () => root.classList.remove('has-unlock-bar');
-  }, [barVisible]);
+  // Gated on `ready` so the affordance never renders during hydration (the
+  // prerender strips unlock chrome; see UnlockChrome in App.tsx) and never
+  // flashes for a visitor whose stored unlock hasn't been read yet.
+  const lockedReady = ready && !unlocked;
 
   const value = useMemo<UnlockValue>(
     () => ({
-      unlocked, promptOpen, barVisible, resolving,
+      unlocked, promptOpen, lockedReady, resolving,
       openPrompt, unlock, dismissPrompt, continueLocked,
     }),
-    [unlocked, promptOpen, barVisible, resolving,
+    [unlocked, promptOpen, lockedReady, resolving,
      openPrompt, unlock, dismissPrompt, continueLocked]
   );
 

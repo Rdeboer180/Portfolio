@@ -17,7 +17,6 @@ import { usePageMeta } from './hooks/usePageMeta';
 import { SITE } from './data/site';
 import { scrollBehavior } from './utils/motion';
 import { UnlockProvider, useUnlock } from './context/UnlockContext';
-import SiteUnlockBar from './components/SiteUnlockBar';
 import PasswordModal from './components/PasswordModal';
 
 // Targeted-homepage template. Duplicate homepage-template.tsx per deployment and
@@ -98,26 +97,22 @@ function CaseStudyRoute() {
 }
 
 /**
- * Site-wide unlock chrome: the first-load prompt, and the standing bar a visitor
- * gets if they close it. Rendered outside <Routes> so both survive navigation.
+ * Site-wide unlock chrome: the password prompt, raised on intent. Rendered
+ * outside <Routes> so it survives navigation.
  *
- * Held back until after mount, and that delay is load-bearing in two directions.
+ * The standing bar that used to live here is gone. It rendered above the nav on
+ * every page, which made "enter the site password" the first line of the site —
+ * the worst possible first impression for chrome whose whole job was to be a
+ * quiet standing offer. The affordance now lives in the work section
+ * (CaseStudyPlayground), beside the locked objects it actually unlocks.
  *
- * The prerender step strips this chrome out of every static file on purpose —
- * a crawler should index the page, not a "the work is locked" bar, and a
- * visitor on a slow connection should not read a lock prompt baked into HTML
- * before any JS has decided whether they are already unlocked. But React then
- * hydrated a tree that *did* contain the bar, found markup that did not, and
- * threw error #418 on all 27 routes — discarding the entire prerendered tree
- * and re-rendering it on the client. The static HTML was still correct, so
- * nothing looked broken; the site was just paying for prerendering twice and
- * getting it once.
- *
- * Gating on a post-mount flag makes the first client render match the stripped
- * markup exactly. Hydration succeeds, the prerendered DOM is kept, and the
- * chrome appears a frame later — which is also when the unlock state read from
- * storage is actually known, so the bar no longer renders before it can tell
- * whether it should.
+ * Held back until after mount, and that delay is load-bearing: the prerender
+ * step strips this chrome out of every static file on purpose, and rendering it
+ * during hydration made React find markup the static HTML didn't have — error
+ * #418 on all 27 routes, discarding the prerendered tree. Gating on a
+ * post-mount flag makes the first client render match the stripped markup
+ * exactly, and the chrome appears a frame later — which is also when the unlock
+ * state read from storage is actually known.
  */
 function UnlockChrome() {
   const { promptOpen, unlock, dismissPrompt, continueLocked, unlocked, resolving } = useUnlock();
@@ -128,7 +123,6 @@ function UnlockChrome() {
 
   return (
     <>
-      <SiteUnlockBar />
       {/*
         Unlocking succeeded entirely in pictures: the modal closed, protected
         images resolved in, and 1150ms later the router navigated. A screen

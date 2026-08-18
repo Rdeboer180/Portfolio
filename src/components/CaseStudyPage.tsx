@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import projects, { Project, ProjectImage } from '../data/projects';
+import projects, { Project, ProjectBeat, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import LinkedInLink from './LinkedInLink';
@@ -183,6 +183,34 @@ const CaseStudyLocked: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => (
     </div>
   </section>
 );
+
+/**
+ * The beat — the one full-bleed moment a study earns. Mother-style scale
+ * courage for a metric, COLLINS-style evidence for an artifact; either way it
+ * breaks the reading column exactly once, directly after the explanation that
+ * earned it. Deliberately not a `.cs__section`: it doesn't count in the
+ * numbering, doesn't scroll-reveal, and needs no motion at all.
+ */
+const CaseStudyBeat: React.FC<{ beat: ProjectBeat }> = ({ beat }) => {
+  if (beat.kind === 'metric' && beat.value) {
+    return (
+      <aside className="cs__beat cs__beat--metric">
+        <p className="cs__beat-value">{beat.value}</p>
+        {beat.label && <p className="cs__beat-label">{beat.label}</p>}
+        {beat.context && <p className="cs__beat-context">{beat.context}</p>}
+      </aside>
+    );
+  }
+  if (beat.kind === 'image' && beat.src) {
+    return (
+      <figure className="cs__beat cs__beat--image">
+        <img src={beat.src} alt={beat.alt ?? ''} loading="lazy" />
+        {beat.caption && <figcaption className="cs__beat-caption">{beat.caption}</figcaption>}
+      </figure>
+    );
+  }
+  return null;
+};
 
 /* ─── Section Image Renderer ─── */
 // Muted autoplay loop clip with a pause/play control (WCAG 2.2.2).
@@ -650,6 +678,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             {locked ? (
               <>
                 <CaseStudyLocked onUnlock={openPrompt} />
+                {/* Metric beats restate numbers already public in
+                    OutcomeMetrics, so they survive the gate. Image beats are
+                    media and stay behind it with the rest. */}
+                {project.beat?.kind === 'metric' && <CaseStudyBeat beat={project.beat} />}
                 {/* Outcome survives the gate — see OutcomeMetrics. The heading
                     is kept so the numbers arrive with their context instead of
                     floating under the lock panel. */}
@@ -783,6 +815,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <SectionImages images={project.approachImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
               </section>
             ) : null}
+
+            {/* The beat — after the approach that earns it, before the outcome
+                that cashes it. */}
+            {project.beat && <CaseStudyBeat beat={project.beat} />}
 
             {/* --- 05 Outcome --- */}
             <section className="cs__section cs__section--outcome">

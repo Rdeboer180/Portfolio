@@ -3,6 +3,29 @@ export interface ProjectMetric {
   label: string;
 }
 
+/**
+ * The one full-bleed moment a study earns: the strongest artifact or the
+ * headline metric set enormous, placed directly after the explanation that
+ * earns it (between Approach and Outcome). Exactly one per study — a second
+ * beat makes both ordinary. Everything else keeps the reading-column
+ * discipline.
+ *
+ * Metric beats restate a number already in the public OutcomeMetrics, so they
+ * survive the gate on locked studies. Image beats are media and stay behind it.
+ */
+export interface ProjectBeat {
+  kind: 'metric' | 'image';
+  /** Metric: the value, hedges intact — the beat inherits the study's honesty. */
+  value?: string;
+  label?: string;
+  /** Metric: one line keeping the number honest (measurement window, scope). */
+  context?: string;
+  /** Image: full-bleed artifact. Must survive enlargement or it isn't the beat. */
+  src?: string;
+  alt?: string;
+  caption?: string;
+}
+
 export interface ProjectImage {
   src?: string;
   alt: string;
@@ -46,6 +69,19 @@ export interface Project {
    *  sitemap. Keeps the branded `title` while adding the searchable problem. */
   seoTitle?: string;
   summary?: string;
+  /**
+   * Homepage-card copy in the proof formula: the problem, then the shipped
+   * thing and what it did. Falls back to `summary` where absent. Every claim
+   * must already exist in the public (locked-state) study — the card may move
+   * public information forward, never disclose new information.
+   */
+  cardHook?: string;
+  /**
+   * Short display title for homepage cards, where the full `title` runs three
+   * lines. The study page keeps `title`; the card sentence (`cardHook`) and
+   * metric carry what the long title was doing.
+   */
+  cardTitle?: string;
   /** One-sentence argument shown under the hero title, with a drawn underline. */
   thesis?: string;
   /** Short point-of-view asides shown in each section's margin (About-story style). */
@@ -73,6 +109,8 @@ export interface Project {
   // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
   metrics: ProjectMetric[];
+  /** See ProjectBeat — at most one per study, by design. */
+  beat?: ProjectBeat;
   hidden?: boolean;
   timeToLive?: string;
 
@@ -140,6 +178,7 @@ const projects: Project[] = [
       outcome: 'The framework outlived the project. Wholesale picked it up next.',
     },
     summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
+    cardHook: 'A 20-year-old dealer platform had no design system behind it. One was built from scratch\u2014and partner adoption grew from 6 to 10 while the redesign was still in progress.',
     year: '2023\u20132024',
     tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
     role: 'Senior Web Designer / UX Engineer',
@@ -281,6 +320,13 @@ const projects: Project[] = [
     title: 'Tire Category Page Redesign & Optimizations',
     seoTitle: 'Automotive Ecommerce Category UX Redesign — +400% Category Entry',
     summary: 'Redesigned 30+ tire category pages into a scalable system of iconography, data visualization, and content structure. Top-performing category pages saw up to +50% conversion lift in the first month after launch.',
+    cardHook: 'Choosing tires takes expertise most shoppers don\u2019t have. 30+ category pages were rebuilt into one guided system\u2014top pages lifted conversion up to +50% in the first month.',
+    beat: {
+      kind: 'metric',
+      value: 'Up to +400%',
+      label: 'Category entry growth',
+      context: 'Entry traffic across the category system, measured against the month before launch.',
+    },
     year: '2024',
     tags: ['UX/UI Design', 'Wireframing', 'Component Design', 'Modular Design', 'SEO Optimization', 'Icon System Implementation'],
     role: 'Senior Web Designer / UX Engineer',
@@ -414,6 +460,13 @@ const projects: Project[] = [
     title: 'Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
     seoTitle: 'Seasonal Ecommerce Content System \u2014 AEM Experience Fragments & Adobe Target',
     summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season. Seasonal winterization has been associated with stronger annual winter conversion lift compared with pre-winterization periods.',
+    cardHook: 'Seasonal storefronts were rebuilt by hand every year. An AEM fragment system now swaps 20+ components a season through authoring, not development.',
+    beat: {
+      kind: 'image',
+      src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
+      alt: 'Winterized homepage with seasonal hero, editorial blocks, and category grid',
+      caption: 'The full winter swap: every above-the-fold section replaced through authoring \u2014 hero, editorial blocks, and category grid \u2014 with no development involved.',
+    },
     year: '2013\u2013Present',
     tags: ['AEM', 'Content Strategy', 'SEO', 'Photography Direction', 'CMS', 'Component Design', 'Modular Design', 'Adobe Target'],
     role: 'Senior Web Designer / AEM Content Strategist',
@@ -504,7 +557,7 @@ const projects: Project[] = [
     outcomeImages: [
       {
         src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
-        alt: 'Winterized Tire Rack homepage with seasonal hero, editorial blocks, and category grid',
+        alt: 'Winterized homepage with seasonal hero, editorial blocks, and category grid',
         layout: 'full',
         caption: 'Winterized homepage\u2014full Experience Fragment swap across all above-the-fold sections',
       },
@@ -671,6 +724,7 @@ const projects: Project[] = [
     title: 'AEM Landing Page System & SEO Template Framework',
     seoTitle: 'AEM Landing-Page & SEO Template System for Ecommerce',
     summary: 'Designed 50+ landing pages personally, then built the governed AEM template system that two junior designers now use\u2014shifting turnaround from ~1 month to 1\u20132 weeks for complex pages and 1\u20132 days for simple launches.',
+    cardHook: 'Every landing page took a designer about a month. A governed AEM template system moved complex pages to 1\u20132 weeks\u2014and junior designers ship them now.',
     year: '2023\u2013Present',
     tags: ['UX/UI Design', 'Front-End Development', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
@@ -806,6 +860,7 @@ const projects: Project[] = [
     title: 'AEM Component System Rebuild',
     seoTitle: 'Adobe Experience Manager Design System & Storefront Performance Rebuild',
     summary: 'Partnered with a newly formed AEM dev team to rebuild the authoring system around reusable core components. Shipped 10+ live components powering homepage, tires hub, events, and packages\u201460% faster page loads (WebPageTest) and a shared foundation for design, dev, SEO, and accessibility.',
+    cardHook: 'Every page was a one-off build. Authoring was rebuilt around 10+ reusable core components\u2014pages load 60% faster, on a foundation design and dev share.',
     year: '2024\u20132025',
     tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
@@ -979,6 +1034,7 @@ $mobile-max-width: 768px;
     seoTitle: 'Design Enablement — Internal Figma Plugins & AI-Assisted Tooling',
     summary:
       'Agentic internal application development: a connected layer of plugins and web applications that streamlined repetitive design work, standardized project communication, and reduced manual review cycles across the Design, UX, and Photography teams.',
+    cardHook: 'Repetitive production work was eating design time. Three connected internal tools\u2014plugins and web apps\u2014standardized it away.',
     year: '2025–2026',
     tags: [
       'Design Enablement',
@@ -1318,8 +1374,10 @@ Frame every output as:
     stream: 'passion',
     client: 'PlayDraft (personal product)',
     title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
+    cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft — a 0→1 Social Mobile Game Designed & Built in React Native',
     summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic: Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution across product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight, with AI-assisted workflows moving it faster.',
+    cardHook: 'The fantasy-draft ritual, turned loose on any topic — snacks, movies, or anything friends write in. Solo 0 → 1: brand, token-governed system, and a working Expo + Supabase app, now on TestFlight.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',

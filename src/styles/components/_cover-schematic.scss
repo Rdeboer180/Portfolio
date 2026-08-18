@@ -1,0 +1,144 @@
+// ── Cover schematics ─────────────────────────────────────────────────────────
+// The locked professional stream, drawn instead of blurred. The plate is an
+// opaque paper surface over the card's real media: while locked it IS the
+// cover; on unlock it fades on the playground's existing card-by-card delay,
+// revealing the media resolving underneath — the drawing becoming the thing.
+//
+// Hover grammar (locked cards only): the card border warms, the corner handles
+// tick in, and the dimension callouts draw themselves — the locked card's hover
+// reward is more specificity, never a tease of hidden media.
+
+.cover-schematic {
+  position: absolute;
+  inset: 0;
+  z-index: 1; // above media, below the stream chip and lock line (z-index: 2)
+  margin: 0;
+  background: $color-white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 900ms var(--case-study-ease-out);
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+// Visible while the preview is locked; fades when the lock lifts.
+.case-playground__preview--locked .cover-schematic {
+  opacity: 1;
+}
+
+// ── Linework vocabulary ──────────────────────────────────────────────────────
+.cs-ink { stroke: $color-neutral-dark; fill: none; stroke-width: 1.5; }
+.cs-steel { stroke: $color-secondary; fill: none; stroke-width: 1; }
+.cs-dash { stroke: $color-secondary; fill: none; stroke-width: 1; stroke-dasharray: 3 3; }
+.cs-keep { stroke: $color-primary; fill: none; stroke-width: 1.5; }
+.cs-keep-thin { stroke: $color-primary; fill: none; stroke-width: 1; }
+.cs-tint { fill: $color-primary-light; stroke: none; }
+.cs-mist { fill: $color-neutral-lightest; stroke: none; }
+.cs-steel-fill { fill: $color-secondary; stroke: none; }
+
+.cs-mono {
+  font-family: $font-family-mono;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: $color-neutral-muted;
+}
+.cs-mono--accent { fill: $color-primary-dark; }
+.cs-caveat {
+  font-family: $font-family-hand;
+  font-size: 16px;
+  fill: $color-primary;
+}
+
+// ── Corner handles — the selection vernacular, on hover/focus ───────────────
+.cover-schematic__handle {
+  fill: $color-secondary;
+  opacity: 0;
+  transition: opacity 200ms ease 120ms;
+}
+
+// ── Callouts — hidden at rest, drawn in on hover/focus ──────────────────────
+.cover-schematic__callout {
+  line,
+  path {
+    stroke-dasharray: 170;
+    stroke-dashoffset: 170;
+    transition: stroke-dashoffset 400ms ease 150ms;
+  }
+
+  text {
+    opacity: 0;
+    transition: opacity 300ms ease 420ms;
+  }
+}
+
+// The card carries --plated (set in CaseStudyPlayground) only while locked
+// with a plate, so none of this grammar leaks onto unlocked cards.
+.case-playground__card--plated:hover,
+.case-playground__card--plated:focus-visible {
+  border-color: rgba($color-primary, 0.45);
+
+  .cover-schematic__handle { opacity: 1; }
+
+  .cover-schematic__callout {
+    line,
+    path { stroke-dashoffset: 0; }
+    text { opacity: 1; }
+  }
+}
+
+// Touch has no hover: the callouts are content, so they read resolved.
+@media (hover: none) {
+  .cover-schematic__handle { opacity: 1; }
+
+  .cover-schematic__callout {
+    line,
+    path { stroke-dashoffset: 0; }
+    text { opacity: 1; }
+  }
+}
+
+// Reduced motion: everything still appears on hover — instantly, with no draw,
+// and the plate/media swap on unlock is a cut instead of a crossfade.
+@media (prefers-reduced-motion: reduce) {
+  .cover-schematic { transition: none; }
+  .cover-schematic__handle { transition: none; }
+
+  .cover-schematic__callout {
+    line,
+    path { transition: none; }
+    text { transition: none; }
+  }
+}
+
+// ── Plate context inside the playground ─────────────────────────────────────
+// These live here (imported after _case-study-playground) because they exist
+// only when a plate does.
+
+// The paper scrim was the blur's companion; under an opaque drawing it only
+// washes the linework. Two classes so it wins over the locked rule regardless
+// of import order.
+.case-playground__preview--locked.case-playground__preview--plate::after {
+  opacity: 0;
+}
+
+// The lock line becomes the plate's chip: same element, same copy, same
+// screen-reader story — restyled from bottom-center caption to top-right pill.
+.case-playground__preview--plate .case-playground__lock {
+  inset: $spacing-md $spacing-md auto auto;
+  justify-content: flex-start;
+  padding: 3px 10px;
+  background: $color-primary-light;
+  border-radius: $radius-full;
+  color: $color-primary-dark;
+}
+
+// Unlocking fades the plate on the same card-by-card delay as the scrim, so
+// the drawing resolves into the media underneath rather than vanishing at once.
+.case-playground--resolving .cover-schematic {
+  transition-delay: var(--resolve-delay, 0ms);
+}
