@@ -1402,14 +1402,15 @@ Frame every output as:
       'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic—Snacks, Movies, Super Powers, GOAT Athletes, or a written-in "Best road trip snacks"—could be drafted with friends and settled in one session?',
     ],
     // The 68-second product reel sits right after the intro — it IS the
-    // 60-second scan. Every frame is the real app captured on-simulator
-    // (Maestro-scripted flows + simctl recordings), not a motion mockup.
+    // 89-second narrated scan (reel v13, 2026-08-19). Every frame is the
+    // real app captured on-simulator against the live backend — Maestro
+    // flows + simctl recordings — not a motion mockup.
     problemImages: [
       {
         src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
-        alt: 'PlayDraft product reel — authoring a custom draft topic, browsing and searching packs, live snake-draft picks on the clock, the winner ceremony scored by the DraftLab confidence pool, and sharing the final board to X',
+        alt: 'PlayDraft product reel — picking a DraftPack, tuning the draft and inviting a group, live snake-draft picks on the clock, DraftLab solo games, the store economy, the winner scored on draft-day value, the competitive sliced board and season standings, and sharing the final board',
         layout: 'full',
-        caption: 'The product in 66 seconds — real app, captured on-simulator with scripted flows: settle any debate → choose a topic → set the rules → invite the group → take turns drafting → reveal the lineups → vote and react → post it to X',
+        caption: 'The product in 89 seconds, narrated and subtitled — real app, captured on-simulator against the live backend: pick a pack → make it yours → draft on the clock → DraftLab daily → earn DraftCoins → the board decides → competitive changes everything → sleepers pay → argue it → take it public',
         isVideo: true,
         videoPoster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
       },
