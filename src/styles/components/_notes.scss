@@ -995,3 +995,17 @@
     }
   }
 }
+
+// ── Source line ─────────────────────────────────────────────────────────────
+// Where a note started life as a LinkedIn post, it closes by saying so. Set
+// off by a hairline and quieter than the prose: this is provenance, not the
+// argument. The link itself is the LinkedInLink atom, which always points at
+// the profile root — activity deep links are auth-walled for logged-out
+// readers, so they are never used.
+.notes__body .notes__source {
+  margin-top: $spacing-2xl;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-neutral-light;
+  font-size: $font-size-body-sm;
+  color: $color-neutral-muted;
+}

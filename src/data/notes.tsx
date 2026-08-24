@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LinkedInLink from '../components/LinkedInLink';
 
 // ============================================
 // Notes — the writing stream. Craft is the through-line: essays argue a
@@ -142,6 +143,121 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  // ──────────────────────────────────────────────────────────────────────────
+  {
+    slug: 'what-id-keep',
+    read: '5 min',
+    kind: 'essay',
+    date: 'August 2026',
+    dateISO: '2026-08-24',
+    title: 'I worried the new tools were taking me away from design. They made me specific about it.',
+    dek: 'Watching one of my Figma teachers turn toward AI and building, at the same time my own work did. Four parts of the craft I would keep if every tool changed tomorrow — and the work where each one is still happening.',
+    body: (
+      <>
+        <p>
+          Michael W. &mdash; Mizko &mdash; is one of the people who taught me how to think in
+          Figma. Not shortcuts: how to structure a file, how to build a system, how to turn a
+          visual decision into a rule other people could follow. Then he went quiet on YouTube for
+          more than a year. When he came back, most of his attention had moved toward AI and
+          building things.
+        </p>
+        <p>
+          That caught me because my own week had drifted the same way at roughly the same time,
+          without either of us telling the other. Figma is still in my process &mdash; I still care
+          about the artboards, the component logic, the small decisions that make a product feel
+          considered. It just isn&rsquo;t where all of the work lives anymore. More of my week now
+          happens in Claude, in code, in Markdown files, in plugins and tests and products that
+          actually run.
+        </p>
+        <p>
+          For a while I read that as drift. If the file stopped being the deliverable, was I still
+          doing the thing I signed up for?
+        </p>
+        <Callout marker="The turn">
+          The shift didn&rsquo;t move me away from the parts of design I love. It forced me to say
+          exactly which parts those were.
+        </Callout>
+
+        <h2>Four things I&rsquo;d keep if every tool changed tomorrow</h2>
+        <p>
+          I wrote these down as a gut list, then went looking for whether the work backed them up.
+          It does, which is the only reason I trust the list.
+        </p>
+        <Split sum="none of these name a tool">
+          <Term word="Building systems" gloss="the rule, not the screen">
+            The part I&rsquo;d protect first. A 20-year-old dealer platform with no system behind
+            it became{' '}
+            <Link to="/work/wheelrack/">one built from scratch</Link>, and the argument that
+            settled it was about tokens, not layouts.
+          </Term>
+          <Term word="The visual details" gloss="down to favicon size">
+            Construction, really &mdash;{' '}
+            <Link to="/work/overscroll-tactics/">making a mark hold up at 4000% and at 16px</Link>.
+            The rules that keep a mark intact are the same discipline as the rules that keep an
+            interface intact.
+          </Term>
+          <Term word="The rule that solves ten screens" gloss="instead of decorating one">
+            I designed 50+ landing pages by hand before building{' '}
+            <Link to="/work/landing-pages/">the governed template system two junior designers use
+            now</Link>. The pages were the work; the system was the point.
+          </Term>
+          <Term word="Staying until it survives" gloss="past the point the screens look finished">
+            The one that changed most. Stopping at a polished file used to be allowed. Now an idea
+            isn&rsquo;t finished until{' '}
+            <Link to="/work/playdraft/">it runs on a phone</Link> and I&rsquo;ve watched it fail
+            against something real.
+          </Term>
+        </Split>
+
+        <h2>What the tools actually changed</h2>
+        <p>
+          Not the judgment. The distance between deciding something and finding out whether the
+          decision was any good. That gap used to be weeks and a handoff; now it is often an
+          afternoon. Which sounds purely good, and mostly is, except that a shorter loop punishes
+          a confident guess faster than it rewards one &mdash; something I&rsquo;ve now{' '}
+          <Link to="/notes/eight-wrong-first-drafts/">written down eight times over</Link>.
+        </p>
+        <p>
+          The honest part I keep circling: writing a throwaway simulation, a plugin, a governance
+          file is fast now, and that speed is the reason I test ideas instead of arguing about
+          them. What the tooling cannot do is distrust its own output. Deciding to go looking for
+          the number that could prove me wrong is still mine, and it is most of the job.
+        </p>
+
+        <h2>The cost nobody warns you about</h2>
+        <p>
+          This work is harder to show. A Figma file is a portfolio piece &mdash; you open it and
+          the craft is right there. A Markdown file that keeps a brand from drifting, an{' '}
+          <Link to="/work/design-enablement/">internal plugin that removes a repetitive step</Link>,
+          a test that catches a bug before a user does: all real, all close to invisible. Half of
+          my strongest work now lives inside systems I can describe but can&rsquo;t open, which is
+          why the independent products exist at all. That is a genuine trade, not a humblebrag.
+        </p>
+
+        <h2>Not a prescription</h2>
+        <p>
+          Watching someone who taught me one chapter of this career turn the same corner
+          independently was reassuring, and reassurance is all it was. It doesn&rsquo;t mean every
+          designer should follow the same path or chase every release. I&rsquo;ve{' '}
+          <Link to="/notes/where-is-my-role-moving/">asked in public where the role is going</Link>{' '}
+          for months without landing anywhere final, and I&rsquo;ve argued before that{' '}
+          <Link to="/notes/photoshop-taught-me-composition/">tools expire while the judgment
+          you built with them doesn&rsquo;t</Link>. This is the same argument, made specific: not
+          which tools to keep, but which four things you&rsquo;d want to still be doing if all of
+          them were gone by Monday.
+        </p>
+        <p>
+          I don&rsquo;t think my four are anyone else&rsquo;s four. I do think naming them is
+          worth an afternoon, because you can&rsquo;t protect a part of the craft you&rsquo;ve
+          never said out loud. So: which part of design would you keep doing even if the tools
+          changed completely?
+        </p>
+        <p className="notes__source">
+          <LinkedInLink label="This started as a post — the conversation is there" surface="note_source" />
+        </p>
+      </>
+    ),
+  },
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'eight-wrong-first-drafts',
