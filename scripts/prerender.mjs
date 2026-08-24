@@ -35,7 +35,14 @@ const EXTRA_ROUTES = ['/design-system', '/sitemap', ...new Set(HIDDEN_WORK_ROUTE
 // links to /work/bolus-binder/ from a public, indexed page, so a crawler
 // reaches it regardless of what the sitemap lists — the meta tag is what
 // actually carries the instruction.
-const NOINDEX_ROUTES = new Set(['/design-system', '/work/bolus-binder']);
+//
+// Derived from the same list that renders them, deliberately. When EXTRA_ROUTES
+// learned to derive hidden studies but this set stayed hand-listed, the two
+// drifted within one commit: `photography-workflow-agent` gained a prerendered
+// file and went straight into the sitemap with no robots tag, because nobody
+// added it here. A hidden study is now rendered and noindexed by the same
+// derivation, so the pair cannot fall out of step again.
+const NOINDEX_ROUTES = new Set(['/design-system', ...HIDDEN_WORK_ROUTES]);
 
 // Content routes seeded deterministically from the data files so the sitemap
 // never depends on link-discovery timing. The /notes children were occasionally
