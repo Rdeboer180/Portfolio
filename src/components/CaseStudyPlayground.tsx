@@ -213,6 +213,14 @@ const CARDS: PlaygroundCard[] = [
       { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 66, rot: 12, lift: 2, z: 2 },],
   },
   {
+    slug: 'overscroll-tactics',
+    coins: [{ icon: 'illustrator.svg', name: 'Illustrator', x: 7, rot: -9, lift: 0, z: 2 },
+      { icon: 'figma-dark.svg', name: 'Figma', x: 25, rot: 8, lift: 4, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -6, lift: 0, z: 1 },
+      { icon: 'claude.svg', name: 'Claude', x: 60, rot: 12, lift: 2, z: 2 },
+      { icon: 'github.svg', name: 'GitHub', x: 77, rot: -8, lift: 0, z: 1 },],
+  },
+  {
     slug: 'heatherwood',
     coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 9, rot: 10, lift: 0, z: 1 },
       { icon: 'illustrator.svg', name: 'Adobe Illustrator', x: 28, rot: -9, lift: 4, z: 3 },

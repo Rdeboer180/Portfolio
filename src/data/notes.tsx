@@ -144,6 +144,161 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
+    slug: 'eight-wrong-first-drafts',
+    read: '6 min',
+    kind: 'log',
+    date: 'August 2026',
+    dateISO: '2026-08-24',
+    title: 'Eight times my first idea was wrong. What changed was the cost of finding out.',
+    dek: 'Eight PlayDraft decisions where the obvious answer lost to a number — ordered by how late each one was caught, from a simulation that ran in minutes to a comment that had been lying for six days.',
+    artifact: {
+      label: 'Source notes — all eight, with the numbers',
+      href: '/artifacts/eight-wrong-first-drafts.html',
+    },
+    body: (
+      <>
+        <p>
+          I keep a running file of decisions that went the wrong way first. Not bugs exactly &mdash;
+          decisions: the moment where I had a clear, confident answer and something measurable
+          disagreed with it. Eight of them came out of <Link to="/work/playdraft">PlayDraft</Link> in
+          one stretch of build work. Six were caught before a player ever saw them. Two were not.
+        </p>
+        <p>
+          What interests me now isn&rsquo;t that the first idea was wrong &mdash; that&rsquo;s
+          ordinary. It&rsquo;s that the eight sort cleanly by <em>how</em> I found out, and that
+          ordering turns out to be a cost ladder. The cheapest catches took minutes. The most
+          expensive one had been sitting in the codebase for six days wearing a comment that said
+          it was fixed.
+        </p>
+
+        <h2>The one that rewarded exactly what it punished</h2>
+        <p>
+          The clearest example first, because it&rsquo;s the one where the gap between the idea and
+          the evidence was widest.
+        </p>
+        <Turn>
+          <TurnSide label="First idea" question="Reward the gem-finder">
+            Pay drafters for reaching &mdash; taking something later than the world takes it &mdash;
+            so that chalk never settles into the solved meta. Coherent, popular, and the kind of
+            rule you can explain in one sentence.
+          </TurnSide>
+          <TurnSide label="What 400 drafts said" question="It rewarded chalk 99–100% of the time" kept>
+            The precise inverse of its purpose. The obvious repair &mdash; normalising across the
+            whole pack &mdash; just moved the win to the last seat instead, at roughly 90&ndash;100%.
+            A seat lottery wearing a skill mechanic.
+          </TurnSide>
+        </Turn>
+        <p>
+          What shipped was honest chalk scoring with a comment saying so out loud. The real finding
+          wasn&rsquo;t that the formula was miscalibrated; it was that the thing I wanted to reward
+          isn&rsquo;t measurable yet. With a static popularity list and no outcome data,
+          &ldquo;did you find a gem&rdquo; has no evidence behind it &mdash; you cannot detect a gem
+          without proof that it was one. That&rsquo;s not a rejection. It&rsquo;s a feature waiting
+          on population data that&rsquo;s already being collected.
+        </p>
+
+        <h2>Four ways of finding out, cheapest first</h2>
+        <p>
+          Sorting the eight by their catch mechanism produced a ladder I didn&rsquo;t expect to be
+          so tidy. Each rung costs more than the one above it.
+        </p>
+        <Split sum="the later the catch, the more it costs">
+          <Term word="A simulation" gloss="minutes · nobody saw it">
+            Two scoring ideas died here. The reach bonus above, and a rule locking each round to one
+            category &mdash; which turned out to be safe in the deep packs where categories are
+            nearly free, and broken in the shallow ones where it would actually have mattered. The
+            smallest fast-food category is 14 items, about seven on a live board; at eight seats it
+            is exhausted before the round completes.
+          </Term>
+          <Term word="A measurement" gloss="minutes · once I stopped guessing">
+            I was certain untracked media was bloating a 650 MB build. I inspected the archive
+            instead of reasoning about it: the ignore file was excluding all of that correctly, and
+            624 MB of the 650 was <code>.git</code>, re-added by the build tool after the patterns
+            were applied. 650 MB to 25 MB, verified by diffing both archives file by file. A
+            diversity bonus died the same way &mdash; every major category in movies and music tops
+            out at 98&ndash;100, so a five-pick roster spanning five categories costs about two
+            points against pure chalk. Players were already drafting diverse rosters by accident.
+            The lever was never variety. It was scarcity.
+          </Term>
+          <Term word="A real session" gloss="after it shipped">
+            Two bugs survived mockups, fixtures, review and a full test suite, then died within
+            minutes of a real board. One race bar announced &ldquo;kev is close behind &middot; 0
+            picks&rdquo; on the opening pick &mdash; true by subtraction, nonsense as a sentence, and
+            shown at the one moment nobody is chasing anyone. A fixture never contains a drafter
+            with zero picks, and never contains someone losing.
+          </Term>
+          <Term word="A comment" gloss="six days, or never">
+            The expensive rung. A celebration layout marked centred, commented, and marked fixed six
+            days earlier still wasn&rsquo;t centred: the container said{' '}
+            <code>justify-content: center</code> while its last child said{' '}
+            <code>margin-top: auto</code>, and an auto margin eats the free space before
+            justify-content ever sees it. The prose asserted something the code contradicted, and
+            everyone downstream believed the prose.
+          </Term>
+        </Split>
+
+        <Callout marker="The point">
+          The first idea is a hypothesis. Testing it almost always costs less than shipping it.
+        </Callout>
+
+        <h2>The two that got out</h2>
+        <p>
+          Six of the eight never reached a player. The two that did are the ones worth writing down.
+        </p>
+        <p>
+          A push notification told competitive players they had two minutes to pick. The competitive
+          clock is 30 seconds. The number almost certainly came from a nearby constant &mdash; clock
+          plus sweeper lag &mdash; but that lag is what an <em>abandoned</em> pick costs everyone
+          else, not time the player ever had. On the one mode whose own code comment calls the alert
+          &ldquo;the product,&rdquo; the notification was walking people into missed turns while
+          telling them they had four times the time they did. It surfaced only because someone
+          specifying an unrelated feature said &ldquo;since it&rsquo;s 30 second clocks&rdquo; and
+          the number didn&rsquo;t match.
+        </p>
+        <p>
+          The other was quieter and worse. Turn alerts were sent by the client that had just picked
+          &mdash; simple, no server work, and correct right up until nobody picked. The timeout
+          sweeper has no client, so a missed clock meant the next player was never told they were
+          on it, and that cascades: one player times out, the next is never alerted, the next times
+          out. A room can auto-draft itself to completion in total silence. The competitive mode had
+          already fixed this exact failure and left a comment describing it word for word. Nobody
+          noticed it applied to casual too.
+        </p>
+
+        <h2>What I actually changed</h2>
+        <p>
+          Not the ideas &mdash; the order of operations. Simulate before shipping, measure before
+          diagnosing, and treat a confident explanation as the thing most in need of a number. Four
+          of these eight were killed by a query or a loop that took minutes to write, and in every
+          one of those four the confident explanation and the true one were different.
+        </p>
+        <p>
+          The tooling half of that is worth naming honestly: writing a simulation harness or a
+          throwaway query is fast now, and that speed is the reason eight of these got tested at all
+          rather than argued about. What the tooling cannot do is distrust its own output. Every one
+          of these was caught because someone went looking for a number capable of contradicting a
+          belief, and deciding to go looking is still the job.
+        </p>
+        <p>
+          There&rsquo;s a habit underneath the other three. Comments rot into lies, and the two
+          worst-aged defects here were both places where prose asserted something the code did not
+          do. So I write down <em>why</em> now, not <em>what</em>. A &ldquo;what&rdquo; comment
+          agrees with you forever. A &ldquo;why&rdquo; is checkable, and a checkable claim is the
+          only kind that can be caught being wrong.
+        </p>
+        <p>
+          The part I&rsquo;m least sure about: one bonus mechanic was finished, verified, and proven
+          to do exactly what it was designed to do &mdash; on its verification run it flipped second
+          and third, which was the intent. I shelved it anyway, because I couldn&rsquo;t explain the
+          result to the player who lost. A surprise you can&rsquo;t explain afterwards is
+          indistinguishable from a bug. I still don&rsquo;t know whether that was good judgment or
+          just nerves.
+        </p>
+      </>
+    ),
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  {
     slug: 'overscroll-tactics',
     read: '6 min',
     kind: 'log',
@@ -305,9 +460,12 @@ excluded    Angle brackets, pixel grids, terminal type,
             anything that reads "developer logo."`}</code>
         </pre>
         <p>
-          The marks aren&rsquo;t public yet; they&rsquo;re still one-color tests on a black
-          artboard. The deliverable was never a logo. A parent with too much character turns every
-          product underneath it into a variant of itself, which is{' '}
+          The marks were one-color tests on a black artboard when I wrote this. They have since
+          resolved and shipped &mdash; the emblem is now{' '}
+          <Link to="/work/overscroll-tactics/">die-cut out of a played board in the studio ident</Link>,
+          on the site and on every cold launch of PlayDraft. The deliverable was still never a
+          logo. A parent with too much character turns every product underneath it into a variant
+          of itself, which is{' '}
           <Link to="/work/wheelrack/">partner theming in a token architecture</Link> at a much
           smaller scale.
         </p>
@@ -343,9 +501,9 @@ excluded    Angle brackets, pixel grids, terminal type,
           layer: systems work and architecture decisions in public, nothing redacted.
         </p>
         <p>
-          The mark isn&rsquo;t final and the sub-brand rules haven&rsquo;t been tested against a
-          second product. I spent six weeks trying to name what I build. The answer was to name how
-          I work, and it had been sitting in a branch I&rsquo;d already thrown away.
+          The mark has resolved since; the sub-brand rules still haven&rsquo;t been tested against
+          a second product. I spent six weeks trying to name what I build. The answer was to name
+          how I work, and it had been sitting in a branch I&rsquo;d already thrown away.
         </p>
       </>
     ),
@@ -414,9 +572,10 @@ excluded    Angle brackets, pixel grids, terminal type,
       <>
         <p>
           When someone asks how I work, this site is the thing I point at. Not the case studies
-          on it. The site itself. It went through the same loop I use on product work: start from
-          a reference, build tokens before components, add motion only when it carries meaning,
-          and keep AI out of the final call.
+          on it. The site itself. It went through{' '}
+          <Link to="/work/wheelrack/">the same loop I use on product work</Link>: start from a
+          reference, build tokens before components, add motion only when it carries meaning, and
+          keep AI out of the final call.
         </p>
         <h2>One vocabulary, written down</h2>
         <p>
@@ -643,8 +802,9 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
           Looking back at sixteen years of visual design, front-end code, design systems, and now
           AI-assisted product work, the constant was never a tool or even a discipline. It was
           refusing to hand off something I didn&rsquo;t understand. Learning the CMS well enough
-          to author in it. Learning Sass well enough to ship it. Learning the token pipeline well
-          enough to argue with it.
+          to <Link to="/work/seasonal-content-system/">author a seasonal storefront in it</Link>.
+          Learning Sass well enough to ship it. Learning the token pipeline well enough to{' '}
+          <Link to="/work/wheelrack/">argue with it across a design system</Link>.
         </p>
         <p>
           That instinct is why this moment reads as an opening to me rather than a threat. The
@@ -867,8 +1027,10 @@ description: Conservative product-risk framework for DraftPacks
       <>
         <p>
           Photoshop taught me composition. Illustrator taught me construction, which is really
-          the discipline of making a mark hold up at 4000% and at favicon size. Print taught me
-          that you get one shot, so the details had better be right before it goes to press.
+          the discipline of{' '}
+          <Link to="/work/overscroll-tactics/">making a mark hold up at 4000% and at favicon size</Link>.
+          Print taught me that you get one shot, so the details had better be right before it goes
+          to press.
         </p>
         <p>
           None of those tools are where I spend my days now. All of those lessons are.

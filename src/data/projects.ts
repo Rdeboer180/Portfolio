@@ -1580,6 +1580,134 @@ export const packs = {
   },
 
   // =============================================
+  // Overscroll Tactics — studio identity + the ident that boots PlayDraft  [passion]
+  // Ryan's own LLC and studio brand, so nothing here is client-confidential.
+  // The mark's construction is the subject: it is public artwork on a public
+  // site, and the drawings below are the shipped geometry, not a preview.
+  // =============================================
+  {
+    slug: 'overscroll-tactics',
+    client: 'Overscroll Tactics (self-initiated)',
+    title: 'Overscroll Tactics: A Studio Mark Die-Cut From a Game That Just Finished',
+    cardTitle: 'Overscroll Tactics: A Studio Identity',
+    seoTitle: 'Overscroll Tactics studio identity — brand mark, motion ident, and two runtimes from one geometry',
+    summary:
+      'The studio identity behind PlayDraft. Overscroll Tactics is the practice; OTC Games is the studio it ships games under, and this is its mark: one geometry, and an ident that plays a four-piece falling-block game before die-cutting the logo out of the finished stack. Shipped twice — CSS keyframes on the web, Reanimated and SVG inside the app.',
+    cardHook:
+      'PlayDraft shipped with no studio behind it. Overscroll Tactics is the parent — one mark that survives a favicon and a cold boot, built once and ported to two runtimes.',
+    thesis: 'The mark isn’t drawn on screen. It’s cut out of a game that just finished playing.',
+    year: '2026',
+    tags: ['Brand System', 'Motion Design', 'Design System', 'Front-End (React Native)', 'SVG', 'Accessibility'],
+    role: 'Brand & Identity · Motion Design · Front-End (Web + React Native) · Design System Documentation',
+    tools: ['Illustrator', 'Figma', 'Claude Code', 'VS Code', 'React Native', 'Reanimated', 'CSS'],
+    timeline: 'August 2026 · shipped',
+    stream: 'passion',
+    featured: '/images/work/overscroll-tactics/lockup-resolved.png',
+    // Deliberately not `featuredVideoPrimary`. A primary loop autoplays forever,
+    // which would leave the card resting on a half-resolved frame and put the
+    // ident on repeat — the one thing its own spec forbids. On hover instead,
+    // the card rests on the finished mark and the ident plays when someone
+    // engages it, which is the cold-boot gesture it was designed for.
+    featuredVideo: '/images/work/overscroll-tactics/cover-loop.mp4',
+    timeToLive: 'Mark to shipped ident in about three weeks, across a static site and a React Native app.',
+    metrics: [
+      { value: '2 runtimes', label: 'One geometry: CSS keyframes on web, Reanimated + SVG in the app' },
+      { value: '~2.2s', label: 'Ident runtime — plays once per cold launch, never loops' },
+      { value: '4 pieces', label: 'Tetrominoes filling a 4×4 board, every path collision-legal' },
+      { value: '1 path', label: 'The resolved mark hands off to a single canonical path, no seams' },
+    ],
+
+    problemPunch: 'PlayDraft had a brand. The studio shipping it didn’t exist.',
+    problem: [
+      'PlayDraft reached TestFlight as a product with its own identity and no parent behind it. Naming the practice was its own six-week problem; what followed was the harder half. Overscroll Tactics ships games as OTC Games, and that studio needed a mark with a tougher brief than the app’s.',
+      'A studio mark has to work at both ends of the scale at once: legible as a 16px favicon, and worth watching as the first thing a player sees on a cold launch. Those usually get solved as two separate pieces of artwork that drift apart.',
+    ],
+
+    gapsPunch: 'The first ident was motion graphics wearing a game costume.',
+    gaps: [
+      'The first version stacked blocks upward until they assembled the mark. It read well and it was wrong: the blocks obeyed no rules, so the assembly was arbitrary — decoration that happened to be block-shaped.',
+      'If a studio makes games, the ident should be one. Not a reference to a game; an actual played board, with legal moves, that resolves into the mark.',
+    ],
+
+    constraintsPunch: 'Under two seconds, once per launch, no strobe, two runtimes, one geometry.',
+    constraints: [
+      'A studio ident is a cold-boot moment. Play it on a recurring loading state and it burns out — so the app gates it to once per launch, not once per mount.',
+      'An early version pulsed twice at the clear. Repeated flashing above three per second is a seizure risk (WCAG 2.3.1), so it became a single pulse and then a cutter pass instead.',
+      'Compositor-safe properties only, and the finished box is reserved before the ident mounts so nothing reflows behind it.',
+      'The assembly is falling-block inspired and stays that way: no borrowed branding, signature colours, or game UI.',
+    ],
+
+    approachSubsections: [
+      {
+        key: 'mark',
+        label: 'One geometry, written down as rules',
+        systemMarker: 'BRAND SYSTEM',
+        description:
+          'A compact silhouette: a rounded arch, a knocked-out wheel slot, and exactly three descending steps along the bottom. The rules that keep it intact are written as non-negotiables — the wheel is a knockout that shows the ground behind it, never a painted fill; the mark at rest is flat ink; and orange is reserved for motion, focus and interaction, never for the resting mark.',
+        images: [
+          {
+            src: '/images/work/overscroll-tactics/lockup-resolved.png',
+            alt: 'The resolved OTC Games lockup: a compact arched mark with a knocked-out wheel slot and three descending steps, beside custom OTC GAMES lettering.',
+            layout: 'full',
+            caption: 'The finished lockup. The lettering is custom artwork, not a typeface — the UI face is Montserrat and never sets the logotype.',
+          },
+        ],
+      },
+      {
+        key: 'game',
+        label: 'The ident plays an actual game',
+        systemMarker: 'MOTION',
+        description:
+          'Four tetromino shapes — I, O, J and L — fill a 4×4 board laid over the mark’s own footprint. Pieces enter from the top edge, move in whole-cell steps, and every path is collision-legal against the stack already there: the I hard-drops as the floor, the O falls the right lane and steers left onto it, the J caps the O, and the L completes the board. The quantised step is the whole idea — a smooth glide would read as motion graphics again.',
+        gridColumns: 2,
+        images: [
+          {
+            src: '/images/work/overscroll-tactics/board-complete.png',
+            alt: 'Four tetromino pieces filling a four-by-four board exactly, with white seams showing the boundary between each piece.',
+            layout: 'half',
+            caption: 'The board at lock: four pieces, no gaps. The seams are where the die-cut will ignore them.',
+          },
+          {
+            src: '/images/work/overscroll-tactics/cut-pass.png',
+            alt: 'A dark blade sweeping across the stack, revealing the studio mark behind it while the block stack remains ahead of it.',
+            layout: 'half',
+            caption: 'The cutter pass: one clip reveals the mark behind the blade, another hides the stack ahead of it.',
+          },
+        ],
+      },
+      {
+        key: 'cut',
+        label: 'The logo is the waste product',
+        systemMarker: 'THE PAYOFF',
+        description:
+          'Rather than flashing the mark into existence, a blade sweeps the finished board and die-cuts the mark out of it. The offcuts are real: each scrap is a plain rectangle trimmed by a mask of everything inside the board that is not the mark, so the waste matches the cut exactly without a single hand-drawn complement. Freed pieces fall behind the sheet. The same accent bar that does the cutting then types the wordmark on, one glyph per step, the way a high-score line resolves.',
+      },
+      {
+        key: 'ports',
+        label: 'Two runtimes, one source of truth',
+        systemMarker: 'IMPLEMENTATION',
+        description:
+          'The web port is CSS keyframes over inline SVG with no library. The app port is Reanimated and react-native-svg, and it cost three lessons: animated props bypass react-native-svg’s prop parsing, so an animated transform or points string silently fails to render — every moving shape is a rect driven by y instead. Nothing animates a group, so the wordmark rides a plain Animated.View outside the SVG. And every property derives from one linear clock, which makes reduced motion a single assignment to the end state rather than a second timeline to maintain.',
+      },
+    ],
+
+    outcomeNote:
+      'Live at overscrolltactics.com, and shipping inside PlayDraft on every cold launch. The gate mounts the app tree behind the ident rather than after it, so the animation covers warm-up work instead of adding to it — by the time the mark clears, the first screen is already there. Under reduced motion both ports render the finished mark immediately, with no moving parts at all.',
+    outcomeImages: [
+      {
+        src: '/images/work/overscroll-tactics/site-home.png',
+        alt: 'The OTC Games homepage: the resolved lockup centred on paper with navigation and a line introducing the studio behind PlayDraft.',
+        layout: 'full',
+        caption: 'overscrolltactics.com — the ident runs once on load, then rests as the static lockup.',
+      },
+    ],
+    outcomeLiveLinks: [
+      { label: 'overscrolltactics.com', url: 'https://overscrolltactics.com/' },
+    ],
+    outcomeLiveLinksLabel: 'The studio site is live',
+  },
+
+  // =============================================
   // Bolus Binder — diabetes-aware recipe keeper + T1D Hub identity  [passion]
   // Hidden (direct-link only): the app is an early TestFlight build and the
   // T1D Hub engagement is still running, so this stays off the homepage

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eight Wrong First Drafts</title>
+<meta name="description" content="Source notes for a post on product evolution — eight times the first idea lost to the data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+
+<!-- Deliberately single-theme. This is source material about a dark mobile
+     product, written in that product's own palette and its own two faces, so
+     the document and the thing it describes agree. Every colour is painted
+     explicitly so it holds on either host ground. -->
+<style>
+  :root {
+    --ink:      #0b1322;
+    --canvas:   #0d1626;
+    --surface:  #16223a;
+    --line:     rgba(160, 179, 202, 0.14);
+    --line-str: rgba(160, 179, 202, 0.30);
+    --text:     #e8ecf2;
+    --muted:    #7a96b6;
+    --dim:      #5f7f9f;
+    --gold:     #f0c853;
+    --red:      #f87171;
+    --green:    #4ade80;
+    --measure:  64ch;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 5rem) clamp(1.25rem, 4vw, 2.5rem) 6rem;
+  }
+
+  .eyebrow {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin: 0.4rem 0 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    max-width: var(--measure);
+    color: var(--muted);
+    font-size: 1.0625rem;
+    margin: 1.25rem 0 0;
+  }
+  .standfirst em { color: var(--text); font-style: normal; font-weight: 600; }
+
+  hr.rule {
+    height: 1px; border: 0; background: var(--line);
+    margin: clamp(2.5rem, 6vw, 3.5rem) 0;
+  }
+
+  h2.sect {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    margin: 0 0 0.35rem;
+  }
+  .sect-note { color: var(--muted); margin: 0 0 1.75rem; max-width: var(--measure); }
+
+  /* Eight entries, and the number is load-bearing — this is a counted list,
+     and each entry's three-part split IS the argument. */
+  .entry {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1.25rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .num {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--gold);
+    font-variant-numeric: tabular-nums;
+    min-width: 2ch;
+  }
+  .entry h3 {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 700;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    margin: 0 0 0.85rem;
+    text-wrap: balance;
+  }
+  .beats { grid-column: 2; display: grid; gap: 0.7rem; max-width: var(--measure); }
+  .beat { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.9rem; align-items: baseline; }
+  @media (max-width: 620px) {
+    .beat { grid-template-columns: 1fr; gap: 0.15rem; }
+    .entry { grid-template-columns: 1fr; }
+    .beats { grid-column: 1; }
+    .num { font-size: 1.125rem; margin-bottom: 0.25rem; }
+  }
+  .lbl {
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .lbl.first { color: var(--red); }
+  .lbl.data  { color: var(--gold); }
+  .lbl.ship  { color: var(--green); }
+  .beat p { margin: 0; color: var(--muted); }
+  .beat p b { color: var(--text); font-weight: 600; }
+
+  .pull {
+    border-left: 2px solid var(--gold);
+    padding: 0.15rem 0 0.15rem 1.1rem;
+    margin: 1.75rem 0;
+    max-width: var(--measure);
+  }
+  .pull p {
+    margin: 0;
+    font-family: Rajdhani, Inter, sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.35;
+    color: var(--text);
+  }
+
+  .takeaways { display: grid; gap: 1rem; max-width: var(--measure); margin: 0; padding: 0; list-style: none; }
+  .takeaways li {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem 1.15rem;
+    color: var(--muted);
+  }
+  .takeaways b { color: var(--text); font-weight: 600; display: block; margin-bottom: 0.2rem;
+    font-family: Rajdhani, Inter, sans-serif; font-size: 1.0625rem; }
+
+  footer {
+    margin-top: clamp(3rem, 8vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 0.875rem;
+    max-width: var(--measure);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">PlayDraft · source notes</p>
+    <h1>Eight Wrong First Drafts</h1>
+    <p class="standfirst">
+      Raw material for a post about product evolution. Eight times the first
+      idea was the obvious one, and eight times something measurable said
+      otherwise — <em>with the numbers that said it</em>. Most of these were
+      caught before users saw them. Two were not.
+    </p>
+  </header>
+
+  <div class="pull">
+    <p>The first idea is a hypothesis. The cost of testing it is almost always
+    lower than the cost of shipping it.</p>
+  </div>
+
+  <hr class="rule">
+
+  <h2 class="sect">Caught by simulation</h2>
+  <p class="sect-note">Ideas that were coherent, popular, and provably backwards.</p>
+
+  <div class="entry">
+    <div class="num">01</div>
+    <div>
+      <h3>The scoring rule that rewarded exactly what it punished</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Pay drafters for <b>reaching</b> — taking something later than the world takes it. Reward the gem-finder, so chalk never becomes the solved meta.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>400 simulated drafts per cell. It rewarded <b>chalk 99–100% of the time</b> — the precise inverse of its purpose. The obvious fix, normalising across the whole pack, just moved the win to the last seat instead (~90–100%). A seat lottery wearing a skill mechanic.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>Honest chalk scoring, and a comment saying so out loud. With a static popularity list and no outcome data, <b>"did you find a gem" is not measurable</b> — you cannot detect a gem without evidence that it was one.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="num">02</div>
+    <div>
+      <h3>Locking each round to one category</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Randomise a category per round; only that category is draftable. Categories become maximally relevant, diversity is structural, no scoring change needed.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>Every board is <b>half the pack</b>. The smallest fast-food category is 14 items — about <b>7 on a live board</b>, against one pick per seat. At six seats the last picker chooses from one card; at eight the category is exhausted before the round completes. And the inversion: it is safe in the deep packs where categories are already nearly free, and breaks in the shallow packs where they would actually matter.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>Nothing yet — narrowed to <b>one</b> locked round with a depth guard, plus a softer bonus variant. The reel animation that made the idea appealing was built anyway; it works for either mechanic.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2 class="sect">Caught by measuring instead of reasoning</h2>
+  <p class="sect-note">Where the confident diagnosis and the true one were different things.</p>
+
+  <div class="entry">
+    <div class="num">03</div>
+    <div>
+      <h3>The 650 MB build upload</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Untracked media directories — screenshots, demo reels, design references — are bloating every build. Add them to the ignore file.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>Inspected the actual archive instead of guessing. The ignore file was excluding all of that <b>correctly</b>. <b>624 MB of the 650 MB was <code>.git</code></b> — the one rule in the file that does nothing, because the build tool re-adds the directory after applying the patterns.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p><b>650 MB → 25 MB.</b> Verified by diffing both archives file-by-file: identical apart from <code>.git</code>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="num">04</div>
+    <div>
+      <h3>"Rewarding diversity" would have changed nothing</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Give a bonus per distinct category on a roster, so players spread out instead of stacking.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>Pulled the top value in every category. In movies and music <b>every major category tops out at 98–100</b>. A five-pick roster spanning five categories costs about <b>two points</b> versus pure chalk. Players were already drafting diverse rosters by accident.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>Dropped. The lever was never variety — it was <b>scarcity</b>. Which pointed at a mechanic already built and shelved.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2 class="sect">Caught by using it live</h2>
+  <p class="sect-note">Two bugs that survived mockups, fixtures, and a full test suite, then died in minutes against a real board.</p>
+
+  <div class="entry">
+    <div class="num">05</div>
+    <div>
+      <h3>"kev is close behind · 0 picks"</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>A live race bar: name the leader, show the gap. Looked right in every mockup and every test fixture.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>On the first pick of a real draft it read <b>"kev is close behind · 0 picks."</b> True by subtraction — 50 minus 0 is inside the threshold — and nonsense as a sentence, shown at the one moment nobody is chasing anybody. A second bug in the same session: a green ↑ rendering inside a red border, because the mover's outline borrowed the bar's tone. Two signals describing different people.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>A chaser now has to actually be on the board; the mover's colour follows the <b>direction of the move</b>, not the reader's own standing.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="num">06</div>
+    <div>
+      <h3>The silent room</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>The client that just picked sends the "you're on the clock" push to the next player. Simple, no server work.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>It only works when a live client made the pick. The <b>timeout sweeper has no client</b> — so when a casual player missed their clock, the next player was never told they were on it. That cascades: A times out, B is never alerted, B times out. A room can auto-draft itself to completion in total silence. The competitive mode had already fixed exactly this and left a comment describing the bug word for word. Nobody noticed it applied to casual too.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>Casual announces its own turns from the database, same as competitive.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2 class="sect">Caught by reading the code against its own comments</h2>
+  <p class="sect-note">The most expensive category — where a comment or a constant asserted something the code did not do, and everyone believed the comment.</p>
+
+  <div class="entry">
+    <div class="num">07</div>
+    <div>
+      <h3>A centred layout that was never centred</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Centre the achievement celebration as one composition, and pin the button to the bottom. Written, commented, and marked fixed — six days earlier, in response to the same complaint.</p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>The container said <code>justify-content: center</code>. Its last child said <code>margin-top: auto</code>. <b>An auto margin consumes the free space before justify-content ever sees it</b> — so the centring was a silent no-op, and the gap the comment was written to close simply reopened somewhere else. The comment described an intent the code contradicted, and nothing caught it.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>The composition got its own box, so there is real free space to centre inside. The note now records <b>why the box exists</b>, not just what it is meant to look like.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="num">08</div>
+    <div>
+      <h3>An alert that was wrong by 4×</h3>
+      <div class="beats">
+        <div class="beat"><span class="lbl first">First idea</span><p>Tell competitive players how long they have when their turn starts. The push said <b>"2 minutes to pick."</b></p></div>
+        <div class="beat"><span class="lbl data">The data</span><p>The competitive clock is <b>30 seconds</b>. The two minutes almost certainly came from a nearby constant — clock plus sweeper lag — but that lag is what an <em>abandoned</em> pick costs everyone else, not time the player ever had. Surfaced only because someone specifying an unrelated feature said "since it's 30 sec clocks" and the number did not match.</p></div>
+        <div class="beat"><span class="lbl ship">Shipped</span><p>"30 seconds to pick." On the one mode whose own code comment calls the alert <em>the product</em>, a player told they had four times the time they actually had was being walked into a missed turn <b>by the notification</b>.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <h2 class="sect">What it adds up to</h2>
+
+  <ul class="takeaways">
+    <li><b>A mechanic can be finished and still not be ready.</b> One bonus system was built, verified, and proven to work — on its verification run it flipped 2nd and 3rd, which was exactly the intent. It was shelved anyway, because there was no way to explain the result to the player who lost. A surprise you cannot explain afterwards is indistinguishable from a bug.</li>
+    <li><b>Simulate before you ship, measure before you diagnose.</b> Four of these eight were killed by a query or a simulation that took minutes. The confident explanation and the true one were different every time.</li>
+    <li><b>Fixtures agree with you. Real data does not.</b> Two bugs survived mockups, tests and review, then died within minutes of a real board — because a fixture never has a drafter with zero picks, and never has someone losing.</li>
+    <li><b>Comments rot into lies.</b> The two worst-aged defects were both places where prose asserted something the code did not do, and everyone downstream trusted the prose. Write down <em>why</em>, not just <em>what</em> — a why is checkable.</li>
+    <li><b>Not-yet is a real answer.</b> "Reward the hidden gem" was not rejected, it was deferred to a specific unlock: it needs population data that is already being collected. Knowing the trigger is different from saying no.</li>
+  </ul>
+
+  <footer>
+    Source notes, not a draft post — angles and numbers to pull from. Every
+    figure here is from the shipped codebase or a live production query.
+  </footer>
+</div>
+</body>
+</html>
