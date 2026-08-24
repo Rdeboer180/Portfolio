@@ -145,6 +145,120 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
+    slug: 'nobody-clapped',
+    read: '5 min',
+    kind: 'essay',
+    date: 'August 2026',
+    dateISO: '2026-08-24',
+    title: 'Build the thing you would still care about if nobody clapped',
+    dek: 'Four months inside PlayDraft: what happens when you build from an actual obsession instead of for an audience, and what it costs when the system you wanted turns out not to be measurable yet.',
+    body: (
+      <>
+        <p>
+          I love fantasy football. Not the games so much as everything around them: rankings, ADP
+          movement, roster construction, the group chat arguing about a late round pick, and the
+          specific feeling of having seen value before the rest of the room did.
+        </p>
+        <p>
+          For about four months I have been trying to find out whether that feeling can exist
+          outside of football. Could drafting be a social game about anything? Could friends draft
+          pizza toppings, movie characters, snacks or superpowers and still get the ownership, the
+          debate, the sense that their taste was on the line? Could it stay casual enough to play
+          on a couch while the systems underneath actually held up?
+        </p>
+        <p>
+          That became <Link to="/work/playdraft/">PlayDraft</Link>. At its simplest it may end up
+          being a small game I play with my friends. As a design project it has turned into the
+          most complete thing I have made: product strategy, visual design, systems, front end
+          logic, game mechanics, scoring models, AI assisted iteration, and a long run of moments
+          where my first idea lost to evidence.
+        </p>
+
+        <h2>The rabbit hole was the math</h2>
+        <p>
+          The clearest of those was a scoring rule I wanted badly. It was built to reward the gem
+          finder, the player who reaches before consensus catches up, and it was exactly the kind
+          of mechanic I thought the game should have. Then I ran 400 simulated drafts against it.
+          It rewarded the safe pick 99 to 100 percent of the time, which is the precise inverse of
+          its purpose. The obvious repair traded one problem for another: it handed the win to
+          whoever drafted last, so a skill mechanic had quietly become a seat lottery.
+        </p>
+        <p>
+          The lesson was not that my formula was miscalibrated. It was that the thing I wanted to
+          reward is not measurable yet. With a static popularity list and no outcome data, &ldquo;did
+          you find a gem&rdquo; has no evidence behind it, and you cannot detect a gem without
+          proof that it was one. So I did not kill the idea. I deferred it to the unlock it
+          actually needs, which is population data I am already collecting. That was one of{' '}
+          <Link to="/notes/eight-wrong-first-drafts/">eight decisions I wrote up where the first
+          idea lost to a number</Link>, sorted by how late each one surfaced.
+        </p>
+        <Callout marker="The rhythm">
+          Build the thing I want to be true. Test whether the product can actually support it.
+          Decide whether to ship it, simplify it, or shelve it until the system is ready.
+        </Callout>
+
+        <h2>The craft moved under the frame</h2>
+        <p>
+          The game is not the only place this happens. Over the same stretch of months I was cutting a studio mark
+          out of a finished board of falling blocks for{' '}
+          <Link to="/work/overscroll-tactics/">Overscroll Tactics</Link>, and the interesting
+          questions there were underneath the frame too: whether the pieces obeyed real rules
+          rather than decorative ones, whether the offcuts matched the cut exactly, whether the
+          whole thing survived being ported to a second runtime without the geometry drifting.
+        </p>
+        <p>
+          Design craft used to stop at the polished frame. Most of mine now lives below it, in the
+          prompt, the component, the rule, the query, the simulation, the edge case, the code
+          comment that turns out to be lying, and the thing I almost shipped before a number proved
+          me wrong. That is the work I want more of: the overlap between product design, systems
+          thinking, front end execution, and AI assisted workflows.
+        </p>
+
+        <h2>The part that has been harder than I expected</h2>
+        <p>
+          The hard part has not been the math. It is explainability. The interface has to feel fun, the scoring has to feel
+          fair, the packs have to stay replayable, the room flow has to be obvious, and the winner
+          has to feel earned. All of that is achievable. The one I keep failing is the last one:
+          when the system makes a call, the player has to understand why.
+        </p>
+        <p>
+          I shelved a finished bonus mechanic over exactly that. On its verification run it flipped
+          second and third, which was the intent, and the test passed. I could not explain the
+          result to the player who lost. A surprise you cannot explain afterwards is
+          indistinguishable from a bug, so it went on the shelf. I still do not know whether that
+          was judgment or nerves.
+        </p>
+
+        <h2>Why I keep going</h2>
+        <p>
+          None of this is finished and it is not a case study wrapped in a bow. It is a real
+          artifact of someone trying to move from taste to system, system to prototype, prototype
+          to evidence, and evidence back into better product judgment. I have written elsewhere
+          about <Link to="/notes/what-id-keep/">which parts of the craft I would keep if every tool
+          changed tomorrow</Link>. This is the other half of that answer: what I would build if
+          nobody were watching.
+        </p>
+        <p>
+          There is something worth defending in building from a genuine obsession rather than
+          chasing a trend, polishing a fake app for a portfolio, or performing craft from a safe
+          distance. The thing you would still care about if nobody clapped is also the thing that
+          teaches you, because you want it to be better and you will argue with your own
+          assumptions until it gets more honest.
+        </p>
+        <p>
+          PlayDraft might stay a game I play with my friends. It might become the clearest signal
+          in my portfolio of how I think across design, systems, code and iteration. Either way I
+          would still be working on it, which is the only test I trust now: what would I build if I
+          knew I was going to love it, even if no one else did?
+        </p>
+        <p className="notes__source">
+          <LinkedInLink label="A shorter version of this started as a post" surface="note_source" />
+        </p>
+      </>
+    ),
+  },
+  // ──────────────────────────────────────────────────────────────────────────
+  {
     slug: 'what-id-keep',
     read: '5 min',
     kind: 'essay',
