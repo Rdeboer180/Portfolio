@@ -16,12 +16,12 @@ const ProcessPrinciples: React.FC = () => {
         {/* Section header */}
         <div className="process-principles__section-label">[ Process ]</div>
         <h2 id="process-heading" className="process-principles__section-title">
-          My Process
+          How I work
         </h2>
-        <p className="process-principles__subtitle">Ever Evolving</p>
+        <p className="process-principles__subtitle">A working loop</p>
         <p className="process-principles__core-line">
-          I start by defining the problem and aligning early, design with intent, ship
-          confidently, and refine through reflection to make the next iteration better.
+          Find the decision, make it legible, stay with the build, and let the shipped result
+          correct the next version.
         </p>
       </div>
 
@@ -57,9 +57,8 @@ const ProcessPrinciples: React.FC = () => {
       <div className="process-principles__inner">
         {/* Closing statement */}
         <p className="process-principles__closing">
-          The tools will keep changing. The expectations will keep rising. My process is built
-          to keep evolving with them — without losing the fundamentals that got me here. In the
-          end, the job is simple to say and hard to do:{' '}
+          The tools will keep changing, so I do not build the process around a tool. I build it
+          around a harder standard:{' '}
           <span className="process-principles__closing-emphasis">care for what ships</span>.
         </p>
       </div>

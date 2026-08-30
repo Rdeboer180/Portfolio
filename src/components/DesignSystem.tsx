@@ -729,8 +729,8 @@ const DesignSystem: React.FC = () => {
         <Link to={getHomeHref()} className="ds__back">&larr; Back to Portfolio</Link>
         <h1 className="ds__title">Design System</h1>
         <p className="ds__subtitle">
-          Living reference of design tokens, typography, and component patterns.
-          Sourced from the Figma design system file.
+          Every token, type role, and component pattern this site currently ships. Figma is the
+          source; this page is the check.
         </p>
         <p className="ds__subtitle">
           Documented for people and agents in two files at the repo root.{' '}

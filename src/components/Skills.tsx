@@ -47,10 +47,13 @@ const Skills: React.FC = () => {
           <SectionBadge icon={<LayersIcon />} label="Strengths" index="03" />
           <h2 className="skills__title">What I bring beyond the tools</h2>
           <p className="skills__subtitle">
-            <span className="about__highlight">AI is changing how quickly ideas can be explored and shipped—but without strategy behind the work and the prompt, the product won’t stand out.</span> The real separation comes from designers who can think beyond the output—who know how to guide the tools, pressure test what they produce, and push the work further than expected.
+            <span className="about__highlight">Faster output makes judgment easier to see.</span>{' '}
+            I set the constraints, test what the tools produce, and stay with the work until it
+            survives the product, the codebase, and the people using it.
           </p>
           <p className="skills__intro">
-            That mindset shows up in how I approach the work day to day—across systems, collaboration, and execution.
+            These are the parts of the job I rely on when the brief is still loose and the first
+            answer is not good enough.
           </p>
         </div>
 

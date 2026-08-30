@@ -68,7 +68,7 @@ function HomeRoute() {
     description:
       'Ryan DeBoer | Product Design Engineer · Systems · Front-End. Design engineer bridging UX, systems thinking, and real-world shipping. 16+ years in design systems, ecommerce, and high-impact product work.',
     canonical: `${SITE.portfolioUrl}/`,
-    ogDescription: 'Product Design Engineer. I bridge the gap between ambitious UX and buildable systems.',
+    ogDescription: 'Product Design Engineer building design systems, ecommerce experiences, and mobile products from Figma into working front ends.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   });

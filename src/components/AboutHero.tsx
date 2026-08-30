@@ -104,19 +104,18 @@ const AboutHero: React.FC = () => {
 
           <div className="about-hero__intro reveal-fade" style={d(1000)}>
             <p>
-              I’m a senior designer shaped by craft, code, systems, and care — but there’s more
-              to the story than a title.
+              I’m a senior designer who kept moving closer to how the work gets built. The title
+              covers part of that story, but not all of it.
             </p>
             <p>
-              I’ve spent 16+ years evolving through the tools, constraints, and expectations of
-              digital design. I started with visual craft, moved closer to front-end
-              implementation, built systems that help teams ship consistently, and now I’m
-              exploring how AI-assisted workflows can make the path from idea to product faster,
-              clearer, and more creative.
+              I started in visual design, learned front-end implementation because the browser
+              kept exposing gaps in my files, then built systems that design and engineering could
+              share. Now I use AI-assisted workflows to explore more directions and get working
+              ideas in front of people sooner.
             </p>
             <p>
-              At the center of all of it is the same standard: care about the idea, the interface,
-              the system, the people building it, and what actually ships.
+              The tools changed. My responsibility did not: understand the idea, stay close to the
+              implementation, and care about what people actually receive.
             </p>
           </div>
         </div>
@@ -124,7 +123,7 @@ const AboutHero: React.FC = () => {
         {/* Right margin — artifact cluster (decoration), revealed last */}
         <aside className="about-hero__artifacts" aria-label="Margin notes">
           <div className="reveal-fade" style={d(1150)}>
-            <div className="about-hero__note">craft = care made visible</div>
+            <div className="about-hero__note">the file is not the finish line</div>
           </div>
 
           <div className="reveal-fade" style={d(1260)}>

@@ -130,10 +130,10 @@ const testimonials: Testimonial[] = [
 ];
 
 const teamScoreTags = [
-  'Systems thinker',
-  'Remote teammate',
-  'Design → code bridge',
-  'AI-assisted delivery',
+  'Systems ownership',
+  'Remote collaboration',
+  'Design into code',
+  'Mentorship',
 ];
 
 const Testimonials: React.FC = () => {
@@ -176,9 +176,8 @@ const Testimonials: React.FC = () => {
               Hear from the people I build with
             </h2>
             <p className="testimonials__subline">
-              I can tell you I&rsquo;m systems-minded, collaborative, fast-moving,
-              and easy to work with&mdash;but the people I&rsquo;ve partnered with
-              probably say it better.
+              The claims elsewhere on this site are mine. These are the people who saw how I
+              worked when the project got difficult.
             </p>
             <p className="testimonials__micro">Managers, peers, the engineers who built the work, and the designers I&rsquo;ve mentored</p>
             <a
@@ -226,8 +225,7 @@ const Testimonials: React.FC = () => {
                 </span>
                 <div
                   className="testimonials__team-score-stars"
-                  role="img"
-                  aria-label="4.9 out of 5 stars"
+                  aria-hidden="true"
                 >
                   {[0, 1, 2, 3, 4].map((i) => (
                     <span
@@ -242,15 +240,14 @@ const Testimonials: React.FC = () => {
               </div>
               <figcaption className="testimonials__team-score-body">
                 <p className="testimonials__team-score-rating">
-                  <span className="testimonials__team-score-label">Collaboration Rating</span>
+                  <span className="testimonials__team-score-label">Peer evidence</span>
                   <span className="testimonials__team-score-score">
-                    <strong>4.9</strong> / 5
+                    <strong>6</strong> voices
                   </span>
-                  <span className="sr-only"> — 4.9 out of 5</span>
                 </p>
                 <p className="testimonials__team-score-basis">
-                  Built from 16+ years of design systems, production handoff, remote
-                  teamwork, and cross-functional problem solving.
+                  A manager, an executive, two engineering partners, a UX leader, and a designer
+                  I mentored. Their words are below.
                 </p>
                 <ul className="testimonials__team-score-tags">
                   {teamScoreTags.map((tag) => (

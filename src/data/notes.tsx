@@ -151,7 +151,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'Build the thing you would still care about if nobody clapped',
-    dek: 'Four months inside PlayDraft: what happens when you build from an actual obsession instead of for an audience, and what it costs when the system you wanted turns out not to be measurable yet.',
+    dek: 'Four months inside PlayDraft: what building from an actual obsession costs when the system you want turns out not to be measurable yet.',
     body: (
       <>
         <p>
@@ -265,7 +265,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'I worried the new tools were taking me away from design. They made me specific about it.',
-    dek: 'Watching one of my Figma teachers turn toward AI and building, at the same time my own work did. Four parts of the craft I would keep if every tool changed tomorrow — and the work where each one is still happening.',
+    dek: 'My work moved from Figma into code and AI at the same time one of my teachers did. Four parts of the craft I would keep if every tool changed tomorrow.',
     body: (
       <>
         <p>
@@ -380,7 +380,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'Eight times my first idea was wrong. What changed was the cost of finding out.',
-    dek: 'Eight PlayDraft decisions where the obvious answer lost to a number — ordered by how late each one was caught, from a simulation that ran in minutes to a comment that had been lying for six days.',
+    dek: 'Eight PlayDraft decisions where the obvious answer lost to a number, from a five-minute simulation to a comment that had been lying for six days.',
     artifact: {
       label: 'Source notes — all eight, with the numbers',
       href: '/artifacts/eight-wrong-first-drafts.html',

@@ -35,11 +35,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'slack',
     label: 'Slack',
-    headline: 'Communication & Collaboration',
+    headline: 'Give the team the missing context',
     copy: ({ testimonialsHref }) => (
       <>
-        A consistent thread across my work is building trust across UX, engineering, analytics, SEO,
-        and leadership&mdash;the kind of alignment that makes better work possible.{' '}
+        I keep UX, engineering, analytics, SEO, and leadership close to the same decision. The work
+        moves faster when nobody has to reconstruct the reason behind it.{' '}
         <InlineCTA href={testimonialsHref} label="View Testimonials" />
       </>
     ),
@@ -48,11 +48,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'figma',
     label: 'Figma',
-    headline: 'Designing Systems, Not Screens',
+    headline: 'Turn repeated decisions into a system',
     copy: () => (
       <>
-        Building token-driven systems and component libraries that scale across teams, products,
-        and platforms.{' '}
+        I use tokens and components to settle the decisions a team should not have to remake on
+        every screen.{' '}
         <InlineCTA href="/work/wheelrack" label="See my Figma Design System" />
       </>
     ),
@@ -61,19 +61,19 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'workfront',
     label: 'Workfront',
-    headline: 'Project Management',
+    headline: 'Make loose direction buildable',
     copy: () =>
-      'Turning loose direction into structured execution\u2014connecting research, copy, SEO, and stakeholders to drive work from ambiguity to shipped.',
+      'I turn a loose brief into decisions the team can act on, with the research, copy, search needs, owners, and open questions visible.',
     icon: <img src="/images/proficiencies/workfront.svg" alt="" />,
   },
   {
     id: 'claude',
     label: 'Claude / Agentic Coding',
-    headline: 'Accelerating Exploration',
+    headline: 'Explore more, keep the final call',
     copy: () => (
       <>
-        Using AI to rapidly prototype, test variations, and push ideas further&mdash;while
-        applying judgment to shape what&rsquo;s worth shipping.{' '}
+        I use AI to prototype and compare directions sooner. I still choose the references, set the
+        constraints, test the result, and decide what earns its way into the product.{' '}
         <InlineCTA href="/work/wheelrack" label="See how I built this portfolio" />
       </>
     ),
@@ -82,11 +82,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'chatgpt',
     label: 'ChatGPT',
-    headline: 'LLM Integration',
+    headline: 'Use language tools for real production work',
     copy: () => (
       <>
-        Using ChatGPT to speed up SEO support, alt text, presentation drafts, and documentation
-        that makes systems, components, and tokens easier for teams to understand and use.{' '}
+        I use ChatGPT for first passes on SEO support, alt text, presentations, and system
+        documentation, then check each draft against the source and the people who will use it.{' '}
         <InlineCTA href="/about" label="Read how I think about AI" />
       </>
     ),
@@ -95,11 +95,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'vscode',
     label: 'VS Code',
-    headline: 'Building What Ships',
+    headline: 'Test the idea in its real medium',
     copy: () => (
       <>
-        Not just designing interfaces, but validating them in code&mdash;bridging design and
-        implementation to ensure ideas hold up in real environments.{' '}
+        I validate interface decisions in code because the browser exposes things a static frame
+        cannot: wrapping, state, performance, accessibility, and real content.{' '}
         <InlineCTA href="/work/aem-component-system" label="AEM Core" />{' '}
         <InlineCTA href="/work/tire-categories" label="Tire Categories" />
       </>
@@ -109,11 +109,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'aem',
     label: 'Adobe Experience Manager',
-    headline: 'Scaling Through Systems',
+    headline: 'Give authors a system they can reuse',
     copy: () => (
       <>
-        Led and contributed to design patterns powering 80%+ of Tire Rack landing pages&mdash;building
-        reusable components that balance flexibility, performance, and consistency at scale.{' '}
+        I helped build the AEM patterns behind more than 80% of Tire Rack landing pages, including
+        the component rules and documentation authors use to make the next page.{' '}
         <InlineCTA href="/work/aem-component-system" label="View AEM Core rebuild" />
       </>
     ),
@@ -122,12 +122,12 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'adobe-cc',
     label: 'Adobe Creative Cloud',
-    headline: 'The Tools That Built My Eye',
+    headline: 'The tools that trained my eye',
     copy: () => (
       <>
-        Adobe tools were the first applications that unlocked my craft. Illustrator still feels like
-        home&mdash;especially in SVG, iconography, and brand systems&mdash;and that foundation still shapes how I
-        think about polish and visual precision.{' '}
+        Illustrator still feels like home, especially for SVG, iconography, and identity work. The
+        construction habits I learned there still shape how I judge an interface at 16 pixels and at
+        full scale.{' '}
         <InlineCTA href="/work/tire-categories" label="View the tire category page" />
       </>
     ),
@@ -136,12 +136,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'analytics',
     label: 'Adobe Analytics',
-    headline: 'Reading the Behavior',
+    headline: 'Read what people actually did',
     copy: () => (
       <>
-        Analytics helps me understand what users are actually doing&mdash;not just what we assume. On Tire
-        Rack&rsquo;s winterization work, it helped shape region-specific experiences based on real seasonal
-        behavior.{' '}
+        Analytics gives the assumption something to answer to. On Tire Rack&rsquo;s winterization work,
+        seasonal behavior helped shape which regional experiences were worth serving.{' '}
         <InlineCTA href="/work/seasonal-content-system" label="View the winterization case study" />
       </>
     ),
@@ -150,11 +149,11 @@ const proficienciesByIdRaw: Proficiency[] = [
   {
     id: 'github',
     label: 'GitHub',
-    headline: 'Collaborating in Code',
+    headline: 'Work in the same place as the build',
     copy: () => (
       <>
-        Comfortable working in shared repos, reviewing implementations, and contributing
-        directly&mdash;ensuring design intent survives through development.{' '}
+        I work in shared repositories, review the implementation, and contribute directly when
+        that is the clearest way to keep a design decision intact.{' '}
         <InlineCTA href="/work/aem-component-system" label="Explore implementation" />
       </>
     ),
@@ -242,9 +241,9 @@ const ProficiencyDock: React.FC<ProficiencyDockProps> = ({
       <div className="proficiency-dock__left">
         <p className="proficiency-dock__intro">
           <span className="proficiency-dock__intro-highlight">
-            From systems to implementation
+            From decision to implementation
           </span>{' '}
-          This is how the work actually gets made.
+          These tools matter because of the work they let me inspect, change, and ship.
         </p>
 
         <div className="proficiency-dock__row-wrap">

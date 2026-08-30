@@ -5,16 +5,15 @@ import { SITE, EMAIL_HREF } from '../data/site';
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   {
     question: 'Do you work with developers or hand off files?',
-    answer: 'Both. I design with engineering handoff in mind \u2014 tokens, specs, and component documentation are built into my process. On many projects I also write production front-end code (HTML, CSS/SCSS, React), so the handoff is often the code itself. At Tire Rack, I led the effort to build and document our AEM component templates and their styles \u2014 creating a shared pattern library that the full team could use to ship consistently.',
+    answer: 'Both. I document tokens, states, and component behavior when engineering owns the build. On projects where I write the front-end code, the handoff may be a pull request instead of a file. At Tire Rack, I helped build and document the AEM templates and production styles the team now reuses.',
   },
   {
     question: 'Can you work within an existing design system?',
     answer: (
       <p>
-        Absolutely. I&rsquo;ve contributed to and extended large-scale design systems at
-        enterprise companies. I&rsquo;m comfortable working within existing token structures,
-        component libraries, and governance models &mdash; or building them from scratch if none
-        exist. My bar for that work is written up in the notes:{' '}
+        Yes. I have extended existing token and component systems, and I have built them from
+        scratch when the product had no shared foundation. In either case, I start by learning
+        which rules are doing useful work before I propose a new one. My bar is written up here:{' '}
         <Link to="/notes/systems-that-make-better-decisions-easier">
           a good design system makes better decisions easier
         </Link>.
@@ -23,14 +22,14 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   },
   {
     question: 'How do you handle projects that need both brand and UX work?',
-    answer: 'I treat brand and UX as the same problem at different altitudes. The brand system establishes the visual language \u2014 color, type, tone \u2014 and the UX work applies it to real user flows. I scope both together so the system stays coherent from identity through interaction.',
+    answer: 'I treat the identity and the interface as one system. The brand sets the visual and verbal rules; the product tests those rules against real tasks, states, and content. I scope them together when separating the work would create two different answers.',
   },
   {
     question: 'Do you take on freelance or contract work?',
     answer: (
       <p>
-        Not at this current time, but please <a href={EMAIL_HREF}>reach out</a> if
-        you have an idea &mdash; I&rsquo;d love to talk.
+        I am not taking on freelance work right now. You can still <a href={EMAIL_HREF}>send me the idea</a> if
+        a future fit is possible.
       </p>
     ),
   },
@@ -48,8 +47,8 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
     question: 'How was this portfolio built?',
     answer: (
       <>
-        <p>This portfolio was built through an iterative design-to-code workflow combining Figma, Claude AI, and hands-on front-end development. I started by establishing a full design system in Figma defining color tokens, typography scales, spacing values, and component patterns then used that system as the single source of truth while building out each section in React and SCSS. You can explore the <Link to="/design-system">design system here</Link>.</p>
-        <p>The process was genuinely collaborative: I worked back and forth between Figma mockups and live code, using Claude as a development partner to scaffold components, refine styling logic, audit token consistency, and generate a complete Figma-ready specification from the finished codebase. Every section went through multiple rounds of visual review, brand alignment checks, and responsive refinement &mdash; the same rigor I apply to client work, applied to my own.</p>
+        <p>I built the site in React and SCSS from a Figma token and component foundation. The live <Link to="/design-system">design system</Link> shows the color, type, spacing, and component rules the pages actually use.</p>
+        <p>Claude helped scaffold components, inspect token drift, and work through implementation problems. I chose the references, set the direction, reviewed the responsive behavior, and made the final calls. The workflow moved back and forth between Figma and the browser until the built page held up on its own.</p>
         <p>The full breakdown is a note of its own: <Link to="/notes/how-this-site-works">How this site works</Link>. The workflow keeps evolving, and that thinking lands first on <a href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" data-li-surface="faq_build">LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>.</p>
       </>
     ),
@@ -77,7 +76,7 @@ const FAQ: React.FC = () => {
             questions?
           </h2>
           <p className="faq__intro">
-            Here&rsquo;s what collaborators usually want to know before we start working together.
+            The questions that usually come up before the work starts.
           </p>
         </div>
 

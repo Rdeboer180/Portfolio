@@ -6,7 +6,7 @@
 @import '../variables';
 
 .about-hero {
-  padding: 150px 0 $spacing-4xl;
+  padding: $spacing-4xl 0 $spacing-4xl;
   border-bottom: 1px solid $color-neutral-light;
   background: $color-neutral-lightest ;
 

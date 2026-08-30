@@ -34,7 +34,7 @@ const ResumePage: React.FC = () => {
   usePageMeta({
     title: 'Résumé — Ryan DeBoer, Product Design Engineer',
     description:
-      'Résumé of Ryan DeBoer — systems-focused product designer with 16+ years building scalable, token-driven design systems across high-traffic web and native platforms.',
+      'Ryan DeBoer is a product design engineer with 16+ years of experience building design systems, ecommerce experiences, and working products across web and native platforms.',
     canonical: `${SITE.portfolioUrl}/resume/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
@@ -129,12 +129,12 @@ const ResumePage: React.FC = () => {
         {/* Summary */}
         <section className="resume-page__summary-section">
           <p className="resume-page__summary">
-            Systems-focused product designer with 16+ years across high-traffic web and native platforms,
-            building scalable, token-driven design systems that ship.
+            Product design engineer with 16+ years across ecommerce, design systems, and working
+            web and native products.
           </p>
           <p className="resume-page__summary">
-            I work at the seam of design and engineering—owning component libraries, design tokens, and design-to-code
-            workflows that improve consistency, speed delivery, and hold up in production.
+            I own the decisions that connect Figma to the build: tokens, component behavior,
+            production styles, documentation, and the checks that keep the system intact after launch.
           </p>
         </section>
 
@@ -244,9 +244,9 @@ const ResumePage: React.FC = () => {
                   <li>Built and shipped WheelRack, a token-driven design system—200+ design tokens and 50+ Storybook-integrated components—giving the React team one source of truth, and extended it into Tire Rack's Wholesale platform within 6 months</li>
                   <li>Redesigned high-traffic tire category pages, driving up to +50% conversion lift on top pages and up to +400% category-entry traffic growth in the first month, and scaled a 32→100+ characteristic-icon library governed sitewide</li>
                   <li>Turned one-off landing-page production into a governed AEM template system—50+ pages personally designed, turnaround cut from ~1 month to days, with under one QA issue per page on average</li>
-                  <li>Operated as the bridge between UX, product, and engineering—translating ambiguous concepts into production-ready components with states and behaviors aligned to scalable front-end patterns</li>
+                  <li>Turned early UX and product concepts into component states, behavior specs, and front-end patterns that engineering could build and reuse</li>
                   <li>Own a decade-long AEM Experience Fragment system—20+ swappable components across 6 high-traffic pages with geo-targeting via Adobe Target—now authored by 2 junior designers under my governance</li>
-                  <li>Introduced AI-assisted design workflows (Claude, LLM tooling) to accelerate ideation and prototyping, and mentored teammates on design systems and design-to-code practices</li>
+                  <li>Introduced Claude and other AI-assisted workflows for prototyping and internal tools, while mentoring teammates on design systems and design-to-code practice</li>
                 </ul>
               </div>
 
@@ -260,9 +260,9 @@ const ResumePage: React.FC = () => {
                   <span className="resume-page__job-date">2014&ndash;2021</span>
                 </div>
                 <ul className="resume-page__job-list">
-                  <li>Designed and implemented responsive web experiences across ecommerce and marketing platforms</li>
-                  <li>Translated UX concepts into production-ready front-end solutions using HTML/CSS and CMS systems</li>
-                  <li>Collaborated with cross-functional teams to support campaign execution and iterative product improvements</li>
+                  <li>Designed and implemented responsive ecommerce and marketing experiences for Tire Rack</li>
+                  <li>Moved UX concepts into production with HTML, CSS, and Adobe Experience Manager</li>
+                  <li>Worked with product, engineering, SEO, analytics, and brand partners through launch and iteration</li>
                 </ul>
               </div>
 

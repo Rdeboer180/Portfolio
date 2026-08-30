@@ -184,7 +184,7 @@ const projects: Project[] = [
       approach: 'Design it in Figma, then prove every state in Storybook.',
       outcome: 'The framework outlived the project. Wholesale picked it up next.',
     },
-    summary: 'Built a design system from scratch and redesigned the full customer journey for a 20-year-old dealer platform. Partner adoption grew from 6 to 10 during the build\u2014the redesign helped influence buy-in as additional retailers saw the in-progress UI. Now live at wheelrack.com/pitstop/search.',
+    summary: 'I built WheelRack’s first design system and redesigned the dealer journey from vehicle selection through checkout. Partner adoption grew from six to ten while retailers were seeing the new interface in progress. The product is now live.',
     cardHook: 'A 20-year-old dealer platform had no design system behind it. One was built from scratch\u2014and partner adoption grew from 6 to 10 while the redesign was still in progress.',
     openerSchematic: true,
     year: '2023\u20132024',
@@ -199,14 +199,14 @@ const projects: Project[] = [
     // ── 01 Problem ──
     problemPunch: 'A 20-year-old platform. No design system. No responsive design. Six partners, zero consistency.',
     problem: [
-      'WheelRack is Tire Rack\u2019s aftermarket wheel visualizer\u2014roughly 20 years old, served to dealers across 6 retail partners.',
-      'Dealers use it on tablets in-store. No responsive design, clunky dropdowns, visually inconsistent across partner brands.',
-      'Business goal: modernize as a proof-of-concept for Tire Rack\u2019s future tech stack (React + Microservices).',
+      'WheelRack was a roughly 20-year-old aftermarket wheel visualizer used by dealers across six retail partners.',
+      'Dealers used it on tablets, but the interface was not responsive and every partner carried a slightly different version of the experience.',
+      'The redesign also had to prove that Tire Rack’s future React and microservices stack could support a real customer journey.',
     ],
     // ── 02 Gaps & Opportunity ──
     gapsPunch: 'Every partner was a one-off. No tokens, no components, no shared language between design and engineering.',
     gaps: [
-      'No shared design system, tokens, or component library\u2014every partner variant handled ad hoc.',
+      'There were no shared tokens or components. Each partner variant was handled as a separate exception.',
       'Invested deliberately in advanced design-system fluency: completed an 80+ hour Figma Masterclass covering Atomic Design, components and variants, tokens and variables, responsive behavior, documentation and handoff, and prototyping component behavior.',
       'Partnered with senior React developer Cheryl Carpenter to build the system from the ground up. I owned system design, component logic, token structure, edge cases, responsive behavior, and design\u2013dev alignment. Cheryl owned React implementation, component integration, and viewport/behavior stress testing. Work moved Figma \u2192 Tokens Studio \u2192 Storybook \u2192 React, tracked in Jira.',
       'Chose Tokens Studio because this work predated Figma Variables. It better supported structured token sets, sync, export/import, and the React/Storybook pipeline. Today I\u2019d start in Figma Variables and evaluate an external pipeline from there.',
@@ -290,7 +290,7 @@ const projects: Project[] = [
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'Now live at wheelrack.com/pitstop/search. Delivered a complete design system and full customer journey from vehicle selection through checkout. Partner adoption grew from 6 to 10 during the build as additional retailers saw the in-progress UI, which helped influence buy-in (final adoption reflects broader business factors too). The Storybook-integrated component library gave the React team one source of truth to build against. Within 6 months, the same framework was extended into Tire Rack\u2019s Wholesale site, where I helped onboard 3\u20134 additional designers into the workflow Cheryl and I established.',
+    outcomeNote: 'WheelRack is live from vehicle selection through checkout. Partner adoption grew from six to ten during the build as more retailers saw the interface, although the final count reflects business factors beyond the redesign. The Storybook library gave Cheryl and the React team one component source to build against. Six months later, Tire Rack extended the same framework into Wholesale, and I helped three or four more designers join the workflow Cheryl and I had established.',
     outcomeLiveLinks: [
       { label: 'View the live WheelRack PitStop experience', url: 'https://wheelrack.com/pitstop/search' },
     ],
@@ -327,7 +327,7 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
     seoTitle: 'Automotive Ecommerce Category UX Redesign — +400% Category Entry',
-    summary: 'Redesigned 30+ tire category pages into a scalable system of iconography, data visualization, and content structure. Top-performing category pages saw up to +50% conversion lift in the first month after launch.',
+    summary: 'I rebuilt 30+ tire category pages around one icon, comparison, and content system. In the first month, top-performing pages saw up to a 50% conversion lift.',
     cardHook: 'Choosing tires takes expertise most shoppers don\u2019t have. 30+ category pages were rebuilt into one guided system\u2014top pages lifted conversion up to +50% in the first month.',
     beat: {
       kind: 'metric',
@@ -347,16 +347,16 @@ const projects: Project[] = [
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'Too many choices. Too much text. Users couldn\u2019t decide fast enough.',
     problem: [
-      'Tire Rack\u2019s category pages serve as a primary entry point for millions of users navigating a highly complex product space.',
-      'The existing experience was text-heavy and inconsistent\u2014no visual system to differentiate 40+ tire categories, each supporting 80+ products.',
-      'Design needed to define both the structure and the visual language from scratch.',
+      'Category pages are one of Tire Rack’s main entry points into a product space most shoppers do not already understand.',
+      'The experience was dense, inconsistent, and almost entirely verbal. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another.',
+      'I had to define the page structure and the visual vocabulary at the same time.',
     ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No visual language existed. Design had to define both the system and the vocabulary.',
     gaps: [
-      'No existing framework to visually represent differences between categories.',
-      'Each category needed to communicate distinct performance characteristics clearly while maintaining consistency across 40+ variations.',
-      'SEO-driven content requirements competing with usability and clarity\u2014no balance had been struck.',
+      'There was no visual framework for comparing category strengths.',
+      'The system had to make each category distinct without inventing a different design for all 40.',
+      'Search content needed real space on the page, but it could not bury the product decision.',
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
@@ -376,13 +376,13 @@ const projects: Project[] = [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Broke the experience into scalable layers: category hierarchy, icon systems, data visualization, and content structure aligned to SEO intent. Partnered closely with Ransom Rockliffe on the SEO side, navigating the core tension\u2014preserving usability and clarity while adding enough keyword and product depth for SEO and LLM discoverability.',
+        description: 'I split the page into four decisions: category hierarchy, icon meaning, performance comparison, and search content. Ransom Rockliffe owned the SEO side, and we worked through where keyword and product depth helped discovery versus where it buried the choice.',
         images: [],
       },
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Defined the category page hierarchy and wireframed repeatable layout patterns that could flex across 40+ variations while keeping product discovery and comparison front and center.',
+        description: 'I wireframed one hierarchy that could flex across more than 40 categories while keeping the comparison and product list ahead of supporting content.',
         systemMarker: 'Pattern introduced',
         images: [
           {
@@ -411,20 +411,20 @@ const projects: Project[] = [
       {
         key: 'build',
         label: 'Build',
-        description: 'Worked with engineering to define reusable AEM components with admin-controlled fields for performance data. Contributed directly to page structure, CSS chart animations, SVG icon creation, and scalable styling patterns.',
+        description: 'I worked with engineering on reusable AEM components with author-controlled performance data, then contributed the page structure, CSS chart motion, SVG icons, and shared styles.',
         systemMarker: 'Scalability consideration',
         images: [],
       },
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'System scaled to 30+ landing pages with consistent UX patterns and flexible CMS-driven content updates. Non-dev teams could update performance data and category content without engineering support.',
+        description: 'The pattern reached 30+ pages. Content teams can now update category copy and performance data in AEM without waiting for an engineer.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The redesigned system aligned SEO, UX, and product discovery into a single framework\u2014reducing friction while increasing clarity and conversion. Measured against the month before launch, top-performing category pages (Performance All-Season, Performance Summer) saw up to +50% conversion lift in the first month; niche categories saw 30\u201340% gains. Category page entry traffic across the system saw up to +400% growth in the same window. Beyond the initial launch, this work influenced the broader direction of characteristic icons sitewide\u2014now governed as a 100+ icon sprite library.',
+    outcomeNote: 'Measured against the month before launch, Performance All-Season and Performance Summer reached up to a 50% conversion lift in the first month. Niche categories gained 30 to 40%, and category-entry traffic across the system grew by as much as 400% in the same window. The icon work also moved beyond these pages: the original 32 icons became a governed sitewide sprite library of more than 100.',
     outcomeImages: [
       {
         src: '/images/work/tire-categories/supporting/outcome/in-page-application.png',
@@ -467,7 +467,7 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'Seasonal Content Swap \u2014 AEM Experience Fragments & Adobe Target',
     seoTitle: 'Seasonal Ecommerce Content System \u2014 AEM Experience Fragments & Adobe Target',
-    summary: 'Built and owned a scalable AEM content system that swaps 20+ components across 6 landing pages each season. Seasonal winterization has been associated with stronger annual winter conversion lift compared with pre-winterization periods.',
+    summary: 'I built and still govern an AEM system that swaps more than 20 seasonal fragments across six landing pages. The same URLs can serve winter and southern-state audiences without rebuilding the pages each year.',
     cardHook: 'Seasonal storefronts were rebuilt by hand every year. An AEM fragment system now swaps 20+ components a season through authoring, not development.',
     beat: {
       kind: 'image',
@@ -486,15 +486,15 @@ const projects: Project[] = [
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'Manual seasonal updates. No scalable system. Winter and southern-states customers seeing the same content.',
     problem: [
-      'Since 2013, Tire Rack needed a winterized version of its high-traffic landing pages each fall\u2014homepage, tire pages, delivery, research, and wheel adjustment pages.',
-      'Early seasonal updates were manual and time-intensive. As the digital footprint grew, the process needed to scale without duplicating pages or confusing search engines.',
+      'Every fall, Tire Rack changed the homepage, tire pages, delivery, research, and wheel-fitment surfaces for winter shoppers.',
+      'The early swaps were manual. As the site grew, rebuilding pages each season became slow, and duplicate regional versions created a search problem.',
     ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No fragment library, no audience targeting, no way to serve different content to different regions without page duplication.',
     gaps: [
-      'No existing system to serve meaningfully different content to winter-climate and southern-states customers.',
-      'Needed new fragment types, accessible component variants, and Adobe Target audience rules.',
-      'Close collaboration required across Analytics, Photography, and SEO teams to ensure consistency and conversion.',
+      'The same page needed to speak differently to winter-climate and southern-state customers.',
+      'AEM needed new fragment types and accessible variants; Adobe Target needed a dependable audience split.',
+      'Analytics, Photography, and SEO each owned part of the result, so the system had to make those dependencies visible.',
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
@@ -506,7 +506,7 @@ const projects: Project[] = [
       'System needed to be documented clearly enough for two junior designers to author seasonally alongside me, with my oversight on approvals, governance, and design-system alignment.',
       'When breaks happen, they\u2019re usually tied to Experience Fragment / Adobe Target sync issues\u2014resolved through coordinated fixes across authoring, analytics, and targeting.',
     ],
-    insightCallout: 'Evolved from manual content updates into a 20+ component Experience Fragment library\u2014audience-targeted, SEO-safe, and mentor-ready for junior designers.',
+    insightCallout: 'The page stays put while the authored fragments change. That one decision made seasonal swaps faster, kept regional targeting out of duplicated URLs, and gave junior designers a system they could run.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -561,7 +561,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'Over a decade of continuous ownership, this system evolved into a scalable AEM Experience Fragment library\u201420+ component types, geo-based audience targeting via Adobe Target, spanning 6 high-traffic landing pages simultaneously. Seasonal winterization has been associated with stronger annual winter conversion lift than pre-winterization periods\u2014though that outcome reflects product, marketing, and climate factors alongside the system itself. Two junior designers now author seasonal content under my governance, with documentation, approvals, and design-system alignment owned by me. The 10+ year arc is less about repetition and more about long-term system governance, documentation leadership, and strategic refinement.',
+    outcomeNote: 'The library now includes more than 20 fragment types across six high-traffic pages, with geo-based audiences managed through Adobe Target. Winter conversion has generally been stronger since the seasonal program began, although product, marketing, and weather all contribute to that result. Two junior designers now author the swaps using my documentation and approval workflow. I still own the system rules, the final review, and the fixes when AEM and Target fall out of sync.',
     outcomeImages: [
       {
         src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
@@ -593,9 +593,9 @@ const projects: Project[] = [
     },
     stream: 'passion',
     client: 'Heatherwood Equestrian Academy',
-    title: 'Building a Brand and a Sustainable System for a Local Equestrian Academy',
+    title: 'Heatherwood: A Brand and Site the Owner Can Run Herself',
     seoTitle: 'Brand Identity & WordPress Site for a Local Equestrian Academy',
-    summary: 'End-to-end rebrand and rebuild for a family-owned equestrian academy\u2014brand identity, IA, WordPress CMS, and SEO architecture. Inquiries moved from ~3\u20134 per month pre-launch to 4\u20135 form submissions daily in the weeks after launch.',
+    summary: 'I rebuilt Heatherwood’s identity and WordPress site around the services families actually search for. In the weeks after launch, website inquiries moved from roughly three or four a month to four or five a day.',
     year: '2025',
     tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
     role: 'Brand & Web Designer',
@@ -608,15 +608,15 @@ const projects: Project[] = [
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'An outdated brand and website that wasn\u2019t converting. After 12+ years, the digital presence no longer matched the quality of the program.',
     problem: [
-      'Heatherwood had operated under the same brand and website for 12+ years. Core issues: outdated look, weak brand continuity, no logical UX path, and a trust/conversion structure that wasn\u2019t supporting inquiries.',
+      'Heatherwood had used the same identity and website for more than twelve years. The program had grown, but the site still felt pieced together and gave families no clear path from interest to inquiry.',
       'Families search for specific activities ("horseback riding lessons South Bend"), not the brand name. Each service needed its own search entry point.',
-      'The system had to be fully owner-managed with zero ongoing agency dependency.',
+      'The owner needed to manage the site herself after launch, without an agency retainer.',
     ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'An aging identity up against polished commercial programs, with none of the SEO or conversion infrastructure to compete.',
     gaps: [
-      'The existing brand felt dated and lacked the polish needed to compete with larger commercial programs\u2014needed a full rebrand that feels warm and family-oriented but holds its own visually.',
-      'Brand work started from a phone-image dump and required curation, aesthetic research, and regional positioning before a usable visual system could take shape.',
+      'The identity needed to feel as warm and personal as the academy while holding its own beside larger commercial programs.',
+      'The source material was a phone-image dump. I had to find the visual thread, choose what belonged, and build a usable identity from it.',
       'Each service (lessons, camps, boarding, birthday parties, trail rides) needed to function as an independent SEO landing page with its own conversion path.',
       'Every headline had to work for both the parent scanning the page and the search engine indexing it.',
     ],
@@ -645,20 +645,20 @@ const projects: Project[] = [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Partnered with the founder to understand the academy\u2019s story, key demographics (families with children 5\u201315 across Michiana), and what makes Heatherwood different from commercial programs.',
+        description: 'I worked with founder Deborah Clements to understand why families choose Heatherwood, what parents of children ages five to fifteen need to know, and where the academy differs from commercial programs.',
         images: [],
       },
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Architected the site so each service functions as an independent SEO entry point. FAQ content structured around real parent questions. Conversion path routes every visitor to a form submission.',
+        description: 'Each service became its own search entry point with a page, parent questions, and a dedicated contact form. Visitors can arrive on the exact activity they searched for without reconstructing the site first.',
         systemMarker: 'Pattern introduced',
         images: [],
       },
       {
         key: 'system',
         label: 'System',
-        description: 'Redesigned the full brand identity (logo, color, typography) and built reusable page patterns\u2014service card grids, FAQ accordions, contact form sidebars\u2014that scale across 10+ service pages.',
+        description: 'I redesigned the logo, color, and typography, then carried those rules into service cards, FAQ accordions, and contact-form sidebars reused across more than ten pages.',
         systemMarker: 'System decision',
         gridColumns: 2,
         images: [
@@ -692,7 +692,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebrand and new site launched with a complete identity overhaul, 10+ SEO-optimized service pages each functioning as independent search entry points with dedicated contact forms, and a WordPress CMS that Deborah Clements still manages independently. Inquiries moved from ~3\u20134 website-driven submissions per month pre-launch to 4\u20135 daily in the weeks after launch\u2014a step-change in demand alignment with the local market. Testimonial themes emphasize site cleanliness, clear UX flow, easy access to training materials, simple service requests, and rider consent access. The redesign drove increased demand; broader conversion results reflect the combined effect of brand, IA, SEO, and CMS handoff.',
+    outcomeNote: 'The site launched with a new identity and more than ten service pages, each built as a search entry point with its own contact form. Deborah still manages the WordPress content herself. Website inquiries moved from roughly three or four a month before launch to four or five a day in the weeks after. That change belongs to the brand, information architecture, search work, and easier inquiry path together, not to a single screen.',
     outcomeImages: [
       {
         src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-desktop-01.png',
@@ -745,9 +745,9 @@ const projects: Project[] = [
     // \u2500\u2500 01 Problem \u2500\u2500
     problemPunch: 'Every landing page started from scratch. No templates, no patterns, no scalable process.',
     problem: [
-      'Tire Rack\u2019s SEO strategy relies on targeted landing pages capturing high-intent search queries across tire sizes, categories, and niche segments.',
-      'Pages were requested by SEO or partner teams and needed to launch quickly\u2014without sacrificing consistency, usability, or performance.',
-      'At scale, the challenge wasn\u2019t designing a page\u2014it was creating a system that other designers and teams could use without starting from scratch each time.',
+      'Tire Rack uses landing pages to answer high-intent searches for tire sizes, categories, and narrow product needs.',
+      'SEO and partner teams needed those pages quickly, but every request still started from an empty Figma file and a thin brief.',
+      'After enough one-off pages, the design problem became obvious: stop solving the same layout and authoring decisions again.',
     ],
     problemImages: [
       {
@@ -782,20 +782,20 @@ const projects: Project[] = [
       {
         key: 'alignment',
         label: 'Content-Driven Foundation',
-        description: 'Every page begins with a content brief and defined goal. I establish page hierarchy (hero, features, products, FAQs), required SEO content placement, and internal linking strategy. Close collaboration with SEO and copy teams to refine needs against available component structures.',
+        description: 'I start with the search intent, the page goal, and the available AEM components. Then I place the hero, product evidence, supporting copy, FAQs, and internal links in the order that serves both the shopper and the query.',
         images: [],
       },
       {
         key: 'structure',
         label: 'Component-Based Planning',
-        description: 'In Figma, I map each landing page using reusable components sourced from across the site\u2014hero patterns, product feature sections, FAQ modules, promotional and linking sections. Consistency while allowing flexibility for different page types.',
+        description: 'In Figma, I assemble the page from reusable hero, product, FAQ, promotion, and link patterns. The structure stays recognizable while the content and emphasis change with the query.',
         systemMarker: 'Pattern introduced',
         images: [],
       },
       {
         key: 'system',
         label: 'AEM System Development',
-        description: 'Built and established a system of reusable component patterns: rapid page creation from pre-defined layouts to start from.',
+        description: 'I turned the recurring page shapes into governed starting templates, with enough variation for size, category, promotion, and product launches.',
         systemMarker: 'System decision',
         images: [],
       },
@@ -808,7 +808,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'This work shifted landing page creation from a one-off design task to a governed system. I personally designed and built 50+ landing pages, and later built the governed system that two junior designers now use under my oversight. Turnaround moved from ~1 month to 1\u20132 weeks for complex pages, a week for standard pages, and 1\u20132 days for simple launches\u2014with QA surfacing under one issue per page on average. One illustrative SEO win: a 40-inch tire landing page contributed to $10k+ in added annual revenue per SEO reporting, though there was no prior page to compare against, so the gain reflects net-new reach rather than design attribution alone.',
+    outcomeNote: 'I designed and built more than 50 landing pages before turning the recurring decisions into a system two junior designers now use. Complex pages moved from about a month to one or two weeks; standard pages take about a week, and simple launches take one or two days. QA now finds fewer than one issue per page on average. SEO reporting tied a new 40-inch tire page to more than $10,000 in annual revenue. There was no earlier page to compare, so I treat that as evidence of new reach, not a clean design-attribution claim.',
     outcomeImages: [
       {
         src: '/images/work/landing-pages/supporting/landing-pages-35-inch.jpg',
@@ -860,14 +860,14 @@ const projects: Project[] = [
       problem: 'A decade of AEM authoring with no core system underneath.',
       gaps: 'No reusable patterns, no variables. The same work, done twice.',
       constraints: 'A live enterprise CMS and a dev team still learning the codebase.',
-      approach: 'I shipped production Sass, not just specs.',
+      approach: 'I wrote the specs and shipped the production Sass.',
       outcome: 'One system design, dev, SEO, and accessibility all build against.',
     },
     stream: 'professional',
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
     seoTitle: 'Adobe Experience Manager Design System & Storefront Performance Rebuild',
-    summary: 'Partnered with a newly formed AEM dev team to rebuild the authoring system around reusable core components. Shipped 10+ live components powering homepage, tires hub, events, and packages\u201460% faster page loads (WebPageTest) and a shared foundation for design, dev, SEO, and accessibility.',
+    summary: 'I partnered with a new AEM engineering team to replace one-off authoring with more than ten reusable components. The components now power the homepage, tires hub, events, and packages pages, with WebPageTest showing 60% faster loads.',
     cardHook: 'Every page was a one-off build. Authoring was rebuilt around 10+ reusable core components\u2014pages load 60% faster, on a foundation design and dev share.',
     year: '2024\u20132025',
     tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
@@ -883,7 +883,7 @@ const projects: Project[] = [
     problem: [
       'I\u2019d been authoring in AEM since 2013, before Adobe even acquired the platform\u2014but the team never adopted core components, editable templates, or a scalable pattern library.',
       'Every page was stitched together from aging custom components, one-off overrides, and asset dumps that slowed authoring and hurt page performance.',
-      'In 2025 we finally hired a dedicated AEM dev team\u2014the moment to rebuild the foundation, not just patch what was there.',
+      'In 2025 we hired a dedicated AEM engineering team, which made it possible to rebuild the foundation instead of adding another patch.',
     ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
     gapsPunch: 'No reusable patterns. No variable system. Authoring and engineering solving the same problems twice.',
@@ -898,10 +898,10 @@ const projects: Project[] = [
     constraints: [
       'Work happened inside a live production AEM instance\u2014nothing could break authoring for merchandising or content teams mid-flight.',
       'Every component shipped with SEO and accessibility requirements baked in: lazy loading with toggle control, H1 restrictions per surface, eyebrow support in teaser/hero for keyword headroom without breaking hierarchy, and Akamai integration for serving only the relevant JSP/CSS assets per page.',
-      'Invested deliberately in technical fluency: completed AEM authoring certification, finished the weekend AEM tutorial, and leveled up on Sass structure so I could contribute real code alongside the dev team, not just hand off specs.',
+      'I completed AEM authoring certification, worked through the weekend AEM tutorial, and deepened my Sass practice so I could contribute code beside the engineering team after the specs were written.',
       'Led 15 years of DAM cleanup\u2014tagging, alt text, file naming, and asset governance across 100+ images. The operational win (discoverability, consistency, authoring speed) was as important as the performance win.',
     ],
-    insightCallout: 'The value was the shared system rather than any one component: variables, variants, and documentation the design, dev, SEO, and accessibility teams build against. I shipped production Sass, not just specs.',
+    insightCallout: 'The value was the shared system: variables, variants, and documentation that design, engineering, SEO, and accessibility build against. I wrote the component specs and shipped production Sass beside them.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -1009,7 +1009,7 @@ $mobile-max-width: 768px;
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'The rebuild moved Tire Rack\u2019s AEM authoring from one-off pages to a real component system: 60% faster page loads (measured in WebPageTest), cleaner authoring, and one foundation the design, dev, SEO, and accessibility teams share. The new core components now power the homepage, tires landing, events and sponsorship pages, and packages page in production. The authoring experience is far better for junior designers, and combined with my documentation it lets design and SEO use the CMS the way a CMS is meant to work. Due to proprietary constraints, certain aspects of this system (including internal tooling and workflows) are not publicly displayed. I\u2019m happy to walk through them in conversation.',
+    outcomeNote: 'WebPageTest measured pages with the new components loading 60% faster. More than ten reusable components now power the homepage, tires landing, events, sponsorship, and packages surfaces. Junior designers author against the same fields and variants that engineering supports, with my documentation explaining when each one belongs. Some internal tooling and workflow details remain private, but the live pages below show the system in production.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
@@ -1041,8 +1041,8 @@ $mobile-max-width: 768px;
     title: 'Scaling Design Through Internal Tooling',
     seoTitle: 'Design Enablement — Internal Figma Plugins & AI-Assisted Tooling',
     summary:
-      'Agentic internal application development: a connected layer of plugins and web applications that streamlined repetitive design work, standardized project communication, and reduced manual review cycles across the Design, UX, and Photography teams.',
-    cardHook: 'Repetitive production work was eating design time. Three connected internal tools\u2014plugins and web apps\u2014standardized it away.',
+      'I built three internal tools that removed repeat setup and review work: a Figma metadata plugin, a production-accurate crop simulator, and a componentized presentation system used across Design, UX, and Photography.',
+    cardHook: 'Repetitive production work was eating design time. Three internal tools now handle project context, crop validation, and stakeholder decks.',
     year: '2025–2026',
     tags: [
       'Design Enablement',
@@ -1062,30 +1062,30 @@ $mobile-max-width: 768px;
     problemPunch:
       'The team’s biggest friction wasn’t the work. It was the process around the work.',
     problem: [
-      'Repetitive design tasks, manual review cycles, and inconsistent project communication were absorbing time across the Design, UX, and Photography teams.',
-      'Project context lived in exported spreadsheets and tribal knowledge. With hundreds of active design files, finding ownership, business context, and planning metadata meant hunting — not designing.',
-      'Hero imagery couldn’t be validated until it was placed into AEM, pushing crop and safe-zone problems to the end of the workflow, where they were slowest to fix.',
+      'Design, UX, and Photography were losing time to repeat setup, manual review, and project context that changed shape from file to file.',
+      'Ownership and planning data lived in exported spreadsheets and people’s memory. In a library of hundreds of Figma files, finding the right context meant hunting for it.',
+      'Hero crops could not be trusted until the image was placed in AEM. That pushed safe-zone and breakpoint problems to the most expensive point in the workflow.',
     ],
 
     // ── 02 Gaps & Opportunity ──
     gapsPunch: 'Each problem had a point solution. Nobody was designing the workflow itself.',
     gaps: [
-      'Tools existed in isolation — nothing connected project metadata, image validation, and stakeholder communication into one consistent layer.',
-      'AI and MCP-based tools can generate and infer a great deal, but not internal project identifiers, business context, ownership, or planning metadata. That context had to be engineered into the workflow deliberately.',
-      'Every stakeholder review was assembled from scratch, so presentation quality depended on who built the deck and how much time they had.',
+      'Project metadata, image validation, and stakeholder reviews each had a workaround, but the workarounds did not share context.',
+      'AI and MCP tools could infer structure, but they could not know an internal project ID, owner, or planning note. The workflow had to supply that context explicitly.',
+      'Every stakeholder deck started from an empty file, so teams spent review time rebuilding the container around the work.',
     ],
 
     // ── 03 Constraints ──
-    constraintsPunch: 'Built inside a production team’s real cadence — not a lab.',
+    constraintsPunch: 'Built inside the team’s production week, not in a lab.',
     constraints: [
       'Internal tools earn adoption or die. Every tool had to beat the workaround it replaced from its first release.',
-      'The Hero Crop Simulator had to reproduce production behavior exactly — the same responsive CSS, gradients, safe zones, and breakpoint-specific crop logic used across Tire Rack’s website — or its previews couldn’t be trusted.',
+      'The Hero Crop Simulator had to reproduce the live responsive CSS, gradients, safe zones, and crop behavior. A close approximation would still send the wrong image into production.',
       'Everything was built alongside normal production workload, in partnership with our Lead Product Manager, so scope had to stay surgical.',
     ],
 
     // ── Key Insight (portable-governance thesis) ──
     insightCallout:
-      'A design system doesn’t have to live inside a component library. It can live in Markdown files, agent skills, plugins, code, and documentation: governance that travels with the work, so teams keep making good calls when I’m not in the room.',
+      'The design system had to travel with the work. Its rules now live in the plugin, the simulator, the presentation components, the code, and the documentation rather than waiting in a library someone has to remember to open.',
 
     // ── 04 Approach — one subsection per tool ──
     approachSubsections: [
@@ -1094,7 +1094,7 @@ $mobile-max-width: 768px;
         label: 'Figma Project Metadata Plugin',
         systemMarker: 'CONTEXT LAYER',
         description:
-          'An internal Figma plugin that connects project metadata from an exported Workfront spreadsheet directly into design files. Working alongside our Lead Product Manager, we built a workflow that auto-generates standardized project title cards while pre-populating the information AI or MCP-based tools cannot reliably infer — internal project identifiers, business context, ownership, and planning metadata. The result is a searchable, standardized project framework that gives designers and stakeholders immediate context when navigating hundreds of active design files.',
+          'I worked with our Lead Product Manager on a Figma plugin that reads an exported Workfront spreadsheet and builds the project title card inside the design file. It fills the fields an agent cannot infer, including the internal ID, owner, business context, and planning metadata. That gives hundreds of active files one searchable entry point instead of another naming convention people have to remember.',
         images: [
           {
             src: '/assets/portfolio-safe/web-apps/internalTool_figmaPlugin.png',
@@ -1109,7 +1109,7 @@ $mobile-max-width: 768px;
         label: 'Hero Crop Simulator',
         systemMarker: 'VALIDATION LAYER',
         description:
-          'A browser-based application that lets Design and Photography validate hero imagery before implementation. It recreates our production hero components with the same responsive CSS behavior, gradients, safe zones, and breakpoint-specific crop logic used on the live site — instant desktop, tablet, and mobile previews without placing assets into AEM or waiting on engineering. Moving crop validation earlier in the workflow eliminated multiple review cycles between Design and Photography, and the tool exports crop reports for implementation and handoff.',
+          'I built a browser app that runs hero imagery through the same responsive behavior, gradients, safe zones, and breakpoint crop logic as the live site. Design and Photography can compare desktop, tablet, and mobile before an asset touches AEM, then export the crop report engineering needs. That moved crop decisions earlier and removed several back-and-forth review cycles.',
         images: [
           {
             src: '/assets/portfolio-safe/web-apps/cover-loop.mp4',
@@ -1127,7 +1127,7 @@ $mobile-max-width: 768px;
         label: 'Component-Based Presentation System',
         systemMarker: 'COMMUNICATION LAYER',
         description:
-          'A fully componentized presentation framework in Figma that gives Design and UX teams one consistent visual language for communicating project progress. Every layout, chart, callout, status indicator, and content block is a reusable component, so teams assemble stakeholder presentations quickly while reviews stay clear, professional, and easy to maintain — presentation setup time dropped significantly.',
+          'I turned the recurring parts of a stakeholder deck into Figma components: layouts, charts, callouts, status markers, and content blocks. Design and UX now assemble the presentation around the project instead of rebuilding its visual language before every review.',
         images: [
           {
             src: '/assets/portfolio-safe/web-apps/internalTool_SlidesTemplate.png',
@@ -1142,14 +1142,14 @@ $mobile-max-width: 768px;
         label: 'One Connected Layer, Not Isolated Tools',
         systemMarker: 'PLATFORM',
         description:
-          'Rather than treating each tool as an isolated solution, they were designed as a connected layer of workflow automation: shared context in, standardized artifacts out. The same pattern extends to an agentic workflow tool I built for the Photography team, and to the design system itself, since the tokens, components, and documentation these tools speak are the same ones that power the shipped work. Sometimes the best design work isn’t another customer-facing screen. It’s taking friction out of the day for the people who build those screens.',
+          'The three tools share the same tokens, component language, and project context as the work they support. That is the connection. The plugin starts the file with the right facts, the simulator checks an asset against production behavior, and the presentation system carries the decision into review.',
       },
     ],
 
     // ── 05 Outcome ──
     timeToLive: 'Shipped internally and in daily use by the design team — three connected tools, maintained alongside core project work rather than as a separate initiative.',
     outcomeNote:
-      'This work reflects how I think about design systems now: not just component libraries, but platforms that change how a team works together. These tools took repetitive work off the team, kept project context in one place, and made the workflow consistent, so people spent more time solving problems and less time managing process.',
+      'All three tools shipped into the team’s normal workflow. The metadata plugin keeps project context inside the file, the simulator lets Photography validate crops without an AEM placement, and the presentation system removes repeat deck setup. The design-system work is visible in what the team no longer has to rebuild.',
     outcomeArtifacts: [
       'Figma Project Metadata Plugin',
       'Hero Crop Simulator',
@@ -1178,9 +1178,9 @@ $mobile-max-width: 768px;
     },
     stream: 'passion',
     client: 'LoopStack (personal project)',
-    title: 'LoopStack: Meal Memory + Insulin Timing Intelligence',
+    title: 'LoopStack: Pattern Review for Meals and Glucose',
     seoTitle: 'LoopStack — Trends-First Health-Data UX for Type 1 Diabetes (React/TypeScript)',
-    summary: 'A Type 1 diabetes pattern-review app that turns meal history and glucose response into pattern review — comparing what Loop predicted with what actually happened, then surfacing patterns worth reviewing with a care team. Live on TestFlight, wired to 90 days of real HealthKit CGM data. Pattern evidence and discussion points, not dosing advice.',
+    summary: 'A Type 1 diabetes app that compares what Loop predicted with what happened after a meal, then groups repeated glucose curves into patterns worth reviewing with a care team. It runs on TestFlight with 90 days of my HealthKit CGM data and never gives dosing advice.',
     year: '2026',
     tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'HealthKit'],
     role: 'Product Design · UX · Front-End',
@@ -1284,7 +1284,7 @@ $mobile-max-width: 768px;
       {
         key: 'build',
         label: 'Build',
-        description: 'Worked in rapid prompt → output → critique → refine loops with Claude and ChatGPT — but the most important refinement target wasn’t the model’s logic, it was its language. Every output had to read as observation, evidence, or discussion point — never as instruction. That discipline is now enforced by tests, not just review: a 460-test Vitest suite covers the pattern-confidence logic that decides what the app is allowed to claim. TestFlight keeps the loop honest on device — build 2 live, build 3 in flight, stress-tested against real Loop data meal after meal.',
+        description: 'Claude and ChatGPT helped me compare logic and language quickly. The harder review was mine: every output had to read as an observation, a piece of evidence, or a discussion point, never an instruction. A 460-test Vitest suite now guards the confidence logic that decides what the app may claim. TestFlight adds the device check against real Loop data, meal after meal.',
         codeBlock: {
           language: 'text',
           filename: 'pattern-review-system-prompt.md',
@@ -1330,7 +1330,7 @@ Frame every output as:
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'LoopStack reframes this space from carb counting to pattern review. It runs on TestFlight against 90 days of real HealthKit CGM data, comparing what Loop predicted with what actually happened meal after meal, clustering repeated meals by curve shape, and surfacing patterns at the right confidence level to bring to a care team. Observed values stay alongside — never on top of — what the pump is actually running, sample data is disclosed wherever real history hasn’t accumulated yet, and a 460-test suite covers the confidence logic that decides what the app may claim. The next chapter is clinician-facing review modes and tightening the safety framing further before any wider release.',
+    outcomeNote: 'LoopStack now runs on TestFlight against 90 days of my HealthKit CGM data. It compares each meal with Loop’s prediction, groups repeated meals by curve shape, and waits for enough evidence before it calls a pattern ready to review. Observed values stay beside the pump settings rather than replacing them, and sample data is labeled wherever real history is still thin. A 460-test suite guards the confidence logic and the claims the interface is allowed to make. Clinician-facing review and tighter safety language come before any wider release.',
     outcomeImages: [
       {
         src: '/images/work/loopstack/04_fix_log.png',
@@ -1381,11 +1381,11 @@ Frame every output as:
     },
     stream: 'passion',
     client: 'PlayDraft (personal product)',
-    title: 'PlayDraft: A Social Drafting Game, Taken 0 → 1 — Brand to TestFlight in 12 Weeks',
+    title: 'PlayDraft: A Social Drafting Game Built From Brand to TestFlight',
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft — a 0→1 Social Mobile Game Designed & Built in React Native',
-    summary: 'A mobile game that turns the fantasy-draft ritual loose on any topic: Snacks, Movies, Super Powers, GOAT Athletes, or anything friends write in. Solo 0 → 1 execution across product strategy, game mechanics, brand, a token-governed design system, and a working Expo + Supabase app now on TestFlight, with AI-assisted workflows moving it faster.',
-    cardHook: 'The fantasy-draft ritual, turned loose on any topic — snacks, movies, or anything friends write in. Solo 0 → 1: brand, token-governed system, and a working Expo + Supabase app, now on TestFlight.',
+    summary: 'PlayDraft turns the fantasy-draft ritual loose on snacks, movies, athletes, or any topic a group writes in. I took it from the first identity sketch to a working Expo and Supabase app on TestFlight in twelve weeks, using AI to accelerate the build inside a token-governed system.',
+    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. I took the brand, game system, and Expo app to TestFlight in twelve weeks.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',
@@ -1544,7 +1544,7 @@ export const packs = {
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'PlayDraft is a working product on TestFlight, in App Store submission prep. The full loop runs end to end on device: author or pick a topic, draft on the clock with friends, get an instant scored winner, share the board, level up. Launch posture is deliberate: coins-only economy first (cash purchases behind a feature flag until counsel review), third-party topic packs free-tier-only under the legal-safety framework, and a handful of promo surfaces that are UI-complete but not yet wired. No launch metrics exist yet, and none are claimed here. The bigger takeaway sits one level up. PlayDraft is working proof of how my process operates at product scope: define the system, build the experience, test the behavior, cut the parts that don’t survive play, and let AI move the work faster without handing it the final call.',
+    outcomeNote: 'PlayDraft is on TestFlight and being prepared for App Store submission. On device, a group can choose or write a topic, draft on the clock, get an immediate scored winner, share the board, and level up. The first release uses a coins-only economy; cash purchases stay behind a feature flag until counsel review, and third-party topic packs stay free under the legal-safety framework. Some promotional surfaces are visually complete but not wired. There are no launch metrics yet. What exists is working proof of the full product loop, including the parts I cut after play exposed a bad assumption.',
     outcomeImages: [
       {
         src: '/images/work/playdraft/playdraft-home-draft-leagues.png',
@@ -1831,7 +1831,7 @@ export const packs = {
     client: 'Internal Tool',
     title: 'Photography Workflow Agent',
     seoTitle: 'Photography Workflow Agent — AI-Assisted Internal Design Tooling',
-    summary: 'An internal agentic workflow tool built to support photography team operations—combining practical interface design, workflow logic, and AI-assisted execution to reduce repetitive production steps and make image-related tasks easier to test, review, and act on.',
+    summary: 'A zero-install internal tool that packages a repetitive photography workflow into one interface the team can run, preview, and check themselves. I used Claude to accelerate the build, then tested it against the team’s real tasks.',
     year: '2026',
     tags: ['Agentic Workflow', 'Internal Tools', 'AI-Assisted Product', 'UX Engineering', 'Production Systems'],
     role: 'Product Design · UX Engineering · AI-Assisted Build',
@@ -1841,59 +1841,59 @@ export const packs = {
 
     problemPunch: 'Repetitive, judgment-heavy image production steps were slowing a real team down.',
     problem: [
-      'A photography team handled a recurring set of image-preparation and review tasks by hand—careful work, but repetitive enough to eat real time and invite small, late-caught mistakes.',
-      'The opportunity: package that judgment into a tool the team could run themselves, so the repetitive steps got faster and the review step got clearer.',
+      'The photography team repeated the same preparation and review steps by hand. The work needed judgment, but too much of the time went to setup and mistakes surfaced late.',
+      'The tool needed to handle the repeatable parts while keeping the review decision with the person who understood the image.',
     ],
 
     gapsPunch: 'A tool, not a deck. Built to be used, not presented.',
     gaps: [
-      'Off-the-shelf options didn’t fit the team’s actual workflow—the value was in matching their real steps, not a generic editor.',
+      'Off-the-shelf editors did not match the team’s sequence of decisions. The useful part was fitting their actual workflow, not adding another general image tool.',
       'It needed to run with zero setup friction for non-technical users and produce output they could trust at a glance.',
-      'It was a chance to prove that AI-assisted, agentic workflows can solve a concrete internal problem—not just demo well in the abstract.',
+      'A convincing demo was not enough. The test was whether the team chose it for a real task the next day.',
     ],
 
     constraintsPunch: 'Self-started. Zero-install. Real users on day one.',
     constraints: [
-      'Built as a self-started initiative alongside core work—scoped to ship something useful fast, not perfect.',
+      'I started it alongside core project work, so the first release had to solve one useful path instead of covering every edge case.',
       'Had to be usable by the photography team directly, with no install step and no technical onboarding.',
-      'Kept confidential operational specifics out of scope here—the story is the workflow and the build approach, not internal process detail.',
+      'Operational details stay private. This case study can show the workflow and build approach without exposing the team’s internal process.',
     ],
 
-    insightCallout: 'AI didn’t replace the design work here—it expanded the surface area of what I could responsibly explore, build, and put in a real team’s hands. Design judgment decided what was worth shipping.',
+    insightCallout: 'Claude made the first working version cheaper to reach. The design work was deciding which steps could be automated, where the team still needed control, and what the preview had to prove before anyone could trust it.',
 
     approachSubsections: [
       {
         key: 'alignment',
         label: 'Alignment',
-        description: 'Started from the team’s actual steps—what they did by hand, where time went, and what "good" looked like for a finished result. The tool’s job was to absorb the repetitive parts and make the judgment parts faster and clearer, not to take judgment away.',
+        description: 'I mapped the team’s actual steps, where the time went, and what they checked before calling a result finished. That separated the repeatable setup from the judgment the tool should leave alone.',
         images: [],
       },
       {
         key: 'structure',
         label: 'Structure',
-        description: 'Designed a single, self-contained interface the team could open and use immediately—inputs on one side, a live, trustworthy preview on the other—so the result of each decision was visible in real time instead of discovered later.',
+        description: 'I kept the workflow in one screen, with inputs beside a live preview. Each change becomes visible before export instead of turning into a problem at the next review.',
         images: [],
       },
       {
         key: 'build',
         label: 'Build',
-        description: 'Used AI-assisted, agentic workflows to move from idea to working tool quickly—pairing my design and front-end judgment with Claude to structure the logic, build the interface, and tighten the behavior. The design system mindset kept it consistent and legible as it grew.',
+        description: 'Claude helped structure the first logic and scaffold the interface. I set the interaction model, connected it to the existing design tokens, checked the output against real examples, and tightened the behavior when the generated version made a wrong assumption.',
         images: [],
       },
       {
         key: 'iteration',
         label: 'Iteration',
-        description: 'Tested it against real tasks, watched where it helped and where it got in the way, and refined the flow, the output, and the small clarity details that decide whether a team actually adopts a tool or quietly abandons it.',
+        description: 'I tested the tool on real tasks with the team and watched for the places it added work instead of removing it. Those sessions changed the flow, the preview, and the labels before the tool became part of the routine.',
         images: [],
       },
     ],
 
-    outcomeNote: 'The tool put a faster, clearer version of a repetitive workflow directly in the photography team’s hands—turning judgment-heavy manual steps into something they can run, preview, and trust themselves. It’s also a concrete proof point for where my work is heading: using AI-assisted, agentic workflows to solve real internal problems end-to-end, not just talk about them. This entry is intentionally high-level; happy to walk through the build and the workflow in detail.',
+    outcomeNote: 'The photography team now uses the tool directly, with no install step or technical handoff. It makes the repeatable work faster and shows the result early enough to catch a bad decision before export. Claude accelerated the build, but adoption came from matching the team’s real sequence and leaving the final judgment with them. The operational details remain private, so this entry stays at the workflow level.',
     metrics: [
       { value: 'Self-started', label: 'Built alongside core work' },
       { value: 'Zero-install', label: 'Runs for non-technical users day one' },
       { value: 'In use', label: 'Adopted by a real internal team' },
-      { value: 'Agentic', label: 'AI-assisted, end-to-end build' },
+      { value: 'AI-assisted', label: 'Claude accelerated the working build' },
     ],
   },
 ];

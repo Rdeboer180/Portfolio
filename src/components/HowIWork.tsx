@@ -16,7 +16,7 @@ const ProcessIcon = () => (
 
 const steps = [
   {
-    label: 'Understand & Align',
+    label: 'Find the Real Problem',
     phase: 'Discovery',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -24,10 +24,10 @@ const steps = [
       </svg>
     ),
     annotations: ['Stakeholder interviews', 'Business goals', 'User research'],
-    body: 'I ask the right questions before a single pixel moves. I map business goals to user research, surface the real problem early, and align stakeholders across product, engineering, and brand so everyone\u2019s building the same thing.',
+    body: 'Before I open Figma, I need to know what is actually stuck. I compare the business goal with user evidence, name the constraints, and get product, engineering, and brand working from the same problem.',
   },
   {
-    label: 'Design With Intent',
+    label: 'Make the Decision Legible',
     phase: 'Design',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -35,10 +35,10 @@ const steps = [
       </svg>
     ),
     annotations: ['Design tokens', 'Component specs', 'Hi-fi prototypes'],
-    body: 'Every decision is documented and defensible. From high-fidelity prototypes and annotated UI behavior specs to design tokens and component libraries \u2014 I design so engineers can build confidently and teams can extend the work without me in the room.',
+    body: 'The artifact should explain the decision. I use prototypes, behavior notes, tokens, and component rules so engineering can build the intended behavior and the team can extend it without guessing.',
   },
   {
-    label: 'Build for the Long Game',
+    label: 'Stay Close to the Build',
     phase: 'Build',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -46,10 +46,10 @@ const steps = [
       </svg>
     ),
     annotations: ['SCSS/BEM', 'AEM templates', 'Scalable systems'],
-    body: 'With 10+ years of hands-on code experience, I understand how design decisions live in production. I build sustainable components inside complex CMS architectures like AEM — owning the template layer, writing the styles, and documenting patterns so the broader team can ship consistently. I translate brand identity into scalable web systems and deliver work that holds up long after launch.',
+    body: 'More than ten years of front-end work taught me where design decisions fail in production. In AEM and React systems, I work on the templates, styles, component behavior, and documentation instead of treating implementation as someone else\u2019s phase.',
   },
   {
-    label: 'Validate, Optimize & Drive Results',
+    label: 'Test What Shipped',
     phase: 'Validate',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -57,7 +57,7 @@ const steps = [
       </svg>
     ),
     annotations: ['A/B testing', 'SEO analysis', 'Conversion tracking'],
-    body: 'I design for outcomes, not deliverables. A/B testing, usability reviews, SEO-informed information architecture, and post-launch analysis aren\u2019t afterthoughts \u2014 they\u2019re built into how I work. It\u2019s a constant balance of data and intuition: the numbers show what\u2019s happening, judgment reads why and decides what to try next \u2014 and every release feeds back into the one after it to protect conversion and drive measurable impact.',
+    body: 'A/B tests, usability reviews, search behavior, and post-launch data tell me where the design is holding and where it is not. The number describes what happened. My job is to read the context, choose the next test, and avoid claiming more than the evidence supports.',
   },
   {
     label: 'Putting in the reps',
@@ -68,7 +68,7 @@ const steps = [
       </svg>
     ),
     annotations: ['AI workflows', 'Certifications', 'Emerging tools'],
-    body: 'I treat my craft the way an athlete treats performance \u2014 deliberately. Design intuition is really just an accumulation of pattern recognition, and the reps are how you build it: ongoing certifications, continuous refinement of soft skills like facilitation and storytelling, and staying ahead of the tools redefining the field. I was an early adopter of AI-augmented workflows and I actively integrate emerging tools to work faster, communicate more clearly, and deliver at a higher level.',
+    body: 'I still study the work. Certifications, design interviews, side projects, facilitation, and new tools all become useful when they change what I do on Monday. AI belongs in that practice too: it earns a place when it helps me test a real decision, not when it only makes more output.',
   },
 ];
 
@@ -178,8 +178,8 @@ const HowIWork: React.FC = () => {
     <section id="how-i-work" className="how-i-work" ref={sectionRef}>
       <div className="how-i-work__header">
         <SectionBadge icon={<ProcessIcon />} label="How I Work" />
-        <h2 className="how-i-work__title">My Design &amp; Development Process</h2>
-        <p className="how-i-work__intro">I start by defining the problem and aligning early, design with intent, ship confidently, and refine through reflection to make the next iteration better.</p>
+        <h2 className="how-i-work__title">How I move a decision into the product</h2>
+        <p className="how-i-work__intro">The steps flex with the project. The constant is staying with the work long enough to see whether the idea survives implementation and use.</p>
       </div>
 
       <div className="how-i-work__container">

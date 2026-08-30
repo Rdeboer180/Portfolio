@@ -3,7 +3,7 @@
 // Route: #/about
 // ============================================
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import { getHomeHref } from '../utils/homeSession';
@@ -13,11 +13,15 @@ import AboutBench from './AboutBench';
 import ProcessPrinciples from './ProcessPrinciples';
 import LinkedInLink from './LinkedInLink';
 import CandidateSnapshot from './CandidateSnapshot';
+import AboutModeSwitcher, { AboutMode } from './AboutModeSwitcher';
+import AboutStudio from './AboutStudio';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import '../styles/styles.scss';
 
 const AboutPage: React.FC = () => {
+  const [activeMode, setActiveMode] = useState<AboutMode>('approach');
+
   usePageMeta({
     title: 'About — Ryan DeBoer, Product Design Engineer',
     description:
@@ -38,49 +42,69 @@ const AboutPage: React.FC = () => {
         </Link>
       </nav>
 
-      {/* ── Hero — text-first editorial intro ─────────────────────────────── */}
-      <AboutHero />
+      <AboutModeSwitcher activeMode={activeMode} onChange={setActiveMode} />
 
-      {/* ── At a glance — factual candidate snapshot for recruiters + AI ───── */}
-      <CandidateSnapshot variant="full" />
+      {activeMode === 'approach' ? (
+        <div
+          id="about-mode-panel-approach"
+          role="tabpanel"
+          aria-labelledby="about-mode-tab-approach"
+          className="about-page__mode-panel"
+        >
+          {/* ── Hero — text-first editorial intro ─────────────────────────── */}
+          <AboutHero />
 
-      {/* ── Story — six text-first beats (career evolution, not tabs) ─────── */}
-      <AboutStorySections />
+          {/* ── At a glance — factual candidate snapshot for recruiters + AI ─ */}
+          <CandidateSnapshot variant="full" />
 
-      {/* ── The bench — the person by their objects, drawn ────────────────── */}
-      <AboutBench />
+          {/* ── Story — six text-first beats (career evolution, not tabs) ─── */}
+          <AboutStorySections />
 
-      {/* ── Transition — single orange dot-matrix card ─────────────────────── */}
-      <div className="about-page__transition-card">
-        <div className="about-page__transition-inner">
-          <p className="about-page__transition-label">[ Bridge ]</p>
-          <h2 className="about-page__transition-headline">
-            How that shows up in the work
-          </h2>
-          <p className="about-page__transition-body">
-            The path has changed over time, but the pattern has stayed consistent: understand the
-            problem, shape the experience, build close to the system, ship with care, and use each
-            release to make the next one stronger.
-          </p>
-          <p className="about-page__transition-body">
-            That thread runs from visual design to front-end code to design systems to AI-assisted
-            work. The tools change; the standard doesn&rsquo;t.
-          </p>
-          <p className="about-page__transition-note">
-            The finished version of that standard is this site &mdash; and the thinking behind it
-            lives in <Link to="/notes" className="about-page__transition-notes-link">the notes</Link>,
-            where essays start as LinkedIn posts and the systems behind the work get written up.
-          </p>
-          <LinkedInLink
-            label="Read along as it happens"
-            surface="about_bridge"
-            className="about-page__transition-link"
-          />
+          {/* ── The bench — the person by their objects, drawn ────────────── */}
+          <AboutBench />
+
+          {/* ── Transition — single orange dot-matrix card ─────────────────── */}
+          <div className="about-page__transition-card">
+            <div className="about-page__transition-inner">
+              <p className="about-page__transition-label">[ Bridge ]</p>
+              <h2 className="about-page__transition-headline">
+                How that shows up in the work
+              </h2>
+              <p className="about-page__transition-body">
+                The path changed, but one habit stayed: follow the decision past the frame. I want
+                to see how it behaves in the system, what implementation exposes, and what the next
+                release should learn from it.
+              </p>
+              <p className="about-page__transition-body">
+                That habit connects the visual work, the front-end code, the design systems, and the
+                AI-assisted products. The tools change. The responsibility stays mine.
+              </p>
+              <p className="about-page__transition-note">
+                This site is one working example. The decisions behind it live in{' '}
+                <Link to="/notes" className="about-page__transition-notes-link">the notes</Link>,
+                alongside the systems, mistakes, and open questions that shaped the work.
+              </p>
+              <LinkedInLink
+                label="Read along as it happens"
+                surface="about_bridge"
+                className="about-page__transition-link"
+              />
+            </div>
+          </div>
+
+          {/* ── My Process — 5-row principles accordion ───────────────────── */}
+          <ProcessPrinciples />
         </div>
-      </div>
-
-      {/* ── My Process — 5-row principles accordion ───────────────────────── */}
-      <ProcessPrinciples />
+      ) : (
+        <div
+          id="about-mode-panel-studio"
+          role="tabpanel"
+          aria-labelledby="about-mode-tab-studio"
+          className="about-page__mode-panel"
+        >
+          <AboutStudio />
+        </div>
+      )}
 
       <Footer />
     </article>

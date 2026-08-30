@@ -89,10 +89,10 @@ const SitemapPage: React.FC = () => {
       <div className="sitemap-page__inner">
         <header className="sitemap-page__header">
           <p className="sitemap-page__eyebrow">Site Index</p>
-          <h1 className="sitemap-page__title">Everything, in one place</h1>
+          <h1 className="sitemap-page__title">Every public page</h1>
           <p className="sitemap-page__lead">
-            Every page on rdeboerdesigns.com&mdash;pages, client and employer work, and self-initiated products.
-            Start anywhere.
+            The main pages, client and employer work, self-initiated products, and notes on how
+            they were made.
           </p>
         </header>
 

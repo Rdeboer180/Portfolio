@@ -96,7 +96,7 @@ const TechnicalAbilities: React.FC = () => {
           <SectionBadge icon={<CodeIcon />} label="Technical" index="06" />
           <h2 className="technical__title">Tools &amp; Technologies</h2>
           <p className="technical__subtitle">
-            A toolkit built over 16+ years of hands-on work across design, front-end development, and systems thinking.
+            Tools I have used to design the system, inspect the build, and stay close to what ships.
           </p>
         </div>
 

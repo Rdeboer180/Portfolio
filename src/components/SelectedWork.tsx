@@ -20,7 +20,7 @@ const SelectedWork: React.FC = () => {
       <div className="selected-work__container">
         <div className="selected-work__header">
           <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" />
-          <h2 className="selected-work__title">What I've designed recently</h2>
+          <h2 className="selected-work__title">Work I stayed with through implementation</h2>
         </div>
 
         <div className="selected-work__list">

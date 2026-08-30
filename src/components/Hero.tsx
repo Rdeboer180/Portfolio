@@ -508,7 +508,7 @@ const Hero: React.FC = () => {
                   visual sequence below is untouched; only what the h1 asserts
                   has changed. */}
               <h1 className="hero__h1-sr-only">
-                Ryan DeBoer &mdash; Product Design Engineer bridging ambitious UX and buildable systems
+                Ryan DeBoer, Product Design Engineer building systems and products from Figma into working front ends
               </h1>
 
               {/* The animated phrases still reach assistive tech: the visual
