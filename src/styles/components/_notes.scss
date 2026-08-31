@@ -85,7 +85,10 @@
     font-weight: $font-weight-medium;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: $color-primary;
+    // Orange Deep, not Signal Orange: at 12px this is text, and #f03d01
+    // measures 3.9:1 on paper against a 4.5:1 AA floor. The deeper end of the
+    // same accent clears it at 5.6:1 without introducing a second hue.
+    color: $color-primary-dark;
     margin: 0 0 $spacing-md;
   }
 
@@ -171,7 +174,8 @@
     font-weight: $font-weight-medium;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: $color-primary;
+    // Same AA reasoning as __eyebrow above.
+    color: $color-primary-dark;
     margin-bottom: $spacing-md;
   }
 
@@ -246,10 +250,30 @@
     color: $color-neutral-standard;
   }
 
+  // The stream number is the thing that says "a new section starts here", so
+  // it is the only word in the rule that takes the accent. The label beside it
+  // stays slate — orange marks the boundary, it does not colour the heading.
+  &__rule-index {
+    // Same AA reasoning as __eyebrow above. The handle and the accent run in
+    // the line keep Signal Orange: those are graphics, not text, so they answer
+    // to the 3:1 non-text floor instead and clear it.
+    color: $color-primary-dark;
+  }
+
+  // The rule reads left to right: an accent run leaves the number, then hands
+  // off to the hairline that carries the rest of the width. One hard stop, no
+  // fade — the same flat, drawn logic as the selection frames elsewhere. A
+  // full-width orange rule would put three loud lines on one page and break
+  // the single-accent rule; a short leading run delineates without shouting.
   &__rule-line {
     flex: 1;
     height: 1px;
-    background: $color-neutral-light;
+    background: linear-gradient(
+      to right,
+      $color-primary 0,
+      $color-primary 72px,
+      $color-neutral-light 72px
+    );
   }
 
   &__rule-handle {
@@ -257,6 +281,13 @@
     width: 5px;
     height: 5px;
     background: $color-secondary;
+  }
+
+  // The opening handle is the section's own start mark and takes the accent;
+  // the closing one stays steel, so a stream reads as opening rather than
+  // being bracketed by two equal marks.
+  &__rule-handle--start {
+    background: $color-primary;
   }
 
   // ReadMe-style split: identity rail left, entries right

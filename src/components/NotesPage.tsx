@@ -113,9 +113,13 @@ const NoteStream: React.FC<{
   rail?: React.ReactNode;
 }> = ({ index, label, ariaLabel, sub, count, notes, rail }) => (
   <section className="notes__section" aria-label={ariaLabel}>
+    {/* The index carries the accent, not the whole label — the number is what
+        marks a new stream starting, so it is the part that gets to be orange. */}
     <div className="notes__rule" aria-hidden="true">
-      <span className="notes__rule-handle" />
-      <span className="notes__rule-label">{index} / {label}</span>
+      <span className="notes__rule-handle notes__rule-handle--start" />
+      <span className="notes__rule-label">
+        <span className="notes__rule-index">{index}</span> / {label}
+      </span>
       <span className="notes__rule-line" />
       <span className="notes__rule-handle" />
     </div>
