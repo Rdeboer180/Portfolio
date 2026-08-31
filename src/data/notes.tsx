@@ -144,6 +144,101 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
+  // Two live client engagements. Deliberately scoped to what is Ryan's to tell:
+  // his own contributions and his own reasons. No agency partner, no internal
+  // deliberation, no private design critique, no staging URLs, and T1D Hub is
+  // marked unlaunched because it is. Promote to a case study once the practice
+  // opens and the framing is signed off.
+  {
+    slug: 'already-the-audience',
+    read: '4 min',
+    kind: 'log',
+    date: 'August 2026',
+    dateISO: '2026-08-31',
+    title: 'The brief came second: two projects where I was already the audience',
+    dek: 'A Type 1 diabetes practice and an NFL analyst, both in progress. In each one the work started from something I was already obsessed with, and in each one what I handed over was a tool rather than a file.',
+    body: (
+      <>
+        <p>
+          Two engagements are running right now that I did not pitch in any normal sense. In both
+          cases I was already deep in the subject before there was any work to do, and the brief
+          arrived afterwards. That order turns out to change what you make.
+        </p>
+
+        <h2>A Type 1 practice, for reasons that are not professional</h2>
+        <p>
+          T1D Hub is a Type 1 diabetes practice a close friend is opening. I have been a Type 1
+          diabetic for most of my life, and I now have two young kids and a real understanding that
+          this could become part of their lives too. So when he started building the practice, I
+          was not a designer looking at a healthcare brief. I was about as close to both the vision
+          and the people it needs to serve as a designer can get.
+        </p>
+        <p>
+          What I brought first was a mark and a small design system, plus a working prototype to
+          argue from rather than a deck. What turned out to matter more was the document behind it:
+          a vision handoff describing what the thing could eventually become, which is not a
+          brochure site. It is a personalised portal that onboards someone by where they actually
+          are in their diabetes journey, an education library closer to a course platform than a
+          resources page, and somewhere for people to not feel alone in it. Most of that is years
+          out. Writing it down early is what keeps the first version from foreclosing it.
+        </p>
+        <p>
+          I am a contributor here, not the owner of it, and the site has not launched yet. The part
+          I keep coming back to is that being the patient is the whole reason I can be useful. I
+          know what the typical version of this experience feels like from the other side of it,
+          and I have wanted the different version to exist for a long time. It is the same reason{' '}
+          <Link to="/work/loopstack/">LoopStack</Link> exists.
+        </p>
+
+        <h2>An NFL analyst, and a brand that applies itself</h2>
+        <p>
+          The other is Zain Dhanani, who does NFL analysis and hosts The CutUp. I have been a
+          fantasy football obsessive for years, which is also{' '}
+          <Link to="/work/playdraft/">where PlayDraft came from</Link>, so this one started from
+          the same place: I was in the audience first.
+        </p>
+        <p>
+          It began as ordinary asset work. A banner that stops getting cropped on mobile, a podcast
+          cover at the size the platforms actually want. But the recurring need was not assets, it
+          was that every screengrab he posts should look like it came from the show. That is
+          usually solved with a brand guideline nobody opens, or by the designer becoming a
+          bottleneck on every post.
+        </p>
+        <p>
+          So the deliverable became a tool: an installable skill that takes any screenshot and
+          frames it in the show&rsquo;s treatment, header and footer, handle and link, in two
+          styles. It runs in batches and carries its own fonts and marks, so there is nothing to
+          download and nothing to remember. My favourite detail is the least visible one: it pads
+          the image before it frames it, so the branding can never cover the first or last line of
+          text in the screenshot. That bug would have shown up on the first real post, and the
+          brand would have quietly become the thing that ate the content.
+        </p>
+
+        <Callout marker="The pattern">
+          In both, the useful thing was not the file. It was the thing that keeps working when I am
+          not in the room.
+        </Callout>
+
+        <h2>What I am not sure about yet</h2>
+        <p>
+          I believe in shipping the system rather than the artifact, and I have{' '}
+          <Link to="/work/design-enablement/">built internal tooling on exactly that bet</Link>{' '}
+          before. What I have not proven is whether it holds up in client work. A design system
+          only pays off if the next person extends it instead of redesigning around it. A branding
+          tool only pays off if it actually gets installed and used, rather than admired once and
+          forgotten.
+        </p>
+        <p>
+          Neither of these has run long enough to tell me. Both are the kind of work I want more
+          of, and both started the same way, which is the part I did not plan and now think is the
+          point: I was{' '}
+          <Link to="/notes/nobody-clapped/">already building in these spaces for myself</Link>{' '}
+          before either was a project. The obsession was the qualification.
+        </p>
+      </>
+    ),
+  },
+  // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'nobody-clapped',
     read: '5 min',
