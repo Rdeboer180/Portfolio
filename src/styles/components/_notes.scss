@@ -932,58 +932,29 @@
 }
 
 // ── Responsive ──────────────────────────────────────────────────────────────
-@media (max-width: $breakpoint-md) {
+// ── Index layout, below the desktop grid ────────────────────────────────────
+// Stacks at $breakpoint-lg rather than $breakpoint-md, and the two are separate
+// decisions. The index runs two nested grids: a 300px identity rail beside the
+// entries, and inside each entry a 132px meta column, the title, and the
+// read-time aside. Those cost roughly 560px before the title gets any width at
+// all, so between 768px and about 1000px the desktop grid technically applied
+// while the title column was down to a word per line. The rail and the rows
+// stack together because they fail together.
+@media (max-width: $breakpoint-lg) {
   .notes {
-    &__header {
-      padding: $spacing-3xl $spacing-xl $spacing-xl;
-    }
-
-    &__pinned-wrap,
-    &__body,
-    &__close {
-      padding-left: $spacing-lg;
-      padding-right: $spacing-lg;
-    }
-
     &__section-grid {
       grid-template-columns: 1fr;
       row-gap: $spacing-xl;
     }
 
+    // Meta rail stacks above the title once the row is a single column.
     &__row {
       grid-template-columns: 1fr;
       row-gap: $spacing-sm;
     }
 
-    &__row-meta {
-      flex-direction: row;
-      align-items: center;
-      gap: $spacing-md;
-      padding-top: 0;
-    }
-
+    &__row-meta,
     &__row-aside {
-      flex-direction: row;
-      align-items: center;
-      padding-top: 0;
-    }
-
-    &__section {
-      padding-left: $spacing-lg;
-      padding-right: $spacing-lg;
-    }
-
-    &__title {
-      font-size: $font-size-h3;
-    }
-
-    // Meta rail stacks above the title on small screens
-    &__row {
-      grid-template-columns: 1fr;
-      row-gap: $spacing-sm;
-    }
-
-    &__row-meta {
       flex-direction: row;
       align-items: center;
       gap: $spacing-md;
@@ -993,6 +964,29 @@
     &__row-title,
     &__row-dek {
       grid-column: 1;
+    }
+  }
+}
+
+// ── Phone treatment ─────────────────────────────────────────────────────────
+// Padding and display type only. Kept at $breakpoint-md on purpose: a tablet
+// stacks the grid above but should not inherit phone gutters.
+@media (max-width: $breakpoint-md) {
+  .notes {
+    &__header {
+      padding: $spacing-3xl $spacing-xl $spacing-xl;
+    }
+
+    &__pinned-wrap,
+    &__body,
+    &__close,
+    &__section {
+      padding-left: $spacing-lg;
+      padding-right: $spacing-lg;
+    }
+
+    &__title {
+      font-size: $font-size-h3;
     }
   }
 }
