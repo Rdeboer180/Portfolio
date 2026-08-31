@@ -1034,3 +1034,28 @@
   font-size: $font-size-body-sm;
   color: $color-neutral-muted;
 }
+
+// ── In-body figure ──────────────────────────────────────────────────────────
+// Notes are prose first, so an image has to earn its place and then behave like
+// prose: it holds the reading column rather than breaking out of it, sits on a
+// hairline card so a light artwork does not float on the page, and takes a
+// caption in the same voice as the body.
+.notes__body .notes__figure {
+  margin: $spacing-2xl 0;
+  max-width: 68ch;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+  }
+
+  figcaption {
+    margin-top: $spacing-md;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+}

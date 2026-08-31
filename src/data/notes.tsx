@@ -167,23 +167,36 @@ export const NOTES: Note[] = [
 
         <h2>A Type 1 practice, for reasons that are not professional</h2>
         <p>
-          T1D Hub is a Type 1 diabetes practice a close friend is opening. I have been a Type 1
-          diabetic for most of my life, and I now have two young kids and a real understanding that
-          this could become part of their lives too. So when he started building the practice, I
-          was not a designer looking at a healthcare brief. I was about as close to both the vision
-          and the people it needs to serve as a designer can get.
+          T1D Hub is a Type 1 diabetes practice Dr. Brian Huber is opening, and Brian is a close
+          friend. I have been a Type 1 diabetic for most of my life, and I now have two young kids
+          and a real understanding that this could become part of their lives too. So when he
+          started building the practice, I was not a designer looking at a healthcare brief. I was
+          about as close to both the vision and the people it needs to serve as a designer can get.
         </p>
         <p>
           What I brought first was a mark and a small design system, plus a working prototype to
           argue from rather than a deck. What turned out to matter more was the document behind it:
           a vision handoff describing what the thing could eventually become, which is not a
-          brochure site. It is a personalised portal that onboards someone by where they actually
+          brochure site. It is a personalized portal that onboards someone by where they actually
           are in their diabetes journey, an education library closer to a course platform than a
           resources page, and somewhere for people to not feel alone in it. Most of that is years
           out. Writing it down early is what keeps the first version from foreclosing it.
         </p>
+        <figure className="notes__figure">
+          <img
+            src="/images/notes/t1d-hub/logo-system.png"
+            alt="T1D Hub logo system: the primary lockup on white and the reversed lockup on navy. In both, a continuous glucose monitor trace runs through the wordmark, entering at the T and connecting across the 1 and D."
+            loading="lazy"
+          />
+          <figcaption>
+            The mark and the rule that governs it. A CGM trace runs through the wordmark, and it has
+            to stay connected in every configuration. That constraint is the whole idea: the line a
+            Type 1 reads every day is the line holding the name together.
+          </figcaption>
+        </figure>
         <p>
-          I am a contributor here, not the owner of it, and the site has not launched yet. The part
+          I am a contributor to Brian's practice, not the owner of it, and the site has not
+          launched yet. The part
           I keep coming back to is that being the patient is the whole reason I can be useful. I
           know what the typical version of this experience feels like from the other side of it,
           and I have wanted the different version to exist for a long time. It is the same reason{' '}
@@ -192,8 +205,9 @@ export const NOTES: Note[] = [
 
         <h2>An NFL analyst, and a brand that applies itself</h2>
         <p>
-          The other is Zain Dhanani, who does NFL analysis and hosts The CutUp. I have been a
-          fantasy football obsessive for years, which is also{' '}
+          The other is <a href="https://x.com/DhananiZain" target="_blank" rel="noopener noreferrer">Zain
+          Dhanani</a>, who does NFL analysis and hosts The CutUp. I have been a fantasy football
+          obsessive for years, which is also{' '}
           <Link to="/work/playdraft/">where PlayDraft came from</Link>, so this one started from
           the same place: I was in the audience first.
         </p>
@@ -205,13 +219,17 @@ export const NOTES: Note[] = [
           bottleneck on every post.
         </p>
         <p>
-          So the deliverable became a tool: an installable skill that takes any screenshot and
-          frames it in the show&rsquo;s treatment, header and footer, handle and link, in two
-          styles. It runs in batches and carries its own fonts and marks, so there is nothing to
-          download and nothing to remember. My favourite detail is the least visible one: it pads
-          the image before it frames it, so the branding can never cover the first or last line of
-          text in the screenshot. That bug would have shown up on the first real post, and the
-          brand would have quietly become the thing that ate the content.
+          So the deliverable became a tool. It is an agent skill: Zain drops it into Claude once,
+          then says &ldquo;brand this for X&rdquo; and gets back a framed image in the show&rsquo;s
+          treatment, header and footer, handle and link, in either of two styles. It runs in batches
+          and carries its own fonts and marks, so there is nothing to download and nothing to
+          remember. This is the same move as{' '}
+          <Link to="/notes/ryan-design-taste-skill/">publishing my own taste as a skill</Link>:
+          the agent executes it, but the rules it follows are decisions I made and wrote down.
+          My favorite detail is the least visible one. It pads the image before it frames it, so
+          the branding can never cover the first or last line of text in the screenshot. That bug
+          would have shown up on the first real post, and the brand would have quietly become the
+          thing that ate the content.
         </p>
 
         <Callout marker="The pattern">
