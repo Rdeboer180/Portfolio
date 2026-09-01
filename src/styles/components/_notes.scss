@@ -66,6 +66,30 @@
   }
 
   // ── Header ────────────────────────────────────────────────────────────────
+  // ── Intro band ─────────────────────────────────────────────────────────────
+  // Statement left, way-in right. Both children already center themselves in
+  // the page container, so the band takes that job over and they run full-width
+  // inside their own column — otherwise each would re-center in half the space.
+  // Baseline alignment, not stretch: the Start Here frame should sit on the
+  // lede's line rather than growing to match the headline's height.
+  &__intro {
+    width: 100%;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $section-pad-y $container-padding-x $spacing-2xl;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: $spacing-4xl;
+    align-items: start;
+  }
+
+  &__intro > &__header,
+  &__intro > &__pinned-wrap {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
   &__header {
     width: 100%;
     max-width: $container-max-width; // mirrors the homepage container
@@ -232,68 +256,67 @@
     }
   }
 
-  // Quiet numbered rule — the homepage section-rule recipe in editorial tone:
-  // mono label seated on a hairline, selection handles bookending it.
-  &__rule {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-2xl;
+  // ── Stream rail ────────────────────────────────────────────────────────────
+  // The rail replaces the thin horizontal rule that used to open each stream.
+  // A number at display scale against a vertical edge delineates far harder
+  // than a hairline, and it gives the stream name, the count and the aside one
+  // column to live in instead of three separate places.
+  //
+  // Only stream 01 takes the accent, per the section-rule rule in DESIGN.md:
+  // one section carries orange at a time. The others run steel, which keeps
+  // the page from turning into three competing accents.
+  &__stream-index {
+    font-family: $font-family-heading;
+    font-size: 64px;
+    font-weight: $font-weight-extrabold;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: $color-secondary;
   }
 
-  &__rule-label {
+  &__stream-label {
+    margin: $spacing-sm 0 0;
     font-family: $font-family-mono;
-    font-size: $font-size-caption;
+    font-size: 11px;
     font-weight: $font-weight-medium;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: $color-neutral-standard;
+    color: $color-neutral-dark;
+    max-width: 12ch;
   }
 
-  // The stream number is the thing that says "a new section starts here", so
-  // it is the only word in the rule that takes the accent. The label beside it
-  // stays slate — orange marks the boundary, it does not colour the heading.
-  &__rule-index {
-    // Same AA reasoning as __eyebrow above. The handle and the accent run in
-    // the line keep Signal Orange: those are graphics, not text, so they answer
-    // to the 3:1 non-text floor instead and clear it.
-    color: $color-primary-dark;
+  // The aside is the one handwritten mark on the page. Caveat is reserved for
+  // exactly this in the system, so it stays scarce: one per stream, never a
+  // second per entry.
+  &__stream-aside {
+    display: block;
+    margin-top: $spacing-lg;
+    padding-top: $spacing-lg;
+    border-top: 1px solid $color-neutral-light;
+    font-family: $font-family-hand;
+    font-size: 20px;
+    line-height: 1.25;
+    color: $color-primary;
+    max-width: 16ch;
   }
 
-  // The rule reads left to right: an accent run leaves the number, then hands
-  // off to the hairline that carries the rest of the width. One hard stop, no
-  // fade — the same flat, drawn logic as the selection frames elsewhere. A
-  // full-width orange rule would put three loud lines on one page and break
-  // the single-accent rule; a short leading run delineates without shouting.
-  &__rule-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      $color-primary 0,
-      $color-primary 72px,
-      $color-neutral-light 72px
-    );
-  }
+  &__stream-arrow {
+    display: block;
+    width: 120px;
+    height: 22px;
+    margin: 6px 0 0 -4px;
 
-  &__rule-handle {
-    flex-shrink: 0;
-    width: 5px;
-    height: 5px;
-    background: $color-secondary;
-  }
-
-  // The opening handle is the section's own start mark and takes the accent;
-  // the closing one stays steel, so a stream reads as opening rather than
-  // being bracketed by two equal marks.
-  &__rule-handle--start {
-    background: $color-primary;
+    path {
+      stroke: $color-primary;
+      stroke-width: 1.4;
+      fill: none;
+    }
   }
 
   // ReadMe-style split: identity rail left, entries right
   &__section-grid {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 212px 1fr;
     column-gap: $spacing-3xl;
     align-items: start;
   }
@@ -302,13 +325,23 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: $spacing-md;
+    gap: 0;
+    padding-right: $spacing-xl;
+    border-right: 2px solid $color-secondary;
+    align-self: stretch;
   }
 
+  // One stream at a time wears the accent.
+  &__section--accent &__section-rail { border-right-color: $color-primary; }
+  &__section--accent &__stream-index { color: $color-primary; }
+
   &__section-count {
+    margin-top: $spacing-sm;
     font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    color: $color-neutral-muted;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-secondary-dark;
   }
 
   &__stream-sub {
@@ -316,17 +349,112 @@
     line-height: $line-height-body-sm;
     color: $color-neutral-standard;
     max-width: 34ch;
-    margin: 0;
+    margin: $spacing-lg 0 0;
   }
 
-  // First row aligns to the rail's first line — no top padding on the group
-  &__section-rows .notes__row:first-child {
+  // First row aligns to the rail's first line — no top padding on the group.
+  // The newest row opts out: it is a tinted surface, so it keeps its inset.
+  &__section-rows .notes__row:first-child:not(.notes__row--newest) {
     padding-top: 0;
+  }
+
+
+  // ── Selection marquee ──────────────────────────────────────────────────────
+  // Photoshop's marching ants, in Signal Orange: four 1px edges drawn as
+  // repeating gradients, each marching in the direction that reads as one
+  // continuous rotation around the row. Four backgrounds rather than a dashed
+  // border because a CSS border dashes each side independently and the corners
+  // never line up.
+  //
+  // This loops, which the motion rules otherwise forbid. It earns the exception
+  // the same way the real thing does: it runs only while a row is actually
+  // hovered or focused, so it is reporting a state the pointer is holding open
+  // rather than asking for attention on its own.
+  &__row-marquee {
+    position: absolute;
+    // Rows carry vertical padding but no horizontal padding, so inset:0 would
+    // run the ants straight down the edge of the date and the read time. The
+    // box widens to the same boundary the newest row's tint uses, so the
+    // marquee lands in the same place on every row, tinted or not.
+    inset: 0 (-$spacing-xl);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms ease;
+
+    background-image:
+      repeating-linear-gradient(90deg, #{$color-primary} 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(90deg, #{$color-primary} 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(0deg, #{$color-primary} 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(0deg, #{$color-primary} 0 5px, transparent 5px 10px);
+    background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+  }
+
+  // The tinted row's box already extends past the text column, so its marquee
+  // sits flush instead of widening again.
+  &__row--newest &__row-marquee {
+    inset: 0;
+  }
+
+  &__row:hover &__row-marquee,
+  &__row:focus-visible &__row-marquee {
+    opacity: 1;
+    animation: notesMarquee 1200ms linear infinite;
+  }
+
+  // ── Newest entry ───────────────────────────────────────────────────────────
+  // The single most recent note on the page, not one per stream: a tint wash
+  // and the 5px corner handles the case-study cards use, so "most recent" is a
+  // state the page shows rather than something the reader has to work out from
+  // the dates. Handles are on the element, not a hover reward, because this is
+  // standing information.
+  &__section-rows &__row--newest {
+    position: relative;
+    background: $color-primary-light;
+    // The tint is a surface, so it needs real inset on all four sides. The
+    // negative margin cancels the horizontal half so the text still lines up
+    // with the untinted rows above and below it.
+    margin: 0 (-$spacing-xl);
+    padding: $spacing-2xl $spacing-xl;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: $color-secondary;
+      left: -3px;
+    }
+
+    &::before { top: -3px; }
+    &::after { bottom: -3px; }
+  }
+
+  // The right-hand pair, so the frame reads as a bounding box rather than an
+  // edge marker.
+  &__section-rows &__row--newest .notes__row-aside {
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: $color-secondary;
+      right: -#{$spacing-xl + 3px};
+    }
+
+    &::before { top: -#{$spacing-2xl + 3px}; }
+    &::after { bottom: -#{$spacing-2xl + 3px}; }
   }
 
   // Two-column editorial row on desktop: mono meta rail left, content right —
   // the case-study meta-bar rhythm applied to a list.
   &__row {
+    position: relative;
     display: grid;
     grid-template-columns: 132px 1fr auto;
     column-gap: $spacing-2xl;
@@ -942,10 +1070,47 @@
 // stack together because they fail together.
 @media (max-width: $breakpoint-lg) {
   .notes {
+    // Statement above the way-in once there is no room beside it.
+    &__intro {
+      grid-template-columns: 1fr;
+      row-gap: $spacing-2xl;
+    }
+
     &__section-grid {
       grid-template-columns: 1fr;
       row-gap: $spacing-xl;
     }
+
+    // The rail turns from a left column into a header band: the edge moves to
+    // the bottom, the number and name sit on one line, and the aside keeps its
+    // place in the flow as a lead-in instead of disappearing with the margin.
+    // This is the whole reason the aside lives in the rail.
+    &__section-rail {
+      border-right: 0;
+      border-bottom: 2px solid $color-secondary;
+      padding-right: 0;
+      padding-bottom: $spacing-lg;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: $spacing-lg;
+      align-items: baseline;
+    }
+
+    &__section--accent &__section-rail { border-bottom-color: $color-primary; }
+
+    &__stream-index { font-size: 44px; }
+    &__stream-label { margin-top: 0; max-width: none; }
+    &__section-count { grid-column: 2; margin-top: 2px; }
+
+    &__stream-aside {
+      grid-column: 1 / -1;
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      max-width: none;
+    }
+
+    &__stream-arrow { display: none; }
+    &__stream-sub { grid-column: 1 / -1; max-width: 60ch; }
 
     // Meta rail stacks above the title once the row is a single column.
     &__row {
@@ -1057,5 +1222,22 @@
     font-size: $font-size-body-sm;
     line-height: 1.6;
     color: $color-neutral-muted;
+  }
+}
+
+// Each edge steps one full dash cycle (10px) per iteration, in the rotational
+// direction of its side, so the ants appear to travel around the row rather
+// than each edge sliding on its own.
+@keyframes notesMarquee {
+  to {
+    background-position: 10px 0, -10px 100%, 0 -10px, 100% 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // The marquee still marks the hovered row; it just stops marching.
+  .notes__row:hover .notes__row-marquee,
+  .notes__row:focus-visible .notes__row-marquee {
+    animation: none;
   }
 }

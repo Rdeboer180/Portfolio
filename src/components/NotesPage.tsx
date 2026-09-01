@@ -20,6 +20,9 @@ const NotesPage: React.FC = () => {
   const essays = NOTES_BY_DATE.filter((n) => n.kind === 'essay');
   const logs = NOTES_BY_DATE.filter((n) => n.kind === 'log');
   const resolved = NOTES_BY_DATE.filter((n) => n.kind === 'skill' || n.kind === 'system');
+  // NOTES_BY_DATE is sorted newest first, so the head of it is the one entry
+  // that gets the tint and the selection frame.
+  const newestSlug = NOTES_BY_DATE[0]?.slug;
   usePageMeta({
     title: 'Notes — Ryan DeBoer on craft, systems, and care',
     description:
@@ -37,6 +40,11 @@ const NotesPage: React.FC = () => {
         </div>
       </nav>
 
+      {/* Intro is one two-column band on desktop: the page's own statement on
+          the left, the way in on the right, so the first screen carries both
+          instead of pushing Start Here below the fold. Collapses to a single
+          column at the same breakpoint the stream rails do, header first. */}
+      <div className="notes__intro">
       <header className="notes__header">
         <p className="notes__eyebrow">[ Notes ]</p>
         <h1 className="notes__title">Writing from the work</h1>
@@ -46,8 +54,6 @@ const NotesPage: React.FC = () => {
         </p>
       </header>
 
-      {/* Pinned — the system + the skill, front and center. The frame caps at
-          the text column and left-aligns with the header copy above it. */}
       <section className="notes__pinned-wrap" aria-label="Start here">
         <div className="notes__pinned">
           <span className="notes__pinned-label">[ Start Here ]</span>
@@ -67,17 +73,22 @@ const NotesPage: React.FC = () => {
           </div>
         </div>
       </section>
+      </div>
 
-      {/* Every stream uses case-study grammar: a numbered rule opens the
-          section, a rail carries its identity (ReadMe-style split), and the
-          entries are hairline rows with a read-time + sketch-arrow aside. */}
+      {/* Each stream is a rail plus its rows: the rail carries the number at
+          display scale, the name, the count and one handwritten aside; the rows
+          stay hairline-separated with a read-time and sketch-arrow. Stream 01
+          alone takes the accent, so orange still means one thing on the page. */}
       <NoteStream
         index="01"
         label="Thinking Out Loud"
         ariaLabel="Notes from LinkedIn"
         sub="Blog-like thoughts that started as public LinkedIn posts. Lightly edited, still warm."
+        aside="the rough cut is on LinkedIn"
         count={essays.length}
         notes={essays}
+        accent
+        newestSlug={newestSlug}
         rail={<LinkedInLink label="Read them as they land" surface="notes_stream" />}
       />
       <NoteStream
@@ -85,16 +96,20 @@ const NotesPage: React.FC = () => {
         label="In Progress"
         ariaLabel="Build logs"
         sub="Work that isn't settled. Published while the decisions are still moving, discarded directions included."
+        aside="dated because they will age"
         count={logs.length}
         notes={logs}
+        newestSlug={newestSlug}
       />
       <NoteStream
         index="03"
         label="Resolved"
         ariaLabel="Systems and skills"
         sub="The settled artifacts: how things work, and the skills that encode the judgment."
+        aside="the artifact, not the argument"
         count={resolved.length}
         notes={resolved}
+        newestSlug={newestSlug}
       />
 
       <Footer />
@@ -108,32 +123,48 @@ const NoteStream: React.FC<{
   label: string;
   ariaLabel: string;
   sub: string;
+  aside: string;
   count: number;
   notes: typeof NOTES_BY_DATE;
   rail?: React.ReactNode;
-}> = ({ index, label, ariaLabel, sub, count, notes, rail }) => (
-  <section className="notes__section" aria-label={ariaLabel}>
-    {/* The index carries the accent, not the whole label — the number is what
-        marks a new stream starting, so it is the part that gets to be orange. */}
-    <div className="notes__rule" aria-hidden="true">
-      <span className="notes__rule-handle notes__rule-handle--start" />
-      <span className="notes__rule-label">
-        <span className="notes__rule-index">{index}</span> / {label}
-      </span>
-      <span className="notes__rule-line" />
-      <span className="notes__rule-handle" />
-    </div>
+  /** Exactly one stream carries the accent — see DESIGN.md's section-rule rule. */
+  accent?: boolean;
+  /** Slug of the newest note on the page; that row wears the selection frame. */
+  newestSlug?: string;
+}> = ({ index, label, ariaLabel, sub, aside, count, notes, rail, accent, newestSlug }) => (
+  <section
+    className={`notes__section${accent ? ' notes__section--accent' : ''}`}
+    aria-label={ariaLabel}
+  >
+    {/* The rail delineates the stream, replacing the thin horizontal rule it
+        used to carry: a stream number at display scale, its name, its count,
+        and one handwritten aside, all in one column against a vertical edge.
+        Only the first stream takes the accent — one section at a time. */}
     <div className="notes__section-grid">
       <div className="notes__section-rail">
-        <p className="notes__stream-sub">{sub}</p>
+        <span className="notes__stream-index" aria-hidden="true">{index}</span>
+        <h2 className="notes__stream-label">{label}</h2>
         <span className="notes__section-count">
           {count} {count === 1 ? 'entry' : 'entries'}
         </span>
+        {/* The aside lives in the rail rather than its own margin column, which
+            is what lets it survive: the rail already stacks above the rows on
+            narrow screens, so the note comes with it as a lead-in line. */}
+        <span className="notes__stream-aside" aria-hidden="true">{aside}</span>
+        <svg className="notes__stream-arrow" viewBox="0 0 120 22" aria-hidden="true" focusable="false">
+          <path d="M6 14 C 40 14, 78 10, 112 8" fill="none" strokeLinecap="round" />
+          <path d="M112 8 L 102 12 M112 8 L 104 3" fill="none" strokeLinecap="round" />
+        </svg>
+        <p className="notes__stream-sub">{sub}</p>
         {rail}
       </div>
       <div className="notes__section-rows">
         {notes.map((note) => (
-          <Link key={note.slug} to={`/notes/${note.slug}/`} className="notes__row">
+          <Link
+            key={note.slug}
+            to={`/notes/${note.slug}/`}
+            className={`notes__row${note.slug === newestSlug ? ' notes__row--newest' : ''}`}
+          >
             <div className="notes__row-meta">
               <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
               <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
@@ -141,9 +172,13 @@ const NoteStream: React.FC<{
               </span>
             </div>
             <div className="notes__row-main">
-              <h2 className="notes__row-title">{note.title}</h2>
+              <h3 className="notes__row-title">{note.title}</h3>
               <p className="notes__row-dek">{note.dek}</p>
             </div>
+            {/* Marching-ants marquee — Photoshop's selection border, in Signal
+                Orange. Its own element rather than a pseudo: the newest row
+                already spends ::before and ::after on corner handles. */}
+            <span className="notes__row-marquee" aria-hidden="true" />
             <div className="notes__row-aside">
               <span className="notes__row-read">{note.read} read</span>
               {/* Hand-sketched arrow — the case-study CTA vocabulary, drawn in on row hover */}
