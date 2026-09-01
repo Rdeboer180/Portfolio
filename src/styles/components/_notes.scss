@@ -352,11 +352,11 @@
     margin: $spacing-lg 0 0;
   }
 
-  // First row aligns to the rail's first line — no top padding on the group.
-  // The newest row opts out: it is a tinted surface, so it keeps its inset.
-  &__section-rows .notes__row:first-child:not(.notes__row--newest) {
-    padding-top: 0;
-  }
+  // The first row used to drop its top padding so its text lined up with the
+  // rail's first line. That alignment stopped being worth it twice over: the
+  // rail now opens on a 64px numeral rather than a line of type, and every row
+  // is a marquee target, so a row with no top padding gets a selection box
+  // drawn hard against its date and title. Every row keeps the same inset.
 
 
   // ── Selection marquee ──────────────────────────────────────────────────────
