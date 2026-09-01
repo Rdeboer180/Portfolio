@@ -144,6 +144,96 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
+  // Adjacent to studying-the-tape, what-id-keep and photoshop-taught-me, all of
+  // which touch "the tools changed". Scoped hard to what those do not have: the
+  // dated arc from spectator to practitioner, and the day-job pitch. Links out
+  // rather than re-arguing.
+  {
+    slug: 'a-system-to-maintain',
+    read: '4 min',
+    kind: 'essay',
+    date: 'August 2026',
+    dateISO: '2026-08-31',
+    title: 'I cannot learn a tool from a tutorial. I have to build something I will have to maintain.',
+    dek: 'Late 2025 I was using LLMs as a better search box. The path from there to shipping internal tooling at work ran through one thing: picking a real product and being stuck with it.',
+    body: (
+      <>
+        <p>
+          Toward the end of 2025 I was using LLMs mostly as a better search box and a copy editor.
+          Routine questions, recipes, cleaning up things I had already written. Useful, and entirely
+          outside the work.
+        </p>
+        <p>
+          What changed it was not an article. It was hundreds of hours of{' '}
+          <Link to="/notes/studying-the-tape/">watching people I learn from at a distance</Link>{' '}
+          &mdash; Tommy Geoco and Michael Riddering especially &mdash; change their own workflows in
+          public, over months. Eventually watching stopped being enough. I wanted into the weeds
+          myself.
+        </p>
+
+        <h2>Pay for it yourself, then pick something you actually want</h2>
+        <p>
+          So I paid for Claude and Codex out of pocket, picked a product I genuinely wanted to
+          exist, and started building. <Link to="/work/playdraft/">PlayDraft</Link> began as a
+          design exploration and is now a React Native app on TestFlight. Getting it there ran
+          through product strategy, game mechanics, a token-governed design system, front-end
+          implementation, testing, and App Store constraints.
+        </p>
+        <p>
+          It may still make exactly zero dollars in the App Store. As a place to learn it has
+          already been worth more than that, because it forced decisions no tutorial or tool
+          comparison could have manufactured &mdash; including{' '}
+          <Link to="/notes/eight-wrong-first-drafts/">eight where my first idea lost to a number</Link>.
+          A tutorial hands you a finished decision. A product you are stuck with hands you the
+          argument.
+        </p>
+
+        <h2>Then I asked for it at work</h2>
+        <p>
+          About six months ago I brought the practice into my day job, which meant going to my
+          managers and to IT and making an actual case: an internal tooling effort, company access
+          to Claude and Opus, room to explore new workflows inside work we were already doing.
+        </p>
+        <p>
+          They said yes. That is the part of this I would have found least believable a year
+          earlier, and it is the part that mattered most. Personal practice stays a hobby until
+          somebody lets you point it at the real thing. Now those tools run daily against{' '}
+          <Link to="/work/design-enablement/">internal applications and workflow tools</Link>, and
+          against reusable agent skills &mdash; some that remove repeat setup, others that carry
+          team standards and context into work that used to start from scratch, like{' '}
+          <Link to="/notes/ryan-design-taste-skill/">the one that encodes my own taste</Link>.
+        </p>
+
+        <Callout marker="The method">
+          I need a real system to make, maintain, test, and occasionally undo. Tutorials give you
+          the making and stop there.
+        </Callout>
+
+        <h2>The pattern is older than the tools</h2>
+        <p>
+          None of this approach is new for me. When I was learning how to establish a design system
+          for a large organization, I went and found the right training and spent months inside the
+          problem before I pushed a single token into Tokens Studio or a component into Storybook.
+          The result was{' '}
+          <Link to="/work/wheelrack/">a system other people build from</Link>, and it took that long
+          because a design system is not a file either. It is something you maintain, argue with,
+          and occasionally roll back.
+        </p>
+        <p>
+          The tools changed. The way I learn them did not. I still cannot get there by reading about
+          it, and I still cannot tell whether I understand something until I have had to keep it
+          working for a few months.
+        </p>
+        <p>
+          Which tool are you choosing to learn through a real project right now?
+        </p>
+        <p className="notes__source">
+          <LinkedInLink label="A shorter version of this started as a post" surface="note_source" />
+        </p>
+      </>
+    ),
+  },
+  // ──────────────────────────────────────────────────────────────────────────
   // Two live client engagements. Deliberately scoped to what is Ryan's to tell:
   // his own contributions and his own reasons. No agency partner, no internal
   // deliberation, no private design critique, no staging URLs, and T1D Hub is
