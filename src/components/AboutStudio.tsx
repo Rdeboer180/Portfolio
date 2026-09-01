@@ -18,8 +18,8 @@ const STUDIO_POINTS: StudioPoint[] = [
     number: '01',
     label: 'The monitor',
     title: 'Design beside the build',
-    body: 'Figma, front-end code, and the shipped product stay close enough to pressure-test one another.',
-    proof: 'PlayDraft and LoopStack move from idea to working software here.',
+    body: 'Everything starts as a sketch before it becomes a file. From there Figma, front-end code, and the shipped product stay close enough to pressure-test one another.',
+    proof: 'PlayDraft and LoopStack move from idea to working software here. LoopStack exists because I have Type 1 diabetes and wanted the version of that experience that did not exist yet.',
     position: { left: '49%', top: '45%' },
   },
   {
