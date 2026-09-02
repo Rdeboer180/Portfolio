@@ -107,6 +107,36 @@ went with it.
 
 ## Still open
 
+**A Fable pass on the studio tab is deferred, not dropped.** Asked for on
+2026-09-02 ("feel free to hand off to codex / fable for more direction") and
+declined *for that turn only*, on a specific ground: the brief was five
+photographs of the actual room, held in the session's context. A handoff would
+have shipped the redraw without its reference. That reason expires the moment
+someone writes the brief down — see below.
+
+What already shipped, so a Fable pass starts from it rather than repeating it:
+the studio plate is now drawn from those photographs (`AboutStudio.tsx`), with
+four selectable objects, one always-on ambient loop (the coffee), and a
+workday/after-hours light toggle.
+
+What a Fable pass is *for* is the question that is still genuinely open: the
+"step into the studio" walkthrough — a moving, inhabited version of the room
+rather than a plate you select objects on. That was researched and **rejected
+on evidence, not taste**, and any new direction has to beat this bar:
+
+- Bruno Simon's room: 7.15 MB, 114 resources, zero readable DOM text.
+- Jesse Zhou: 5 characters of page text. Henry Heffernan: BIOS text only.
+- Cassie Evans — the most admired SVG-animated portfolio of the genre —
+  **retired her own site**, saying it no longer nourished her. Upkeep, not
+  failure, killed it.
+- The two that hold up are content-first: Josh Comeau (6,091 characters, plus a
+  "Disable sounds" control) and Lynn Fisher (9 requests, 0.38 MB, pure CSS).
+
+So the bar for any richer direction is: **stays readable with JS off or on a
+slow connection, and is cheap enough that Ryan still wants to maintain it in a
+year.** That is the constraint to hand Fable, along with the room photographs
+and the current plate — not "make the studio more impressive."
+
 **Two case studies have no social image.** `cs-bolus-binder.jpg` and
 `cs-photography-workflow-agent.jpg` do not exist, so those two fall back to no
 OG image when shared. Found while resolving P1's dynamic paths. Needs artwork,
