@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { useReveal } from '../hooks/useReveal';
+
+/** Reveal stagger, matching AboutHero's `d()`. */
+const d = (ms: number) => ({ ['--reveal-delay' as string]: `${ms}ms` });
 
 type StudioPointId = 'monitor' | 'system-wall' | 'walking-pad' | 'game-shelf';
 
@@ -284,13 +288,46 @@ const AboutStudio: React.FC = () => {
   const [activePointId, setActivePointId] = useState<StudioPointId>('monitor');
   const [isAfterHours, setIsAfterHours] = useState(false);
   const activePoint = STUDIO_POINTS.find((point) => point.id === activePointId) ?? STUDIO_POINTS[0];
+  // The panel only mounts when this tab is selected, so the observer fires on
+  // tab-in — the underline draws when you arrive, not once per page load.
+  const [revealRef, revealed] = useReveal<HTMLElement>(0.15);
 
   return (
-    <section className="studio-mock" aria-labelledby="studio-mock-heading">
+    <section
+      ref={revealRef}
+      className={`studio-mock${revealed ? ' is-visible' : ''}`}
+      aria-labelledby="studio-mock-heading"
+    >
       <div className="studio-mock__intro">
         <div>
           <p className="studio-mock__eyebrow">[ Concept mockup / where it happens ]</p>
-          <h1 id="studio-mock-heading" className="studio-mock__heading">The room behind the work.</h1>
+          <h1 id="studio-mock-heading" className="studio-mock__heading">
+            The room behind{' '}
+            <span className="studio-mock__heading-mark">
+              the work.
+              {/* Same hand-drawn underline as the approach tab's h1, same path,
+                  same draw. The two tabs are one page; their headline should
+                  behave like one headline. */}
+              <svg
+                className="studio-mock__underline"
+                width="320"
+                height="16"
+                viewBox="0 0 320 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  className="reveal-draw"
+                  style={d(360)}
+                  d="M4 10 C 80 3, 220 3, 316 9"
+                  stroke="var(--color-primary, #f03d01)"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  pathLength={1}
+                />
+              </svg>
+            </span>
+          </h1>
         </div>
         <div className="studio-mock__intro-copy">
           <p>
