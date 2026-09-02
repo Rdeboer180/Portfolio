@@ -54,75 +54,64 @@
     color: $color-neutral-muted !important;
   }
 
-  &__storyboard {
-    list-style: none;
+  /* Four facts. Same chrome as the strip it replaced, without the numbered
+     arrows — these are parallel details, not a sequence to walk through. */
+  &__facts {
     margin: 0 0 $spacing-xl;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border: 1px solid $color-border-default;
     background: $color-white;
 
-    li {
-      position: relative;
+    > div {
       min-height: 90px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      grid-template-rows: auto auto;
-      column-gap: $spacing-md;
-      align-content: center;
+      display: flex;
+      flex-direction: column;
+      /* Top-aligned, not centred: one cell wraps to two lines and the rest do
+         not, and centring each cell independently staggered the labels. */
+      justify-content: flex-start;
+      gap: $spacing-sm;
       padding: $spacing-lg;
       border-right: 1px solid $color-border-default;
 
       &:last-child {
         border-right: 0;
       }
+    }
 
-      &:not(:last-child)::after {
-        content: '\2192';
-        position: absolute;
-        right: -9px;
-        top: 50%;
-        z-index: 2;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        display: grid;
-        place-items: center;
-        background: $color-white;
-        color: $color-primary-text;
-        font-size: 12px;
-      }
+    dt {
+      font-family: $font-family-mono;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $color-primary-text;
+    }
 
-      > span {
-        grid-row: 1 / 3;
-        font-family: $font-family-mono;
-        font-size: 10px;
-        color: $color-primary-text;
-      }
-
-      strong {
-        font-family: $font-family-heading;
-        font-size: $font-size-body-sm;
-        color: $color-neutral-dark;
-      }
-
-      small {
-        margin-top: 3px;
-        font-size: 11px;
-        color: $color-neutral-muted;
-      }
+    dd {
+      margin: 0;
+      font-family: $font-family-heading;
+      font-size: $font-size-body;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: $color-neutral-dark;
     }
   }
 
   &__workspace {
     --studio-paper: #fff;
     --studio-wall: #f5f5f5;
-    --studio-floor: #eef1f4;
+    --studio-floor: #f0e7db;
     --studio-ink: #1b1b1b;
     --studio-steel: #8f9daf;
     --studio-screen: #22282e;
     --studio-screen-line: #8f9daf;
+    /* Materials, named for what they are in the room: butcher-block top,
+       black desk frame, cream upholstery. */
+    --studio-wood: #d9b98b;
+    --studio-frame: #2b2f33;
+    --studio-fabric: #efeae2;
+    --studio-fabric-alt: #b7bbc0;
+    --studio-mat: #3a3f45;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 310px;
     min-height: 630px;
@@ -133,11 +122,16 @@
     &.is-after-hours {
       --studio-paper: #20262c;
       --studio-wall: #171b20;
-      --studio-floor: #11151a;
+      --studio-floor: #191410;
       --studio-ink: #d6dce4;
       --studio-steel: #718095;
       --studio-screen: #090c0f;
       --studio-screen-line: #9ba8b9;
+      --studio-wood: #6d573a;
+      --studio-frame: #0c0f12;
+      --studio-fabric: #2b3239;
+      --studio-fabric-alt: #3e464e;
+      --studio-mat: #0c0f12;
       background: #11151a;
 
       .studio-mock__scene-meta,
@@ -182,26 +176,48 @@
 
   &__wall { fill: var(--studio-wall); stroke: var(--studio-ink); stroke-width: 1.5; }
   &__floor { fill: var(--studio-floor); stroke: none; }
+  &__plank { fill: none; stroke: var(--studio-ink); stroke-width: 1; opacity: 0.26; }
   &__paper { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1.4; }
   &__ink { fill: none; stroke: var(--studio-ink); stroke-width: 1.5; }
   &__ink--heavy { stroke-width: 3; }
+  &__ink--fill { fill: var(--studio-ink); stroke: none; }
   &__steel { fill: none; stroke: var(--studio-steel); stroke-width: 1.2; }
   &__signal { fill: none; stroke: $color-primary; stroke-width: 3; stroke-linecap: round; }
-  &__sun { fill: rgba($color-primary-md, 0.28); stroke: none; }
   &__box { fill: var(--studio-paper); stroke: var(--studio-steel); stroke-width: 1; }
   &__box--accent { fill: $color-primary-light; stroke: $color-primary; }
   &__note { fill: rgba($color-primary-md, 0.58); stroke: $color-primary-muted; stroke-width: 1; }
-  &__desk { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1.6; }
+  &__note--alt { fill: rgba($color-primary, 0.22); }
+  &__pin { fill: $color-primary; stroke: none; }
+  &__shelf { fill: none; stroke: var(--studio-ink); stroke-width: 3; }
+  &__spine { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 0.9; }
+  &__spine--accent { fill: $color-primary-light; }
+  &__spine--alt { fill: rgba($color-primary-md, 0.5); }
+  &__wood { fill: var(--studio-wood); stroke: var(--studio-ink); stroke-width: 1.5; }
+  &__frame { fill: var(--studio-frame); stroke: none; }
+  &__frame-line { fill: none; stroke: var(--studio-frame); stroke-width: 4; stroke-linecap: round; }
+  &__tv { fill: var(--studio-screen); stroke: var(--studio-frame); stroke-width: 2; }
   &__monitor { fill: var(--studio-screen); stroke: var(--studio-ink); stroke-width: 2; }
+  &__laptop { fill: var(--studio-steel); stroke: var(--studio-ink); stroke-width: 1.3; }
+  &__laptop-screen { fill: var(--studio-screen); stroke: var(--studio-ink); stroke-width: 1.6; }
   &__screen-line { fill: none; stroke: var(--studio-screen-line); stroke-width: 4; stroke-linecap: round; }
-  &__screen-signal { fill: none; stroke: $color-primary; stroke-width: 4; stroke-linecap: round; }
-  &__keyboard { fill: var(--studio-steel); stroke: none; }
-  &__lamp { fill: none; stroke: var(--studio-ink); stroke-width: 4; stroke-linecap: round; }
-  &__lamp-head { fill: $color-primary-muted; stroke: var(--studio-ink); stroke-width: 1.5; }
+  &__keys { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1.2; }
+  &__key-line { fill: none; stroke: var(--studio-steel); stroke-width: 1; }
+  &__shade { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1.4; }
   &__pot { fill: $color-primary-light; stroke: $color-primary-dark; stroke-width: 1.4; }
   &__plant { fill: none; stroke: var(--studio-steel); stroke-width: 7; stroke-linecap: round; }
-  &__pad { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1.5; }
-  &__pad-line { fill: none; stroke: var(--studio-steel); stroke-width: 2; }
+  &__plant--small { stroke-width: 3.2; }
+  &__fabric { fill: var(--studio-fabric); stroke: var(--studio-ink); stroke-width: 1.4; }
+  &__fabric--alt { fill: var(--studio-fabric-alt); }
+  &__knit { fill: none; stroke: var(--studio-ink); stroke-width: 1; opacity: 0.35; }
+  &__seam { fill: none; stroke: var(--studio-ink); stroke-width: 1.2; opacity: 0.4; }
+  &__art { fill: rgba($color-primary-md, 0.4); stroke: none; }
+  &__art-mass { fill: rgba($color-primary-dark, 0.42); stroke: none; }
+  &__art-frame { fill: none; stroke: var(--studio-ink); stroke-width: 1.5; }
+  &__mat { fill: var(--studio-mat); stroke: none; }
+  &__ottoman { fill: var(--studio-fabric-alt); stroke: var(--studio-ink); stroke-width: 1.4; }
+  &__pad { fill: var(--studio-frame); stroke: var(--studio-ink); stroke-width: 1.4; }
+  &__pad-deck { fill: var(--studio-steel); stroke: none; opacity: 0.75; }
+  &__pad-line { fill: none; stroke: var(--studio-paper); stroke-width: 2; opacity: 0.5; }
   &__crop { fill: none; stroke: $color-primary; stroke-width: 1; }
   &__svg-label { font-family: $font-family-mono; font-size: 9px; fill: $color-neutral-muted; letter-spacing: 0.08em; }
 
@@ -373,10 +389,10 @@
       gap: $spacing-2xl;
     }
 
-    &__storyboard {
+    &__facts {
       grid-template-columns: repeat(2, 1fr);
 
-      li {
+      > div {
         border-bottom: 1px solid $color-border-default;
 
         &:nth-child(2) {
@@ -386,15 +402,6 @@
         &:nth-child(3),
         &:nth-child(4) {
           border-bottom: 0;
-        }
-
-        &:nth-child(2)::after {
-          content: '\2193';
-          right: auto;
-          left: 50%;
-          top: auto;
-          bottom: -9px;
-          transform: translateX(-50%);
         }
       }
     }
@@ -410,25 +417,16 @@
       font-size: clamp(2.7rem, 14vw, 4rem);
     }
 
-    &__storyboard {
+    &__facts {
       grid-template-columns: 1fr;
 
-      li {
-        min-height: 72px;
+      > div {
+        min-height: 0;
         border-right: 0;
         border-bottom: 1px solid $color-border-default !important;
 
         &:last-child {
           border-bottom: 0 !important;
-        }
-
-        &:not(:last-child)::after {
-          content: '\2193';
-          right: auto;
-          left: 50%;
-          top: auto;
-          bottom: -9px;
-          transform: translateX(-50%);
         }
       }
     }
@@ -465,4 +463,115 @@
       font-size: $font-size-h4;
     }
   }
+}
+
+/* ── The room reacts ────────────────────────────────────────────────────────
+   Three changes, all cheap, all inside the existing SVG — deliberately not the
+   animated walkthrough the storyboard used to promise, because the evidence for
+   that build is bad: the celebrated 3D portfolios in this genre carry almost no
+   readable content, and the most admired SVG-animated one was retired by its
+   own author for the upkeep.
+
+   Motion here is covered by the global prefers-reduced-motion floor in
+   _base.scss, so nothing needs its own guard. */
+
+.studio-mock {
+  /* Selecting a numbered control lights its object and lets the rest recede,
+     so the control and the thing it describes read as one. */
+  &__drawing {
+    [data-part] {
+      transition: opacity 220ms ease, transform 220ms ease;
+      transform-origin: center;
+    }
+
+    &[data-active] [data-part] {
+      opacity: 0.55;
+    }
+  }
+
+  &__drawing[data-active='monitor'] [data-part='monitor'],
+  &__drawing[data-active='system-wall'] [data-part='system-wall'],
+  &__drawing[data-active='walking-pad'] [data-part='walking-pad'],
+  &__drawing[data-active='game-shelf'] [data-part='game-shelf'] {
+    opacity: 1;
+    /* A lift small enough to feel like attention rather than a jump. */
+    transform: translateY(-3px);
+  }
+
+  /* The monitor's chart. Reads as a data product being built, which is what
+     actually happens in this room. */
+  &__screen-axis {
+    fill: none;
+    stroke: var(--studio-screen-line);
+    stroke-width: 2;
+    opacity: 0.5;
+  }
+
+  &__screen-band {
+    fill: none;
+    stroke: $color-primary;
+    stroke-width: 14;
+    stroke-linecap: round;
+    opacity: 0.14;
+  }
+
+  &__screen-trace {
+    fill: none;
+    stroke: $color-primary;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* Visible by default. Hiding it until selection left the monitor reading
+       as a blank screen for three of the four states, which is the opposite of
+       the point — the screen is meant to show that a data product gets built
+       here. The dash is only the vehicle for the draw-in below. */
+    stroke-dasharray: 160;
+    stroke-dashoffset: 0;
+  }
+
+  /* Selecting the desk redraws the line — the one moment of narrative motion
+     in the room, and only on request. */
+  &__drawing[data-active='monitor'] &__screen-trace {
+    animation: studio-trace-in 900ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  /* ── Coffee ── */
+  &__mug {
+    fill: var(--studio-paper);
+    stroke: var(--studio-ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+
+  &__mug-handle {
+    fill: none;
+    stroke: var(--studio-ink);
+    stroke-width: 2.5;
+  }
+
+  &__steam-wisp {
+    fill: none;
+    stroke: var(--studio-steel);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0;
+    animation: studio-steam 4.2s ease-in-out infinite;
+  }
+
+  /* Offset rather than duplicated: three wisps on one keyframe set, staggered,
+     so the plume never pulses in unison. */
+  &__steam-wisp--mid { animation-delay: 1.4s; }
+  &__steam-wisp--late { animation-delay: 2.8s; }
+}
+
+@keyframes studio-steam {
+  0% { opacity: 0; transform: translateY(4px) scaleX(0.9); }
+  22% { opacity: 0.55; }
+  70% { opacity: 0.28; }
+  100% { opacity: 0; transform: translateY(-16px) scaleX(1.15); }
+}
+
+@keyframes studio-trace-in {
+  from { stroke-dashoffset: 160; }
+  to { stroke-dashoffset: 0; }
 }

@@ -16,11 +16,11 @@ const STUDIO_POINTS: StudioPoint[] = [
   {
     id: 'monitor',
     number: '01',
-    label: 'The monitor',
+    label: 'The desk',
     title: 'Design beside the build',
     body: 'Everything starts as a sketch before it becomes a file. From there Figma, front-end code, and the shipped product stay close enough to pressure-test one another.',
     proof: 'PlayDraft and LoopStack move from idea to working software here. LoopStack exists because I have Type 1 diabetes and wanted the version of that experience that did not exist yet.',
-    position: { left: '49%', top: '45%' },
+    position: { left: '45%', top: '36%' },
   },
   {
     id: 'system-wall',
@@ -29,7 +29,7 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Make the structure visible',
     body: 'References, rules, and active decisions stay in view so the system is easier to question and maintain.',
     proof: 'The same bias shows up in tokens, components, documentation, and governance.',
-    position: { left: '70%', top: '23%' },
+    position: { left: '33.5%', top: '24.5%' },
   },
   {
     id: 'walking-pad',
@@ -38,7 +38,7 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Build a sustainable pace',
     body: 'The room is set up for long focus without treating stillness as the price of serious work.',
     proof: 'A dedicated workspace helps remote work stay focused, repeatable, and present.',
-    position: { left: '48%', top: '82%' },
+    position: { left: '41%', top: '66%' },
   },
   {
     id: 'game-shelf',
@@ -47,62 +47,230 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Keep play close',
     body: 'Board games, long-running leagues, and the arguments around both are part of how I think about systems people return to.',
     proof: 'PlayDraft started with that same interest in choices, tension, and shared rituals.',
-    position: { left: '15%', top: '42%' },
+    position: { left: '14.5%', top: '51.5%' },
   },
 ];
 
-const StudioDrawing = () => (
-  <svg className="studio-mock__drawing" viewBox="0 0 900 520" role="img" aria-labelledby="studio-drawing-title studio-drawing-desc">
-    <title id="studio-drawing-title">Concept drawing of Ryan's home studio</title>
-    <desc id="studio-drawing-desc">A front-facing vector room with a game shelf, standing desk and monitor, system wall, plant, and walking pad. Numbered controls reveal how each part supports the work.</desc>
+/** [x, width, height, tone] — tone 0 plain, 1 accent, 2 alt. */
+type Spine = [number, number, number, 0 | 1 | 2];
+
+// Shelves of games and books. Widths and heights vary because a row of
+// identical bars reads as a barcode rather than a shelf: in the actual closet
+// the Catan boxes are tall and square and the card games are thin.
+const CLOSET_TOP: Spine[] = [
+  [52, 11, 54, 0], [65, 9, 48, 1], [76, 13, 56, 0], [91, 8, 44, 2], [101, 11, 52, 0],
+  [114, 9, 50, 1], [125, 14, 56, 0], [141, 8, 46, 0], [151, 11, 54, 2], [164, 9, 48, 0],
+  [175, 12, 52, 1], [189, 8, 44, 0], [199, 13, 56, 0],
+];
+
+const CLOSET_BOTTOM: Spine[] = [
+  [52, 13, 58, 0], [67, 9, 50, 1], [78, 11, 54, 0], [91, 8, 46, 0], [101, 12, 56, 2],
+  [115, 10, 48, 0], [127, 9, 52, 1], [138, 13, 58, 0], [153, 8, 44, 0], [163, 11, 54, 0],
+  [176, 10, 48, 2], [188, 12, 56, 1], [202, 10, 50, 0],
+];
+
+const BOOKS_MID: Spine[] = [
+  [614, 8, 32, 0], [624, 7, 28, 1], [633, 9, 34, 0], [644, 6, 26, 2],
+  [664, 8, 30, 0], [674, 7, 26, 0], [683, 9, 34, 1], [694, 6, 28, 0],
+];
+
+const BOOKS_LOW: Spine[] = [
+  [614, 9, 36, 1], [625, 7, 30, 0], [634, 8, 34, 2], [644, 6, 28, 0],
+  [664, 7, 30, 0], [673, 9, 36, 0], [684, 7, 28, 1], [693, 6, 32, 0],
+];
+
+const TONE_CLASS = ['', ' studio-mock__spine--accent', ' studio-mock__spine--alt'];
+
+const renderSpines = (baseline: number, spines: Spine[]) =>
+  spines.map(([x, w, h, tone]) => (
+    <rect
+      key={`${baseline}-${x}`}
+      x={x}
+      y={baseline - h}
+      width={w}
+      height={h}
+      className={`studio-mock__spine${TONE_CLASS[tone]}`}
+    />
+  ));
+
+const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
+  // Drawn from the actual room rather than a generic studio: butcher-block
+  // standing desk on black legs, monitor on an arm with the laptop on a riser
+  // beside it, walking pad folded upright underneath, the game closet, and the
+  // couch half of the room that makes it a room and not a workstation.
+  //
+  // `data-active` lets the selected object respond, so the numbered control and
+  // the thing it describes are visibly the same object. Until that existed the
+  // only link between them was proximity, which meant the room read as a
+  // picture with buttons on top rather than a room you were touching.
+  <svg
+    className="studio-mock__drawing"
+    data-active={activePart}
+    viewBox="0 0 900 520"
+    role="img"
+    aria-labelledby="studio-drawing-title studio-drawing-desc"
+  >
+    <title id="studio-drawing-title">Drawing of Ryan&rsquo;s home studio</title>
+    <desc id="studio-drawing-desc">
+      A flattened front elevation of the actual room: a closet of board games, a
+      whiteboard of the week with drawings pinned beside it, a wall-mounted TV, a
+      standing desk carrying a wide monitor, a laptop on a riser, keyboard,
+      notebook and coffee, a walking pad folded upright underneath, a bookcase
+      over a sideboard with a lamp, and a cream couch below a framed landscape.
+      Numbered controls reveal how each part supports the work.
+    </desc>
 
     <rect x="22" y="24" width="856" height="460" rx="8" className="studio-mock__wall" />
     <path d="M22 390H878V484H22Z" className="studio-mock__floor" />
+    {/* Light wood plank floor — the floor is most of the lower third, and a
+        flat band there read as nothing at all. */}
+    <path d="M22 414H878M22 442H878M22 470H878" className="studio-mock__plank" />
     <path d="M22 390H878" className="studio-mock__ink" />
 
-    {/* Window and quiet daylight */}
-    <rect x="50" y="58" width="164" height="164" rx="4" className="studio-mock__paper" />
-    <path d="M132 58V222M50 140H214" className="studio-mock__steel" />
-    <path d="M214 90L380 238H214Z" className="studio-mock__sun" />
+    {/* Game closet — doors off, wire rack up top for the big flat boxes,
+        two wooden shelves of spines below. */}
+    <g data-part="game-shelf">
+      <rect x="44" y="146" width="176" height="244" className="studio-mock__paper" />
+      <rect x="56" y="196" width="72" height="18" className="studio-mock__box studio-mock__box--accent" />
+      <rect x="56" y="178" width="72" height="18" className="studio-mock__box" />
+      <rect x="134" y="186" width="74" height="28" className="studio-mock__box" />
+      <rect x="134" y="168" width="74" height="18" className="studio-mock__box studio-mock__box--accent" />
+      <path d="M44 214H220" className="studio-mock__steel" />
+      <path d="M58 214V222M80 214V222M102 214V222M124 214V222M146 214V222M168 214V222M190 214V222M208 214V222" className="studio-mock__steel" />
+      {renderSpines(300, CLOSET_TOP)}
+      {renderSpines(372, CLOSET_BOTTOM)}
+      <path d="M44 300H220M44 372H220" className="studio-mock__shelf" />
+    </g>
 
-    {/* Game shelf */}
-    <rect x="58" y="250" width="180" height="134" rx="3" className="studio-mock__paper" />
-    <path d="M58 294H238M58 338H238" className="studio-mock__ink" />
-    <rect x="73" y="260" width="35" height="28" className="studio-mock__box studio-mock__box--accent" />
-    <rect x="113" y="266" width="48" height="22" className="studio-mock__box" />
-    <rect x="167" y="256" width="55" height="32" className="studio-mock__box" />
-    <rect x="72" y="304" width="58" height="28" className="studio-mock__box" />
-    <rect x="136" y="300" width="36" height="32" className="studio-mock__box studio-mock__box--accent" />
-    <rect x="178" y="310" width="43" height="22" className="studio-mock__box" />
-    <path d="M80 348V377M92 348V377M109 348V377M132 348V377M146 348V377" className="studio-mock__steel" />
+    {/* The week, written out, and whatever the kids brought home this month. */}
+    <g data-part="system-wall">
+      <rect x="240" y="76" width="132" height="106" className="studio-mock__paper" />
+      <path d="M240 98H372" className="studio-mock__steel" />
+      <path d="M254 114H332M254 128H346M254 142H318M254 156H338M254 170H304" className="studio-mock__steel" />
+      <path d="M254 114H294" className="studio-mock__signal" />
+      <rect x="358" y="90" width="46" height="54" className="studio-mock__note" />
+      <rect x="374" y="114" width="44" height="52" className="studio-mock__note studio-mock__note--alt" />
+      <circle cx="381" cy="90" r="3" className="studio-mock__pin" />
+      <circle cx="396" cy="114" r="3" className="studio-mock__pin" />
+    </g>
 
-    {/* Wall artifacts */}
-    <rect x="300" y="70" width="168" height="92" rx="3" className="studio-mock__paper" />
-    <path d="M324 97H438M324 116H410M324 135H452" className="studio-mock__steel" />
-    <path d="M324 97H375" className="studio-mock__signal" />
-    <rect x="558" y="64" width="210" height="120" rx="3" className="studio-mock__paper" />
-    <path d="M584 92H632V126H584ZM646 92H694V126H646ZM708 92H742V126H708Z" className="studio-mock__note" />
-    <path d="M584 146H742" className="studio-mock__steel" />
-    <path d="M600 146V164M662 146V164M724 146V164" className="studio-mock__steel" />
+    <circle cx="436" cy="106" r="14" className="studio-mock__paper" />
+    <path d="M436 106V97M436 106L442 111" className="studio-mock__ink" />
 
-    {/* Desk and monitor */}
-    <path d="M290 314H700V335H290Z" className="studio-mock__desk" />
-    <path d="M318 335V414M672 335V414" className="studio-mock__ink studio-mock__ink--heavy" />
-    <rect x="401" y="204" width="188" height="106" rx="6" className="studio-mock__monitor" />
-    <path d="M495 310V326M452 326H538" className="studio-mock__ink studio-mock__ink--heavy" />
-    <path d="M424 228H484M424 246H548M424 264H506M520 228H566" className="studio-mock__screen-line" />
-    <path d="M424 282H470" className="studio-mock__screen-signal" />
-    <rect x="422" y="319" width="124" height="8" rx="3" className="studio-mock__keyboard" />
-    <path d="M610 304L626 256L641 304M626 256V238" className="studio-mock__lamp" />
-    <circle cx="626" cy="234" r="10" className="studio-mock__lamp-head" />
+    {/* Wall-mounted TV, off. */}
+    <rect x="462" y="66" width="96" height="58" rx="2" className="studio-mock__tv" />
 
-    {/* Plant */}
-    <path d="M742 374H807L797 422H752Z" className="studio-mock__pot" />
-    <path d="M774 372C768 334 748 308 726 292M774 370C780 328 803 300 828 292M774 368C756 344 735 342 715 346M776 355C798 338 818 340 840 350" className="studio-mock__plant" />
+    {/* Bookcase over the walnut-topped sideboard, lamp on the open end. */}
+    <rect x="608" y="152" width="98" height="138" className="studio-mock__paper" />
+    <path d="M608 200H706M608 246H706" className="studio-mock__ink" />
+    <path d="M658 152V290" className="studio-mock__steel" />
+    <rect x="616" y="166" width="26" height="30" className="studio-mock__paper" />
+    <path d="M681 182H697L694 196H678Z" className="studio-mock__pot" />
+    <path d="M689 182V164M689 174C684 170 680 164 679 158M689 174C694 170 698 164 699 158M689 179C683 177 678 172 675 167M689 179C695 177 700 172 703 167" className="studio-mock__plant studio-mock__plant--small" />
+    {renderSpines(246, BOOKS_MID)}
+    {renderSpines(290, BOOKS_LOW)}
+    <rect x="604" y="300" width="136" height="90" className="studio-mock__paper" />
+    <path d="M600 290H744V300H600Z" className="studio-mock__wood" />
+    <path d="M650 300V390M698 300V390" className="studio-mock__steel" />
+    <circle cx="644" cy="322" r="2.5" className="studio-mock__ink--fill" />
+    <circle cx="704" cy="322" r="2.5" className="studio-mock__ink--fill" />
+    <path d="M712 252H736L741 276H707Z" className="studio-mock__shade" />
+    <path d="M718 276H730V290H718Z" className="studio-mock__wood" />
 
-    {/* Walking pad */}
-    <path d="M326 432H648L678 466H298Z" className="studio-mock__pad" />
-    <path d="M336 444H638" className="studio-mock__pad-line" />
+    {/* Framed landscape over the couch. */}
+    <rect x="774" y="96" width="96" height="64" className="studio-mock__art" />
+    <path d="M774 150L798 120L816 138L838 112L870 146V160H774Z" className="studio-mock__art-mass" />
+    <rect x="774" y="96" width="96" height="64" className="studio-mock__art-frame" />
+
+    {/* Couch. Cream, two seats, one knit pillow that lives on the right.
+        Every corner is rounded and the parts overlap front-to-back, because the
+        first pass drew it as flush rectangles and it read as a filing cabinet
+        sitting where the couch is. Softness is the whole signal here — it is
+        the one object in the room that is not a hard edge. */}
+    <rect x="762" y="286" width="92" height="64" rx="9" className="studio-mock__fabric" />
+    <path d="M808 292V346" className="studio-mock__seam" />
+    <rect x="748" y="346" width="120" height="36" rx="8" className="studio-mock__fabric" />
+    <rect x="772" y="340" width="36" height="32" rx="6" className="studio-mock__fabric" />
+    <rect x="812" y="340" width="36" height="32" rx="6" className="studio-mock__fabric" />
+    <rect x="742" y="300" width="26" height="82" rx="10" className="studio-mock__fabric" />
+    <rect x="848" y="300" width="26" height="82" rx="10" className="studio-mock__fabric" />
+    <rect x="776" y="302" width="28" height="32" rx="4" className="studio-mock__fabric" />
+    <rect x="812" y="298" width="32" height="36" rx="4" className="studio-mock__fabric studio-mock__fabric--alt" />
+    <path d="M818 306H838M818 316H838M818 326H838" className="studio-mock__knit" />
+    <path d="M754 382V390M860 382V390" className="studio-mock__ink" />
+
+    {/* Anti-fatigue mat, then the walking pad standing on it — drawn before the
+        desk so the desktop overlaps them the way it actually does. */}
+    <path d="M250 392H480V404H250Z" className="studio-mock__mat" />
+
+    <g data-part="walking-pad">
+      <path d="M330 296H412V390H330Z" className="studio-mock__pad" />
+      <path d="M340 310H402V374H340Z" className="studio-mock__pad-deck" />
+      <path d="M326 292H416V300H326Z" className="studio-mock__pad" />
+      <rect x="334" y="318" width="6" height="16" className="studio-mock__box--accent" />
+      <rect x="402" y="318" width="6" height="16" className="studio-mock__box--accent" />
+      <path d="M338 382H404" className="studio-mock__pad-line" />
+    </g>
+
+    {/* The desk. */}
+    <g data-part="monitor">
+      {/* Wide monitor on its arm. */}
+      <path d="M460 272V286M434 286H486" className="studio-mock__frame-line" />
+      <rect x="380" y="168" width="160" height="104" rx="3" className="studio-mock__monitor" />
+      {/* What is on the screen is a chart, because what gets built here is a
+          data product. Drawn in the plate's own vernacular rather than dropping
+          in a screenshot — a raster image would break the blueprint conceit
+          that holds the rest of the drawing together. */}
+      <path d="M394 198H444" className="studio-mock__screen-line" />
+      <path d="M394 250H518M394 250V206" className="studio-mock__screen-axis" />
+      <path d="M394 226H518" className="studio-mock__screen-band" />
+      <path
+        d="M394 240L414 232L436 214L458 222L478 202L498 210L518 196"
+        className="studio-mock__screen-trace"
+      />
+
+      {/* Butcher block on black legs. */}
+      <path d="M228 286H588V300H228Z" className="studio-mock__wood" />
+      <path d="M266 300H280V382H266Z" className="studio-mock__frame" />
+      <path d="M546 300H560V382H546Z" className="studio-mock__frame" />
+      <path d="M244 382H302V390H244Z" className="studio-mock__frame" />
+      <path d="M524 382H582V390H524Z" className="studio-mock__frame" />
+      <path d="M273 306H553" className="studio-mock__frame-line" />
+
+      {/* Spiral notebook and a pen, always to the left of the keyboard. */}
+      <path d="M238 276H300V286H238Z" className="studio-mock__paper" />
+      <path d="M243 276V286M249 276V286M255 276V286M261 276V286M267 276V286" className="studio-mock__steel" />
+      <path d="M276 272H300" className="studio-mock__ink" />
+
+      {/* MacBook on its riser, overlapping the monitor's left edge. */}
+      <path d="M312 272H400L394 286H318Z" className="studio-mock__frame" />
+      <rect x="320" y="206" width="76" height="60" rx="2" className="studio-mock__laptop-screen" />
+      <path d="M306 266H410L416 272H300Z" className="studio-mock__laptop" />
+
+      {/* Full-size keyboard with the numpad, trackpad to its right. */}
+      <rect x="404" y="276" width="112" height="10" rx="2" className="studio-mock__keys" />
+      <path d="M486 276V286" className="studio-mock__steel" />
+      <path d="M414 280H478M414 283H478" className="studio-mock__key-line" />
+      <rect x="524" y="276" width="28" height="10" rx="2" className="studio-mock__keys" />
+
+    </g>
+
+    {/* The only thing in the room that moves on its own, and the only object
+        that stays lit in every state — it sits on the desk but outside the
+        desk's group, because dimming the coffee to 0.55 for three of the four
+        selections put out the one signal that says someone is in here. */}
+    <g className="studio-mock__coffee">
+      <path d="M556 260H584V280A6 6 0 0 1 578 286H562A6 6 0 0 1 556 280Z" className="studio-mock__mug" />
+      <path d="M584 265H591A7 7 0 0 1 591 279H584" className="studio-mock__mug-handle" />
+      <g className="studio-mock__steam" aria-hidden="true">
+        <path d="M563 254C559 246 567 242 563 234" className="studio-mock__steam-wisp" />
+        <path d="M572 256C568 247 576 243 572 233" className="studio-mock__steam-wisp studio-mock__steam-wisp--mid" />
+        <path d="M580 254C576 246 584 242 580 236" className="studio-mock__steam-wisp studio-mock__steam-wisp--late" />
+      </g>
+    </g>
+
+    {/* Ottoman, foreground, where it is always in the way. */}
+    <path d="M636 414H744L760 442H652Z" className="studio-mock__ottoman" />
 
     {/* Light switch — its HTML control sits over this plate */}
     <rect x="824" y="218" width="24" height="38" rx="3" className="studio-mock__paper" />
@@ -110,7 +278,7 @@ const StudioDrawing = () => (
 
     {/* Construction marks */}
     <path d="M22 12V2M12 24H2M878 12V2M888 24H898M22 496V506M12 484H2M878 496V506M888 484H898" className="studio-mock__crop" />
-    <text x="32" y="510" className="studio-mock__svg-label">STUDIO PLATE / CONCEPT 01</text>
+    <text x="32" y="510" className="studio-mock__svg-label">STUDIO PLATE / DRAWN FROM THE ROOM</text>
     <text x="688" y="510" className="studio-mock__svg-label">FRONT ELEVATION / NOT TO SCALE</text>
   </svg>
 );
@@ -133,27 +301,44 @@ const AboutStudio: React.FC = () => {
             the work survive after launch.
           </p>
           <p className="studio-mock__intro-note">
-            The finished version would arrive through the accelerated walk, hold on the final
-            frame, then draw this room into place.
+            Built as a drawing rather than a walkthrough. The room answers when you
+            ask it something — which is the part worth having, and the part that
+            still works on a slow connection.
           </p>
         </div>
       </div>
 
-      <ol className="studio-mock__storyboard" aria-label="Planned transition into the studio">
-        <li><span>01</span><strong>Upstairs</strong><small>Begin in real footage</small></li>
-        <li><span>02</span><strong>Speed ramp</strong><small>Move through the house</small></li>
-        <li><span>03</span><strong>Final hold</strong><small>Lock the office frame</small></li>
-        <li><span>04</span><strong>Vector pass</strong><small>Draw the system over reality</small></li>
-      </ol>
+      {/* Facts, not instructions. The strip that lived here explained how to
+          use the widget below it, which is the one thing a visitor can work out
+          on their own — and it pushed the details a hiring team actually scans
+          for off the page entirely. */}
+      <dl className="studio-mock__facts">
+        <div>
+          <dt>Base</dt>
+          <dd>South Bend, Indiana</dd>
+        </div>
+        <div>
+          <dt>Time zone</dt>
+          <dd>Eastern &middot; US remote</dd>
+        </div>
+        <div>
+          <dt>Workspace</dt>
+          <dd>Dedicated home studio</dd>
+        </div>
+        <div>
+          <dt>Working loop</dt>
+          <dd>Focus &rarr; critique &rarr; handoff</dd>
+        </div>
+      </dl>
 
       <div className={`studio-mock__workspace${isAfterHours ? ' is-after-hours' : ''}`}>
         <div className="studio-mock__scene">
           <div className="studio-mock__scene-meta">
-            <span>Dedicated home studio</span>
-            <span>South Bend, Indiana</span>
+            <span>Four objects &middot; select to read</span>
+            <span>Drawn from the actual room</span>
           </div>
           <div className="studio-mock__drawing-wrap">
-            <StudioDrawing />
+            <StudioDrawing activePart={activePointId} />
             {STUDIO_POINTS.map((point) => {
               const isActive = activePointId === point.id;
               return (
