@@ -250,7 +250,10 @@
 
   &__light-switch {
     position: absolute;
-    right: 1.5%;
+    /* Inside the drawn wall, not straddling it. The wall's right edge sits at
+       97.6% of the viewBox, so 1.5% put the control half outside the frame —
+       which read as a rendering fault once the plate behind it came out. */
+    right: 4.5%;
     top: 40%;
     display: flex;
     align-items: center;

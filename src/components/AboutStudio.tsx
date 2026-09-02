@@ -38,7 +38,7 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Build a sustainable pace',
     body: 'The room is set up for long focus without treating stillness as the price of serious work.',
     proof: 'A dedicated workspace helps remote work stay focused, repeatable, and present.',
-    position: { left: '41%', top: '66%' },
+    position: { left: '75%', top: '69%' },
   },
   {
     id: 'game-shelf',
@@ -199,17 +199,18 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
     <path d="M818 306H838M818 316H838M818 326H838" className="studio-mock__knit" />
     <path d="M754 382V390M860 382V390" className="studio-mock__ink" />
 
-    {/* Anti-fatigue mat, then the walking pad standing on it — drawn before the
-        desk so the desktop overlaps them the way it actually does. */}
+    {/* Anti-fatigue mat. Stays under the desk — it is where you stand. */}
     <path d="M250 392H480V404H250Z" className="studio-mock__mat" />
 
+    {/* Walking pad, folded upright and parked against the sideboard. Drawn
+        after it so it clearly stands in front rather than inside it. */}
     <g data-part="walking-pad">
-      <path d="M330 296H412V390H330Z" className="studio-mock__pad" />
-      <path d="M340 310H402V374H340Z" className="studio-mock__pad-deck" />
-      <path d="M326 292H416V300H326Z" className="studio-mock__pad" />
-      <rect x="334" y="318" width="6" height="16" className="studio-mock__box--accent" />
-      <rect x="402" y="318" width="6" height="16" className="studio-mock__box--accent" />
-      <path d="M338 382H404" className="studio-mock__pad-line" />
+      <path d="M624 296H706V390H624Z" className="studio-mock__pad" />
+      <path d="M634 310H696V374H634Z" className="studio-mock__pad-deck" />
+      <path d="M620 292H710V300H620Z" className="studio-mock__pad" />
+      <rect x="628" y="318" width="6" height="16" className="studio-mock__box--accent" />
+      <rect x="696" y="318" width="6" height="16" className="studio-mock__box--accent" />
+      <path d="M632 382H698" className="studio-mock__pad-line" />
     </g>
 
     {/* The desk. */}
@@ -271,10 +272,6 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
 
     {/* Ottoman, foreground, where it is always in the way. */}
     <path d="M636 414H744L760 442H652Z" className="studio-mock__ottoman" />
-
-    {/* Light switch — its HTML control sits over this plate */}
-    <rect x="824" y="218" width="24" height="38" rx="3" className="studio-mock__paper" />
-    <path d="M836 228V246" className="studio-mock__signal" />
 
     {/* Construction marks */}
     <path d="M22 12V2M12 24H2M878 12V2M888 24H898M22 496V506M12 484H2M878 496V506M888 484H898" className="studio-mock__crop" />
