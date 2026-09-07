@@ -124,12 +124,9 @@
     --studio-screen: #22282e;
     --studio-screen-line: #8f9daf;
     /* Materials, named for what they are in the room: butcher-block top,
-       black desk frame, cream upholstery. */
+       black desk frame. */
     --studio-wood: #d9b98b;
     --studio-frame: #2b2f33;
-    --studio-fabric: #efeae2;
-    --studio-fabric-alt: #b7bbc0;
-    --studio-mat: #3a3f45;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 310px;
     min-height: 630px;
@@ -147,9 +144,6 @@
       --studio-screen-line: #9ba8b9;
       --studio-wood: #6d573a;
       --studio-frame: #0c0f12;
-      --studio-fabric: #2b3239;
-      --studio-fabric-alt: #3e464e;
-      --studio-mat: #0c0f12;
       background: #11151a;
 
       .studio-mock__scene-meta,
@@ -224,18 +218,31 @@
   &__pot { fill: $color-primary-light; stroke: $color-primary-dark; stroke-width: 1.4; }
   &__plant { fill: none; stroke: var(--studio-steel); stroke-width: 7; stroke-linecap: round; }
   &__plant--small { stroke-width: 3.2; }
-  &__fabric { fill: var(--studio-fabric); stroke: var(--studio-ink); stroke-width: 1.4; }
-  &__fabric--alt { fill: var(--studio-fabric-alt); }
-  &__knit { fill: none; stroke: var(--studio-ink); stroke-width: 1; opacity: 0.35; }
-  &__seam { fill: none; stroke: var(--studio-ink); stroke-width: 1.2; opacity: 0.4; }
-  &__art { fill: rgba($color-primary-md, 0.4); stroke: none; }
-  &__art-mass { fill: rgba($color-primary-dark, 0.42); stroke: none; }
-  &__art-frame { fill: none; stroke: var(--studio-ink); stroke-width: 1.5; }
-  &__mat { fill: var(--studio-mat); stroke: none; }
-  &__ottoman { fill: var(--studio-fabric-alt); stroke: var(--studio-ink); stroke-width: 1.4; }
+  /* Library volumes. Paper and ink like every other object, so the shelf
+     survives After hours by inversion alone; a core proficiency takes the
+     same tint the closet's accent boxes use, and its label is the text-safe
+     orange because a spine label is small type, not a fill. Ink on the tint
+     would have gone light-on-light the moment the room went dark. */
+  &__vol { fill: var(--studio-paper); stroke: var(--studio-ink); stroke-width: 1; }
+  &__vol--core { fill: $color-primary-light; stroke: $color-primary; }
+  &__vol-label {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    fill: var(--studio-ink);
+    pointer-events: none;
+  }
+  &__vol-label--core { fill: $color-primary-text; }
+  /* Walking pad. Frame and ink like the desk it sits under; the belt is the
+     monitor's screen tone so it reads as a recessed deck, and the slats and
+     readout are steel, which survives After hours where a second dark would
+     not. The readout is the one thing that takes orange, and only on
+     selection — see the reacting block below. */
   &__pad { fill: var(--studio-frame); stroke: var(--studio-ink); stroke-width: 1.4; }
-  &__pad-deck { fill: var(--studio-steel); stroke: none; opacity: 0.75; }
-  &__pad-line { fill: none; stroke: var(--studio-paper); stroke-width: 2; opacity: 0.5; }
+  &__pad-belt { fill: var(--studio-screen); stroke: var(--studio-steel); stroke-width: 1; }
+  &__pad-slat { fill: none; stroke: var(--studio-steel); stroke-width: 1.4; opacity: 0.85; }
+  &__pad-display { fill: var(--studio-steel); stroke: none; transition: fill 220ms ease; }
   &__crop { fill: none; stroke: $color-primary; stroke-width: 1; }
   &__svg-label { font-family: $font-family-mono; font-size: 9px; fill: $color-neutral-muted; letter-spacing: 0.08em; }
 
@@ -268,11 +275,14 @@
 
   &__light-switch {
     position: absolute;
-    /* Inside the drawn wall, not straddling it. The wall's right edge sits at
-       97.6% of the viewBox, so 1.5% put the control half outside the frame —
-       which read as a rendering fault once the plate behind it came out. */
-    right: 4.5%;
-    top: 40%;
+    /* On the strip of wall between the TV and the bookcase. It used to sit on
+       the right-hand wall above the couch; the library now stands there, and
+       a switch on the face of a bookcase reads as a fault. This is the one
+       run of bare wall left at switch height, and it stays inside the drawn
+       frame at every width — 4.5% from the right once put the control half
+       outside it. */
+    right: 33%;
+    top: 26%;
     display: flex;
     align-items: center;
     gap: 7px;
@@ -322,6 +332,13 @@
 
   &__detail-body {
     animation: studio-detail-in 260ms ease-out both;
+
+    /* All five readings are in the DOM for the prerender; the guard keeps a
+       later `display` on this class from putting the hidden ones back. Same
+       reasoning as the about-page tab panels. */
+    &[hidden] {
+      display: none;
+    }
   }
 
   &__detail-index {
@@ -509,7 +526,8 @@
   &__drawing[data-active='monitor'] [data-part='monitor'],
   &__drawing[data-active='system-wall'] [data-part='system-wall'],
   &__drawing[data-active='walking-pad'] [data-part='walking-pad'],
-  &__drawing[data-active='game-shelf'] [data-part='game-shelf'] {
+  &__drawing[data-active='game-shelf'] [data-part='game-shelf'],
+  &__drawing[data-active='library'] [data-part='library'] {
     opacity: 1;
     /* A lift small enough to feel like attention rather than a jump. */
     transform: translateY(-3px);
@@ -546,10 +564,21 @@
     stroke-dashoffset: 0;
   }
 
-  /* Selecting the desk redraws the line — the one moment of narrative motion
-     in the room, and only on request. */
+  /* Selecting the desk redraws the line — narrative motion only on request. */
   &__drawing[data-active='monitor'] &__screen-trace {
     animation: studio-trace-in 900ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  /* The pad answers the same way: select it and the readout lights and the
+     belt steps forward one slat, once. Orange here marks the selected state,
+     not the object — at rest the readout is steel like everything else on
+     the pad. */
+  &__drawing[data-active='walking-pad'] &__pad-display {
+    fill: $color-primary;
+  }
+
+  &__drawing[data-active='walking-pad'] &__pad-slats {
+    animation: studio-belt-step 700ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
   }
 
   /* ── Coffee ── */
@@ -591,4 +620,10 @@
 @keyframes studio-trace-in {
   from { stroke-dashoffset: 160; }
   to { stroke-dashoffset: 0; }
+}
+
+/* One slat spacing, in the drawing's user units, toward the hood. */
+@keyframes studio-belt-step {
+  from { transform: translateX(-10px); }
+  to { transform: translateX(0); }
 }

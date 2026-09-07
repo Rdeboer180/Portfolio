@@ -104,20 +104,22 @@ function CaseStudyRoute() {
  * quiet standing offer. The affordance now lives in the work section
  * (CaseStudyPlayground), beside the locked objects it actually unlocks.
  *
- * Held back until after mount, and that delay is load-bearing: the prerender
- * step strips this chrome out of every static file on purpose, and rendering it
- * during hydration made React find markup the static HTML didn't have — error
- * #418 on all 27 routes, discarding the prerendered tree. Gating on a
- * post-mount flag makes the first client render match the stripped markup
- * exactly, and the chrome appears a frame later — which is also when the unlock
- * state read from storage is actually known.
+ * The modal is held back until after mount, and that delay is load-bearing:
+ * the prerender step strips this chrome out of every static file on purpose,
+ * and rendering it during hydration made React find markup the static HTML
+ * didn't have — error #418 on all 27 routes, discarding the prerendered tree.
+ * Gating on a post-mount flag makes the first client render match the stripped
+ * markup exactly, and the chrome appears a frame later — which is also when the
+ * unlock state read from storage is actually known.
+ *
+ * The live region below is the exception, and for the same reason inverted:
+ * the prerender does *not* strip it, so it has to render on both sides. See
+ * the note on it.
  */
 function UnlockChrome() {
   const { promptOpen, unlock, dismissPrompt, continueLocked, unlocked, resolving } = useUnlock();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
-
-  if (!mounted) return null;
 
   return (
     <>
@@ -127,11 +129,22 @@ function UnlockChrome() {
         reader announced none of it — the correct password produced silence,
         then an unexplained new page. This says both halves out loud, and says
         the navigation *before* it happens rather than after.
+
+        Rendered unconditionally, outside the `mounted` gate below, for two
+        reasons that agree. A live region has to be in the document *before* its
+        content changes or screen readers routinely miss the first
+        announcement — inserting the region and its text in the same commit is
+        the classic way to announce nothing. And the prerender strips the
+        modal, not this: an empty region in the static HTML that the client's
+        first render omitted was a structural difference at the very top of
+        #root, which is React #418 on every prerendered route, hero or no hero.
+        Rendering it on both sides fixes the announcement and the hydration in
+        one move. It stays empty until an unlock actually resolves.
       */}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {unlocked && resolving ? 'Password accepted. Protected work unlocked.' : ''}
+        {mounted && unlocked && resolving ? 'Password accepted. Protected work unlocked.' : ''}
       </div>
-      {promptOpen && (
+      {mounted && promptOpen && (
         <PasswordModal
           variant="site"
           onUnlock={unlock}

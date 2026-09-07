@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
@@ -78,6 +78,30 @@ const Hero: React.FC = () => {
   const isMobileInitial = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   const [introStage, setIntroStage] = useState<IntroStage>(isMobileInitial ? 'sketch' : 'scrawl');
 
+  /**
+   * Hydration gate — the first client render must be the frame the static file
+   * already holds.
+   *
+   * scripts/prerender.mjs drives this page in a `reducedMotion: 'reduce'`
+   * browser context on purpose, so the HTML it serialises is the *settled*
+   * hero: data-intro-stage="done", the resolved headline, the layers panel on
+   * its last row. The client, meanwhile, used to start its first render at
+   * stage one — a genuinely different set of elements inside
+   * .hero__typed-group than the markup it was hydrating onto. React answered
+   * with error #418 and threw the entire prerendered tree away on every single
+   * load, which is the whole architecture PRODUCT.md is built on.
+   *
+   * suppressHydrationWarning was never going to fix that. It silences differing
+   * text and attributes; it says nothing about a differing element tree.
+   *
+   * So: the same shape as UnlockChrome in App.tsx. Render the settled frame
+   * until a post-mount flag flips, then run the real sequence. The flag is set
+   * in a *layout* effect — after hydration commits, before the browser paints —
+   * so the intro still begins on frame one and no resolved hero flashes past
+   * on the way in.
+   */
+  const [introArmed, setIntroArmed] = useState(false);
+
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLParagraphElement>(null);
@@ -105,6 +129,25 @@ const Hero: React.FC = () => {
     }, ms);
     timeoutsRef.current.push(id);
     return id;
+  }, []);
+
+  // ── Arm the intro — layout effect, so it lands before the first paint ────
+  // Deliberately not a passive effect: a `useEffect` here can let the browser
+  // paint the settled hero once before the sequence starts. See the
+  // `introArmed` comment above.
+  useLayoutEffect(() => {
+    // A reduced-motion visitor's settled frame IS the pre-armed frame, so move
+    // the machine there *before* arming. Both updates land in the same commit,
+    // so arming can never expose stage one for a frame on the way past.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayText(roles[FINAL_INDEX]);
+      setActiveIndex(FINAL_INDEX);
+      activeIndexRef.current = FINAL_INDEX;
+      setPhase('complete');
+      setShowBBox(false);
+      setIntroStage('done');
+    }
+    setIntroArmed(true);
   }, []);
 
   // ── Intro conductor — single mount effect ──────────────────────────────
@@ -211,18 +254,9 @@ const Hero: React.FC = () => {
     };
   }, []);
 
-  // Reduced motion — jump type machine to complete and set intro to done
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mq.matches) {
-      setDisplayText(roles[FINAL_INDEX]);
-      setActiveIndex(FINAL_INDEX);
-      activeIndexRef.current = FINAL_INDEX;
-      setPhase('complete');
-      setShowBBox(false);
-      setIntroStage('done');
-    }
-  }, []);
+  // (Reduced motion resolves the type machine in the arming layout effect
+  // above — it has to happen there, not in a passive effect, or the settled
+  // state arrives a paint too late.)
 
   // Flash an orange selection bbox whenever a new layer/role becomes active.
   // Mirrors Adobe/Figma's "I just clicked this layer" feedback before the cursor lands.
@@ -422,30 +456,38 @@ const Hero: React.FC = () => {
     return () => clearAllTimeouts();
   }, [clearAllTimeouts]);
 
+  // Every value the markup below reads goes through one of these, so the single
+  // `introArmed` flag swaps the whole hero between the settled frame the static
+  // HTML carries and the live state machine. Nothing downstream branches on the
+  // raw state.
+  const renderStage: IntroStage = introArmed ? introStage : 'done';
+  const renderPhase: Phase = introArmed ? phase : 'complete';
+  const renderIndex = introArmed ? activeIndex : FINAL_INDEX;
+  const renderText = introArmed ? displayText : roles[FINAL_INDEX];
+  const renderBBox = introArmed ? showBBox : false;
+
   const showResolved =
-    phase === 'paused-final' ||
-    phase === 'cursor-backtrack' ||
-    phase === 'editing-final' ||
-    phase === 'gradient-final' ||
-    phase === 'complete';
-  const showGradient = phase === 'gradient-final' || phase === 'complete';
+    renderPhase === 'paused-final' ||
+    renderPhase === 'cursor-backtrack' ||
+    renderPhase === 'editing-final' ||
+    renderPhase === 'gradient-final' ||
+    renderPhase === 'complete';
+  const showGradient = renderPhase === 'gradient-final' || renderPhase === 'complete';
   // Only animate the per-role tool action during the automatic cycle — never on user clicks.
-  const isAutoCycle = phase === 'cycling';
-  const currentAction = isAutoCycle ? roleActions[activeIndex] || null : null;
+  const isAutoCycle = renderPhase === 'cycling';
+  const currentAction = isAutoCycle ? roleActions[renderIndex] || null : null;
 
   // Panel layer list mirrors the role list 1:1 — the four animated phrases.
   const dynamicRoles = roles;
 
   return (
-    // suppressHydrationWarning: `data-intro-stage` legitimately differs between
-    // server and client. The prerender runs under reduced motion so the static
-    // HTML serialises the settled hero ("done"); the client begins its intro
-    // from the first stage. The attribute drives CSS only.
+    // `renderStage` is "done" until the intro is armed, which is exactly what
+    // the prerendered HTML carries — see the `introArmed` note above. No
+    // suppressHydrationWarning needed: server and client now agree.
     <section
       className="hero"
       ref={sectionRef}
-      data-intro-stage={introStage}
-      suppressHydrationWarning
+      data-intro-stage={renderStage}
     >
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
@@ -527,7 +569,7 @@ const Hero: React.FC = () => {
                   the current width. Replaces the old fixed min-height, which
                   left a large empty band under the H1 on phones where the
                   final line didn't actually wrap. */}
-              <span className="hero__typed-sizer" aria-hidden="true" suppressHydrationWarning>
+              <span className="hero__typed-sizer" aria-hidden="true">
                 {roles.slice(0, FINAL_INDEX).map((r) => (
                   <span key={r}>{r}</span>
                 ))}
@@ -537,28 +579,26 @@ const Hero: React.FC = () => {
                 </span>
               </span>
 
-              {/* suppressHydrationWarning: this span's content is deliberately
-                  different on server and client. The prerender runs with
-                  reduced motion so the static HTML captures the RESOLVED
-                  headline (a crawler and a JS-disabled visitor should see the
-                  finished sentence, not animation frame one), while the client
-                  starts the sequence from the top. The real <h1> above carries
-                  the full sentence for AT either way, and this node is
-                  aria-hidden. Without this, React logs a text mismatch (#418)
-                  on every load. */}
+              {/* The prerender captures the RESOLVED headline here — a crawler
+                  and a JS-disabled visitor should see the finished sentence,
+                  not animation frame one. Reading `renderPhase`/`renderText`
+                  rather than the raw state is what lets the client's first
+                  render put back that same resolved tree, element for element,
+                  before the sequence takes over a beat later. The real <h1>
+                  above carries the full sentence for AT either way, and this
+                  node is aria-hidden. */}
               <div className="hero__typed-group">
                 <span
-                  key={phase === 'typing' ? 'typing' : `role-${activeIndex}-${phase}`}
-                  className={`hero__typed${phase !== 'typing' ? ' hero__typed--swap' : ''}`}
+                  key={renderPhase === 'typing' ? 'typing' : `role-${renderIndex}-${renderPhase}`}
+                  className={`hero__typed${renderPhase !== 'typing' ? ' hero__typed--swap' : ''}`}
                   aria-hidden="true"
-                  suppressHydrationWarning
                 >
                   {showResolved ? (
                     <>
                       <span className="hero__final-word-wrap">
                         <span
                           className={`hero__selection${
-                            phase === 'editing-final' ? ' hero__selection--active' : ''
+                            renderPhase === 'editing-final' ? ' hero__selection--active' : ''
                           }`}
                           aria-hidden="true"
                         />
@@ -573,11 +613,11 @@ const Hero: React.FC = () => {
                         </span>
                         <span
                           className={`hero__cursor hero__cursor--absolute${
-                            phase === 'cursor-backtrack' ? ' hero__cursor--backtrack' : ''
+                            renderPhase === 'cursor-backtrack' ? ' hero__cursor--backtrack' : ''
                           }${
-                            phase === 'editing-final' ? ' hero__cursor--selecting' : ''
+                            renderPhase === 'editing-final' ? ' hero__cursor--selecting' : ''
                           }${
-                            phase === 'complete' ? ' hero__cursor--hide' : ''
+                            renderPhase === 'complete' ? ' hero__cursor--hide' : ''
                           }`}
                         />
                       </span>
@@ -585,13 +625,13 @@ const Hero: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      {displayText}
-                      {phase === 'typing' && displayText.length > 0 && <span className="hero__cursor" />}
+                      {renderText}
+                      {renderPhase === 'typing' && renderText.length > 0 && <span className="hero__cursor" />}
                     </>
                   )}
                 </span>
 
-                {(phase === 'typing' || phase === 'cycling') && (
+                {(renderPhase === 'typing' || renderPhase === 'cycling') && (
                   <span
                     key={flashKey}
                     className="hero__bbox-flash"
@@ -599,7 +639,7 @@ const Hero: React.FC = () => {
                   />
                 )}
 
-                <div className={`hero__bbox${showBBox ? ' hero__bbox--visible' : ''}${currentAction ? ` hero__bbox--${currentAction}` : ''}`}>
+                <div className={`hero__bbox${renderBBox ? ' hero__bbox--visible' : ''}${currentAction ? ` hero__bbox--${currentAction}` : ''}`}>
                   <span className="hero__bbox-handle hero__bbox-handle--tl" />
                   <span className="hero__bbox-handle hero__bbox-handle--tr" />
                   <span className="hero__bbox-handle hero__bbox-handle--bl" />
@@ -722,7 +762,6 @@ const Hero: React.FC = () => {
                 viewBox="0 0 420 420"
                 aria-hidden="true"
                 focusable="false"
-                style={{ overflow: 'visible' }}
               >
                 {/* Wobbly lumpy blob — one fast marker loop that overshoots */}
                 <path
@@ -784,7 +823,6 @@ const Hero: React.FC = () => {
                 viewBox="0 0 420 420"
                 aria-hidden="true"
                 focusable="false"
-                style={{ overflow: 'visible' }}
               >
                 {/* Tick — short stray stroke near blob's top-left */}
                 <path
@@ -904,7 +942,7 @@ const Hero: React.FC = () => {
               <div className="hero__ui-element hero__ui-element--layers">
                 <LayersPanel
                   ref={panelRef}
-                  activeIndex={activeIndex}
+                  activeIndex={renderIndex}
                   onLayerClick={handleLayerClick}
                   roles={dynamicRoles}
                   action={currentAction}

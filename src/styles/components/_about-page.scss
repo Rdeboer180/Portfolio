@@ -39,6 +39,18 @@
     z-index: 1;
   }
 
+  // ── Tab panels ──────────────────────────────────────────────────────────────
+  // Both panels stay mounted so the prerendered HTML carries every claim on
+  // this page; the inactive one is hidden with the `hidden` attribute. This
+  // rule is a guard, not the mechanism — the UA already applies
+  // `[hidden] { display: none }`, but any author rule that later gave
+  // `.about-page__mode-panel` a `display` would silently beat it and put the
+  // hidden panel back on screen. Class + attribute outranks class alone.
+
+  &__mode-panel[hidden] {
+    display: none;
+  }
+
   // ── Navigation ──────────────────────────────────────────────────────────────
 
   &__nav {

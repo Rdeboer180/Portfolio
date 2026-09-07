@@ -4,7 +4,7 @@ import { useReveal } from '../hooks/useReveal';
 /** Reveal stagger, matching AboutHero's `d()`. */
 const d = (ms: number) => ({ ['--reveal-delay' as string]: `${ms}ms` });
 
-type StudioPointId = 'monitor' | 'system-wall' | 'walking-pad' | 'game-shelf';
+type StudioPointId = 'monitor' | 'system-wall' | 'walking-pad' | 'game-shelf' | 'library';
 
 interface StudioPoint {
   id: StudioPointId;
@@ -35,14 +35,30 @@ const STUDIO_POINTS: StudioPoint[] = [
     proof: 'The same bias shows up in tokens, components, documentation, and governance.',
     position: { left: '33.5%', top: '24.5%' },
   },
+  // The retired fifth principle, "Keep putting in the reps", lives here now —
+  // as a habit with an object, not as a step in the loop. The process closer
+  // on the approach tab already says why the loop keeps turning (the people
+  // and communities whose standards make Ryan inspect his own work), so this
+  // point deliberately carries the other half of the same idea: the daily,
+  // physical version, in this room, with its own evidence. Neither restates
+  // the other.
+  //
+  // COPY STATUS: the body's claim about what gets done on the pad is a DRAFT
+  // for Ryan's edit — the footage puts the pad in the room, not what happens
+  // on it. The proof's numbers are as of September 2026: notes.tsx holds
+  // fifteen dated notes, June to August, and the repo has commits in 24 of
+  // the 25 weeks since 15 March.
   {
     id: 'walking-pad',
     number: '03',
     label: 'The walking pad',
-    title: 'Build a sustainable pace',
-    body: 'The room is set up for long focus without treating stillness as the price of serious work.',
-    proof: 'A dedicated workspace helps remote work stay focused, repeatable, and present.',
-    position: { left: '75%', top: '69%' },
+    title: 'Show up on the days nothing ships',
+    body: 'The interesting part of a working day is short. The rest is reading, reviewing, and redrafting, and the pad is where that gets done, at a walk, whether or not the day produces anything worth keeping. The good days get paid for on the ordinary ones.',
+    proof: 'The notes are one record: fifteen since June, each one dated. This site is the other: it has changed every week but one since March.',
+    // On the belt, a touch left of the deck's centre so the hood and its
+    // readout stay clear; the slats run out from under the control on both
+    // sides.
+    position: { left: '43%', top: '72.5%' },
   },
   {
     id: 'game-shelf',
@@ -52,6 +68,19 @@ const STUDIO_POINTS: StudioPoint[] = [
     body: 'Board games, long-running leagues, and the arguments around both are part of how I think about systems people return to.',
     proof: 'PlayDraft started with that same interest in choices, tension, and shared rituals.',
     position: { left: '14.5%', top: '51.5%' },
+  },
+  {
+    id: 'library',
+    number: '05',
+    label: 'The library',
+    title: 'Put the whole stack within reach',
+    body: 'Shelved by the job each tool does: design, system, build, agent, measure. The orange spines are core proficiencies. The full inventory is longer; this is the shelf that gets reached for.',
+    proof: 'This site is the evidence: React and TypeScript over SCSS variables that were named in Figma first, drafted with Claude Code against the same files, with every call still mine. Design and code share a shelf because the work does.',
+    // On the cupboard base, not the shelves — the one part of the unit with
+    // no label under it for the control to cover. A touch right of the unit's
+    // centre line, from when the walking pad's control sat at the sideboard
+    // and the two touched at phone width; it stays because it is fine there.
+    position: { left: '91%', top: '69%' },
   },
 ];
 
@@ -73,16 +102,6 @@ const CLOSET_BOTTOM: Spine[] = [
   [176, 10, 48, 2], [188, 12, 56, 1], [202, 10, 50, 0],
 ];
 
-const BOOKS_MID: Spine[] = [
-  [614, 8, 32, 0], [624, 7, 28, 1], [633, 9, 34, 0], [644, 6, 26, 2],
-  [664, 8, 30, 0], [674, 7, 26, 0], [683, 9, 34, 1], [694, 6, 28, 0],
-];
-
-const BOOKS_LOW: Spine[] = [
-  [614, 9, 36, 1], [625, 7, 30, 0], [634, 8, 34, 2], [644, 6, 28, 0],
-  [664, 7, 30, 0], [673, 9, 36, 0], [684, 7, 28, 1], [693, 6, 32, 0],
-];
-
 const TONE_CLASS = ['', ' studio-mock__spine--accent', ' studio-mock__spine--alt'];
 
 const renderSpines = (baseline: number, spines: Spine[]) =>
@@ -97,11 +116,100 @@ const renderSpines = (baseline: number, spines: Spine[]) =>
     />
   ));
 
+/**
+ * A volume in the library of assets. Standing volumes carry their label down
+ * the spine; flat ones lie on the shelf and carry it along the long side.
+ * `core` marks a core proficiency — the same set that is starred under Tools
+ * & Technologies, so orange here means the same thing it means there.
+ */
+interface Volume {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+  flat?: boolean;
+  core?: boolean;
+}
+
+// The library, curated from the Tools & Technologies inventory: one shelf per
+// category, in the inventory's own order, and only the tools that have shipped
+// something. Forty-two spines is a barcode; eighteen is a shelf.
+//
+// How a tool reads at this scale: the label is Menlo at 10 user units, which
+// is ~8.5px on a desktop viewport and ~7.4px on a tablet — the same size as
+// the plate marks in the corners and the light switch's own label. A name
+// that fits on a standing spine (five characters or fewer in a 46-unit row)
+// stands; a longer one lies flat so it can run horizontally. At phone widths
+// the SVG is ~317px wide and no label in the drawing is readable, so the
+// detail panel and the <desc> carry the inventory there; the shelf still
+// reads as a shelf of distinct volumes.
+const LIBRARY: Volume[] = [
+  // Bookcase over the sideboard — the build. Short names stand; the two
+  // long ones lie in a stack on the lower shelf.
+  { x: 613, y: 208, w: 19, h: 38, label: 'SCSS', core: true },
+  { x: 635, y: 206, w: 21, h: 40, label: 'React' },
+  { x: 659, y: 212, w: 18, h: 34, label: 'AEM', core: true },
+  { x: 681, y: 209, w: 20, h: 37, label: 'Expo' },
+  { x: 612, y: 276, w: 76, h: 14, label: 'TypeScript', flat: true },
+  { x: 618, y: 262, w: 50, h: 14, label: 'GitHub', flat: true },
+
+  // Tall unit, top shelf — design and prototyping.
+  { x: 756, y: 158, w: 22, h: 42, label: 'Figma', core: true },
+  { x: 781, y: 186, w: 80, h: 14, label: 'Illustrator', flat: true, core: true },
+  { x: 787, y: 172, w: 67, h: 14, label: 'Photoshop', flat: true },
+
+  // Second shelf — the design system. All three names are long, so the
+  // whole shelf is a stack.
+  { x: 757, y: 232, w: 93, h: 14, label: 'Atomic Design', flat: true, core: true },
+  { x: 763, y: 218, w: 93, h: 14, label: 'Design Tokens', flat: true },
+  { x: 760, y: 204, w: 67, h: 14, label: 'Storybook', flat: true },
+
+  // Third shelf — agentic systems.
+  { x: 756, y: 254, w: 20, h: 36, label: 'MCP' },
+  { x: 777, y: 276, w: 86, h: 14, label: 'Agent Skills', flat: true },
+  { x: 781, y: 262, w: 80, h: 14, label: 'Claude Code', flat: true },
+
+  // Fourth shelf — UX, accessibility, measurement.
+  { x: 756, y: 322, w: 86, h: 14, label: 'Adobe Target', flat: true },
+  { x: 760, y: 308, w: 28, h: 14, label: 'SEO', flat: true, core: true },
+  { x: 844, y: 298, w: 20, h: 38, label: 'WCAG' },
+];
+
+const renderVolumes = (volumes: Volume[]) =>
+  volumes.map(({ x, y, w, h, label, flat, core }) => {
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+    return (
+      <g key={label}>
+        <rect
+          x={x}
+          y={y}
+          width={w}
+          height={h}
+          rx={1}
+          className={`studio-mock__vol${core ? ' studio-mock__vol--core' : ''}`}
+        />
+        <text
+          x={cx}
+          y={cy}
+          textAnchor="middle"
+          dominantBaseline="central"
+          transform={flat ? undefined : `rotate(90 ${cx} ${cy})`}
+          className={`studio-mock__vol-label${core ? ' studio-mock__vol-label--core' : ''}`}
+        >
+          {label}
+        </text>
+      </g>
+    );
+  });
+
 const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
   // Drawn from the actual room rather than a generic studio: butcher-block
   // standing desk on black legs, monitor on an arm with the laptop on a riser
   // beside it, walking pad folded upright underneath, the game closet, and the
-  // couch half of the room that makes it a room and not a workstation.
+  // library wall on the right that gives the closet on the left something to
+  // answer to.
   //
   // `data-active` lets the selected object respond, so the numbered control and
   // the thing it describes are visibly the same object. Until that existed the
@@ -117,11 +225,18 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
     <title id="studio-drawing-title">Drawing of Ryan&rsquo;s home studio</title>
     <desc id="studio-drawing-desc">
       A flattened front elevation of the actual room: a closet of board games, a
-      whiteboard of the week with drawings pinned beside it, a wall-mounted TV, a
-      standing desk carrying a wide monitor, a laptop on a riser, keyboard,
-      notebook and coffee, a walking pad folded upright underneath, a bookcase
-      over a sideboard with a lamp, and a cream couch below a framed landscape.
-      Numbered controls reveal how each part supports the work.
+      whiteboard of the week with drawings pinned beside it, a clock, a
+      wall-mounted TV, a standing desk carrying a wide monitor, a laptop on a
+      riser, keyboard, notebook and coffee, a walking pad out on the floor
+      beneath it with its slatted belt along the top and the motor hood at
+      one end, and on the right a library of assets: a bookcase over a
+      sideboard with a lamp, grown into a tall unit with a cupboard base. Its
+      spines and flat volumes are labelled with the tools of the work, one
+      shelf per job. Design: Figma, Illustrator, Photoshop. System: Atomic
+      Design, Design Tokens, Storybook. Build: SCSS, React, AEM, Expo,
+      TypeScript, GitHub. Agentic: MCP, Claude Code, Agent Skills. Measurement:
+      Adobe Target, SEO, WCAG. Orange volumes mark core proficiencies. Numbered
+      controls reveal how each part supports the work.
     </desc>
 
     <rect x="22" y="24" width="856" height="460" rx="8" className="studio-mock__wall" />
@@ -164,15 +279,8 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
     {/* Wall-mounted TV, off. */}
     <rect x="462" y="66" width="96" height="58" rx="2" className="studio-mock__tv" />
 
-    {/* Bookcase over the walnut-topped sideboard, lamp on the open end. */}
-    <rect x="608" y="152" width="98" height="138" className="studio-mock__paper" />
-    <path d="M608 200H706M608 246H706" className="studio-mock__ink" />
-    <path d="M658 152V290" className="studio-mock__steel" />
-    <rect x="616" y="166" width="26" height="30" className="studio-mock__paper" />
-    <path d="M681 182H697L694 196H678Z" className="studio-mock__pot" />
-    <path d="M689 182V164M689 174C684 170 680 164 679 158M689 174C694 170 698 164 699 158M689 179C683 177 678 172 675 167M689 179C695 177 700 172 703 167" className="studio-mock__plant studio-mock__plant--small" />
-    {renderSpines(246, BOOKS_MID)}
-    {renderSpines(290, BOOKS_LOW)}
+    {/* Walnut-topped sideboard, lamp on the open end. The bookcase that sits
+        on it belongs to the library group below. */}
     <rect x="604" y="300" width="136" height="90" className="studio-mock__paper" />
     <path d="M600 290H744V300H600Z" className="studio-mock__wood" />
     <path d="M650 300V390M698 300V390" className="studio-mock__steel" />
@@ -181,40 +289,64 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
     <path d="M712 252H736L741 276H707Z" className="studio-mock__shade" />
     <path d="M718 276H730V290H718Z" className="studio-mock__wood" />
 
-    {/* Framed landscape over the couch. */}
-    <rect x="774" y="96" width="96" height="64" className="studio-mock__art" />
-    <path d="M774 150L798 120L816 138L838 112L870 146V160H774Z" className="studio-mock__art-mass" />
-    <rect x="774" y="96" width="96" height="64" className="studio-mock__art-frame" />
+    {/* The library of assets. The bookcase over the sideboard, grown into a
+        tall unit on the floor beside it — the two share their shelf lines, and
+        the lamp sits in the nook between. It replaces the couch, which was
+        drawn twice and read as a filing cabinet both times, and it gives the
+        right side of the room a piece of furniture with the closet's weight
+        so the room does not end at the sideboard. */}
+    <g data-part="library">
+      <rect x="608" y="152" width="98" height="138" className="studio-mock__paper" />
+      <path d="M608 200H706M608 246H706" className="studio-mock__ink" />
+      <rect x="616" y="166" width="26" height="30" className="studio-mock__paper" />
+      <path d="M681 182H697L694 196H678Z" className="studio-mock__pot" />
+      <path d="M689 182V164M689 174C684 170 680 164 679 158M689 174C694 170 698 164 699 158M689 179C683 177 678 172 675 167M689 179C695 177 700 172 703 167" className="studio-mock__plant studio-mock__plant--small" />
 
-    {/* Couch. Cream, two seats, one knit pillow that lives on the right.
-        Every corner is rounded and the parts overlap front-to-back, because the
-        first pass drew it as flush rectangles and it read as a filing cabinet
-        sitting where the couch is. Softness is the whole signal here — it is
-        the one object in the room that is not a hard edge. */}
-    <rect x="762" y="286" width="92" height="64" rx="9" className="studio-mock__fabric" />
-    <path d="M808 292V346" className="studio-mock__seam" />
-    <rect x="748" y="346" width="120" height="36" rx="8" className="studio-mock__fabric" />
-    <rect x="772" y="340" width="36" height="32" rx="6" className="studio-mock__fabric" />
-    <rect x="812" y="340" width="36" height="32" rx="6" className="studio-mock__fabric" />
-    <rect x="742" y="300" width="26" height="82" rx="10" className="studio-mock__fabric" />
-    <rect x="848" y="300" width="26" height="82" rx="10" className="studio-mock__fabric" />
-    <rect x="776" y="302" width="28" height="32" rx="4" className="studio-mock__fabric" />
-    <rect x="812" y="298" width="32" height="36" rx="4" className="studio-mock__fabric studio-mock__fabric--alt" />
-    <path d="M818 306H838M818 316H838M818 326H838" className="studio-mock__knit" />
-    <path d="M754 382V390M860 382V390" className="studio-mock__ink" />
+      <rect x="752" y="152" width="116" height="238" className="studio-mock__paper" />
+      <path d="M752 200H868M752 246H868M752 290H868M752 336H868" className="studio-mock__ink" />
+      {/* Cupboard base with the sideboard's knobs, then a plinth. A run of
+          spines all the way to the floor is the barcode again; the doors give
+          the eye somewhere to rest and the unit somewhere to stand. */}
+      <path d="M810 336V384" className="studio-mock__steel" />
+      <circle cx="804" cy="360" r="2.5" className="studio-mock__ink--fill" />
+      <circle cx="816" cy="360" r="2.5" className="studio-mock__ink--fill" />
+      <path d="M752 384H868V390H752Z" className="studio-mock__frame" />
 
-    {/* Anti-fatigue mat. Stays under the desk — it is where you stand. */}
-    <path d="M250 392H480V404H250Z" className="studio-mock__mat" />
+      {renderVolumes(LIBRARY)}
+    </g>
 
-    {/* Walking pad, folded upright and parked against the sideboard. Drawn
-        after it so it clearly stands in front rather than inside it. */}
+    {/* Walking pad, out on the floor under the desk: a long, low deck with the
+        belt slatted along its top and the motor hood at the sideboard end.
+        This is the one object in the room drawn in a pose it is not parked
+        in. In the footage it is folded in half and stood upright, and three
+        passes drew that faithfully — under the desk, then in front of the
+        sideboard, then with a slatted belt, a rounded fold, and wheels — and
+        it read as a cabinet with glass doors, then as a cabinet again, then
+        as a space heater. A folded pad seen square-on is a stubby box, and a
+        stubby box with casters is an appliance; the cue a treadmill cannot do
+        without is its length. So it is drawn the way it is when it is being
+        used, which is the state the rest of the plate is in (the coffee is
+        steaming, the chart is up). Same failure as the couch, same call:
+        legibility over the parked pose. It takes the place of the
+        anti-fatigue mat, which is under it when it is out.
+
+        Selecting the point lights the readout and steps the belt one slat,
+        once — the same request-only motion as the monitor's trace. */}
     <g data-part="walking-pad">
-      <path d="M624 296H706V390H624Z" className="studio-mock__pad" />
-      <path d="M634 310H696V374H634Z" className="studio-mock__pad-deck" />
-      <path d="M620 292H710V300H620Z" className="studio-mock__pad" />
-      <rect x="628" y="318" width="6" height="16" className="studio-mock__box--accent" />
-      <rect x="696" y="318" width="6" height="16" className="studio-mock__box--accent" />
-      <path d="M632 382H698" className="studio-mock__pad-line" />
+      <path d="M311 366H513A5 5 0 0 1 518 371V390H306V371A5 5 0 0 1 311 366Z" className="studio-mock__pad" />
+      <path d="M484 356H513A5 5 0 0 1 518 361V390H480V360A4 4 0 0 1 484 356Z" className="studio-mock__pad" />
+      <clipPath id="studio-pad-belt">
+        <rect x="314" y="370" width="160" height="12" />
+      </clipPath>
+      <rect x="314" y="370" width="160" height="12" className="studio-mock__pad-belt" />
+      {/* One slat more than fits: the clip hides whichever is off the deck,
+          so the belt can step a slat without a gap opening at either end. */}
+      <g clipPath="url(#studio-pad-belt)">
+        <g className="studio-mock__pad-slats">
+          <path d="M322 371V381M332 371V381M342 371V381M352 371V381M362 371V381M372 371V381M382 371V381M392 371V381M402 371V381M412 371V381M422 371V381M432 371V381M442 371V381M452 371V381M462 371V381M472 371V381M482 371V381" className="studio-mock__pad-slat" />
+        </g>
+      </g>
+      <rect x="490" y="362" width="18" height="5" rx="1" className="studio-mock__pad-display" />
     </g>
 
     {/* The desk. */}
@@ -262,7 +394,7 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
 
     {/* The only thing in the room that moves on its own, and the only object
         that stays lit in every state — it sits on the desk but outside the
-        desk's group, because dimming the coffee to 0.55 for three of the four
+        desk's group, because dimming the coffee to 0.55 for four of the five
         selections put out the one signal that says someone is in here. */}
     <g className="studio-mock__coffee">
       <path d="M556 260H584V280A6 6 0 0 1 578 286H562A6 6 0 0 1 556 280Z" className="studio-mock__mug" />
@@ -274,9 +406,6 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
       </g>
     </g>
 
-    {/* Ottoman, foreground, where it is always in the way. */}
-    <path d="M636 414H744L760 442H652Z" className="studio-mock__ottoman" />
-
     {/* Construction marks */}
     <path d="M22 12V2M12 24H2M878 12V2M888 24H898M22 496V506M12 484H2M878 496V506M888 484H898" className="studio-mock__crop" />
     <text x="32" y="510" className="studio-mock__svg-label">STUDIO PLATE / DRAWN FROM THE ROOM</text>
@@ -287,9 +416,12 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
 const AboutStudio: React.FC = () => {
   const [activePointId, setActivePointId] = useState<StudioPointId>('monitor');
   const [isAfterHours, setIsAfterHours] = useState(false);
-  const activePoint = STUDIO_POINTS.find((point) => point.id === activePointId) ?? STUDIO_POINTS[0];
-  // The panel only mounts when this tab is selected, so the observer fires on
-  // tab-in — the underline draws when you arrive, not once per page load.
+  // The panel is now always mounted (both panels are, so the prerendered HTML
+  // carries both) and merely `hidden` while the other tab is selected. The
+  // reveal still fires on tab-in rather than on page load: a `display: none`
+  // subtree has no box, so IntersectionObserver reports it as not intersecting
+  // and only delivers `isIntersecting` once the panel is shown. The underline
+  // draws when you arrive, not while nobody is looking.
   const [revealRef, revealed] = useReveal<HTMLElement>(0.15);
 
   return (
@@ -368,7 +500,7 @@ const AboutStudio: React.FC = () => {
       <div className={`studio-mock__workspace${isAfterHours ? ' is-after-hours' : ''}`}>
         <div className="studio-mock__scene">
           <div className="studio-mock__scene-meta">
-            <span>Four objects &middot; select to read</span>
+            <span>Five objects &middot; select to read</span>
             <span>Drawn from the actual room</span>
           </div>
           <div className="studio-mock__drawing-wrap">
@@ -402,16 +534,27 @@ const AboutStudio: React.FC = () => {
           </div>
         </div>
 
+        {/* Every point's copy is in the DOM and the inactive ones are `hidden`,
+            the same trade the About tabs make: the prerendered HTML carries all
+            five readings instead of whichever one happened to be selected at
+            build time. Leaving `display: none` for the displayed one restarts
+            the entry animation, so the swap still reads as a swap. */}
         <aside className="studio-mock__detail" aria-live="polite">
-          <div className="studio-mock__detail-body" key={activePoint.id}>
-            <p className="studio-mock__detail-index">{activePoint.number} / {activePoint.label}</p>
-            <h2>{activePoint.title}</h2>
-            <p>{activePoint.body}</p>
-            <div className="studio-mock__proof">
-              <span>What it proves</span>
-              <p>{activePoint.proof}</p>
+          {STUDIO_POINTS.map((point) => (
+            <div
+              key={point.id}
+              className="studio-mock__detail-body"
+              hidden={point.id !== activePointId}
+            >
+              <p className="studio-mock__detail-index">{point.number} / {point.label}</p>
+              <h2>{point.title}</h2>
+              <p>{point.body}</p>
+              <div className="studio-mock__proof">
+                <span>What it proves</span>
+                <p>{point.proof}</p>
+              </div>
             </div>
-          </div>
+          ))}
           <p className="studio-mock__detail-hint">Select a numbered object to read the room.</p>
         </aside>
       </div>

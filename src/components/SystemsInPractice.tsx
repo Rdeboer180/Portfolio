@@ -25,6 +25,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
+import { useHighlightSweep } from '../hooks/useHighlightSweep';
 
 /**
  * The context tag that travels with a request. One constant, read by the body
@@ -466,6 +467,20 @@ function returnRail(from: Box, to: Box, railY: number): Wire {
 // ── Component ────────────────────────────────────────────────────────────────
 
 const SystemsInPractice: React.FC = () => {
+  // The one sentence in this section that carries the argument gets the site's
+  // selection-sweep: it highlights, then settles to bold. Same vocabulary as the
+  // About section, same hook — the classes and the reduced-motion fallback are
+  // global (see _about.scss), so nothing new is needed here but the ref.
+  // Threshold is lower than About's default because this section is ~1,470px
+  // tall; at 0.4 the sweep would not arm until the board had scrolled past.
+  const sweepRef = useHighlightSweep<HTMLElement>({
+    selector: '.animated-bold',
+    activeClass: 'animated-bold--active',
+    settledClass: 'animated-bold--settled',
+    settleOffset: 850,
+    cycleTime: 1900,
+    threshold: 0.2,
+  });
   const [introRef, introVisible] = useReveal<HTMLDivElement>(0.3);
   const [stageRef, stageVisible] = useReveal<HTMLDivElement>(0.2);
   const [loopRef, loopVisible] = useReveal<HTMLDivElement>(0.2);
@@ -624,7 +639,7 @@ const SystemsInPractice: React.FC = () => {
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
 
   return (
-    <section id="systems" className={`sip${activeBeat ? ' sip--beat-active' : ''}`}>
+    <section id="systems" className={`sip${activeBeat ? ' sip--beat-active' : ''}`} ref={sweepRef}>
       <div className="sip__container">
         {/* The handoff's label is "Systems in Practice", and it is the one badge on
             the site that wraps: at 375 the label needs 233px on one line, the pill's
@@ -651,9 +666,12 @@ const SystemsInPractice: React.FC = () => {
             </h2>
             <p className="sip__body reveal-fade" style={delay(240)}>
               Figma still starts and steers the conversation &mdash; and it remains a home for some of
-              the tools. But as high-fidelity prototypes get faster to build, the time I spend in Figma
-              is getting smaller. What used to be the nucleus of a design system is now one piece in a
-              much larger puzzle.
+              the tools.{' '}
+              <span className="animated-bold">
+                But as high-fidelity prototypes get faster to build, the time I spend in Figma is
+                getting smaller.
+              </span>{' '}
+              What used to be the nucleus of a design system is now one piece in a much larger puzzle.
             </p>
             <p className="sip__body reveal-fade" style={delay(320)}>
               The system has to travel farther: into documentation, prompt workflows, QA, automation,

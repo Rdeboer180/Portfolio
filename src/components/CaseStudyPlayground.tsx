@@ -447,6 +447,23 @@ const CaseStudyPlayground: React.FC = () => {
 
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
 
+  /**
+   * Which media element a card renders is the one reduced-motion decision in
+   * here that changes the DOM rather than the motion — and scripts/prerender.mjs
+   * drives the build in a reduced-motion browser on purpose, so every static
+   * file holds an <img> where a normal visitor's React renders a <video>. React
+   * reads that as a structural hydration mismatch, throws error #418, and drops
+   * the entire prerendered page to re-render it client-side.
+   *
+   * Same gate as UnlockChrome in App.tsx and the hero intro: render what the
+   * static markup already has, then put the real thing in a beat later. The
+   * <video> carries the same file as its poster, and the poster is already
+   * decoded from the <img>, so the swap is invisible.
+   */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const posterOnly = !mounted || reduceMotion;
+
   return (
     <section
       id="projects"
@@ -552,7 +569,7 @@ const CaseStudyPlayground: React.FC = () => {
                       {STREAM_LABEL[card.stream]}
                     </span>
                   )}
-                  {card.video && !reduceMotion ? (
+                  {card.video && !posterOnly ? (
                     <CardVideo
                       src={card.video}
                       poster={card.image}

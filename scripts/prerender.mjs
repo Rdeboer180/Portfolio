@@ -149,8 +149,79 @@ async function main() {
       // client renders first.
       const clone = document.documentElement.cloneNode(true);
       clone.classList.remove('has-unlock-bar');
-      clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay')
+      // `.case-playground__unlock` is the same thing wearing its current
+      // clothes: the standing unlock offer moved out of the site chrome and
+      // into the work section, but it is still gated on `lockedReady`, still
+      // absent from the client's first render, and so still has to be absent
+      // from the static file.
+      clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay, .case-playground__unlock')
         .forEach((el) => el.remove());
+
+      // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its
+      // modifier classes straight to the DOM after the copy resolves — React
+      // never renders them, so leaving them in the static file hands hydration
+      // a className the client's first render doesn't have. Same category as
+      // the unlock chrome above: post-load state, not content. Stripped, the
+      // spans serialize in their base state, which is exactly what React
+      // renders and what a JS-disabled visitor should see before the sweep.
+      clone.querySelectorAll('.animated-bold, .about__highlight').forEach((el) => {
+        el.classList.remove(
+          'animated-bold--active', 'animated-bold--bold', 'animated-bold--settled',
+          'about__highlight--active', 'about__highlight--bold', 'about__highlight--settled',
+        );
+      });
+
+      const root = clone.querySelector('#root');
+      if (root) {
+        // ── Put back what DOM serialization loses ──────────────────────────
+        //
+        // This prerender is not renderToString: it walks a *live* DOM that
+        // React built in a real browser and prints it. That is almost the same
+        // thing, and the two places it isn't were costing us the entire
+        // architecture — React error #418 on every route, on every load, which
+        // means the prerendered tree was thrown away and redrawn client-side
+        // every single time.
+        //
+        // React's own server output carries two markers that exist purely so
+        // hydration can find its place again. innerHTML has no idea about
+        // either of them, so we re-insert them by hand.
+
+        // 1. Text separators. React renders `{a}{' '}{b}` as three separate
+        //    text nodes; serialize and re-parse that and the HTML parser
+        //    rightly merges them into one. Hydration then compares its first
+        //    text child (" ") against a node holding the whole run and calls
+        //    it a mismatch. React's SSR emits <!-- --> between adjacent text
+        //    for exactly this reason. (Live case: the proficiency dock's
+        //    intro paragraph.)
+        const SKIP = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'TITLE', 'NOSCRIPT']);
+        const separateText = (node) => {
+          let child = node.firstChild;
+          while (child) {
+            const next = child.nextSibling;
+            if (child.nodeType === 3 && next && next.nodeType === 3) {
+              node.insertBefore(document.createComment(''), next);
+            }
+            if (child.nodeType === 1 && !SKIP.has(child.tagName)) separateText(child);
+            child = next;
+          }
+        };
+        separateText(root);
+
+        // 2. Suspense boundary markers. React 19 will not hydrate a <Suspense>
+        //    it cannot find in the DOM: it looks for the <!--$--> / <!--/$-->
+        //    pair its own renderer emits, finds a plain element instead, and
+        //    throws the whole tree out. PageShell puts the site's one and only
+        //    boundary directly inside <main id="main-content">, wrapping all of
+        //    it, so its children are the boundary's children. If that ever
+        //    stops being true the failure mode is the mismatch we started with,
+        //    not something worse — but keep the two in step.
+        const main = root.querySelector('#main-content');
+        if (main) {
+          main.insertBefore(document.createComment('$'), main.firstChild);
+          main.appendChild(document.createComment('/$'));
+        }
+      }
+
       return clone.outerHTML;
     }));
     if (NOINDEX_ROUTES.has(route)) {
