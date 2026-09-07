@@ -222,8 +222,20 @@ export const processBeats: ProcessBeat[] = [
  * Under the circuit. The first sentence is unchanged from the previous deck.
  * The second paragraph is the old fifth principle ("Keep putting in the reps"),
  * which was never a step in the loop; it is the reason the loop keeps turning,
- * so it moves here. Its opening clause is a DRAFT; the list of names and the
- * last two sentences are Ryan's, unchanged.
+ * so it moves here. Its opening clause is a DRAFT; the last two sentences are
+ * Ryan's, unchanged.
+ *
+ * The people and shows Ryan studies used to be listed here. They are named
+ * once now, on the studio tab's walking pad (AboutStudio.tsx, point 03),
+ * because that is where the listening physically happens — the pad is the
+ * object, this paragraph is the argument. Naming them in both places was the
+ * same duplication the rest of this page was cleaned of, so this paragraph
+ * points at the room instead of restating the list.
+ *
+ * "Putting in the reps" stays here, and only here and in the story above.
+ * The studio's walking-pad title was going to carry the phrase too ("Put in
+ * the reps between releases"); it says "Stay in shape between releases"
+ * instead, so one page does not use the same line three times.
  */
 export const processCloser = {
   lead:
@@ -232,9 +244,9 @@ export const processCloser = {
   emphasis: 'care for what ships',
   reps:
     'The loop keeps turning because I keep putting in the reps: studying the people and ' +
-    'communities whose standards make me inspect my own work more closely, including Dive Club, ' +
-    'UI Collective Design, Tommy Geoco, Michael Riddering, Jenny Wen, and Brad Frost. The useful ' +
-    'part is not the inspiration. It is the habit or rule that changes what I build next.',
+    'communities whose standards make me inspect my own work more closely. They are named in ' +
+    'the studio, on the walking pad, where most of that studying gets done. The useful part is ' +
+    'not the inspiration. It is the habit or rule that changes what I build next.',
 };
 
 // ============================================

@@ -56,10 +56,40 @@
 
     p {
       margin: 0;
-      font-size: $font-size-body-lg;
+      font-size: $font-size-body;
       line-height: 1.6;
       color: $color-neutral-standard;
     }
+
+    p + p {
+      margin-top: $spacing-md;
+    }
+
+    /* In-copy emphasis is ink and semibold, the treatment body copy already
+       uses in Systems in Practice. Orange is kept for the one thesis line. */
+    strong {
+      font-weight: $font-weight-semibold;
+      color: $color-neutral-dark;
+    }
+  }
+
+  /* The lede carries the section's claim at the size the whole intro used to
+     be set in; the two paragraphs under it step down a size, so a column that
+     grew from one paragraph to three stays in proportion to the headline it
+     sits beside. */
+  &__intro-copy &__intro-lede {
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+  }
+
+  /* The one line that carries the argument, set the way the approach tab sets
+     its closing thesis (.process-principles__closing-emphasis): the two tabs
+     are one page, and its thesis lines should read in one voice. Orange at
+     body size is $color-primary-dark, per DESIGN.md. */
+  &__emphasis {
+    font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
   }
 
   &__intro-note {
@@ -235,14 +265,30 @@
   }
   &__vol-label--core { fill: $color-primary-text; }
   /* Walking pad. Frame and ink like the desk it sits under; the belt is the
-     monitor's screen tone so it reads as a recessed deck, and the slats and
-     readout are steel, which survives After hours where a second dark would
-     not. The readout is the one thing that takes orange, and only on
-     selection — see the reacting block below. */
+     monitor's screen tone so it reads as a recessed deck, and the slats,
+     hinge pin and readout are steel, which survives After hours where a
+     second dark would not. The readout is the one thing that takes orange,
+     and only on selection — see the reacting block below. */
   &__pad { fill: var(--studio-frame); stroke: var(--studio-ink); stroke-width: 1.4; }
   &__pad-belt { fill: var(--studio-screen); stroke: var(--studio-steel); stroke-width: 1; }
   &__pad-slat { fill: none; stroke: var(--studio-steel); stroke-width: 1.4; opacity: 0.85; }
   &__pad-display { fill: var(--studio-steel); stroke: none; transition: fill 220ms ease; }
+  &__pad-hinge { fill: var(--studio-steel); stroke: var(--studio-frame); stroke-width: 1; }
+  /* The rear half of the deck turns about the hinge pin, which sits on the
+     deck's top surface at the seam (400, 366 in user units). A transition
+     rather than a keyframe, so deselecting runs the same turn backwards from
+     wherever it is: select another point mid-fold and the half comes back
+     down, it never jumps. Rotation is clockwise on screen, which for a half
+     that lies to the left of its hinge means up, over, and down. It stops
+     at 168°, not 180°: the hood's top is drawn at that slope and the rear
+     half comes to rest lying along it, the way the real one parks on its
+     motor housing. */
+  &__pad-rear {
+    transform-box: view-box;
+    transform-origin: 400px 366px;
+    transform: rotate(0deg);
+    transition: transform 1000ms cubic-bezier(0.6, 0, 0.3, 1);
+  }
   &__crop { fill: none; stroke: $color-primary; stroke-width: 1; }
   &__svg-label { font-family: $font-family-mono; font-size: 9px; fill: $color-neutral-muted; letter-spacing: 0.08em; }
 
@@ -364,6 +410,13 @@
     font-size: $font-size-body;
     line-height: 1.65;
     color: $color-neutral-standard;
+
+    /* One phrase per reading, the concept the object stands for — same ink
+       semibold as the intro, so five readings do not become a skills cloud. */
+    strong {
+      font-weight: $font-weight-semibold;
+      color: $color-neutral-dark;
+    }
   }
 
   &__proof {
@@ -569,16 +622,36 @@
     animation: studio-trace-in 900ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
   }
 
-  /* The pad answers the same way: select it and the readout lights and the
-     belt steps forward one slat, once. Orange here marks the selected state,
-     not the object — at rest the readout is steel like everything else on
-     the pad. */
+  /* The pad answers with the one thing only a walking pad does. Select it
+     and, in order: the readout lights, the belt steps forward one slat and
+     stops, and the rear half hinges up through vertical and over onto the
+     front half — the fold, once, the way it is put away. Orange marks the
+     selected state, not the object; at rest the readout is steel like
+     everything else on the pad.
+
+     The fold waits for the belt to settle (380ms), because a deck that
+     folds while its belt is still moving is a machine eating itself. Under
+     prefers-reduced-motion the global floor in _base.scss collapses both the
+     step and the turn to nothing, so the pad simply is folded while
+     selected and flat otherwise; the wait is zeroed below so the static
+     change lands with the readout rather than a third of a second after. */
   &__drawing[data-active='walking-pad'] &__pad-display {
     fill: $color-primary;
   }
 
   &__drawing[data-active='walking-pad'] &__pad-slats {
     animation: studio-belt-step 700ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
+  }
+
+  &__drawing[data-active='walking-pad'] &__pad-rear {
+    transform: rotate(168deg);
+    transition-delay: 380ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__drawing[data-active='walking-pad'] &__pad-rear {
+      transition-delay: 0ms;
+    }
   }
 
   /* ── Coffee ── */

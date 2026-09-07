@@ -11,71 +11,138 @@ interface StudioPoint {
   number: string;
   label: string;
   title: string;
-  body: string;
+  /**
+   * A body may carry one emphasised phrase: the concept the object stands
+   * for, never a tool name, so the reading is a philosophy and not a skills
+   * cloud. The proof stays plain; its block already carries the accent.
+   */
+  body: React.ReactNode;
   proof: string;
   position: { left: string; top: string };
 }
 
+// Copy budget, from the handoff that repositioned this room for design-systems
+// and design-engineering roles: body 35–55 words, proof 25–45. The room should
+// reward a click without becoming five mini case studies. The three About
+// surfaces keep distinct jobs — My Process is how Ryan works, Systems Beyond
+// the Canvas is where the system lives, this room is what habits make that
+// believable — so nothing here restates the four-beat loop, and every proof
+// names something a reader can go and check elsewhere on the site.
 const STUDIO_POINTS: StudioPoint[] = [
   {
     id: 'monitor',
     number: '01',
     label: 'The desk',
-    title: 'Design beside the build',
-    body: 'Everything starts as a sketch before it becomes a file. From there Figma, front-end code, and the shipped product stay close enough to pressure-test one another.',
-    proof: 'PlayDraft and LoopStack move from idea to working software here. LoopStack exists because I have Type 1 diabetes and wanted the version of that experience that did not exist yet.',
+    title: 'Keep design and build in the same conversation',
+    body: (
+      <>
+        A screen rarely gets the final say. I move between{' '}
+        <strong>Figma, working prototypes, front-end code, and the shipped product</strong>, and
+        keep them close enough to challenge each other. A component that works in Figma and
+        breaks in production is not finished. Code that ships clean and drifts from the system
+        is not either.
+      </>
+    ),
+    proof: 'PlayDraft went from brand sketch to a React Native build on TestFlight in twelve weeks, the Figma file and the code correcting each other at this desk. LoopStack is here too, running on my own glucose data because I have Type 1 diabetes.',
     position: { left: '45%', top: '36%' },
   },
   {
     id: 'system-wall',
     number: '02',
     label: 'The system wall',
-    title: 'Make the structure visible',
-    body: 'References, rules, and active decisions stay in view so the system is easier to question and maintain.',
-    proof: 'The same bias shows up in tokens, components, documentation, and governance.',
+    title: 'Make the rules visible enough to travel',
+    body: (
+      <>
+        A design system gets fragile when its logic lives only in a file or in one
+        person&rsquo;s head. I keep{' '}
+        <strong>
+          tokens, component decisions, open questions, accessibility rules, and implementation
+          constraints
+        </strong>{' '}
+        where they can be used outside the original canvas: by designers, engineers, reviewers,
+        and increasingly the agents helping us build.
+      </>
+    ),
+    proof: 'WheelRack was built that way: neither Figma nor Storybook was the source of truth, so they had to agree. This site keeps its rules in DESIGN.md and PRODUCT.md, one record for the person and the agent building from it.',
     position: { left: '33.5%', top: '24.5%' },
   },
   // The retired fifth principle, "Keep putting in the reps", lives here now —
-  // as a habit with an object, not as a step in the loop. The process closer
-  // on the approach tab already says why the loop keeps turning (the people
-  // and communities whose standards make Ryan inspect his own work), so this
-  // point deliberately carries the other half of the same idea: the daily,
-  // physical version, in this room, with its own evidence. Neither restates
-  // the other.
+  // as a habit with an object, not as a step in the loop. This is where the
+  // people and shows Ryan studies are named, because this is where the
+  // listening physically happens; the process closer on the approach tab
+  // keeps the argument (what studying other people's standards does to the
+  // work) and points here rather than listing them again. One place names
+  // the sources, the other says why they matter. Neither restates the other.
   //
-  // COPY STATUS: the body's claim about what gets done on the pad is a DRAFT
-  // for Ryan's edit — the footage puts the pad in the room, not what happens
-  // on it. The proof's numbers are as of September 2026: notes.tsx holds
-  // fifteen dated notes, June to August, and the repo has commits in 24 of
-  // the 25 weeks since 15 March.
+  // The title deliberately does not say "reps". The closer and the story on
+  // the approach tab both already do, and the handoff's "Put in the reps
+  // between releases" would have made three on one page. Ryan's own direction
+  // for this point — never falling behind, staying in shape mentally,
+  // sharpening the biggest gap he has named — gives the title instead, and
+  // the handoff's "between releases" framing keeps it about consistency and
+  // curiosity rather than hours.
+  //
+  // COPY STATUS: body and proof come from Ryan's direction (purposeful
+  // conferences, Dive Radio, the Dive Club series, emerging tools and the
+  // workflows around them as the gap) and from what the site records: the
+  // "Studying the tape" note (July 2026) holds the Monday rule and the Dive
+  // Club / Config habit; the AI-workflow note dates the "better search box"
+  // starting point to late 2025; the names were Ryan's own list in the
+  // process closer before it moved here. Still to confirm with Ryan: the
+  // exact name of Dive Radio (it is on the record nowhere else on the site),
+  // and whether a conference should be named (none is, because none is on
+  // the record).
   {
     id: 'walking-pad',
     number: '03',
     label: 'The walking pad',
-    title: 'Show up on the days nothing ships',
-    body: 'The interesting part of a working day is short. The rest is reading, reviewing, and redrafting, and the pad is where that gets done, at a walk, whether or not the day produces anything worth keeping. The good days get paid for on the ordinary ones.',
-    proof: 'The notes are one record: fifteen since June, each one dated. This site is the other: it has changed every week but one since March.',
-    // On the belt, a touch left of the deck's centre so the hood and its
-    // readout stay clear; the slats run out from under the control on both
-    // sides.
-    position: { left: '43%', top: '72.5%' },
+    title: 'Stay in shape between releases',
+    body: (
+      <>
+        This is what the pad is for between launches: Dive Radio, the Dive Club series,
+        conferences chosen on purpose, and people whose standards argue with mine, UI Collective
+        Design, Tommy Geoco, Michael Riddering, Jenny Wen, Brad Frost. Not to keep up. To close
+        the gap I have named: <strong>emerging tools and the workflows around them</strong>.
+      </>
+    ),
+    proof: 'The rule, from the note Studying the tape: if watching it does not change what I make on Monday, it was entertainment. Late 2025, an LLM was a better search box to me. Since then: PlayDraft on TestFlight, a design-taste skill an agent can install.',
+    // On the front half of the belt, right of the hinge, so the control is
+    // still on the pad once the rear half has folded over onto it. Clear of
+    // the hood and its readout down to tablet width; at phone width the
+    // control covers the hood's edge and the readout is still in the clear.
+    position: { left: '48.4%', top: '72.5%' },
   },
   {
     id: 'game-shelf',
     number: '04',
     label: 'The game shelf',
-    title: 'Keep play close',
-    body: 'Board games, long-running leagues, and the arguments around both are part of how I think about systems people return to.',
-    proof: 'PlayDraft started with that same interest in choices, tension, and shared rituals.',
+    title: 'Design systems people want to return to',
+    body: (
+      <>
+        Board games and long-running leagues are a useful reminder that a system is more than
+        its rules. Rules give it consistency;{' '}
+        <strong>choice, feedback, tension, and shared understanding</strong> are what bring
+        people back. I hold product and design systems to the same test: a technically correct
+        system still fails if the team avoids it.
+      </>
+    ),
+    proof: 'PlayDraft started there: rules people can understand, choices that stay interesting, and the on-the-clock tension of a fantasy draft, opened to snacks, movies, or anything friends write in.',
     position: { left: '14.5%', top: '51.5%' },
   },
   {
     id: 'library',
     number: '05',
     label: 'The library',
-    title: 'Put the whole stack within reach',
-    body: 'Shelved by the job each tool does: design, system, build, agent, measure. The orange spines are core proficiencies. The full inventory is longer; this is the shelf that gets reached for.',
-    proof: 'This site is the evidence: React and TypeScript over SCSS variables that were named in Figma first, drafted with Claude Code against the same files, with every call still mine. Design and code share a shelf because the work does.',
+    title: 'Keep the whole system within reach',
+    body: (
+      <>
+        Shelved by the job each tool does, the core in orange: Figma to frame and steer, code to
+        make the behavior real, documentation to preserve intent, analytics and QA to test the
+        result, agent skills to carry the same rules into new requests.{' '}
+        <strong>The tool changes with the question. The system should survive the switch.</strong>
+      </>
+    ),
+    proof: 'This site runs on the same idea: tokens named in Figma first, React and TypeScript, written governance, agent-readable context, and drafts from Claude Code with every call still mine. Figma and code share a shelf because neither is the finish line.',
     // On the cupboard base, not the shelves — the one part of the unit with
     // no label under it for the control to cover. A touch right of the unit's
     // centre line, from when the walking pad's control sat at the sideboard
@@ -207,7 +274,7 @@ const renderVolumes = (volumes: Volume[]) =>
 const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
   // Drawn from the actual room rather than a generic studio: butcher-block
   // standing desk on black legs, monitor on an arm with the laptop on a riser
-  // beside it, walking pad folded upright underneath, the game closet, and the
+  // beside it, walking pad out on the floor underneath, the game closet, and the
   // library wall on the right that gives the closet on the left something to
   // answer to.
   //
@@ -228,8 +295,11 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
       whiteboard of the week with drawings pinned beside it, a clock, a
       wall-mounted TV, a standing desk carrying a wide monitor, a laptop on a
       riser, keyboard, notebook and coffee, a walking pad out on the floor
-      beneath it with its slatted belt along the top and the motor hood at
-      one end, and on the right a library of assets: a bookcase over a
+      beneath it with its slatted belt along the top, a hinge pin at mid-deck
+      and the motor hood with its readout at the sideboard end (select it and
+      the rear half folds up and over to rest on the hood, the way it is put
+      away),
+      and on the right a library of assets: a bookcase over a
       sideboard with a lamp, grown into a tall unit with a cupboard base. Its
       spines and flat volumes are labelled with the tools of the work, one
       shelf per job. Design: Figma, Illustrator, Photoshop. System: Atomic
@@ -315,40 +385,6 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
       {renderVolumes(LIBRARY)}
     </g>
 
-    {/* Walking pad, out on the floor under the desk: a long, low deck with the
-        belt slatted along its top and the motor hood at the sideboard end.
-        This is the one object in the room drawn in a pose it is not parked
-        in. In the footage it is folded in half and stood upright, and three
-        passes drew that faithfully — under the desk, then in front of the
-        sideboard, then with a slatted belt, a rounded fold, and wheels — and
-        it read as a cabinet with glass doors, then as a cabinet again, then
-        as a space heater. A folded pad seen square-on is a stubby box, and a
-        stubby box with casters is an appliance; the cue a treadmill cannot do
-        without is its length. So it is drawn the way it is when it is being
-        used, which is the state the rest of the plate is in (the coffee is
-        steaming, the chart is up). Same failure as the couch, same call:
-        legibility over the parked pose. It takes the place of the
-        anti-fatigue mat, which is under it when it is out.
-
-        Selecting the point lights the readout and steps the belt one slat,
-        once — the same request-only motion as the monitor's trace. */}
-    <g data-part="walking-pad">
-      <path d="M311 366H513A5 5 0 0 1 518 371V390H306V371A5 5 0 0 1 311 366Z" className="studio-mock__pad" />
-      <path d="M484 356H513A5 5 0 0 1 518 361V390H480V360A4 4 0 0 1 484 356Z" className="studio-mock__pad" />
-      <clipPath id="studio-pad-belt">
-        <rect x="314" y="370" width="160" height="12" />
-      </clipPath>
-      <rect x="314" y="370" width="160" height="12" className="studio-mock__pad-belt" />
-      {/* One slat more than fits: the clip hides whichever is off the deck,
-          so the belt can step a slat without a gap opening at either end. */}
-      <g clipPath="url(#studio-pad-belt)">
-        <g className="studio-mock__pad-slats">
-          <path d="M322 371V381M332 371V381M342 371V381M352 371V381M362 371V381M372 371V381M382 371V381M392 371V381M402 371V381M412 371V381M422 371V381M432 371V381M442 371V381M452 371V381M462 371V381M472 371V381M482 371V381" className="studio-mock__pad-slat" />
-        </g>
-      </g>
-      <rect x="490" y="362" width="18" height="5" rx="1" className="studio-mock__pad-display" />
-    </g>
-
     {/* The desk. */}
     <g data-part="monitor">
       {/* Wide monitor on its arm. */}
@@ -390,6 +426,84 @@ const StudioDrawing = ({ activePart }: { activePart: StudioPointId }) => (
       <path d="M414 280H478M414 283H478" className="studio-mock__key-line" />
       <rect x="524" y="276" width="28" height="10" rx="2" className="studio-mock__keys" />
 
+    </g>
+
+    {/* Walking pad, out on the floor under the desk: a long, low deck with the
+        belt slatted along its top, a hinge pin at mid-deck, and the motor hood
+        at the sideboard end. At rest it is drawn in use, which is the state
+        the rest of the plate is in (the coffee is steaming, the chart is up)
+        and the one pose in which this object is unmistakable: the cue a
+        treadmill cannot do without is its length. Three earlier passes drew
+        it parked instead — folded upright under the desk, then in front of
+        the sideboard, then with a slatted belt, a rounded fold and wheels —
+        and it read as a cabinet with glass doors, a cabinet again, and a
+        space heater. A folded pad seen square-on is a stubby box, and a
+        stubby box with casters is an appliance.
+
+        The fourth pass keeps the in-use pose at rest and makes the fold the
+        thing you ask for. Selecting the point lights the readout, steps the
+        belt one slat as it comes to a stop, then hinges the rear half up
+        through vertical and over onto the front half, which is how the real
+        one is put away. Deselecting unfolds it. Nothing else in a room folds
+        like this, so the motion carries the identity the parked pose alone
+        could not, and the folded pose it lands in is a low double deck
+        beside the hood rather than the tall box that read as furniture.
+
+        The fold has to end lying down. The desk is drawn with 66 units of
+        clearance above the deck and the plate is not to scale (the deck is
+        long on purpose), so a folded stack stood on end is 106 tall and goes
+        through the desktop; the real pad's upright parking spot is not
+        available in this drawing. And the fold does not close flat. On the
+        real thing the motor housing is taller than the deck, so the folded
+        rear half rests on it at a slight incline with a wedge of air between
+        the two belts. The first cut of this pass closed it flat, and a flat
+        double deck beside a boxy hood read at 6× as a stacked amplifier next
+        to a heater — the appliance again. The open wedge is what says
+        "hinged", so the hood carries a sloped top and the turn stops at 168°
+        with the rear half lying along that slope. The hinge sits at 400, a
+        touch nearer the far end than the midpoint, so the rear half lands on
+        the hood rather than short of it; the readout is on the hood's face,
+        below the slope, so it stays lit when the deck is lying over it.
+
+        Painted after the desk, not before. At rest the two never overlap, but
+        at the top of the swing the rising half stands in front of the laptop
+        riser, and a desk painted over it would look like it had swallowed
+        the pad. The geometry of the turn is in _about-studio.scss. */}
+    <g data-part="walking-pad">
+      {/* Front half: deck, belt, and the motor hood with its sloped top and
+          the readout on its face. */}
+      <path d="M400 366H518V390H400Z" className="studio-mock__pad" />
+      <clipPath id="studio-pad-belt-front">
+        <rect x="404" y="370" width="70" height="12" />
+      </clipPath>
+      <rect x="404" y="370" width="70" height="12" className="studio-mock__pad-belt" />
+      {/* One slat more than fits on each half: the clip hides whichever is
+          off the deck, so the belt can step a slat without a gap opening at
+          either end. */}
+      <g clipPath="url(#studio-pad-belt-front)">
+        <g className="studio-mock__pad-slats">
+          <path d="M412 371V381M422 371V381M432 371V381M442 371V381M452 371V381M462 371V381M472 371V381M482 371V381" className="studio-mock__pad-slat" />
+        </g>
+      </g>
+      <path d="M480 366V352Q480 349 483 348.4L514 341.8Q518 341 518 345V390H480Z" className="studio-mock__pad" />
+      <rect x="489" y="356" width="20" height="5" rx="1" className="studio-mock__pad-display" />
+
+      {/* Rear half. Hinged at (400, 366), the top of the deck at the seam.
+          Turned 168° in _about-studio.scss it lies along the hood's slope
+          with its belt facing the front belt, a wedge of air between. */}
+      <g className="studio-mock__pad-rear">
+        <path d="M311 366H400V390H306V371A5 5 0 0 1 311 366Z" className="studio-mock__pad" />
+        <clipPath id="studio-pad-belt-rear">
+          <rect x="314" y="370" width="83" height="12" />
+        </clipPath>
+        <rect x="314" y="370" width="83" height="12" className="studio-mock__pad-belt" />
+        <g clipPath="url(#studio-pad-belt-rear)">
+          <g className="studio-mock__pad-slats">
+            <path d="M322 371V381M332 371V381M342 371V381M352 371V381M362 371V381M372 371V381M382 371V381M392 371V381M402 371V381" className="studio-mock__pad-slat" />
+          </g>
+        </g>
+      </g>
+      <circle cx="400" cy="366" r="2.4" className="studio-mock__pad-hinge" />
     </g>
 
     {/* The only thing in the room that moves on its own, and the only object
@@ -462,9 +576,20 @@ const AboutStudio: React.FC = () => {
           </h1>
         </div>
         <div className="studio-mock__intro-copy">
+          <p className="studio-mock__intro-lede">
+            Most of the work I care about happens between the obvious artifacts.
+          </p>
           <p>
-            A dedicated studio for focused design, close-to-code making, and the systems that help
-            the work survive after launch.
+            This is where a Figma decision gets tested in code, a production edge case becomes a
+            new system rule, an agent gets the same context as the team, and an idea gets enough
+            drafts to become something other people can use.
+          </p>
+          <p>
+            The room is personal. The way it works is not:{' '}
+            <b className="studio-mock__emphasis">
+              keep the system close, keep the build close, and keep feeding what you learn back
+              into both.
+            </b>
           </p>
           <p className="studio-mock__intro-note">
             Built as a drawing rather than a walkthrough. The room answers when you
@@ -493,7 +618,7 @@ const AboutStudio: React.FC = () => {
         </div>
         <div>
           <dt>Working loop</dt>
-          <dd>Focus &rarr; critique &rarr; handoff</dd>
+          <dd>Define &rarr; build &rarr; learn &rarr; feed back</dd>
         </div>
       </dl>
 
