@@ -494,7 +494,12 @@ const Hero: React.FC = () => {
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">Product Design Engineer · Systems · Front-End</span>
+              <span className="hero__eyebrow-title">
+                {/* Each term is held whole above the phone breakpoint (see
+                    _hero.scss) so the line breaks at a separator, not inside
+                    "Agentic Workflows". */}
+                <span className="hero__eyebrow-term">Design Engineer</span> · <span className="hero__eyebrow-term">Design Systems</span> · <span className="hero__eyebrow-term">Agentic Workflows</span>
+              </span>
             </p>
 
             <div className="hero__typed-wrap hero__reveal hero__reveal--2">
@@ -508,7 +513,7 @@ const Hero: React.FC = () => {
                   visual sequence below is untouched; only what the h1 asserts
                   has changed. */}
               <h1 className="hero__h1-sr-only">
-                Ryan DeBoer, Product Design Engineer building systems and products from Figma into working front ends
+                Ryan DeBoer, Product Design Engineer &mdash; I build design systems that live across Figma, production code, and the tools connecting them.
               </h1>
 
               {/* The animated phrases still reach assistive tech: the visual
@@ -608,7 +613,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            I work across product strategy, UX/UI, design systems, and front-end implementation, bringing <span className="animated-bold">craft, care, and production-minded judgment</span> to every stage. My official title has been Senior Web Designer, but the work runs well past the web: my background in visual communication and code carries ideas beyond the artboard and into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
+            Visual craft, tokens, components, internal tooling, and agent-readable rules &mdash; built so <span className="animated-bold">designers and engineers can move faster without the system drifting</span>. My official title has been Senior Web Designer, but the work runs well past the web: my background in visual communication and code carries ideas beyond the artboard and into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">

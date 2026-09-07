@@ -159,13 +159,6 @@ interface PlaygroundCard {
 
 const CARDS: PlaygroundCard[] = [
   {
-    slug: 'playdraft',
-    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
-      { icon: 'claude.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
-  },
-  {
     slug: 'wheelrack',
     coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 6, rot: -9, lift: 0, z: 2 },
       { icon: 'vscode.svg', name: 'VS Code', x: 22, rot: 7, lift: 3, z: 3 },
@@ -174,12 +167,19 @@ const CARDS: PlaygroundCard[] = [
       { icon: 'slack.svg', name: 'Slack', x: 75, rot: -6, lift: 0, z: 1 },],
   },
   {
-    slug: 'aem-component-system',
-    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
-      { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
+    slug: 'design-enablement',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: 6, lift: 0, z: 1 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 59, rot: -12, lift: 2, z: 2 },
+      { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },],
+  },
+  {
+    slug: 'playdraft',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
-      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
+      { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
   },
   {
     slug: 'loopstack',
@@ -190,12 +190,12 @@ const CARDS: PlaygroundCard[] = [
       { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },],
   },
   {
-    slug: 'design-enablement',
-    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
-      { icon: 'claude.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: 6, lift: 0, z: 1 },
-      { icon: 'workfront.svg', name: 'Workfront', x: 59, rot: -12, lift: 2, z: 2 },
-      { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },],
+    slug: 'aem-component-system',
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
+      { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
+      { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
   },
   {
     slug: 'tire-categories',
@@ -459,10 +459,10 @@ const CaseStudyPlayground: React.FC = () => {
         {/* ── Intro ── */}
         <div className="case-playground__intro">
           <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" index="02" tone="accent" />
-          <h2 className="case-playground__title">What I've designed recently</h2>
+          <h2 className="case-playground__title">Systems, products, and tools I&rsquo;ve shipped</h2>
           <p className="case-playground__lede">
-            A closer look at the systems, interfaces, and product thinking I've shaped from
-            concept through implementation.
+            A closer look at the systems, interfaces, internal tools, and products I&rsquo;ve carried
+            from concept through implementation.
           </p>
           {/* The unlock affordance lives here now — beside the locked objects —
               instead of as a site-wide bar above every page's nav. Same prompt,

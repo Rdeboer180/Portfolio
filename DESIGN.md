@@ -169,6 +169,8 @@ A near-monochrome bench (ink on paper, cool off-whites for depth) with a single 
 ### Named Rules
 **The Signal Orange Rule.** Orange is the only chromatic voice on the page. It may carry both emphasis and state, but it is the sole accent: never introduce a second hue to compete with it, and never let a screen turn orange-heavy. When orange appears, it should mean something (a link, an action, an active section, a selection).
 
+**The No-Categorical-Palette Rule.** When a diagram or module needs its parts told apart, distinguish them with icon, label, border weight, and the selection frame — not with a palette of category tints. A pastel surface per category is the most common way this system gets diluted, and it was explicitly considered and rejected for the Systems in Practice ecosystem board: the two working surfaces there use the existing Orange Tint and Cool Paper families, the hub earns its weight from the selection frame, and the remaining five nodes are deliberately identical paper cards. Identical is the point — it is what makes them read as equally legitimate rather than decorative.
+
 **The Ink-on-Paper Rule.** Depth and grouping come from paper vs. cool-paper grounds and hairline borders, not from gray boxes or tinted panels. Reach for a background change or a hairline before a fill.
 
 ## Typography
@@ -192,7 +194,7 @@ A near-monochrome bench (ink on paper, cool off-whites for depth) with a single 
 ### Named Rules
 **The Annotation Rule.** Caveat is reserved exclusively for hand-drawn craft marks (margin notes, the circled FAQ "?", underline flourishes). It never sets UI, labels, or body copy. Its rarity is what makes it read as a human mark rather than a font choice.
 
-**The Title Case Rule.** Headings render in Title Case (a global `text-transform: capitalize`), which is intentional house style. Keep it consistent; do not mix sentence-case headings into the same hierarchy.
+**The Authored-Casing Rule.** Headings render exactly as they are written. There is no global `text-transform` on `h1`–`h6`: a `capitalize` rule used to live there and was removed because it overrode authored copy (note titles lost their intended casing, and browsers treat an apostrophe as a word break, so "What I've designed recently" rendered as "What I'Ve Designed Recently"). Casing is applied per role instead, where `uppercase` is set deliberately on eyebrows, badges, and micro-labels. Write the heading in the casing you want to see, and keep sibling headings in one hierarchy consistent with each other.
 
 ## Layout
 
@@ -217,7 +219,7 @@ Flat by default. Surfaces rest with no shadow; structure comes from hairline bor
 
 A soft-but-tight radius language. Buttons and interactive pills round to 10px; cards to 12px (dense) or 16px (feature); inputs to 8px; eyebrow badges and status pills to full. Borders are the workhorse: a single 10%-ink hairline (`rgba(27,27,27,0.1)`) defines most cards and inputs.
 
-The signature silhouette is the **selection frame**: 5px square handles that bookend section rules and sit at card corners, quoting a Figma bounding box. It is the geometric motif that ties the "workbench" world together and should recur wherever the interface wants to say "this is an object you can act on."
+The signature silhouette is the **selection frame**: square handles quoting a Figma bounding box, at two sizes. 5px handles bookend section rules; the `selection-frame` mixin draws 7px handles on card corners (Steel at rest, Signal Orange on hover). It is the geometric motif that ties the "workbench" world together and should recur wherever the interface wants to say "this is an object you can act on" — including where an element needs to read as the most important object on a board without reaching for a colour to say so.
 
 ## Components
 
@@ -234,6 +236,16 @@ The signature silhouette is the **selection frame**: 5px square handles that boo
 - **Shadow Strategy:** none at rest; Shadow SM on hover (see Elevation).
 - **Internal Padding:** 24px-32px (`$spacing-xl` to `$spacing-2xl`).
 - **Selection-frame variant:** on scroll-into-view, the four corner handles fade in once (staggered across a grid) and then stay put. The perimeter itself does not animate — the craft signal is the vernacular, not motion (see _selection-frame.scss, which says the same thing); on hover the border warms to a 45%-orange tint. This is the card expression of the selection-frame vernacular.
+
+### Ecosystem Node
+The card used on the homepage's Systems in Practice board (and documented live under Molecules → Ecosystem Node). One shape, three tiers, and the tier is carried by structure rather than by a category colour:
+- **Hub** (Shared System): paper, 1px Ink border, and the `selection-frame` corner handles. It reads as the primary object on the board without taking a hue.
+- **Pair** (Figma / Canvas, Codebase): the two existing tint families — Orange Tint with a 35% Signal Orange border, and a half-strength Steel Light surface with a 55% Steel border. They are the section's thesis, so they carry more weight than the surfaces but never more than the hub.
+- **Surface** (Documentation, Prompts, QA, People, Governance): paper on Border Hairline, identical to one another on purpose.
+
+Anatomy is fixed across all three: icon, title (Hubot Sans Bold, 17px; hub 19px), a Menlo meta triplet in Steel Dark, and a body line. Steel Dark is the meta colour because it is the only token that clears AA on all three surfaces. Connectors are Steel; Signal Orange is spent only on the bidirectional Figma ⇄ Codebase relationship, and relationships are always stated in text as well as drawn, so meaning never depends on a wire or a colour.
+
+The idea the component exists to carry: **the system is not owned by Figma or by code. Both are working surfaces that read from and feed back into shared product knowledge** — which also has to reach documentation, prompts, QA, people, and governance.
 
 ### Inputs / Fields
 - **Style:** Paper fill, 1px Border Hairline, 8px radius, 8px/12px padding, inherited body type.
@@ -258,7 +270,7 @@ The signature silhouette is the **selection frame**: 5px square handles that boo
 - **Do** keep surfaces flat and let hairline borders and paper/cool-paper grounds carry structure. Reach for a shadow only as a state response (Shadow SM on hover).
 - **Do** treat Signal Orange as the single accent for both emphasis and state, and make each orange mean something.
 - **Do** reserve Caveat for hand-drawn craft marks and Menlo for system markers and code.
-- **Do** reuse the selection-frame vernacular (5px square handles, corner frames, the comet) when an element should read as an actionable object.
+- **Do** reuse the selection-frame vernacular (square handles, corner frames, the comet) when an element should read as an actionable object, or as the primary object among peers.
 - **Do** respect reduced-motion and keep visible keyboard focus on every interactive element.
 
 ### Don't:
@@ -266,4 +278,4 @@ The signature silhouette is the **selection frame**: 5px square handles that boo
 - **Don't** add ambient shadows, floating cards, or glassmorphism. Nothing lifts at rest.
 - **Don't** use purple-to-blue SaaS gradients, icons inside decorative circles, pill-shaped everything, or ambient animated blobs (per ryan-design-taste).
 - **Don't** add motion that exists only to be noticed; if it does not mark state or reveal once, cut it.
-- **Don't** replace this visual world. All work extends the existing system and connects to its tokens/components (ryan-design-taste + apply-design-system are binding). A new surface preserves this language rather than inventing another.
+- **Don't** replace this visual world. All work extends the existing system and connects to its tokens/components (ryan-design-taste + design-system-governance are binding). A new surface preserves this language rather than inventing another.

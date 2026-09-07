@@ -6,11 +6,10 @@ import NotFoundPage from './components/NotFoundPage';
 // Home-page sections load in the initial chunk — home is the default route.
 import Hero from './components/Hero';
 import About from './components/About';
-import Skills from './components/Skills';
 import TechnicalAbilities from './components/TechnicalAbilities';
 import CaseStudyPlayground from './components/CaseStudyPlayground';
+import SystemsInPractice from './components/SystemsInPractice';
 import Footer from './components/Footer';
-import ProcessPlayground from './components/ProcessPlayground';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import { usePageMeta } from './hooks/usePageMeta';
@@ -64,9 +63,9 @@ function RouteEffects() {
 
 function HomeRoute() {
   usePageMeta({
-    title: 'Ryan DeBoer | Product Design Engineer · Systems · Front-End',
+    title: 'Ryan DeBoer | Product Design Engineer · Design Systems · Agentic Workflows',
     description:
-      'Ryan DeBoer | Product Design Engineer · Systems · Front-End. Design engineer bridging UX, systems thinking, and real-world shipping. 16+ years in design systems, ecommerce, and high-impact product work.',
+      'Product Design Engineer building design systems across Figma, production code, internal tooling, and agentic workflows.',
     canonical: `${SITE.portfolioUrl}/`,
     ogDescription: 'Product Design Engineer building design systems, ecommerce experiences, and mobile products from Figma into working front ends.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
@@ -77,9 +76,8 @@ function HomeRoute() {
       <Hero />
       <About />
       <CaseStudyPlayground />
-      <Skills />
+      <SystemsInPractice />
       <Testimonials />
-      <ProcessPlayground />
       <TechnicalAbilities />
       <FAQ />
       <Footer />

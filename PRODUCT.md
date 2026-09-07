@@ -16,11 +16,11 @@ rdeboerdesigns.com is Ryan DeBoer's personal portfolio and its own case study: t
 
 ## Positioning
 
-Ryan designs systems and then helps build them, the implementation half most design roles leave out, and increasingly encodes his judgment as installable agent skills and agent-readable documentation so the standard travels with the work instead of living in his head. The test he holds himself to: a system succeeds when a team, or an agent, decides well without him in the room. A neighboring "senior product designer" cannot truthfully copy the combination of production front-end depth, design-system governance, and judgment-as-portable-artifact.
+Ryan builds design systems that live across Figma, production code, and the tools connecting them, the implementation half most design roles leave out, and increasingly encodes his judgment as installable agent skills and agent-readable documentation so the standard travels with the work instead of living in his head. The system is not owned by Figma or by code: both are working surfaces that read from and feed back into shared product knowledge, which also has to reach documentation, prompts, QA, people, and governance. The test he holds himself to: a system succeeds when a team, or an agent, decides well without him in the room. A neighboring "senior product designer" cannot truthfully copy the combination of production front-end depth, design-system governance, and judgment-as-portable-artifact.
 
 ## Operating Context
 
-- Readers evaluate across surfaces: the homepage (hero, about, strengths, technical, how-i-work, testimonials, work, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, and a résumé.
+- Readers evaluate across surfaces: the homepage (hero, about, work, systems, testimonials, technical, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, and a résumé.
 - Case studies carry real employer (Tire Rack) and client work. Confidential ones are password-gated; only "portfolio-safe" assets are ever public.
 - Evaluation extends off-site to LinkedIn (positioned as in-progress thinking) and to live product demos, e.g. WheelRack at wheelrack.com/pitstop/search.
 
@@ -33,23 +33,31 @@ Ryan designs systems and then helps build them, the implementation half most des
 
 ## Brand Commitments
 
-- Name/identity: Ryan DeBoer; rdeboerdesigns.com. Current title framing is Product Design Engineer, Systems, Front-End.
+- Name/identity: Ryan DeBoer; rdeboerdesigns.com. Current title framing is Product Design Engineer, Design Systems, Agentic Workflows.
 - Voice is governed by the ryan-design-taste / ryan-taste skill: systems-first, craft-led, implementation-aware, evidence-backed, plainly confident, honest about cost, and explicit about what AI accelerated versus what Ryan decided. Banned phrasing (e.g. "AI-native," corporate filler) is enforced.
-- BINDING (user directive): all design work stays within the existing design system and the ryan-design-taste skill. Do not introduce a divergent visual world. Connect new UI to existing tokens and components via the apply-design-system skill. The existing implementation and the live /design-system page are the design authority; impeccable new-work must preserve and extend this world, never replace it.
+- BINDING (user directive): all design work stays within the existing design system and the ryan-design-taste skill. Do not introduce a divergent visual world. Connect new UI to existing tokens and components via the design-system-governance skill. The existing implementation and the live /design-system page are the design authority; impeccable new-work must preserve and extend this world, never replace it.
 
 ## Evidence on Hand
 
-- Eleven case studies at /work/* (WheelRack, Tire Categories, AEM component system, Tire Rack Winter, Heatherwood, Landing Pages, Design Enablement, LoopStack, PlayDraft), several with real metrics (e.g. +400% category entry and +50% conversion; 200+ design tokens and 50+ Storybook components; partner adoption 6 to 10).
+- Ten public case studies at /work/* (two more render direct-link only, noindexed) (WheelRack, Tire Categories, AEM component system, Tire Rack Winter, Heatherwood, Landing Pages, Design Enablement, LoopStack, PlayDraft), several with real metrics (e.g. +400% category entry and +50% conversion; 200+ design tokens and 50+ Storybook components; partner adoption 6 to 10).
 - Named, attributed testimonials from managers, peers, and a principal front-end developer.
-- Ten published notes; a live /design-system token page; the ryan-design-taste skill published as a downloadable Markdown artifact.
+- Fifteen published notes; a live /design-system token page; the ryan-design-taste skill published as a downloadable Markdown artifact.
 - Real metrics and quotes only. Future work must never fabricate numbers, testimonials, or endorsements, and must keep every quote attributable.
+
+## The Process, Stated Once
+
+There is exactly one canonical statement of how Ryan works, and it is the four-beat loop inside the homepage's Systems section: **Define the rules → Explore across surfaces ⇄ Learn from what becomes real → Feed it back into the system**, with the fourth returning to the first.
+
+This is a governance rule, not a copy preference. The site previously carried five competing accounts of the same process — a homepage section, two on /about, the decorative words in the About hero, and the five-part Approach vocabulary running across every case study — none of which pointed at any other. Every surface that describes the process now adapts these four beats. Adaptation is expected and wording need not match; what is not allowed is a rival sequence with a different number of steps or a different vocabulary.
+
+Where a surface has room for more than the beats, it adds depth (a paragraph, the cost of skipping a beat, evidence) rather than a new framework. Case-study Approach subsections stay five and keep their per-project labels, but those labels are written as instances of the loop, not as a method of their own.
 
 ## Product Principles
 
 1. Evidence beside every claim: a reader can verify seniority (live token page, live demos, attributed quotes), never just take it on assertion.
 2. Lead with the work, not the title; protect the "designs systems and helps build them" position.
 3. Preserve confidentiality: portfolio-safe assets only; gate the rest.
-4. Stay inside the established system and voice: ryan-design-taste plus apply-design-system govern; no divergent visual worlds.
+4. Stay inside the established system and voice: ryan-design-taste plus design-system-governance govern; no divergent visual worlds.
 5. Keep it crawlable and honest: SEO architecture preserved; AI accelerates, Ryan owns the decisions.
 
 ## Accessibility & Inclusion

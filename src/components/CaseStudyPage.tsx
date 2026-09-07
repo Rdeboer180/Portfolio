@@ -413,19 +413,26 @@ interface CaseStudyPageProps {
  * sensitivity: if a figure is safe enough to publish on the card, it is safe on
  * the page. What stays gated is what the gate was actually for — client
  * imagery, process detail, live URLs, and the named client.
+ *
+ * That last one is why this runs redactClient over the note and the metric
+ * strings. It did not, and WheelRack's outcomeNote names the client outright —
+ * so a locked page anonymised the header to ANON_CLIENT and then printed the
+ * real name two paragraphs below it.
  */
-const OutcomeMetrics: React.FC<{ project: Project }> = ({ project }) => (
+const OutcomeMetrics: React.FC<{ project: Project; locked: boolean }> = ({ project, locked }) => (
   <>
               <div className="cs__results-grid">
                 {project.metrics.map((metric) => (
                   <div key={metric.label} className="cs__result-card">
-                    <span className="cs__result-value">{metric.value}</span>
-                    <span className="cs__result-label">{metric.label}</span>
+                    <span className="cs__result-value">{redactClient(metric.value, locked)}</span>
+                    <span className="cs__result-label">{redactClient(metric.label, locked)}</span>
                   </div>
                 ))}
               </div>
               {(project.outcomeNote || project.resultsNote) && (
-                <p className="cs__results-note">{project.outcomeNote || project.resultsNote}</p>
+                <p className="cs__results-note">
+                  {redactClient(project.outcomeNote || project.resultsNote || '', locked)}
+                </p>
               )}
   </>
 );
@@ -720,7 +727,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     <span className="cs__micro-label">What Changed</span>
                     <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
                   </div>
-                  <OutcomeMetrics project={project} />
+                  <OutcomeMetrics project={project} locked={locked} />
                 </section>
               </>
             ) : (<>
@@ -859,7 +866,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                   <p className="cs__section-aside">{project.annotations.outcome}</p>
                 )}
               </div>
-              <OutcomeMetrics project={project} />
+              <OutcomeMetrics project={project} locked={locked} />
               <SectionImages images={project.outcomeImages || []} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} locked={locked} />
 
               {/* Outcome grid — scale wall */}

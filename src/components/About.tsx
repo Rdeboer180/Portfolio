@@ -31,7 +31,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                The polished screen is only one artifact. I also care about the patterns, documentation, accessibility, handoff, QA, and governance that keep the idea intact after I step away. A design system has done its job when <span className="animated-bold">the team can make the next good decision without me in the room</span>.
+                The polished screen is only one artifact. I care just as much about the tokens, patterns, documentation, tooling, accessibility, QA, and governance that keep the idea intact after it leaves Figma. Increasingly, that also means asking what an agent needs to understand about the system before it contributes to it. A design system has done its job when <span className="animated-bold">the team can make the next good decision without me in the room</span>.
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>

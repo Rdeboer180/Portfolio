@@ -176,12 +176,12 @@ const projects: Project[] = [
     client: 'Tire Rack \u2014 WheelRack',
     title: 'WheelRack Design System & Full Customer Journey Redesign',
     seoTitle: 'WheelRack — Enterprise React Design System for a Wholesale Ecommerce Platform',
-    thesis: 'A design system built so engineering never had to guess.',
+    thesis: 'One shared vocabulary, held in Figma and Storybook at the same time.',
     annotations: {
       problem: 'Every team kept rebuilding the same thing, a little differently.',
       gaps: 'Design and dev were describing the same button two different ways.',
       constraints: 'Dealers on tablets, real fitment data, no room to guess.',
-      approach: 'Design it in Figma, then prove every state in Storybook.',
+      approach: 'Neither file was the source of truth. Figma and Storybook had to agree.',
       outcome: 'The framework outlived the project. Wholesale picked it up next.',
     },
     summary: 'I built WheelRack’s first design system and redesigned the dealer journey from vehicle selection through checkout. Partner adoption grew from six to ten while retailers were seeing the new interface in progress. The product is now live.',
@@ -226,15 +226,14 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'The flow and the primary user, agreed before drawing',
         description: 'Full stakeholder meeting to review objectives. Worked with UX design manager and teammates to map the page flow and identify the primary user: dealers on tablets.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'Wireframes that carried behavior specs, not just layout',
         description: 'Wireframed the full customer journey\u2014vehicle selection, search results, product detail, and checkout. Annotated behavior specs for autocomplete, responsive states, and error handling.',
-        systemMarker: 'Pattern introduced',
         gridColumns: 2,
         images: [
           {
@@ -247,9 +246,9 @@ const projects: Project[] = [
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'Atomic tokens first, then everything built from them',
         description: 'Established atomic tokens (color, spacing, typography, shadow) that evolved into buttons, inputs, headers, modals, product cards, and visualizer views. Each component built in Figma, validated in Storybook.',
-        systemMarker: 'System decision',
+        systemMarker: 'Figma ↔ Codebase',
         gridColumns: 2,
         images: [
           {
@@ -268,9 +267,9 @@ const projects: Project[] = [
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'Daily with the React developer, not a handoff at the end',
         description: 'Partnered daily with React dev via Slack threads and calls. Components validated in Storybook before integration. Supplied detailed front-end behavior specs for every complex component.',
-        systemMarker: 'Scalability consideration',
+        systemMarker: 'People',
         images: [
           {
             alt: 'Placeholder for omitted internal Storybook artifact',
@@ -283,7 +282,8 @@ const projects: Project[] = [
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: '40+ hours reconciling the React build against Figma',
+        systemMarker: 'QA',
         description: 'Presented weekly to a large stakeholder group for review and sign-off. Spent 40+ hours comparing the React build against Figma styles\u2014reviewing token names, responsive behavior, and component fidelity screen by screen.',
         images: [],
       },
@@ -375,15 +375,14 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'Four decisions, agreed before a layout existed',
         description: 'I split the page into four decisions: category hierarchy, icon meaning, performance comparison, and search content. Ransom Rockliffe owned the SEO side, and we worked through where keyword and product depth helped discovery versus where it buried the choice.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'One hierarchy that had to flex across 40+ categories',
         description: 'I wireframed one hierarchy that could flex across more than 40 categories while keeping the comparison and product list ahead of supporting content.',
-        systemMarker: 'Pattern introduced',
         images: [
           {
             alt: 'Placeholder for omitted internal wireframe artifact',
@@ -396,9 +395,8 @@ const projects: Project[] = [
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'An icon system, and a chart that works without motion',
         description: 'Developed 8 primary category icons and 24 supporting characteristic icons\u2014a deliberate scaling move against a proposed 90 one-offs. Designed a CSS-animated bar chart system for performance comparison, shipped with reduced-motion support, text fallback, and screen-reader labeling. Sourced photography inspiration, aligned category/vehicle/product fit with specialists, and worked with in-house photography on location, weather, tone, and composition\u2014joining two specialized shoots for the trailer and classic tire categories.',
-        systemMarker: 'System decision',
         images: [
           {
             src: '/images/work/tire-categories/primaryHome+icons_safe.png',
@@ -410,14 +408,14 @@ const projects: Project[] = [
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'I contributed the chart motion, icons, and shared styles',
         description: 'I worked with engineering on reusable AEM components with author-controlled performance data, then contributed the page structure, CSS chart motion, SVG icons, and shared styles.',
-        systemMarker: 'Scalability consideration',
+        systemMarker: 'Codebase',
         images: [],
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'Content teams now change the data without an engineer',
         description: 'The pattern reached 30+ pages. Content teams can now update category copy and performance data in AEM without waiting for an engineer.',
         images: [],
       },
@@ -443,7 +441,7 @@ const projects: Project[] = [
     metrics: [
       { value: 'Up to +50%', label: 'Conversion lift, top pages (first month)' },
       { value: 'Up to +400%', label: 'Category entry growth vs. month prior' },
-      { value: '32 \u2192 100+', label: 'Icons scaled into sitewide sprite library' },
+      { value: '32 \u2192 100+', label: 'Icons scaled into a governed sitewide sprite library' },
     ],
     outcomeLiveLinks: [
       { label: 'High Performance Summer (live CSS chart)', url: 'https://www.tirerack.com/tires/summer/high-performance' },
@@ -455,7 +453,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'seasonal-content-system',
-    thesis: 'One system that serves winter and the Sun Belt from the same page.',
+    thesis: 'Documented well enough that someone else can run the season.',
     annotations: {
       problem: 'Manual seasonal updates, and everyone saw the same content.',
       gaps: 'No way to serve different regions without duplicating pages.',
@@ -512,15 +510,15 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'Four teams with a stake in one page',
+        systemMarker: 'People',
         description: 'Coordinated across Analytics (audience segmentation rules), Photography (seasonal shoots I directed), SEO (variant indexing strategy), and junior designers (authoring onboarding).',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'One architecture, twenty modules that swap at once',
         description: 'Designed the Experience Fragment architecture\u2014component types, variant rules, and the swap logic that lets 20+ modules change simultaneously without touching page structure.',
-        systemMarker: 'System decision',
         images: [
           {
             alt: 'Placeholder for omitted internal documentation artifact',
@@ -533,9 +531,8 @@ const projects: Project[] = [
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'Five fragment types, authored in AEM without a developer',
         description: 'Built reusable fragment types: Hero, Teaser, Entertainment, Video Center, Category Bar. Each with content fields, link behavior, and CTA configuration authored directly in AEM.',
-        systemMarker: 'Pattern introduced',
         images: [
           {
             src: '/images/work/seasonal-content-system/winter-aem-hero-detail_blurred.png',
@@ -547,14 +544,15 @@ const projects: Project[] = [
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'Written down, then taught to the people authoring it',
         description: 'Authored, tested, and deployed seasonal content directly in AEM. Documented the system in Confluence and mentored junior designers through the authoring workflow.',
-        systemMarker: 'Scalability consideration',
+        systemMarker: 'Documentation',
         images: [],
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'Twice, live data forced the rules to change',
+        systemMarker: 'Governance',
         description: 'This was never static work. Two phase shifts defined its evolution: in 2018, reduced unnecessary winter / non-winter content swaps to focus ROI on the highest-traffic surfaces. In 2025\u20132026, SEO identified indexing harm from serving different content on the same URLs\u2014which drove a more visual-first, system-driven winterization approach that preserved seasonal distinction without creating duplicate-content signals.',
         images: [],
       },
@@ -644,22 +642,20 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'What makes families choose it, in the founder’s words',
         description: 'I worked with founder Deborah Clements to understand why families choose Heatherwood, what parents of children ages five to fifteen need to know, and where the academy differs from commercial programs.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'Every service is its own front door',
         description: 'Each service became its own search entry point with a page, parent questions, and a dedicated contact form. Visitors can arrive on the exact activity they searched for without reconstructing the site first.',
-        systemMarker: 'Pattern introduced',
         images: [],
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'One identity, reused across more than ten pages',
         description: 'I redesigned the logo, color, and typography, then carried those rules into service cards, FAQ accordions, and contact-form sidebars reused across more than ten pages.',
-        systemMarker: 'System decision',
         gridColumns: 2,
         images: [
           {
@@ -678,14 +674,14 @@ const projects: Project[] = [
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'Built on tools the owner could keep after I left',
         description: 'Built on WordPress with Elementor, WPForms for contact routing, and Yoast SEO for on-page optimization. Configured caching, analytics, and form notifications for the owner.',
-        systemMarker: 'Scalability consideration',
         images: [],
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'Handing it over is the last design decision',
+        systemMarker: 'People',
         description: 'Trained the owner to manage content updates, add new services, and monitor form submissions and SEO scores independently.',
         images: [],
       },
@@ -781,34 +777,33 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Content-Driven Foundation',
+        label: 'The search intent decides the order of the page',
         description: 'I start with the search intent, the page goal, and the available AEM components. Then I place the hero, product evidence, supporting copy, FAQs, and internal links in the order that serves both the shopper and the query.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Component-Based Planning',
+        label: 'Assembled from patterns, not drawn from scratch',
         description: 'In Figma, I assemble the page from reusable hero, product, FAQ, promotion, and link patterns. The structure stays recognizable while the content and emphasis change with the query.',
-        systemMarker: 'Pattern introduced',
         images: [],
       },
       {
         key: 'system',
-        label: 'AEM System Development',
+        label: 'The recurring shapes became governed templates',
         description: 'I turned the recurring page shapes into governed starting templates, with enough variation for size, category, promotion, and product launches.',
-        systemMarker: 'System decision',
         images: [],
       },
       {
         key: 'iteration',
-        label: 'Iteration & Deployment',
+        label: 'When the template can’t do it, that becomes a request',
+        systemMarker: 'Governance',
         description: 'High-impact pages (homepage, major category pages, high-traffic surfaces) go through senior review, SEO, analytics, and QA. Lower-risk pages move faster\u2014often senior review, publish, live validation. When SEO needs a structure the template doesn\u2019t support, a formal project request is filed so the system grows deliberately rather than through one-off exceptions. I govern all AEM template and component-level updates.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'I designed and built more than 50 landing pages before turning the recurring decisions into a system two junior designers now use. Complex pages moved from about a month to one or two weeks; standard pages take about a week, and simple launches take one or two days. QA now finds fewer than one issue per page on average. SEO reporting tied a new 40-inch tire page to more than $10,000 in annual revenue. There was no earlier page to compare, so I treat that as evidence of new reach, not a clean design-attribution claim.',
+    outcomeNote: 'I designed and built more than 50 landing pages before turning the recurring decisions into a system two junior designers now use. Complex pages moved from about a month to one or two weeks; standard pages take about a week, and simple launches take one or two days. QA now finds fewer than one issue per page on average. SEO reporting tied a new 40-inch tire page to more than $10,000 in annual revenue. There was no earlier page to compare, so I treat that as evidence of new reach, not a clean design-attribution claim. I still govern every template and component-level change: when SEO needs a structure the templates don’t support, it gets filed as a request instead of shipped as a one-off, so the system grows on purpose rather than by exception.',
     outcomeImages: [
       {
         src: '/images/work/landing-pages/supporting/landing-pages-35-inch.jpg',
@@ -907,13 +902,13 @@ const projects: Project[] = [
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'Engineering, SEO, and accessibility in the room first',
         description: 'Worked side by side with Patrick Steins, a trusted engineering peer on AEM, to establish which core components we could adopt as-is, which needed extension, and which had to be built from scratch. He reviewed my branch work based on established trust. Partnered early with SEO and accessibility leads so their requirements\u2014lazy-load toggles, H1 rules, eyebrow patterns, Akamai-scoped asset loading\u2014were baked into the component contract, not layered on after.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Component Proposals',
+        label: 'A written contract before any component was built',
         description: 'Before any dev work started, I wrote up each component\u2014authoring fields, variants, responsive behavior, edge cases, and how it should plug into editable templates. These proposals became the shared contract between design and engineering.',
         images: [
           {
@@ -927,9 +922,8 @@ const projects: Project[] = [
       },
       {
         key: 'system',
-        label: 'Building the Variants',
+        label: 'Eight variants, each shipping with its Sass and its docs',
         description: 'Built 8 core component variants directly\u2014heroes, teasers, lists, featured product blocks\u2014each shipping with its Sass, authoring defaults, and documentation at the same time. For 3 additional API-driven foundation components, I wrote the utility and authoring behavior, defined the interaction pattern, provided SCSS, and oversaw implementation through replication with the dev team.',
-        systemMarker: 'System decision',
         gridColumns: 2,
         images: [
           {
@@ -948,7 +942,8 @@ const projects: Project[] = [
       },
       {
         key: 'build',
-        label: 'Design-to-Code Foundation',
+        label: 'The Sass I wrote is the Sass that shipped',
+        systemMarker: 'Codebase',
         description: 'This wasn\u2019t a design-only handoff. I wrote Sass, defined the global variable layer, and shipped component-level code alongside the dev team\u2014closing the gap between what was designed and what landed in production. Sanitized excerpt below (file names redacted; CSS custom properties for tokens, responsive-aware layout containers, and component-scoped Sass).',
         codeBlock: {
           filename: 'components/heroTeaser/scss/styles/_default.scss (sanitized)',
@@ -1002,14 +997,15 @@ $mobile-max-width: 768px;
       },
       {
         key: 'iteration',
-        label: 'Documentation & Handoff',
+        label: 'Documentation is what made it a system',
+        systemMarker: 'Documentation',
         description: 'Every component shipped with written documentation for the design team\u2014when to use which variant, what fields to author, and how the component behaves across breakpoints. That documentation is what turned the build into an actual system other people could use.',
         images: [],
       },
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'WebPageTest measured pages with the new components loading 60% faster. More than ten reusable components now power the homepage, tires landing, events, sponsorship, and packages surfaces. Junior designers author against the same fields and variants that engineering supports, with my documentation explaining when each one belongs. Some internal tooling and workflow details remain private, but the live pages below show the system in production.',
+    outcomeNote: 'WebPageTest measured pages with the new components loading 60% faster. More than ten reusable components now power the homepage, tires landing, events, sponsorship, and packages surfaces. Junior designers author against the same fields and variants that engineering supports, with my documentation explaining when each one belongs. SEO and accessibility requirements live in the component contract rather than in a per-page cleanup pass, so they are settled once, upstream, instead of re-decided on every surface. Some internal tooling and workflow details remain private, but the live pages below show the system in production.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
@@ -1028,7 +1024,7 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'design-enablement',
-    thesis: 'Design the workflow itself, not another one-off tool.',
+    thesis: 'The design system had to travel with the work.',
     annotations: {
       problem: 'Repetitive design work and messy handoffs slowed the team down.',
       gaps: 'Every problem had a point solution. Nobody was designing the workflow.',
@@ -1041,8 +1037,8 @@ $mobile-max-width: 768px;
     title: 'Scaling Design Through Internal Tooling',
     seoTitle: 'Design Enablement — Internal Figma Plugins & AI-Assisted Tooling',
     summary:
-      'I built three internal tools that removed repeat setup and review work: a Figma metadata plugin, a production-accurate crop simulator, and a componentized presentation system used across Design, UX, and Photography.',
-    cardHook: 'Repetitive production work was eating design time. Three internal tools now handle project context, crop validation, and stakeholder decks.',
+      'I built three internal tools that carry the system’s rules into daily work: a Figma metadata plugin, a production-accurate crop simulator, and a presentation system used across Design, UX, and Photography.',
+    cardHook: 'Repetitive production work was eating design time. Three connected internal tools carried system thinking past the component library and into the daily workflow\u2014project context, crop validation, and stakeholder decks.',
     year: '2025–2026',
     tags: [
       'Design Enablement',
@@ -1223,7 +1219,7 @@ $mobile-max-width: 768px;
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'Reframed from smarter dosing to safer pattern review',
         description: 'Scoped LoopStack as a personal build with one priority above all others: explore a real T1D problem through design without ever drifting into medical advice. Reframed the product thesis from “smarter dosing” to “safer pattern review” — comparing what Loop predicted with what actually happened, and surfacing observations worth discussing with a care team. Chose an AI-augmented workflow (Claude + ChatGPT for system logic and safety framing, Figma for structure, Cursor for the working app) so I could pressure-test copy and clinician-safe wording at every iteration.',
         images: [
           {
@@ -1239,7 +1235,7 @@ $mobile-max-width: 768px;
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'Ingredients ordered by how much they move the curve',
         description: 'Mapped the loop as Input → Compare → Cluster → Review → Refine — every surface has a single job. The meal builder orders ingredients by absorption impact; context chips (meal time, activity, setting) let pattern-matching cluster a meal with the right past ones. Evidence stays optional — a meal photo or Loop screenshot pairs with the entry automatically.',
         systemMarker: 'Loop introduced',
         images: [
@@ -1261,7 +1257,7 @@ $mobile-max-width: 768px;
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'Real CGM data in, and sample data labeled as sample',
         description: 'Grounded the system in real data instead of hand entry. HealthKit wiring pulls 90 days of CGM metrics — time in range across five bands, GMI, and glucose variability — and composite exercise tracking folds workouts, elevated heart rate, and step bursts into one fitness trend, correlated to glucose response and applied as a visible sensitivity multiplier, never a dose. Dietary profile and health connections sit alongside the curve as explanatory factors, and the app is honest about its sources: wherever real history hasn’t accumulated yet, sample values are labeled as sample — computed and demonstrated are never blended.',
         systemMarker: 'Real data in',
         images: [
@@ -1283,7 +1279,7 @@ $mobile-max-width: 768px;
       },
       {
         key: 'build',
-        label: 'Build',
+        label: '460 tests guarding what the app may claim',
         description: 'Claude and ChatGPT helped me compare logic and language quickly. The harder review was mine: every output had to read as an observation, a piece of evidence, or a discussion point, never an instruction. A 460-test Vitest suite now guards the confidence logic that decides what the app may claim. TestFlight adds the device check against real Loop data, meal after meal.',
         codeBlock: {
           language: 'text',
@@ -1314,7 +1310,7 @@ Frame every output as:
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'A pattern earns its tier, or it stays evidence',
         description: 'The most valuable UX moment in this product is deciding whether a pattern is even worth reviewing yet. Every observation carries its evidence — how many meals, which direction it’s trending, what confidence tier it has earned — and tiers are gated by evidence, not enthusiasm. Favorite meals grow into report cards: repeated logs land as observations in a Fix Log, and only graduate to the Commit Log when the pattern holds. Loop calibration works the same way — full 6–8-hour outcomes build toward sensitivity tuning one upload at a time, and until the bar is met the app keeps calling it evidence, not an answer.',
         systemMarker: 'Confidence gate',
         images: [
@@ -1385,7 +1381,7 @@ Frame every output as:
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft — a 0→1 Social Mobile Game Designed & Built in React Native',
     summary: 'PlayDraft turns the fantasy-draft ritual loose on snacks, movies, athletes, or any topic a group writes in. I took it from the first identity sketch to a working Expo and Supabase app on TestFlight in twelve weeks, using AI to accelerate the build inside a token-governed system.',
-    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. I took the brand, game system, and Expo app to TestFlight in twelve weeks.',
+    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. Brand, game system, and Expo app to TestFlight in twelve weeks \u2014 with the design system as the guardrail on every AI-assisted screen.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',
@@ -1448,7 +1444,7 @@ Frame every output as:
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'The brief banned the patterns I didn’t want to copy',
         description: 'Wrote the project brief and core loop before any UI: Create/Join Draft → snake-style picks → a verdict → reward. Locked the tone (family-friendly, competitive, social, replayable) and ruled out the patterns I didn’t want to copy—no TCG card-collector framing, no pay-to-win, no copyrighted rosters. From day one the repo carried a memory protocol: an append-only progress log and numbered architecture decisions. The identity went through a real pivot at this stage—the first mark, “DraftPack,” a wolf-and-card collector identity, was retired within days for pulling toward the TCG framing the brief had banned. PlayDraft’s D-with-a-play-cut shield replaced it, tested at 29 px and against the App Store grid it would actually sit in.',
         images: [
           {
@@ -1461,9 +1457,8 @@ Frame every output as:
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'Four surfaces, with the draft room at the center',
         description: 'Mapped the app around drafts as the primary noun, as one connected flow map rather than a stack of screens. The shipped information architecture settled on four surfaces—Home (wallet, live drafts, results), Packs (browse, search, favorites), Lab (DraftLab solo modes that feed the scoring pool), and Store—with the draft room as the product’s centerpiece: live board, pick clock, queue, roster, and chat in one screen. Two structural bets defined the room: every pack draft supports in-draft search that understands intent (typing “lay” surfaces every Lay’s flavor), and Custom Drafts make every pick a free-text write-in—the group authors the topic, duplicates bounce, and the payoff is deliberately social rather than a scored winner.',
-        systemMarker: 'Pattern introduced',
         images: [
           {
             src: '/images/work/playdraft/playdraft-figma-product-screens.png',
@@ -1475,9 +1470,9 @@ Frame every output as:
       },
       {
         key: 'system',
-        label: 'System',
+        label: 'The constraint layer came before the screens',
         description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system—color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, and component recipes. Governance is written down, not implied: no hex literals in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to nine by decision record, never improvisation—that’s what let 121 components and 40+ screens ship solo without drifting.',
-        systemMarker: 'System decision',
+        systemMarker: 'Governance',
         images: [
           {
             src: '/images/work/playdraft/playdraft-design-system-v01-board.png',
@@ -1489,9 +1484,9 @@ Frame every output as:
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'AI scaffolds against the recipes; the audit catches drift',
         description: 'The shipped app is a real production build, not a prototype shell: 40+ Expo Router screens, 121 components, 30 feature modules, 24 provider-agnostic services, 11 Supabase migrations, and 5 edge functions. Pure game logic lives inside—snake-order generation, pick-clock state, confidence-pool scoring—with providers at the edge, so the engine is testable without the network. AI slots in as the loop accelerator: scaffolding against the token recipes, pack authoring through a curator agent with a legal-safety check, and a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself—design tokens, product decisions, and legal posture live in the same annotated file:',
-        systemMarker: 'Scalability consideration',
+        systemMarker: 'Prompts',
         codeBlock: {
           language: 'ts',
           filename: 'src/design-system/packs.ts (excerpt, real file)',
@@ -1522,7 +1517,7 @@ export const packs = {
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'Playing it killed the feature the app was built around',
         description: 'The defining pivot came from playing the game, not reviewing screens. The original loop resolved drafts through community voting—bracketed vote sessions, a 24-hour pre-draft gate, daily coins for voters. It was the app’s reason to exist, and it was wrong: a casual group wants a verdict tonight, not after a day of strangers voting. In June the voting system was retired—pressure-tested through structured research before any code changed—and replaced with the DraftLab confidence pool: solo mini-games that rank every item in a pack, so every finished draft gets an instant, explainable winner, with an in-room peer vote kept for bragging rights. The economy was rebuilt around the same finding: dailies pay XP, coins come from leveling, a win always funds the next ticket. And the QA loop kept paying—scripting the demo reel with Maestro surfaced a real shipping bug, a pick clock that never auto-picked at zero, that became a fix instead of a caption.',
         images: [
           {
@@ -1864,25 +1859,25 @@ export const packs = {
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Alignment',
+        label: 'Separating the repeatable steps from the judgment',
         description: 'I mapped the team’s actual steps, where the time went, and what they checked before calling a result finished. That separated the repeatable setup from the judgment the tool should leave alone.',
         images: [],
       },
       {
         key: 'structure',
-        label: 'Structure',
+        label: 'Inputs beside a live preview, in one screen',
         description: 'I kept the workflow in one screen, with inputs beside a live preview. Each change becomes visible before export instead of turning into a problem at the next review.',
         images: [],
       },
       {
         key: 'build',
-        label: 'Build',
+        label: 'Claude scaffolded it; I decided what it could assume',
         description: 'Claude helped structure the first logic and scaffold the interface. I set the interaction model, connected it to the existing design tokens, checked the output against real examples, and tightened the behavior when the generated version made a wrong assumption.',
         images: [],
       },
       {
         key: 'iteration',
-        label: 'Iteration',
+        label: 'Real tasks changed the flow, the preview, and the labels',
         description: 'I tested the tool on real tasks with the team and watched for the places it added work instead of removing it. Those sessions changed the flow, the preview, and the labels before the tool became part of the routine.',
         images: [],
       },

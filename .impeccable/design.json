@@ -144,7 +144,7 @@
       "Don't add ambient shadows, floating cards, or glassmorphism.",
       "Don't use purple-to-blue SaaS gradients, icons inside decorative circles, pill-shaped everything, or ambient animated blobs.",
       "Don't add motion that exists only to be noticed; if it does not mark state or reveal once, cut it.",
-      "Don't replace this visual world; all work extends the existing system and connects to its tokens/components (ryan-design-taste + apply-design-system are binding)."
+      "Don't replace this visual world; all work extends the existing system and connects to its tokens/components (ryan-design-taste + design-system-governance are binding)."
     ]
   }
 }

@@ -36,9 +36,11 @@ const AboutHero: React.FC = () => {
       className={`about-hero${visible ? ' is-visible' : ''}`}
     >
       <div className="about-hero__inner">
-        {/* Left margin — faint process words (decorative) */}
+        {/* Left margin — faint process words (decorative). These echo the four
+            beats of the loop below rather than naming a separate five-step
+            process, which is what they used to do. */}
         <div className="about-hero__process" aria-hidden="true">
-          DEFINE · SHAPE · BUILD · REFINE · SHIP
+          DEFINE · EXPLORE · LEARN · FEED BACK
         </div>
 
         {/* Reading column */}

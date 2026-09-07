@@ -3,11 +3,9 @@
 // All copy lives here, not in markup.
 // ============================================
 
-import React from 'react';
-
 // ============================================
 // Story Sections — text-first editorial flow ("Craft is the through-line")
-// Six scannable beats; each has one orange handwritten annotation.
+// Seven scannable beats; each has one orange handwritten annotation.
 // ============================================
 
 export interface StorySection {
@@ -108,13 +106,18 @@ export const storySections: StorySection[] = [
     ],
     annotation: 'Collaboration is not proximity. It is trust, context, and intent.',
   },
+  // Was "How I work", and opened with a one-paragraph restatement of the loop
+  // (find the decision → stay close to implementation → ship what holds up →
+  // learn for the next one). The four-beat circuit below the Bridge card is now
+  // the site's single account of that sequence, so this beat keeps only what
+  // exists nowhere else on the site: the bar the work is held to, and the kind
+  // of team that clears it. Nothing from the cut paragraph was lost — "which
+  // decision is stuck" opens beat 01 of the circuit, and "use what we learn to
+  // shape the next one" is beats 03 and 04.
   {
     num: '07',
-    title: 'How I work',
+    title: 'What I hold myself to',
     body: [
-      'I start by finding the decision the team is actually stuck on. Then I stay close enough to ' +
-        'implementation to see where the idea breaks, ship the version that holds up, and use what ' +
-        'we learn to shape the next one.',
       'My bar is practical. The work should survive scrutiny, the team should be able to extend it ' +
         'without me, and I should not need an invitation to fix an obvious gap.',
       'The best teams I’ve worked with were more than talented. They were honest, aligned, willing ' +
@@ -126,76 +129,234 @@ export const storySections: StorySection[] = [
 ];
 
 // ============================================
-// Process Principles — "My Process" section
+// The loop — "How I work", drawn as a circuit
+// The same four beats as the homepage rail (SystemsInPractice), in the same
+// words. The About page adds what the rail has no room for: a paragraph, the
+// cost of skipping the beat, and one evidence link per beat.
+//
+// COPY STATUS — read before editing:
+//   • `title` and `meta` (the mono triplet) are Ryan's words and are final.
+//   • `body` and `cost` are DRAFTS assembled from the previous five-principle
+//     deck (01 Find the decision · 02 Make it legible · 03 Stay with the
+//     build · 04 Measure what changed) and awaiting Ryan's edit.
+//   • `evidence` points at ungated routes only. Every `/work/*` study in the
+//     professional stream renders its middle as a lock panel, so the evidence
+//     here comes from the self-built stream, the notes, and the live design
+//     system — pages a reader lands on, not a prompt.
 // ============================================
 
-export interface Principle {
-  num: string;     // e.g. "01"
-  label: string;
+export interface ProcessBeat {
+  num: '01' | '02' | '03' | '04';
   title: string;
-  body: React.ReactNode;
+  /** Mono marker under the title — Ryan's own sub-terms, as on the homepage rail. */
+  meta: string;
+  /** DRAFT — see COPY STATUS above. */
+  body: string;
+  /** DRAFT — the admitted-cost line: what the loop loses when this beat is skipped. */
+  cost: string;
+  /** One page that proves the beat. Ungated routes only. */
+  evidence: { label: string; to: string };
+  /**
+   * The beat's place on the loop, in words. Screen-reader only where a wire
+   * draws it; visible under the card on the phone. The loop is never carried by
+   * a line or a colour alone.
+   */
+  relation: string;
 }
 
-export const principles: Principle[] = [
+export const processBeats: ProcessBeat[] = [
   {
     num: '01',
-    label: 'Method',
-    title: 'Find the decision',
-    body: (
-      <p>
-        Before I move pixels, I need to know which decision is stuck, who it affects, and what
-        the product has to survive. A polished answer is still wrong if it answers the wrong
-        question.
-      </p>
-    ),
+    title: 'Define the rules',
+    meta: 'intent · constraints · foundations',
+    body:
+      'Before anything gets drawn I want to know which decision is stuck, what the product has to ' +
+      'survive, and what already exists to build on: tokens, patterns, and the rules people and ' +
+      'agents read. A polished answer to the wrong question is still wrong.',
+    cost: 'Every later beat argues about scope instead of the work.',
+    evidence: { label: 'The design system this site runs on, live', to: '/design-system' },
+    relation: 'Leads to 02.',
   },
   {
     num: '02',
-    label: 'Method',
-    title: 'Make it legible',
-    body: (
-      <p>
-        I put the reason close to the artifact. Hierarchy, states, behavior notes,
-        accessibility, and tokens should give the next person enough context to build or extend
-        the decision without guessing.
-      </p>
-    ),
+    title: 'Explore across surfaces',
+    meta: 'Figma · prototypes · code',
+    body:
+      'Figma or working code, whichever answers fastest. High-fidelity prototypes are cheap enough ' +
+      'now that the first thing a stakeholder sees often runs. Both surfaces are allowed to change ' +
+      'the system, and neither owns it.',
+    cost: 'Stay on one surface and the file keeps hiding what the browser would have shown.',
+    evidence: {
+      label: 'PlayDraft: Figma to React Native to TestFlight in twelve weeks',
+      to: '/work/playdraft',
+    },
+    relation: 'Two-way with 03: exploring and learning trade places as often as the work needs.',
   },
   {
     num: '03',
-    label: 'Method',
-    title: 'Stay with the build',
-    body: (
-      <p>
-        The browser exposes what the frame hid. I stay close to the components, CMS patterns,
-        naming, responsive behavior, and documentation so the idea has a chance to survive
-        production.
-      </p>
-    ),
+    title: 'Learn from what becomes real',
+    meta: 'QA · edge cases · accessibility · production',
+    body:
+      'The browser exposes what the frame hid: responsive behavior, naming, the state nobody drew, ' +
+      'the orange that fails contrast at 14px. I stay through QA and past launch, and I keep the ' +
+      'claim as narrow as the evidence.',
+    cost: 'The system learns nothing, and the next version repeats the miss.',
+    evidence: { label: 'Eight times my first idea was wrong', to: '/notes/eight-wrong-first-drafts' },
+    relation: 'Two-way with 02. Leads to 04.',
   },
   {
     num: '04',
-    label: 'Method',
-    title: 'Measure what changed',
-    body: (
-      <p>
-        Usability reviews, experiments, analytics, search behavior, accessibility checks, and
-        post-launch reflection tell me where the work held and where it did not. I keep the claim
-        as narrow as the evidence.
-      </p>
-    ),
+    title: 'Feed it back into the system',
+    meta: 'components · documentation · governance · agent-readable guidance',
+    body:
+      'What production taught goes back where the next person will find it: the component, the ' +
+      'doc, the governance rule, the skill an agent reads before it contributes. The system has ' +
+      'done its job when the team makes the next good decision without me in the room.',
+    cost: 'The lesson lives in one head, mine, which is the failure a system exists to prevent.',
+    evidence: { label: 'A design-taste system an agent can follow', to: '/notes/ryan-design-taste-skill' },
+    relation: 'Returns to 01. The loop has no finish line.',
+  },
+];
+
+/**
+ * Under the circuit. The first sentence is unchanged from the previous deck.
+ * The second paragraph is the old fifth principle ("Keep putting in the reps"),
+ * which was never a step in the loop; it is the reason the loop keeps turning,
+ * so it moves here. Its opening clause is a DRAFT; the list of names and the
+ * last two sentences are Ryan's, unchanged.
+ */
+export const processCloser = {
+  lead:
+    'The tools will keep changing, so I do not build the process around a tool. I build it ' +
+    'around a harder standard: ',
+  emphasis: 'care for what ships',
+  reps:
+    'The loop keeps turning because I keep putting in the reps: studying the people and ' +
+    'communities whose standards make me inspect my own work more closely, including Dive Club, ' +
+    'UI Collective Design, Tommy Geoco, Michael Riddering, Jenny Wen, and Brad Frost. The useful ' +
+    'part is not the inspiration. It is the habit or rule that changes what I build next.',
+};
+
+// ============================================
+// Strengths, in other people's words
+// The homepage Strengths section (Skills.tsx) relocated here. It failed on the
+// homepage because it asserted 22 phrases with no way to check any of them.
+// Here each surviving phrase is grouped by who the work was with and paired
+// with the person who said it — a verbatim fragment of a recommendation that
+// appears in full in the homepage Testimonials section and on LinkedIn — or,
+// for the writing row, with the artifact itself.
+//
+// WHAT DID NOT SURVIVE, and why (so nothing was dropped silently):
+//   • Already in the homepage Technical section, some verbatim — dropped here:
+//     Accessibility-First Design (WCAG) → "WCAG Accessibility"; SEO-Driven
+//     Design → "SEO-Informed Design"; A/B Testing & Experimentation → "A/B
+//     Testing"; Design Systems & Governance → "Governance & Adoption" and the
+//     Design Systems column; Design-system auditing (verbatim); Reusable design
+//     and QA skills → "Reusable agent skills" + "System-aware QA"; Human review
+//     and governance → "Human review gates"; System-aware agent workflows →
+//     "MCP workflows" and the whole Systems in Practice section.
+//   • Carried by the circuit above, in Ryan's own term — dropped here:
+//     Machine-readable design guidance → beat 04, "agent-readable guidance".
+//   • Merged: Stakeholder Management + Stakeholder Alignment → "Stakeholder
+//     alignment"; Stakeholder Presentation & Storytelling → "Presentation &
+//     storytelling".
+//   • Dropped as unevidenced: Strategic Planning. No recommendation, study, or
+//     note on the site evidences it as a distinct practice. It can return when
+//     something does.
+//
+// COPY STATUS: the phrases are the homepage's, re-cased. The row labels, the
+// intro, and the section title are DRAFTS for Ryan's edit. Quote fragments are
+// verbatim from Testimonials.tsx and must stay that way.
+// ============================================
+
+export type StrengthVoucher =
+  | { kind: 'person'; quote: string; name: string; role: string }
+  | { kind: 'artifact'; label: string; to: string };
+
+export interface StrengthRow {
+  /** Who the work was with. */
+  with: string;
+  /** The strengths, as the mono meta of the relationship. */
+  phrases: string[];
+  /** Who said so, or the artifact that shows it. */
+  vouchers: StrengthVoucher[];
+}
+
+export const strengthRows: StrengthRow[] = [
+  {
+    with: 'With engineers',
+    phrases: ['Engineering partnership', 'Framework & template development'],
+    vouchers: [
+      {
+        kind: 'person',
+        quote: 'one vocabulary to work from instead of two',
+        name: 'Cheryl Carpenter',
+        role: 'React front-end developer, WheelRack build partner',
+      },
+    ],
   },
   {
-    num: '05',
-    label: 'Method',
-    title: 'Keep putting in the reps',
-    body: (
-      <p>
-        I study the people and communities whose standards make me inspect my own work more
-        closely, including Dive Club, UI Collective Design, Tommy Geoco, Michael Riddering,
-        Jenny Wen, and Brad Frost. The useful part is not the inspiration. It is the habit or rule
-        that changes what I build next.
-      </p>
-    ),
+    with: 'With product and stakeholders',
+    phrases: [
+      'Product team integration',
+      'Cross-functional facilitation',
+      'Stakeholder alignment',
+      'Presentation & storytelling',
+    ],
+    vouchers: [
+      {
+        kind: 'person',
+        quote: 'coordinates with leaders and ICs from corresponding teams on his own',
+        name: 'Adam Payne',
+        role: 'Web Design Manager, Ryan’s direct manager',
+      },
+      {
+        kind: 'person',
+        quote: 'communication skills are top notch',
+        name: 'Urbano Baz',
+        role: 'Software Engineer, partner team',
+      },
+    ],
+  },
+  {
+    with: 'With designers',
+    phrases: ['Design leadership', 'Mentoring & design advocacy'],
+    vouchers: [
+      {
+        kind: 'person',
+        quote: 'a kind and thoughtful mentor',
+        name: 'Gina Saucedo',
+        role: 'Web Designer, Tire Rack',
+      },
+      {
+        kind: 'person',
+        quote: 'a professional development program that serves around 100 people',
+        name: 'Amanda Straup',
+        role: 'Assistant Vice President, Digital Operations',
+      },
+    ],
+  },
+  {
+    with: 'Over the long run',
+    phrases: ['Systems thinking'],
+    vouchers: [
+      {
+        kind: 'person',
+        quote: 'what’s worked, what hasn’t, and why',
+        name: 'Ryan Kokesh',
+        role: 'Senior UX Manager, 2022–2024',
+      },
+    ],
+  },
+  {
+    with: 'In writing',
+    phrases: ['Written documentation', 'Process documentation'],
+    vouchers: [
+      {
+        kind: 'artifact',
+        label: 'Two files keep the brand from drifting',
+        to: '/notes/governance-in-markdown',
+      },
+    ],
   },
 ];

@@ -1,5 +1,5 @@
 // ============================================
-// AboutPage — editorial story-stack + process principles
+// AboutPage — editorial story-stack + the loop, drawn as a circuit
 // Route: #/about
 // ============================================
 
@@ -10,6 +10,7 @@ import { getHomeHref } from '../utils/homeSession';
 import AboutHero from './AboutHero';
 import AboutStorySections from './AboutStorySections';
 import ProcessPrinciples from './ProcessPrinciples';
+import ProcessStrengths from './ProcessStrengths';
 import LinkedInLink from './LinkedInLink';
 import CandidateSnapshot from './CandidateSnapshot';
 import AboutModeSwitcher, { AboutMode } from './AboutModeSwitcher';
@@ -88,8 +89,11 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* ── My Process — 5-row principles accordion ───────────────────── */}
+          {/* ── How I work — the four-beat loop, drawn as a closed circuit ── */}
           <ProcessPrinciples />
+
+          {/* ── Strengths — the homepage list, relocated and vouched for ──── */}
+          <ProcessStrengths />
         </div>
       ) : (
         <div

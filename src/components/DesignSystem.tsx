@@ -7,6 +7,7 @@ import SectionBadge from './SectionBadge';
 import PageHeader from './PageHeader';
 import TestimonialCard from './TestimonialCard';
 import CaseStudyCard from './CaseStudyCard';
+import { SystemNode, SYSTEM_NODES } from './SystemsInPractice';
 import '../styles/styles.scss';
 
 // ============================================
@@ -649,6 +650,64 @@ const CardsContent: React.FC = () => (
         </div>
         <div className="ds__btn-specs">
           <code>bg: white · border: #5e6c7c · text: #5e6c7c</code>
+        </div>
+      </div>
+    </section>
+
+    {/* ======================== ECOSYSTEM NODE ======================== */}
+    <section className="ds__section">
+      <h2 className="ds__section-title">Ecosystem Node</h2>
+      <div className="ds__component-showcase">
+        {/* .sip__stage.is-visible so the hub's corner handles show at rest,
+            the way they do once the homepage board has revealed. */}
+        <div className="ds__component-preview sip__stage is-visible">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', width: '100%' }}>
+            {(['system', 'figma', 'docs'] as const).map((id) => {
+              const node = SYSTEM_NODES.find((n) => n.id === id);
+              return node ? <SystemNode key={id} node={node} /> : null;
+            })}
+          </div>
+        </div>
+        <div className="ds__component-meta">
+          <h4 className="ds__subsection-title">Specs</h4>
+          <div className="ds__spec-table">
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Container</span>
+              <code className="ds__spec-value">radius: 12px · padding: 16px · border: 1px · hover: Shadow SM + border shift</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Hub tier</span>
+              <code className="ds__spec-value">paper · 1px Ink border · selection-frame corner handles (Steel) · centred</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Pair tier</span>
+              <code className="ds__spec-value">Figma: Orange Tint surface + 35% Orange border · Codebase: 50% Steel Light surface + 55% Steel border</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Surface tier</span>
+              <code className="ds__spec-value">paper · Border Hairline · identical to one another by design</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Title</span>
+              <code className="ds__spec-value">Hubot Sans Bold · 17px (hub 19px) · #1b1b1b</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Meta</span>
+              <code className="ds__spec-value">Menlo · 10px · uppercase · 0.08em · Steel Dark #5e6c7c (AA on all three surfaces)</code>
+            </div>
+            <div className="ds__spec-row">
+              <span className="ds__spec-label">Body</span>
+              <code className="ds__spec-value">Inter · 13px / 1.5 · #4a4a4a</code>
+            </div>
+          </div>
+        </div>
+        <div className="ds__component-usage">
+          <h4 className="ds__subsection-title">Usage</h4>
+          <pre className="ds__code-block">
+{`import { SystemNode, SYSTEM_NODES } from './components/SystemsInPractice';
+
+<SystemNode node={SYSTEM_NODES[0]} />  // tier: 'center' | 'pair' | 'surface'`}
+          </pre>
         </div>
       </div>
     </section>

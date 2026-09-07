@@ -289,6 +289,16 @@
     color: $color-neutral-dark;
   }
 
+  // Keep each positioning term whole from tablet up, so the eyebrow wraps at a
+  // separator ("… · DESIGN SYSTEMS ·" / "AGENTIC WORKFLOWS") instead of
+  // orphaning "WORKFLOWS" at 1024–1280. Phones keep a free break: holding the
+  // terms there forces a third line at 360px.
+  &__eyebrow-term {
+    @media (min-width: $breakpoint-md) {
+      white-space: nowrap;
+    }
+  }
+
   &__eyebrow-sep {
     color: $color-primary;
     font-weight: $font-weight-bold;

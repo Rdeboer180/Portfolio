@@ -21,6 +21,13 @@
   --case-study-motion-medium: var(--transition-base);
   --case-study-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 
+  // Cool paper, not the page's white. With Strengths and My Process gone the
+  // homepage would otherwise open on four paper sections in a row — hero,
+  // About, this, Systems — five screens with no ground change. This is the
+  // one flip that restores the alternation: paper / cool / paper / cool /
+  // paper / cool down the page. The cards are white (--case-study-card-bg)
+  // and lift off it the way the Peer Reviewed cards already do.
+  background: $color-secondary-lightest;
   padding: $section-pad-y 0;
 
   &__container {
@@ -36,6 +43,7 @@
   }
 
   &__title {
+    text-wrap: balance; // "…tools I've / shipped" was orphaning the last word
     font-family: $font-family-heading;
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;

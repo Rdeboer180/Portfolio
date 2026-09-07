@@ -1,130 +1,469 @@
 // ============================================
-// Process Principles — "My Process" sticky stacking cards
-// Title bars pin + stack at the top (lightest-orange #fdede9); the open card's
-// breakdown shows until the next card slides up over it. Pure-CSS sticky stack.
-// Mobile / reduced-motion → plain readable list.
+// Process Principles — the loop, drawn as a circuit
+// Four beats at the corners of one closed loop: 01 → 02 across the top,
+// 02 ⇄ 03 down the right in Signal Orange (the one orange relation — the
+// Systems in Practice board's rule), 03 → 04 across the bottom, 04 → 01 back
+// up the left under a RETURNS TO 01 tag. Wires are CSS boxes in the gaps
+// between adjacent cards, sized from --gx / --gy, so the geometry needs no
+// measuring pass: a 1.4px shaft in the board's steel and a 10px open two-tick
+// head. Each relation is also written into the card (`__rel`) — screen-reader
+// only where a wire draws it, visible on the phone — so the loop never
+// depends on a drawn line or a colour.
+//
+// Ground: the About page's own paper and construction grid, not a mist band;
+// wires read cleaner on the grid. Flat at rest; a card lifts only on hover
+// or focus-within. Caveat is spent on one mark, Menlo on the system markers.
+//
+// Layouts — 2×2 circuit at 120/96 gaps with the hand mark in the cross of the
+// gaps (≥1024) · 2×2 at 72/72, mark dropped (768–1023) · stacked, with one
+// rectangular wire around the stack and the relation written under each card
+// (<768). Wires draw once on reveal; reduced motion renders the final state.
+//
+// Orange under 18px is always $color-primary-dark (5.65:1). $color-primary is
+// only ever a stroke or a focus ring here.
 // ============================================
 
 @import '../variables';
 
-$proc-bar-h: 64px;     // collapsed title-bar height == the stack offset
-$proc-stack-top: 92px; // clears the fixed nav
-
 .process-principles {
-  padding: $spacing-4xl 0;
-  border-top: 1px solid #e5e5e5;
-  background: var(--color-neutral-lightest);
-  margin-top: -3em;
+  --pp-wire: #{$color-secondary};
+  --pp-wire-pair: #{$color-primary};
+  --pp-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --gx: 120px;
+  --gy: 96px;
+
+  padding: $spacing-4xl 0 0;
 
   &__inner {
     max-width: $container-max-width;
     margin: 0 auto;
-    padding: $spacing-2xl 0 0 $container-padding-x;
+    padding: 0 $container-padding-x;
   }
 
+  // ── Header ─────────────────────────────────────────────────────────────────
+
   &__section-label {
+    margin: 0 0 $spacing-sm;
     font-family: $font-family-mono;
     font-size: $font-size-caption;
     font-weight: $font-weight-medium;
-    color: $color-primary-dark;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin-bottom: $spacing-sm;
+    color: $color-primary-dark;
   }
 
   &__section-title {
+    margin: 0 0 $spacing-xs;
     font-family: $font-family-heading;
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
     letter-spacing: -0.02em;
     line-height: 1.2;
-    margin-bottom: $spacing-xs;
+    color: $color-neutral-dark;
   }
 
   &__subtitle {
+    margin: 0 0 $spacing-xl;
     font-family: $font-family-heading;
     font-size: $font-size-body-lg;
     font-weight: $font-weight-medium;
     color: $color-neutral-muted;
-    margin-bottom: $spacing-xl;
   }
 
   &__core-line {
+    max-width: 600px;
+    margin: 0;
     font-family: $font-family-primary;
     font-size: $font-size-body;
     line-height: 1.75;
     color: $color-neutral-standard;
-    max-width: 600px;
-    margin-bottom: 0;
   }
 
-  // ── Stacking deck ──────────────────────────────────────────────────────────
+  // ── The circuit ────────────────────────────────────────────────────────────
+  // Three columns (card · gap · card) by three rows (card · gap · card). The
+  // gaps are real tracks so a wire can be a box that fills one.
 
-  &__deck {
-    max-width: $container-max-width;
-    margin: $spacing-2xl auto 0;
-    padding: 0 $container-padding-x;
+  &__circuit {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--gx) minmax(0, 1fr);
+    grid-template-rows: auto var(--gy) auto;
+    margin: $spacing-3xl 0 0;
+    padding: 0;
+    list-style: none;
   }
 
-  &__card {
-    position: sticky;
-    top: calc(#{$proc-stack-top} + var(--i, 0) * #{$proc-bar-h});
-    z-index: calc(var(--i, 0) + 1);
-    min-height: 280px;
-    background: $color-white; // opaque — covers the card beneath when it pins
-    border: 1px solid $color-neutral-light;
-    border-radius: $radius-2xl;
-    box-shadow: 0 5px 20px -22px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-  }
-
-  // Collapsed title bar — fixed height so the stacked bars tile exactly
-  &__bar {
+  &__cell {
+    position: relative;
     display: flex;
-    align-items: center;
-    gap: $spacing-lg;
-    height: $proc-bar-h;
-    padding: 0 $spacing-2xl;
-    border-bottom: 1px solid rgba($color-primary, 0.14);
+    min-width: 0;
+  }
+
+  // DOM order is 01–04; only the grid placement turns the corner.
+  &__cell--1 { grid-area: 1 / 1; }
+  &__cell--2 { grid-area: 1 / 3; }
+  &__cell--3 { grid-area: 3 / 3; }
+  &__cell--4 { grid-area: 3 / 1; }
+
+  // ── Beat card ──────────────────────────────────────────────────────────────
+  // The board's surface-tier card: paper, hairline, 12px. Flat at rest.
+
+  &__beat {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    padding: $spacing-xl;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
+
+    &:hover,
+    &:focus-within {
+      border-color: rgba($color-neutral-dark, 0.28);
+      box-shadow: $shadow-sm;
+    }
+  }
+
+  &__beat-top {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
   }
 
   &__num {
-    font-family: $font-family-heading;
-    font-size: 18px;
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    line-height: 1;
+    flex-shrink: 0;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    letter-spacing: 0.08em;
+    color: $color-secondary-dark;
   }
 
-  &__bar-title {
+  &__beat-title {
     margin: 0;
     font-family: $font-family-heading;
-    font-size: $font-size-body-lg;
+    font-size: $font-size-h5;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
     letter-spacing: -0.01em;
     line-height: 1.2;
+    color: $color-neutral-dark;
+    text-wrap: balance;
   }
 
-  // Expanded breakdown
-  &__breakdown {
-    padding: $spacing-2xl;
-  }
-
-
-  &__breakdown-label {
-    display: block;
+  // Ryan's sub-terms as the node meta: mono, Steel Dark, uppercase.
+  &__meta {
+    margin: 0;
     font-family: $font-family-mono;
     font-size: 10px;
-    font-weight: $font-weight-medium;
-    color: $color-primary-dark;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: $spacing-md;
+    line-height: 1.5;
+    color: $color-secondary-dark;
   }
 
-  &__breakdown-body {
+  &__body {
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: 15px;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+
+  // The admitted cost, under a hairline, with its own mono label.
+  &__cost {
+    margin: 2px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid $color-neutral-light;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+
+    b {
+      display: block;
+      margin-bottom: 3px;
+      font-family: $font-family-mono;
+      font-size: 10px;
+      font-weight: $font-weight-medium;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $color-neutral-muted;
+    }
+  }
+
+  // One link per beat, on the text-safe orange, with its route in mono. A
+  // block that shrinks to its content (align-self on a column flex item), so
+  // the icon and label wrap as one run of text and the route always sits on
+  // its own line beneath — the same shape at 375 as at 1440.
+  &__evidence {
+    display: block;
+    align-self: flex-start;
+    margin-top: 2px;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-text;
+    text-decoration: none;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    svg {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: $spacing-sm;
+      vertical-align: -2px;
+      color: $color-secondary;
+
+      path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    small {
+      display: block;
+      margin-top: 3px;
+      font-family: $font-family-mono;
+      font-size: 11px;
+      font-weight: $font-weight-regular;
+      letter-spacing: 0.02em;
+      color: $color-neutral-muted;
+    }
+  }
+
+  // The relation in words. Screen-reader only wherever a wire draws it;
+  // visible under the card on the phone, where it and the rectangular wire
+  // say the same thing twice.
+  &__rel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  // ── Wires ──────────────────────────────────────────────────────────────────
+  // A wire is a flex box filling the gap beside its card: shaft (1.4px,
+  // currentColor) and head (10px two-tick), 7px off each card edge. Shafts
+  // draw by scaling from the card they leave; heads land 500ms after the
+  // shaft starts, like the board's.
+
+  &__wire {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pp-wire);
+    pointer-events: none;
+  }
+
+  &__wire--pair {
+    color: var(--pp-wire-pair);
+  }
+
+  &__shaft {
+    flex: 1;
+    background: currentColor;
+    transition: transform 620ms var(--pp-ease-out) var(--wire-delay, 0ms);
+  }
+
+  &__head {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 240ms ease calc(var(--wire-delay, 0ms) + 500ms);
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__head--down { transform: rotate(90deg); }
+  &__head--up   { transform: rotate(-90deg); }
+  &__head--left { transform: rotate(180deg); }
+
+  // 01 → 02: the column gap to the right of 01.
+  &__wire--r {
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    width: var(--gx);
+    flex-direction: row;
+    padding: 0 7px;
+
+    .process-principles__shaft {
+      height: 1.4px;
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+
+    .process-principles__head {
+      margin-left: -2px;
+    }
+  }
+
+  // 03 → 04: the column gap to the left of 03.
+  &__wire--l {
+    right: 100%;
+    top: 0;
+    bottom: 0;
+    width: var(--gx);
+    flex-direction: row;
+    padding: 0 7px;
+
+    .process-principles__shaft {
+      height: 1.4px;
+      transform: scaleX(0);
+      transform-origin: right center;
+    }
+
+    .process-principles__head {
+      margin-right: -2px;
+    }
+  }
+
+  // 02 ⇄ 03: the row gap under 02, two tracks side by side, in orange.
+  &__wire--d {
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: var(--gy);
+    flex-direction: row;
+    gap: 14px;
+    padding: 7px 0;
+  }
+
+  &__track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    .process-principles__shaft {
+      width: 1.4px;
+      transform: scaleY(0);
+    }
+  }
+
+  &__track--down {
+    .process-principles__shaft { transform-origin: center top; }
+    .process-principles__head  { margin-top: -2px; }
+  }
+
+  &__track--up {
+    .process-principles__shaft { transform-origin: center bottom; }
+    .process-principles__head  { margin-bottom: -2px; }
+  }
+
+  // 04 → 01: the row gap above 04 — the return, drawn as a wire like the rest.
+  &__wire--u {
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: var(--gy);
+    flex-direction: column;
+    padding: 7px 0;
+
+    .process-principles__shaft {
+      width: 1.4px;
+      transform: scaleY(0);
+      transform-origin: center bottom;
+    }
+
+    .process-principles__head {
+      margin-bottom: -2px;
+    }
+  }
+
+  // The tag on the return wire, the way a wire on a bench carries one.
+  &__tag {
+    position: absolute;
+    left: calc(50% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: $color-secondary-dark;
+    opacity: 0;
+    transition: opacity 240ms ease calc(var(--wire-delay, 0ms) + 500ms);
+  }
+
+  // The one hand mark, centred on the cross of the gaps. `rotate`, not
+  // `transform`, so it composes with the centring translate.
+  &__mark {
+    position: absolute;
+    left: calc(100% + var(--gx) / 2);
+    top: calc(100% + var(--gy) / 2);
+    transform: translate(-50%, -50%);
+    rotate: -3deg;
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 1;
+    white-space: nowrap;
+    color: $color-primary-dark;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 400ms ease 900ms;
+  }
+
+  // Phone-only furniture, hidden wherever the wires are drawn.
+  &__pair,
+  &__ah,
+  &__ptag {
+    display: none;
+  }
+
+  // Drawn state.
+  &__circuit.is-visible &__shaft {
+    transform: none;
+  }
+
+  &__circuit.is-visible &__head,
+  &__circuit.is-visible &__tag,
+  &__circuit.is-visible &__mark {
+    opacity: 1;
+  }
+
+  // ── Closing ────────────────────────────────────────────────────────────────
+
+  &__closing {
+    max-width: 600px;
+    margin: $spacing-3xl 0 0;
+    padding: $spacing-2xl 0 $spacing-4xl;
+    border-top: 1px solid $color-neutral-light;
+
     p {
       margin: 0 0 $spacing-md;
       font-family: $font-family-primary;
@@ -132,67 +471,250 @@ $proc-stack-top: 92px; // clears the fixed nav
       line-height: 1.75;
       color: $color-neutral-standard;
 
-      &:last-child { margin-bottom: 0; }
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
-  // ── Closing statement ──────────────────────────────────────────────────────
-
-  &__closing {
-    font-family: $font-family-primary;
-    font-size: $font-size-body;
-    line-height: 1.75;
-    color: $color-neutral-standard;
-    margin-top: $spacing-3xl;
-    padding-top: $spacing-3xl;
-    border-top: 1px solid $color-neutral-light;
-    max-width: 600px;
-  }
-
+  // 16px orange text: the text-safe token, not the brand fill (3.91:1 fails AA).
   &__closing-emphasis {
-    color: $color-primary;
     font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
   }
 }
 
-// ── Static fallback: mobile + reduced motion → plain list (no pinning) ─────────
+// ── 768–1023: the 2×2 holds at tighter gaps; the hand mark has no room ────────
 
-@mixin process-static {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .process-principles {
-    &__card {
+    --gx: 72px;
+    --gy: 72px;
+
+    &__mark {
+      display: none;
+    }
+
+    &__beat {
+      padding: 20px;
+    }
+
+    &__beat-title {
+      font-size: 20px;
+    }
+  }
+}
+
+// ── <768: the same loop, stacked ─────────────────────────────────────────────
+// The grid becomes a stack with 28px reserved on the left. One rectangular
+// wire runs around it: down the left through a 7px handle at each beat,
+// across the bottom, up the right inside the section's own padding, back
+// along the top under a RETURNS TO 01 tag, and down into 01 on an arrowhead.
+// The ⇄ knocks its segment of the left wire out in orange between 02 and 03.
+// Under each card the relation is written in mono, so the loop is stated
+// twice: once drawn, once in words.
+
+@media (max-width: #{$breakpoint-md - 1}) {
+  .process-principles {
+    padding-top: $spacing-3xl;
+
+    &__inner {
+      padding: 0 $spacing-xl;
+    }
+
+    &__section-title {
+      font-size: $font-size-h3;
+    }
+
+    &__circuit {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: $spacing-3xl 8px 44px 0;
+      padding: 0 0 0 28px;
+
+      // The wire around the stack.
+      &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        right: -8px;
+        top: -18px;
+        bottom: -18px;
+        border: 1.4px solid var(--pp-wire);
+        border-radius: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 400ms ease;
+      }
+
+      &.is-visible::before {
+        opacity: 1;
+      }
+    }
+
+    // A handle on the wire at each beat — the selection frame's 7px square.
+    &__cell::before {
+      content: '';
+      position: absolute;
+      left: -21.5px;
+      top: 24px;
+      width: 7px;
+      height: 7px;
+      background: var(--pp-wire);
+    }
+
+    &__wire,
+    &__mark {
+      display: none;
+    }
+
+    // Paper behind the ⇄ knocks the steel wire out beneath it.
+    &__pair {
+      display: block;
+      position: absolute;
+      left: -26px;
+      top: -28px;
+      z-index: 1;
+      width: 16px;
+      height: 36px;
+      background: $color-white;
+      color: var(--pp-wire-pair);
+
+      svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    // Arrowheads hang off the card nearest each edge, so the <ol> holds only <li>.
+    &__ah {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      color: var(--pp-wire);
+
+      path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    // Along the bottom, heading right.
+    &__ah--bottom {
+      left: 50%;
+      bottom: -23.5px;
+      transform: translateX(-50%);
+    }
+
+    // Up the right side.
+    &__ah--right {
+      right: -13.5px;
+      top: calc(100% + 10px);
+      transform: translateY(-50%) rotate(-90deg);
+    }
+
+    // Down into 01 — on the straight run below the 14px corner and above the
+    // first handle, so the chevron never sits on the curve.
+    &__ah--in {
+      left: -23px;
+      top: 0;
+      transform: rotate(90deg);
+    }
+
+    // The tag, seated on the top wire over 01, paper behind it.
+    &__ptag {
+      display: block;
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      z-index: 1;
+      transform: translateX(-50%);
+      padding: 0 6px;
+      background: $color-white;
+      font-family: $font-family-mono;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: $color-secondary-dark;
+    }
+
+    &__beat {
+      padding: 20px;
+    }
+
+    &__beat-title {
+      font-size: 20px;
+    }
+
+    // The relation, in flow.
+    &__rel {
       position: static;
-      min-height: 0;
-      margin-bottom: $spacing-lg;
+      width: auto;
+      height: auto;
+      margin: 4px 0 0;
+      padding-top: $spacing-sm;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+      border-top: 1px solid $color-neutral-light;
+      font-family: $font-family-mono;
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      color: $color-secondary-dark;
     }
   }
 }
 
-@media (max-width: $breakpoint-md) {
-  @include process-static;
+// ── Touch: no hover lift; nothing is hidden behind it ─────────────────────────
 
+@media (hover: none) {
   .process-principles {
-    padding: $spacing-3xl 0;
-
-    &__section-title { font-size: $font-size-h3; }
-
-    &__breakdown {
-      grid-template-columns: 1fr;
-      gap: $spacing-lg;
-      padding: $spacing-xl;
+    &__beat:hover {
+      box-shadow: none;
     }
-
-    &__tile { display: none; }
-
-    &__bar { padding: 0 $spacing-xl; }
   }
 }
+
+// ── Reduced motion: final state, no draw, no lift ─────────────────────────────
 
 @media (prefers-reduced-motion: reduce) {
-  @include process-static;
-}
-
-@media (max-width: $breakpoint-sm) {
   .process-principles {
-    &__section-title { font-size: $font-size-h4; }
+    &__shaft {
+      transition: none;
+      transform: none;
+    }
+
+    &__head,
+    &__tag,
+    &__mark {
+      transition: none;
+      opacity: 1;
+    }
+
+    &__circuit::before {
+      transition: none;
+      opacity: 1;
+    }
+
+    &__beat {
+      transition: none;
+    }
   }
 }

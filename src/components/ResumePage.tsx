@@ -9,7 +9,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: 'Product Design Engineer · Systems · Front-End',
+  title: 'Product Design Engineer · Design Systems · Agentic Workflows',
   email: SITE.email,
   city: 'South Bend',
   region: 'Indiana',
@@ -106,7 +106,7 @@ const ResumePage: React.FC = () => {
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
           <p className="resume-page__tagline">
-            Product Design Engineer · Systems · Front-End
+            Product Design Engineer · Design Systems · Agentic Workflows
           </p>
           <div className="resume-page__contact">
             <span>{CONTACT.city}, {CONTACT.region}</span>

@@ -1,0 +1,1049 @@
+// ============================================
+// Systems in Practice — ecosystem board + the loop
+// Section 03 on the homepage. Eight nodes in three tiers, told with the
+// system's own vernacular rather than a palette: the hub wears the selection
+// frame (ink border + corner handles), the working pair sits on two tint
+// surfaces (orange tint / half-strength steel light over paper), and the five
+// extended surfaces are identical paper-and-hairline cards on purpose —
+// that sameness is what makes them read as equally legitimate.
+// Signal Orange is spent in one place: the Figma ⇄ Codebase wires.
+//
+// Beneath the board, the loop: four beats on identical paper cards, wired
+// 01 → 02 ⇄ 03 → 04 and back to 01 in the board's own steel. Each beat
+// claims nodes on the board; hovering or focusing one lights them and
+// recedes the rest. Nothing active is the resting state — the whole board,
+// lit — and that is what the first paint and the prerender carry.
+//
+// Layout modes are announced to SystemsInPractice.tsx via custom properties:
+//   --sip-layout (board): network (default, ≥1024) · tree (768–1023) · list (<768)
+//   --sip-loop (beats):   row (default, ≥1024) · ring (768–1023) · list (<768)
+// Wire geometry is measured in the component; this file owns everything
+// else — placement, the draw-in, the comet, hover, lit/receded, and reduced
+// motion.
+// ============================================
+
+@import '../variables';
+
+.sip {
+  --sip-wire: #{$color-secondary};
+  --sip-wire-active: #{$color-neutral-dark};
+  --sip-wire-pair: #{$color-primary};
+  --sip-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  background: $color-white;
+  padding: $section-pad-y 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // Editorial left, board right — the reference's split.
+  &__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: $spacing-3xl;
+    row-gap: $spacing-2xl;
+    align-items: start;
+  }
+
+  // ── Editorial ──────────────────────────────────────────────────────────────
+
+  // Stretches to the board's height so the foot mark can sit on the row's
+  // bottom edge. The reserve is only insurance: if the copy ever outgrows
+  // the board, the mark still has room under the CTAs instead of over them.
+  &__intro {
+    position: relative;
+    align-self: stretch;
+    max-width: $container-text-width;
+    padding-bottom: $spacing-4xl + $spacing-xl;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: $color-neutral-dark;
+    margin: $spacing-lg 0 $spacing-lg;
+  }
+
+  // Each sentence is its own line; balance keeps a wrapped sentence from
+  // stranding one word ("…outside the / canvas.").
+  &__title-line {
+    display: block;
+    text-wrap: balance;
+  }
+
+  &__body {
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+    margin: 0 0 $spacing-lg;
+
+    code {
+      white-space: nowrap;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-lg $spacing-xl;
+    margin-top: $spacing-xl;
+  }
+
+  // The global .btn resets outline on <button>; a link needs its own ring.
+  &__btn:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 3px;
+  }
+
+  // Text link — same weight as the About read-more, on the text-safe orange.
+  &__link {
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-text;
+    text-decoration: none;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-primary-dark;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+  }
+
+  // The section's second hand mark, at the foot of the column. The approved
+  // reference carries two — one above the file, one under the CTAs — and this
+  // is the one that answers the space under the CTAs at ≥1280, where the
+  // editorial column is shorter than the board. Anchored to the row's bottom
+  // edge rather than flowed under the CTAs: in flow it still left the height
+  // of the board's last row empty beneath it, whereas here it closes the
+  // spread — headline top-left, mark bottom-left, the two marks at opposite
+  // corners as in the reference — and sits beside the surfaces it names.
+  // Quieter than the note above the board on purpose: muted ink, a size
+  // down, and a steel pen-line under the last two words instead of an arrow.
+  // `rotate`, not `transform` — .reveal-fade owns transform, and a
+  // transform set here loses to it.
+  &__mark {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: fit-content;
+    margin: 0;
+    rotate: -3deg;
+    transform-origin: 0 50%;
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 1.1;
+    color: $color-neutral-muted;
+    pointer-events: none;
+  }
+
+  &__mark-line {
+    display: block;
+  }
+
+  &__mark-line--drawn {
+    position: relative;
+    display: inline-block;
+  }
+
+  // The same draw as the thesis underline on a case study — one shallow
+  // cubic, stretched to the words it sits under — re-toned to the section's
+  // linework steel and thinned to a pen line.
+  &__mark-underline {
+    position: absolute;
+    left: 0;
+    bottom: -0.3em;
+    width: 100%;
+    height: 8px;
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: $color-secondary;
+      stroke-width: 2;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+  }
+
+  // ── Stage: annotation + board ──────────────────────────────────────────────
+
+  &__stage {
+    position: relative;
+  }
+
+  // The Caveat note in the margin above the file. Tilted with `rotate` rather
+  // than `transform`: .reveal-fade owns transform in every state and outranks
+  // this class, so a transform here never rendered.
+  &__note {
+    position: absolute;
+    top: 0;
+    left: 9%;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+    max-width: 250px;
+    margin: 0;
+    rotate: -2deg;
+    font-family: $font-family-hand;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.1;
+    color: $color-primary-dark;
+    pointer-events: none;
+  }
+
+  &__note-arrow {
+    flex-shrink: 0;
+    width: 26px;
+    height: 32px;
+    margin-top: 12px;
+    color: $color-secondary;
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  // ── Board ──────────────────────────────────────────────────────────────────
+  // Nine tracks: six half-columns with three gutters between the node slots.
+  // Row 2 (Docs · Shared System · Prompts) sits on the half-columns; row 1's
+  // pair straddles them, so Figma and Codebase land a half-step in from the
+  // edges — the reference's stagger — and each overlaps the hub below it,
+  // which is what lets those two wires run straight down.
+
+  &__board {
+    --sip-layout: network;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 36px 1fr 56px 1fr 36px 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 0;
+    row-gap: 64px;
+    padding: 64px 0 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__cell {
+    display: flex;
+    min-width: 0;
+    position: relative;
+  }
+
+  &__cell--figma      { grid-row: 1; grid-column: 2 / 5; }
+  &__cell--code       { grid-row: 1; grid-column: 6 / 9; }
+  &__cell--docs       { grid-row: 2; grid-column: 1 / 3; }
+  &__cell--system     { grid-row: 2; grid-column: 4 / 7; }
+  &__cell--prompts    { grid-row: 2; grid-column: 8 / 10; }
+  &__cell--qa         { grid-row: 3; grid-column: 1 / 3; }
+  &__cell--people     { grid-row: 3; grid-column: 4 / 7; }
+  &__cell--governance { grid-row: 3; grid-column: 8 / 10; }
+
+  // List-mode-only ⇄ between the pair; hidden wherever wires exist.
+  &__pair-link {
+    display: none;
+  }
+
+  // ── Node card ──────────────────────────────────────────────────────────────
+  // Single-class selectors so the card renders the same on the design-system
+  // page as it does on the board.
+
+  &__node {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: $spacing-lg;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base,
+      opacity $transition-base;
+  }
+
+  &__cell:hover &__node,
+  &__node:hover {
+    border-color: rgba($color-neutral-dark, 0.28);
+    box-shadow: $shadow-sm;
+  }
+
+  // Working pair — the two tint surfaces the tokens already carry.
+  &__node--figma {
+    background: $color-primary-light;
+    border-color: rgba($color-primary, 0.35);
+  }
+
+  &__cell:hover &__node--figma,
+  &__node--figma:hover {
+    border-color: rgba($color-primary, 0.6);
+  }
+
+  // Codebase has to hold its half of the thesis. Cool paper is only a few
+  // points off the page, so at a glance Figma read as the privileged one and
+  // Codebase fell in with the five paper surfaces. Half-strength Steel Light
+  // over paper sits at the same remove from white as the orange tint, and
+  // keeps the mono meta at 4.61:1 — the solid token would drop it to 3.89:1,
+  // under AA — and the border steps up to the steel the hover already used.
+  // The alpha composites over the section's paper; on cool paper the same
+  // fill would land at 4.40:1, so this node stays on paper grounds.
+  &__node--code {
+    background: rgba($color-secondary-light, 0.5);
+    border-color: rgba($color-secondary, 0.55);
+  }
+
+  &__cell:hover &__node--code,
+  &__node--code:hover {
+    border-color: $color-secondary;
+  }
+
+  // The hub — paper, ink border, and the selection frame's corner handles.
+  // Weight comes from the vernacular, not a hue.
+  &__node--center {
+    @include selection-frame($card-border-radius);
+    border-color: $color-neutral-dark;
+    text-align: center;
+    align-items: center;
+    padding: $spacing-xl $spacing-lg;
+  }
+
+  &__cell:hover &__node--center,
+  &__node--center:hover,
+  &__node--center:focus-within {
+    border-color: $color-neutral-dark;
+  }
+
+  &__stage.is-visible &__node--center {
+    @include selection-frame-revealed;
+  }
+
+  &__node-icon {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    color: $color-neutral-dark;
+    margin-bottom: 2px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__node--center &__node-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  &__node-title {
+    font-family: $font-family-heading;
+    font-size: 17px;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: $color-neutral-dark;
+    margin: 0;
+  }
+
+  &__node--center &__node-title {
+    font-size: 19px;
+  }
+
+  // Mono system marker. Steel Dark clears AA on paper and on both tints.
+  &__node-meta {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: $color-secondary-dark;
+    margin: 0;
+  }
+
+  &__node-body {
+    font-family: $font-family-primary;
+    font-size: 13px;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+    margin: 2px 0 0;
+  }
+
+  &__node-line {
+    display: block;
+  }
+
+  // Relationship in words. Screen-reader only wherever the wires are drawn;
+  // visible in list mode, where they are the only connective tissue.
+  &__node-rel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  // ── Lit and receded: the loop's claim on the board ─────────────────────────
+  // While a beat is active the section carries --beat-active; nodes the beat
+  // claims carry .is-lit and take the selected state a hover already gives
+  // them, and everything else recedes. Opacity, not colour: the tiers keep
+  // their own surfaces, and a receded node is still the same object, only
+  // further away. The pair wire is the one wire a beat claims (02), so it is
+  // the only link that lights rather than recedes.
+
+  &--beat-active &__node:not(.is-lit) {
+    opacity: 0.3;
+  }
+
+  // Scoped to the board's SVG: .sip__link is also the editorial column's
+  // text link, and the loop's own connectors stay at full strength.
+  &--beat-active &__board &__link:not(.is-lit) {
+    opacity: 0.25;
+  }
+
+  &__node.is-lit {
+    border-color: rgba($color-neutral-dark, 0.28);
+    box-shadow: $shadow-sm;
+  }
+
+  &__node--figma.is-lit {
+    border-color: rgba($color-primary, 0.6);
+  }
+
+  &__node--code.is-lit {
+    border-color: $color-secondary;
+  }
+
+  // The hub's lit state is its selection: ink border held, handles to orange —
+  // the same thing the frame does under a hover.
+  &__node--center.is-lit {
+    border-color: $color-neutral-dark;
+    --frame-handle: #{$color-primary};
+  }
+
+  // ── Wires ──────────────────────────────────────────────────────────────────
+
+  &__wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  &__wires &__link {
+    transition: opacity $transition-base;
+  }
+
+  &__wire,
+  &__head {
+    fill: none;
+    stroke: var(--sip-wire);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    // Undrawn until the stage reveals; pathLength=1 normalises the dash math.
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 620ms var(--sip-ease-out) var(--reveal-delay, 0ms),
+      stroke $transition-fast,
+      stroke-width $transition-fast;
+  }
+
+  // Heads finish just after the shaft lands, like the sketched nav arrows.
+  &__head {
+    transition:
+      stroke-dashoffset 240ms ease calc(var(--reveal-delay, 0ms) + 500ms),
+      stroke $transition-fast,
+      stroke-width $transition-fast;
+  }
+
+  &__stage.is-visible &__wire,
+  &__stage.is-visible &__head,
+  &__loop.is-visible &__wire,
+  &__loop.is-visible &__head {
+    stroke-dashoffset: 0;
+  }
+
+  &__link--pair &__wire,
+  &__link--pair &__head {
+    stroke: var(--sip-wire-pair);
+    stroke-width: 1.6;
+  }
+
+  // Hovering a node picks out its wires — the state that clarifies. A beat
+  // does the same for the loop's connectors either side of it.
+  &__link.is-active &__wire,
+  &__link.is-active &__head {
+    stroke: var(--sip-wire-active);
+    stroke-width: 1.8;
+  }
+
+  &__link--pair.is-active &__wire,
+  &__link--pair.is-active &__head {
+    stroke: var(--sip-wire-pair);
+    stroke-width: 2.2;
+  }
+
+  // The return rail is the loop's longest stroke; it draws slower, and its
+  // head lands last.
+  &__link--return &__wire {
+    transition:
+      stroke-dashoffset 900ms var(--sip-ease-out) var(--reveal-delay, 0ms),
+      stroke $transition-fast,
+      stroke-width $transition-fast;
+  }
+
+  &__link--return &__head {
+    transition:
+      stroke-dashoffset 240ms ease calc(var(--reveal-delay, 0ms) + 780ms),
+      stroke $transition-fast,
+      stroke-width $transition-fast;
+  }
+
+  // One comet per direction, once, after the pair's shafts have drawn.
+  // dasharray 0.18 + gap 1.2 with offset 0.2 parks the dash just before the
+  // path start; sliding the offset to -1.2 carries it off the far end.
+  &__comet {
+    fill: none;
+    stroke: var(--sip-wire-pair);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 0.18 1.2;
+    stroke-dashoffset: 0.2;
+    opacity: 0.9;
+  }
+
+  &__stage.is-visible &__comet {
+    animation: sip-comet 900ms cubic-bezier(0.4, 0, 0.2, 1) 1 forwards;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 720ms);
+  }
+
+  // ── The loop ───────────────────────────────────────────────────────────────
+  // Four identical paper cards under the board — the surface tier's own
+  // treatment, so the beats read as peers of the nodes they claim and never
+  // compete with the hub. The connectors between them are the board's wires
+  // (steel, 1.4, open tick heads); the return runs under the row on a rail
+  // and carries a mono label, the way a wire on a bench carries a tag.
+
+  &__loop {
+    margin-top: $spacing-3xl;
+  }
+
+  // The seam: hairline with a mono label seated on it — the section rule's
+  // quieter cousin, without the handles, so the rule above keeps its rank.
+  &__seam {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm $spacing-lg;
+    margin: 0 0 $spacing-xl;
+  }
+
+  &__seam-label {
+    flex-shrink: 0;
+    margin: 0;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-regular;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: $color-neutral-muted;
+  }
+
+  &__seam-line {
+    flex: 1 1 120px;
+    height: 1px;
+    background: $color-neutral-light;
+  }
+
+  &__seam-note {
+    flex: 0 1 auto;
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+    color: $color-neutral-muted;
+  }
+
+  // The rail band under the row is reserved here; the label sits in it and
+  // the rail is measured from the label, so the two agree by construction.
+  &__track {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  &__beats {
+    --sip-loop: row;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: $spacing-3xl;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__beat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: $spacing-lg;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    cursor: default;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+
+    // Hover or focus: the same selected state a node takes.
+    &.is-active {
+      border-color: rgba($color-neutral-dark, 0.28);
+      box-shadow: $shadow-sm;
+    }
+  }
+
+  // List-mode-only connector from the beat above; hidden wherever wires exist.
+  &__beat-link {
+    display: none;
+  }
+
+  // The index, in the site's status-chip brackets. Orange only while the beat
+  // is the active one — a state, on the text-safe orange.
+  &__beat-num {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.1em;
+    line-height: 1.5;
+    color: $color-neutral-muted;
+    transition: color $transition-fast;
+  }
+
+  &__beat.is-active &__beat-num {
+    color: $color-primary-dark;
+  }
+
+  &__beat-title {
+    font-family: $font-family-heading;
+    font-size: 17px;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: $color-neutral-dark;
+    margin: 0;
+  }
+
+  // Ryan's own sub-terms, as the node meta: mono, Steel Dark, uppercase.
+  &__beat-meta {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: $color-secondary-dark;
+    margin: 0;
+  }
+
+  // The claim, in words. The nodes it names are set a weight up so the
+  // mapping can be read off the card without touching anything.
+  &__beat-body {
+    font-family: $font-family-primary;
+    font-size: 13px;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+    margin: 2px 0 0;
+
+    strong {
+      font-weight: $font-weight-semibold;
+      color: $color-neutral-dark;
+    }
+  }
+
+  // The rail label's slot: full width, centred, on the band's centre line.
+  // Not itself revealed — the label inside it is — so its box is where the
+  // label ends up, and the rail can be measured from it before the reveal.
+  &__return-slot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  // Paper behind the label knocks the rail out beneath it.
+  &__return {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0 10px;
+    background: $color-white;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 16px;
+    color: $color-secondary-dark;
+  }
+
+  &__return-glyph {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    color: $color-secondary;
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+}
+
+@keyframes sip-comet {
+  to {
+    stroke-dashoffset: -1.2;
+  }
+}
+
+// ── Stacked network (1024–1279): editorial above, board full width ────────────
+
+@media (max-width: #{$breakpoint-xl - 1}) {
+  .sip {
+    &__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    // Stacked, the foot mark would sit a few lines above the board's own note
+    // as a second handwritten line; the space it answers only exists in the
+    // two-column layout. Its reserve goes with it.
+    &__intro {
+      padding-bottom: 0;
+    }
+
+    &__mark {
+      display: none;
+    }
+
+    &__note {
+      left: 6%;
+    }
+  }
+}
+
+// ── Tree (768–1023): two columns, a trunk down from the hub ───────────────────
+// Row 1 keeps the pair side by side; the hub spans both columns; the five
+// surfaces hang off one vertical trunk through the centre gutter.
+// The loop becomes a ring: 01 top-left, 02 top-right, 03 bottom-right, 04
+// bottom-left, so the four connectors are the four sides and the return is
+// simply the left edge, 04 up into 01. DOM order stays 01–04; only the grid
+// placement turns the corner.
+
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .sip {
+    &__board {
+      --sip-layout: tree;
+      grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
+      grid-template-rows: repeat(5, auto);
+      row-gap: 56px;
+      padding-top: 72px;
+    }
+
+    &__cell--figma      { grid-row: 1; grid-column: 1; }
+    &__cell--code       { grid-row: 1; grid-column: 3; }
+    &__cell--system     { grid-row: 2; grid-column: 1 / 4; justify-self: center; width: min(100%, 440px); }
+    &__cell--docs       { grid-row: 3; grid-column: 1; }
+    &__cell--prompts    { grid-row: 3; grid-column: 3; }
+    &__cell--qa         { grid-row: 4; grid-column: 1; }
+    &__cell--people     { grid-row: 4; grid-column: 3; }
+    &__cell--governance { grid-row: 5; grid-column: 1; }
+
+    &__note {
+      left: 0;
+    }
+
+    &__beats {
+      --sip-loop: ring;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 56px;
+      row-gap: 56px;
+    }
+
+    &__beat--3 { grid-row: 2; grid-column: 2; }
+    &__beat--4 { grid-row: 2; grid-column: 1; }
+
+    // No rail in the ring; the return is a side of it.
+    &__track {
+      padding-bottom: 0;
+    }
+
+    &__return-slot {
+      display: none;
+    }
+  }
+}
+
+// ── List (<768): the ordered narrative, no graph ──────────────────────────────
+// Reading order is the DOM order — Shared System, the pair, then each surface —
+// and each card carries its relationships in words. The loop stacks the same
+// way: a glyph between beats where the wire was, and the return as a line of
+// text under 04.
+
+@media (max-width: #{$breakpoint-md - 1}) {
+  .sip {
+    padding: $spacing-3xl 0;
+
+    &__title {
+      font-size: $font-size-h3;
+    }
+
+    &__board {
+      --sip-layout: list;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      row-gap: $spacing-md;
+      padding-top: 0;
+    }
+
+    &__cell--figma,
+    &__cell--code,
+    &__cell--system,
+    &__cell--docs,
+    &__cell--prompts,
+    &__cell--qa,
+    &__cell--people,
+    &__cell--governance {
+      grid-row: auto;
+      grid-column: auto;
+      width: auto;
+      justify-self: stretch;
+    }
+
+    // Room for the ⇄ between Figma and Codebase.
+    &__cell--code {
+      margin-top: 28px;
+    }
+
+    &__pair-link {
+      display: block;
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      width: 16px;
+      height: 32px;
+      transform: translateX(-50%);
+      color: $color-primary;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    &__wires {
+      display: none;
+    }
+
+    &__node--center {
+      text-align: left;
+      align-items: flex-start;
+      padding: $spacing-lg;
+    }
+
+    &__node-line {
+      display: inline;
+
+      & + &::before {
+        content: ' ';
+      }
+    }
+
+    &__node-rel {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: $spacing-sm 0 0;
+      padding-top: $spacing-sm;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+      border-top: 1px solid $color-neutral-light;
+      font-family: $font-family-mono;
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      color: $color-secondary-dark;
+    }
+
+    // The margin note becomes an inline aside above the list.
+    &__note {
+      position: static;
+      max-width: none;
+      margin: 0 0 $spacing-lg;
+      rotate: none;
+      font-size: 21px;
+      pointer-events: auto;
+    }
+
+    &__note-arrow {
+      display: none;
+    }
+
+    &__seam-note {
+      flex-basis: 100%;
+    }
+
+    &__beats {
+      --sip-loop: list;
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: $spacing-md;
+    }
+
+    &__beat--3,
+    &__beat--4 {
+      grid-row: auto;
+      grid-column: auto;
+    }
+
+    // Room for the glyph between beats.
+    &__beat--2,
+    &__beat--3,
+    &__beat--4 {
+      margin-top: 28px;
+    }
+
+    &__beat-link {
+      display: block;
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      width: 16px;
+      height: 32px;
+      transform: translateX(-50%);
+      color: $color-secondary;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    &__track {
+      padding-bottom: 0;
+    }
+
+    // The return, in flow: the hook glyph and the words, under 04. Shown
+    // again here — the ring above hides it, and this range sits inside it.
+    &__return-slot {
+      display: flex;
+      position: static;
+      justify-content: flex-start;
+      margin-top: $spacing-lg;
+    }
+
+    &__return {
+      padding: 0;
+      background: none;
+    }
+  }
+}
+
+// ── Touch: no hover to pick out wires; nothing is hidden behind it ────────────
+
+@media (hover: none) {
+  .sip {
+    &__cell:hover &__node,
+    &__node:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+// ── Reduced motion: everything in its final state, no draw-in, no comet ───────
+// Lit and receded still happen — instantly, rather than faded.
+
+@media (prefers-reduced-motion: reduce) {
+  .sip {
+    &__wire,
+    &__head {
+      transition: stroke $transition-fast, stroke-width $transition-fast;
+      stroke-dashoffset: 0;
+    }
+
+    &__comet {
+      display: none;
+    }
+
+    &__node,
+    &__wires &__link,
+    &__beat,
+    &__beat-num {
+      transition: none;
+    }
+  }
+}

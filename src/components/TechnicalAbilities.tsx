@@ -26,62 +26,67 @@ const abilities: { category: string; skills: Skill[] }[] = [
     category: 'Design & Prototyping',
     skills: [
       { name: 'Figma', proficiency: true },
+      { name: 'Figma Make' },
       { name: 'Adobe Illustrator', proficiency: true },
       { name: 'Adobe Photoshop' },
       { name: 'Adobe InDesign' },
-      { name: 'Token Studio' },
-      { name: 'FigmaMake' },
-    ],
-  },
-  {
-    category: 'Front-End Development',
-    skills: [
-      { name: 'SCSS/SASS & BEM', proficiency: true },
-      { name: 'AEM', proficiency: true },
-      { name: 'HTML5 & CSS3' },
-      { name: 'Responsive Design' },
-      { name: 'WordPress' },
-      { name: 'Visual Studio Code' },
-      { name: 'Git' },
     ],
   },
   {
     category: 'Design Systems',
     skills: [
+      { name: '0\u21921 System Architecture' },
       { name: 'Atomic Design', proficiency: true },
       { name: 'Component Libraries' },
       { name: 'Design Tokens' },
       { name: 'Figma Variables & Styles' },
       { name: 'Token Studio' },
       { name: 'Storybook' },
-      { name: 'Documentation & Governance' },
+      { name: 'Component Documentation' },
+      { name: 'Governance & Adoption' },
+      { name: 'Design QA' },
     ],
   },
   {
-    category: 'UX & Research',
+    category: 'Front-End & Product Build',
+    skills: [
+      { name: 'HTML5 / CSS3' },
+      { name: 'SCSS / SASS / BEM', proficiency: true },
+      { name: 'React' },
+      { name: 'TypeScript' },
+      { name: 'React Native' },
+      { name: 'Expo' },
+      { name: 'Vite' },
+      { name: 'Git / GitHub' },
+      { name: 'Visual Studio Code' },
+      { name: 'AEM', proficiency: true },
+      { name: 'WordPress' },
+    ],
+  },
+  {
+    category: 'Agentic Systems',
+    skills: [
+      { name: 'Claude / Claude Code' },
+      { name: 'ChatGPT' },
+      { name: 'MCP workflows' },
+      { name: 'Reusable agent skills' },
+      { name: 'Design-system auditing' },
+      { name: 'System-aware QA' },
+      { name: 'Human review gates' },
+      { name: 'Figma plugins / internal tooling' },
+    ],
+  },
+  {
+    category: 'UX / Accessibility / Measurement',
     skills: [
       { name: 'High-Fidelity Prototyping', proficiency: true },
-      { name: 'Wireframing' },
       { name: 'UX Specs & Annotation' },
       { name: 'A/B Testing' },
       { name: 'Adobe Target' },
-    ],
-  },
-  {
-    category: 'SEO & Accessibility',
-    skills: [
-      { name: 'SEO-Informed Design', proficiency: true },
       { name: 'WCAG Accessibility' },
+      { name: 'SEO-Informed Design', proficiency: true },
       { name: 'Performance Analysis' },
       { name: 'Data-Informed Design' },
-    ],
-  },
-  {
-    category: 'AI-Assisted Workflow',
-    skills: [
-      { name: 'Claude' },
-      { name: 'ChatGPT' },
-      { name: 'FigmaMake' },
     ],
   },
 ];
@@ -93,7 +98,7 @@ const TechnicalAbilities: React.FC = () => {
     <section id="technical" className="technical">
       <div className="technical__container">
         <div className="technical__header">
-          <SectionBadge icon={<CodeIcon />} label="Technical" index="06" />
+          <SectionBadge icon={<CodeIcon />} label="Technical" index="05" />
           <h2 className="technical__title">Tools &amp; Technologies</h2>
           <p className="technical__subtitle">
             Tools I have used to design the system, inspect the build, and stay close to what ships.
