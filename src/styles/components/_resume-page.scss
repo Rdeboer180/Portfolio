@@ -22,6 +22,9 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
   // ==========================================
   // Screen-only nav
   // ==========================================
+  // Same bar as the About page and the hero: 24px/48px padding, 92% paper,
+  // 12px blur, hairline underneath. It was 16px/48px here, and the résumé
+  // nav read 26px shorter than every other page's.
   &__nav {
     position: sticky;
     top: 0;
@@ -29,7 +32,7 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: $spacing-lg $spacing-3xl;
+    padding: $spacing-xl $spacing-3xl;
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -51,54 +54,15 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     gap: $spacing-xl;
   }
 
-  &__print-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-sm;
-    padding: $button-padding-y-sm $button-padding-x-md;
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-white;
-    // 14px white on Signal Orange is 3.91:1 and fails the 4.5:1 AA floor for
-    // normal text. This is the button a recruiter is here to press, so it takes
-    // Orange Deep (5.65:1) at rest and inverts to ink on hover rather than
-    // deepening into a colour it is already using.
-    background: $color-primary-dark;
-    border: none;
-    border-radius: $button-radius;
-    cursor: pointer;
-    transition: background $transition-fast;
-
-    &:hover {
-      background: $color-neutral-dark;
-    }
-
-    svg {
-      flex-shrink: 0;
-    }
-  }
-
-  // Secondary action — outline button that sits beside the primary "Save as PDF"
+  // "Save as PDF" and "Save contact" are the site's `.btn--primary` and
+  // `.btn--secondary` at `--md` (the footer runs the same pair). That is
+  // where the face (Hubot Sans 800), the AA-safe Orange Deep at rest, the
+  // text-warms-and-lifts hover, and the ink inversion for secondary come
+  // from. Before this they were Inter 600 with their own hover, and read as
+  // a third button style the site does not have. Only the icon gap is local.
+  &__print-btn,
   &__vcard-btn {
-    display: inline-flex;
-    align-items: center;
     gap: $spacing-sm;
-    padding: $button-padding-y-sm $button-padding-x-md;
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-neutral-dark;
-    background: transparent;
-    border: 1px solid $color-border-default;
-    border-radius: $button-radius;
-    cursor: pointer;
-    transition: border-color $transition-fast, color $transition-fast;
-
-    &:hover {
-      color: $color-primary-text;
-      border-color: $color-primary;
-    }
 
     svg {
       flex-shrink: 0;
@@ -126,7 +90,8 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     padding: $spacing-3xl;
     background: $color-white;
     border: 1px solid $color-border-default;
-    border-radius: $radius-lg;
+    // The card radius, not the button radius it had (10px is `$button-radius`).
+    border-radius: $card-border-radius;
   }
 
   // ==========================================
@@ -179,8 +144,7 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
   // Spacing around them is real spaces in the markup, not margin, so the
   // DOM text, the PDF text, and the rendered page all agree.
   &__contact-sep,
-  &__job-sep,
-  &__work-dash {
+  &__job-sep {
     color: $color-secondary;
     font-weight: $font-weight-regular;
   }
@@ -272,11 +236,16 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     margin-bottom: $spacing-sm;
   }
 
+  // An h3, so it takes the heading face: the system sets structure in Hubot
+  // Sans and content in Inter, and the inline <strong> labels further down
+  // stay Inter because they are emphasis inside a line, not a heading. This
+  // is the dense-grid card-title size (16px, bold, tight tracking).
   &__job-title {
     flex: 1 1 auto;
-    font-family: $font-family-primary;
+    font-family: $font-family-heading;
     font-size: $font-size-body;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.02em;
     color: $color-neutral-dark;
     line-height: $line-height-body;
     margin: 0;
@@ -429,15 +398,23 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
 // ==========================================
 // Print — one US Letter page
 //
-// Budget: 8.5×11in at 0.55in margins leaves 7.4×9.9in. Body is 10.5pt on a
-// 14pt line, name 24pt. Sizes are in pt because that is the unit the page
-// is measured in; screen sizes above are px because that is the unit the
-// viewport is measured in. Check the page count after any copy change.
+// Budget: 8.5×11in at 0.5in margins leaves 7.5×10in. The lede is 10.5pt on
+// 13.5pt, the lists 10pt on 13pt (the same lede-over-list step the screen
+// has), the name 24pt. Sizes are in pt because that is the unit the page is
+// measured in; screen sizes above are px because that is the unit the
+// viewport is measured in.
+//
+// The page is deliberately not full at 100%. A print dialog set to 110%
+// shrinks the box to 6.8×9.1in and re-wraps every line, and the document
+// has to stay one page there too; anything fuller than ~85% at 100% spills
+// at 110%. Measured 2026-09-08: 83% at 100%, 95% at 110%, one page in
+// Chromium at Letter and A4, and under the box in Firefox and WebKit.
+// Check the page count after any copy change.
 // ==========================================
 @media print {
   @page {
     size: letter;
-    margin: 0.55in;
+    margin: 0.5in;
   }
 
   html,
@@ -445,6 +422,8 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     background: $color-white !important;
     margin: 0;
     padding: 0;
+    // _base.scss gives body min-height: 100vh; on paper that is a page box.
+    min-height: 0;
   }
 
   .resume-page__nav {
@@ -488,21 +467,32 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
       line-height: 13.5pt;
       gap: 0 5pt;
       margin-top: 3pt;
+      // The phone breakpoint must not fire on paper. Chromium evaluates print
+      // media queries against the print dialog's margins before @page replaces
+      // them: a 1in dialog margin makes the width 6.5in, under 640px, and the
+      // screen rules below stacked the contact line inside a 7.5in box. Same
+      // guard on the separator and the job title.
+      flex-direction: row;
+      align-items: baseline;
+    }
+
+    &__contact-sep {
+      display: inline;
     }
 
     &__rule {
       height: 2pt;
       border-radius: 1pt;
-      margin: 8pt 0 9pt;
+      margin: 7pt 0 8pt;
     }
 
     &__summary {
       font-size: 10.5pt;
-      line-height: 14pt;
+      line-height: 13.5pt;
     }
 
     &__section {
-      margin-top: 12pt;
+      margin-top: 10pt;
       break-inside: avoid;
     }
 
@@ -510,23 +500,23 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
       font-size: 9pt;
       line-height: 12pt;
       padding-bottom: 3pt;
-      margin-bottom: 6pt;
+      margin-bottom: 5pt;
     }
 
     &__capabilities li,
     &__job-list li,
     &__work-list li,
     &__extra-list li {
-      font-size: 10.5pt;
-      line-height: 14pt;
+      font-size: 10pt;
+      line-height: 13pt;
     }
 
     &__capabilities li + li {
-      margin-top: 1.5pt;
+      margin-top: 1pt;
     }
 
     &__job {
-      margin-bottom: 9pt;
+      margin-bottom: 8pt;
       break-inside: avoid;
     }
 
@@ -537,14 +527,16 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
 
     &__job-title {
       font-size: 11pt;
-      line-height: 14pt;
+      line-height: 13pt;
+      // Title and date share the line on paper (see the breakpoint note above).
+      flex-basis: auto;
     }
 
     &__job-date,
     &__job-role,
     &__extra-date {
       font-size: 10pt;
-      line-height: 14pt;
+      line-height: 13pt;
     }
 
     &__job-role {
@@ -561,7 +553,7 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
 
     &__work-list li + li,
     &__extra-list li + li {
-      margin-top: 3.5pt;
+      margin-top: 3pt;
     }
 
     // Links stay links: real anchors, the text-safe accent so a reader can

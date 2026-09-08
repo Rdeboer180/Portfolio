@@ -10,10 +10,17 @@ import { usePageMeta } from '../hooks/usePageMeta';
 // `title` is the positioning string, not the job title. The job title is
 // "Senior Web Designer" and lives on the Tire Rack entry below, where it
 // belongs; the positioning string is what the header and the vCard carry.
+//
+// The site joins these three with a middle dot. The résumé joins them with
+// the pipe it uses on every other line, and keeps the vCard TITLE in ASCII:
+// desktop Outlook has imported .vcf files as Windows-1252 and would show
+// the dot as "Â·" on a recruiter's contact card.
+const TITLE_PARTS = ['Product Design Engineer', 'Design Systems', 'Agentic Workflows'];
+
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: 'Product Design Engineer | Design Systems | Agentic Workflows',
+  title: TITLE_PARTS.join(' | '),
   email: SITE.email,
   city: 'South Bend',
   region: 'Indiana',
@@ -102,7 +109,9 @@ const ResumePage: React.FC = () => {
       <nav className="resume-page__nav" aria-label="Primary">
         <Link to={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</Link>
         <div className="resume-page__nav-actions">
-          <button className="resume-page__vcard-btn" onClick={handleDownloadVCard}>
+          {/* The site's own button pair (footer uses the same two at --md);
+              the résumé classes only add the icon gap. */}
+          <button className="btn btn--secondary btn--md resume-page__vcard-btn" onClick={handleDownloadVCard}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -111,7 +120,7 @@ const ResumePage: React.FC = () => {
             </svg>
             Save contact
           </button>
-          <button className="resume-page__print-btn" onClick={handleExportPDF}>
+          <button className="btn btn--primary btn--md resume-page__print-btn" onClick={handleExportPDF}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
               <polyline points="6 9 6 2 18 2 18 9" />
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
@@ -119,7 +128,7 @@ const ResumePage: React.FC = () => {
             </svg>
             Save as PDF
           </button>
-          <Link to={getHomeHref()} className="resume-page__nav-back">Back to Portfolio</Link>
+          <Link to={getHomeHref()} className="resume-page__nav-back">&larr; Back to Portfolio</Link>
         </div>
       </nav>
 
@@ -129,7 +138,16 @@ const ResumePage: React.FC = () => {
         {/* Header */}
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
-          <p className="resume-page__tagline">{CONTACT.title}</p>
+          {/* Same pipe-as-furniture treatment as the contact line below, so
+              the separators read as steel on screen and as " | " in the text. */}
+          <p className="resume-page__tagline">
+            {TITLE_PARTS.map((part, i) => (
+              <React.Fragment key={part}>
+                {i > 0 && <>{' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}</>}
+                {part}
+              </React.Fragment>
+            ))}
+          </p>
           {/* Full URLs shown as text so every link is also readable on paper.
               Each separator travels with the item after it, so if the line
               ever wraps it never leaves a pipe hanging at the end of a line. */}
@@ -152,13 +170,17 @@ const ResumePage: React.FC = () => {
 
         <div className="resume-page__rule" role="presentation" />
 
-        {/* Summary */}
+        {/* Summary. The promotion was a bullet until it read as a standalone
+            boast, and it is the one line on this page a recruiter cannot
+            corroborate elsewhere on the site. As a subordinate clause it dates
+            the scope instead of asking to be admired. */}
         <p className="resume-page__summary">
-          Product design engineer with 12+ years at Tire Rack and 16+ years across visual design,
-          responsive web, design systems, and front-end implementation. I build the systems
-          connecting Figma, production code, documentation, and internal tooling so designers and
-          engineers can move faster without the work drifting. AI speeds up exploration; I stay
-          responsible for the decisions and details behind what ships.
+          Product design engineer with 12+ years at Tire Rack and 16+ years across visual design
+          and responsive web. Since 2021, when I was one of two designers promoted to Senior, my
+          scope has spanned product, UX, design systems, and front-end implementation. I build the
+          systems connecting Figma, production code, documentation, and internal tooling so
+          designers and engineers move faster without the work drifting. AI accelerates
+          exploration. I remain responsible for the decisions and details behind what ships.
         </p>
 
         {/* Core capabilities */}
@@ -190,7 +212,6 @@ const ResumePage: React.FC = () => {
               <p className="resume-page__job-role">Product design, design systems, and front-end collaboration</p>
             </div>
             <ul className="resume-page__job-list">
-              <li>Selected as one of two designers promoted to Senior in 2021, with scope across product, UX, design systems, and front-end collaboration.</li>
               <li>Turn product direction into responsive systems, component contracts, production styles, and implementation QA across React and AEM.</li>
               <li>Redesigned high-traffic category experiences; in the first month, top pages recorded up to a 50% conversion lift and category entry grew up to 400%, both measured against the month before launch.</li>
             </ul>
@@ -215,31 +236,27 @@ const ResumePage: React.FC = () => {
           <ul className="resume-page__work-list">
             {SELECTED_WORK.map((w) => (
               <li key={w.slug} className="resume-page__work-item">
-                <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>
-                {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
-                {w.note}
+                <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>: {w.note}
               </li>
             ))}
           </ul>
         </section>
 
-        {/* Additional experience and education */}
+        {/* Additional experience and education. Label-then-gloss takes the
+            colon the rest of the site uses; the site was swept of em dashes. */}
         <section className="resume-page__section">
           <h2 className="resume-page__section-title">Additional experience and education</h2>
           <ul className="resume-page__extra-list">
             <li>
               <strong>Independent design work</strong>
               {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
-              <span className="resume-page__extra-date">2009 to 2024</span>
-              {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
+              <span className="resume-page__extra-date">2009 to 2024</span>:{' '}
               Identity and responsive web work for small businesses and university communications.
             </li>
             <li>
-              <strong>BFA, Graphic Design</strong>
+              <strong>BFA, Graphic Design</strong>, Minor in Digital Media
               {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
               <span className="resume-page__extra-date">Kendall College of Art and Design</span>
-              {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
-              Minor in Digital Media
             </li>
           </ul>
         </section>

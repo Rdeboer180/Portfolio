@@ -91,7 +91,10 @@
     transition: color $transition-fast;
 
     &:hover {
-      color: $color-primary;
+      // 14px text, so the accent has to be the text-safe one: #f03d01 is
+      // 3.91:1 and fails AA, #c23001 is 5.65:1. The focus ring below is a
+      // non-text graphic and keeps Signal Orange at the 3:1 floor.
+      color: $color-primary-text;
     }
 
     &:focus-visible {
