@@ -155,7 +155,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-31',
     title: 'I cannot learn a tool from a tutorial. I have to build something I will have to maintain.',
-    dek: 'Late 2025 I was using LLMs as a better search box. The path from there to shipping internal tooling at work ran through one thing: picking a real product and being stuck with it.',
+    dek: 'Late 2025 I was using LLMs as a better search box. The path to shipping internal tooling ran through one thing: picking a real product and being stuck with it.',
     body: (
       <>
         <p>
@@ -246,7 +246,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-31',
     title: 'The brief came second: two projects where I was already the audience',
-    dek: 'A Type 1 diabetes practice and an NFL analyst, both in progress. In each one the work started from something I was already obsessed with, and in each one what I handed over was a tool rather than a file.',
+    dek: 'A Type 1 diabetes practice and an NFL analyst, both in progress. Each started from something I was already obsessed with, and each ended in a tool, not a file.',
     body: (
       <>
         <p>

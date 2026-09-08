@@ -170,10 +170,11 @@ export const processBeats: ProcessBeat[] = [
     title: 'Define the rules',
     meta: 'intent · constraints · foundations',
     body:
-      'Before anything gets drawn I want to know which decision is stuck, what the product has to ' +
-      'survive, and what already exists to build on: tokens, patterns, and the rules people and ' +
-      'agents read. A polished answer to the wrong question is still wrong.',
-    cost: 'Every later beat argues about scope instead of the work.',
+      'Before anything gets drawn I want to know which decision is stuck and what the product has ' +
+      'to survive after launch. Then I take stock of what is already there: the tokens and ' +
+      'patterns, and the rules written down for people and agents alike. A polished answer to the ' +
+      'wrong question is still wrong.',
+    cost: 'I spent six weeks on studio names before I asked which question a name had to answer.',
     evidence: { label: 'The design system this site runs on, live', to: '/design-system' },
     relation: 'Leads to 02.',
   },
@@ -182,10 +183,11 @@ export const processBeats: ProcessBeat[] = [
     title: 'Explore across surfaces',
     meta: 'Figma · prototypes · code',
     body:
-      'Figma or working code, whichever answers fastest. High-fidelity prototypes are cheap enough ' +
-      'now that the first thing a stakeholder sees often runs. Both surfaces are allowed to change ' +
-      'the system, and neither owns it.',
-    cost: 'Stay on one surface and the file keeps hiding what the browser would have shown.',
+      'PlayDraft has a red line. No screen gets built without a reference on the Figma canvas ' +
+      'first. That same canvas holds the observations from testing the running app. Prototypes ' +
+      'are cheap enough now that the first thing a stakeholder sees often runs. Either surface is ' +
+      'allowed to change the system.',
+    cost: 'Stay in the file and the screen gets built twice, the second time after someone approved the first.',
     evidence: {
       label: 'PlayDraft: Figma to React Native to TestFlight in twelve weeks',
       to: '/work/playdraft',
@@ -197,10 +199,10 @@ export const processBeats: ProcessBeat[] = [
     title: 'Learn from what becomes real',
     meta: 'QA · edge cases · accessibility · production',
     body:
-      'The browser exposes what the frame hid: responsive behavior, naming, the state nobody drew, ' +
-      'the orange that fails contrast at 14px. I stay through QA and past launch, and I keep the ' +
+      'The browser exposes what the frame hid: responsive behavior, the state nobody drew, the ' +
+      'orange that fails contrast at 14px. I stay through QA and past launch, and I keep the ' +
       'claim as narrow as the evidence.',
-    cost: 'The system learns nothing, and the next version repeats the miss.',
+    cost: 'PlayDraft\u2019s competitive clock is thirty seconds. The notification that shipped told players they had two minutes.',
     evidence: { label: 'Eight times my first idea was wrong', to: '/notes/eight-wrong-first-drafts' },
     relation: 'Two-way with 02. Leads to 04.',
   },
@@ -209,10 +211,10 @@ export const processBeats: ProcessBeat[] = [
     title: 'Feed it back into the system',
     meta: 'components · documentation · governance · agent-readable guidance',
     body:
-      'What production taught goes back where the next person will find it: the component, the ' +
-      'doc, the governance rule, the skill an agent reads before it contributes. The system has ' +
-      'done its job when the team makes the next good decision without me in the room.',
-    cost: 'The lesson lives in one head, mine, which is the failure a system exists to prevent.',
+      'An agent kept reaching for purple gradients. Better prompting per task did not fix it. ' +
+      'Writing the judgment down once, as a skill the agent loads before any visual work, did. ' +
+      'The system has done its job when the team makes the next good decision without me in the room.',
+    cost: 'Someone rebuilds the same component, and the product ships both versions.',
     evidence: { label: 'A design-taste system an agent can follow', to: '/notes/ryan-design-taste-skill' },
     relation: 'Returns to 01. The loop has no finish line.',
   },

@@ -11,16 +11,17 @@ import { usePageMeta } from '../hooks/usePageMeta';
 // "Senior Web Designer" and lives on the Tire Rack entry below, where it
 // belongs; the positioning string is what the header and the vCard carry.
 //
-// The site joins these three with a middle dot. The résumé joins them with
-// the pipe it uses on every other line, and keeps the vCard TITLE in ASCII:
-// desktop Outlook has imported .vcf files as Windows-1252 and would show
-// the dot as "Â·" on a recruiter's contact card.
+// The site joins these three with a middle dot. The résumé joins them with a
+// hyphen, per Ryan, which also keeps the vCard TITLE in ASCII: desktop Outlook
+// has imported .vcf files as Windows-1252 and would render the dot as "Â·" on
+// a recruiter's contact card. The pipe stays as furniture on the contact and
+// job lines, so the title is visibly the title.
 const TITLE_PARTS = ['Product Design Engineer', 'Design Systems', 'Agentic Workflows'];
 
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: TITLE_PARTS.join(' | '),
+  title: TITLE_PARTS.join(' - '),
   email: SITE.email,
   city: 'South Bend',
   region: 'Indiana',
@@ -143,7 +144,7 @@ const ResumePage: React.FC = () => {
           <p className="resume-page__tagline">
             {TITLE_PARTS.map((part, i) => (
               <React.Fragment key={part}>
-                {i > 0 && <>{' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}</>}
+                {i > 0 && <>{' '}<span className="resume-page__job-sep" aria-hidden="true">-</span>{' '}</>}
                 {part}
               </React.Fragment>
             ))}
@@ -209,7 +210,6 @@ const ResumePage: React.FC = () => {
                 Tire Rack <span className="resume-page__job-sep" aria-hidden="true">|</span> Senior Web Designer
               </h3>
               <span className="resume-page__job-date">2021 to present</span>
-              <p className="resume-page__job-role">Product design, design systems, and front-end collaboration</p>
             </div>
             <ul className="resume-page__job-list">
               <li>Turn product direction into responsive systems, component contracts, production styles, and implementation QA across React and AEM.</li>
