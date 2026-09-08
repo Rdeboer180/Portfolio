@@ -1,13 +1,23 @@
 // ============================================
-// Resume Page — Branded HTML resume with print
+// Resume Page — one document, on screen and on paper
+//
+// The screen and the print are the same single column in the same reading
+// order. The screen adds a nav and a paper card; the print block below
+// re-sizes the same markup to fit one US Letter page at 0.55in margins.
+// Export is window.print(): native print keeps the links clickable and the
+// text selectable / ATS-readable, which a rasterized export would not.
 // ============================================
 
 @import '../variables';
+
+// Paper width: the 720px reading column plus the paper's own padding.
+$resume-paper-width: $container-text-width + ($spacing-3xl * 2);
 
 .resume-page {
   min-height: 100vh;
   background: $color-neutral-lightest;
   font-family: $font-family-primary;
+  color: $color-neutral-standard;
 
   // ==========================================
   // Screen-only nav
@@ -82,7 +92,7 @@
     transition: border-color $transition-fast, color $transition-fast;
 
     &:hover {
-      color: $color-primary;
+      color: $color-primary-text;
       border-color: $color-primary;
     }
 
@@ -98,283 +108,141 @@
     transition: color $transition-fast;
 
     &:hover {
-      color: $color-primary;
+      color: $color-primary-text;
     }
   }
 
   // ==========================================
   // Paper — the resume document
+  // Flat by default: a hairline, not a shadow, separates it from the ground.
   // ==========================================
   &__paper {
-    max-width: $container-wide;
+    max-width: $resume-paper-width;
     margin: $spacing-2xl auto;
     padding: $spacing-3xl;
     background: $color-white;
+    border: 1px solid $color-border-default;
     border-radius: $radius-lg;
-    box-shadow: $shadow-md;
   }
 
   // ==========================================
   // Header
   // ==========================================
-  &__header {
-    margin-bottom: $spacing-lg;
-  }
-
   &__name {
     font-family: $font-family-heading;
     font-size: $font-size-h1;
     font-weight: $font-weight-extrabold;
     color: $color-neutral-dark;
     line-height: 1.1;
-    letter-spacing: 0.035em;
+    letter-spacing: -0.02em;
     margin: 0;
   }
 
   &__tagline {
     font-size: $font-size-body;
-    color: $color-neutral-muted;
-    margin-top: $spacing-xs;
-    line-height: 1.5;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-standard;
+    line-height: $line-height-body;
+    margin: $spacing-xs 0 0;
   }
 
   &__contact {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: $spacing-sm;
-    margin-top: $spacing-md;
+    align-items: baseline;
+    gap: $spacing-xs;
+    margin: $spacing-sm 0 0;
     font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
     color: $color-neutral-standard;
 
     a {
-      color: $color-primary;
+      color: $color-primary-text;
       text-decoration: none;
-      font-weight: $font-weight-medium;
 
       &:hover {
-        color: $color-primary-dark;
+        text-decoration: underline;
       }
     }
   }
 
-  &__contact-sep {
-    color: $color-primary-muted;
+  // Separator and link wrap as one unit (see the markup comment).
+  &__contact-item {
+    white-space: nowrap;
   }
 
-  &__contact-portfolio {
-    color: $color-neutral-muted;
-
-    a {
-      text-decoration: underline;
-    }
+  // Separators are furniture, so they take the quiet steel, not the accent.
+  // Spacing around them is real spaces in the markup, not margin, so the
+  // DOM text, the PDF text, and the rendered page all agree.
+  &__contact-sep,
+  &__job-sep,
+  &__work-dash {
+    color: $color-secondary;
+    font-weight: $font-weight-regular;
   }
 
   // ==========================================
-  // Dividers
+  // The orange rule — the one branded mark on the document
   // ==========================================
-  &__divider {
-    height: 1px;
-    background: $color-neutral-light;
-    margin: $spacing-lg 0;
-    border: none;
-
-    &--accent {
-      height: 3px;
-      background: $color-primary;
-      border-radius: 2px;
-      // The +-48px full bleed is a desktop flourish. The responsive blocks
-      // below reset the section's padding but never this, so at <=640 the
-      // divider ran 24px past each viewport edge — and with
-      // `overflow-x: clip` on html/body there was no scrollbar to recover it.
-      margin-left: (-$spacing-3xl);
-      margin-right: (-$spacing-3xl);
-
-      @media (max-width: $breakpoint-md) {
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
+  &__rule {
+    height: 3px;
+    background: $color-primary;
+    border-radius: 2px;
+    margin: $spacing-lg 0 $spacing-xl;
   }
 
   // ==========================================
   // Summary
   // ==========================================
-  &__summary-section {
-    background: $color-secondary-lightest;
-    padding: $spacing-xl $spacing-2xl;
-    margin: 0 (-$spacing-3xl);
-    margin-top: -$spacing-lg;
-    margin-bottom: $spacing-xl;
-  }
-
   &__summary {
     font-size: $font-size-body;
-    line-height: 1.5;
+    line-height: $line-height-body;
     color: $color-neutral-standard;
     margin: 0;
-
-    & + & {
-      margin-top: $spacing-md;
-    }
   }
 
   // ==========================================
-  // Two-column layout
+  // Sections
   // ==========================================
-  &__columns {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: $spacing-3xl;
-    margin-top: $spacing-xl;
+  &__section {
+    margin-top: $spacing-2xl;
   }
 
-  // ==========================================
-  // Sidebar
-  // ==========================================
-  &__sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xl;
-  }
-
-  // ==========================================
-  // Section titles
-  // ==========================================
+  // The Label style: Hubot Sans, uppercase, tracked. Sits on a hairline.
   &__section-title {
-    font-family: $font-family-primary;
+    font-family: $font-family-heading;
     font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-neutral-dark;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    color: $color-neutral-dark;
+    line-height: $line-height-body-sm;
     padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-primary-muted;
-    margin: 2em 0 $spacing-lg;
-
-    .resume-page__main & {
-      &:not(:first-child) {
-        margin-top: $spacing-2xl;
-      }
-    }
-  }
-
-  &__subsection-title {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-lg;
-    font-weight: $font-weight-semibold;
-    color: $color-neutral-dark;
-    margin: $spacing-xl 0 $spacing-md;
+    border-bottom: 1px solid $color-neutral-light;
+    margin: 0 0 $spacing-md;
   }
 
   // ==========================================
-  // Skills groups (Technical Skills subcategories)
+  // Core capabilities — three lines, label then list
   // ==========================================
-  &__skills-group {
-    margin-bottom: $spacing-md;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__skills-category {
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-neutral-dark;
-    text-decoration: underline;
-    margin: 0 0 $spacing-xs;
-  }
-
-  // ==========================================
-  // Skill / Tool / Cert lists
-  // ==========================================
-  &__skill-list,
-  &__tool-list,
-  &__cert-list {
+  &__capabilities {
     list-style: none;
     padding: 0;
     margin: 0;
 
     li {
       font-size: $font-size-body-sm;
+      line-height: $line-height-body-sm;
       color: $color-neutral-standard;
-      line-height: 1.5;
-      padding: 3px 0;
-      padding-left: $spacing-md;
-      position: relative;
 
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 10px;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: $color-neutral-standard;
+      & + li {
+        margin-top: $spacing-xs;
       }
 
       strong {
-        font-weight: $font-weight-bold;
+        font-weight: $font-weight-semibold;
         color: $color-neutral-dark;
       }
-    }
-  }
-
-  // ==========================================
-  // Selected Work
-  // ==========================================
-  &__work-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-  }
-
-  &__work-item {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  &__work-link {
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    color: $color-primary;
-    text-decoration: none;
-    width: fit-content;
-
-    &:hover {
-      color: $color-primary-dark;
-      text-decoration: underline;
-    }
-  }
-
-  &__work-note {
-    font-size: $font-size-body-sm;
-    color: $color-neutral-standard;
-    line-height: 1.4;
-  }
-
-  // ==========================================
-  // Education
-  // ==========================================
-  &__edu {
-    strong {
-      font-size: $font-size-body-sm;
-      font-weight: $font-weight-medium;
-      color: $color-neutral-standard;
-      display: block;
-    }
-
-    p {
-      font-size: $font-size-body-sm;
-      color: $color-neutral-standard;
-      margin: 2px 0 0;
-      line-height: 1.5;
     }
   }
 
@@ -382,72 +250,108 @@
   // Jobs
   // ==========================================
   &__job {
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-lg;
 
-    &--compact {
-      margin-bottom: $spacing-lg;
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
+  // Title and date share the first line; the role sub-line wraps beneath.
+  // DOM order stays title → date → role so a text extraction reads the way
+  // a résumé is expected to read.
   &__job-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: $spacing-lg;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: $spacing-lg;
     margin-bottom: $spacing-sm;
-    padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-neutral-light;
   }
 
-  &__job-company {
+  &__job-title {
+    flex: 1 1 auto;
     font-family: $font-family-primary;
-    font-size: $font-size-body-lg;
+    font-size: $font-size-body;
     font-weight: $font-weight-semibold;
     color: $color-neutral-dark;
+    line-height: $line-height-body;
     margin: 0;
-    line-height: 1.5;
+  }
 
-    &--freelance {
-      font-size: $font-size-body-sm;
-      font-weight: $font-weight-medium;
-      color: $color-neutral-dark;
-    }
+  &__job-date,
+  &__extra-date {
+    font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
+    color: $color-neutral-muted;
+  }
+
+  // Only the job date holds its line; the inline dates below must be free
+  // to wrap on narrow screens.
+  &__job-date {
+    white-space: nowrap;
   }
 
   &__job-role {
+    flex-basis: 100%;
     font-size: $font-size-body-sm;
+    line-height: $line-height-body-sm;
     color: $color-neutral-muted;
-    display: block;
-    margin-top: 2px;
-  }
-
-  &__job-date {
-    font-size: $font-size-body-sm;
-    color: $color-neutral-muted;
-    white-space: nowrap;
-    padding-top: 4px;
-  }
-
-  &__job-desc {
-    font-size: $font-size-body-sm;
-    color: $color-neutral-standard;
-    line-height: 1.5;
-    margin: 0;
+    margin: 2px 0 0;
   }
 
   &__job-list {
+    // _base.scss strips markers from every list; accomplishments get theirs back.
+    list-style: disc;
     padding-left: $spacing-xl;
     margin: 0;
 
     li {
       font-size: $font-size-body-sm;
+      line-height: $line-height-body-sm;
       color: $color-neutral-standard;
-      line-height: 1.6;
-      margin-bottom: $spacing-xs;
+
+      & + li {
+        margin-top: $spacing-xs;
+      }
 
       &::marker {
         color: $color-neutral-standard;
       }
+    }
+  }
+
+  // ==========================================
+  // Selected work + additional experience — one line per entry
+  // ==========================================
+  &__work-list,
+  &__extra-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-size: $font-size-body-sm;
+      line-height: $line-height-body-sm;
+      color: $color-neutral-standard;
+
+      & + li {
+        margin-top: $spacing-sm;
+      }
+
+      strong {
+        font-weight: $font-weight-semibold;
+        color: $color-neutral-dark;
+      }
+    }
+  }
+
+  &__work-link {
+    font-weight: $font-weight-semibold;
+    color: $color-primary-text;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
@@ -465,25 +369,6 @@
       margin: $spacing-lg;
       padding: $spacing-2xl;
     }
-
-    &__summary-section {
-      margin-left: -$spacing-2xl;
-      margin-right: -$spacing-2xl;
-      padding: $spacing-lg $spacing-2xl;
-    }
-
-    &__columns {
-      grid-template-columns: 1fr;
-      gap: $spacing-xl;
-    }
-
-    &__sidebar {
-      order: 2;
-    }
-
-    &__main {
-      order: 1;
-    }
   }
 }
 
@@ -495,12 +380,6 @@
       border-radius: 0;
     }
 
-    &__summary-section {
-      margin-left: -$spacing-lg;
-      margin-right: -$spacing-lg;
-      padding: $spacing-md $spacing-lg;
-    }
-
     &__name {
       font-size: $font-size-h2;
     }
@@ -508,194 +387,17 @@
     &__contact {
       flex-direction: column;
       align-items: flex-start;
-      gap: $spacing-xs;
     }
 
     &__contact-sep {
       display: none;
     }
 
-    &__job-header {
-      flex-direction: column;
-      gap: $spacing-xs;
+    &__job-title {
+      flex-basis: 100%;
     }
   }
 }
-
-// ==========================================
-// Print styles
-// ==========================================
-@media print {
-  // Hide screen-only elements
-  .resume-page__nav {
-    display: none !important;
-  }
-
-  // Reset page
-  body {
-    background: white !important;
-    margin: 0;
-    padding: 0;
-  }
-
-  .resume-page {
-    background: white;
-    min-height: auto;
-
-    &__paper {
-      max-width: none;
-      margin: 0;
-      padding: 0.4in 0.5in;
-      box-shadow: none;
-      border-radius: 0;
-    }
-
-    &__name {
-      font-size: 28px;
-    }
-
-    &__tagline {
-      font-size: 11px;
-    }
-
-    &__contact {
-      font-size: 10px;
-
-      a {
-        color: $color-neutral-dark;
-        text-decoration: none;
-      }
-    }
-
-    &__divider--accent {
-      height: 2px;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    &__summary-section {
-      margin-left: -0.5in;
-      margin-right: -0.5in;
-      padding: 12px 0.5in;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    &__summary {
-      font-size: 10px;
-      line-height: 1.5;
-    }
-
-    &__columns {
-      grid-template-columns: 200px 1fr;
-      gap: 24px;
-      margin-top: 12px;
-    }
-
-    &__section-title {
-      font-size: 11px;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    &__subsection-title {
-      font-size: 13px;
-      margin: 12px 0 6px;
-    }
-
-    &__skills-category {
-      font-size: 9px;
-    }
-
-    &__skill-list li,
-    &__tool-list li,
-    &__cert-list li {
-      font-size: 9px;
-      padding: 1px 0 1px 10px;
-
-      &::before {
-        width: 4px;
-        height: 4px;
-        top: 7px;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-    }
-
-    &__edu {
-      strong { font-size: 10px; }
-      p { font-size: 9px; }
-    }
-
-    &__work-list {
-      gap: 6px;
-    }
-
-    &__work-link {
-      font-size: 10px;
-      color: $color-neutral-dark;
-    }
-
-    &__work-note {
-      font-size: 9px;
-      line-height: 1.35;
-    }
-
-    &__job {
-      margin-bottom: 12px;
-      &--compact { margin-bottom: 8px; }
-    }
-
-    &__job-company {
-      font-size: 13px;
-
-      &--freelance {
-        font-size: 10px;
-      }
-    }
-
-    &__job-role {
-      font-size: 9px;
-    }
-
-    &__job-date {
-      font-size: 9px;
-    }
-
-    &__job-desc {
-      font-size: 9px;
-      line-height: 1.4;
-    }
-
-    &__job-list {
-      padding-left: 16px;
-
-      li {
-        font-size: 9px;
-        line-height: 1.4;
-        margin-bottom: 2px;
-
-        &::marker {
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-      }
-    }
-  }
-
-  // Prevent breaks inside jobs
-  .resume-page__job {
-    break-inside: avoid;
-  }
-
-  @page {
-    margin: 0.3in;
-    size: letter;
-  }
-}
-
 
 // At <=480 the nav row could not fit the logo, "Save contact", "Save as PDF"
 // and the back link on one line: the logo wrapped under the buttons and the
@@ -717,5 +419,152 @@
   .resume-page__print-btn,
   .resume-page__vcard-btn {
     white-space: nowrap;
+  }
+}
+
+// ==========================================
+// Print — one US Letter page
+//
+// Budget: 8.5×11in at 0.55in margins leaves 7.4×9.9in. Body is 10.5pt on a
+// 14pt line, name 24pt. Sizes are in pt because that is the unit the page
+// is measured in; screen sizes above are px because that is the unit the
+// viewport is measured in. Check the page count after any copy change.
+// ==========================================
+@media print {
+  @page {
+    size: letter;
+    margin: 0.55in;
+  }
+
+  html,
+  body {
+    background: $color-white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .resume-page__nav {
+    display: none !important;
+  }
+
+  .resume-page {
+    background: $color-white;
+    min-height: auto;
+    // The orange rule must print. Inherited by everything below.
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    // Hidden text meant for screen readers has no reader in a PDF, and an
+    // extractor would surface it mid-sentence.
+    .sr-only {
+      display: none;
+    }
+
+    &__paper {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    &__name {
+      font-size: 24pt;
+      line-height: 1.1;
+    }
+
+    &__tagline {
+      font-size: 11pt;
+      line-height: 14pt;
+      margin-top: 3pt;
+    }
+
+    &__contact {
+      font-size: 10pt;
+      line-height: 13.5pt;
+      gap: 0 5pt;
+      margin-top: 3pt;
+    }
+
+    &__rule {
+      height: 2pt;
+      border-radius: 1pt;
+      margin: 8pt 0 9pt;
+    }
+
+    &__summary {
+      font-size: 10.5pt;
+      line-height: 14pt;
+    }
+
+    &__section {
+      margin-top: 12pt;
+      break-inside: avoid;
+    }
+
+    &__section-title {
+      font-size: 9pt;
+      line-height: 12pt;
+      padding-bottom: 3pt;
+      margin-bottom: 6pt;
+    }
+
+    &__capabilities li,
+    &__job-list li,
+    &__work-list li,
+    &__extra-list li {
+      font-size: 10.5pt;
+      line-height: 14pt;
+    }
+
+    &__capabilities li + li {
+      margin-top: 1.5pt;
+    }
+
+    &__job {
+      margin-bottom: 9pt;
+      break-inside: avoid;
+    }
+
+    &__job-header {
+      column-gap: 12pt;
+      margin-bottom: 2pt;
+    }
+
+    &__job-title {
+      font-size: 11pt;
+      line-height: 14pt;
+    }
+
+    &__job-date,
+    &__job-role,
+    &__extra-date {
+      font-size: 10pt;
+      line-height: 14pt;
+    }
+
+    &__job-role {
+      margin-top: 0;
+    }
+
+    &__job-list {
+      padding-left: 12pt;
+
+      li + li {
+        margin-top: 2pt;
+      }
+    }
+
+    &__work-list li + li,
+    &__extra-list li + li {
+      margin-top: 3.5pt;
+    }
+
+    // Links stay links: real anchors, the text-safe accent so a reader can
+    // tell them apart, and the URL is already printed as the link text.
+    a {
+      color: $color-primary-text;
+      text-decoration: none;
+    }
   }
 }

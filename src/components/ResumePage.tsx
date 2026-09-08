@@ -6,16 +6,20 @@ import { usePageMeta } from '../hooks/usePageMeta';
 
 // Shared contact details come from data/site.ts; the resume adds its own
 // display fields (name split for the vCard, address parts, link labels).
+//
+// `title` is the positioning string, not the job title. The job title is
+// "Senior Web Designer" and lives on the Tire Rack entry below, where it
+// belongs; the positioning string is what the header and the vCard carry.
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: 'Product Design Engineer · Design Systems · Agentic Workflows',
+  title: 'Product Design Engineer | Design Systems | Agentic Workflows',
   email: SITE.email,
   city: 'South Bend',
   region: 'Indiana',
   country: 'USA',
   portfolioUrl: SITE.portfolioUrl,
-  portfolioLabel: 'RDeboerDesigns.com',
+  portfolioLabel: 'rdeboerdesigns.com',
   linkedinUrl: SITE.linkedinUrl,
   linkedinLabel: 'linkedin.com/in/ryandeboerdesigns',
 };
@@ -23,11 +27,29 @@ const CONTACT = {
 // Absolute links (not bare #hashes) so they stay clickable from an exported PDF.
 const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/work/${slug}/`;
 
+// One line per entry. The numbers are the case studies' own (data/projects.ts);
+// change them there first, then here.
 const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
-  { name: 'WheelRack Design System', slug: 'wheelrack', note: '200+ tokens, 50+ Storybook components; full customer-journey redesign' },
-  { name: 'Tire Category Redesign', slug: 'tire-categories', note: 'Up to +50% conversion lift, +400% category-entry growth (first month)' },
-  { name: 'AEM Landing Page System', slug: 'landing-pages', note: '50+ pages; turnaround cut from weeks to days, <1 QA issue per page' },
-  { name: 'PlayDraft', slug: 'playdraft', note: '0→1 social drafting game — brand to TestFlight in 12 weeks (React Native)' },
+  {
+    name: 'WheelRack',
+    slug: 'wheelrack',
+    note: 'Designed a 200+ token system and 50+ Storybook components for a dealer journey spanning vehicle selection through checkout; partner adoption grew from six to ten.',
+  },
+  {
+    name: 'PlayDraft',
+    slug: 'playdraft',
+    note: 'Took a social drafting game from its first identity sketch to TestFlight in 12 weeks, owning product design, the design system, and React Native implementation.',
+  },
+  {
+    name: 'Internal Tooling',
+    slug: 'design-enablement',
+    note: 'Shipped a Figma metadata plugin, production-accurate crop simulator, and presentation system used across Design, UX, and Photography.',
+  },
+  {
+    name: 'AEM Component System',
+    slug: 'aem-component-system',
+    note: 'Defined and shipped 10+ reusable components with Sass, responsive behavior, accessibility rules, and documentation; WebPageTest measured 60% faster loads.',
+  },
 ];
 
 const ResumePage: React.FC = () => {
@@ -42,6 +64,7 @@ const ResumePage: React.FC = () => {
 
   // Native print produces a PDF with clickable links and selectable, ATS-readable
   // text (unlike a rasterized canvas export), using the @media print styles.
+  // The print block is tuned so the document is one US Letter page.
   const handleExportPDF = () => {
     window.print();
   };
@@ -100,218 +123,127 @@ const ResumePage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Resume document */}
-      <div className="resume-page__paper">
+      {/* Resume document — one column, in reading order, so the print and the
+          screen are the same document and an ATS reads it top to bottom. */}
+      <article className="resume-page__paper">
         {/* Header */}
         <header className="resume-page__header">
           <h1 className="resume-page__name">Ryan DeBoer</h1>
-          <p className="resume-page__tagline">
-            Product Design Engineer · Design Systems · Agentic Workflows
+          <p className="resume-page__tagline">{CONTACT.title}</p>
+          {/* Full URLs shown as text so every link is also readable on paper.
+              Each separator travels with the item after it, so if the line
+              ever wraps it never leaves a pipe hanging at the end of a line. */}
+          <p className="resume-page__contact">
+            <span className="resume-page__contact-item">{CONTACT.city}, {CONTACT.region}</span>
+            <span className="resume-page__contact-item">
+              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
+              <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+            </span>
+            <span className="resume-page__contact-item">
+              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
+              <a href={CONTACT.portfolioUrl} target="_blank" rel="noopener noreferrer">{CONTACT.portfolioLabel}<span className="sr-only"> (opens in a new tab)</span></a>
+            </span>
+            <span className="resume-page__contact-item">
+              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
+              <a href={CONTACT.linkedinUrl} target="_blank" rel="noopener noreferrer">{CONTACT.linkedinLabel}<span className="sr-only"> (opens in a new tab)</span></a>
+            </span>
           </p>
-          <div className="resume-page__contact">
-            <span>{CONTACT.city}, {CONTACT.region}</span>
-            <span className="resume-page__contact-sep">&bull;</span>
-            <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-            <span className="resume-page__contact-sep">&bull;</span>
-            <span className="resume-page__contact-portfolio">
-              Portfolio Site: <a href={CONTACT.portfolioUrl} target="_blank" rel="noopener noreferrer">{CONTACT.portfolioLabel}<span className="sr-only"> (opens in a new tab)</span></a>
-            </span>
-            <span className="resume-page__contact-sep">&bull;</span>
-            {/* Full URL shown as text so the link is also readable on a printed page. */}
-            <span className="resume-page__contact-linkedin">
-              LinkedIn: <a href={CONTACT.linkedinUrl} target="_blank" rel="noopener noreferrer">{CONTACT.linkedinLabel}<span className="sr-only"> (opens in a new tab)</span></a>
-            </span>
-          </div>
         </header>
 
-        <div className="resume-page__divider resume-page__divider--accent" />
+        <div className="resume-page__rule" role="presentation" />
 
         {/* Summary */}
-        <section className="resume-page__summary-section">
-          <p className="resume-page__summary">
-            Product design engineer with 16+ years across ecommerce, design systems, and working
-            web and native products.
-          </p>
-          <p className="resume-page__summary">
-            I own the decisions that connect Figma to the build: tokens, component behavior,
-            production styles, documentation, and the checks that keep the system intact after launch.
-          </p>
+        <p className="resume-page__summary">
+          Product design engineer with 12+ years at Tire Rack and 16+ years across visual design,
+          responsive web, design systems, and front-end implementation. I build the systems
+          connecting Figma, production code, documentation, and internal tooling so designers and
+          engineers can move faster without the work drifting. AI speeds up exploration; I stay
+          responsible for the decisions and details behind what ships.
+        </p>
+
+        {/* Core capabilities */}
+        <section className="resume-page__section">
+          <h2 className="resume-page__section-title">Core capabilities</h2>
+          <ul className="resume-page__capabilities">
+            <li>
+              <strong>Systems:</strong> Design systems, tokens, components, documentation, governance, accessibility
+            </li>
+            <li>
+              <strong>Build:</strong> Figma, Storybook, React, React Native, TypeScript, HTML, CSS, Sass, AEM
+            </li>
+            <li>
+              <strong>Workflow:</strong> Product design, prototyping, implementation QA, internal tooling, agentic workflows
+            </li>
+          </ul>
         </section>
 
-        {/* Two-column layout */}
-        <div className="resume-page__columns">
-          {/* Sidebar */}
-          <aside className="resume-page__sidebar">
-            {/* Core Strengths */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Design Systems &amp; Visual Identity</h2>
-              <ul className="resume-page__skill-list">
-                <li>Design Systems Development</li>
-                <li>Component Architecture &amp; Scalable UI Patterns</li>
-                <li>Design Tokens (Figma Variables, Token Studio)</li>
-                <li>System-Driven UX &amp; Interaction Models</li>
-                <li>Brand-to-UI Translation</li>
-              </ul>
-            </section>
+        {/* Professional experience */}
+        <section className="resume-page__section">
+          <h2 className="resume-page__section-title">Professional experience</h2>
 
-            {/* Product Design Experience */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Product Design Experience</h2>
-              <ul className="resume-page__skill-list">
-                <li>End-to-End Product Design (0→1 &amp; Iteration)</li>
-                <li>UX Strategy &amp; Journey Mapping</li>
-                <li>Interaction Design &amp; High-Fidelity Prototyping</li>
-                <li>Information Architecture &amp; Content Structure</li>
-                <li>Visual Design (Typography, Layout, Hierarchy)</li>
-              </ul>
-            </section>
-
-            {/* Design Engineering & Frontend */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Design Engineering &amp; Frontend Collaboration</h2>
-              <ul className="resume-page__skill-list">
-                <li>Figma (Components, Variables, Auto Layout)</li>
-                <li>HTML / CSS / SCSS (Design-to-Code Alignment)</li>
-                <li>Adobe Experience Manager (AEM)</li>
-                <li>Component-Based Development Collaboration</li>
-                <li>Storybook &amp; Design System Integration</li>
-              </ul>
-            </section>
-
-            {/* Growth, Performance & Optimization */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Growth, Performance &amp; Optimization</h2>
-              <ul className="resume-page__skill-list">
-                <li>A/B Testing &amp; Experimentation</li>
-                <li>SEO &amp; Conversion Optimization</li>
-                <li>Accessibility (WCAG)</li>
-                <li>Performance &amp; Responsive Design</li>
-              </ul>
-            </section>
-
-            {/* AI & Emerging Workflows */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">AI &amp; Emerging Workflows</h2>
-              <ul className="resume-page__skill-list">
-                <li>AI-Augmented Design Workflows (Claude, Cursor)</li>
-                <li>Rapid Prototyping &amp; Iteration Systems</li>
-                <li>AI Assisted Content &amp; UI Generation</li>
-                <li>Workflow Optimization &amp; Automation</li>
-              </ul>
-            </section>
-
-          </aside>
-
-          {/* Main content */}
-          <div className="resume-page__main">
-            {/* Selected Work */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Selected Work</h2>
-              <ul className="resume-page__work-list">
-                {SELECTED_WORK.map((w) => (
-                  <li key={w.slug} className="resume-page__work-item">
-                    <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>
-                    <span className="resume-page__work-note">{w.note}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {/* Education */}
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Education</h2>
-              <div className="resume-page__edu">
-                <strong>Bachelor of Fine Arts (BFA), Graphic Design</strong>
-                <p>Kendall College of Art &amp; Design</p>
-                <p>Minor in Digital Media (Web)</p>
-                <p>Foundation in typography, grid systems, and modernist design principles</p>
-              </div>
-            </section>
-
-            <section className="resume-page__section">
-              <h2 className="resume-page__section-title">Professional Experience</h2>
-
-              {/* Tire Rack — Senior */}
-              <div className="resume-page__job">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company">Tire Rack</h3>
-                    <span className="resume-page__job-role">Senior Product Designer (Design Systems &amp; Frontend Collaboration)</span>
-                  </div>
-                  <span className="resume-page__job-date">2021&ndash;Present</span>
-                </div>
-                <ul className="resume-page__job-list">
-                  <li>Built and shipped WheelRack, a token-driven design system—200+ design tokens and 50+ Storybook-integrated components—giving the React team one source of truth, and extended it into Tire Rack's Wholesale platform within 6 months</li>
-                  <li>Redesigned high-traffic tire category pages, driving up to +50% conversion lift on top pages and up to +400% category-entry traffic growth in the first month, and scaled a 32→100+ characteristic-icon library governed sitewide</li>
-                  <li>Turned one-off landing-page production into a governed AEM template system—50+ pages personally designed, turnaround cut from ~1 month to days, with under one QA issue per page on average</li>
-                  <li>Turned early UX and product concepts into component states, behavior specs, and front-end patterns that engineering could build and reuse</li>
-                  <li>Own a decade-long AEM Experience Fragment system—20+ swappable components across 6 high-traffic pages with geo-targeting via Adobe Target—now authored by 2 junior designers under my governance</li>
-                  <li>Introduced Claude and other AI-assisted workflows for prototyping and internal tools, while mentoring teammates on design systems and design-to-code practice</li>
-                </ul>
-              </div>
-
-              {/* Tire Rack — Web Designer */}
-              <div className="resume-page__job">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company">Tire Rack</h3>
-                    <span className="resume-page__job-role">Web Designer</span>
-                  </div>
-                  <span className="resume-page__job-date">2014&ndash;2021</span>
-                </div>
-                <ul className="resume-page__job-list">
-                  <li>Designed and implemented responsive ecommerce and marketing experiences for Tire Rack</li>
-                  <li>Moved UX concepts into production with HTML, CSS, and Adobe Experience Manager</li>
-                  <li>Worked with product, engineering, SEO, analytics, and brand partners through launch and iteration</li>
-                </ul>
-              </div>
-
-              {/* Freelance */}
-              <h3 className="resume-page__subsection-title">Freelance Work</h3>
-
-              <div className="resume-page__job resume-page__job--compact">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company resume-page__job-company--freelance">Heatherwood Equestrian Academy</h3>
-                  </div>
-                  <span className="resume-page__job-date">2023&ndash;2024</span>
-                </div>
-                <p className="resume-page__job-desc">Designed and built a responsive WordPress site and brand identity</p>
-              </div>
-
-              <div className="resume-page__job resume-page__job--compact">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company resume-page__job-company--freelance">Stompin Barley Wine Bar</h3>
-                  </div>
-                  <span className="resume-page__job-date">2017&ndash;2018</span>
-                </div>
-                <p className="resume-page__job-desc">Created brand identity and website supporting events and promotions</p>
-              </div>
-
-              <div className="resume-page__job resume-page__job--compact">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company resume-page__job-company--freelance">FitStop / Vitamin Giant</h3>
-                  </div>
-                  <span className="resume-page__job-date">2012&ndash;2013</span>
-                </div>
-                <p className="resume-page__job-desc">Restructured and rebuilt website and marketing materials</p>
-              </div>
-
-              <div className="resume-page__job resume-page__job--compact">
-                <div className="resume-page__job-header">
-                  <div>
-                    <h3 className="resume-page__job-company resume-page__job-company--freelance">University of Notre Dame &mdash; Technology Department</h3>
-                  </div>
-                  <span className="resume-page__job-date">2009&ndash;2010</span>
-                </div>
-                <p className="resume-page__job-desc">Designed branded informational materials for internal communications</p>
-              </div>
-            </section>
+          <div className="resume-page__job">
+            <div className="resume-page__job-header">
+              <h3 className="resume-page__job-title">
+                Tire Rack <span className="resume-page__job-sep" aria-hidden="true">|</span> Senior Web Designer
+              </h3>
+              <span className="resume-page__job-date">2021 to present</span>
+              <p className="resume-page__job-role">Product design, design systems, and front-end collaboration</p>
+            </div>
+            <ul className="resume-page__job-list">
+              <li>Selected as one of two designers promoted to Senior in 2021, with scope across product, UX, design systems, and front-end collaboration.</li>
+              <li>Turn product direction into responsive systems, component contracts, production styles, and implementation QA across React and AEM.</li>
+              <li>Redesigned high-traffic category experiences; in the first month, top pages recorded up to a 50% conversion lift and category entry grew up to 400%, both measured against the month before launch.</li>
+            </ul>
           </div>
-        </div>
-      </div>
+
+          <div className="resume-page__job">
+            <div className="resume-page__job-header">
+              <h3 className="resume-page__job-title">
+                Tire Rack <span className="resume-page__job-sep" aria-hidden="true">|</span> Web Designer
+              </h3>
+              <span className="resume-page__job-date">2014 to 2021</span>
+            </div>
+            <ul className="resume-page__job-list">
+              <li>Designed and implemented responsive ecommerce and marketing experiences in HTML, CSS, and AEM, partnering with product, engineering, SEO, analytics, and brand through launch.</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Selected work */}
+        <section className="resume-page__section">
+          <h2 className="resume-page__section-title">Selected work</h2>
+          <ul className="resume-page__work-list">
+            {SELECTED_WORK.map((w) => (
+              <li key={w.slug} className="resume-page__work-item">
+                <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>
+                {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
+                {w.note}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Additional experience and education */}
+        <section className="resume-page__section">
+          <h2 className="resume-page__section-title">Additional experience and education</h2>
+          <ul className="resume-page__extra-list">
+            <li>
+              <strong>Independent design work</strong>
+              {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
+              <span className="resume-page__extra-date">2009 to 2024</span>
+              {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
+              Identity and responsive web work for small businesses and university communications.
+            </li>
+            <li>
+              <strong>BFA, Graphic Design</strong>
+              {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
+              <span className="resume-page__extra-date">Kendall College of Art and Design</span>
+              {' '}<span className="resume-page__work-dash" aria-hidden="true">&mdash;</span>{' '}
+              Minor in Digital Media
+            </li>
+          </ul>
+        </section>
+      </article>
     </div>
   );
 };
