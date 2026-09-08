@@ -152,7 +152,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'surface',
     title: 'Documentation',
     meta: 'Teach · Reference · Share',
-    body: 'Make the system clear, findable, and usable beyond the file.',
+    body: 'Write the system down so people who never open the Figma file or the code can still use it.',
     relation: 'Two-way with the Shared System.',
     icon: ICON.docs,
   },

@@ -36,7 +36,7 @@ export const storySections: StorySection[] = [
     body: [
       'I came into my career with a strong eye for design, but the codebase quickly exposed what ' +
         'I still needed to learn. HTML tables, CSS, responsive behavior, variables, flexbox, CMS ' +
-        'constraints — early on, a lot of it felt like a different language.',
+        'constraints: early on, a lot of it felt like a different language.',
       'I learned by putting in the reps: conferences, certifications, side projects, questions, ' +
         'and plenty of things I had to break before I could fix them. Working closer to the ' +
         'codebase changed my design instincts. I started judging a decision by how it behaved in ' +
@@ -56,7 +56,7 @@ export const storySections: StorySection[] = [
         'documentation. I became a lead for the template and style layer because I kept staying ' +
         'with the work after the first version shipped.',
     ],
-    annotation: 'Good systems help when I’m not in the room.',
+    annotation: 'Built to outlast the launch meeting.',
   },
   {
     num: '04',
