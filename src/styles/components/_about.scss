@@ -91,6 +91,25 @@ $select-b: blue($color-primary-light);
 }
 
 
+// In-body cross-link. The site's dominant internal-link idiom (see the notes'
+// prose links): underlined in the accent, no arrow, no button chrome, so it
+// reads as part of the sentence rather than a CTA competing with the one below.
+// $color-primary-text, not $color-primary: this is body-size text, and #f03d01
+// is 3.91:1 on paper, under the 4.5:1 AA floor.
+.about__inline-link {
+  color: $color-primary-text;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color $transition-fast;
+
+  &:hover,
+  &:focus-visible {
+    color: $color-primary-dark;
+    text-decoration-thickness: 2px;
+  }
+}
+
 .about {
   background: $color-white;
   padding: $section-pad-y 0;

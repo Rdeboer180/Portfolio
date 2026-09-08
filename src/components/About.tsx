@@ -21,17 +21,26 @@ const About: React.FC = () => {
         <div className="about__content">
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" index="01" />
-            <h2 className="about__title">I follow the work past the frame</h2>
+            <h2 className="about__title">The craft keeps evolving. The process never settles.</h2>
+              {/* Ryan's own copy. Its bolded phrases carry the highlight sweep,
+                  so the emphasis he wrote and the emphasis the page animates are
+                  the same claims. Two em dashes in the source became colons, per
+                  the site-wide sweep.
+
+                  P1's closing sentence ("The craft keeps evolving, and I want my
+                  process to evolve with it") became the h2, so it is not repeated
+                  here three lines below itself. The sweep moved to the line that
+                  sentence was setting up. */}
               <p className="about__body">
-                I&rsquo;ve spent 16+ years moving between visual craft, brand systems, front-end constraints, and production code. The tools changed, but the responsibility did not: <span className="animated-bold">know what to design, why it matters, and whether it still holds up</span> once a real team builds it and real people use it.
+                I&rsquo;ve spent 16+ years designing for the web, and <span className="animated-bold">the constant through all of it has been refinement</span>. As the tools have changed, I&rsquo;ve kept expanding how I work: learning more about code, systems, product, and implementation so I can follow an idea further and make better decisions about what actually ships.
               </p>
 
               <p className="about__body">
-                AI-assisted workflows let me test more directions and get to working software sooner. Personal, volunteer, and internal products have given me room to <span className="animated-bold">take ideas from the first sketch through the build</span>, including the parts that fail once they are real. <span className="animated-bold">The value I add with AI isn&rsquo;t volume</span>. It is choosing the direction, writing down the constraints, and rejecting plausible work that does not meet the bar.
+                I&rsquo;m a designer at my core, proficient in front-end code, and deeply fluent in the tools and workflows that marry the two. <span className="animated-bold">But brand and design systems have always been my specialty.</span> I gravitate toward the rules underneath the interface: the tokens, components, patterns, documentation, accessibility, and governance that turn individual decisions into something a whole team can build from. Increasingly, that means making sure the system holds together <a href="#systems" className="about__inline-link">across Figma, code, tooling, and whatever comes next</a>.
               </p>
 
               <p className="about__body">
-                The polished screen is only one artifact. I care just as much about the tokens, patterns, documentation, tooling, accessibility, QA, and governance that keep the idea intact after it leaves Figma. Increasingly, that also means asking what an agent needs to understand about the system before it contributes to it. A design system has done its job when <span className="animated-bold">the team can make the next good decision without me in the room</span>.
+                AI is the newest extension of that process, not a crutch for it. I use it aggressively to explore more directions, prototype faster, test ideas, and get to working software sooner. <span className="animated-bold">But faster output doesn&rsquo;t replace taste, judgment, or responsibility for the final decision.</span> I still want to be the person asking what belongs, what needs another pass, where the system breaks, and whether what we built actually holds up in production.
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>

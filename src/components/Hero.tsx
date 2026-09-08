@@ -555,7 +555,7 @@ const Hero: React.FC = () => {
                   visual sequence below is untouched; only what the h1 asserts
                   has changed. */}
               <h1 className="hero__h1-sr-only">
-                Ryan DeBoer, Product Design Engineer &mdash; I build design systems that live across Figma, production code, and the tools connecting them.
+                Ryan DeBoer is a Product Design Engineer who builds design systems that live across Figma, production code, and the tools connecting them.
               </h1>
 
               {/* The animated phrases still reach assistive tech: the visual
@@ -653,7 +653,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            Visual craft, tokens, components, internal tooling, and agent-readable rules &mdash; built so <span className="animated-bold">designers and engineers can move faster without the system drifting</span>. My official title has been Senior Web Designer, but the work runs well past the web: my background in visual communication and code carries ideas beyond the artboard and into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
+            Visual craft, tokens, components, internal tooling, and agent-readable rules: all of it built so <span className="animated-bold">designers and engineers can move faster without the system drifting</span>. My official title has been Senior Web Designer, but the work runs well past the web: my background in visual communication and code carries ideas beyond the artboard and into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
           </p>
 
             <div className="hero__actions hero__reveal hero__reveal--4">

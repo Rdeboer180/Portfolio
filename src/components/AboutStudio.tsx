@@ -105,7 +105,7 @@ const STUDIO_POINTS: StudioPoint[] = [
         the gap I have named: <strong>emerging tools and the workflows around them</strong>.
       </>
     ),
-    proof: 'The rule, from the note Studying the tape: if watching it does not change what I make on Monday, it was entertainment. Late 2025, an LLM was a better search box to me. Since then: PlayDraft on TestFlight, a design-taste skill an agent can install.',
+    proof: 'The rule is from the note Studying the tape: if watching it doesn’t change what you make on Monday, it was entertainment. In late 2025 I was using an LLM as a better search box. PlayDraft on TestFlight and an installable design-taste skill came after.',
     // On the front half of the belt, right of the hinge, so the control is
     // still on the pad once the rear half has folded over onto it. Clear of
     // the hood and its readout down to tablet width; at phone width the
@@ -142,7 +142,7 @@ const STUDIO_POINTS: StudioPoint[] = [
         <strong>The tool changes with the question. The system should survive the switch.</strong>
       </>
     ),
-    proof: 'This site runs on the same idea: tokens named in Figma first, React and TypeScript, written governance, agent-readable context, and drafts from Claude Code with every call still mine. Figma and code share a shelf because neither is the finish line.',
+    proof: 'This site runs on the same idea: tokens named in Figma first, React and TypeScript, written governance, agent-readable context, and drafts from Claude Code with every call still mine.',
     // On the cupboard base, not the shelves — the one part of the unit with
     // no label under it for the control to cover. A touch right of the unit's
     // centre line, from when the walking pad's control sat at the sideboard
@@ -618,7 +618,7 @@ const AboutStudio: React.FC = () => {
         </div>
         <div>
           <dt>Working loop</dt>
-          <dd>Define &rarr; build &rarr; learn &rarr; feed back</dd>
+          <dd>Define &rarr; explore &rarr; learn &rarr; feed back</dd>
         </div>
       </dl>
 

@@ -143,7 +143,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'pair',
     title: 'Codebase',
     meta: 'Implement · Maintain · Scale',
-    body: 'Turn system decisions into real products — and feed production lessons back into the system.',
+    body: 'Turn system decisions into real products. Feed what production teaches back into the system.',
     relation: 'Two-way with Figma and with the Shared System.',
     icon: ICON.code,
   },
@@ -257,7 +257,7 @@ export const BEATS: BeatData[] = [
     meta: 'Figma · Prototypes · Code',
     body: (
       <>
-        <strong>Figma / Canvas</strong> and the <strong>Codebase</strong>, working both ways &mdash;
+        <strong>Figma / Canvas</strong> and the <strong>Codebase</strong>, in whichever order
         whichever answers fastest. Either is allowed to change the system.
       </>
     ),
@@ -285,7 +285,7 @@ export const BEATS: BeatData[] = [
       // hydration mismatch the header describes. Keep each run of text on
       // one side of an element, in one string.
       <>
-        Into <strong>Documentation</strong>, <strong>Prompts</strong>, and <strong>Governance</strong> &mdash;
+        Into <strong>Documentation</strong>, <strong>Prompts</strong>, and <strong>Governance</strong>:
         the guidance the next designer, engineer, or agent starts from.
       </>
     ),
@@ -665,7 +665,7 @@ const SystemsInPractice: React.FC = () => {
               </span>
             </h2>
             <p className="sip__body reveal-fade" style={delay(240)}>
-              Figma still starts and steers the conversation &mdash; and it remains a home for some of
+              Figma still starts and steers the conversation, and it remains home to some of
               the tools.{' '}
               <span className="animated-bold">
                 But as high-fidelity prototypes get faster to build, the time I spend in Figma is
@@ -675,7 +675,7 @@ const SystemsInPractice: React.FC = () => {
             </p>
             <p className="sip__body reveal-fade" style={delay(320)}>
               The system has to travel farther: into documentation, prompt workflows, QA, automation,
-              team conversations, and production decisions. Half or more of my work now starts with a
+              team conversations, and production decisions. More and more of my work now starts with a
               request carrying <code>{CONTEXT_SKILL}</code>, so the same standards can be understood
               whether the next collaborator is a designer, engineer, or agent.
             </p>

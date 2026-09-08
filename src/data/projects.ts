@@ -803,7 +803,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'I designed and built more than 50 landing pages before turning the recurring decisions into a system two junior designers now use. Complex pages moved from about a month to one or two weeks; standard pages take about a week, and simple launches take one or two days. QA now finds fewer than one issue per page on average. SEO reporting tied a new 40-inch tire page to more than $10,000 in annual revenue. There was no earlier page to compare, so I treat that as evidence of new reach, not a clean design-attribution claim. I still govern every template and component-level change: when SEO needs a structure the templates don’t support, it gets filed as a request instead of shipped as a one-off, so the system grows on purpose rather than by exception.',
+    outcomeNote: 'I designed and built more than 50 landing pages before turning the recurring decisions into a system two junior designers now use. Complex pages moved from about a month to one or two weeks; standard pages take about a week, and simple launches take one or two days. QA now finds fewer than one issue per page on average. SEO reporting tied a new 40-inch tire page to more than $10,000 in annual revenue. There was no earlier page to compare, so I treat that as evidence of new reach, not a clean design-attribution claim.',
     outcomeImages: [
       {
         src: '/images/work/landing-pages/supporting/landing-pages-35-inch.jpg',
@@ -1005,7 +1005,7 @@ $mobile-max-width: 768px;
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'WebPageTest measured pages with the new components loading 60% faster. More than ten reusable components now power the homepage, tires landing, events, sponsorship, and packages surfaces. Junior designers author against the same fields and variants that engineering supports, with my documentation explaining when each one belongs. SEO and accessibility requirements live in the component contract rather than in a per-page cleanup pass, so they are settled once, upstream, instead of re-decided on every surface. Some internal tooling and workflow details remain private, but the live pages below show the system in production.',
+    outcomeNote: 'WebPageTest measured pages with the new components loading 60% faster. More than ten reusable components now power the homepage, tires landing, events, sponsorship, and packages pages. Junior designers author against the same fields and variants that engineering supports, with my documentation explaining when each one belongs. SEO and accessibility rules sit in the component contract, so nobody re-decides them page by page. Some internal tooling and workflow details remain private, but the live pages below show the system in production.',
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
@@ -1038,7 +1038,7 @@ $mobile-max-width: 768px;
     seoTitle: 'Design Enablement — Internal Figma Plugins & AI-Assisted Tooling',
     summary:
       'I built three internal tools that carry the system’s rules into daily work: a Figma metadata plugin, a production-accurate crop simulator, and a presentation system used across Design, UX, and Photography.',
-    cardHook: 'Repetitive production work was eating design time. Three connected internal tools carried system thinking past the component library and into the daily workflow\u2014project context, crop validation, and stakeholder decks.',
+    cardHook: 'Repetitive production work was eating design time. Three connected internal tools now carry the system into project setup, crop validation, and stakeholder decks, places the component library never reached.',
     year: '2025–2026',
     tags: [
       'Design Enablement',
@@ -1381,7 +1381,7 @@ Frame every output as:
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft — a 0→1 Social Mobile Game Designed & Built in React Native',
     summary: 'PlayDraft turns the fantasy-draft ritual loose on snacks, movies, athletes, or any topic a group writes in. I took it from the first identity sketch to a working Expo and Supabase app on TestFlight in twelve weeks, using AI to accelerate the build inside a token-governed system.',
-    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. Brand, game system, and Expo app to TestFlight in twelve weeks \u2014 with the design system as the guardrail on every AI-assisted screen.',
+    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. Brand, game system, and Expo app hit TestFlight in twelve weeks, with the design system holding every AI-scaffolded screen to its rules.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Front-End (React Native) · Content & Legal Ops · QA',

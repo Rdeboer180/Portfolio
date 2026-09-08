@@ -57,8 +57,8 @@ const ProcessStrengths: React.FC = () => {
             In other people’s words
           </h2>
           <p className="process-strengths__intro">
-            A list of strengths is a claim. These are the ones the people I worked with have put in
-            writing, grouped by who I was working with at the time. Each line is theirs, not mine.
+            A list of strengths is a claim. So each one here is paired with the person who saw it,
+            in their words, or with the artifact that shows it. The phrases are mine. The quotes are theirs.
           </p>
         </div>
 
