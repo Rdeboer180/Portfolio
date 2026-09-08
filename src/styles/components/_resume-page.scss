@@ -60,14 +60,18 @@ $resume-paper-width: $container-text-width + ($spacing-3xl * 2);
     font-size: $font-size-body-sm;
     font-weight: $font-weight-semibold;
     color: $color-white;
-    background: $color-primary;
+    // 14px white on Signal Orange is 3.91:1 and fails the 4.5:1 AA floor for
+    // normal text. This is the button a recruiter is here to press, so it takes
+    // Orange Deep (5.65:1) at rest and inverts to ink on hover rather than
+    // deepening into a colour it is already using.
+    background: $color-primary-dark;
     border: none;
     border-radius: $button-radius;
     cursor: pointer;
     transition: background $transition-fast;
 
     &:hover {
-      background: $color-primary-dark;
+      background: $color-neutral-dark;
     }
 
     svg {
