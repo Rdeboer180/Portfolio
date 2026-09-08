@@ -22,25 +22,20 @@ const About: React.FC = () => {
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" index="01" />
             <h2 className="about__title">The craft keeps evolving. The process never settles.</h2>
-              {/* Ryan's own copy. Its bolded phrases carry the highlight sweep,
+              {/* Ryan's own copy. The bolded phrases carry the highlight sweep,
                   so the emphasis he wrote and the emphasis the page animates are
-                  the same claims. Two em dashes in the source became colons, per
-                  the site-wide sweep.
-
-                  P1's closing sentence ("The craft keeps evolving, and I want my
-                  process to evolve with it") became the h2, so it is not repeated
-                  here three lines below itself. The sweep moved to the line that
-                  sentence was setting up. */}
+                  the same claims. The source's one em dash became a colon, per
+                  the site-wide sweep; the 8-10 en dash is a range and stays. */}
               <p className="about__body">
-                I&rsquo;ve spent 16+ years designing for the web, and <span className="animated-bold">the constant through all of it has been refinement</span>. As the tools have changed, I&rsquo;ve kept expanding how I work: learning more about code, systems, product, and implementation so I can follow an idea further and make better decisions about what actually ships.
+                I&rsquo;m a designer at my core, proficient in front-end code, and most at home in the systems that connect the two. <span className="animated-bold">Brand and design systems have always been my specialty</span>: the rules, components, patterns, and decisions that help good work hold together after it leaves my hands.
               </p>
 
               <p className="about__body">
-                I&rsquo;m a designer at my core, proficient in front-end code, and deeply fluent in the tools and workflows that marry the two. <span className="animated-bold">But brand and design systems have always been my specialty.</span> I gravitate toward the rules underneath the interface: the tokens, components, patterns, documentation, accessibility, and governance that turn individual decisions into something a whole team can build from. Increasingly, that means making sure the system holds together <a href="#systems" className="about__inline-link">across Figma, code, tooling, and whatever comes next</a>.
+                I&rsquo;ve spent 16+ years <span className="animated-bold">deliberately moving closer to how the work gets built</span>. Visual design led me into HTML and CSS. Front-end constraints pushed me toward reusable systems. Figma, tokens, and Storybook gave design and engineering a shared language. Now AI is shrinking that distance again, letting me move from an idea through UX, system decisions, working software, QA, and refinement <a href="#systems" className="about__inline-link">without treating handoff as the finish line</a>.
               </p>
 
               <p className="about__body">
-                AI is the newest extension of that process, not a crutch for it. I use it aggressively to explore more directions, prototype faster, test ideas, and get to working software sooner. <span className="animated-bold">But faster output doesn&rsquo;t replace taste, judgment, or responsibility for the final decision.</span> I still want to be the person asking what belongs, what needs another pass, where the system breaks, and whether what we built actually holds up in production.
+                I&rsquo;ve never waited for a new workflow to become standard before learning it. I was early to get AI tools approved and into my daily work, I&rsquo;ve spent close to a year building deeply with Claude, and I still put 8&ndash;10 hours a week outside work into learning by making things, lately with Codex, Paper, and whatever genuinely changes what a designer can own next. The tools keep moving. <span className="animated-bold">My responsibility stays the same: bring the judgment, protect the craft, understand the system, and care about what actually ships.</span>
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>

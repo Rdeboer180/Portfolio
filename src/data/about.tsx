@@ -60,7 +60,7 @@ export const storySections: StorySection[] = [
   },
   {
     num: '04',
-    title: 'Exploring what is next',
+    title: 'Learning by building',
     body: [
       'AI-assisted tools made it cheaper to test an idea. That opens the conversation earlier, but ' +
         'it also produces more plausible work that still needs someone to judge it.',
