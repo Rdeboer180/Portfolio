@@ -41,12 +41,15 @@ interface Testimonial {
   year: string;
 }
 
-// Order runs the seniority spread on purpose — manager → cross-team engineer →
-// AVP → UX manager → build partner → the junior designer he mentored. A reader
-// scanning top to bottom sees the same person vouched for from every direction:
-// 1. Leadership & Delivery (Adam) → 2. Cross-Team Trust (Urbano)
-// → 3. Craft, Care, and Growth (Amanda) → 4. Systems Thinking (Kokesh)
-// → 5. Design–Engineering Partnership (Cheryl) → 6. Mentorship & Confidence (Gina)
+// Cheryl sits second, per Ryan. The design-engineering partnership is the claim
+// the rest of the site is built on, so the developer who did the build vouches
+// for it early rather than fifth:
+// 1. Leadership & Delivery (Adam) → 2. Design-Engineering Partnership (Cheryl)
+// → 3. Cross-Team Trust (Urbano) → 4. Craft, Care, and Growth (Amanda)
+// → 5. Systems Thinking (Kokesh) → 6. Mentorship & Confidence (Gina)
+// The seniority spread still runs manager → build partner → cross-team engineer
+// → AVP → UX manager → the junior designer he mentored, so a reader scanning top
+// to bottom is still shown him vouched for from every direction.
 //
 // Cards carry no per-quote links. Six identical "see all recommendations" links
 // was repetition pretending to be evidence — the section CTA now does that job
@@ -63,6 +66,19 @@ const testimonials: Testimonial[] = [
     ),
     name: 'Adam Payne',
     role: 'Web Design Manager (Ryan’s direct manager)',
+    year: '2026',
+  },
+  {
+    title: 'Design–Engineering Partnership',
+    quote: (
+      <>
+        <p>He owned the design side; I owned the build, and it was <H>one of the best collaborations I&rsquo;ve had</H>. Ryan doesn&rsquo;t just design screens&mdash;he <H>designs the whole experience</H>.</p>
+        <p>WheelRack had no shared foundation when we started, so Ryan built one from scratch&mdash;a full token set for color, spacing, and typography that grew into a documented component library. That gave us <H>one vocabulary to work from instead of two</H>, and it made my half of the work a lot easier to do well.</p>
+        <p><H>Any product team would be better with him on it.</H></p>
+      </>
+    ),
+    name: 'Cheryl Carpenter',
+    role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
     year: '2026',
   },
   {
@@ -99,19 +115,6 @@ const testimonials: Testimonial[] = [
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
-  },
-  {
-    title: 'Design–Engineering Partnership',
-    quote: (
-      <>
-        <p>He owned the design side; I owned the build, and it was <H>one of the best collaborations I&rsquo;ve had</H>. Ryan doesn&rsquo;t just design screens&mdash;he <H>designs the whole experience</H>.</p>
-        <p>WheelRack had no shared foundation when we started, so Ryan built one from scratch&mdash;a full token set for color, spacing, and typography that grew into a documented component library. That gave us <H>one vocabulary to work from instead of two</H>, and it made my half of the work a lot easier to do well.</p>
-        <p><H>Any product team would be better with him on it.</H></p>
-      </>
-    ),
-    name: 'Cheryl Carpenter',
-    role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
-    year: '2026',
   },
   {
     title: 'Mentorship & Confidence',
