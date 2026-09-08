@@ -376,6 +376,23 @@
     background: $color-white;
   }
 
+  // The one outbound link in the room. Body-size text, so it takes
+  // $color-primary-text, not $color-primary: #f03d01 is 3.91:1 on paper and
+  // fails the 4.5:1 AA floor at this size.
+  &__body-link {
+    color: $color-primary-text;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    transition: color $transition-fast;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-primary-dark;
+      text-decoration-thickness: 2px;
+    }
+  }
+
   &__detail-body {
     animation: studio-detail-in 260ms ease-out both;
 

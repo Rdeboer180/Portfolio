@@ -89,7 +89,8 @@ const STUDIO_POINTS: StudioPoint[] = [
   // Club / Config habit; the AI-workflow note dates the "better search box"
   // starting point to late 2025; the names were Ryan's own list in the
   // process closer before it moved here. Still to confirm with Ryan: the
-  // exact name of Dive Radio (it is on the record nowhere else on the site),
+  // name of Dive Radio, now linked to the show's own playlist ("Dive Radio -
+  // Weekly Live Show"), which is the only corroboration it has on the site,
   // and whether a conference should be named (none is, because none is on
   // the record).
   {
@@ -99,10 +100,28 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Stay in shape between releases',
     body: (
       <>
-        This is what the pad is for between launches: Dive Radio, the Dive Club series,
-        conferences chosen on purpose, and people whose standards argue with mine, UI Collective
-        Design, Tommy Geoco, Michael Riddering, Jenny Wen, Brad Frost. Not to keep up. To close
-        the gap I have named: <strong>emerging tools and the workflows around them</strong>.
+        What the pad is for between launches:{' '}
+        <a
+          className="studio-mock__body-link"
+          href="https://www.youtube.com/playlist?list=PLWyuIk6_QxAE"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Dive Radio
+        </a>
+        , and{' '}
+        <a
+          className="studio-mock__body-link"
+          href="https://www.dive.club/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Dive Club
+        </a>{' '}
+        interviews with Dan Mall on design systems, Loredana Crisan on Figma, Meaghan Choi on
+        Claude Code. Tommy Geoco and Michael Riddering are the standing argument. Not to keep
+        up. To close the gap I have named:{' '}
+        <strong>emerging tools and the workflows around them</strong>.
       </>
     ),
     proof: 'The rule is from the note Studying the tape: if watching it doesn’t change what you make on Monday, it was entertainment. In late 2025 I was using an LLM as a better search box. PlayDraft on TestFlight and an installable design-taste skill came after.',
