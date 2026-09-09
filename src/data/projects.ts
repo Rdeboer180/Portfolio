@@ -1397,10 +1397,11 @@ Frame every output as:
       'The rituals of a fantasy draft (on-the-clock pressure, sleeper picks, post-draft debates, the group chat after) work because the format is competitive, social, and replayable. Outside of fantasy sports, that same mechanic almost never gets used.',
       'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic (Snacks, Movies, Super Powers, GOAT Athletes, or a written-in "Best road trip snacks") could be drafted with friends and settled in one session?',
     ],
-    // The 68-second product reel sits right after the intro — it IS the
-    // 89-second narrated scan (reel v13, 2026-08-19). Every frame is the
-    // real app captured on-simulator against the live backend — Maestro
-    // flows + simctl recordings — not a motion mockup.
+    // The product reel sits right after the intro — the 89-second narrated
+    // scan (reel v16, 2026-09-08; v13 ran here until the winner ceremony was
+    // rebuilt as the podium, which is what section 6 now shows). Every frame
+    // is the real app captured on-simulator against the live backend —
+    // Maestro flows + simctl recordings — not a motion mockup.
     problemImages: [
       {
         src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
@@ -1458,20 +1459,20 @@ Frame every output as:
       {
         key: 'structure',
         label: 'Four screens, with the draft room at the center',
-        description: 'Mapped the app around drafts as the primary noun, as one connected flow map rather than a stack of screens. The shipped information architecture settled on four screens: Home (wallet, live drafts, results), Packs (browse, search, favorites), Lab (DraftLab solo modes that feed the scoring pool), and Store. The draft room is the product’s centerpiece: live board, pick clock, queue, roster, and chat in one screen. Two structural bets defined the room. Every pack draft supports in-draft search that understands intent (typing “lay” surfaces every Lay’s flavor). Custom Drafts make every pick a free-text write-in: the group authors the topic, duplicates bounce, and the payoff is deliberately social rather than a scored winner.',
+        description: 'Mapped the app around drafts as the primary noun, as one connected flow map rather than a stack of screens. The shipped information architecture settled on four screens: Home (wallet, live drafts, the week’s competitive rooms), Packs (browse, favorites, write your own), Collection (cards, per-pack binders, in-pack search), and Store. The fourth tab moved once: DraftLab held it until cards and binders outgrew a sub-screen, so the solo modes that feed the scoring pool now sit one tap off Home and Collection took the slot. The draft room is the product’s centerpiece: live board, pick clock, queue, roster, and chat in one screen. Two structural bets defined the room. Every pack draft supports in-draft search that understands intent (typing “lay” surfaces every Lay’s flavor). Custom Drafts make every pick a free-text write-in: the group authors the topic, duplicates bounce, and the payoff is deliberately social rather than a scored winner.',
         images: [
           {
-            src: '/images/work/playdraft/playdraft-figma-product-screens.png',
-            alt: 'PlayDraft working Figma canvas: draft-room and onboarding screen references, GOAT Bundle promo iterations, a “UI Observations from testing” annotation board, notification components, and avatar rarity-tier explorations (stroke and effect-aura treatments from Basic to Epic)',
+            src: '/images/work/playdraft/playdraft-shipped-screens.png',
+            alt: 'Six screens from the shipped PlayDraft build, captured on an iPhone 17: Home with the week’s three competitive rooms and a join button, the full Packs grid with the write-your-own band above it, Collection with per-pack progress and the binder door, the coins-only Store of tickets and card packs, the live draft board with the “The pick is in” card revealing over it, and the winner podium with final standings',
             layout: 'full',
-            caption: 'The working Figma canvas: screen references, bundle-promo iterations, testing observations, and avatar rarity-tier explorations. The build protocol’s red line: no screen gets built without a reference here first',
+            caption: 'The shipped app, not the Figma: Home, Packs, Collection, and Store, then the two moments the whole product turns on — a pick landing on the live board, and the podium that settles it',
           },
         ],
       },
       {
         key: 'system',
         label: 'The constraint layer came before the screens',
-        description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system: color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, and component recipes. Governance is written down, not implied: no hex literals in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to nine by decision record, never improvisation. That’s what let 121 components and 40+ screens ship solo without drifting.',
+        description: 'Built the design system as the constraint layer first, screens second. The Figma-sourced foundation ships as tokens.json + tokens.css + a 15-module TypeScript design system: color ramps, a 16-style type ramp (Rajdhani for headers and stats, Inter for body, JetBrains Mono for numbers), an 11-step spacing scale, radius, shadows, motion, and component recipes. Governance is written down, not implied: no hex literals in components (ADR-003), nine status-pill states with required leading icons, a live in-app /design-system screen where any token without a visual rendering gets deleted, and locked micro-rules like “white on gold is forbidden.” The pack accent system grew from five color pairs to ten by decision record, never improvisation. That’s what let 133 components and 59 screens ship solo without drifting.',
         systemMarker: 'Governance',
         images: [
           {
@@ -1480,12 +1481,24 @@ Frame every output as:
             layout: 'full',
             caption: 'The v0.1 system board: emblem, ramps, semantic tokens, type, custom icon set, and status indicators on one sheet; v0.2 later re-tuned the palette cool and expanded the type ramp',
           },
+          {
+            src: '/images/work/playdraft/playdraft-design-system-governance.png',
+            alt: 'PlayDraft design-system governance board: the rule that components must not inline hex codes, font sizes or spacing numbers; four locked micro-rules including white-on-gold forbidden and the variant owning casing; a primitive to semantic to recipe token flow; Figma provenance with three accepted sources of truth; the five-step path for adding a token; and the three mechanisms that catch drift',
+            layout: 'full',
+            caption: 'The governance sheet: one rule at the top, the contribution path that enforces it, and the three places drift gets caught. Step 4 is the teeth — a token with no rendering on the live screen gets deleted',
+          },
+          {
+            src: '/images/work/playdraft/playdraft-design-system-live-screen.png',
+            alt: 'Three columns cropped from the in-app /design-system route running on device: semantic text and border tokens, then icon, state and podium tokens, then the typography ramp, with swatches labelled by token name and resolved value',
+            layout: 'full',
+            caption: 'Three columns of the living reference, running on-device: tokens rendered with their names and resolved values. This screen is the audit surface — the podium tokens in the middle column were added the week the winner ceremony shipped',
+          },
         ],
       },
       {
         key: 'build',
         label: 'AI scaffolds against the recipes; the audit catches drift',
-        description: 'The shipped app is a real production build, not a prototype shell: 40+ Expo Router screens, 121 components, 30 feature modules, 24 provider-agnostic services, 11 Supabase migrations, and 5 edge functions. Pure game logic (snake-order generation, pick-clock state, confidence-pool scoring) lives inside, with providers at the edge, so the engine is testable without the network. AI slots in as the loop accelerator: scaffolding against the token recipes, pack authoring through a curator agent with a legal-safety check, and a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself. Design tokens, product decisions, and legal posture live in the same annotated file:',
+        description: 'The shipped app is a real production build, not a prototype shell: 59 Expo Router screens, 133 components, 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, and 8 edge functions. Pure game logic (snake-order generation, pick-clock state, confidence-pool scoring) lives inside, with providers at the edge, so the engine is testable without the network. AI slots in as the loop accelerator: scaffolding against the token recipes, pack authoring through a curator agent with a legal-safety check, and a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself. Design tokens, product decisions, and legal posture live in the same annotated file:',
         systemMarker: 'Prompts',
         codeBlock: {
           language: 'ts',
@@ -1497,7 +1510,7 @@ Frame every output as:
 export const packAccents = {
   green:  { primary: '#35d68a', secondary: '#163e41' },
   yellow: { primary: '#ffd23f', secondary: '#403d31' },
-  // …6 more pairs, each added by decision record…
+  // …7 more pairs, each added by decision record…
   ink:    { primary: '#5ad1c2', secondary: '#0c2a2e' },
 } as const;
 
@@ -1542,10 +1555,10 @@ export const packs = {
     outcomeNote: 'PlayDraft is on TestFlight and being prepared for App Store submission. On device, a group can choose or write a topic, draft on the clock, get an immediate scored winner, share the board, and level up. The first release uses a coins-only economy; cash purchases stay behind a feature flag until counsel review, and third-party topic packs stay free under the legal-safety framework. Some promotional surfaces are visually complete but not wired. There are no launch metrics yet. What exists is working proof of the full product loop, including the parts I cut after play exposed a bad assumption.',
     outcomeImages: [
       {
-        src: '/images/work/playdraft/playdraft-home-draft-leagues.png',
-        alt: 'Current PlayDraft home screen on TestFlight: level and wallet header, Draft Leagues carousel panel with crown illustration and Create a League button, live-drafts row, and coins / active / tickets stat tiles above the Home / Packs / Lab / Store tab bar',
+        src: '/images/work/playdraft/playdraft-home-current.png',
+        alt: 'PlayDraft home screen from the current TestFlight build: level and wallet header with coins and ticket counts, a no-live-drafts card, and this week’s three competitive rooms as a 3-up row above a join button, sitting on the Home / Packs / Collection / Store tab bar',
         layout: 'half',
-        caption: 'The shipped home surface: wallet, feature carousel, live-draft rows, and the four-tab IA running on TestFlight',
+        caption: 'The shipped home surface from the build now on TestFlight: wallet, live drafts, and the week’s competitive rooms over the four-tab IA',
         mobile: true,
       },
       {
@@ -1568,8 +1581,8 @@ export const packs = {
     },
     metrics: [
       { value: '12 wks', label: 'First logo sketch → TestFlight (Apr–Jul 2026, solo)' },
-      { value: '121', label: 'Components on a token-governed design system' },
-      { value: '40+', label: 'Screens & routes across the shipped Expo Router app' },
+      { value: '133', label: 'Components on a token-governed design system' },
+      { value: '59', label: 'Screens & routes across the shipped Expo Router app' },
       { value: '17', label: 'Draft packs in the launch catalog, every third-party topic cleared through a legal-safety framework' },
     ],
   },
