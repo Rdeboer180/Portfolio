@@ -818,6 +818,21 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                           )}
                         </figure>
                       )}
+                      {sub.promptRows && sub.promptRows.length > 0 && (
+                        <figure className="cs__prompt-rows">
+                          <dl className="cs__prompt-list">
+                            {sub.promptRows.map((row) => (
+                              <div className="cs__prompt-row" key={row.prompt}>
+                                <dt className="cs__prompt-text">{row.prompt}</dt>
+                                <dd className="cs__prompt-outcome">{row.outcome}</dd>
+                              </div>
+                            ))}
+                          </dl>
+                          {sub.promptRowsCaption && (
+                            <figcaption className="cs__caption">{sub.promptRowsCaption}</figcaption>
+                          )}
+                        </figure>
+                      )}
                       {sub.images && sub.images.length > 0 && (
                         <div className={`cs__approach-sub-images${sub.gridColumns ? ` cs__approach-sub-images--col-${sub.gridColumns}` : ''}`}>
                           <SectionImages images={sub.images} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />

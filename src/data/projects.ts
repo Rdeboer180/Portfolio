@@ -59,6 +59,11 @@ export interface ApproachSubsection {
   gridColumns?: 2 | 3 | 4;
   systemMarker?: string;
   codeBlock?: CodeBlock;
+  /** Verbatim prompts from the real build sessions, paired with what each one
+   *  settled. Rendered as a two-column list; the prompt keeps its own casing
+   *  and typos on purpose — an edited prompt is not evidence. */
+  promptRows?: { prompt: string; outcome: string }[];
+  promptRowsCaption?: string;
 }
 
 export interface Project {
@@ -1394,8 +1399,8 @@ Frame every output as:
     // ── 01 Problem ──
     problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports, but it has stayed locked to sports.',
     problem: [
-      'The rituals of a fantasy draft (on-the-clock pressure, sleeper picks, post-draft debates, the group chat after) work because the format is competitive, social, and replayable. Outside of fantasy sports, that same mechanic almost never gets used.',
-      'PlayDraft asks the obvious next question: what if the format itself was the product, and any topic (Snacks, Movies, Super Powers, GOAT Athletes, or a written-in "Best road trip snacks") could be drafted with friends and settled in one session?',
+      'The rituals of a fantasy draft (on-the-clock pressure, sleeper picks, post-draft debates, the group chat after) work because everyone at the table wants the same pick and only one of them gets it. Outside of fantasy sports, almost nobody runs a draft.',
+      'PlayDraft makes the format the product. Pick a topic — Snacks, Movies, Super Powers, GOAT Athletes, or a written-in "Best road trip snacks" — draft it with friends, settle it in one session.',
     ],
     // The product reel sits right after the intro — the 89-second narrated
     // scan (reel v16, 2026-09-08; v13 ran here until the winner ceremony was
@@ -1421,15 +1426,6 @@ Frame every output as:
       'Topic content needs to grow without flattening personality. A Scary Movies draft, a Super Powers draft, and a GOAT Athletes draft should feel like the same product but read very differently.',
       'AI-assisted prototyping can produce a lot of screens fast, and just as easily produce inconsistent ones. The project needed a design system strong enough to act as a constraint layer, not a style guide tacked on later.',
     ],
-    gapsImages: [
-      {
-        src: '/images/work/playdraft/playdraft-pack-shields.png',
-        alt: 'Ten PlayDraft pack shields on navy (GOAT Athletes, Fast Food, Candy, Soda, Music, Movies, Scary Movies, Recess Games, Video Games, and Ice Cream), sharing one silhouette language with distinct glyphs',
-        layout: 'full',
-        caption: 'Pack shields: one silhouette system, distinct glyphs and accents, so every topic reads as the same product with its own personality',
-      },
-    ],
-
     // ── 03 Constraints ──
     constraintsPunch: 'Solo designer-builder. Real mobile stack. Real App Store rules. No lawyer on retainer.',
     constraints: [
@@ -1498,8 +1494,27 @@ Frame every output as:
       {
         key: 'build',
         label: 'AI scaffolds against the recipes; the audit catches drift',
-        description: 'The shipped app is a real production build, not a prototype shell: 59 Expo Router screens, 133 components, 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, and 8 edge functions. Pure game logic (snake-order generation, pick-clock state, confidence-pool scoring) lives inside, with providers at the edge, so the engine is testable without the network. AI slots in as the loop accelerator: scaffolding against the token recipes, pack authoring through a curator agent with a legal-safety check, and a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself. Design tokens, product decisions, and legal posture live in the same annotated file:',
+        description: 'The shipped app is a real production build, not a prototype shell: 59 Expo Router screens, 133 components, 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, and 8 edge functions. Pure game logic (snake-order generation, pick-clock state, confidence-pool scoring) lives inside, with providers at the edge, so the engine is testable without the network. AI scaffolds against the token recipes, authors packs through a curator agent with a legal-safety check, and runs a weekly report-only audit that flags drift without touching app code. The design-to-code workflow shows in the source itself. Design tokens, product decisions, and legal posture live in the same annotated file:',
         systemMarker: 'Prompts',
+        promptRows: [
+          {
+            prompt: '1 this is good as described XP only slots feed to bonus math 2 defer to casing established in design system dont add transform properties',
+            outcome: 'The variant kept its own casing and no textTransform was added. It is now one of the four locked micro-rules on the governance sheet.',
+          },
+          {
+            prompt: 'implement a extremely sharp countdown timer UI for the above need. dont stray from brand system but pull from the best of the apps animation and UI to build and reference my /ryan-design-taste',
+            outcome: 'The pre-draft countdown shipped on the existing motion, type, and colour tokens. No new visual language entered the system to get it.',
+          },
+          {
+            prompt: 'the .05 holo bonus should only apply to the bonus XP rewarded not deterministic results',
+            outcome: 'The holo bonus is wired to the bonus-XP lane only. Collection luck pays progression and never moves a placement.',
+          },
+          {
+            prompt: 'just provide me the mechanics for scoring as they stand right now please, hold off on visual enhancements',
+            outcome: 'The scoring model got written down before any UI was drawn for it. The visual work waited a turn.',
+          },
+        ],
+        promptRowsCaption: 'Verbatim from the build sessions, April–July 2026. Lowercase and typos left in — an edited prompt is not evidence.',
         codeBlock: {
           language: 'ts',
           filename: 'src/design-system/packs.ts (excerpt, real file)',
@@ -1562,10 +1577,10 @@ export const packs = {
         mobile: true,
       },
       {
-        src: '/images/work/playdraft/playdraft-share-card.jpg',
-        alt: 'Exported PlayDraft share board card: “Snacks Royale · Final Board” with a gold CHAMPION banner capping the winner’s block, every pick rendered as a full-width legible chip, and a “Think you’d draft better? Get PlayDraft.” wordmark footer',
+        src: '/images/work/playdraft/playdraft-share-card-current.png',
+        alt: 'The PlayDraft share board as it renders in the current build: a “Settle it” wordmark, the Snacks Royale final board, “@kev drafted it best” in a gold highlight, a three-squads / five-picks / final line, all three rosters with every pick numbered and legible, then a See the board button over a short link and the line “Draft yours. Settle it.”',
         layout: 'half',
-        caption: 'The real exported share card from the working app. The champion’s board reads gold, every pick reads in full, and the download hook rides along',
+        caption: 'The share board from the same build: the winner is named in plain language, every pick stays readable at thumbnail size, and the link back is the last thing you read',
       },
     ],
     outcomeLiveLinksLabel: 'Install the build',

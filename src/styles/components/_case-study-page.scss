@@ -453,6 +453,45 @@
     max-width: $container-text-width;
   }
 
+  // Verbatim build prompts paired with what each one settled. The prompt is
+  // monospace and unquoted on purpose: quotation marks read as edited speech,
+  // and the whole point is that these are unedited.
+  &__prompt-rows {
+    margin: 0 0 $spacing-xl;
+  }
+
+  &__prompt-list {
+    margin: 0;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  &__prompt-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: $spacing-lg;
+    align-items: baseline;
+    padding: $spacing-lg 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+    }
+  }
+
+  &__prompt-text {
+    font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  &__prompt-outcome {
+    margin: 0;
+    font-size: $font-size-body;
+    line-height: 1.6;
+  }
+
   &__code-block {
     margin: 0 0 $spacing-xl;
     border: 1px solid $color-neutral-light;
