@@ -268,6 +268,74 @@
     display: none;
   }
 
+  // ── The wire's label ───────────────────────────────────────────────────────
+  // Code Connect, on the thesis wire. The gap the wires cross is 56px and the
+  // label is ~330px, so it rides the pair's top edge instead, centred on the
+  // gap: half above the cards, half over their top padding, clear of both
+  // icons and of the two hub wires below. `translate`, not `transform` —
+  // .reveal-fade owns transform on every cell. Orange Deep on white for the
+  // text (5.65:1); the border is Signal Orange at 45%, the wire's own colour.
+  &__cell--connect {
+    grid-row: 1;
+    grid-column: 2 / 9;
+    justify-self: center;
+    align-self: start;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    translate: 0 -50%;
+    pointer-events: none;
+  }
+
+  &__connect {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: $color-white;
+    border: 1px solid rgba($color-primary, 0.45);
+    font-family: $font-family-mono;
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    color: $color-primary-dark;
+    white-space: nowrap;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base,
+      opacity $transition-base;
+  }
+
+  // The site's inline <code> carries its own chip (tint, padding, radius); this
+  // one is text inside a chip already, so it is reset to plain type.
+  &__connect-map {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    color: inherit;
+    white-space: inherit;
+  }
+
+  // Hovering either card of the pair thickens its wires; the label firms up
+  // with them. The loop's claim (beat 02) does the same.
+  &__cell--connect.is-active &__connect,
+  &__cell--connect.is-lit &__connect {
+    border-color: rgba($color-primary, 0.7);
+    box-shadow: $shadow-sm;
+  }
+
+  &--beat-active &__cell--connect:not(.is-lit) &__connect {
+    opacity: 0.3;
+  }
+
   // ── Node card ──────────────────────────────────────────────────────────────
   // Single-class selectors so the card renders the same on the design-system
   // page as it does on the board.
@@ -798,6 +866,7 @@
 
     &__cell--figma      { grid-row: 1; grid-column: 1; }
     &__cell--code       { grid-row: 1; grid-column: 3; }
+    &__cell--connect    { grid-row: 1; grid-column: 1 / 4; }
     &__cell--system     { grid-row: 2; grid-column: 1 / 4; justify-self: center; width: min(100%, 440px); }
     &__cell--docs       { grid-row: 3; grid-column: 1; }
     &__cell--prompts    { grid-row: 3; grid-column: 3; }
@@ -866,19 +935,33 @@
       justify-self: stretch;
     }
 
-    // Room for the ⇄ between Figma and Codebase.
-    &__cell--code {
-      margin-top: 28px;
+    // The ⇄ and its label stand between Figma and Codebase in the flow.
+    &__cell--connect {
+      grid-row: auto;
+      grid-column: auto;
+      justify-self: center;
+      align-self: auto;
+      translate: none;
+      gap: 4px;
+      max-width: 100%;
+    }
+
+    &__connect {
+      flex-wrap: wrap;
+      justify-content: center;
+      white-space: normal;
+      text-align: center;
+    }
+
+    // Name on one line, mapping on the next; the separator has no job here.
+    &__connect-dot {
+      display: none;
     }
 
     &__pair-link {
       display: block;
-      position: absolute;
-      top: -34px;
-      left: 50%;
       width: 16px;
       height: 32px;
-      transform: translateX(-50%);
       color: $color-primary;
 
       svg {

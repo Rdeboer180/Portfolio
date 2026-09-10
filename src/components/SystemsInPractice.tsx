@@ -258,7 +258,8 @@ export const BEATS: BeatData[] = [
     body: (
       <>
         <strong>Figma / Canvas</strong> and the <strong>Codebase</strong>, in whichever order
-        whichever answers fastest. Either is allowed to change the system.
+        answers fastest. Either is allowed to change the system. The Figma MCP server hands an
+        agent the mapped component and its tokens rather than a screenshot of the frame.
       </>
     ),
     nodes: ['figma', 'code'],
@@ -292,6 +293,18 @@ export const BEATS: BeatData[] = [
     nodes: ['docs', 'prompts', 'governance'],
   },
 ];
+
+// ── The wire's label ─────────────────────────────────────────────────────────
+// Code Connect is what makes the Figma ⇄ Codebase wire literally true: the
+// Figma component is mapped to the code component and its props, so an agent
+// reading the pair gets a contract rather than a screenshot. One chip, on the
+// wire, and the only literal code on the board. The mapping is Figma's own
+// Button example; it is a demonstration of the shape, not a claim about a
+// specific library.
+const CODE_CONNECT = {
+  name: 'Code Connect',
+  map: 'Button → <Button variant="primary">',
+};
 
 // ── Wires ────────────────────────────────────────────────────────────────────
 // A fixed set of links so the SVG's structure never changes between layout
@@ -734,24 +747,41 @@ const SystemsInPractice: React.FC = () => {
 
             <ol className="sip__board" ref={boardRef}>
               {SYSTEM_NODES.map((node, i) => (
-                <li
-                  key={node.id}
-                  className={`sip__cell sip__cell--${node.id} reveal-fade`}
-                  style={delay(i * 50)}
-                  ref={(el) => { cellRefs.current[node.id] = el; }}
-                  onMouseEnter={() => setActive(node.id)}
-                  onMouseLeave={() => setActive((cur) => (cur === node.id ? null : cur))}
-                >
-                  {node.id === 'code' && (
-                    // List mode only: the ⇄ between the working pair, where no wires are drawn.
-                    <span className="sip__pair-link" aria-hidden="true">
-                      <svg viewBox="0 0 16 32" focusable="false">
-                        <path d="M8 4v24M4 8l4-4 4 4M4 24l4 4 4-4" />
-                      </svg>
-                    </span>
+                <React.Fragment key={node.id}>
+                  <li
+                    className={`sip__cell sip__cell--${node.id} reveal-fade`}
+                    style={delay(i * 50)}
+                    ref={(el) => { cellRefs.current[node.id] = el; }}
+                    onMouseEnter={() => setActive(node.id)}
+                    onMouseLeave={() => setActive((cur) => (cur === node.id ? null : cur))}
+                  >
+                    <SystemNode node={node} lit={!!litNodes && litNodes.includes(node.id)} />
+                  </li>
+                  {node.id === 'figma' && (
+                    // The pair's label. Sits on the pair's top edge over the gap the
+                    // wires cross (the gap is 56px; the label is not), lights with the
+                    // pair when beat 02 claims it, and recedes with everything else
+                    // otherwise. In list mode it stands between the two cards, under
+                    // the ⇄ glyph that stands in for the wires there.
+                    <li
+                      className={`sip__cell sip__cell--connect reveal-fade${
+                        activeBeat === 2 ? ' is-lit' : ''
+                      }${active === 'figma' || active === 'code' ? ' is-active' : ''}`}
+                      style={delay(760)}
+                    >
+                      <span className="sip__pair-link" aria-hidden="true">
+                        <svg viewBox="0 0 16 32" focusable="false">
+                          <path d="M8 4v24M4 8l4-4 4 4M4 24l4 4 4-4" />
+                        </svg>
+                      </span>
+                      <span className="sip__connect">
+                        <span className="sip__connect-name">{CODE_CONNECT.name}</span>
+                        <span className="sip__connect-dot" aria-hidden="true">·</span>
+                        <code className="sip__connect-map">{CODE_CONNECT.map}</code>
+                      </span>
+                    </li>
                   )}
-                  <SystemNode node={node} lit={!!litNodes && litNodes.includes(node.id)} />
-                </li>
+                </React.Fragment>
               ))}
 
               {/* Connective linework — supplemental to the relation text inside each node. */}
