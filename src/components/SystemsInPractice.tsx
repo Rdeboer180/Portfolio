@@ -296,7 +296,8 @@ const CODE_CONNECT = {
 // ── Wires ────────────────────────────────────────────────────────────────────
 // A fixed set of links so the SVG's structure never changes between layout
 // modes; a link that a mode doesn't draw simply has an empty `d`.
-// `pair` = the Figma ⇄ Codebase thesis, the one relationship in Signal Orange.
+// `pair` = the Figma ⇄ Codebase thesis, the board's one relationship in Signal
+// Orange. The loop beneath spends its own on the return to 01 (LOOP_LINKS).
 
 type LinkId =
   | 'pair-a' | 'pair-b'

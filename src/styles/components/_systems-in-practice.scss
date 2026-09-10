@@ -6,7 +6,8 @@
 // surfaces (orange tint / half-strength steel light over paper), and the five
 // extended surfaces are identical paper-and-hairline cards on purpose —
 // that sameness is what makes them read as equally legitimate.
-// Signal Orange is spent in one place: the Figma ⇄ Codebase wires.
+// Signal Orange is spent once per drawing: the Figma ⇄ Codebase wires on the
+// board, and the return to 01 on the loop.
 //
 // Beneath the board, the loop: four beats on a rail (index, heading, short
 // body), wired 01 → 02 ⇄ 03 → 04 and back to 01 in the board's own steel. Each beat
@@ -590,6 +591,22 @@
     stroke-width: 2.2;
   }
 
+  // The loop's one orange relation: the return. "The fourth feeds the first"
+  // is what makes the four beats a loop, so it takes the thesis wire's
+  // treatment: Signal Orange at rest, thicker while 01 or 04 is active. In
+  // ring mode it is the ring's left side; in list mode the label alone.
+  &__link--return &__wire,
+  &__link--return &__head {
+    stroke: var(--sip-wire-pair);
+    stroke-width: 1.6;
+  }
+
+  &__link--return.is-active &__wire,
+  &__link--return.is-active &__head {
+    stroke: var(--sip-wire-pair);
+    stroke-width: 2.2;
+  }
+
   // The return rail is the loop's longest stroke; it draws slower, and its
   // head lands last.
   &__link--return &__wire {
@@ -794,14 +811,14 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     line-height: 16px;
-    color: $color-secondary-dark;
+    color: $color-primary-dark;
   }
 
   &__return-glyph {
     flex-shrink: 0;
     width: 14px;
     height: 14px;
-    color: $color-secondary;
+    color: $color-primary;
     overflow: visible;
 
     path {
