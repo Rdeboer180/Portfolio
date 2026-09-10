@@ -35,7 +35,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                I&rsquo;ve never waited for a new workflow to become standard before learning it. I was early to get AI tools approved and into my daily work, I&rsquo;ve spent close to a year building deeply with Claude, and I still put 8&ndash;10 hours a week outside work into learning by making things, lately with Codex, Paper, and whatever genuinely changes what a designer can own next. The tools keep moving. <span className="animated-bold">My responsibility stays the same: bring the judgment, protect the craft, understand the system, and care about what actually ships.</span>
+                I&rsquo;ve never waited for a new workflow to become standard before learning it. I was early to get AI tools approved and into my daily work, I&rsquo;ve spent close to a year building deeply with Claude, and I still put 8&ndash;10 hours a week outside work into learning by making things, lately with Codex, Figma agent exploration, and bridging the gap of knowledge between the systems I build and the React Native output that results. The tools keep moving. <span className="animated-bold">My responsibility stays the same: bring the judgment, protect the craft, understand the system, and care about what actually ships.</span>
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>
