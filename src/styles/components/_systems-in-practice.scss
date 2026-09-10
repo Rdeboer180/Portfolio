@@ -6,8 +6,9 @@
 // surfaces (orange tint / half-strength steel light over paper), and the five
 // extended surfaces are identical paper-and-hairline cards on purpose —
 // that sameness is what makes them read as equally legitimate.
-// Signal Orange is spent once per drawing: the Figma ⇄ Codebase wires on the
-// board, and the return to 01 on the loop.
+// Signal Orange is spent on the Figma ⇄ Codebase wires on the board. On the
+// loop it appears only in motion: the surge that rides the return rail back
+// to 01, on a thin ink line.
 //
 // Beneath the board, the loop: four beats on a rail (index, heading, short
 // body), wired 01 → 02 ⇄ 03 → 04 and back to 01 in the board's own steel. Each beat
@@ -591,20 +592,49 @@
     stroke-width: 2.2;
   }
 
-  // The loop's one orange relation: the return. "The fourth feeds the first"
-  // is what makes the four beats a loop, so it takes the thesis wire's
-  // treatment: Signal Orange at rest, thicker while 01 or 04 is active. In
-  // ring mode it is the ring's left side; in list mode the label alone.
+  // The return: the loop's one ink stroke, thin, like a mains line on a bench
+  // drawing. "The fourth feeds the first" is what makes the four beats a loop,
+  // and the surge below is the current on it. Active (01 or 04) takes the
+  // generic .is-active weight. In ring mode it is the ring's left side; in
+  // list mode the label alone.
   &__link--return &__wire,
   &__link--return &__head {
-    stroke: var(--sip-wire-pair);
-    stroke-width: 1.6;
+    stroke: var(--sip-wire-active);
+    stroke-width: 1.2;
   }
 
-  &__link--return.is-active &__wire,
-  &__link--return.is-active &__head {
+  // The surge. Two dashes on one path (pathLength 1): a faint tail 0.14 long
+  // and a bright core 0.05 long held at the tail's front (its offsets sit
+  // 0.09 behind), parked before the start, then carried off the far end in
+  // 1.8s of a 6s cycle. Gaps are longer than the path, so a second instance
+  // never shows. Starts after the rail has drawn.
+  &__surge {
+    fill: none;
     stroke: var(--sip-wire-pair);
-    stroke-width: 2.2;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+
+  // Both dashes at full strength: a translucent tail over the ink line reads
+  // as brown, so the head-to-tail shape comes from width alone.
+  &__surge--tail {
+    stroke-width: 1.4;
+    stroke-dasharray: 0.14 1.2;
+    stroke-dashoffset: 0.14;
+  }
+
+  &__surge--core {
+    stroke-width: 2.4;
+    stroke-dasharray: 0.05 1.3;
+    stroke-dashoffset: 0.05;
+  }
+
+  &__loop.is-visible &__surge--tail {
+    animation: sip-surge-tail 6s linear 1800ms infinite;
+  }
+
+  &__loop.is-visible &__surge--core {
+    animation: sip-surge-core 6s linear 1800ms infinite;
   }
 
   // The return rail is the loop's longest stroke; it draws slower, and its
@@ -811,14 +841,14 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     line-height: 16px;
-    color: $color-primary-dark;
+    color: $color-neutral-dark;
   }
 
   &__return-glyph {
     flex-shrink: 0;
     width: 14px;
     height: 14px;
-    color: $color-primary;
+    color: $color-neutral-dark;
     overflow: visible;
 
     path {
@@ -834,6 +864,29 @@
 @keyframes sip-comet {
   to {
     stroke-dashoffset: -1.2;
+  }
+}
+
+// The surge travels in the first 30% of the cycle and rests off the end.
+@keyframes sip-surge-tail {
+  0% {
+    stroke-dashoffset: 0.14;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  30%,
+  100% {
+    stroke-dashoffset: -1.14;
+  }
+}
+
+@keyframes sip-surge-core {
+  0% {
+    stroke-dashoffset: 0.05;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  30%,
+  100% {
+    stroke-dashoffset: -1.23;
   }
 }
 
@@ -1134,7 +1187,8 @@
       stroke-dashoffset: 0;
     }
 
-    &__comet {
+    &__comet,
+    &__surge {
       display: none;
     }
 

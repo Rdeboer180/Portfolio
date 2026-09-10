@@ -297,7 +297,8 @@ const CODE_CONNECT = {
 // A fixed set of links so the SVG's structure never changes between layout
 // modes; a link that a mode doesn't draw simply has an empty `d`.
 // `pair` = the Figma ⇄ Codebase thesis, the board's one relationship in Signal
-// Orange. The loop beneath spends its own on the return to 01 (LOOP_LINKS).
+// Orange. On the loop beneath, orange appears only as the surge that rides the
+// return rail back to 01 (LOOP_LINKS); the rail itself is a thin ink line.
 
 type LinkId =
   | 'pair-a' | 'pair-b'
@@ -600,6 +601,9 @@ const SystemsInPractice: React.FC = () => {
       set(`${id}:shaft`, wire.d);
       set(`${id}:a`, wire.headA);
       set(`${id}:b`, wire.headB);
+      // The return's surge rides the same geometry (no-ops for other links).
+      set(`${id}:tail`, wire.d);
+      set(`${id}:core`, wire.d);
     };
 
     const draw = () => {
@@ -923,6 +927,26 @@ const SystemsInPractice: React.FC = () => {
                     suppressHydrationWarning
                     ref={(el) => { loopWireRefs.current[`${link.id}:b`] = el; }}
                   />
+                  {link.isReturn && (
+                    // The surge: a slow pulse of current that rides the rail back
+                    // to 01 every six seconds. Two dashes on one geometry, a faint
+                    // tail and a bright core at its front, so it reads as current
+                    // on a line rather than a dot. Off under reduced motion.
+                    <>
+                      <path
+                        className="sip__surge sip__surge--tail"
+                        pathLength={1}
+                        suppressHydrationWarning
+                        ref={(el) => { loopWireRefs.current[`${link.id}:tail`] = el; }}
+                      />
+                      <path
+                        className="sip__surge sip__surge--core"
+                        pathLength={1}
+                        suppressHydrationWarning
+                        ref={(el) => { loopWireRefs.current[`${link.id}:core`] = el; }}
+                      />
+                    </>
+                  )}
                 </g>
               ))}
             </svg>
