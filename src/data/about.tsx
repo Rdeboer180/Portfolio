@@ -148,7 +148,7 @@ export const storySections: StorySection[] = [
 export interface ProcessBeat {
   num: '01' | '02' | '03' | '04';
   title: string;
-  /** Mono marker under the title — Ryan's own sub-terms, as on the homepage rail. */
+  /** Mono marker under the title. Ryan's own sub-terms; the homepage rail dropped its own, so this is the only place they appear. */
   meta: string;
   /** DRAFT — see COPY STATUS above. */
   body: string;

@@ -286,7 +286,7 @@ const projects: Project[] = [
         key: 'build',
         label: 'Daily with the React developer, not a handoff at the end',
         description: 'Partnered daily with the React developer over Slack threads and calls. Supplied front-end behavior specs for every complex component.',
-        systemMarker: 'People',
+        systemMarker: 'Team',
         images: [
           {
             alt: 'Placeholder for omitted internal Storybook artifact',
@@ -540,7 +540,7 @@ const projects: Project[] = [
       {
         key: 'alignment',
         label: 'Four teams with a stake in one page',
-        systemMarker: 'People',
+        systemMarker: 'Team',
         description: 'Coordinated across Analytics (audience segmentation rules), Photography (seasonal shoots I directed), SEO (variant indexing strategy), and junior designers (authoring onboarding).',
         images: [],
       },
@@ -713,7 +713,7 @@ const projects: Project[] = [
       {
         key: 'iteration',
         label: 'Handing it over is the last design decision',
-        systemMarker: 'People',
+        systemMarker: 'Team',
         description: 'Trained the owner to manage content updates independently.',
         images: [],
       },
@@ -1562,7 +1562,7 @@ Frame every output as:
         key: 'build',
         label: 'AI scaffolds against the recipes; the audit catches drift',
         description: 'The shipped app is a production build, not a prototype shell: 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, 8 edge functions. Game logic (snake order, pick clock, confidence-pool scoring) lives inside with providers at the edge, so the engine is testable without the network. AI scaffolds screens from the token recipes, authors packs through a curator agent with a legal-safety check, and runs a weekly report-only audit that flags drift and touches no app code. Tokens, product decisions, and legal posture sit in the same annotated file:',
-        systemMarker: 'Prompts',
+        systemMarker: 'Agent workflows',
         promptRows: [
           {
             prompt: '1 this is good as described XP only slots feed to bonus math 2 defer to casing established in design system dont add transform properties',

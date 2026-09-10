@@ -16,11 +16,11 @@ rdeboerdesigns.com is Ryan DeBoer's personal portfolio and its own case study: t
 
 ## Positioning
 
-Ryan builds design systems that live across Figma, production code, and the tools connecting them, the implementation half most design roles leave out, and increasingly encodes his judgment as installable agent skills and agent-readable documentation so the standard travels with the work instead of living in his head. The system is not owned by Figma or by code: both are working surfaces that read from and feed back into shared product knowledge, which also has to reach documentation, prompts, QA, people, and governance. The test he holds himself to: a system succeeds when a team, or an agent, decides well without him in the room. A neighboring "senior product designer" cannot truthfully copy the combination of production front-end depth, design-system governance, and judgment-as-portable-artifact.
+Ryan builds design systems that live across Figma, production code, and the tools connecting them, the implementation half most design roles leave out, and increasingly encodes his judgment as installable agent skills and agent-readable documentation so the standard travels with the work instead of living in his head. The system is not owned by Figma or by code: both are working surfaces that read from and feed back into shared product knowledge, which also has to reach documentation, agent workflows, QA, the team, and governance. The test he holds himself to: a system succeeds when a team, or an agent, decides well without him in the room. A neighboring "senior product designer" cannot truthfully copy the combination of production front-end depth, design-system governance, and judgment-as-portable-artifact.
 
 ## Operating Context
 
-- Readers evaluate across surfaces: the homepage (hero, about, work, systems, testimonials, technical, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, and a résumé.
+- Readers evaluate across surfaces: the homepage (hero, about, work, how I work, testimonials, technical, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, and a résumé.
 - Case studies carry real employer (Tire Rack) and client work. Confidential ones are password-gated; only "portfolio-safe" assets are ever public.
 - Evaluation extends off-site to LinkedIn (positioned as in-progress thinking) and to live product demos, e.g. WheelRack at wheelrack.com/pitstop/search.
 
@@ -46,7 +46,7 @@ Ryan builds design systems that live across Figma, production code, and the tool
 
 ## The Process, Stated Once
 
-There is exactly one canonical statement of how Ryan works, and it is the four-beat loop inside the homepage's Systems section: **Define the rules → Explore across surfaces ⇄ Learn from what becomes real → Feed it back into the system**, with the fourth returning to the first.
+There is exactly one canonical statement of how Ryan works, and it is the four-beat loop inside the homepage's How I work section (03): **Define the rules → Explore across surfaces ⇄ Learn from what becomes real → Feed it back into the system**, with the fourth returning to the first.
 
 This is a governance rule, not a copy preference. The site previously carried five competing accounts of the same process — a homepage section, two on /about, the decorative words in the About hero, and the five-part Approach vocabulary running across every case study — none of which pointed at any other. Every surface that describes the process now adapts these four beats. Adaptation is expected and wording need not match; what is not allowed is a rival sequence with a different number of steps or a different vocabulary.
 

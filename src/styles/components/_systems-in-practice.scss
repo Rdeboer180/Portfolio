@@ -1,5 +1,5 @@
 // ============================================
-// Systems in Practice — ecosystem board + the loop
+// How I work (SystemsInPractice) — ecosystem board + the loop
 // Section 03 on the homepage. Eight nodes in three tiers, told with the
 // system's own vernacular rather than a palette: the hub wears the selection
 // frame (ink border + corner handles), the working pair sits on two tint
@@ -8,8 +8,8 @@
 // that sameness is what makes them read as equally legitimate.
 // Signal Orange is spent in one place: the Figma ⇄ Codebase wires.
 //
-// Beneath the board, the loop: four beats on identical paper cards, wired
-// 01 → 02 ⇄ 03 → 04 and back to 01 in the board's own steel. Each beat
+// Beneath the board, the loop: four beats on a rail (index, heading, short
+// body), wired 01 → 02 ⇄ 03 → 04 and back to 01 in the board's own steel. Each beat
 // claims nodes on the board; hovering or focusing one lights them and
 // recedes the rest. Nothing active is the resting state — the whole board,
 // lit — and that is what the first paint and the prerender carry.
@@ -230,7 +230,7 @@
 
   // ── Board ──────────────────────────────────────────────────────────────────
   // Nine tracks: six half-columns with three gutters between the node slots.
-  // Row 2 (Docs · Shared System · Prompts) sits on the half-columns; row 1's
+  // Row 2 (Documentation · Shared Product Context · Agent workflows) sits on the half-columns; row 1's
   // pair straddles them, so Figma and Codebase land a half-step in from the
   // edges — the reference's stagger — and each overlaps the hub below it,
   // which is what lets those two wires run straight down.
@@ -399,6 +399,9 @@
     border-color: $color-neutral-dark;
     text-align: center;
     align-items: center;
+    // Row 2 stretches the hub to its neighbours' height; the frame reads as
+    // a frame around too little unless its contents sit in its middle.
+    justify-content: center;
     padding: $spacing-xl $spacing-lg;
   }
 
@@ -453,6 +456,8 @@
     line-height: 1.5;
     color: $color-secondary-dark;
     margin: 0;
+      // A triplet that wraps breaks in the middle, never stranding one word.
+    text-wrap: balance;
   }
 
   &__node-body {
@@ -620,11 +625,9 @@
   }
 
   // ── The loop ───────────────────────────────────────────────────────────────
-  // Four identical paper cards under the board — the surface tier's own
-  // treatment, so the beats read as peers of the nodes they claim and never
-  // compete with the hub. The connectors between them are the board's wires
-  // (steel, 1.4, open tick heads); the return runs under the row on a rail
-  // and carries a mono label, the way a wire on a bench carries a tag.
+  // The loop under the board. The connectors between beats are the board's
+  // wires (steel, 1.4, open tick heads); the return runs under the row on a
+  // rail and carries a mono label, the way a wire on a bench carries a tag.
 
   &__loop {
     margin-top: $spacing-3xl;
@@ -679,36 +682,36 @@
     position: relative;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    // Each beat hugs its text: the return rail and the focus ring are measured
+    // from the box, and a stretched cell would put both in empty air.
+    align-items: start;
     column-gap: $spacing-3xl;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
+  // A rail, not four more cards: index, heading, and a short body, with the
+  // connectors doing the joining. The board above already spends the section's
+  // eight bordered containers; four more read as a codified methodology.
   &__beat {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-width: 0;
-    padding: $spacing-lg;
-    background: $color-white;
-    border: 1px solid $color-border-default;
-    border-radius: $card-border-radius;
+    padding: 0;
     cursor: default;
-    transition:
-      border-color $transition-base,
-      box-shadow $transition-base;
 
+    // Ring inside the wires' 7px gap, and a focused beat is never invisible:
+    // Tab can land here before the loop has revealed.
     &:focus-visible {
       outline: 2px solid $color-primary;
-      outline-offset: 3px;
-    }
-
-    // Hover or focus: the same selected state a node takes.
-    &.is-active {
-      border-color: rgba($color-neutral-dark, 0.28);
-      box-shadow: $shadow-sm;
+      outline-offset: 4px;
+      border-radius: 4px;
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 
@@ -729,8 +732,14 @@
     transition: color $transition-fast;
   }
 
+  // Hover or focus: the index takes the text-safe orange and the body steps
+  // up to ink, the rail's version of the selected state a node takes.
   &__beat.is-active &__beat-num {
     color: $color-primary-dark;
+  }
+
+  &__beat.is-active &__beat-body {
+    color: $color-neutral-dark;
   }
 
   &__beat-title {
@@ -743,17 +752,6 @@
     margin: 0;
   }
 
-  // Ryan's own sub-terms, as the node meta: mono, Steel Dark, uppercase.
-  &__beat-meta {
-    font-family: $font-family-mono;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1.5;
-    color: $color-secondary-dark;
-    margin: 0;
-  }
-
   // The claim, in words. The nodes it names are set a weight up so the
   // mapping can be read off the card without touching anything.
   &__beat-body {
@@ -762,6 +760,7 @@
     line-height: 1.5;
     color: $color-neutral-standard;
     margin: 2px 0 0;
+    transition: color $transition-fast;
 
     strong {
       font-weight: $font-weight-semibold;
@@ -900,7 +899,7 @@
 }
 
 // ── List (<768): the ordered narrative, no graph ──────────────────────────────
-// Reading order is the DOM order — Shared System, the pair, then each surface —
+// Reading order is the DOM order — Shared Product Context, the pair, then each surface —
 // and each card carries its relationships in words. The loop stacks the same
 // way: a glyph between beats where the wire was, and the return as a line of
 // text under 04.
@@ -1051,14 +1050,14 @@
       margin-top: 28px;
     }
 
+    // In the index column, on the rail's left edge, like everything else here.
     &__beat-link {
       display: block;
       position: absolute;
       top: -34px;
-      left: 50%;
+      left: 0;
       width: 16px;
       height: 32px;
-      transform: translateX(-50%);
       color: $color-secondary;
 
       svg {
@@ -1125,7 +1124,8 @@
     &__node,
     &__wires &__link,
     &__beat,
-    &__beat-num {
+    &__beat-num,
+    &__beat-body {
       transition: none;
     }
   }

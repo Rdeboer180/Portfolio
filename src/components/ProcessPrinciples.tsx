@@ -1,8 +1,8 @@
 // ============================================
 // ProcessPrinciples — "How I work", drawn as a circuit
-// The About page's version of the four-beat loop. Same beats, titles and
-// triplets as the homepage rail under the Systems in Practice board; different
-// form and depth. Form: a closed 2×2 circuit — 01 → 02 across the top,
+// The About page's version of the four-beat loop. Same beats and titles as
+// the homepage rail under the How I work board (section 03); the mono triplets
+// live only here now. Different form and depth. Form: a closed 2×2 circuit — 01 → 02 across the top,
 // 02 ⇄ 03 down the right in Signal Orange (the one orange relation, the
 // board's rule), 03 → 04 across the bottom, 04 → 01 back up the left under a
 // RETURNS TO 01 tag — the return the rail cannot draw. Depth: a paragraph, the

@@ -1,8 +1,8 @@
 // ============================================
-// SystemsInPractice — "Accessible outside the canvas. Useful outside the code."
-// Homepage section 03. An ecosystem board of eight nodes — Shared System at
-// the centre, the Figma ⇄ Codebase working pair, and five extended surfaces —
-// built as real HTML/CSS, with the connective linework in one SVG overlay
+// SystemsInPractice — "Good product work has to travel."
+// Homepage section 03, badged "How I work". An ecosystem board of eight nodes —
+// Shared Product Context at the centre, the Figma ⇄ Codebase working pair, and
+// five extended surfaces — built as real HTML/CSS, with the connective linework in one SVG overlay
 // whose geometry is measured from the live DOM. Beneath it, the loop: four
 // beats that say how the board gets used, each claiming the nodes it works
 // on, so the process and the ecosystem read as one argument rather than two
@@ -26,18 +26,6 @@ import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
-
-/**
- * The context tag that travels with a request. One constant, read by the body
- * paragraph, so it can be swapped in one place.
- *
- * The section only names a skill that actually exists — the site's argument is
- * that its claims are verifiable. This one is `~/.claude/skills/design-system-
- * governance/`, and PRODUCT.md names it as the binding governance entry point
- * for connecting new UI to the system. If it is ever renamed, change the string
- * here and nowhere else.
- */
-export const CONTEXT_SKILL = '/design-system-governance';
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 // Stroke glyphs in the same hand as the site's other inline marks (1.8 stroke,
@@ -103,7 +91,11 @@ export interface SystemNodeData {
   id: NodeId;
   tier: 'center' | 'pair' | 'surface';
   title: string;
-  /** Mono system marker, e.g. "DESIGN · EXPLORE · ALIGN". */
+  /**
+   * Mono marker under the title. A phrase on the hub, three verbs on the
+   * working pair, and one role word on each of the five surfaces, so the
+   * surfaces read as working notes rather than an institutional taxonomy.
+   */
   meta: string;
   body: string;
   /** Centre node only: body set as separate lines. */
@@ -121,12 +113,13 @@ export const SYSTEM_NODES: SystemNodeData[] = [
   {
     id: 'system',
     tier: 'center',
-    title: 'Shared System',
+    title: 'Shared Product Context',
     meta: 'System knowledge',
-    body: 'Same source. More surfaces. Greater impact.',
-    lines: ['Same source.', 'More surfaces.', 'Greater impact.'],
+    // No `lines`: the sentence breaks on its own at every board width without
+    // stranding a word, which the old three-line body could not do.
+    body: 'Intent, decisions, and standards that can travel.',
     relation:
-      'Two-way with every surface on the board: Figma, the codebase, documentation, prompts, QA, people, and governance.',
+      'Two-way with every surface on the board: Figma, the codebase, documentation, agent workflows, QA, the team, and governance.',
     icon: ICON.system,
   },
   {
@@ -135,7 +128,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     title: 'Figma / Canvas',
     meta: 'Design · Explore · Align',
     body: 'Figma still starts and steers the conversation.',
-    relation: 'Two-way with the Codebase and with the Shared System.',
+    relation: 'Two-way with the Codebase and with the Shared Product Context.',
     icon: ICON.figma,
   },
   {
@@ -144,52 +137,52 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     title: 'Codebase',
     meta: 'Implement · Maintain · Scale',
     body: 'Turn system decisions into real products. Feed what production teaches back into the system.',
-    relation: 'Two-way with Figma and with the Shared System.',
+    relation: 'Two-way with Figma and with the Shared Product Context.',
     icon: ICON.code,
   },
   {
     id: 'docs',
     tier: 'surface',
     title: 'Documentation',
-    meta: 'Teach · Reference · Share',
+    meta: 'Reference',
     body: 'Write the system down so people who never open the Figma file or the code can still use it.',
-    relation: 'Two-way with the Shared System.',
+    relation: 'Two-way with the Shared Product Context.',
     icon: ICON.docs,
   },
   {
     id: 'prompts',
     tier: 'surface',
-    title: 'Prompts',
-    meta: 'Augment · Accelerate · Apply',
+    title: 'Agent workflows',
+    meta: 'Apply',
     body: 'Carry system context into AI workflows, prototypes, and implementation requests.',
-    relation: 'Two-way with the Shared System.',
+    relation: 'Two-way with the Shared Product Context.',
     icon: ICON.prompts,
   },
   {
     id: 'qa',
     tier: 'surface',
     title: 'QA',
-    meta: 'Test · Validate · Confidence',
+    meta: 'Validate',
     body: 'Catch drift, accessibility issues, and system mismatches before they ship.',
-    relation: 'Two-way with the Shared System.',
+    relation: 'Two-way with the Shared Product Context.',
     icon: ICON.qa,
   },
   {
     id: 'people',
     tier: 'surface',
-    title: 'People',
-    meta: 'Collaborate · Champion · Grow',
+    title: 'Team',
+    meta: 'Collaborate',
     body: 'Help specialists share context, challenge decisions, and evolve the system together.',
-    relation: 'Two-way with the Shared System.',
+    relation: 'Two-way with the Shared Product Context.',
     icon: ICON.people,
   },
   {
     id: 'governance',
     tier: 'surface',
     title: 'Governance',
-    meta: 'Guide · Evolve · Sustain',
+    meta: 'Guide',
     body: 'Define guardrails, handle exceptions, and decide when patterns should change.',
-    relation: 'Two-way with the Shared System.',
+    relation: 'Two-way with the Shared Product Context.',
     icon: ICON.governance,
   },
 ];
@@ -231,8 +224,6 @@ export type BeatIndex = 1 | 2 | 3 | 4;
 export interface BeatData {
   n: BeatIndex;
   title: string;
-  /** Mono marker under the title — the beat's own sub-terms. */
-  meta: string;
   /** Names the nodes the beat claims, in words. */
   body: React.ReactNode;
   nodes: NodeId[];
@@ -242,10 +233,9 @@ export const BEATS: BeatData[] = [
   {
     n: 1,
     title: 'Define the rules',
-    meta: 'Intent · Constraints · Foundations',
     body: (
       <>
-        Starts at the <strong>Shared System</strong>. Problem, people, constraints, and proof come
+        Starts at the <strong>Shared Product Context</strong>. Problem, people, constraints, and proof come
         before a tool picks the direction.
       </>
     ),
@@ -254,7 +244,6 @@ export const BEATS: BeatData[] = [
   {
     n: 2,
     title: 'Explore across surfaces',
-    meta: 'Figma · Prototypes · Code',
     body: (
       <>
         <strong>Figma / Canvas</strong> and the <strong>Codebase</strong>, in whichever order
@@ -267,10 +256,9 @@ export const BEATS: BeatData[] = [
   {
     n: 3,
     title: 'Learn from what becomes real',
-    meta: 'QA · Edge cases · Accessibility · Production',
     body: (
       <>
-        <strong>QA</strong> and <strong>People</strong> report back: edge cases, accessibility gaps,
+        <strong>QA</strong> and the <strong>Team</strong> report back: edge cases, accessibility gaps,
         and what production actually did with the rule.
       </>
     ),
@@ -279,14 +267,13 @@ export const BEATS: BeatData[] = [
   {
     n: 4,
     title: 'Feed it back into the system',
-    meta: 'Components · Documentation · Governance · Agent-readable guidance',
     body: (
       // No `{' '}` anywhere in these bodies: text either side of an expression
       // is two text nodes, and the prerender flattens them into one — the
       // hydration mismatch the header describes. Keep each run of text on
       // one side of an element, in one string.
       <>
-        Into <strong>Documentation</strong>, <strong>Prompts</strong>, and <strong>Governance</strong>:
+        Into <strong>Documentation</strong>, <strong>Agent workflows</strong>, and <strong>Governance</strong>:
         the guidance the next designer, engineer, or agent starts from.
       </>
     ),
@@ -369,10 +356,17 @@ const EMPTY: Wire = { d: '', headA: '', headB: '' };
 const GAP = 7; // breathing room between a wire's end and the node border
 const r1 = (n: number) => Math.round(n * 10) / 10;
 
+// Measured where the element lands, not where it is: wires are drawn at
+// mount, while .reveal-fade still holds every cell 12px low, and a resize can
+// catch a cell mid-transition. The pending translate is subtracted, so the
+// wire meets the settled border with its 7px gap instead of 12px later.
 const toBox = (el: Element, origin: DOMRect): Box => {
   const r = el.getBoundingClientRect();
+  const tf = getComputedStyle(el).transform;
+  const parts = tf.slice(tf.indexOf('(') + 1, -1).split(',').map(parseFloat);
+  const dy = tf.startsWith('matrix3d(') ? parts[13] || 0 : tf.startsWith('matrix(') ? parts[5] || 0 : 0;
   const x = r.left - origin.left;
-  const y = r.top - origin.top;
+  const y = r.top - origin.top - dy;
   return { x, y, w: r.width, h: r.height, r: x + r.width, b: y + r.height, cx: x + r.width / 2, cy: y + r.height / 2 };
 };
 
@@ -511,10 +505,13 @@ const SystemsInPractice: React.FC = () => {
 
   // Hover and focus are tracked apart so a mouse leaving a beat that also
   // holds focus (it was clicked, or tabbed to) keeps the board lit until the
-  // focus moves on. Hover wins while both are set.
+  // focus moves on. The most recent input wins while both are set, so a
+  // pointer parked on one beat never overrides the beat the keyboard is on.
   const [hoveredBeat, setHoveredBeat] = useState<BeatIndex | null>(null);
   const [focusedBeat, setFocusedBeat] = useState<BeatIndex | null>(null);
-  const activeBeat = hoveredBeat ?? focusedBeat;
+  const lastInput = useRef<'hover' | 'focus'>('hover');
+  const activeBeat =
+    lastInput.current === 'focus' ? (focusedBeat ?? hoveredBeat) : (hoveredBeat ?? focusedBeat);
   const litNodes = activeBeat ? BEATS[activeBeat - 1].nodes : null;
 
   useLayoutEffect(() => {
@@ -612,7 +609,25 @@ const SystemsInPractice: React.FC = () => {
         const origin = track.getBoundingClientRect();
         const [b1, b2, b3, b4] = ([1, 2, 3, 4] as BeatIndex[]).map((n) => {
           const el = beatRefs.current[n];
-          return el ? toBox(el, origin) : null;
+          if (!el) return null;
+          const box = toBox(el, origin);
+          // A rail, not cards: a connector between two beats runs beside their
+          // headings, so the row reads as a sequence of titles rather than a
+          // line through the middle of four text blocks. Only the horizontal
+          // connectors read cy; the stacked ones and the return rail measure
+          // from the box edges.
+          const title = el.querySelector('.sip__beat-title');
+          if (title) {
+            // Relative to the cell, so the cell's pending reveal translate
+            // (already removed from `box`) is not counted twice.
+            const li = el.getBoundingClientRect();
+            const t = title.getBoundingClientRect();
+            // The first line, not the box: one heading wraps at 1440 and the
+            // rail should still read as one line.
+            const line = parseFloat(getComputedStyle(title).lineHeight) || t.height;
+            box.cy = box.y + (t.top - li.top) + line / 2;
+          }
+          return box;
         });
 
         if (b1 && b2 && b3 && b4) {
@@ -654,13 +669,10 @@ const SystemsInPractice: React.FC = () => {
   return (
     <section id="systems" className={`sip${activeBeat ? ' sip--beat-active' : ''}`} ref={sweepRef}>
       <div className="sip__container">
-        {/* The handoff's label is "Systems in Practice", and it is the one badge on
-            the site that wraps: at 375 the label needs 233px on one line, the pill's
-            fixed chrome (icon, gap, padding) adds 80px, and the whole rule is 311px —
-            before either handle or any line. No style override inside this section
-            can hold the shared badge's proportions, so the label keeps the half that
-            carries the argument; the subject is named by the hub and the body. */}
-        <SectionBadge icon={<NetworkIcon />} label="Systems" index="03" />
+        {/* "How I work", not "Systems": the section is the process, and the
+            board is how the process is drawn. Short enough to hold one line at
+            375 inside the shared badge's fixed chrome. */}
+        <SectionBadge icon={<NetworkIcon />} label="How I work" index="03" />
 
         <div className="sip__inner">
           {/* ── Editorial column ── */}
@@ -668,36 +680,31 @@ const SystemsInPractice: React.FC = () => {
             <h2 className="sip__title">
               <span className="reveal-mask">
                 <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
-                  Accessible outside the canvas.
-                </span>
-              </span>
-              <span className="reveal-mask">
-                <span className="sip__title-line reveal-mask__inner" style={delay(110)}>
-                  Useful outside the code.
+                  Good product work has to travel.
                 </span>
               </span>
             </h2>
             <p className="sip__body reveal-fade" style={delay(240)}>
-              Figma still starts and steers the conversation, and it remains home to some of
-              the tools.{' '}
+              I don’t treat Figma, code, documentation, or a prompt as the finish line. They’re
+              working surfaces for the same product decision. I move between them depending on
+              what will answer the question fastest, and{' '}
               <span className="animated-bold">
-                But as high-fidelity prototypes get faster to build, the time I spend in Figma is
-                getting smaller.
-              </span>{' '}
-              What used to be the nucleus of a design system is now one piece in a much larger puzzle.
+                what I learn in one should be allowed to change the others.
+              </span>
             </p>
             <p className="sip__body reveal-fade" style={delay(320)}>
-              The system has to travel farther: into documentation, prompt workflows, QA, automation,
-              team conversations, and production decisions. More and more of my work now starts with a
-              request carrying <code>{CONTEXT_SKILL}</code>, so the same standards can be understood
-              whether the next collaborator is a designer, engineer, or agent.
+              Design systems make that movement easier, but they aren’t the whole job. The work is
+              defining the problem, making tradeoffs visible, testing what becomes real, and leaving
+              enough context for the next designer, engineer, or agent to make a good decision
+              without me in the room.
             </p>
             <div className="sip__actions reveal-fade" style={delay(420)}>
-              <Link
-                to="/notes/systems-that-make-better-decisions-easier/"
-                className="btn btn--secondary btn--md sip__btn"
-              >
-                Read my thinking &rarr;
+              {/* PlayDraft is the public study where the whole loop is visible:
+                  Figma, a token-governed build, Maestro QA, and the live
+                  /design-system screen. WheelRack is the deeper system study but
+                  sits behind the gate, and a first click should land. */}
+              <Link to="/work/playdraft/" className="btn btn--secondary btn--md sip__btn">
+                See this in the work &rarr;
               </Link>
               <Link to="/design-system" className="sip__link">
                 Explore the live system &rarr;
@@ -708,14 +715,14 @@ const SystemsInPractice: React.FC = () => {
                 approved reference carries two, one above the file and one under
                 the CTAs, and this is the one that answers the space under the
                 CTAs where the column is shorter than the board. Decorative, and
-                hidden from AT: it paraphrases the hub's own three lines. Drawn
+                hidden from AT: it names the move the board is for. Drawn
                 only where the columns sit side by side (the SCSS hides it
                 below 1280) — stacked, it would just be a second handwritten
                 line above the board's own. */}
             <p className="sip__mark reveal-fade" aria-hidden="true" style={delay(560)}>
-              <span className="sip__mark-line">Same standards,</span>
+              <span className="sip__mark-line">Use the surface</span>
               <span className="sip__mark-line sip__mark-line--drawn">
-                more surfaces.
+                that answers fastest.
                 <svg
                   className="sip__mark-underline"
                   viewBox="0 0 240 14"
@@ -764,6 +771,7 @@ const SystemsInPractice: React.FC = () => {
                     // otherwise. In list mode it stands between the two cards, under
                     // the ⇄ glyph that stands in for the wires there.
                     <li
+                      role="presentation"
                       className={`sip__cell sip__cell--connect reveal-fade${
                         activeBeat === 2 ? ' is-lit' : ''
                       }${active === 'figma' || active === 'code' ? ' is-active' : ''}`}
@@ -856,9 +864,9 @@ const SystemsInPractice: React.FC = () => {
                   // is a lens on the board, and the beat's text already says
                   // what it would show — so it carries no button role.
                   tabIndex={0}
-                  onMouseEnter={() => setHoveredBeat(beat.n)}
+                  onMouseEnter={() => { lastInput.current = 'hover'; setHoveredBeat(beat.n); }}
                   onMouseLeave={() => setHoveredBeat((cur) => (cur === beat.n ? null : cur))}
-                  onFocus={() => setFocusedBeat(beat.n)}
+                  onFocus={() => { lastInput.current = 'focus'; setFocusedBeat(beat.n); }}
                   onBlur={() => setFocusedBeat((cur) => (cur === beat.n ? null : cur))}
                 >
                   {beat.n > 1 && (
@@ -880,7 +888,6 @@ const SystemsInPractice: React.FC = () => {
                       "[ 0" — the #418 the header describes. */}
                   <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
                   <h4 className="sip__beat-title">{beat.title}</h4>
-                  <p className="sip__beat-meta">{beat.meta}</p>
                   <p className="sip__beat-body">{beat.body}</p>
                 </li>
               ))}
