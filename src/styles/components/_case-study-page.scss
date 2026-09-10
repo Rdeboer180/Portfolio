@@ -328,7 +328,11 @@
     margin-bottom: $spacing-sm;
   }
 
-  &__section-bullets {
+  // One dash treatment for every list on the page: the section lists, the
+  // approach-subsection inventories, and the takeaways under the results note.
+  &__section-bullets,
+  &__approach-sub-list,
+  &__takeaways {
     list-style: none;
     padding: 0;
     margin: 0 0 $spacing-2xl;
@@ -451,6 +455,14 @@
     color: $color-neutral-standard;
     margin: 0 0 $spacing-xl;
     max-width: $container-text-width;
+  }
+
+  // Inventory list under a subsection description; dash treatment comes from
+  // the shared rule above, this only matches the description's measure and
+  // bottom margin.
+  &__approach-sub-list {
+    max-width: $container-text-width;
+    margin: 0 0 $spacing-xl;
   }
 
   // Verbatim build prompts paired with what each one settled. The prompt is
@@ -615,6 +627,15 @@
     color: $color-neutral-standard;
     border-top: 1px solid rgba($color-primary, 0.15);
     padding-top: $spacing-xl;
+  }
+
+  // Takeaways: rendered by OutcomeMetrics beneath the results note, on both
+  // sides of the password gate. Dash treatment comes from the shared list
+  // rule; this sets the measure and the gap from the note.
+  &__takeaways {
+    max-width: $container-text-width;
+    margin: $spacing-xl 0 0;
+    @include fade-in-up(0.3s);
   }
 
   // ==========================================
@@ -1022,13 +1043,6 @@
     line-height: $line-height-body-sm;
     color: $color-neutral-standard;
     margin: 0;
-  }
-
-  // LEGACY: Takeaways
-  &__takeaways {
-    max-width: $container-text-width;
-    margin-bottom: $spacing-4xl;
-    @include fade-in-up(0.3s);
   }
 
   // LEGACY: Images

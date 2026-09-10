@@ -418,6 +418,10 @@ interface CaseStudyPageProps {
  * strings. It did not, and WheelRack's outcomeNote names the client outright —
  * so a locked page anonymised the header to ANON_CLIENT and then printed the
  * real name two paragraphs below it.
+ *
+ * Takeaways render here too, beneath the note, for the same reason: on a
+ * locked study they are the only place a visitor meets a decision behind the
+ * numbers. Same redaction, no heading.
  */
 const OutcomeMetrics: React.FC<{ project: Project; locked: boolean }> = ({ project, locked }) => (
   <>
@@ -433,6 +437,13 @@ const OutcomeMetrics: React.FC<{ project: Project; locked: boolean }> = ({ proje
                 <p className="cs__results-note">
                   {redactClient(project.outcomeNote || project.resultsNote || '', locked)}
                 </p>
+              )}
+              {project.takeaways && project.takeaways.length > 0 && (
+                <ul className="cs__takeaways">
+                  {project.takeaways.map((item, i) => (
+                    <li key={i}>{redactClient(item, locked)}</li>
+                  ))}
+                </ul>
               )}
   </>
 );
@@ -805,6 +816,13 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
+                      {sub.bullets && sub.bullets.length > 0 && (
+                        <ul className="cs__approach-sub-list">
+                          {sub.bullets.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      )}
                       {sub.codeBlock && (
                         <figure className="cs__code-block">
                           {sub.codeBlock.filename && (
@@ -971,7 +989,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             {project.timeToLive && (
               <div className="cs__time-to-live">
                 <span className="cs__time-to-live-label">Time to Live</span>
-                <span className="cs__time-to-live-value">{project.timeToLive}</span>
+                <span className="cs__time-to-live-value">{redactClient(project.timeToLive, locked)}</span>
               </div>
             )}
           </>
