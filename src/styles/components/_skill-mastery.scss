@@ -1,0 +1,507 @@
+// ============================================
+// Mastery (SkillMastery): homepage section 05
+// The class the talent tree computes, how the tree grew, a miniature of the
+// tree on Ink, and the door into /talent-tree/. Paper chrome like every other
+// section; the one dark surface is the tree panel, the Layers-panel
+// vernacular grown up (Ink, 12px radius, hairlines at 8% white, Cool Paper
+// labels, Steel meta, selection-frame handles on the corners). Signal Orange
+// on the panel is spent only on earned state: the ramp a node climbs as points
+// land, the fill and glow at 5 / 5, and the lit paths between them.
+//
+// Beneath the class, "How the tree grew" is a rail, not cards: index, heading,
+// short body, and a steel arrow between beats, the same hand as the How I work
+// loop's connectors. Nothing here is measured; the miniature is fixed geometry
+// drawn by SkillMastery.tsx, and the layout modes are all CSS:
+//   rail:   six across (≥1024) · three by two (640–1023) · a list (<640)
+//   spread: panel beside the aside (≥1280) · aside beneath the panel (<1280)
+//   panel:  three trees across (≥768) · stacked (<768)
+// ============================================
+
+@import '../variables';
+
+.sm {
+  --sm-ink: #{$color-neutral-dark};
+  --sm-hairline: rgba(255, 255, 255, 0.08);
+
+  background: $color-white;
+  padding: $section-pad-y 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // ── Head: badge, eyebrow, class, explanation ───────────────────────────────
+
+  &__rule {
+    max-width: $container-text-width;
+  }
+
+  &__eyebrow {
+    margin: 0 0 $spacing-sm;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  &__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $spacing-sm 20px;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+    text-wrap: balance;
+  }
+
+  // The slash between the two archetypes: Steel, so the pair reads as one
+  // class with a seam rather than two titles.
+  &__title-slash {
+    color: $color-secondary;
+  }
+
+  &__level {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    color: $color-secondary-dark;
+    white-space: nowrap;
+  }
+
+  &__explanation {
+    max-width: $container-text-width;
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+
+  // ── How the tree grew: seam + rail ─────────────────────────────────────────
+
+  &__growth {
+    margin-top: 28px;
+  }
+
+  // The seam: a mono label seated on a hairline, the section rule's quieter
+  // cousin (no handles, so the rule above keeps its rank).
+  &__seam {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm $spacing-lg;
+    margin: 0 0 $spacing-lg;
+  }
+
+  &__seam-label {
+    flex-shrink: 0;
+    margin: 0;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-regular;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: $color-neutral-muted;
+  }
+
+  &__seam-line {
+    flex: 1 1 120px;
+    height: 1px;
+    background: $color-neutral-light;
+  }
+
+  &__seam-note {
+    flex: 0 1 auto;
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+    color: $color-neutral-muted;
+  }
+
+  // Six beats across, with the 26px arrow living in the gap between columns.
+  &__rail {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 26px;
+    row-gap: $spacing-xl;
+    align-items: start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__beat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  // The arrow from the beat before, drawn in the gap: steel, 1.4, an open
+  // head, level with the heading (index 16 + gap 6 + half the 20px heading).
+  &__beat-link {
+    position: absolute;
+    top: 26px;
+    left: -26px;
+    width: 26px;
+    height: 12px;
+    color: $color-secondary;
+    pointer-events: none;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__beat-num {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.1em;
+    line-height: 16px;
+    color: $color-neutral-muted;
+  }
+
+  &__beat-title {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+    line-height: 20px;
+    color: $color-neutral-dark;
+  }
+
+  &__beat-body {
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: 13px;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+  }
+
+  // ── The spread: the miniature and the aside ────────────────────────────────
+
+  &__spread {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $spacing-2xl 40px;
+    margin-top: $spacing-2xl;
+  }
+
+  // The tree on Ink. Handles on the corners, the way the section rules and
+  // cards carry them, in the same Steel; static, like every frame on the site.
+  &__mini {
+    position: relative;
+    flex: 0 0 auto;
+    width: 700px;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 20px $spacing-xl;
+    background: var(--sm-ink);
+    border-radius: $radius-xl;
+    color: $color-secondary-lightest;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      pointer-events: none;
+      background-image:
+        linear-gradient($color-secondary 0 0),
+        linear-gradient($color-secondary 0 0),
+        linear-gradient($color-secondary 0 0),
+        linear-gradient($color-secondary 0 0);
+      background-size: 7px 7px;
+      background-repeat: no-repeat;
+      background-position: top left, top right, bottom left, bottom right;
+    }
+  }
+
+  &__mini-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px $spacing-lg;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-secondary;
+  }
+
+  &__mini-trees {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+  }
+
+  &__tree {
+    flex: 0 0 auto;
+    width: 204px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tree-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: $spacing-sm;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__tree-name {
+    color: $color-secondary-lightest;
+  }
+
+  &__tree-pts {
+    color: $color-secondary;
+  }
+
+  &__tree-svg {
+    display: block;
+    width: 204px;
+    height: 156px;
+    margin-top: 6px;
+    // The mastered glow and the lit-path shadow reach past the stage.
+    overflow: visible;
+  }
+
+  // The root's name beside it, in the panel's meta voice.
+  &__tree-root {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    fill: $color-secondary;
+  }
+
+  // MASTERED: an orange dot (earned state), the label in Steel, the names in
+  // Cool Paper, and the pool seam ("· core") back in Steel.
+  &__mini-foot {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  &__mini-dot {
+    position: relative;
+    top: -1px;
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-primary;
+  }
+
+  &__mini-label {
+    flex: 0 0 auto;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-secondary;
+  }
+
+  &__mini-list {
+    letter-spacing: 0.02em;
+    color: rgba(244, 246, 247, 0.85);
+  }
+
+  &__mini-core {
+    color: $color-secondary;
+  }
+
+  // ── The aside: caveat, message, the door, the tools line ───────────────────
+
+  &__aside {
+    flex: 1 1 300px;
+    min-width: 0;
+    max-width: $container-text-width;
+    padding-top: 2px;
+  }
+
+  // The hand mark: a pen arrow back toward the panel and the caveat in
+  // Caveat. `rotate`, not `transform`: .reveal-fade owns transform.
+  &__caveat {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin: 0 0 10px;
+    pointer-events: none;
+  }
+
+  &__caveat-arrow {
+    flex: 0 0 auto;
+    display: block;
+    width: 40px;
+    height: 16px;
+    color: $color-neutral-muted;
+    overflow: visible;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__caveat-text {
+    display: inline-block;
+    rotate: -1.5deg;
+    font-family: $font-family-hand;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $color-neutral-muted;
+  }
+
+  &__message {
+    margin: 0;
+    font-family: $font-family-primary;
+    font-size: $font-size-body;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+  }
+
+  // The site's primary button, with the arrow the artboard gives it. The
+  // global .btn resets outline on <button>; a link needs its own ring.
+  &__cta {
+    gap: 10px;
+    margin-top: $spacing-xl;
+    white-space: nowrap;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
+  &__cta-arrow {
+    display: block;
+    width: 16px;
+    height: 16px;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  // The quiet Menlo line of tools that stays inside the section for search
+  // terms (BRIEF-v3, assumptions carried).
+  &__tools {
+    margin: 20px 0 0;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: $color-neutral-muted;
+  }
+}
+
+// ── Three by two: the rail folds, and a row's first beat has no arrow ────────
+
+@media (max-width: #{$breakpoint-lg - 1px}) {
+  .sm {
+    &__rail {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &__beat:nth-child(3n + 1) &__beat-link {
+      display: none;
+    }
+  }
+}
+
+// ── The panel stacks its trees ───────────────────────────────────────────────
+
+@media (max-width: #{$breakpoint-md - 1px}) {
+  .sm {
+    &__mini {
+      width: 100%;
+    }
+
+    &__mini-trees {
+      flex-direction: column;
+      gap: $spacing-lg;
+    }
+  }
+}
+
+// ── A list: one beat per row, the arrow above it pointing down ───────────────
+
+@media (max-width: #{$breakpoint-sm - 1px}) {
+  .sm {
+    &__title {
+      font-size: 28px;
+    }
+
+    &__rail {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 36px;
+    }
+
+    &__beat:nth-child(3n + 1) &__beat-link {
+      display: block;
+    }
+
+    &__beat-link {
+      top: -30px;
+      left: -7px;
+      rotate: 90deg;
+    }
+  }
+}
+
+// ── Reduced motion: hover transitions only, and none of those here ───────────
+
+@media (prefers-reduced-motion: reduce) {
+  .sm {
+    &__cta {
+      transition: none;
+    }
+  }
+}

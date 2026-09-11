@@ -110,6 +110,44 @@ $select-b: blue($color-primary-light);
   }
 }
 
+// The bio's one door to the talent tree. Semibold on the text-safe orange,
+// with the branch glyph (the same mark the hero chip and section 05 carry)
+// drawn as a pseudo element in currentColor, so the link reads as a place to
+// go rather than a word that happens to be underlined.
+.about__tree-link {
+  font-weight: $font-weight-semibold;
+  color: $color-primary-text;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  white-space: nowrap;
+  transition: color $transition-fast;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.28em;
+    vertical-align: -0.14em;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18.6' r='2.2'/><path d='M12 16.4V11.6M12 11.6L6.6 6.8M12 11.6L17.4 6.8'/><circle cx='5.6' cy='5.6' r='2.2' fill='%23000'/><circle cx='18.4' cy='5.6' r='2.2' fill='%23000'/></svg>") center / contain no-repeat;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18.6' r='2.2'/><path d='M12 16.4V11.6M12 11.6L6.6 6.8M12 11.6L17.4 6.8'/><circle cx='5.6' cy='5.6' r='2.2' fill='%23000'/><circle cx='18.4' cy='5.6' r='2.2' fill='%23000'/></svg>") center / contain no-repeat;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $color-primary-dark;
+    text-decoration-thickness: 2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
 .about {
   background: $color-white;
   padding: $section-pad-y 0;

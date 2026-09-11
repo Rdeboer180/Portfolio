@@ -6,7 +6,7 @@ import NotFoundPage from './components/NotFoundPage';
 // Home-page sections load in the initial chunk — home is the default route.
 import Hero from './components/Hero';
 import About from './components/About';
-import TechnicalAbilities from './components/TechnicalAbilities';
+import SkillMastery from './components/SkillMastery';
 import CaseStudyPlayground from './components/CaseStudyPlayground';
 import SystemsInPractice from './components/SystemsInPractice';
 import Footer from './components/Footer';
@@ -29,6 +29,7 @@ const AboutPage = lazy(() => import('./components/AboutPage'));
 const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
+const TalentTreePage = lazy(() => import('./components/TalentTreePage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
 
@@ -78,7 +79,7 @@ function HomeRoute() {
       <CaseStudyPlayground />
       <SystemsInPractice />
       <Testimonials />
-      <TechnicalAbilities />
+      <SkillMastery />
       <FAQ />
       <Footer />
     </PageShell>
@@ -182,6 +183,10 @@ function AppRoutes() {
         <Route path="/notes" element={<PageShell><NotesPage /></PageShell>} />
         <Route path="/notes/:slug" element={<PageShell><NotePage /></PageShell>} />
         <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
+        <Route path="/talent-tree" element={<PageShell><TalentTreePage /></PageShell>} />
+        {/* The name Ryan used in the brief; the site's routes are kebab-case with a
+            trailing slash, so this is a client-side alias, not the canonical. */}
+        <Route path="/talentTree" element={<Navigate to="/talent-tree/" replace />} />
         {/* A real 404 instead of a silent redirect home. The redirect
             returned HTTP 200 with the homepage, gave the visitor no signal,
             and hydrated the prerendered shell at the wrong URL — which

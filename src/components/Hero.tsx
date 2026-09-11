@@ -2,6 +2,8 @@ import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from
 import { Link } from 'react-router-dom';
 import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
+import { glyph } from '../data/talent/glyphs';
+import { RYAN_CLASS_SHORT, RYAN_INTAKE } from '../data/talent/ryan';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 import { useUnlock } from '../context/UnlockContext';
@@ -924,6 +926,38 @@ const Hero: React.FC = () => {
                 <div className="hero__profile-label hero__profile-label--layer" aria-hidden="true">
                   <span>layer</span> / 01 Portfolio image
                 </div>
+
+                {/* The easter egg (BRIEF-v3, "Option C"): a second inspector chip
+                    8px under the layer label, reading the class the talent tree
+                    computes, and the hero's door into /talent-tree/. Stateless
+                    and identical on server and client; it rides the layer
+                    label's stage keys in _hero.scss, one beat behind it. The
+                    class is an authored constant so this file never imports the
+                    scorer (ryan.test.ts holds the constant to the computed
+                    result); the level is the years rule from economy.ts. One
+                    template string after the span, so the serialised text node
+                    matches on hydration. */}
+                <Link
+                  to="/talent-tree/"
+                  className="hero__profile-label hero__profile-label--class"
+                  aria-label="Open the talent tree"
+                >
+                  <svg
+                    className="hero__profile-label-glyph"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                    dangerouslySetInnerHTML={{ __html: glyph('branch') }}
+                  />
+                  <span>class</span>
+                  {` / ${RYAN_CLASS_SHORT} · Lv ${RYAN_INTAKE.years}`}
+                  <span className="hero__profile-tip" aria-hidden="true">Open the talent tree</span>
+                </Link>
               </div>
 
               {/* DevTools-style tag indicator pointing at the portrait layer */}

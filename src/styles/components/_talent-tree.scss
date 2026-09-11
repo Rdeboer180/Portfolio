@@ -1,0 +1,2308 @@
+// ============================================
+// Talent tree — /talent-tree
+// The page chrome is the site's paper; the board is the one dark surface,
+// the Layers-panel vernacular grown up: Ink #1b1b1b, 12px radius, hairlines
+// at 8% white, labels in Cool Paper, meta in Steel Menlo, selection-frame
+// handles on the panel. Orange is spent only on earned state (the node
+// scale, the lit paths, the mastered glow) and on the one primary action
+// per surface.
+//
+// Node scale, from NodeStates.dc.html (ring and glyph take the same value):
+//   0 unspent   ring 1px #fff 14% · glyph #8f9daf 55%
+//   locked      ring 1px dashed #fff 14% · glyph #8f9daf 30%
+//   1 to 4      ring 1.5px + glyph #f03d01 at 40 / 55 / 70 / 85%
+//   5 mastered  fill #f03d01 · glyph #1b1b1b · ring 1.5px at a 2px gap ·
+//               glow 0 0 12px 45% · 7px mark, top right
+// Paths: unlit #fff 12% at 1.4px; lit #f03d01 at the node's alpha, 1.6px;
+// a glow at 5 only.
+//
+// Layouts. The board's geometry is data (geometry.ts): every node carries
+// its position in both layouts as custom properties, and both wire layers
+// are in the DOM. This file picks one:
+//   column  ≥ 1024   three trees side by side, 796px tall (Tree.dc.html)
+//   row     < 1024   crowns across the top, foundations beneath, the root at
+//                    the foot, 284px tall (Mobile.dc.html); trees stack
+//                    from 768 and sit behind tabs under 768
+// ============================================
+
+@import '../variables';
+
+$tt-ink: $color-neutral-dark;
+$tt-paper: $color-secondary-lightest;
+$tt-steel: $color-secondary;
+$tt-steel-dark: $color-secondary-dark;
+$tt-orange: $color-primary;
+$tt-orange-deep: $color-primary-dark;
+$tt-hairline-dark: rgba(255, 255, 255, 0.08);
+$tt-ring-unspent: rgba(255, 255, 255, 0.14);
+$tt-wire-unlit: rgba(255, 255, 255, 0.12);
+$tt-level-alpha: (1: 0.4, 2: 0.55, 3: 0.7, 4: 0.85);
+$tt-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+$tt-step: 240ms;
+
+$tt-column-height: 796px;
+$tt-row-height: 284px;
+$tt-node: 44px;
+$tt-node-row: 40px;
+
+@mixin tt-mono($size: 10px, $line: 14px) {
+  font-family: $font-family-mono;
+  font-size: $size;
+  line-height: $line;
+}
+
+@mixin tt-eyebrow {
+  @include tt-mono(11px, 14px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $tt-steel-dark;
+}
+
+@mixin tt-focus {
+  &:focus-visible {
+    outline: 2px solid $tt-orange;
+    outline-offset: 3px;
+  }
+}
+
+// Four 7px Steel squares on the bounding corners: the selection frame's
+// handles, without the mixin's paper border and hover tint.
+@mixin tt-handles($color: $tt-steel, $size: 7px) {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(#{$size} / -2);
+    pointer-events: none;
+    background-image:
+      linear-gradient($color 0 0),
+      linear-gradient($color 0 0),
+      linear-gradient($color 0 0),
+      linear-gradient($color 0 0);
+    background-size: $size $size;
+    background-repeat: no-repeat;
+    background-position: top left, top right, bottom left, bottom right;
+  }
+}
+
+// ── Page shell ───────────────────────────────────────────────────────────────
+
+.tt {
+  position: relative;
+  min-height: 100vh;
+  background: $color-white;
+  color: $color-neutral-dark;
+  font-family: $font-family-primary;
+
+  button,
+  a,
+  input,
+  [tabindex='-1'] {
+    @include tt-focus;
+  }
+
+  [data-tt-focus]:focus {
+    outline: none;
+  }
+
+  &__nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-index-sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xl $spacing-3xl;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid $color-border-light;
+  }
+
+  &__nav-logo {
+    font-family: $font-family-heading;
+    font-size: $font-size-body;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    border-radius: $radius-sm;
+  }
+
+  &__nav-back {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+    text-decoration: none;
+    transition: color $transition-fast;
+    border-radius: $radius-sm;
+
+    &:hover {
+      color: $color-primary-text;
+    }
+  }
+
+  &__section {
+    padding: $spacing-xl 0;
+    scroll-margin-top: 96px;
+
+    &:first-of-type {
+      padding-top: 128px;
+    }
+  }
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+}
+
+.tt-eyebrow {
+  @include tt-eyebrow;
+  margin: 0;
+
+  &--orange {
+    color: $tt-orange-deep;
+  }
+}
+
+.tt-rule {
+  position: relative;
+  height: 1px;
+  margin: 28px 0 24px;
+  border: 0;
+  background: $color-neutral-light;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    background: $tt-steel;
+  }
+
+  &::before { left: 0; }
+  &::after { right: 0; }
+}
+
+// ── 00 · Intro ───────────────────────────────────────────────────────────────
+
+.tt-intro {
+  &__card {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+    padding: 28px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-xl;
+    background: $color-white;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 12px 0 0;
+    font-family: $font-family-heading;
+    font-size: 30px;
+    font-weight: $font-weight-extrabold;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__lead {
+    color: $color-neutral-dark;
+    font-weight: $font-weight-medium;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  &__mini {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px 12px;
+    background: $tt-ink;
+    border: 1px solid $tt-hairline-dark;
+    border-radius: $radius-xl;
+  }
+
+  &__mini-head,
+  &__mini-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    @include tt-mono(10px, 14px);
+    color: $tt-steel;
+  }
+
+  &__mini-foot {
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px solid $tt-hairline-dark;
+  }
+
+  &__mini-layer {
+    letter-spacing: 0.06em;
+  }
+
+  &__mini-key {
+    color: $tt-orange;
+  }
+
+  &__mini-meta,
+  &__mini-trees {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__mini-class {
+    margin-left: auto;
+    letter-spacing: 0.06em;
+    color: $tt-paper;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__mini-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__hook {
+    margin: 0;
+    padding: 0 4px;
+    font-family: $font-family-hand;
+    font-size: 22px;
+    font-weight: $font-weight-semibold;
+    line-height: 1.2;
+    color: $tt-orange-deep;
+  }
+}
+
+// ── 01 · Intake ──────────────────────────────────────────────────────────────
+
+.tt-intake {
+  display: grid;
+  grid-template-columns: 1fr 372px;
+  gap: 36px;
+  align-items: start;
+
+  &__frame {
+    padding: 28px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-xl;
+    background: $color-white;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 4px;
+  }
+
+  &__title {
+    margin: 2px 0 0;
+    font-family: $font-family-heading;
+    font-size: 24px;
+    font-weight: $font-weight-bold;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  &__lede {
+    margin: 0;
+    font-size: $font-size-body-sm;
+    line-height: 20px;
+    color: $color-neutral-muted;
+  }
+
+  &__readonly {
+    margin: 4px 0 0;
+    @include tt-mono(11px, 16px);
+    color: $tt-orange-deep;
+  }
+}
+
+.tt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  &__legend {
+    font-size: 13px;
+    font-weight: $font-weight-semibold;
+    line-height: 18px;
+    color: $color-neutral-dark;
+  }
+
+  &__summary {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+    text-align: right;
+  }
+
+  &__note {
+    margin: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.06em;
+    color: $tt-steel-dark;
+
+    &--inline {
+      flex: 1 1 200px;
+    }
+  }
+
+  &:disabled {
+    .tt-chip:not(.is-selected) {
+      opacity: 0.55;
+    }
+
+    .tt-chip,
+    .tt-stepper__value,
+    .tt-input {
+      cursor: default;
+    }
+  }
+}
+
+.tt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tt-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  background: $color-white;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color $transition-fast, background $transition-fast;
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__label {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-standard;
+  }
+
+  &__meta {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel-dark;
+  }
+
+  &:hover {
+    border-color: rgba($color-primary, 0.45);
+  }
+
+  &:focus-within {
+    outline: 2px solid $tt-orange;
+    outline-offset: 3px;
+  }
+
+  &.is-selected {
+    border-color: $tt-orange;
+    background: $color-primary-light;
+
+    .tt-chip__label {
+      font-weight: $font-weight-semibold;
+      color: $tt-orange-deep;
+    }
+
+    .tt-chip__meta {
+      color: $tt-orange-deep;
+    }
+  }
+}
+
+.tt-stepper-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.tt-stepper {
+  display: flex;
+  align-items: stretch;
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid $color-border-default;
+    color: $color-neutral-standard;
+    background: $color-white;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:first-child {
+      border-radius: $radius-md 0 0 $radius-md;
+    }
+
+    &:last-child {
+      margin-left: -1px;
+      border-radius: 0 $radius-md $radius-md 0;
+    }
+
+    &:hover:not(:disabled) {
+      background: $color-neutral-lightest;
+      color: $color-neutral-dark;
+    }
+
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  &__value {
+    width: 72px;
+    height: 40px;
+    margin-left: -1px;
+    padding: 0;
+    border: 1px solid $color-border-default;
+    border-radius: 0;
+    font-family: $font-family-heading;
+    font-size: 20px;
+    font-weight: $font-weight-extrabold;
+    color: $color-neutral-dark;
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      position: relative;
+      z-index: 1;
+      border-color: $tt-orange;
+    }
+  }
+}
+
+.tt-chip.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+
+  &:hover {
+    border-color: $color-border-default;
+  }
+}
+
+// Text fields take the site's input focus (the border turns Signal Orange,
+// no ring), so the page-wide focus-visible outline steps back for them.
+.tt-input {
+  width: 320px;
+  max-width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  background: $color-white;
+  font-size: $font-size-body;
+  color: $color-neutral-dark;
+
+  &::placeholder {
+    color: $tt-steel;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: $tt-orange;
+  }
+}
+
+.tt-stepper__value:focus-visible,
+.tt-result__url:focus-visible {
+  outline: none;
+  border-color: $tt-orange;
+}
+
+.tt-tally {
+  position: sticky;
+  top: 104px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid $color-neutral-dark;
+  border-radius: $radius-xl;
+  background: $tt-paper;
+  @include tt-handles;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  &__lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 4px 0 0;
+    list-style: none;
+  }
+
+  &__line {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__points {
+    flex: 0 0 40px;
+    @include tt-mono(14px, 20px);
+    font-weight: $font-weight-bold;
+    color: $tt-orange-deep;
+    text-align: right;
+  }
+
+  &__dot {
+    @include tt-mono(14px, 20px);
+    color: $tt-steel-dark;
+  }
+
+  &__what {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__label {
+    @include tt-mono(14px, 20px);
+    color: $color-neutral-dark;
+  }
+
+  &__note {
+    @include tt-mono(11px, 15px);
+    color: $tt-steel-dark;
+  }
+
+  &__rule {
+    height: 0;
+    margin: 2px 0;
+    border: 0;
+    border-top: 1px dashed rgba(27, 27, 27, 0.3);
+  }
+
+  &__totals {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  &__total-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  &__big {
+    @include tt-mono(34px, 36px);
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+  }
+
+  &__unit {
+    @include tt-mono(14px, 20px);
+    color: $color-neutral-dark;
+  }
+
+  &__level {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  &__level-text {
+    @include tt-mono(12px, 16px);
+    color: $color-neutral-dark;
+  }
+
+  &__cta {
+    justify-content: center;
+    width: 100%;
+    margin-top: 2px;
+  }
+}
+
+// Each receipt line and total is keyed by its value, so a changed answer
+// remounts it and this plays once: the tally building as answers land.
+@keyframes tt-tally-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tt-tally__line,
+.tt-tally__total {
+  animation: tt-tally-in 320ms $tt-ease both;
+}
+
+// ── 02 · The board ───────────────────────────────────────────────────────────
+
+.tt-board {
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px;
+    margin-bottom: 18px;
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-extrabold;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+    @include tt-mono(12px, 16px);
+    color: $tt-steel-dark;
+  }
+
+  &__meta-item:first-child {
+    color: $color-neutral-dark;
+  }
+
+  &__meta-dot {
+    color: $tt-steel;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+}
+
+.tt-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 28px 24px;
+  background: $tt-ink;
+  border: 1px solid $tt-hairline-dark;
+  border-radius: $radius-xl;
+  color: $tt-paper;
+  @include tt-handles;
+
+  &__top {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+
+  &__title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: 18px;
+    font-weight: $font-weight-bold;
+    line-height: 22px;
+    letter-spacing: -0.02em;
+    color: $tt-paper;
+  }
+
+  &__index {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__line {
+    margin: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel;
+  }
+}
+
+.tt-tabs {
+  display: none;
+  border-bottom: 1px solid $tt-hairline-dark;
+
+  &__tab {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    margin-bottom: -1px;
+    padding: 4px 6px;
+    border-bottom: 2px solid transparent;
+    color: $tt-steel;
+    transition: color $transition-fast, border-color $transition-fast;
+
+    &.is-selected {
+      color: $tt-paper;
+      border-bottom-color: $tt-paper;
+    }
+  }
+
+  &__name {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  &__count {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel;
+  }
+}
+
+.tt-trees {
+  display: flex;
+  gap: 29px;
+}
+
+.tt-tree-panel {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.tt-tree-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $tt-hairline-dark;
+
+  &__name {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: 18px;
+    font-weight: $font-weight-bold;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    color: $tt-paper;
+  }
+
+  &__meta {
+    margin: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+}
+
+.tt-tree-wrap {
+  position: relative;
+}
+
+.tt-tree {
+  position: relative;
+  height: $tt-column-height;
+  --tt-label-w: 96px;
+}
+
+.tt-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+
+  &--row {
+    display: none;
+  }
+}
+
+.tt-wire {
+  fill: none;
+  stroke: $tt-wire-unlit;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    stroke $tt-step ease,
+    stroke-opacity $tt-step ease,
+    stroke-width $tt-step ease;
+
+  @each $level, $alpha in $tt-level-alpha {
+    &--l#{$level} {
+      stroke: $tt-orange;
+      stroke-opacity: $alpha;
+      stroke-width: 1.6;
+    }
+  }
+
+  &--l5 {
+    stroke: $tt-orange;
+    stroke-opacity: 1;
+    stroke-width: 1.6;
+    filter: drop-shadow(0 0 8px rgba($tt-orange, 0.35));
+  }
+}
+
+// ── Nodes ────────────────────────────────────────────────────────────────────
+
+.tt-node {
+  position: absolute;
+  left: var(--tt-cx);
+  top: var(--tt-cy);
+  width: $tt-node;
+  height: $tt-node;
+  margin: calc(#{$tt-node} / -2) 0 0 calc(#{$tt-node} / -2);
+  z-index: 1;
+
+  &.is-active {
+    z-index: 2;
+  }
+
+  &__btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid $tt-ring-unspent;
+    border-radius: 50%;
+    background: $tt-ink;
+    color: rgba($tt-steel, 0.55);
+    cursor: default;
+    transition:
+      border-color $tt-step ease,
+      color $tt-step ease,
+      background $tt-step ease,
+      box-shadow $tt-step ease;
+
+    // The hit target: at least 44px however small the circle draws.
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+    }
+  }
+
+  &__glyph {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  &__mark {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 7px;
+    height: 7px;
+    background: $tt-orange;
+    box-shadow: 0 0 0 1.5px $tt-ink;
+  }
+
+  &__count {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    background: $tt-ink;
+    @include tt-mono(9px, 1);
+    color: $tt-paper;
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  &__minus {
+    position: absolute;
+    left: -8px;
+    bottom: -8px;
+    z-index: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    background: #2b2b2b;
+    color: $tt-paper;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $tt-orange;
+      color: $tt-orange;
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: var(--tt-label-w);
+    transform: translateX(-50%);
+    font-size: $font-size-caption;
+    font-weight: $font-weight-medium;
+    line-height: 14px;
+    color: $tt-paper;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  &__label-text {
+    padding: 0 2px;
+    background: $tt-ink;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  &__mastered {
+    margin-top: 4px;
+    padding: 0 2px;
+    background: $tt-ink;
+    @include tt-mono(9px, 12px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $tt-orange;
+  }
+
+  // ── The scale ──
+  @each $level, $alpha in $tt-level-alpha {
+    &--l#{$level} .tt-node__btn {
+      border: 1.5px solid rgba($tt-orange, $alpha);
+      color: rgba($tt-orange, $alpha);
+    }
+  }
+
+  &--l0 .tt-node__label {
+    color: rgba($tt-paper, 0.6);
+  }
+
+  &.is-locked {
+    .tt-node__btn {
+      border: 1px dashed $tt-ring-unspent;
+      color: rgba($tt-steel, 0.3);
+      cursor: not-allowed;
+    }
+
+    .tt-node__label {
+      color: rgba($tt-paper, 0.4);
+    }
+  }
+
+  &.is-mastered {
+    .tt-node__btn {
+      border-color: transparent;
+      background: $tt-orange;
+      color: $tt-ink;
+      box-shadow:
+        0 0 0 2px $tt-ink,
+        0 0 0 3.5px $tt-orange,
+        0 0 12px 3px rgba($tt-orange, 0.45);
+    }
+
+    .tt-node__count {
+      border-color: transparent;
+      background: $tt-orange;
+      color: $tt-ink;
+    }
+  }
+
+  &.is-editable:not(.is-locked) .tt-node__btn {
+    cursor: pointer;
+  }
+
+  // Hover and focus: the halo, and the level mark.
+  &:hover:not(.is-locked) .tt-node__btn,
+  &.is-active:not(.is-locked) .tt-node__btn {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+  }
+
+  &.is-mastered:hover .tt-node__btn,
+  &.is-mastered.is-active .tt-node__btn {
+    box-shadow:
+      0 0 0 2px $tt-ink,
+      0 0 0 3.5px $tt-orange,
+      0 0 0 7.5px rgba(255, 255, 255, 0.06),
+      0 0 12px 3px rgba($tt-orange, 0.45);
+  }
+
+  &:hover .tt-node__count,
+  &.is-active .tt-node__count {
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (min-width: $breakpoint-md) {
+    &.is-editable:hover .tt-node__minus,
+    &.is-editable.is-active .tt-node__minus {
+      display: flex;
+    }
+  }
+}
+
+.tt-root {
+  position: absolute;
+  left: var(--tt-cx);
+  top: var(--tt-cy);
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+
+  &__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: $tt-paper;
+  }
+
+  &__text {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  &__label {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    line-height: 16px;
+    color: $tt-paper;
+  }
+
+  &__tag {
+    @include tt-mono(9px, 12px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+}
+
+// ── The detail (tooltip on a desktop, a block under the tree on a phone) ────
+
+.tt-detail {
+  position: absolute;
+  left: var(--tt-cx);
+  top: var(--tt-cy);
+  z-index: 4;
+  width: 268px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: $radius-sm;
+  background: #2b2b2b;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, calc(-100% - 30px));
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 12px;
+    height: 6px;
+    margin-left: -6px;
+    background: #2b2b2b;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  &[data-edge='start'] {
+    left: calc(var(--tt-cx) - #{$tt-node} / 2);
+    transform: translate(0, calc(-100% - 30px));
+
+    &::after {
+      left: calc(#{$tt-node} / 2);
+    }
+  }
+
+  &[data-edge='end'] {
+    left: calc(var(--tt-cx) + #{$tt-node} / 2);
+    transform: translate(-100%, calc(-100% - 30px));
+
+    &::after {
+      left: auto;
+      right: calc(#{$tt-node} / 2 - 6px);
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2px 8px;
+  }
+
+  &__name {
+    flex: 1 1 auto;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    line-height: 16px;
+    color: $tt-paper;
+  }
+
+  &__level {
+    flex-shrink: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $tt-paper;
+  }
+
+  &__meaning {
+    margin: 2px 0 0;
+    font-size: 11px;
+    line-height: 15px;
+    color: $tt-steel;
+  }
+
+  &__foot {
+    margin: 6px 0 0;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    @include tt-mono(9px, 12px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__actions {
+    display: none;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  &__btn {
+    flex: 1;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: $radius-md;
+    background: transparent;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    color: $tt-paper;
+
+    &--add {
+      border-color: $tt-orange-deep;
+      background: $tt-orange-deep;
+      color: $color-white;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.tt-tree-nav {
+  display: none;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 4px;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.06em;
+    color: $tt-steel;
+
+    &:hover {
+      color: $tt-paper;
+    }
+
+    &--next {
+      margin-left: auto;
+    }
+  }
+}
+
+// ── Legend ───────────────────────────────────────────────────────────────────
+
+.tt-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $tt-hairline-dark;
+
+  &__scale {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  &__swatch {
+    position: relative;
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 1px solid $tt-ring-unspent;
+    border-radius: 50%;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 4px;
+      height: 4px;
+      margin: -2px 0 0 -2px;
+      border-radius: 50%;
+      background: rgba($tt-steel, 0.45);
+    }
+  }
+
+  &__item--locked &__swatch {
+    border-style: dashed;
+
+    &::after {
+      background: rgba($tt-steel, 0.28);
+    }
+  }
+
+  @each $level, $alpha in $tt-level-alpha {
+    &__item--#{$level} &__swatch {
+      border-color: rgba($tt-orange, $alpha);
+
+      &::after {
+        background: rgba($tt-orange, $alpha);
+      }
+    }
+  }
+
+  &__item--mastered &__swatch {
+    border-color: transparent;
+    background: $tt-orange;
+    box-shadow:
+      0 0 0 1.5px $tt-ink,
+      0 0 0 2.5px $tt-orange,
+      0 0 8px 2px rgba($tt-orange, 0.45);
+
+    &::after {
+      background: $tt-ink;
+    }
+  }
+
+  &__text,
+  &__note {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__note {
+    flex: 0 1 auto;
+    margin: 0;
+    text-align: right;
+  }
+}
+
+// ── 03 · Result ──────────────────────────────────────────────────────────────
+
+.tt-result {
+  display: flex;
+  flex-direction: column;
+
+  &__head {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 48px;
+    align-items: start;
+    margin-top: 36px;
+  }
+
+  &__main,
+  &__side {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 10px 0 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-h1;
+    font-weight: $font-weight-extrabold;
+    line-height: 48px;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  &__lede {
+    max-width: 620px;
+    margin: 8px 0 0;
+    font-size: $font-size-body;
+    line-height: 26px;
+    color: $color-neutral-standard;
+  }
+
+  &__card-frame {
+    position: relative;
+    margin-top: 28px;
+    @include tt-handles;
+  }
+
+  &__receipt {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  &__side .tt-result__actions {
+    margin-top: 12px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    background: $color-white;
+    @include tt-mono(11px, 16px);
+    color: $color-neutral-dark;
+
+    &--sum {
+      background: $tt-paper;
+    }
+  }
+
+  &__why {
+    margin: 10px 0 0;
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    font-weight: $font-weight-bold;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+  }
+
+  &__body {
+    margin: 12px 0 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: $color-neutral-standard;
+
+    &:first-of-type {
+      margin-top: 14px;
+    }
+  }
+
+  &__classes {
+    display: flex;
+    flex-direction: column;
+    margin: 22px 0 0;
+    padding: 0;
+    border-bottom: 1px solid $color-border-default;
+    list-style: none;
+  }
+
+  &__class {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid $color-border-default;
+  }
+
+  &__class-icon {
+    display: block;
+    color: $color-neutral-dark;
+  }
+
+  &__class-text,
+  &__class-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__class-meta {
+    text-align: right;
+  }
+
+  &__class-name {
+    font-family: $font-family-heading;
+    font-size: 17px;
+    font-weight: $font-weight-bold;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  &__class-line {
+    font-size: 13px;
+    line-height: 18px;
+    color: $color-neutral-muted;
+  }
+
+  &__class-family {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+  }
+
+  &__class-led {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  &__btn {
+    gap: 10px;
+    justify-content: center;
+  }
+
+  &__note {
+    margin: 12px 0 0;
+    @include tt-mono(11px, 16px);
+    letter-spacing: 0.02em;
+    color: $tt-steel-dark;
+  }
+
+  &__url {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+    @include tt-mono(12px, 16px);
+    color: $color-neutral-dark;
+  }
+
+  &__back {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-top: 12px;
+  }
+
+  &__work {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    text-decoration-color: rgba(27, 27, 27, 0.3);
+    text-underline-offset: 4px;
+    border-radius: $radius-sm;
+
+    &:hover {
+      color: $color-primary-text;
+      text-decoration-color: currentColor;
+    }
+  }
+
+  &__hint {
+    margin: 12px 0 0;
+    font-size: 13px;
+    line-height: 20px;
+    color: $color-neutral-muted;
+  }
+}
+
+// ── The card ─────────────────────────────────────────────────────────────────
+
+.tt-card {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 44px 48px 40px;
+  border-radius: $radius-xl;
+  background: $tt-ink;
+  color: $tt-paper;
+  overflow: hidden;
+
+  &__main {
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
+  }
+
+  &__left {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  &__id {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__name {
+    @include tt-mono(13px, 18px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $tt-paper;
+  }
+
+  &__level {
+    padding: 3px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: $radius-full;
+    @include tt-mono(11px, 14px);
+    letter-spacing: 0.06em;
+    color: $tt-steel;
+    white-space: nowrap;
+  }
+
+  &__class {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: clamp(27px, 3.8vw, 56px);
+    font-weight: $font-weight-extrabold;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: $tt-paper;
+  }
+
+  &__class-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25em;
+  }
+
+  &__slash {
+    flex: 0 0 auto;
+    width: 0.45em;
+    height: 1em;
+  }
+
+  &__desc {
+    max-width: 660px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 24px;
+    color: rgba($tt-paper, 0.78);
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid $tt-hairline-dark;
+
+    &:last-child {
+      border-bottom: 1px solid $tt-hairline-dark;
+    }
+
+    dt {
+      @include tt-mono(10px, 20px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $tt-steel;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 15px;
+      line-height: 20px;
+      color: $tt-paper;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    flex: 0 0 372px;
+    flex-direction: column;
+    gap: 12px;
+    width: 372px;
+    padding-top: 4px;
+  }
+
+  &__stats-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__stat-label {
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-medium;
+    line-height: 20px;
+    color: $tt-paper;
+  }
+
+  &__stat-num {
+    @include tt-mono(20px, 20px);
+    color: $tt-paper;
+  }
+
+  &__bar {
+    display: flex;
+    gap: 3px;
+  }
+
+  &__seg {
+    position: relative;
+    flex: 1;
+    height: 6px;
+    border-radius: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+
+    &.is-full {
+      background: $tt-orange;
+    }
+  }
+
+  &__seg-fill {
+    display: block;
+    height: 100%;
+    background: $tt-orange;
+  }
+
+  &__axis {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  &__axis-rule {
+    position: relative;
+    display: block;
+    height: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  &__tick {
+    position: absolute;
+    top: -1px;
+    width: 1px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.3);
+
+    &--0 { left: 0; }
+    &--50 { left: 50%; }
+    &--100 { right: 0; }
+  }
+
+  &__axis-labels {
+    display: flex;
+    justify-content: space-between;
+    @include tt-mono(10px, 12px);
+    letter-spacing: 0.08em;
+    color: $tt-steel;
+  }
+
+  &__foot {
+    margin: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.02em;
+    color: $tt-steel;
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  &__mini {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+  }
+
+  &__mini-svg {
+    display: block;
+    width: 168px;
+    height: 44px;
+  }
+
+  &__mini-text {
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__url {
+    @include tt-mono(11px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel;
+  }
+}
+
+// ── Layout modes ─────────────────────────────────────────────────────────────
+
+@media (max-width: $breakpoint-xl) {
+  .tt-tree {
+    --tt-label-w: 86px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .tt-result__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tt-card {
+    gap: 24px;
+    padding: 28px;
+
+    &__main {
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    &__stats {
+      flex-basis: auto;
+      width: 100%;
+    }
+  }
+}
+
+// Row layout: trees stacked, all three in view.
+@media (max-width: 1023px) {
+  .tt-trees {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .tt-tree-panel {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .tt-tree {
+    height: $tt-row-height;
+    --tt-label-w: 96px;
+  }
+
+  .tt-wires--column {
+    display: none;
+  }
+
+  .tt-wires--row {
+    display: block;
+  }
+
+  .tt-node {
+    left: var(--tt-rx);
+    top: var(--tt-ry);
+    width: $tt-node-row;
+    height: $tt-node-row;
+    margin: calc(#{$tt-node-row} / -2) 0 0 calc(#{$tt-node-row} / -2);
+
+    &__glyph {
+      width: 20px;
+      height: 20px;
+    }
+
+    &__label {
+      font-size: 11px;
+      line-height: 13px;
+      letter-spacing: -0.01em;
+    }
+
+    // No hover to reveal it: the level mark is always on.
+    &__count {
+      opacity: 1;
+    }
+  }
+
+  .tt-root {
+    left: var(--tt-rx);
+    top: var(--tt-ry);
+    width: $tt-node-row;
+    height: $tt-node-row;
+    margin: calc(#{$tt-node-row} / -2) 0 0 calc(#{$tt-node-row} / -2);
+
+    &__text {
+      flex-direction: row;
+      gap: 6px;
+    }
+
+    &__label,
+    &__tag {
+      @include tt-mono(10px, 12px);
+      font-weight: $font-weight-regular;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: $tt-steel;
+    }
+
+    &__tag::before {
+      content: '· ';
+    }
+  }
+
+  // The detail becomes a block under the tree, in flow, with the controls.
+  .tt-detail {
+    position: static;
+    width: auto;
+    margin-top: 12px;
+    transform: none;
+    pointer-events: auto;
+
+    &::after {
+      display: none;
+    }
+
+    &[data-edge='start'],
+    &[data-edge='end'] {
+      left: auto;
+      transform: none;
+    }
+
+    &__actions {
+      display: flex;
+    }
+  }
+
+  .tt-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    &__note {
+      text-align: left;
+    }
+  }
+
+  .tt-intro__card {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .tt-intro__aside {
+    max-width: 400px;
+  }
+
+  .tt-intake {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .tt-tally {
+    position: static;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .tt {
+    &__nav {
+      padding: $spacing-lg $spacing-xl;
+    }
+
+    &__section {
+      padding: $spacing-lg 0;
+
+      &:first-of-type {
+        padding-top: 104px;
+      }
+    }
+
+    &__container {
+      padding: 0 $spacing-lg;
+    }
+  }
+
+  .tt-intro {
+    &__card {
+      padding: 20px;
+    }
+
+    &__title {
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    &__body {
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    &__actions {
+      flex-direction: column;
+
+      .btn {
+        justify-content: center;
+      }
+    }
+  }
+
+  .tt-intake__frame {
+    padding: 20px;
+  }
+
+  .tt-field__head {
+    flex-wrap: wrap;
+  }
+
+  .tt-field__summary {
+    white-space: normal;
+    text-align: left;
+  }
+
+  .tt-chip {
+    min-height: 44px;
+  }
+
+  .tt-board {
+    &__head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__actions {
+      width: 100%;
+
+      .btn {
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+    }
+  }
+
+  .tt-panel {
+    padding: 18px;
+
+    &__top {
+      display: flex;
+    }
+  }
+
+  .tt-tabs {
+    display: flex;
+    margin-bottom: 14px;
+  }
+
+  .tt-tree-panel.is-inactive {
+    display: none;
+  }
+
+  .tt-tree-head {
+    display: none;
+  }
+
+  .tt-tree {
+    --tt-label-w: 74px;
+  }
+
+  .tt-node__label {
+    overflow-wrap: anywhere;
+  }
+
+  .tt-tree-nav {
+    display: flex;
+  }
+
+  .tt-legend__scale {
+    gap: 12px;
+  }
+
+  .tt-result {
+    &__title {
+      font-size: 28px;
+      line-height: 34px;
+    }
+
+    &__lede {
+      font-size: $font-size-body-sm;
+      line-height: 22px;
+    }
+
+    &__actions .btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  .tt-card {
+    gap: 16px;
+    padding: 18px;
+
+    &__main {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &__stats {
+      flex-basis: auto;
+      width: 100%;
+    }
+
+    &__row {
+      grid-template-columns: 1fr;
+      gap: 3px;
+    }
+
+    &__desc {
+      font-size: $font-size-caption;
+      line-height: 17px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-xs) {
+  .tt-result__class {
+    grid-template-columns: 24px 1fr;
+  }
+
+  .tt-result__class-meta {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .tt-tree {
+    --tt-label-w: 64px;
+  }
+}
+
+// ── Reduced motion ───────────────────────────────────────────────────────────
+// State still changes, instantly: a point lands without the ring stepping up,
+// the tally line appears without the fade. The reveal utilities handle their
+// own reduced-motion state in _reveal.scss.
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-wire,
+  .tt-node__btn,
+  .tt-node__count,
+  .tt-chip,
+  .tt-tabs__tab,
+  .tt-stepper__btn {
+    transition: none;
+  }
+
+  .tt-tally__line,
+  .tt-tally__total {
+    animation: none;
+  }
+}

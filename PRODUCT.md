@@ -20,7 +20,7 @@ Ryan builds design systems that live across Figma, production code, and the tool
 
 ## Operating Context
 
-- Readers evaluate across surfaces: the homepage (hero, about, work, how I work, testimonials, technical, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, and a résumé.
+- Readers evaluate across surfaces: the homepage (hero, about, work, how I work, testimonials, mastery, FAQ), an /about narrative, per-project case studies at /work/:slug, a /notes writing stream, a live /design-system token page, a /talent-tree (the playable offshoot: Ryan's computed class and tree, and a tree any designer can spend), and a résumé. The hero's second inspector chip and homepage section 05 are the doors into /talent-tree.
 - Case studies carry real employer (Tire Rack) and client work. Confidential ones are password-gated; only "portfolio-safe" assets are ever public.
 - Evaluation extends off-site to LinkedIn (positioned as in-progress thinking) and to live product demos, e.g. WheelRack at wheelrack.com/pitstop/search.
 

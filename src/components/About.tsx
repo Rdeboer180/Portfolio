@@ -22,20 +22,21 @@ const About: React.FC = () => {
           <div className="about__text">
             <SectionBadge icon={<UserIcon />} label="About Me" index="01" />
             <h2 className="about__title">The craft keeps evolving. The process never settles.</h2>
-              {/* Ryan's own copy. The bolded phrases carry the highlight sweep,
-                  so the emphasis he wrote and the emphasis the page animates are
-                  the same claims. The source's one em dash became a colon, per
-                  the site-wide sweep; the 8-10 en dash is a range and stays. */}
+              {/* Ryan's own copy (2026-09-11). The bolded phrases carry the
+                  highlight sweep, so the emphasis he wrote and the emphasis the
+                  page animates are the same claims. The one link in the bio goes
+                  to the talent tree; it carries the branch glyph as a pseudo
+                  element so it reads as a door, not a footnote. */}
               <p className="about__body">
-                I&rsquo;m a designer at my core, proficient in front-end code, and most at home in the systems that connect the two. <span className="animated-bold">Brand and design systems have always been my specialty</span>: the rules, components, patterns, and decisions that help good work hold together after it leaves my hands.
+                I&rsquo;m a designer at my core, proficient in front-end code, and most at home in the systems that connect the two. <span className="animated-bold">Brand and design systems have always been my specialty.</span> The rules, components, patterns, and decisions that help good work stay consistent long after it leaves my hands.
               </p>
 
               <p className="about__body">
-                I&rsquo;ve spent 16+ years <span className="animated-bold">deliberately moving closer to how the work gets built</span>. Visual design led me into HTML and CSS. Front-end constraints pushed me toward reusable systems. Figma, tokens, and Storybook gave design and engineering a shared language. Now AI is shrinking that distance again, letting me move from an idea through UX, system decisions, working software, QA, and refinement <a href="#systems" className="about__inline-link">without treating handoff as the finish line</a>.
+                I&rsquo;ve spent 16+ years deliberately getting closer to how the work actually gets built. Visual design pulled me into HTML and CSS. Front-end constraints pushed me toward reusable systems. Figma, tokens, and Storybook gave design and engineering a shared language. Now AI is closing that gap again and letting me move from an idea through UX, system decisions, working software, QA, and refinement without seeing handoff as the finish line.
               </p>
 
               <p className="about__body">
-                I&rsquo;ve never waited for a new workflow to become standard before learning it. I was early to get AI tools approved and into my daily work, I&rsquo;ve spent close to a year building deeply with Claude, and I still put 8&ndash;10 hours a week outside work into learning by making things, lately with Codex, Figma agent exploration, and bridging the gap of knowledge between the systems I build and the React Native output that results. The tools keep moving. <span className="animated-bold">My responsibility stays the same: bring the judgment, protect the craft, understand the system, and care about what actually ships.</span>
+                I don&rsquo;t sit still for long. I&rsquo;m always learning, building, and changing how I work. That makes me a little hard to fit into one box, but really strong across a few: <span className="animated-bold">craft, UI, systems, and technical fluency.</span> I built a <Link to="/talent-tree/" className="about__tree-link">Design Talent Tree</Link> to make that easier to see. What I&rsquo;ve mastered, where I&rsquo;m strongest, and what I&rsquo;m still leveling up.
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>

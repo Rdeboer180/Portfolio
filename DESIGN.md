@@ -168,6 +168,7 @@ A near-monochrome bench (ink on paper, cool off-whites for depth) with a single 
 
 ### Named Rules
 **The Signal Orange Rule.** Orange is the only chromatic voice on the page. It may carry both emphasis and state, but it is the sole accent: never introduce a second hue to compete with it, and never let a screen turn orange-heavy. When orange appears, it should mean something (a link, an action, an active section, a selection).
+On the talent tree's Ink panel, orange is spent only on earned state: the ramp a node climbs as points land, the fill and glow at 5 / 5, the lit paths between them, and the one primary action per surface.
 
 **The No-Categorical-Palette Rule.** When a diagram or module needs its parts told apart, distinguish them with icon, label, border weight, and the selection frame — not with a palette of category tints. A pastel surface per category is the most common way this system gets diluted, and it was explicitly considered and rejected for the How I work ecosystem board (homepage section 03): the two working surfaces there use the existing Orange Tint and Cool Paper families, the hub earns its weight from the selection frame, and the remaining five nodes are deliberately identical paper cards. Identical is the point — it is what makes them read as equally legitimate rather than decorative.
 
@@ -246,6 +247,18 @@ The card used on the homepage's How I work board (section 03) (and documented li
 Anatomy is fixed across all three: icon, title (Hubot Sans Bold, 17px; hub 19px), a Menlo meta line in Steel Dark (a phrase on the hub, three verbs on the working pair, one role word on each surface, so the surfaces read as working notes rather than a taxonomy), and a body line. The eight nodes stay identical in anatomy on purpose. Beneath the board, the four beats of the loop are a rail rather than cards: index, heading, body, and the connectors, with no border of their own. The one addition sits off the nodes: the Figma ⇄ Codebase wire carries a label, a Menlo chip reading `Code Connect · Button → <Button variant="primary">` in Orange Deep on white with a Signal Orange hairline at 45%. It rides the pair's top edge centred on the gap the wires cross, because the gap is 56px and the label is not; it lights with the pair when beat 02 claims it and recedes otherwise. It is the only literal code on the board. Steel Dark is the meta colour because it is the only token that clears AA on all three surfaces. Connectors are Steel; Signal Orange is spent on the bidirectional Figma ⇄ Codebase relationship on the board, and on the loop beneath it only in motion, as the surge that rides the thin ink return rail back to 01 once every six seconds (off under reduced motion). Relationships are always stated in text as well as drawn, so meaning never depends on a wire, a colour, or the motion.
 
 The idea the component exists to carry: **the system is not owned by Figma or by code. Both are working surfaces that read from and feed back into shared product knowledge** — which also has to reach documentation, agent workflows, QA, the team, and governance.
+
+### Talent Node (on Ink)
+The node of the talent tree (/talent-tree, and the miniature in homepage section 05). The one dark surface in the system: the tree sits on an Ink (#1b1b1b) panel with a 12px radius, hairlines at 8% white, Cool Paper labels (Inter 12 to 13px), Steel meta (Menlo 10px), and the section rule's 7px Steel selection handles on the panel corners. A node is a circle carrying the skill glyph (24 grid, 1.8 stroke, round caps; glyph and ring always take the same value): 44px with a 22px glyph on the page, 40px / 20px on the mobile sheet, 20px / 11px in the miniature and the hero chip.
+- **Unspent (0):** ring 1px white at 14%, glyph Steel at 55%, no fill.
+- **Locked crown** (its foundation holds fewer than 3): ring 1px dashed white at 14%, glyph Steel at 30%.
+- **Levels 1 to 4:** ring 1.5px (1px at 20px) and glyph in Signal Orange at 40% / 55% / 70% / 85%.
+- **Mastered (5):** Signal Orange fill, Ink glyph, a 1.5px Signal Orange ring outside a 2px Ink gap, glow `0 0 12px rgba(240,61,1,0.45)`, and a 7px orange corner mark top right. At 20px the ring is 1px at a 1.5px gap, the glow `0 0 8px`, and there is no mark.
+- **Root:** fill white at 6%, ring 1px white at 24%, glyph Cool Paper; it holds no points, and its paths take the foundation's value.
+- **Paths:** unlit white at 12%, 1.4px; lit Signal Orange at the upper node's opacity, 1.6px; at 5 / 5 the path also glows `0 0 8px` at 35%.
+- **Hover:** a halo `0 0 0 4px` white at 6%, cursor pointer, and a tooltip (#2b2b2b, 6px radius, 1px white at 12%, Shadow `0 6px 16px` black at 40%) with the node name in Inter 12 / 600, the level in Menlo 10, and the meaning in Inter 11 Steel.
+- **Layers panel:** the 12px glyph on #2b2b2b reads lit in Signal Orange with a `0 0 4px` glow at 35%, unlit in Cool Paper at 70%.
+The hero's inspector chip (`class / Guardrail Architect · Lv 16`) is the same chip chrome as `layer / 01 Portfolio image` with the branch glyph at 10px in Signal Orange; on hover the hairline goes to 45% orange, the chip lifts 1px, the glyph glows, the dashed leader goes solid, and a tooltip names the destination.
 
 ### Inputs / Fields
 - **Style:** Paper fill, 1px Border Hairline, 8px radius, 8px/12px padding, inherited body type.
