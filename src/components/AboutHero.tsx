@@ -110,7 +110,7 @@ const AboutHero: React.FC = () => {
               covers part of that story, but not all of it.
             </p>
             <p>
-              I started in visual design, learned front-end implementation because the browser
+              I started in visual design, learned HTML and CSS because the browser
               kept exposing gaps in my files, then built systems that design and engineering could
               share. Now I use AI-assisted workflows to explore more directions and get working
               ideas in front of people sooner.

@@ -97,12 +97,12 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
         </h2>
         <Facts />
         <p className="candidate-snapshot__summary">
-          I design the system and stay close to the build, from Figma tokens through production
-          React and React Native components. Recent work includes a 50-component enterprise
-          design system, an ecommerce redesign with up to 400% category-entry growth, and a
-          social game taken from the first brand sketch to TestFlight in twelve weeks. I do my
-          best work beside skilled specialists who share a picture of what better looks like and
-          keep pushing for refinement and polish.
+          I design the system and stay close to the build, from Figma tokens and states through
+          Storybook, implementation QA, and agent-assisted React Native builds. Recent work
+          includes a 50-component enterprise design system, an ecommerce redesign with up to 400%
+          category-entry growth, and a social game taken from the first brand sketch to TestFlight
+          in twelve weeks. I do my best work beside skilled specialists who share a picture of
+          what better looks like and keep pushing for refinement and polish.
         </p>
         <div className="candidate-snapshot__stack">
           <span className="candidate-snapshot__stack-label">Core stack</span>

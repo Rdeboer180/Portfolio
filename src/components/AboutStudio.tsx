@@ -43,7 +43,7 @@ const STUDIO_POINTS: StudioPoint[] = [
         is not either.
       </>
     ),
-    proof: 'PlayDraft went from brand sketch to a React Native build on TestFlight in twelve weeks, the Figma file and the code correcting each other at this desk. LoopStack is here too, running on my own glucose data because I have Type 1 diabetes.',
+    proof: 'PlayDraft went from brand sketch to an agent-assisted React Native build on TestFlight in twelve weeks, the Figma file and the code correcting each other at this desk. LoopStack is here too, running on my own glucose data because I have Type 1 diabetes.',
     position: { left: '45%', top: '36%' },
   },
   {

@@ -199,7 +199,7 @@ const TargetedHero: React.FC<{ content: TargetedHomepageContent }> = ({ content 
         <div className="hero__grid">
           <div className="hero__text">
             <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              Senior Web Designer by title. <span>Systems thinker with front-end depth. I operate as a</span>
+              Senior Web Designer by title. <span>Systems thinker who stays close to the code. I operate as a</span>
             </p>
 
             <div

@@ -46,7 +46,7 @@ const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
   {
     name: 'PlayDraft',
     slug: 'playdraft',
-    note: 'Took a social drafting game from its first identity sketch to TestFlight in 12 weeks, owning product design, the design system, and React Native implementation.',
+    note: 'Took a social drafting game from its first identity sketch to TestFlight in 12 weeks, owning product design, the design system, and an agent-assisted React Native build.',
   },
   {
     name: 'Internal Tooling',
@@ -64,7 +64,7 @@ const ResumePage: React.FC = () => {
   usePageMeta({
     title: 'Résumé — Ryan DeBoer, Product Design Engineer',
     description:
-      'Ryan DeBoer is a product design engineer with 16+ years of experience building design systems, ecommerce experiences, and working products across web and native platforms.',
+      'Ryan DeBoer is a product design engineer with 16+ years of experience designing systems, ecommerce experiences, and agent-assisted products across web and native.',
     canonical: `${SITE.portfolioUrl}/resume/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
@@ -178,7 +178,7 @@ const ResumePage: React.FC = () => {
         <p className="resume-page__summary">
           Product design engineer with 12+ years at Tire Rack and 16+ years across visual design
           and responsive web. Since 2021, when I was one of two designers promoted to Senior, my
-          scope has spanned product, UX, design systems, and front-end implementation. I build the
+          scope has spanned product, UX, design systems, and implementation QA. I build the
           systems connecting Figma, production code, documentation, and internal tooling so
           designers and engineers move faster without the work drifting. AI accelerates
           exploration. I remain responsible for the decisions and details behind what ships.
@@ -192,7 +192,7 @@ const ResumePage: React.FC = () => {
               <strong>Systems:</strong> Design systems, tokens, components, documentation, governance, accessibility
             </li>
             <li>
-              <strong>Build:</strong> Figma, Storybook, React, React Native, TypeScript, HTML, CSS, Sass, AEM
+              <strong>Tools:</strong> Figma, Storybook, React, React Native, TypeScript, HTML, CSS, Sass, AEM
             </li>
             <li>
               <strong>Workflow:</strong> Product design, prototyping, implementation QA, internal tooling, agentic workflows

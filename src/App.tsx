@@ -65,9 +65,9 @@ function HomeRoute() {
   usePageMeta({
     title: 'Ryan DeBoer | Product Design Engineer · Design Systems · Agentic Workflows',
     description:
-      'Product Design Engineer specializing in design systems, UX engineering, React and Storybook, front-end implementation, and AI-assisted product development. Remote, US.',
+      'Product Design Engineer specializing in design systems, tokens and components, React and Storybook, implementation QA, and AI-assisted product development. Remote, US.',
     canonical: `${SITE.portfolioUrl}/`,
-    ogDescription: 'Product Design Engineer building design systems, ecommerce experiences, and mobile products from Figma into working front ends.',
+    ogDescription: 'Product Design Engineer. Design systems, ecommerce, and agent-assisted mobile builds, from Figma tokens to TestFlight.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   });

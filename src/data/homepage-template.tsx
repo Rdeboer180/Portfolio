@@ -19,7 +19,7 @@ const templateContent: TargetedHomepageContent = {
 
   hero: {
     eyebrow: 'Senior Web Designer by title.',
-    roles: ['Product Designer', 'Design Engineer', 'UX Engineer'],
+    roles: ['Product Designer', 'Design Engineer', 'Systems Designer'],
     headline: '',
     body: (
       <>
@@ -40,7 +40,7 @@ const templateContent: TargetedHomepageContent = {
     ],
     stats: [
       { value: '16+', label: 'Years designing professionally' },
-      { value: '500+', label: 'Projects shipped to production' },
+      { value: '200+', label: 'Design tokens in one system' },
       { value: '[Stat]', label: '[Label]' },
       { value: '50+', label: 'Design system components built' },
     ],
@@ -72,7 +72,7 @@ const templateContent: TargetedHomepageContent = {
         skills: ['[Skill]', '[Skill]', '[Skill]'],
       },
       {
-        title: 'Front-End Fluency',
+        title: 'Front-End & Product Build',
         skills: ['[Skill]', '[Skill]', '[Skill]'],
       },
     ],
