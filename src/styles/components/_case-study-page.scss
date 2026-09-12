@@ -1608,6 +1608,35 @@
     color: $color-neutral-muted;
   }
 
+  // Two ways in, side by side: the request (a text link, the email) and the
+  // password (the button). Stacks on narrow screens.
+  .cs__locked-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md $spacing-xl;
+  }
+
+  .cs__locked-request {
+    font-family: $font-family-heading;
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-primary-dark;
+    text-decoration: none;
+    border-bottom: 1px solid rgba($color-primary, 0.3);
+    transition: border-color 160ms ease;
+
+    &:hover { border-color: $color-primary-dark; }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
   .cs__locked-action {
     appearance: none;
     border: 0;

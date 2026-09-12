@@ -36,7 +36,7 @@ const OverlayCard: React.FC<OverlayCardProps> = ({ text, altText, caption, onCli
       }
     >
       <p className="overlay-card__text">{text}</p>
-      {onClick && <span className="overlay-card__hint">Click to unlock</span>}
+      {onClick && <span className="overlay-card__hint">Enter password</span>}
     </div>
     {caption && <figcaption className="overlay-card__caption">{caption}</figcaption>}
   </figure>

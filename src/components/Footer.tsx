@@ -9,10 +9,14 @@ const Footer: React.FC = () => {
         <div className="footer__top">
           <div className="footer__cta">
             <span className="footer__eyebrow">Get in touch</span>
+            <p className="footer__lead">
+              Looking for someone who can connect design and implementation? I am open to remote
+              roles in the US. If my work fits what your team needs, I would be glad to talk.
+            </p>
           </div>
           <div className="footer__actions">
             <a href={EMAIL_HREF} className="btn btn--primary btn--md">
-              Get in touch
+              Email me
             </a>
             <a href={SITE.linkedinUrl} className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
               Connect on LinkedIn
@@ -26,6 +30,7 @@ const Footer: React.FC = () => {
           </p>
           <div className="footer__meta-links">
             <Link to="/notes" className="footer__site-index">Notes</Link>
+            <Link to="/talent-tree/" className="footer__site-index">Talent tree</Link>
             <Link to="/design-system" className="footer__site-index">Design system</Link>
             <Link to="/sitemap" className="footer__site-index">Site index</Link>
           </div>

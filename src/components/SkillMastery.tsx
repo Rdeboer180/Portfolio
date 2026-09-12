@@ -42,7 +42,7 @@ const nameOf = (id: string) => NODE_NAMES[id] || id;
 // ── Copy (Section05 artboard, approved) ─────────────────────────────────────
 
 const EXPLANATION =
-  'I build enough structure that experimentation can move fast without turning into chaos. I care about the system underneath the work, and I am happiest turning an uncertain idea into something real enough to test.';
+  'Sixteen years of points, spent where the work actually went and scored by the same rules as anyone who builds a tree. A node at zero means no points landed there, not that I have never touched it. The class is the game\'s title for the result, not mine.';
 
 const BEATS: { title: string; body: string }[] = [
   { title: 'Visual design', body: 'Type, hierarchy, and composition still decide if a screen holds up.' },
@@ -300,7 +300,7 @@ const SkillMastery: React.FC = () => {
           </div>
 
           <p className="sm__eyebrow reveal-fade" style={delay(0)}>
-            {`Current class · earned by recipe from ${POOLS.total} points`}
+            {`An experiment · sixteen years scored as a talent tree · ${POOLS.total} points`}
           </p>
           <div className="sm__title-row reveal-fade" style={delay(80)}>
             <h2 className="sm__title">

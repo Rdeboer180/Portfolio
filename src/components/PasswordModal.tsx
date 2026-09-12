@@ -25,13 +25,13 @@ const COPY: Record<Variant, {
 }> = {
   'case-study': {
     title: 'Protected Case Study Images',
-    body: 'Some images in this case study are restricted due to proprietary work. Enter the password to view them, or continue reading without images. We won’t ask again unless you choose to open a hidden image.',
+    body: 'The screens in this case study include employer or client work, so they are password protected. Enter the password to view them, or keep reading without them. You will not be asked again unless you open a protected image.',
     primary: 'Unlock Images',
     secondary: 'No Thanks, View Without Images',
   },
   site: {
     title: 'See the full case studies',
-    body: 'Parts of this work are client- and employer-confidential, so the protected images and product demos stay locked by default. Enter the password to unlock them on this device — you’ll only be asked once. Everything else on the site is open either way.',
+    body: 'Project screens and implementation details are password protected because they include employer or client work. Enter the password once and this device stays unlocked. Everything else on the site is open either way.',
     primary: 'Unlock the work',
     secondary: 'Keep browsing without it',
   },

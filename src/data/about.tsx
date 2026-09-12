@@ -64,9 +64,8 @@ export const storySections: StorySection[] = [
     body: [
       'AI-assisted tools made it cheaper to test an idea. That opens the conversation earlier, but ' +
         'it also produces more plausible work that still needs someone to judge it.',
-      'Claude, Figma Make, and code generation help me explore and build. I still own the ' +
-        'guardrails, the brand, the accessibility check, the system fit, and the decision to keep ' +
-        'or reject what they produce.',
+      'I use Claude, Figma Make, and code generation to explore and build. I review the design, ' +
+        'the behavior, and the code before anything they produce is kept.',
       'I test that boundary in personal, volunteer, and internal products. Those projects let me ' +
         'follow an idea through strategy, interface, code, and use, including the parts that do not ' +
         'survive contact with the working product.',

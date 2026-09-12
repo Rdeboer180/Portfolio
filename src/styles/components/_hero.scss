@@ -742,118 +742,6 @@
     &--src       { bottom: 10%; right: 8%; }
     &--src::after       { right: 100%; width: 42px; }
 
-    // The easter-egg chip (ChipC): the hero's door into /talent-tree/, in the
-    // same chip chrome, stacked 8px under the layer label (the label's bottom
-    // sits at 22%, so its underside is 78% from the top). A real link, so it
-    // takes pointer events back; the leader is the label's, 52px dashed.
-    &--class {
-      top: calc(78% + 8px);
-      left: 2%;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      pointer-events: auto;
-      cursor: pointer;
-      text-decoration: none;
-      transition:
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        translate 0.2s ease,
-        box-shadow 0.2s ease;
-
-      &:focus-visible {
-        outline: 2px solid $color-primary;
-        outline-offset: 2px;
-      }
-    }
-    &--class::after { left: 100%; width: 52px; transition: border-color 0.2s ease; }
-  }
-
-  // The branch mark, 10px in Signal Orange: the tree's own glyph, so the chip
-  // reads as a reflection of the tree rather than another annotation.
-  &__profile-label-glyph {
-    display: block;
-    flex: 0 0 auto;
-    width: 10px;
-    height: 10px;
-    color: $color-primary;
-    transition: filter 0.2s ease;
-  }
-
-  // The tooltip, 6px under the chip: Ink, Inter 11, a small caret. Hidden
-  // until the chip is hovered or focused; the link's aria-label carries the
-  // same words, so this is visual only.
-  &__profile-label &__profile-tip {
-    position: absolute;
-    left: 0;
-    top: calc(100% + 6px);
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 8px;
-    background: $color-neutral-dark;
-    color: $color-secondary-lightest;
-    border-radius: 4px;
-    font-family: $font-family-primary;
-    font-size: 11px;
-    font-weight: $font-weight-regular;
-    line-height: 14px;
-    letter-spacing: 0;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 14px;
-      top: -3px;
-      width: 6px;
-      height: 6px;
-      background: $color-neutral-dark;
-      rotate: 45deg;
-    }
-  }
-
-  &:hover &__profile-selection {
-    border-color: rgba($color-primary, 0.75);
-  }
-
-  &:hover &__profile-label {
-    border-color: rgba($color-primary, 0.28);
-    transform: translateY(-1px);
-  }
-
-  // The chip's own hover and focus, after the hero-wide hover so it wins:
-  // orange hairline at 45%, a 1px lift on `translate` (the stage rules own
-  // `transform`), Shadow SM, the glyph glows, the leader goes solid, and the
-  // tooltip names the destination.
-  & &__profile-label--class:hover,
-  & &__profile-label--class:focus-visible {
-    border-color: rgba($color-primary, 0.45);
-    translate: 0 -1px;
-    box-shadow: $shadow-sm;
-
-    &::after {
-      border-top-style: solid;
-      border-top-color: rgba($color-primary, 0.6);
-    }
-
-    .hero__profile-label-glyph {
-      filter: drop-shadow(0 0 4px rgba($color-primary, 0.35));
-    }
-
-    .hero__profile-tip {
-      opacity: 1;
-    }
-  }
-
-  // Tab can land on the chip before the intro has popped it in; a focused
-  // link is never invisible.
-  & &__profile-label--class:focus-visible {
-    opacity: 1;
-    transform: scale(1);
   }
 
   &__ui-element {
@@ -1869,9 +1757,6 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
   .hero__profile-label--layer {
     animation: heroLowfiPop 0.35s $intro-easing 80ms forwards;
   }
-  .hero__profile-label--class {
-    animation: heroLowfiPop 0.35s $intro-easing 160ms forwards;
-  }
 
   // Scrawl wiped, eraser gone
   .hero__intro-scrawl {
@@ -1949,8 +1834,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     opacity: 1;
     transform: scale(1);
   }
-  .hero__profile-label--layer,
-  .hero__profile-label--class {
+  .hero__profile-label--layer {
     opacity: 1;
     transform: scale(1);
   }
@@ -2070,8 +1954,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     transform: scale(1);
   }
 
-  .hero__profile-label--layer,
-  .hero__profile-label--class {
+  .hero__profile-label--layer {
     opacity: 1;
     transform: scale(1);
   }
@@ -2104,8 +1987,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     opacity: 1;
     transform: scale(1);
   }
-  .hero__profile-label--layer,
-  .hero__profile-label--class {
+  .hero__profile-label--layer {
     opacity: 1;
     transform: scale(1);
   }
@@ -2162,8 +2044,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     // Resume idle drift once docked
     animation: uiDrift1 6s ease-in-out 0.5s infinite;
   }
-  .hero__profile-label--layer,
-  .hero__profile-label--class {
+  .hero__profile-label--layer {
     opacity: 1;
     transform: scale(1);
   }
@@ -2217,8 +2098,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     transform: scale(1);
     animation: uiDrift1 6s ease-in-out 0s infinite;
   }
-  .hero__profile-label--layer,
-  .hero__profile-label--class {
+  .hero__profile-label--layer {
     opacity: 1;
     transform: scale(1);
   }
@@ -2294,8 +2174,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
       transform: scale(1) !important;
       animation: none !important;
     }
-    .hero__profile-label--layer,
-    .hero__profile-label--class {
+    .hero__profile-label--layer {
       opacity: 1 !important;
       transform: scale(1) !important;
       animation: none !important;
@@ -2412,36 +2291,9 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     --profile-size: clamp(220px, 58vw, 260px);
     --profile-shell-size: calc(var(--profile-size) + 36px);
 
-    // Simplify the annotation system on small screens: the annotation chips go,
-    // except the one that is a door. The class chip stays, centred under the
-    // portrait ring where the hidden labels used to annotate, at a tappable size
-    // and with no leader (there is nothing to point at). `left: 0; right: 0;
-    // margin: auto; width: max-content` centres it without touching `transform`,
-    // which the stage rules own.
+    // Simplify the annotation system on small screens: the annotation chips go.
     &__profile-label {
       display: none;
-    }
-
-    &__profile-label--class {
-      display: inline-flex;
-      top: calc(100% + 14px);
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      width: max-content;
-      font-size: 0.72rem;
-      padding: 0.5rem 0.75rem;
-      min-height: 32px;
-      gap: 6px;
-
-      &::after {
-        display: none;
-      }
-    }
-
-    &__profile-label-glyph {
-      width: 12px;
-      height: 12px;
     }
 
     &__profile-selection {

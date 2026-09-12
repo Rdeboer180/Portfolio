@@ -33,20 +33,22 @@ describe('ryan pools and allocation', () => {
     expect(Object.keys(RYAN_ALLOCATION).every((id) => !!NODES[id])).toBe(true);
   });
 
-  it('keeps the must-have levels, and keeps production ownership and React at zero', () => {
+  it('keeps the must-have levels, holds React Native and TypeScript at 2, and keeps production ownership and React at zero', () => {
     expect(RYAN_ALLOCATION.typography).toBe(5);
     expect(RYAN_ALLOCATION.tokens).toBe(5);
     expect(RYAN_ALLOCATION.figma).toBe(5);
     expect(RYAN_ALLOCATION.html).toBe(5);
     expect(RYAN_ALLOCATION['ai-tools']).toBe(4);
-    expect(RYAN_ALLOCATION.handoff).toBe(4);
+    expect(RYAN_ALLOCATION.handoff).toBe(3);
     expect(RYAN_ALLOCATION.accessibility).toBe(4);
-    expect(RYAN_ALLOCATION.css).toBe(4);
+    expect(RYAN_ALLOCATION.css).toBe(3);
     expect(RYAN_ALLOCATION.storybook).toBe(3);
     expect(RYAN_ALLOCATION.documentation).toBe(3);
     expect(RYAN_ALLOCATION['production-ownership']).toBe(0);
     expect(RYAN_ALLOCATION.react).toBe(0);
-    expect(RYAN_ALLOCATION['react-native']).toBe(0);
+    expect(RYAN_ALLOCATION['react-native']).toBe(2);
+    expect(RYAN_ALLOCATION.typescript).toBe(2);
+    expect(RYAN_ALLOCATION.javascript).toBe(0);
   });
 
   it('masters four nodes: Typography, Tokens, Figma, HTML', () => {
@@ -60,6 +62,13 @@ describe('ryan abilities and class', () => {
 
   it('unlocks exactly the four the spec names', () => {
     expect(unlocked).toEqual(['guardrail-architect', 'prototype-alchemist', 'lossless-handoff', 'system-memory']);
+  });
+
+  it('pairs React Native and TypeScript as foundations, so neither waits on a React gate', () => {
+    expect(NODES['react-native'].tier).toBe('foundation');
+    expect(NODES.typescript.tier).toBe('foundation');
+    expect(NODES.react.tier).toBe('crown');
+    expect(NODES['production-ownership'].tier).toBe('crown');
   });
 
   it('shows Cross-platform Builder as next, not as a claimed node', () => {

@@ -172,15 +172,19 @@ const CaseStudyLocked: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => (
           <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
         </svg>
       </span>
-      <h2 className="cs__locked-heading">The rest is password protected</h2>
+      <h2 className="cs__locked-heading">Detailed case study available on request</h2>
       <p className="cs__locked-body">
-        This is client and employer work, so everything past the problem &mdash; the
-        constraints, the approach, the results, and every screen &mdash; stays
-        locked, along with who it was for. Enter the password to read it.
+        This overview is public. Project screens and implementation details are password
+        protected because they include employer or client work.
       </p>
-      <button type="button" className="cs__locked-action" onClick={onUnlock}>
-        Enter password
-      </button>
+      <div className="cs__locked-actions">
+        <a href={`${EMAIL_HREF}?subject=${encodeURIComponent('Case study access')}`} className="cs__locked-request">
+          Request access
+        </a>
+        <button type="button" className="cs__locked-action" onClick={onUnlock}>
+          Enter password
+        </button>
+      </div>
     </div>
   </section>
 );

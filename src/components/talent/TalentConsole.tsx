@@ -93,6 +93,7 @@ export const STORY = [
   "I've never been sure what to call myself.",
   'Product Designer, Design Engineer, UX Engineer, Systems Designer: the job descriptions overlap and none of them agree on what the title means.',
   'So instead of picking one, I built a talent tree and put sixteen years of points where they actually went.',
+  'A node at zero means no points landed there, not that I have never touched it.',
   "Here's where my strengths lie.",
 ].join(' ');
 

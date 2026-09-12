@@ -2,8 +2,6 @@ import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from
 import { Link } from 'react-router-dom';
 import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
-import { glyph } from '../data/talent/glyphs';
-import { RYAN_CLASS_SHORT, RYAN_INTAKE } from '../data/talent/ryan';
 import LayersPanel from './LayersPanel';
 import ProficiencyDock from './ProficiencyDock';
 import { useUnlock } from '../context/UnlockContext';
@@ -655,21 +653,24 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            Visual craft, tokens, components, internal tooling, and agent-readable rules: all of it built so <span className="animated-bold">designers and engineers can move faster without the system drifting</span>. My official title has been Senior Web Designer, but the work has been broader than the title: I use a background in visual communication and code to turn ideas into working products. AI speeds up exploration. <span className="animated-bold">I stay responsible for the decisions, details, and systems behind what ships.</span>
+            I design interfaces, build the tokens and components behind them, and <span className="animated-bold">stay with engineers until the details hold in production</span>. At Tire Rack that means design systems, AEM templates, and the styles the team reuses. On my own products, PlayDraft and LoopStack, <span className="animated-bold">I own the design and the agent-assisted build</span> from brand to TestFlight.
           </p>
 
+            <p className="hero__proof-line hero__reveal hero__reveal--3">
+              Based in South Bend, Indiana. Open to remote roles in the US.
+            </p>
+
             <div className="hero__actions hero__reveal hero__reveal--4">
-              <a href={EMAIL_HREF} className="btn btn--primary btn--lg">
-                <img src="/images/hero/email-icon.svg" alt="" className="hero__btn-icon" />
-                Get in touch
-              </a>
-              <a href="#projects" className="btn btn--secondary btn--lg">
-                View my work
+              <a href="#projects" className="btn btn--primary btn--lg">
+                View selected work
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19" />
                   <polyline points="19 12 12 19 5 12" />
                 </svg>
               </a>
+              <Link to="/resume" className="btn btn--secondary btn--lg">
+                View résumé
+              </Link>
             </div>
           </div>
 
@@ -926,38 +927,6 @@ const Hero: React.FC = () => {
                 <div className="hero__profile-label hero__profile-label--layer" aria-hidden="true">
                   <span>layer</span> / 01 Portfolio image
                 </div>
-
-                {/* The easter egg (BRIEF-v3, "Option C"): a second inspector chip
-                    8px under the layer label, reading the class the talent tree
-                    computes, and the hero's door into /talent-tree/. Stateless
-                    and identical on server and client; it rides the layer
-                    label's stage keys in _hero.scss, one beat behind it. The
-                    class is an authored constant so this file never imports the
-                    scorer (ryan.test.ts holds the constant to the computed
-                    result); the level is the years rule from economy.ts. One
-                    template string after the span, so the serialised text node
-                    matches on hydration. */}
-                <Link
-                  to="/talent-tree/"
-                  className="hero__profile-label hero__profile-label--class"
-                  aria-label="Open the talent tree"
-                >
-                  <svg
-                    className="hero__profile-label-glyph"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                    focusable="false"
-                    dangerouslySetInnerHTML={{ __html: glyph('branch') }}
-                  />
-                  <span>class</span>
-                  {` / ${RYAN_CLASS_SHORT} · Lv ${RYAN_INTAKE.years}`}
-                  <span className="hero__profile-tip" aria-hidden="true">Open the talent tree</span>
-                </Link>
               </div>
 
               {/* DevTools-style tag indicator pointing at the portrait layer */}

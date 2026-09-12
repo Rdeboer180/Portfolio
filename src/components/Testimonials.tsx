@@ -224,7 +224,7 @@ const Testimonials: React.FC = () => {
               <div className="testimonials__team-score-header">
                 <span className="testimonials__team-score-mark">
                   <span className="testimonials__team-score-mark-glyph" aria-hidden="true">★</span>
-                  <span className="testimonials__team-score-mark-text">TeamScore</span>
+                  <span className="testimonials__team-score-mark-text">Recommendations</span>
                 </span>
                 <div
                   className="testimonials__team-score-stars"

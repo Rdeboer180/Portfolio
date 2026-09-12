@@ -327,6 +327,19 @@ export const TREES: TalentTree[] = [
           'Behavior written in the language the browser runs, not described in a spec.',
         ],
         [
+          'performance',
+          'Performance',
+          'Time spent on the budget a page keeps, from payload and paint to the interaction that has to stay under a frame.',
+          { build: 0.6, research: 0.2, systems: 0.2 },
+          'performance',
+          'A page held to a budget, from payload and paint to interaction under a frame.',
+        ],
+      ),
+      area(
+        'code',
+        'typescript',
+        'TypeScript',
+        [
           'typescript',
           'TypeScript',
           'Time spent on types and contracts, so the shape of the data is checked before the interface renders it.',
@@ -334,11 +347,6 @@ export const TREES: TalentTree[] = [
           'problem-framing',
           'Types and contracts that catch a wrong shape before an interface renders it.',
         ],
-      ),
-      area(
-        'code',
-        'react',
-        'React',
         [
           'react',
           'React',
@@ -347,6 +355,11 @@ export const TREES: TalentTree[] = [
           'react',
           'Components, state, and effects written, so the system becomes an application.',
         ],
+      ),
+      area(
+        'code',
+        'react-native',
+        'React Native',
         [
           'react-native',
           'React Native',
@@ -355,11 +368,6 @@ export const TREES: TalentTree[] = [
           'expo',
           'One component vocabulary carried to phones, where the platform rules differ.',
         ],
-      ),
-      area(
-        'code',
-        'production-ownership',
-        'Production ownership',
         [
           'production-ownership',
           'Production ownership',
@@ -367,14 +375,6 @@ export const TREES: TalentTree[] = [
           { build: 0.7, collaboration: 0.2, ai: 0.1 },
           'ship',
           'The front end owned in production, where the real work finally becomes visible.',
-        ],
-        [
-          'performance',
-          'Performance',
-          'Time spent on the budget a page keeps, from payload and paint to the interaction that has to stay under a frame.',
-          { build: 0.6, research: 0.2, systems: 0.2 },
-          'performance',
-          'A page held to a budget, from payload and paint to interaction under a frame.',
         ],
       ),
     ],

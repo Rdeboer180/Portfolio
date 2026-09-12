@@ -42,8 +42,8 @@ describe('the three lanes', () => {
       'Accessibility', 'Governance', 'Research', 'Information architecture',
       'Figma', 'Prototyping', 'Storybook', 'Documentation', 'Handoff', 'State modeling',
       'CMS', 'QA and analytics', 'AI tools', 'Agent context',
-      'HTML', 'CSS', 'Git', 'Automation', 'JavaScript', 'TypeScript',
-      'React', 'React Native', 'Production ownership', 'Performance',
+      'HTML', 'CSS', 'Git', 'Automation', 'JavaScript', 'Performance',
+      'TypeScript', 'React', 'React Native', 'Production ownership',
     ]);
     NODE_LIST.forEach((n) => {
       expect(n.id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);

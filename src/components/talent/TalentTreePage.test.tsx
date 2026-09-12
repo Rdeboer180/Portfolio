@@ -81,9 +81,9 @@ describe('the front door, /talent-tree/', () => {
 
     // The status rail: the three lanes, computed, then the one spend line.
     const lanes = screen.getByRole('list', { name: 'Points per lane' });
-    expect(lanes).toHaveTextContent('Design and systems27');
-    expect(lanes).toHaveTextContent('Technical27');
-    expect(lanes).toHaveTextContent('Code9');
+    expect(lanes).toHaveTextContent('Design and systems25');
+    expect(lanes).toHaveTextContent('Technical26');
+    expect(lanes).toHaveTextContent('Code12');
     expect(screen.getByText('63 / 63')).toBeTruthy();
     expect(screen.getByText('spent · 4 mastered · 4 abilities')).toBeTruthy();
 
@@ -91,7 +91,7 @@ describe('the front door, /talent-tree/', () => {
     expect(screen.getByText('· what you define')).toBeTruthy();
     expect(screen.getByText('· how you connect the work')).toBeTruthy();
     expect(screen.getByText('· what you can express in the medium')).toBeTruthy();
-    expect(screen.getByText('Root Visual craft · 27 points · 2 mastered')).toBeTruthy();
+    expect(screen.getByText('Root Visual craft · 25 points · 2 mastered')).toBeTruthy();
 
     // Thirty nodes, each a button with its meaning as the description.
     const nodes = screen.getAllByRole('button', { name: /, (foundation|crown), \d of 5 points/ });
@@ -366,7 +366,7 @@ describe('the build route, /talent-tree/build/', () => {
     window.history.replaceState(null, '', `/talent-tree/build/#s=${shared}`);
     const { unmount } = mount('/talent-tree/build/');
     expect(await screen.findByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeTruthy();
-    expect(screen.getByText('Root Visual craft · 27 spent · 2 mastered')).toBeTruthy();
+    expect(screen.getByText('Root Visual craft · 25 spent · 2 mastered')).toBeTruthy();
     expect(screen.getByText('four abilities · four masteries · four stats · nothing hand-set')).toBeTruthy();
     // Everyone is scored by the same rules: no authored card lines here.
     expect(screen.queryByText('Designs systems that continue working when he leaves the room.')).toBeNull();
@@ -374,7 +374,7 @@ describe('the build route, /talent-tree/build/', () => {
     expect(screen.getByText(result.passive)).toBeTruthy();
     // The hash round-trips.
     expect(window.location.hash).toBe(`#s=${shared}`);
-    expect(receiptText(result, 'x')).toContain('Design and systems  ●◐◐◐●◐◐◐○○  27 · 2 mastered');
+    expect(receiptText(result, 'x')).toContain('Design and systems  ●◐◐○●◐◐◐○○  25 · 2 mastered');
     expect(receiptText(result, 'x')).toContain('4 unlocked of 12 · Guardrail Architect');
     unmount();
 

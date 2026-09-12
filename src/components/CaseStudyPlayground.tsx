@@ -491,7 +491,7 @@ const CaseStudyPlayground: React.FC = () => {
               onClick={() => openPrompt()}
             >
               <span className="case-playground__unlock-icon"><PreviewLockIcon /></span>
-              Unlock the professional stream
+              Unlock employer and client work
             </button>
           )}
         </div>

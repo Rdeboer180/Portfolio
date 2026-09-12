@@ -628,6 +628,7 @@ const projects: Project[] = [
     title: 'Heatherwood: A Brand and Site the Owner Can Run Herself',
     seoTitle: 'Brand Identity & WordPress Site for a Local Equestrian Academy',
     summary: 'I rebuilt Heatherwood’s identity and WordPress site around the services families actually search for. In the weeks after launch, website inquiries moved from roughly three or four a month to four or five a day.',
+    cardHook: 'A new identity and WordPress site for a riding academy, built around the services families search for and simple enough for the owner to update herself.',
     year: '2025',
     tags: ['Brand Design', 'Web', 'SEO', 'CMS'],
     role: 'Brand & Web Designer',
@@ -720,7 +721,7 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: 'Deborah still manages the WordPress content herself. Website inquiries moved from roughly three or four a month before launch to four or five a day in the weeks after. That change belongs to the brand, the site structure, the search work, and the easier inquiry path together, not to any one screen.',
+    outcomeNote: 'Deborah still manages the WordPress content herself. Website inquiries moved from roughly three or four a month before launch to four or five a day in the weeks after. Those are rough counts from the form submissions in the WordPress inbox, comparing the weeks before launch with the weeks after, not a filtered report. That change belongs to the brand, the site structure, the search work, and the easier inquiry path together, not to any one screen.',
     takeaways: [
       'The site had to run without me, so training the owner was part of the build. She adds services and checks form submissions and SEO scores herself.',
       'One headline for two readers: the parent scanning the page and the search engine indexing it.',
@@ -1446,8 +1447,8 @@ Frame every output as:
     title: 'PlayDraft: A Social Drafting Game Built From Brand to TestFlight',
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft: a 0→1 Social Game Designed & Built With Agents in React Native',
-    summary: 'PlayDraft turns the fantasy-draft ritual loose on snacks, movies, athletes, or any topic a group writes in. I took it from the first identity sketch to a working Expo and Supabase app on TestFlight in twelve weeks, using AI to accelerate the build inside a token-governed system.',
-    cardHook: 'The fantasy-draft ritual, opened to snacks, movies, or anything friends write in. Brand, game system, and Expo app hit TestFlight in twelve weeks, with the design system holding every AI-scaffolded screen to its rules.',
+    summary: 'Friends pick a topic, take turns drafting on the clock, and compare boards at the end. I designed the brand, the game, and the mobile interface, then built the Expo and Supabase app with agents to a working TestFlight build in twelve weeks. The biggest change came from playing it: drafts originally ended in community voting, which pushed the verdict to the next day, so I replaced it with instant scoring and a group can finish in one session.',
+    cardHook: 'A drafting game for snacks, movies, or anything a group writes in. I designed the brand and the game and built the Expo app with agents; it reached TestFlight in twelve weeks.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Agent-Assisted Build (React Native) · Content & Legal Ops · QA',
@@ -1455,7 +1456,7 @@ Frame every output as:
     timeline: 'April → July 2026 · TestFlight',
     featured: '/images/work/playdraft/playdraft-cover-v2.png',
     featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
-    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Currently in App Store submission prep: coins-only economy at launch, cash purchases gated behind a feature flag until counsel review.',
+    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Currently in App Store submission prep: coins-only economy at launch, cash purchases behind a feature flag until a lawyer has reviewed them.',
 
     // ── 01 Problem ──
     problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports, but it has stayed locked to sports.',
@@ -1493,7 +1494,7 @@ Frame every output as:
       'Solo product design and build: no engineering team, no design partner, no research budget. Needed a workflow that compressed system design, screen design, and implementation into a single loop.',
       'Real production stack from day one: Expo Router, React Native, TypeScript, Supabase (auth, DB, realtime, RLS, edge functions), RevenueCat rails. UI never touches provider SDKs directly. Everything routes through /src/services/*.service.ts.',
       'App Store guidelines shaped real product decisions: UGC moderation (block / report / eject) for guideline 1.2, a wager token renamed and made coin-only for 5.3, and non-functional cash UI stripped for 2.1.',
-      'Packs that name real brands, shows, and athletes ran through a legal-safety framework: names only, no likenesses, trademarked nicknames scrubbed, one pack renamed, and a remote kill switch that disables any pack without an app release. The riskiest content launches free-tier only, a documented decision made instead of paying for counsel first.',
+      'Packs that name real brands, shows, and athletes follow content rules I wrote myself, without counsel: names only, no likenesses, trademarked nicknames scrubbed, one pack renamed, and a remote kill switch that disables any pack without an app release. The riskiest content launches free-tier only until a lawyer has reviewed it.',
     ],
 
     insightCallout: 'The design system doubled as the guardrail for AI output. Tokens, recipes, and a “no screen without a reference” rule meant every AI-assisted screen or new pack had somewhere to belong before it was built.',
@@ -1561,7 +1562,7 @@ Frame every output as:
       {
         key: 'build',
         label: 'AI scaffolds against the recipes; the audit catches drift',
-        description: 'The shipped app is a production build, not a prototype shell: 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, 8 edge functions. Game logic (snake order, pick clock, confidence-pool scoring) lives inside with providers at the edge, so the engine is testable without the network. AI scaffolds screens from the token recipes, authors packs through a curator agent with a legal-safety check, and runs a weekly report-only audit that flags drift and touches no app code. Tokens, product decisions, and legal posture sit in the same annotated file:',
+        description: 'The shipped app is a production build, not a prototype shell: 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, 8 edge functions. Game logic (snake order, pick clock, confidence-pool scoring) lives inside with providers at the edge, so the engine is testable without the network. AI scaffolds screens from the token recipes, authors packs through a curator agent that checks them against the content rules, and runs a weekly report-only audit that flags drift and touches no app code. Tokens, product decisions, and legal posture sit in the same annotated file:',
         systemMarker: 'Agent workflows',
         promptRows: [
           {
@@ -1634,7 +1635,7 @@ export const packs = {
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'PlayDraft is on TestFlight. On device, a group can choose or write a topic, draft on the clock, get an instant scored winner, share the board, and level up. There are no launch metrics yet. Third-party packs stay free under the legal-safety framework, and some promotional surfaces are drawn but not wired. What exists is the full loop working.',
+    outcomeNote: 'PlayDraft is on TestFlight. On device, a group can choose or write a topic, draft on the clock, get an instant scored winner, share the board, and level up. There are no launch metrics yet. Third-party packs stay free under those content rules, and some promotional surfaces are drawn but not wired. What exists is the full loop working.',
     takeaways: [
       'Community voting was the app’s reason to exist, and it was wrong. A casual group wants a verdict tonight, not after a day of strangers voting, so I retired it in June.',
       'Any token with no rendering on the live /design-system screen gets deleted. That rule, not a style guide, is what held the AI-scaffolded screens to the system.',
@@ -1671,7 +1672,7 @@ export const packs = {
       { value: '12 wks', label: 'First logo sketch → TestFlight (Apr–Jul 2026, solo)' },
       { value: '133', label: 'Components on a token-governed design system' },
       { value: '59', label: 'Screens & routes across the shipped Expo Router app' },
-      { value: '17', label: 'Draft packs in the launch catalog, every third-party topic cleared through a legal-safety framework' },
+      { value: '17', label: 'Draft packs in the launch catalog, every third-party topic checked against content rules written without counsel' },
     ],
   },
 
