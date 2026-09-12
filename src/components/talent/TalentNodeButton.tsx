@@ -9,10 +9,12 @@
 // and a locked crown is aria-disabled with the reason rather than removed
 // from the tab order.
 //
-// Spending: click, Enter, or Space adds a point. Shift+click, Backspace,
-// Delete, or the minus key removes one, as does the small minus control
-// that appears on hover for pointer users (phones get the same control in
-// the detail block under the tree, at a full-size target).
+// The node prints nothing of its own beyond the label and the level mark:
+// hover and focus hand the node to the console's inspector rail (or, on a
+// phone, a tap opens the sheet), which is where the meaning and the gate are
+// read. Spending: click, Enter, or Space adds a point; Shift+click,
+// Backspace, Delete, or the minus key removes one. On the phone a tap opens
+// the sheet instead and the sheet's minus and plus do the spending.
 // ============================================
 
 import React, { useCallback } from 'react';
@@ -25,6 +27,8 @@ export interface TalentNodeButtonProps {
   node: TalentNode;
   /** Branch index within the tree, 0..4. */
   index: number;
+  /** Tree index, 0..2, for the cascade's stagger. */
+  treeIndex: number;
   points: number;
   /** Crown whose foundation is still below the unlock line. */
   locked: boolean;
@@ -32,17 +36,26 @@ export interface TalentNodeButtonProps {
   foundationName?: string;
   /** False on Ryan's tree: the node still answers hover and focus, but does not spend. */
   editable: boolean;
-  /** The node is hovered, focused, or pinned; the board draws its detail. */
+  /** Build mode before the intake is answered: the node is shown but takes nothing. */
+  dormant: boolean;
+  /** The inspector is printing this node. */
   active: boolean;
+  /** The phone: a tap opens the sheet rather than spending. */
+  tapOpens: boolean;
   onAdd: (nodeId: string) => void;
   onRemove: (nodeId: string) => void;
-  /** Hover or focus landed (pinned = a click on a read-only tree, or a tap). */
-  onActivate: (nodeId: string, pinned: boolean) => void;
-  onDeactivate: (nodeId: string) => void;
+  /** Pointer entered or left, keyboard focus landed or left. */
+  onHover: (nodeId: string | null) => void;
+  /** A click or a tap: the inspector keeps this node until the next pin or Escape. */
+  onPin: (nodeId: string, el: HTMLButtonElement) => void;
 }
 
 export function meaningId(nodeId: string): string {
   return `tt-meaning-${nodeId}`;
+}
+
+export function nodeDomId(nodeId: string): string {
+  return `tt-node-${nodeId}`;
 }
 
 /** "Tokens and variables, foundation, 3 of 5 points" (plus the lock reason on a locked crown). */
@@ -52,27 +65,42 @@ export function nodeLabel(node: TalentNode, points: number, locked: boolean, fou
   return `${base}, locked until ${foundationName || 'its foundation'} holds ${CROWN_UNLOCK_AT}`;
 }
 
+/**
+ * The cascade's delay for a node: root first, then the foundations, then the
+ * crowns, each tier staggered across the three trees and along the branch, so
+ * the whole board lights in about 900ms.
+ */
+export function cascadeDelay(tier: 'root' | 'foundation' | 'crown', treeIndex: number, index: number): number {
+  if (tier === 'root') return treeIndex * 60;
+  const base = tier === 'foundation' ? 140 : 460;
+  return base + treeIndex * 70 + index * 40;
+}
+
 const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
   node,
   index,
+  treeIndex,
   points,
   locked,
   foundationName,
   editable,
+  dormant,
   active,
+  tapOpens,
   onAdd,
   onRemove,
-  onActivate,
-  onDeactivate,
+  onHover,
+  onPin,
 }) => {
   const mastered = points >= MAX_POINTS_PER_NODE;
+  const spends = editable && !dormant;
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!editable) {
-        // A read-only tree: a click pins the detail, a second click on the
-        // same node lets it go (a tap has no hover to lean on).
-        onActivate(node.id, true);
+      if (!spends || tapOpens) {
+        // A read-only tree, a dormant one, or a phone: the click pins the
+        // node in the inspector (or opens the sheet); nothing is spent.
+        onPin(node.id, e.currentTarget);
         return;
       }
       if (e.shiftKey) {
@@ -80,14 +108,14 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
       } else if (!locked) {
         onAdd(node.id);
       }
-      onActivate(node.id, false);
+      onPin(node.id, e.currentTarget);
     },
-    [editable, locked, node.id, onAdd, onRemove, onActivate],
+    [spends, tapOpens, locked, node.id, onAdd, onRemove, onPin],
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (!editable) return;
+      if (!spends) return;
       if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '-') {
         e.preventDefault();
         onRemove(node.id);
@@ -96,7 +124,7 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
         if (!locked) onAdd(node.id);
       }
     },
-    [editable, locked, node.id, onAdd, onRemove],
+    [spends, locked, node.id, onAdd, onRemove],
   );
 
   const classes = [
@@ -106,25 +134,32 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
     locked ? 'is-locked' : '',
     mastered ? 'is-mastered' : '',
     active ? 'is-active' : '',
-    editable ? 'is-editable' : '',
+    spends ? 'is-editable' : '',
+    dormant ? 'is-dormant' : '',
   ]
     .filter(Boolean)
     .join(' ');
 
+  const style = {
+    ...nodeVars(node.tier, index),
+    '--tt-delay': `${cascadeDelay(node.tier, treeIndex, index)}ms`,
+  } as React.CSSProperties;
+
   return (
-    <div className={classes} style={nodeVars(node.tier, index)}>
+    <div className={classes} style={style}>
       <button
         type="button"
+        id={nodeDomId(node.id)}
         className="tt-node__btn"
         aria-label={nodeLabel(node, points, locked, foundationName)}
         aria-describedby={meaningId(node.id)}
-        aria-disabled={locked || undefined}
+        aria-disabled={locked || dormant || undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        onMouseEnter={() => onActivate(node.id, false)}
-        onMouseLeave={() => onDeactivate(node.id)}
-        onFocus={() => onActivate(node.id, false)}
-        onBlur={() => onDeactivate(node.id)}
+        onMouseEnter={() => onHover(node.id)}
+        onMouseLeave={() => onHover(null)}
+        onFocus={() => onHover(node.id)}
+        onBlur={() => onHover(null)}
       >
         <Glyph name={node.glyph} className="tt-node__glyph" />
         {mastered && <span className="tt-node__mark" aria-hidden="true" />}
@@ -132,19 +167,6 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
           <span className="tt-node__count" aria-hidden="true">{points}</span>
         )}
       </button>
-      {editable && points > 0 && (
-        <button
-          type="button"
-          className="tt-node__minus"
-          tabIndex={-1}
-          aria-label={`Remove a point from ${node.name}`}
-          onClick={() => onRemove(node.id)}
-        >
-          <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true" focusable="false">
-            <path d="M2 6h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
-        </button>
-      )}
       <span className="tt-node__label" aria-hidden="true">
         <span className="tt-node__label-text">{node.name}</span>
         {mastered && <span className="tt-node__mastered">Mastered</span>}

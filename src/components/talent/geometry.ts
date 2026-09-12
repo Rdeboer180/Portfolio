@@ -6,16 +6,21 @@
 // it exactly; see the header of SystemsInPractice.tsx for the failure this
 // avoids). Two layouts, both lifted from the approved artboards:
 //
-//   column  Tree.dc.html, 336 × 796. The root sits at the foot, five
-//           foundations fan out above it on two staggered rows, and each
-//           crown sits above its foundation. Read on a desktop, three trees
-//           side by side.
-//   row     Mobile.dc.html, 330 × 284. Crowns across the top, foundations
-//           beneath, the root at the foot on a bus. Read one tree at a time.
+//   column  ConsoleFront.dc.html, 400 × 530 (the svg's 540 viewBox carries the
+//           root's label below the last row). Crowns across the top on two
+//           staggered rows at y 48 and 140, foundations beneath at 293 and
+//           388, the root at 468. Read on a desktop, three columns side by
+//           side inside the 1392 console.
+//   row     ConsoleMobile.dc.html, 318 × 436: the same shape at the phone's
+//           scale, crowns at 48 and 122, foundations at 222 and 300, the root
+//           at 380. One tree at a time behind the segmented control.
+//
+// Branches 0, 2, and 4 take the tall row; 1 and 3 take the short one, which is
+// what gives the board its staggered read and keeps a three-line label out of
+// the next row's node.
 //
 // x is expressed as a percentage of the tree box so the box can flex; y is a
-// pixel offset because the box's height is fixed per layout (the vertical
-// rhythm is what keeps a three-line label out of the next row's node).
+// pixel offset because the box's height is fixed per layout.
 // ============================================
 
 import type { CSSProperties } from 'react';
@@ -31,9 +36,13 @@ export interface Point {
 export interface LayoutSpec {
   width: number;
   height: number;
+  /** The svg viewBox's height: the box plus the room the root's label needs. */
+  viewHeight: number;
   /** Node diameter, px. */
   node: number;
-  root: Point;
+  /** Root diameter, px. */
+  root: number;
+  rootAt: Point;
   foundation: Point[];
   crown: Point[];
   /** Path from the root to branch i's foundation. */
@@ -42,34 +51,37 @@ export interface LayoutSpec {
   crownPath: (i: number) => string;
 }
 
-const COLUMN_ROOT: Point = { x: 168, y: 736 };
-const COLUMN_FOUNDATION: Point[] = [
-  { x: 64, y: 440 },
-  { x: 116, y: 546 },
-  { x: 168, y: 440 },
-  { x: 220, y: 546 },
-  { x: 272, y: 440 },
-];
-const COLUMN_CROWN: Point[] = [
-  { x: 52, y: 162 },
-  { x: 110, y: 274 },
-  { x: 168, y: 162 },
-  { x: 226, y: 274 },
-  { x: 284, y: 162 },
-];
+/** Branches 0, 2, 4 ride the tall row; 1 and 3 the short one. */
+function isTall(i: number): boolean {
+  return i % 2 === 0;
+}
+
+/**
+ * Both artboards draw the root wire the same way: out of the root 80px, into
+ * the foundation from 80px below it. One curve, two scales.
+ */
+function curve(root: Point, f: Point): string {
+  return `M${root.x} ${root.y} C${root.x} ${root.y - 80}, ${f.x} ${f.y + 80}, ${f.x} ${f.y}`;
+}
+
+// ── Desktop: 400 × 530 (ConsoleFront.dc.html) ────────────────────────────────
+
+const COLUMN_ROOT: Point = { x: 200, y: 468 };
+const COLUMN_FOUNDATION_X = [64, 132, 200, 268, 336];
+const COLUMN_CROWN_X = [52, 126, 200, 274, 348];
+const COLUMN_FOUNDATION: Point[] = COLUMN_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 293 : 388 }));
+const COLUMN_CROWN: Point[] = COLUMN_CROWN_X.map((x, i) => ({ x, y: isTall(i) ? 48 : 140 }));
 
 export const COLUMN: LayoutSpec = {
-  width: 336,
-  height: 796,
+  width: 400,
+  height: 530,
+  viewHeight: 540,
   node: 44,
-  root: COLUMN_ROOT,
+  root: 48,
+  rootAt: COLUMN_ROOT,
   foundation: COLUMN_FOUNDATION,
   crown: COLUMN_CROWN,
-  rootPath: (i) => {
-    const f = COLUMN_FOUNDATION[i];
-    const r = COLUMN_ROOT;
-    return `M${r.x} ${r.y} C${r.x} ${r.y - 120}, ${f.x} ${f.y + 120}, ${f.x} ${f.y}`;
-  },
+  rootPath: (i) => curve(COLUMN_ROOT, COLUMN_FOUNDATION[i]),
   crownPath: (i) => {
     const f = COLUMN_FOUNDATION[i];
     const c = COLUMN_CROWN[i];
@@ -77,28 +89,28 @@ export const COLUMN: LayoutSpec = {
   },
 };
 
-const ROW_X = [33, 99, 165, 231, 297];
-const ROW_ROOT: Point = { x: 165, y: 244 };
-const ROW_FOUNDATION: Point[] = ROW_X.map((x) => ({ x, y: 131 }));
-const ROW_CROWN: Point[] = ROW_X.map((x) => ({ x, y: 20 }));
+// ── Phone: 318 × 436 (ConsoleMobile.dc.html) ─────────────────────────────────
+
+const ROW_ROOT: Point = { x: 159, y: 380 };
+const ROW_FOUNDATION_X = [40, 104, 159, 214, 278];
+const ROW_CROWN_X = [32, 94, 159, 224, 286];
+const ROW_FOUNDATION: Point[] = ROW_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 222 : 300 }));
+const ROW_CROWN: Point[] = ROW_CROWN_X.map((x, i) => ({ x, y: isTall(i) ? 48 : 122 }));
 
 export const ROW: LayoutSpec = {
-  width: 330,
-  height: 284,
+  width: 318,
+  height: 436,
+  viewHeight: 436,
   node: 40,
-  root: ROW_ROOT,
+  root: 44,
+  rootAt: ROW_ROOT,
   foundation: ROW_FOUNDATION,
   crown: ROW_CROWN,
-  rootPath: (i) => {
-    const f = ROW_FOUNDATION[i];
-    const r = ROW_ROOT;
-    // Up out of the root to the bus, across, then up into the foundation.
-    return `M${r.x} ${r.y} V210 H${f.x} V${f.y}`;
-  },
+  rootPath: (i) => curve(ROW_ROOT, ROW_FOUNDATION[i]),
   crownPath: (i) => {
     const f = ROW_FOUNDATION[i];
     const c = ROW_CROWN[i];
-    return `M${f.x} ${f.y} V${c.y}`;
+    return `M${f.x} ${f.y} L${c.x} ${c.y}`;
   },
 };
 
@@ -111,8 +123,8 @@ export function pct(x: number, width: number): string {
 
 /** The custom properties a node carries so the SCSS can place it in either layout. */
 export function nodeVars(tier: 'foundation' | 'crown' | 'root', i: number): CSSProperties {
-  const c = tier === 'root' ? COLUMN.root : COLUMN[tier][i];
-  const r = tier === 'root' ? ROW.root : ROW[tier][i];
+  const c = tier === 'root' ? COLUMN.rootAt : COLUMN[tier][i];
+  const r = tier === 'root' ? ROW.rootAt : ROW[tier][i];
   return {
     '--tt-cx': pct(c.x, COLUMN.width),
     '--tt-cy': `${c.y}px`,

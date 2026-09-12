@@ -180,6 +180,44 @@ describe('trees', () => {
     });
   });
 
+  // The masteries drawer prints masteryLine, so every node needs one and it has
+  // to fit a 35px row: one sentence, sentence case, 10 to 16 words, no em dash.
+  it('every node carries a mastery line: one sentence, under 17 words, no em dash', () => {
+    NODE_LIST.forEach((n) => {
+      expect(typeof n.masteryLine).toBe('string');
+      expect(n.masteryLine.trim().length).toBeGreaterThan(20);
+      expect(n.masteryLine).not.toContain(EM_DASH);
+      expect(n.masteryLine).not.toContain('\u2013');
+      expect(n.masteryLine.trim().endsWith('.')).toBe(true);
+      expect(n.masteryLine.trim().split(/[.!?](\s|$)/).filter((s) => s.trim().length > 0)).toHaveLength(1);
+      const words = n.masteryLine.trim().split(/\s+/);
+      expect(words.length).toBeLessThan(17);
+      expect(words.length).toBeGreaterThan(8);
+      // Sentence case: only the first word may be capitalised without a reason.
+      expect(n.masteryLine).not.toMatch(/^[a-z]/);
+      // Distinct from the hover meaning, and never a duplicate of another node's.
+      expect(n.masteryLine).not.toBe(n.meaning);
+    });
+    const all = NODE_LIST.map((n) => n.masteryLine);
+    expect(new Set(all).size).toBe(all.length);
+  });
+
+  // The seven Ryan has mastered are the front-door artboard's lines, verbatim.
+  it('the seven mastered nodes carry the artboard lines verbatim', () => {
+    const expected: Record<string, string> = {
+      'typography-and-hierarchy': 'Type does the structural work, so a screen reads in order before color lands.',
+      'high-fidelity-in-figma': 'Prototypes real enough that a stakeholder forgets it is not the product.',
+      'tokens-and-variables': 'Decisions named as variables, so a change made once lands everywhere.',
+      'components-storybook-and-scaling': 'Parts with contracts, documented where engineers work, tested across surfaces.',
+      'standards-accessibility-and-qa': 'Rules that hold when I am not in the room, from contrast to release checks.',
+      'html-css-and-state-definition': "The design in the browser's own language, every state and breakpoint defined.",
+      'writing-and-presenting': 'Reasoning that travels as far as the screens do, in writing and in the room.',
+    };
+    Object.keys(expected).forEach((id) => {
+      expect(NODES[id].masteryLine).toBe(expected[id]);
+    });
+  });
+
   it('every glyph key resolves: 30 nodes, 3 roots, and the branch mark', () => {
     NODE_LIST.forEach((n) => expect(GLYPHS[n.glyph]).toBeTruthy());
     TREES.forEach((t) => expect(GLYPHS[t.root.glyph]).toBeTruthy());

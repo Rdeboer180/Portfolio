@@ -43,6 +43,12 @@ export interface TalentNode {
   weights: Partial<Record<Trait, number>>;
   /** Key into the glyph table. */
   glyph: string;
+  /**
+   * One sentence the masteries drawer prints when the node reaches 5 / 5: what
+   * the mastery is, not what a point buys. Sentence case, 10 to 16 words, no
+   * em dashes, no contractions.
+   */
+  masteryLine: string;
 }
 
 export interface TalentArea {

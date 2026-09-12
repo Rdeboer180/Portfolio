@@ -4,7 +4,9 @@
 // the pair description, four primary stats as twenty-segment bars, the
 // passive ability and current quest, three miniature trees, and the URL.
 // Responsive here; the 1200 × 630 rendition for sharing is drawn by
-// cardImage.ts from the same cardData().
+// cardImage.ts from the same cardData(). The stat rows and their segments
+// carry an index (--tt-i) so the console's assembling motion can fill them
+// in sequence; the class line carries the sweep's span.
 // ============================================
 
 import React from 'react';
@@ -63,8 +65,13 @@ const MiniTrees: React.FC<{ trees: CardData['trees'] }> = ({ trees }) => (
   </svg>
 );
 
+/** A name past 20 characters steps the class down a size so it never breaks inside the name. */
+export function classIsLong(data: Pick<CardData, 'primary' | 'secondary'>): boolean {
+  return Math.max(data.primary.length, data.secondary.length) > 20;
+}
+
 const TalentCard: React.FC<{ data: CardData }> = ({ data }) => (
-  <div className="tt-card" data-card="talent-card">
+  <div className={`tt-card${classIsLong(data) ? ' tt-card--long-class' : ''}`} data-card="talent-card">
     <div className="tt-card__main">
       <div className="tt-card__left">
         <div className="tt-card__id">
@@ -73,7 +80,7 @@ const TalentCard: React.FC<{ data: CardData }> = ({ data }) => (
         </div>
         <h3 className="tt-card__class">
           <span className="tt-card__class-line">
-            <span>{data.primary}</span>
+            <span className="tt-card__sweep">{data.primary}</span>
             <svg
               className="tt-card__slash"
               viewBox="0 0 26 58"
@@ -89,7 +96,7 @@ const TalentCard: React.FC<{ data: CardData }> = ({ data }) => (
               <path d="M21 5L5 53" />
             </svg>
           </span>
-          <span className="tt-card__class-line">{data.secondary}</span>
+          <span className="tt-card__class-line"><span className="tt-card__sweep">{data.secondary}</span></span>
         </h3>
         <p className="tt-card__desc">{data.description}</p>
         <dl className="tt-card__rows">
@@ -109,15 +116,15 @@ const TalentCard: React.FC<{ data: CardData }> = ({ data }) => (
           <span>Primary stats</span>
           <span>{`Computed from ${data.pointsSpent} points`}</span>
         </div>
-        {data.stats.map((s) => (
-          <div className="tt-card__stat" key={s.trait}>
+        {data.stats.map((s, si) => (
+          <div className="tt-card__stat" key={s.trait} style={{ '--tt-i': si } as React.CSSProperties}>
             <div className="tt-card__stat-row">
               <span className="tt-card__stat-label">{s.label}</span>
               <span className="tt-card__stat-num">{s.score}</span>
             </div>
             <div className="tt-card__bar" role="img" aria-label={`${s.label} ${s.score} of 100`}>
               {s.segments.map((fill, i) => (
-                <span key={i} className={`tt-card__seg${fill >= 1 ? ' is-full' : ''}`}>
+                <span key={i} className={`tt-card__seg${fill >= 1 ? ' is-full' : ''}`} style={{ '--tt-i': i } as React.CSSProperties}>
                   {fill > 0 && fill < 1 && (
                     <span className="tt-card__seg-fill" style={{ width: `${Math.round(fill * 100)}%` }} />
                   )}

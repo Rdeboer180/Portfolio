@@ -139,21 +139,26 @@ function draw(ctx: Ctx, d: CardData) {
   ctx.fillStyle = STEEL;
   drawTracked(ctx, level, pillX + 10, y - 1, 12 * 0.06);
 
-  // Class: two lines of Hubot Sans 800 at 60, a steel slash after the first.
-  y += 22 + 50;
+  // Class: two lines of Hubot Sans 800, a steel slash after the first. The
+  // DOM card sets 34/36 at its 0.54 scale and steps to 30 when a name passes
+  // 20 characters; 60 and 53 are the same sizes at 1200 wide. A line never
+  // breaks inside a name: the wrap is only ever at the slash.
+  const classSize = Math.max(d.primary.length, d.secondary.length) > 20 ? 53 : 60;
+  const classLine = Math.round(classSize * 36 / 34);
+  y += 22 + classSize - 10;
   ctx.fillStyle = PAPER;
-  ctx.font = `800 60px ${HEADING}`;
-  drawTracked(ctx, d.primary, left, y, -60 * 0.02);
-  const primaryW = measureTracked(ctx, d.primary, -60 * 0.02);
+  ctx.font = `800 ${classSize}px ${HEADING}`;
+  drawTracked(ctx, d.primary, left, y, -classSize * 0.02);
+  const primaryW = measureTracked(ctx, d.primary, -classSize * 0.02);
   ctx.strokeStyle = STEEL;
   ctx.lineWidth = 3;
   ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(left + primaryW + 14 + 21, y - 46);
+  ctx.moveTo(left + primaryW + 14 + 21, y - classSize * 0.77);
   ctx.lineTo(left + primaryW + 14 + 5, y + 2);
   ctx.stroke();
-  y += 61;
-  drawTracked(ctx, d.secondary, left, y, -60 * 0.02);
+  y += classLine;
+  drawTracked(ctx, d.secondary, left, y, -classSize * 0.02);
 
   // Pair description, Inter 17/26 at 78% paper, up to 660 wide.
   y += 22 + 17;

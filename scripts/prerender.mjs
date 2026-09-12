@@ -24,7 +24,9 @@ const ORIGIN = `http://localhost:${PORT}`;
 const HIDDEN_WORK_ROUTES = [...readFileSync(new URL('../src/data/projects.ts', import.meta.url), 'utf8')
   .matchAll(/slug: '([^']+)'[\s\S]{0,4000}?hidden: true/g)]
   .map((m) => `/work/${m[1]}`);
-const EXTRA_ROUTES = ['/design-system', '/sitemap', ...new Set(HIDDEN_WORK_ROUTES)];
+// /talent-tree/build is linked from the front door, so the crawler reaches it
+// anyway; listing it means the build path prerenders even if that link moves.
+const EXTRA_ROUTES = ['/design-system', '/sitemap', '/talent-tree/build', ...new Set(HIDDEN_WORK_ROUTES)];
 
 // Rendered so a direct link resolves, but kept out of the sitemap and marked
 // noindex. Rendering a route and publishing it are two decisions, and hidden
