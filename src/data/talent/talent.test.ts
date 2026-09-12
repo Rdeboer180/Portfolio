@@ -88,7 +88,7 @@ const RYAN_MASTERED_NAMES = [
   'Components, Storybook, and scaling',
   'Standards, accessibility, and QA',
   'HTML, CSS, and state definition',
-  'Writing and presenting',
+  'Working across disciplines',
 ];
 
 const idOf = (name: string): string => {
@@ -716,28 +716,29 @@ describe('clampToPools', () => {
 // ── Ryan ────────────────────────────────────────────────────────────────────
 
 describe('ryan', () => {
-  it('masters seven nodes: the six the brief names plus Writing and presenting', () => {
+  it('masters seven nodes: the six craft masteries the brief names plus Working across disciplines', () => {
     const fives = NODE_LIST.filter((n) => RYAN_ALLOCATION[n.id] === 5).map((n) => n.name);
     expect(fives).toHaveLength(7);
     expect(fives).toEqual(RYAN_MASTERED_NAMES);
   });
 
-  it('scores systems and exploration on top, then craft and build, near 92 / 88 / 82 / 79', () => {
+  it('scores systems and exploration on top, then craft and build, near 96 / 89 / 83 / 81', () => {
     const traits = scoreTraits(RYAN_ALLOCATION, TREES);
     const top = topTraits(traits);
     expect(top.map((t) => t.trait).slice(0, 2).sort()).toEqual(['exploration', 'systems']);
     expect(top.map((t) => t.trait).sort()).toEqual(['build', 'craft', 'exploration', 'systems']);
-    expect(Math.abs(traits.systems - 92)).toBeLessThanOrEqual(8);
-    expect(Math.abs(traits.exploration - 88)).toBeLessThanOrEqual(8);
-    expect(Math.abs(traits.craft - 82)).toBeLessThanOrEqual(8);
-    expect(Math.abs(traits.build - 79)).toBeLessThanOrEqual(8);
+    expect(Math.abs(traits.systems - 96)).toBeLessThanOrEqual(8);
+    expect(Math.abs(traits.exploration - 89)).toBeLessThanOrEqual(8);
+    expect(Math.abs(traits.craft - 83)).toBeLessThanOrEqual(8);
+    expect(Math.abs(traits.build - 81)).toBeLessThanOrEqual(8);
     TRAITS.forEach((t) => {
       expect(traits[t]).toBeGreaterThanOrEqual(0);
       expect(traits[t]).toBeLessThanOrEqual(100);
       expect(Number.isInteger(traits[t])).toBe(true);
     });
+    // Collaboration and ai sit at build's level after the core retune (81 / 81 / 81), never above it.
     (['research', 'strategy', 'collaboration', 'ai'] as Trait[]).forEach((t) => {
-      expect(traits[t]).toBeLessThan(traits.build);
+      expect(traits[t]).toBeLessThanOrEqual(traits.build);
     });
   });
 
@@ -888,7 +889,7 @@ describe('scoring', () => {
 
 // ── Share link ──────────────────────────────────────────────────────────────
 
-const RYAN_DIGITS = '533130205255545243424251403020';
+const RYAN_DIGITS = '533130205255545243425434302000';
 
 describe('share link', () => {
   it('round-trips Ryan', () => {

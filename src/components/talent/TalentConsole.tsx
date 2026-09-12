@@ -49,6 +49,7 @@ import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_OVERRIDES } from '../../data/talent/
 import { buildResult, decodeState, encodeState } from '../../data/talent/score';
 import Glyph from './Glyph';
 import TalentNodeButton, { cascadeDelay } from './TalentNodeButton';
+import TalentLedger from './TalentLedger';
 import TalentIntakeStrip, {
   ALL_ANSWERED,
   NOTHING_ANSWERED,
@@ -193,6 +194,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   const [receiptState, setReceiptState] = useState<CopyState>('idle');
   const [cascade, setCascade] = useState(false);
   const [assembled, setAssembled] = useState(false);
+  // Compare with Ryan: local, off by default, never in the URL.
+  const [compare, setCompare] = useState(false);
   const interacted = useRef(false);
   const pinnedEl = useRef<HTMLButtonElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -581,6 +584,13 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
             level={pools.level}
             onChange={changeIntake}
           />
+          {live && (
+            <TalentLedger
+              key={`${pools.craftLocked}-${pools.systemsLocked}-${pools.free}-${pools.core}`}
+              pools={pools}
+              left={left}
+            />
+          )}
         </div>
       ) : (
         <div className="tt-header tt-story">
@@ -653,6 +663,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
                       treeIndex={ti}
                       points={fp}
                       locked={false}
+                      compare={compare ? pointsAt(RYAN_ALLOCATION, foundation.id) : undefined}
                       editable={own}
                       dormant={dormant}
                       active={activeId === foundation.id}
@@ -669,6 +680,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
                       points={pointsAt(allocation, crown.id)}
                       locked={isLocked(allocation, crown.id)}
                       foundationName={foundation.name}
+                      compare={compare ? pointsAt(RYAN_ALLOCATION, crown.id) : undefined}
                       editable={own}
                       dormant={dormant}
                       active={activeId === crown.id}
@@ -744,6 +756,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
             receiptState={receiptState}
             onCopyReceipt={copyReceipt}
             shareUrl={shareUrl}
+            compare={compare}
+            onCompare={own ? setCompare : undefined}
           />
         </div>
       )}

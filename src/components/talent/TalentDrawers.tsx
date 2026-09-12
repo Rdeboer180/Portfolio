@@ -13,6 +13,7 @@ import React from 'react';
 import type { Allocation, TalentResult, TalentTree } from '../../data/talent/types';
 import { FAMILY_LABEL, TRAIT_LABEL } from '../../data/talent/types';
 import { MAX_POINTS_PER_NODE } from '../../data/talent/economy';
+import { RYAN_CLASS_LABEL } from '../../data/talent/ryan';
 import Glyph from './Glyph';
 import TalentCard from './TalentCard';
 import { cardData, explainArchetype, leadTrait } from './cardData';
@@ -80,6 +81,9 @@ export interface CardDrawerProps {
   receiptState?: CopyState;
   onCopyReceipt?: () => void;
   shareUrl?: string;
+  /** Compare with Ryan: on when his allocation is drawn over the visitor's nodes. Build route only. */
+  compare?: boolean;
+  onCompare?: (on: boolean) => void;
 }
 
 const ImageIcon = () => (
@@ -112,6 +116,7 @@ function copyLabel(state: CopyState | undefined, idle: string, done: string): st
 
 export const CardDrawer: React.FC<CardDrawerProps> = ({
   result, own, assembled, name, onName, saving, onSave, linkState, onCopyLink, receiptState, onCopyReceipt, shareUrl,
+  compare, onCompare,
 }) => {
   const data = cardData(result);
   const points = result.pools.craft + result.pools.core;
@@ -185,6 +190,26 @@ export const CardDrawer: React.FC<CardDrawerProps> = ({
             </span>
             {linkState === 'failed' && shareUrl && (
               <input readOnly className="tt-share__url" value={shareUrl} aria-label="Share link" onFocus={(e) => e.currentTarget.select()} />
+            )}
+            {onCompare && (
+              <div className="tt-compare">
+                <button
+                  type="button"
+                  role="switch"
+                  className={`tt-compare__toggle${compare ? ' is-on' : ''}`}
+                  aria-checked={!!compare}
+                  aria-label="Compare with Ryan: draw his points as an outer arc on each node, a fifth of the ring per point"
+                  onClick={() => onCompare(!compare)}
+                >
+                  <span className="tt-compare__label" aria-hidden="true">Compare with Ryan</span>
+                  <span className="tt-compare__switch" aria-hidden="true"><span className="tt-compare__knob" /></span>
+                  <span className="tt-compare__state" aria-hidden="true">{compare ? 'On' : 'Off'}</span>
+                </button>
+                <p className="tt-compare__line">
+                  <span className="tt-compare__arc" aria-hidden="true" />
+                  {`Outer arc = Ryan's points, a fifth per point · Ryan: ${RYAN_CLASS_LABEL}`}
+                </p>
+              </div>
             )}
           </div>
         )}

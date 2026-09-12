@@ -15,6 +15,14 @@
 //   when Ryan's degree rule added four points to his tree and the sprinkle
 //   tipped his secondary archetype from Prototype Alchemist to Interface
 //   Stylist).
+// - Retuned again on 2026-09-11 when Ryan moved his Core points from Writing
+//   and presenting to Critique and consensus and Context that survives the
+//   room: Context and the Exceptions node read collaboration first and carry
+//   ai at 0.1 (agents consume the documents, people write them); Working
+//   across disciplines reads the engineering conversation as build and
+//   exploration; AI-assisted exploration and High-fidelity in Figma read as
+//   the exploration nodes they are (0.75 and 0.8). Without this, the extra
+//   context points read as ai and tipped his secondary to Context Engineer.
 // - "exploration" concentrates in prototyping, AI-assisted work, reframing, and
 //   behavior; "systems" in tokens, components, standards, governance, IA, and
 //   patterns; "build" in design-to-code and production; "ai" on the two agentic
@@ -155,7 +163,7 @@ export const TREES: TalentTree[] = [
           'high-fidelity-in-figma',
           'High-fidelity in Figma',
           'Time spent building prototypes real enough that a stakeholder or a test participant forgets it is not the product.',
-          { exploration: 0.7, craft: 0.2, build: 0.1 },
+          { exploration: 0.8, craft: 0.1, build: 0.1 },
           'hifi-prototyping',
           'Prototypes real enough that a stakeholder forgets it is not the product.',
         ],
@@ -213,7 +221,7 @@ export const TREES: TalentTree[] = [
           'exceptions-contribution-and-agent-readable-rules',
           'Exceptions, contribution, and agent-readable rules',
           'Time spent governing how a system grows, including how a team contributes, when to break a rule, and how an agent can read the rules too.',
-          { systems: 0.5, ai: 0.2, collaboration: 0.2, strategy: 0.1 },
+          { systems: 0.5, collaboration: 0.3, ai: 0.1, strategy: 0.1 },
           'git-github',
           'Rules written so people and agents both know when to break them.',
         ],
@@ -247,7 +255,7 @@ export const TREES: TalentTree[] = [
           'ai-assisted-exploration',
           'AI-assisted exploration',
           'Time spent using models and agents to widen the search, generating and discarding more directions than a hand could alone.',
-          { exploration: 0.65, ai: 0.35 },
+          { exploration: 0.75, ai: 0.25 },
           'agentic-design',
           'Agents put to work on the exploring, with the judgment kept human.',
         ],
@@ -297,7 +305,7 @@ export const TREES: TalentTree[] = [
           'working-across-disciplines',
           'Working across disciplines',
           'Time spent inside engineering, product, and content conversations, not only at the design table.',
-          { collaboration: 0.6, build: 0.15, strategy: 0.15, research: 0.1 },
+          { collaboration: 0.6, build: 0.2, exploration: 0.1, strategy: 0.1 },
           'cross-discipline',
           'Design decided inside engineering and product conversations, not only at the design table.',
         ],
@@ -326,7 +334,7 @@ export const TREES: TalentTree[] = [
           'context-that-survives-the-room',
           'Context that survives the room',
           'Time spent documenting decisions, rationale, and constraints so the next person, or the next agent, starts where you left off.',
-          { ai: 0.3, collaboration: 0.25, systems: 0.25, strategy: 0.2 },
+          { collaboration: 0.45, systems: 0.25, strategy: 0.2, ai: 0.1 },
           'documentation',
           'Decisions and constraints recorded, so the next person starts where the last one stopped.',
         ],

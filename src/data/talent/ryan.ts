@@ -56,15 +56,18 @@ export const RYAN_ALLOCATION: Allocation = {
   'information-architecture': 4,
   'patterns-that-hold-across-surfaces': 2,
   // Core
-  'working-across-disciplines': 4,
-  'critique-and-consensus': 2,
-  'writing-and-presenting': 5,
-  'context-that-survives-the-room': 1,
-  mentoring: 4,
+  // Ryan's words: writing is not the strength, critiquing and context are.
+  // One Core mastery, Working across disciplines; the crowns behind it are
+  // Critique and consensus and Context that survives the room.
+  'working-across-disciplines': 5,
+  'critique-and-consensus': 4,
+  'writing-and-presenting': 3,
+  'context-that-survives-the-room': 4,
+  mentoring: 3,
   'direction-and-advocacy': 0,
-  reframing: 3,
+  reframing: 2,
   'deciding-under-constraint': 0,
-  'user-business-and-technical-constraints': 2,
+  'user-business-and-technical-constraints': 0,
   'north-star-and-direction': 0,
 };
 

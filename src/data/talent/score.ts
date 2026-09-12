@@ -276,11 +276,11 @@ export function buildResult(
 // band>.<one base-6 digit per node, in TREES order>.<name, URL-encoded>.
 // Everything before the name is fixed-shape, so the name may contain any
 // character. Example:
-//   bgw16.5.533130205255545243424251403020.Ryan%20DeBoer
+//   bgw16.5.533130205255545243425434302000.Ryan%20DeBoer
 // The split token is optional and sits on the years: "16d70" is 16 years, 70
 // percent design. A string without it decodes to an intake with no split
 // (years free), so links made before the split rule still open.
-//   bgw16d70.5.533130205255545243424251403020.Ryan%20DeBoer
+//   bgw16d70.5.533130205255545243425434302000.Ryan%20DeBoer
 // The format before the degree rule (b16.5.<digits>.<name>) has no major and
 // minor letters and decodes to null.
 

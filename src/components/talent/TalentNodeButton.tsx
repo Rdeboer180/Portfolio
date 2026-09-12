@@ -42,6 +42,8 @@ export interface TalentNodeButtonProps {
   active: boolean;
   /** The phone: a tap opens the sheet rather than spending. */
   tapOpens: boolean;
+  /** Compare with Ryan: his points here, drawn as an outer arc, a fifth of the circle per point. Undefined when off. */
+  compare?: number;
   onAdd: (nodeId: string) => void;
   onRemove: (nodeId: string) => void;
   /** Pointer entered or left, keyboard focus landed or left. */
@@ -76,6 +78,32 @@ export function cascadeDelay(tier: 'root' | 'foundation' | 'crown', treeIndex: n
   return base + treeIndex * 70 + index * 40;
 }
 
+// The compare arc: a circle at r + 7 around the 44px node (the SVG scales
+// with the node, so the phone's 40px keeps the proportion), 1.5px Signal
+// Orange at 55%, drawn as a dash from twelve o'clock, a fifth of the
+// circumference per point, the full ring at five. Decorative: the toggle's
+// label carries the meaning. No motion, so nothing to reduce.
+const ARC_R = 29;
+const ARC_C = 2 * Math.PI * ARC_R;
+
+export const CompareArc: React.FC<{ points: number }> = ({ points }) => {
+  const p = Math.max(0, Math.min(MAX_POINTS_PER_NODE, points));
+  const dash = p >= MAX_POINTS_PER_NODE ? ARC_C : (ARC_C * p) / MAX_POINTS_PER_NODE;
+  return (
+    <svg className="tt-node__compare" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <circle
+        cx="32"
+        cy="32"
+        r={ARC_R}
+        fill="none"
+        strokeWidth="1.5"
+        strokeDasharray={`${dash.toFixed(2)} ${ARC_C.toFixed(2)}`}
+        transform="rotate(-90 32 32)"
+      />
+    </svg>
+  );
+};
+
 const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
   node,
   index,
@@ -87,6 +115,7 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
   dormant,
   active,
   tapOpens,
+  compare,
   onAdd,
   onRemove,
   onHover,
@@ -147,6 +176,7 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
 
   return (
     <div className={classes} style={style}>
+      {compare !== undefined && compare > 0 && <CompareArc points={compare} />}
       <button
         type="button"
         id={nodeDomId(node.id)}
