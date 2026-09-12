@@ -57,7 +57,7 @@ $tt-column-height: 530px;
 $tt-row-height: 436px;
 $tt-row-width: 318px;
 $tt-node: 44px;
-$tt-node-phone: 40px;
+$tt-node-phone: 44px;
 $tt-pad-x: 24px;
 $tt-nav-h: 73px;
 $tt-nav-h-phone: 57px;
@@ -371,8 +371,8 @@ $tt-overlap-phone: 24px;
   }
 
   &__count {
-    @include tt-mono(9px, 12px);
-    letter-spacing: 0.06em;
+    @include tt-mono(11px, 16px);
+    letter-spacing: 0.02em;
     color: $tt-steel;
   }
 }
@@ -870,14 +870,28 @@ $tt-overlap-phone: 24px;
 .tt-trees {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
-  padding: 0 28px 8px;
+  gap: 16px;
+  padding: 24px 16px 32px;
+  background: $tt-paper;
+  border-block: 1px solid $color-border-light;
 }
 
 .tt-tree-panel {
+  position: relative;
   flex: 1 1 400px;
-  max-width: 400px;
+  max-width: 460px;
   min-width: 0;
+  padding: 6px;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xl;
+  background: $color-white;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &.is-inspected {
+    transform: translateY(-2px);
+    box-shadow: $shadow-sm;
+    .tt-tree-head { @include tt-handles($tt-steel-dark, 5px); }
+  }
 }
 
 .tt-tree-head {
@@ -887,8 +901,8 @@ $tt-overlap-phone: 24px;
   flex-direction: column;
   gap: 4px;
   margin-bottom: 8px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid $tt-hairline;
+  padding: 12px 10px;
+  border-bottom: 1px solid $color-border-light;
 
   &__row {
     display: flex;
@@ -904,12 +918,15 @@ $tt-overlap-phone: 24px;
     font-weight: $font-weight-bold;
     line-height: 22px;
     letter-spacing: -0.01em;
-    color: $tt-paper;
+    color: $tt-ink;
   }
 
   &__meta {
     margin: 0;
     @include tt-rail-label;
+    color: $tt-steel-dark;
+    font-size: 11px;
+    line-height: 16px;
   }
 
   &__reset {
@@ -917,6 +934,9 @@ $tt-overlap-phone: 24px;
     border: 0;
     background: transparent;
     @include tt-rail-label;
+    color: $tt-steel-dark;
+    font-size: 11px;
+    line-height: 16px;
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
@@ -924,7 +944,7 @@ $tt-overlap-phone: 24px;
     transition: color $transition-fast;
 
     &:hover:not(:disabled) {
-      color: $tt-paper;
+      color: $tt-ink;
     }
 
     &:disabled {
@@ -937,7 +957,9 @@ $tt-overlap-phone: 24px;
 .tt-tree {
   position: relative;
   height: $tt-column-height;
-  --tt-label-w: 96px;
+  border-radius: $radius-md;
+  background: $tt-ink;
+  --tt-label-w: 88px;
 }
 
 .tt-wires {
@@ -1070,9 +1092,9 @@ $tt-overlap-phone: 24px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 50%;
     background: $tt-ink;
-    @include tt-mono(9px, 1);
+    @include tt-mono(11px, 1);
     color: $tt-paper;
-    opacity: 0.6;
+    opacity: 1;
     transition: opacity $transition-fast;
   }
 
@@ -1083,12 +1105,13 @@ $tt-overlap-phone: 24px;
   }
 
   &.is-mastered &__count {
-    display: none;
+    display: flex;
+    opacity: 1;
   }
 
   &__label {
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + 10px);
     left: 50%;
     display: flex;
     flex-direction: column;
@@ -1144,7 +1167,7 @@ $tt-overlap-phone: 24px;
     }
 
     .tt-node__label {
-      color: rgba($tt-paper, 0.4);
+      color: $tt-steel;
     }
   }
 
@@ -1213,8 +1236,8 @@ $tt-overlap-phone: 24px;
     height: 100%;
     border: 1px solid rgba(255, 255, 255, 0.24);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.06);
-    color: $tt-paper;
+    background: $tt-paper;
+    color: $tt-ink;
   }
 
   &__text {
@@ -2797,7 +2820,7 @@ $tt-paper-text: #4a4a4a;
   }
 
   .tt-trees {
-    padding: 12px 8px 4px;
+    padding: 16px 8px 24px;
   }
 
   .tt-tree-panel {
@@ -2810,7 +2833,7 @@ $tt-paper-text: #4a4a4a;
 
   .tt-tree {
     --tt-label-w: 92px;
-    width: $tt-row-width;
+    width: min(100%, #{$tt-row-width});
     height: $tt-row-height;
     margin: 0 auto;
   }
@@ -2841,8 +2864,8 @@ $tt-paper-text: #4a4a4a;
     }
 
     &__label {
-      font-size: 11px;
-      line-height: 13px;
+      font-size: 12px;
+      line-height: 15px;
       letter-spacing: -0.01em;
     }
 
@@ -3347,13 +3370,14 @@ $tt-paper-text: #4a4a4a;
 
 .tt-node__compare {
   position: absolute;
-  inset: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
+  inset: -14px;
+  width: calc(100% + 28px);
+  height: calc(100% + 28px);
   overflow: visible;
   pointer-events: none;
   stroke: rgba($tt-orange, 0.55);
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .tt-ledger__tick,
@@ -3379,9 +3403,9 @@ $tt-paper-text: #4a4a4a;
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: 40px;
-    @include tt-mono(10px, 14px);
-    letter-spacing: 0.12em;
+    min-height: 64px;
+    @include tt-mono(12px, 18px);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
     color: $tt-steel;
   }
@@ -3402,7 +3426,7 @@ $tt-paper-text: #4a4a4a;
 
   &__hover {
     margin-left: auto;
-    color: $tt-steel-dark;
+    color: $tt-steel;
     text-align: right;
   }
 
@@ -3424,7 +3448,7 @@ $tt-paper-text: #4a4a4a;
 
   &__cell {
     flex: 0 0 auto;
-    width: 320px;
+    width: 100%;
     max-width: 100%;
   }
 
@@ -3442,7 +3466,7 @@ $tt-paper-text: #4a4a4a;
       @include tt-mono(9px, 13px);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: $tt-steel-dark;
+      color: $tt-steel;
       cursor: pointer;
       list-style: none;
 
@@ -3474,7 +3498,8 @@ $tt-paper-text: #4a4a4a;
   align-items: flex-start;
   gap: 12px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 14px 12px;
+  height: 100%;
   border: 1px solid rgba(143, 157, 175, 0.14);
   border-radius: $radius-md;
   background: $tt-ink;
@@ -3503,45 +3528,46 @@ $tt-paper-text: #4a4a4a;
 
   &__row {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
+    flex-direction: column;
     justify-content: space-between;
     gap: 8px;
   }
 
   &__name {
     font-family: $font-family-heading;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: $font-weight-bold;
-    line-height: 16px;
+    line-height: 20px;
     letter-spacing: -0.01em;
     color: $tt-paper;
   }
 
   &__tag {
     flex: 0 0 auto;
-    @include tt-mono(8px, 12px);
-    letter-spacing: 0.12em;
+    @include tt-mono(11px, 16px);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: $tt-steel-dark;
+    color: $tt-steel;
     white-space: nowrap;
   }
 
   &__formula {
-    @include tt-mono(10px, 14px);
+    @include tt-mono(12px, 18px);
     letter-spacing: 0.02em;
-    color: $tt-steel-dark;
+    color: $tt-steel;
   }
 
   // ── States ──
   &--unlocked {
-    border-color: $tt-orange;
+    border-color: rgba($tt-orange, 0.4);
 
     .tt-chip__glyph {
       color: $tt-orange;
     }
 
     .tt-chip__tag {
-      color: $tt-orange-deep;
+      color: $color-primary-muted;
     }
 
     .tt-chip__formula {
@@ -3566,7 +3592,7 @@ $tt-paper-text: #4a4a4a;
 
     .tt-chip__name {
       color: $tt-steel-light;
-      opacity: 0.6;
+      opacity: 1;
     }
   }
 
@@ -3574,10 +3600,9 @@ $tt-paper-text: #4a4a4a;
   &.is-active,
   &[aria-pressed='true'] {
     background: $tt-ink-raised;
-    transform: translateY(-2px);
-    box-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.15),
-      0 0 12px rgba(240, 61, 1, 0.35);
+    transform: translateY(-1px);
+    border-color: $tt-steel;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -3598,25 +3623,23 @@ $tt-paper-text: #4a4a4a;
   animation: tt-chip-bloom 300ms ease-out both;
 }
 
-// A recipe held up by the Forge: its nodes stay lit, the rest recede.
+// Recipe focus preserves label contrast and each node's invested rank.
 .tt-trees.is-forge {
-  .tt-node.is-receded {
-    opacity: 0.26;
+  .tt-node.is-receded .tt-node__btn { border-color: $tt-steel-dark; }
+  .tt-node.is-receded .tt-node__ranks { opacity: 0.45; }
+  .tt-node.is-lit .tt-node__selection { opacity: 1; }
+  .tt-wire.is-receded { opacity: 0.16; }
+  .tt-wire.is-recipe {
+    stroke-opacity: 1;
+    stroke-width: 2.4;
+    stroke: $color-primary-muted;
+    animation: tt-recipe-trace 350ms ease-out both;
   }
+}
 
-  .tt-node.is-lit .tt-node__count {
-    opacity: 1;
-    width: auto;
-    min-width: 22px;
-    padding: 0 4px;
-    border-color: transparent;
-    background: $tt-orange;
-    color: $tt-ink;
-  }
-
-  .tt-node.is-lit .tt-node__btn {
-    box-shadow: 0 0 0 4px rgba(240, 61, 1, 0.18);
-  }
+@keyframes tt-recipe-trace {
+  from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1; stroke-dashoffset: 0; }
 }
 
 // ── The sheet's section eyebrows ─────────────────────────────────────────────
@@ -3729,7 +3752,7 @@ $tt-paper-text: #4a4a4a;
   font-family: $font-family-primary;
   font-size: 14px;
   font-weight: $font-weight-medium;
-  color: $tt-steel;
+  color: $tt-steel-dark;
 }
 
 @media (max-width: 1023px) {
@@ -3756,4 +3779,153 @@ $tt-paper-text: #4a4a4a;
   .tt-tree-head__tagline {
     font-size: 13px;
   }
+}
+
+// Rank, mastery, and selection are independent signals.
+.tt-node__ranks {
+  position: absolute;
+  inset: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  pointer-events: none;
+  stroke: rgba($tt-steel, 0.24);
+  stroke-width: 1.5;
+  .is-earned { stroke: $color-primary-muted; }
+}
+
+.tt-node__selection {
+  position: absolute;
+  inset: -10px;
+  opacity: 0;
+  pointer-events: none;
+  @include tt-handles($tt-paper, 4px);
+}
+
+.tt-node.is-active .tt-node__selection { opacity: 1; }
+
+.tt-tabs__recipe {
+  font: 10px / 14px $font-family-mono;
+  color: $color-primary-muted;
+}
+
+.tt-recipe-trail {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 12px;
+  line-height: 18px;
+  color: $tt-paper;
+  a { color: $tt-paper; text-underline-offset: 3px; }
+}
+
+.tt-forge__workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 24px;
+  align-items: start;
+  padding-bottom: 24px;
+}
+
+.tt-forge__catalog { min-width: 0; }
+
+.tt-forge__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.tt-chip__description {
+  font: 14px / 20px $font-family-primary;
+  color: $tt-steel-light;
+  margin-top: 6px;
+}
+
+.tt-chip[aria-pressed='true'] {
+  position: relative;
+  border-color: $tt-paper;
+  @include tt-handles($tt-paper, 4px);
+}
+
+.tt-recipe {
+  position: sticky;
+  top: 96px;
+  scroll-margin-top: 200px;
+  padding: 20px;
+  border: 1px solid $tt-hairline-strong;
+  border-radius: $radius-xl;
+  background: $tt-ink;
+  color: $tt-paper;
+
+  &__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font: 11px / 16px $font-family-mono;
+    color: $tt-steel;
+    button {
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: $tt-paper;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+  }
+  h3 { margin: 12px 0; font: 700 26px / 30px $font-family-heading; letter-spacing: -0.02em; }
+  &__description { margin: 0 0 16px; font-size: 14px; line-height: 22px; color: $tt-steel-light; }
+  &__status { font: 12px / 18px $font-family-mono; color: $color-primary-muted; }
+  &__requirements {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 12px;
+    li { border-top: 1px solid $tt-hairline-strong; }
+    button {
+      display: flex;
+      width: 100%;
+      min-height: 64px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 0;
+      border: 0;
+      background: none;
+      color: $tt-paper;
+      text-align: left;
+      cursor: pointer;
+      &:hover { background: rgba(255, 255, 255, 0.04); }
+    }
+    small { display: block; margin-top: 3px; color: $tt-steel; font-size: 12px; line-height: 18px; }
+    .is-met { color: $color-primary-muted; }
+  }
+  &__skill { font-size: 14px; font-weight: 600; }
+  &__numbers { font: 11px / 16px $font-family-mono; }
+  &__hint { margin: 0; color: $tt-steel; font-size: 12px; line-height: 18px; }
+}
+
+@media (max-width: 1023px) {
+  .tt-forge__workspace { grid-template-columns: 1fr; }
+  .tt-recipe { position: static; grid-row: 1; }
+}
+
+@media (max-width: 767px) {
+  .tt-forge__grid { grid-template-columns: 1fr; }
+  .tt-recipe { padding: 16px; }
+  .tt-tree-panel { max-width: 370px; }
+  .tt-recipe-trail { padding-inline: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-trees.is-forge .tt-wire.is-recipe,
+  .tt-chip.is-bloom { animation: none; }
+  .tt-tree-panel,
+  .tt-chip { transition: none; transform: none; }
 }

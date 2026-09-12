@@ -8,8 +8,8 @@
 // the first client render are the same tree.
 //
 // Hover, focus, or a click (which pins) hands the recipe up to the console,
-// which lights those nodes on the trees and recedes the rest; the lit node's
-// count badge prints level over minimum while the recipe is up.
+// which lights those nodes and their paths. Rank badges stay stable; recipe
+// requirements live in the persistent inspector alongside the catalog.
 //
 // On the phone the rail is a vertical list: the unlocked and the next chip
 // stay open and the rest collapse behind one "7 locked" row. That row is a
@@ -18,8 +18,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import type { AbilityState } from '../../data/talent/types';
-import { formulaLine } from '../../data/talent/forge';
-import { NODES } from '../../data/talent/trees';
+import { ARCHETYPES } from '../../data/talent/archetypes';
+import { NODES, TREES } from '../../data/talent/trees';
 import Glyph from './Glyph';
 
 export interface TalentForgeProps {
@@ -32,6 +32,11 @@ export interface TalentForgeProps {
   onPin: (id: string) => void;
   /** The phone list rather than the wrapping grid. */
   phone: boolean;
+  onInspect: (nodeId: string) => void;
+}
+
+function abilityLine(state: AbilityState): string {
+  return state.ability.line || ARCHETYPES.find((a) => a.id === state.ability.archetypeId)?.line || '';
 }
 
 /** The chip's mark: the glyph of the first node in the recipe. */
@@ -84,6 +89,7 @@ const Chip: React.FC<{
     <li className="tt-forge__cell">
       <button
         type="button"
+        id={`tt-ability-${id}`}
         className={`tt-chip tt-chip--${kind}${active ? ' is-active' : ''}${bloom ? ' is-bloom' : ''}`}
         aria-pressed={pinned}
         aria-label={chipLabel(state.ability.name, kind, state.missing)}
@@ -99,7 +105,7 @@ const Chip: React.FC<{
             <span className="tt-chip__name">{state.ability.name}</span>
             <span className="tt-chip__tag">{chipTag(kind, state.missing)}</span>
           </span>
-          <span className="tt-chip__formula">{formulaLine(state.ability)}</span>
+          <span className="tt-chip__description">{abilityLine(state)}</span>
         </span>
       </button>
     </li>
@@ -133,11 +139,12 @@ function useJustUnlocked(abilities: AbilityState[]): Record<string, boolean> {
   return bloom;
 }
 
-const TalentForge: React.FC<TalentForgeProps> = ({ abilities, activeId, pinnedId, onHover, onPin, phone }) => {
+const TalentForge: React.FC<TalentForgeProps> = ({ abilities, activeId, pinnedId, onHover, onPin, phone, onInspect }) => {
   const bloom = useJustUnlocked(abilities);
   const chips = chipStates(abilities);
   const unlocked = abilities.filter((a) => a.unlocked).length;
   const active = abilities.find((a) => a.ability.id === activeId) || null;
+  const inspected = abilities.find((a) => a.ability.id === pinnedId) || abilities[0];
   const open = chips.filter((c) => c.kind !== 'locked');
   const hidden = chips.filter((c) => c.kind === 'locked');
 
@@ -167,10 +174,12 @@ const TalentForge: React.FC<TalentForgeProps> = ({ abilities, activeId, pinnedId
         </span>
         <span className="tt-forge__hover">
           {active
-            ? `Hover · ${active.ability.name} · recipe lit on the trees`
-            : 'Hover an ability to light its recipe on the trees'}
+            ? `${pinnedId ? 'Selected' : 'Preview'} · ${active.ability.name} · recipe lit on the trees`
+            : 'Select an ability to inspect its recipe'}
         </span>
       </div>
+      <div className="tt-forge__workspace">
+      <div className="tt-forge__catalog">
       {phone ? (
         <>
           <ul className="tt-forge__list">{open.map(render)}</ul>
@@ -187,6 +196,40 @@ const TalentForge: React.FC<TalentForgeProps> = ({ abilities, activeId, pinnedId
       ) : (
         <ul className="tt-forge__grid">{chips.map(render)}</ul>
       )}
+      </div>
+      {inspected && (
+        <section className="tt-recipe" id="tt-recipe-inspector" aria-label="Ability recipe">
+          <div className="tt-recipe__eyebrow">
+            <span>{pinnedId ? 'Selected ability' : 'Featured ability'}</span>
+            {pinnedId && <button type="button" onClick={() => {
+              onPin(pinnedId);
+              document.getElementById(`tt-ability-${pinnedId}`)?.focus();
+            }}>Clear selection</button>}
+          </div>
+          <h3>{inspected.ability.name}</h3>
+          <p className="tt-recipe__description">{abilityLine(inspected)}</p>
+          <p className="tt-recipe__status">{inspected.unlocked ? 'Unlocked · all requirements met' : `${inspected.missing} ${inspected.missing === 1 ? 'point' : 'points'} from unlocking`}</p>
+          <ul className="tt-recipe__requirements">
+            {inspected.levels.map((requirement) => {
+              const tree = TREES.find((t) => t.areas.some((area) => area.nodes.some((n) => n.id === requirement.nodeId)));
+              const met = requirement.level >= requirement.min;
+              return (
+                <li key={requirement.nodeId}>
+                  <button type="button" onClick={() => {
+                    if (pinnedId !== inspected.ability.id) onPin(inspected.ability.id);
+                    onInspect(requirement.nodeId);
+                  }} aria-label={`Inspect ${NODES[requirement.nodeId].name} in ${tree?.name}: requires ${requirement.min}, invested ${requirement.level}, ${met ? 'met' : 'not met'}`}>
+                    <span className="tt-recipe__skill">{NODES[requirement.nodeId].name}<small>{tree?.name}</small></span>
+                    <span className="tt-recipe__numbers">Requires {requirement.min} · You have {requirement.level}<small className={met ? 'is-met' : ''}>{met ? '✓ Met' : `${requirement.min - requirement.level} more needed`} <span aria-hidden="true">↗</span></small></span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="tt-recipe__hint">Choose a skill to find it on the tree. Points stay invested in skills.</p>
+        </section>
+      )}
+      </div>
     </div>
   );
 };

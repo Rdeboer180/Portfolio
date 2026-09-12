@@ -119,7 +119,7 @@ function wireLevel(allocation: Allocation, node: TalentNode): number {
   return isLocked(allocation, node.id) ? 0 : pointsAt(allocation, node.id);
 }
 
-const Wires: React.FC<{ tree: TalentTree; treeIndex: number; allocation: Allocation }> = ({ tree, treeIndex, allocation }) => {
+const Wires: React.FC<{ tree: TalentTree; treeIndex: number; allocation: Allocation; lit: Record<string, number> | null }> = ({ tree, treeIndex, allocation, lit }) => {
   // One entry per path, drawn dimmest first so a brighter branch is never
   // painted under a duller one where two share a stretch. Both layouts are in
   // the markup and the SCSS shows one: the phone's board is its own geometry
@@ -128,6 +128,8 @@ const Wires: React.FC<{ tree: TalentTree; treeIndex: number; allocation: Allocat
   const levels = tree.areas.map((area, i) => ({
     i,
     key: area.id,
+    rootLit: !!lit && area.nodes.some((node) => lit[node.id] !== undefined),
+    crownLit: !!lit && lit[area.nodes[1].id] !== undefined,
     rootLevel: wireLevel(allocation, area.nodes[0]),
     crownLevel: wireLevel(allocation, area.nodes[1]),
     rootDelay: cascadeDelay('foundation', treeIndex, i),
@@ -135,9 +137,9 @@ const Wires: React.FC<{ tree: TalentTree; treeIndex: number; allocation: Allocat
   }));
 
   const set = (layout: LayoutSpec) => {
-    const paths = levels.reduce<{ key: string; d: string; level: number; delay: number }[]>((acc, b) => {
-      acc.push({ key: `${b.key}:root`, d: layout.rootPath(b.i), level: b.rootLevel, delay: b.rootDelay });
-      acc.push({ key: `${b.key}:crown`, d: layout.crownPath(b.i), level: b.crownLevel, delay: b.crownDelay });
+    const paths = levels.reduce<{ key: string; d: string; level: number; delay: number; lit: boolean }[]>((acc, b) => {
+      acc.push({ key: `${b.key}:root`, d: layout.rootPath(b.i), level: b.rootLevel, delay: b.rootDelay, lit: b.rootLit });
+      acc.push({ key: `${b.key}:crown`, d: layout.crownPath(b.i), level: b.crownLevel, delay: b.crownDelay, lit: b.crownLit });
       return acc;
     }, []);
     paths.sort((a, b) => a.level - b.level);
@@ -155,7 +157,7 @@ const Wires: React.FC<{ tree: TalentTree; treeIndex: number; allocation: Allocat
       {set(layout).map((p) => (
         <path
           key={p.key}
-          className={`tt-wire tt-wire--l${p.level}`}
+          className={`tt-wire tt-wire--l${p.level}${lit ? p.lit ? ' is-recipe' : ' is-receded' : ''}`}
           d={p.d}
           pathLength={1}
           vectorEffect="non-scaling-stroke"
@@ -241,9 +243,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   const classLabel = `${result.primary.name} / ${result.secondary.name}`;
   const unlockedCount = result.abilities.filter((a) => a.unlocked).length;
 
-  // The recipe the Forge is holding up: node id to its minimum, so a lit node
-  // can print level over minimum on its badge.
-  const forgeId = forgeHover || forgePin;
+  // Recipe membership lights nodes and paths; invested ranks stay stable.
+  const forgeId = forgePin || forgeHover;
   const lit = useMemo(() => {
     if (!forgeId) return null;
     const state = result.abilities.find((a) => a.ability.id === forgeId);
@@ -254,7 +255,25 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   }, [forgeId, result.abilities]);
 
   const onForgeHover = useCallback((id: string | null) => setForgeHover(id), []);
-  const onForgePin = useCallback((id: string) => setForgePin((cur) => (cur === id ? null : id)), []);
+  const onForgePin = useCallback((id: string) => {
+    setForgePin((cur) => (cur === id ? null : id));
+    setForgeHover(null);
+  }, []);
+
+  const inspectRequirement = useCallback((nodeId: string) => {
+    const lane = TREES.findIndex((tree) => tree.areas.some((area) => area.nodes.some((node) => node.id === nodeId)));
+    if (lane < 0) return;
+    setTab(lane);
+    setPinnedId(nodeId);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(nodeDomId(nodeId)) as HTMLButtonElement | null;
+      pinnedEl.current = el;
+      el?.focus({ preventScroll: true });
+      el?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
+    });
+  }, []);
+
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const selected: InspectorNode | null = useMemo(() => {
     const id = hoverId || pinnedId;
@@ -526,7 +545,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   if (dormant) legendHint = 'Answer the three questions above and the trees power up';
   else if (own) legendHint = 'Hover a node for its meaning and gate · click spends a point · Shift-click takes one back';
   else legendHint = 'Hover a node for its meaning and gate · the card sits on the node';
-  const forgeHint = 'Hover an ability to light its recipe · the badge prints level over minimum';
+  const forgeHint = 'Highlighted paths connect the recipe · badges always show invested points';
 
   return (
     <>
@@ -586,7 +605,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
               type="button"
               role="tab"
               id={`tt-tab-${tree.id}`}
-              className={`tt-tabs__tab${tab === i ? ' is-selected' : ''}`}
+              className={`tt-tabs__tab${tab === i ? ' is-selected' : ''}${lit && tree.areas.some((area) => area.nodes.some((node) => lit[node.id] !== undefined)) ? ' has-recipe' : ''}`}
               aria-selected={tab === i}
               aria-controls={`tt-tree-${tree.id}`}
               tabIndex={tab === i ? 0 : -1}
@@ -594,7 +613,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
               onKeyDown={(e) => onTabKey(e, i)}
             >
               <span className="tt-tabs__name">{shortTreeName(tree.id)}</span>
-              <span className="tt-tabs__count">{`${stats[tree.id].spent} · ${stats[tree.id].mastered} mastered`}</span>
+              <span className="tt-tabs__count">{`${stats[tree.id].spent} points`}</span>
+              {lit && tree.areas.some((area) => area.nodes.some((node) => lit[node.id] !== undefined)) && <span className="tt-tabs__recipe">Recipe here</span>}
             </button>
           ))}
         </div>
@@ -650,14 +670,39 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
       )}
 
       {/* ── The trees ─────────────────────────────────────────────────────── */}
-      <div className={`tt-trees${lit ? ' is-forge' : ''}`}>
+      {forgePin && (
+        <div className="tt-recipe-trail" role="status">
+          <span>{result.abilities.find((a) => a.ability.id === forgePin)?.ability.name} · highlighted across the trees</span>
+          <a href="#tt-recipe-inspector">View recipe ↓</a>
+        </div>
+      )}
+      <div className={`tt-trees${lit ? ' is-forge' : ''}`}
+        onTouchStart={(event) => {
+          const touch = event.touches[0];
+          touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null;
+        }}
+        onTouchEnd={(event) => {
+          const start = touchStart.current;
+          touchStart.current = null;
+          if (!start || isDesktop) return;
+          const touch = event.changedTouches[0];
+          const dx = touch.clientX - start.x;
+          const dy = touch.clientY - start.y;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            setTab((current) => Math.max(0, Math.min(TREES.length - 1, current + (dx < 0 ? 1 : -1))));
+            setHoverId(null);
+            setPinnedId(null);
+          }
+        }}
+        onTouchCancel={() => { touchStart.current = null; }}>
+
         {TREES.map((tree, ti) => (
           <div
             key={tree.id}
             id={`tt-tree-${tree.id}`}
             role="tabpanel"
             aria-labelledby={`tt-tab-${tree.id}`}
-            className={`tt-tree-panel${tab === ti ? '' : ' is-inactive'}`}
+            className={`tt-tree-panel${tab === ti ? '' : ' is-inactive'}${selected?.tree.id === tree.id ? ' is-inspected' : ''}`}
           >
             <div className="tt-tree-head">
               <div className="tt-tree-head__row">
@@ -679,7 +724,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
               <p className="tt-tree-head__meta">{treeMeta(tree)}</p>
             </div>
             <div className="tt-tree">
-              <Wires tree={tree} treeIndex={ti} allocation={allocation} />
+              <Wires tree={tree} treeIndex={ti} allocation={allocation} lit={lit} />
               {tree.areas.map((area, i) => {
                 const [foundation, crown] = area.nodes;
                 const fp = pointsAt(allocation, foundation.id);
@@ -778,6 +823,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
         onHover={onForgeHover}
         onPin={onForgePin}
         phone={isPhone}
+        onInspect={inspectRequirement}
       />
 
       {/* ── Closing rail: the console ends here, the summary is on paper ─── */}

@@ -131,23 +131,27 @@ describe('the front door, /talent-tree/', () => {
     const rail = forge();
     expect(within(rail).getByText('The Forge')).toBeTruthy();
     expect(within(rail).getByText('4 of 12')).toBeTruthy();
-    const chips = within(rail).getAllByRole('button');
+    const chips = Array.from(rail.querySelectorAll<HTMLButtonElement>('button.tt-chip'));
     expect(chips.length).toBe(12);
     expect(chips.filter((c) => /, unlocked$/.test(c.getAttribute('aria-label') || '')).length).toBe(4);
     // Unlocked first, then the nearest locked one as "next".
     expect(chips[0].getAttribute('aria-label')).toBe('Guardrail Architect, unlocked');
     expect(chips[4].getAttribute('aria-label')).toBe('Systemsmith, next, 1 point away');
     expect(chips[11].getAttribute('aria-label')).toBe('Shipwright, locked');
-    expect(within(rail).getByText('Tokens 4 · Accessibility 4 · Governance 3 · Documentation 3')).toBeTruthy();
+    // The recipe inspector features the first unlocked ability with its four requirements.
+    const recipe = within(rail).getByRole('region', { name: 'Ability recipe' });
+    expect(within(recipe).getByText('Featured ability')).toBeTruthy();
+    expect(within(recipe).getByRole('button', { name: 'Inspect Tokens in Design and systems: requires 4, invested 5, met' })).toBeTruthy();
+    expect(within(recipe).getAllByRole('button', { name: /^Inspect / }).length).toBe(4);
 
-    // Hover: the recipe's four nodes light and print level over minimum.
+    // Hover: the recipe's four nodes light; badges keep showing invested points.
     fireEvent.mouseEnter(chips[0]);
-    expect(within(rail).getByText('Hover · Guardrail Architect · recipe lit on the trees')).toBeTruthy();
+    expect(within(rail).getByText('Preview · Guardrail Architect · recipe lit on the trees')).toBeTruthy();
     const lit = document.querySelectorAll('.tt-node.is-lit');
     expect(lit.length).toBe(4);
     expect(document.querySelector('.tt-trees')).toHaveClass('is-forge');
     const badges = Array.from(lit).map((n) => n.querySelector('.tt-node__count')?.textContent);
-    expect(badges.sort()).toEqual(['3/3', '3/3', '4/4', '5/4']);
+    expect(badges.sort()).toEqual(['3', '3', '4', '5']);
     expect(document.querySelectorAll('.tt-node.is-receded').length).toBe(26);
 
     fireEvent.mouseLeave(chips[0]);
@@ -213,7 +217,7 @@ describe('the build route, /talent-tree/build/', () => {
     expect(screen.getByText('Your summary assembles when the last point lands')).toBeTruthy();
 
     // The Forge is on the rail from the first paint: twelve chips, none unlocked.
-    expect(within(forge()).getAllByRole('button').length).toBe(12);
+    expect(forge().querySelectorAll('button.tt-chip').length).toBe(12);
     expect(within(forge()).getByText('0 of 12')).toBeTruthy();
 
     const foundation = () => nodeButton(/^Typography, foundation/);

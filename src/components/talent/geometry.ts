@@ -69,7 +69,7 @@ function curve(root: Point, f: Point): string {
 const COLUMN_ROOT: Point = { x: 200, y: 468 };
 const COLUMN_FOUNDATION_X = [64, 132, 200, 268, 336];
 const COLUMN_CROWN_X = [52, 126, 200, 274, 348];
-const COLUMN_FOUNDATION: Point[] = COLUMN_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 293 : 388 }));
+const COLUMN_FOUNDATION: Point[] = COLUMN_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 313 : 388 }));
 const COLUMN_CROWN: Point[] = COLUMN_CROWN_X.map((x, i) => ({ x, y: isTall(i) ? 48 : 140 }));
 
 export const COLUMN: LayoutSpec = {
@@ -94,14 +94,14 @@ export const COLUMN: LayoutSpec = {
 const ROW_ROOT: Point = { x: 159, y: 380 };
 const ROW_FOUNDATION_X = [40, 104, 159, 214, 278];
 const ROW_CROWN_X = [32, 94, 159, 224, 286];
-const ROW_FOUNDATION: Point[] = ROW_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 222 : 300 }));
+const ROW_FOUNDATION: Point[] = ROW_FOUNDATION_X.map((x, i) => ({ x, y: isTall(i) ? 236 : 300 }));
 const ROW_CROWN: Point[] = ROW_CROWN_X.map((x, i) => ({ x, y: isTall(i) ? 48 : 122 }));
 
 export const ROW: LayoutSpec = {
   width: 318,
   height: 436,
   viewHeight: 436,
-  node: 40,
+  node: 44,
   root: 44,
   rootAt: ROW_ROOT,
   foundation: ROW_FOUNDATION,

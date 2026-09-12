@@ -184,6 +184,14 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
 
   return (
     <div className={classes} style={style}>
+      <svg className="tt-node__ranks" viewBox="0 0 60 60" aria-hidden="true" focusable="false">
+        {[0, 1, 2, 3, 4].map((rank) => (
+          <circle key={rank} cx="30" cy="30" r="27" fill="none" pathLength="100"
+            strokeDasharray="16 84" transform={`rotate(${rank * 72 - 87} 30 30)`}
+            className={rank < points ? 'is-earned' : ''} />
+        ))}
+      </svg>
+      <span className="tt-node__selection" aria-hidden="true" />
       {compare !== undefined && compare > 0 && <CompareArc points={compare} />}
       <button
         type="button"
@@ -201,11 +209,7 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
       >
         <Glyph name={node.glyph} className="tt-node__glyph" />
         {mastered && <span className="tt-node__mark" aria-hidden="true" />}
-        {lit !== undefined ? (
-          <span className="tt-node__count" aria-hidden="true">{`${points}/${lit}`}</span>
-        ) : points > 0 ? (
-          <span className="tt-node__count" aria-hidden="true">{points}</span>
-        ) : null}
+        <span className="tt-node__count" aria-hidden="true">{points}</span>
       </button>
       <span className="tt-node__label" aria-hidden="true">
         <span className="tt-node__label-text">{node.name}</span>
