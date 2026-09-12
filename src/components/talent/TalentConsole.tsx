@@ -1,12 +1,14 @@
 // ============================================
 // Talent console: the instrument
-// One dark panel used by both routes. In ryan mode (/talent-tree/) it is the
-// front door: the status rail, the story rail, Ryan's three trees lit, the
-// inspector, the legend and rules, the masteries and card drawers, and one
-// link out to the build path. In build mode (/talent-tree/build/) the story
-// rail becomes the intake strip, the trees start empty and dormant, the
-// status rail counts what is unspent, each column can be reset, and the card
-// assembles when the last point lands or on "Finish with points left".
+// One dark panel used by both routes, followed by the summary sheet on
+// paper (TalentSummary). In ryan mode (/talent-tree/) it is the front door:
+// the status rail, the story rail, Ryan's three trees lit, the node card on
+// hover, the legend and rules, and a closing rail that hands over to the
+// sheet, which carries the masteries, the character card, and the one link
+// out to the build path. In build mode (/talent-tree/build/) the story rail
+// becomes the intake strip, the trees start empty and dormant, the status
+// rail counts what is unspent, each column can be reset, and the sheet's
+// card assembles when the last point lands or on "Finish with points left".
 //
 // Two rules the file is shaped around (see App.tsx on error #418):
 //
@@ -30,7 +32,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SITE } from '../../data/site';
-import { getProjectsHref } from '../../utils/homeSession';
 import { prefersReducedMotion, scrollBehavior } from '../../utils/motion';
 import { useReveal } from '../../hooks/useReveal';
 import type { Allocation, Intake, TalentNode, TalentTree, TreeId } from '../../data/talent/types';
@@ -57,10 +58,11 @@ import TalentIntakeStrip, {
   intakeComplete,
 } from './TalentIntakeStrip';
 import type { Answered, IntakeQuestion } from './TalentIntakeStrip';
-import { InspectorRail, InspectorSheet, Legend } from './TalentInspector';
+import { InspectorSheet, Legend, NodeCard } from './TalentInspector';
 import type { InspectorNode } from './TalentInspector';
-import { CardDrawer, MasteriesDrawer } from './TalentDrawers';
-import type { CopyState } from './TalentDrawers';
+import TalentSummary from './TalentSummary';
+import type { CopyState } from './TalentSummary';
+import { nodeDomId } from './TalentNodeButton';
 import { COLUMN, ROW, nodeVars } from './geometry';
 import type { LayoutSpec } from './geometry';
 import { pointsAt, receiptText, shortTreeName, treeStats } from './consoleData';
@@ -210,6 +212,10 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   const assembledOnce = useRef(false);
 
   const isPhone = useMediaQuery('(max-width: 767px)');
+  // The node card floats beside the node from 1024 up; below that the trees
+  // are one at a time and a tap opens the sheet (under 768) or the node's
+  // own label and count carry the reading.
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [consoleRef, consoleVisible] = useReveal<HTMLElement>(0.05);
 
   // ── Derived ────────────────────────────────────────────────────────────
@@ -294,7 +300,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   }, [own, consoleVisible]);
 
   // The card assembles once it is in view. Its own observer rather than
-  // useReveal, because in build mode the drawer mounts long after the console.
+  // useReveal, because in build mode the card mounts long after the console.
   useEffect(() => {
     if (!showCard || assembledOnce.current) return;
     const el = cardRef.current;
@@ -496,9 +502,16 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
     live ? 'is-live' : 'is-dormant',
   ].filter(Boolean).join(' ');
 
-  const primaryLabel = showCard ? (saving ? 'Rendering' : 'Save as image') : 'Finish with points left';
+  const nodeCount = TREES.reduce((acc, t) => acc + t.areas.length * 2, 0);
+  const totalPoints = pools.craft + pools.core;
+
+  let legendHint: string;
+  if (dormant) legendHint = 'Answer the three questions above and the trees power up';
+  else if (own) legendHint = 'Hover a node for its meaning and gate · click spends a point · Shift-click takes one back';
+  else legendHint = 'Hover a node for its meaning and gate · the card sits on the node';
 
   return (
+    <>
     <section className={consoleClasses} ref={consoleRef} aria-label={own ? 'Build your talent tree' : "Ryan's talent tree"} onKeyDownCapture={onKeyDownCapture}>
       {/* ── Status rail ──────────────────────────────────────────────────── */}
       <div className="tt-status">
@@ -710,85 +723,42 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
         ))}
       </div>
 
-      {/* ── Inspector rail ────────────────────────────────────────────────── */}
-      <InspectorRail
-        selected={selected}
-        pinned={!!pinnedId && !hoverId}
-        allocation={allocation}
-        spends={own && live}
-        dormant={dormant}
-        canAdd={canAdd}
-        onAdd={addPoint}
-        onRemove={removePoint}
-        touch={isPhone}
-      />
+      {/* ── The node card (floats beside the node, from 1024 up) ─────────── */}
+      {isDesktop && selected && (
+        <NodeCard
+          selected={selected}
+          allocation={allocation}
+          spends={own && live}
+          dormant={dormant}
+          canAdd={canAdd}
+          onAdd={addPoint}
+          onRemove={removePoint}
+          hostRef={consoleRef}
+          anchorId={nodeDomId(selected.node.id)}
+        />
+      )}
 
       {/* ── Legend and rules rail ─────────────────────────────────────────── */}
       <div className="tt-legend" id="tt-rules">
         <div className="tt-legend__row">
           <Legend />
-          <p className="tt-legend__note">
-            {own
-              ? `Crown unlocks at foundation ${CROWN_UNLOCK_AT} · Shift-click or Backspace takes a point back · earned by time, not self-rated`
-              : `Crown unlocks at foundation ${CROWN_UNLOCK_AT} · hover prints the gate in the inspector rail`}
-          </p>
+          <p className="tt-legend__note">{legendHint}</p>
         </div>
         <p className="tt-legend__rules">
           <span className="tt-legend__rules-key">How the points work</span>
-          {' · degree 4 a year, locked to its tree · years 4 a year to three, then 2 · hours 1 per 40, cap 5 · core 2 a year to five, then 1 · level = years'}
+          {` · crown unlocks at foundation ${CROWN_UNLOCK_AT} · degree 4 a year, locked to its tree · years 4 a year to three, then 2 · hours 1 per 40, cap 5 · core 2 a year to five, then 1 · level = years`}
         </p>
       </div>
 
-      {/* ── Drawers ───────────────────────────────────────────────────────── */}
-      {(!own || live) && <MasteriesDrawer allocation={allocation} trees={TREES} own={own} />}
-      {showCard && (
-        <div ref={cardRef} className="tt-card-anchor">
-          <CardDrawer
-            result={result}
-            own={own}
-            assembled={assembled}
-            name={intake.name}
-            onName={own ? setName : undefined}
-            saving={saving}
-            onSave={save}
-            linkState={linkState}
-            onCopyLink={copyLink}
-            receiptState={receiptState}
-            onCopyReceipt={copyReceipt}
-            shareUrl={shareUrl}
-            compare={compare}
-            onCompare={own ? setCompare : undefined}
-          />
-        </div>
-      )}
-
-      {/* ── Bottom rail ───────────────────────────────────────────────────── */}
-      <div className="tt-bottom">
-        {own ? (
-          <>
-            <button
-              type="button"
-              className="tt-primary"
-              onClick={showCard ? save : finish}
-              aria-disabled={(!showCard && (!live || !anySpent)) || undefined}
-              disabled={showCard && saving}
-            >
-              {primaryLabel}
-            </button>
-            <p className="tt-bottom__line">
-              <button type="button" className="tt-bottom__reset" onClick={resetAll} disabled={!anySpent}>Reset all</button>
-              <span>{' · free, never confirmed · state lives in the link · #s= one digit per node · nothing stored'}</span>
-            </p>
-            <Link to={FRONT_ROUTE} className="tt-bottom__quiet">{"See Ryan's tree →"}</Link>
-          </>
-        ) : (
-          <>
-            <Link to={BUILD_ROUTE} className="tt-primary">Build your own →</Link>
-            <p className="tt-bottom__line">Three questions, then the fun · your tree gets its own address at /talent-tree/build/ · nothing is stored</p>
-            <Link to={getProjectsHref()} className="tt-bottom__quiet">{"Explore Ryan's work →"}</Link>
-          </>
-        )}
+      {/* ── Closing rail: the console ends here, the summary is on paper ─── */}
+      <div className="tt-closing">
+        <span className="tt-closing__left">
+          <span className="tt-closing__key">End of the trees</span>
+          {` · ${nodeCount} nodes · ${live ? `${spentTotal} / ${totalPoints}` : spentTotal} spent`}
+        </span>
+        <span className="tt-closing__right">The summary continues on paper ↓</span>
       </div>
+      <span className="tt-console__tray" aria-hidden="true">pulled from the tray</span>
 
       <InspectorSheet
         open={sheetOpen && isPhone}
@@ -803,6 +773,35 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
         onClose={closeSheet}
       />
     </section>
+
+    <TalentSummary
+      own={own}
+      live={live}
+      showCard={showCard}
+      allocation={allocation}
+      trees={TREES}
+      result={result}
+      points={totalPoints}
+      assembled={assembled}
+      cardRef={cardRef}
+      frontRoute={FRONT_ROUTE}
+      buildRoute={BUILD_ROUTE}
+      name={intake.name}
+      onName={own ? setName : undefined}
+      saving={saving}
+      onSave={save}
+      linkState={linkState}
+      onCopyLink={copyLink}
+      receiptState={receiptState}
+      onCopyReceipt={copyReceipt}
+      shareUrl={shareUrl}
+      compare={compare}
+      onCompare={own ? setCompare : undefined}
+      anySpent={anySpent}
+      onFinish={finish}
+      onResetAll={resetAll}
+    />
+    </>
   );
 };
 

@@ -182,15 +182,39 @@ $tt-nav-h-phone: 57px;
 
 // ── The console ──────────────────────────────────────────────────────────────
 
+// The summary sheet is pulled up over the console's bottom edge by
+// $tt-overlap (TalentSummary: a negative margin-top); the console carries
+// the same amount of padding under its closing rail so nothing is covered,
+// and its bottom radius stays visible at the edges where the sheet is inset.
+$tt-overlap: 40px;
+$tt-overlap-phone: 24px;
+
 .tt-console {
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-bottom: $tt-overlap;
   background: $tt-ink;
   border: 1px solid $tt-hairline;
   border-radius: $radius-xl;
   color: $tt-paper;
   @include tt-handles;
+
+  // The Caveat note along the right edge, above the sheet's corner.
+  &__tray {
+    position: absolute;
+    left: calc(100% - 26px);
+    bottom: 52px;
+    font-family: Caveat, 'Segoe Script', cursive;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 24px;
+    color: $color-neutral-muted;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    pointer-events: none;
+  }
 }
 
 // ── Status rail ──────────────────────────────────────────────────────────────
@@ -1029,6 +1053,11 @@ $tt-nav-h-phone: 57px;
     box-shadow: 0 0 0 1.5px $tt-ink;
   }
 
+  // The level mark is always on (Ryan: someone may miss four points in a node
+  // that is not yet a mastery if it only shows on hover). Thirty marks on one
+  // board would be noise at full strength, so 1 and 2 sit at 60%, 3 and 4 at
+  // full, and 5 folds into the mastered treatment (the mark hides; the fill,
+  // ring, and MASTERED tag say it).
   &__count {
     position: absolute;
     right: -5px;
@@ -1043,8 +1072,18 @@ $tt-nav-h-phone: 57px;
     background: $tt-ink;
     @include tt-mono(9px, 1);
     color: $tt-paper;
-    opacity: 0;
+    opacity: 0.6;
     transition: opacity $transition-fast;
+  }
+
+  &--l3 &__count,
+  &--l4 &__count,
+  &.is-active &__count {
+    opacity: 1;
+  }
+
+  &.is-mastered &__count {
+    display: none;
   }
 
   &__label {
@@ -1140,7 +1179,7 @@ $tt-nav-h-phone: 57px;
   // Hover and focus: the halo, and the level mark.
   &:hover:not(.is-locked) .tt-node__btn,
   &.is-active:not(.is-locked) .tt-node__btn {
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
   }
 
   &.is-mastered:hover .tt-node__btn,
@@ -1205,60 +1244,125 @@ $tt-nav-h-phone: 57px;
   }
 }
 
-// ── Inspector rail ───────────────────────────────────────────────────────────
+// ── The node card ────────────────────────────────────────────────────────────
+// Floats beside the hovered, focused, or pinned node from 1024 up (NodeCard
+// in TalentInspector.tsx computes the place: right of the node, flipped left
+// at the console's edge, below when neither fits). Raised Ink, the strong
+// hairline, a 12px caret cut from the same surface.
 
-.tt-inspector {
+.tt-nodecard {
+  position: absolute;
+  z-index: 6;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 14px;
-  min-height: 44px;
-  padding: 8px $tt-pad-x;
-  border-top: 1px solid $tt-hairline;
-  @include tt-mono(11px, 16px);
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: $tt-ink-raised;
+  border: 1px solid $tt-hairline-strong;
+  border-radius: $radius-md;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: $tt-paper;
+  pointer-events: none;
 
-  &__key {
-    @include tt-rail-label;
-    padding-right: 8px;
+  &__caret {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: $tt-ink-raised;
+    border-left: 1px solid $tt-hairline-strong;
+    border-bottom: 1px solid $tt-hairline-strong;
+    transform: rotate(45deg);
   }
 
-  &__hint {
-    color: $tt-steel;
+  &--right &__caret {
+    left: -7px;
+    top: 10px;
+  }
+
+  &--left &__caret {
+    right: -7px;
+    top: 10px;
+    transform: rotate(-135deg);
+  }
+
+  &--below &__caret {
+    left: 50%;
+    top: -7px;
+    margin-left: -6px;
+    transform: rotate(135deg);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   &__glyph {
     display: inline-flex;
+    flex: 0 0 auto;
     color: $tt-orange;
   }
 
   &__name {
-    font-family: $font-family-primary;
-    font-size: 13px;
-    font-weight: $font-weight-semibold;
-    line-height: 16px;
+    font-family: $font-family-heading;
+    font-size: 15px;
+    font-weight: $font-weight-bold;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  &__level {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
+  }
+
+  &__dots {
+    display: inline-flex;
+    gap: 3px;
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+
+    &.is-on {
+      border-color: $tt-orange;
+      background: $tt-orange;
+    }
+  }
+
+  &__n {
     color: $tt-paper;
   }
 
-  &__level,
-  &__gate {
-    @include tt-rail-label;
+  &__meaning {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 18px;
+    color: $tt-steel-light;
   }
 
-  &__meaning {
-    font-family: $font-family-primary;
-    font-size: 12px;
-    line-height: 16px;
-    color: rgba($tt-paper, 0.8);
+  &__gate {
+    margin: 0;
+    padding-top: 6px;
+    border-top: 1px solid $tt-hairline;
+    @include tt-mono(9px, 13px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel;
   }
 
   .tt-spend {
-    margin-left: auto;
-  }
-
-  &[data-state='idle'] &__hint {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 10px;
+    margin-top: 4px;
+    pointer-events: auto;
   }
 }
 
@@ -1426,9 +1530,32 @@ $tt-nav-h-phone: 57px;
     @include tt-rail-label;
   }
 
+  // The eighth key: the level mark that is always on the node.
+  &__divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    background: $tt-ink;
+    @include tt-mono(9px, 1);
+    font-weight: $font-weight-bold;
+    color: $tt-paper;
+  }
+
   &__note {
     flex: 0 1 auto;
+    padding-right: 24px; // room for the tray note along the edge
     text-align: right;
+    color: $tt-steel-dark;
   }
 
   &__rules {
@@ -1440,123 +1567,253 @@ $tt-nav-h-phone: 57px;
   }
 }
 
-// ── Drawers ──────────────────────────────────────────────────────────────────
+// ── Closing rail ─────────────────────────────────────────────────────────────
+// The console ends here; the sheet is pulled up over the padding beneath.
 
-.tt-drawer {
+.tt-closing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px $tt-pad-x 0;
   border-top: 1px solid $tt-hairline;
+  @include tt-mono(10px, 16px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $tt-steel-dark;
+  white-space: nowrap;
 
-  &__summary {
+  &__key,
+  &__right {
+    color: $tt-steel;
+  }
+}
+
+// ── The summary sheet (paper) ────────────────────────────────────────────────
+// Cool Paper, the console's radius, the paper hairline, a lifted shadow, the
+// Steel handles; inset 40px each side and pulled up over the console's
+// bottom edge by $tt-overlap.
+
+$tt-paper-hairline: rgba(27, 27, 27, 0.1);
+$tt-paper-text: #4a4a4a;
+
+.tt-summary {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: (-$tt-overlap) 40px 0;
+  padding: 28px 40px;
+  background: $tt-paper;
+  border: 1px solid $tt-paper-hairline;
+  border-radius: $radius-xl;
+  box-shadow: 0 6px 8px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  color: $color-neutral-dark;
+  @include tt-handles;
+
+  &__eyebrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+    white-space: nowrap;
+  }
+
+  &__key {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: $color-neutral-dark;
+  }
+
+  &__square {
+    width: 7px;
+    height: 7px;
+    background: $tt-orange-deep;
+  }
+
+  &__pending {
+    margin: 0;
+    padding: 14px 0 4px;
+    border-top: 1px solid $tt-paper-hairline;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+  }
+
+  // The card row: the white inset panel with the dark card, the reading beside it.
+  &__cardrow {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    padding-top: 20px;
+    border-top: 1px solid $tt-paper-hairline;
+  }
+
+  // The foot: the one primary action, the Menlo line, the quiet link.
+  &__foot {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 14px;
-    min-height: 44px;
-    padding: 8px $tt-pad-x;
-    @include tt-rail-label;
-    list-style: none;
-    cursor: pointer;
-    user-select: none;
-
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &::marker {
-      content: '';
-    }
-
-    &:hover .tt-drawer__index {
-      color: $tt-paper;
-    }
-  }
-
-  &__caret {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-right: 2px;
-    border-right: 1.5px solid $tt-steel;
-    border-bottom: 1.5px solid $tt-steel;
-    transform: rotate(-45deg);
-    transition: transform $transition-fast;
-  }
-
-  &[open] > &__summary &__caret {
-    transform: rotate(45deg);
-  }
-
-  &__index {
-    color: $tt-paper;
-    transition: color $transition-fast;
+    gap: 12px 24px;
+    padding-top: 20px;
+    border-top: 1px solid $tt-paper-hairline;
   }
 
   &__line {
-    color: $tt-steel;
+    flex: 1 1 320px;
+    margin: 0;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $tt-steel-dark;
   }
 
-  &__tag {
+  &__reset {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    @include tt-mono(10px, 14px);
+    letter-spacing: 0.04em;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    border-radius: $radius-sm;
+
+    &:hover:not(:disabled) {
+      color: $tt-orange-deep;
+    }
+
+    &:disabled {
+      color: $tt-steel-dark;
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  &__quiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     margin-left: auto;
-    color: rgba($tt-steel, 0.7);
-  }
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: rgba(27, 27, 27, 0.4);
+    border-radius: $radius-sm;
+    transition: color $transition-fast;
 
-  &__body {
-    padding: 4px $tt-pad-x 20px;
+    &:hover {
+      color: $tt-orange-deep;
+    }
   }
+}
+
+.tt-cardpanel {
+  flex: 0 0 auto;
+  position: relative;
+  padding: 24px;
+  background: $color-white;
+  border: 1px solid $tt-paper-hairline;
+  border-radius: $radius-xl;
+  @include tt-handles;
 }
 
 .tt-masteries {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 40px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  column-gap: 48px;
+  align-items: start;
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
   &__row {
-    display: grid;
-    grid-template-columns: 26px minmax(0, 1fr) auto;
+    display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 9px 0;
-    border-bottom: 1px solid $tt-hairline;
+    gap: 14px;
+    min-height: 52px;
+    padding: 6px 0;
+    border-top: 1px solid $tt-paper-hairline;
   }
 
   &__glyph {
     display: inline-flex;
-    color: $tt-orange;
+    flex: 0 0 auto;
+    color: $tt-orange-deep;
   }
 
   &__text {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 2px;
     min-width: 0;
   }
 
   &__name {
-    font-size: 13px;
-    font-weight: $font-weight-semibold;
-    line-height: 16px;
-    color: $tt-paper;
+    font-family: $font-family-heading;
+    font-size: 15px;
+    font-weight: $font-weight-bold;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
   }
 
   &__meaning {
-    font-size: 11px;
-    line-height: 15px;
-    color: $tt-steel;
+    font-size: 13px;
+    line-height: 17px;
+    color: $tt-paper-text;
   }
 
   &__meta {
-    @include tt-rail-label;
-    white-space: nowrap;
+    flex: 0 0 auto;
+    width: 128px;
+    @include tt-mono(9px, 13px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: right;
+    color: $tt-steel-dark;
+  }
+
+  &__foot {
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    border-top: 1px solid $tt-paper-hairline;
+    @include tt-mono(9px, 13px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+    white-space: pre-wrap;
+  }
+
+  &__foot-key {
+    color: $color-neutral-dark;
   }
 
   &__empty {
+    grid-column: 1 / -1;
     margin: 0;
-    padding: 8px 0 4px;
-    font-size: 12px;
-    line-height: 16px;
-    color: $tt-steel;
+    padding: 12px 0 4px;
+    border-top: 1px solid $tt-paper-hairline;
+    font-size: 13px;
+    line-height: 17px;
+    color: $tt-paper-text;
   }
 }
 
@@ -1565,10 +1822,14 @@ $tt-nav-h-phone: 57px;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 12px;
-  margin: 4px 0 16px;
+  margin: 0 0 16px;
 
   &__label {
     @include tt-rail-label;
+  }
+
+  &__label {
+    color: $tt-steel-dark;
   }
 
   &__input {
@@ -1576,45 +1837,51 @@ $tt-nav-h-phone: 57px;
     max-width: 100%;
     height: 36px;
     padding: 0 12px;
-    @include tt-control;
+    border: 1px solid rgba(27, 27, 27, 0.2);
+    border-radius: $radius-md;
+    background: $color-white;
+    color: $color-neutral-dark;
     font-size: 13px;
 
     &::placeholder {
-      color: rgba($tt-steel, 0.7);
+      color: $tt-steel;
     }
 
     &:focus,
     &:focus-visible {
       outline: none;
-      border-color: $tt-orange;
+      border-color: $tt-orange-deep;
     }
   }
 
   &__note {
     @include tt-mono(9px, 13px);
     letter-spacing: 0.04em;
-    color: rgba($tt-steel, 0.75);
+    color: $tt-steel-dark;
   }
 }
 
 .tt-cardframe {
-  margin: 4px 0 0;
+  margin: 0;
 }
 
+// The reading beside the card, in Ink on paper.
 .tt-cardside {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  gap: 16px;
   min-width: 0;
+  padding-top: 6px;
 
   // The one Caveat line on the front door.
   &__note {
-    margin: 6px 0 0;
-    padding-left: 2px;
+    margin: 0;
     font-family: Caveat, 'Segoe Script', cursive;
     font-size: 21px;
     font-weight: 600;
     line-height: 24px;
-    color: $tt-steel;
+    color: $tt-orange-deep;
     transform: rotate(-2deg);
     transform-origin: left center;
   }
@@ -1624,9 +1891,8 @@ $tt-nav-h-phone: 57px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin: 14px 0 0;
-  padding: 10px 0 0;
-  border-top: 1px solid $tt-hairline;
+  margin: 0;
+  padding: 0;
   list-style: none;
   @include tt-mono(9px, 14px);
   letter-spacing: 0.08em;
@@ -1634,61 +1900,59 @@ $tt-nav-h-phone: 57px;
   color: $tt-steel-dark;
 
   span {
-    color: $tt-steel;
+    color: $color-neutral-dark;
   }
 }
 
 .tt-classes {
-  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
   padding: 0;
   list-style: none;
 
   &__row {
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr) auto;
-    align-items: baseline;
-    gap: 4px 16px;
-    padding: 10px 0;
-    border-top: 1px solid $tt-hairline;
-
-    &:last-child {
-      border-bottom: 1px solid $tt-hairline;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 10px;
+    border-top: 1px solid $tt-paper-hairline;
   }
 
   &__name {
-    font-size: 13px;
-    font-weight: $font-weight-semibold;
-    line-height: 16px;
-    color: $tt-paper;
+    font-family: $font-family-heading;
+    font-size: 18px;
+    font-weight: $font-weight-bold;
+    line-height: 22px;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
   }
 
   &__family {
-    grid-column: 1;
-    @include tt-rail-label;
+    @include tt-mono(9px, 13px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $tt-steel-dark;
+  }
+
+  &__score {
+    color: $color-neutral-dark;
   }
 
   &__line {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    font-size: 12px;
-    line-height: 16px;
-    color: $tt-steel-light;
-  }
-
-  &__led {
-    grid-column: 3;
-    grid-row: 1 / span 2;
-    @include tt-rail-label;
-    white-space: nowrap;
+    font-size: 13px;
+    line-height: 18px;
+    color: $tt-paper-text;
   }
 
   &__why {
-    max-width: 900px;
-    margin: 12px 0 0;
-    font-size: 12px;
-    line-height: 17px;
-    color: $tt-steel;
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px solid $tt-paper-hairline;
+    font-size: 13px;
+    line-height: 19px;
+    color: $tt-paper-text;
   }
 }
 
@@ -1697,7 +1961,7 @@ $tt-nav-h-phone: 57px;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-top: 18px;
+  margin: 0;
 
   &__btn {
     display: inline-flex;
@@ -1705,16 +1969,16 @@ $tt-nav-h-phone: 57px;
     gap: 8px;
     height: 36px;
     padding: 0 14px;
-    border: 1px solid rgba(255, 255, 255, 0.24);
+    border: 1px solid rgba(27, 27, 27, 0.24);
     border-radius: $radius-md;
     background: transparent;
     @include tt-rail-label;
-    color: $tt-paper;
+    color: $color-neutral-dark;
     cursor: pointer;
     transition: border-color $transition-fast, background $transition-fast, color $transition-fast;
 
     &:hover:not(:disabled) {
-      border-color: $tt-paper;
+      border-color: $color-neutral-dark;
     }
 
     &--primary {
@@ -1739,80 +2003,28 @@ $tt-nav-h-phone: 57px;
     flex: 1 1 240px;
     @include tt-mono(9px, 13px);
     letter-spacing: 0.04em;
-    color: rgba($tt-steel, 0.75);
+    color: $tt-steel-dark;
   }
 
   &__url {
     flex: 1 1 100%;
     height: 36px;
     padding: 0 12px;
-    @include tt-control;
+    border: 1px solid rgba(27, 27, 27, 0.2);
+    border-radius: $radius-md;
+    background: $color-white;
+    color: $color-neutral-dark;
     @include tt-mono(11px, 14px);
 
     &:focus,
     &:focus-visible {
       outline: none;
-      border-color: $tt-orange;
+      border-color: $tt-orange-deep;
     }
   }
 }
 
-// ── Bottom rail ──────────────────────────────────────────────────────────────
-
-.tt-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 24px;
-  padding: 16px $tt-pad-x;
-  border-top: 1px solid $tt-hairline;
-  border-radius: 0 0 $radius-xl $radius-xl;
-
-  &__line {
-    flex: 1 1 320px;
-    margin: 0;
-    @include tt-rail-label;
-  }
-
-  &__reset {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    @include tt-rail-label;
-    color: $tt-paper;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-    border-radius: $radius-sm;
-
-    &:hover:not(:disabled) {
-      color: $tt-orange;
-    }
-
-    &:disabled {
-      color: $tt-steel;
-      opacity: 0.6;
-      cursor: default;
-    }
-  }
-
-  &__quiet {
-    margin-left: auto;
-    font-family: $font-family-heading;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-extrabold;
-    color: $tt-paper;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1.5px;
-    border-radius: $radius-sm;
-    transition: color $transition-fast;
-
-    &:hover {
-      color: $tt-orange;
-    }
-  }
-}
+// ── The primary action ───────────────────────────────────────────────────────
 
 .tt-primary {
   display: inline-flex;
@@ -1821,11 +2033,13 @@ $tt-nav-h-phone: 57px;
   height: 44px;
   padding: 0 22px;
   border: 0;
+  gap: 10px;
   border-radius: $button-radius;
   background: $tt-orange-deep;
   font-family: $font-family-heading;
-  font-size: $font-size-body-sm;
+  font-size: 15px;
   font-weight: $font-weight-extrabold;
+  letter-spacing: -0.01em;
   color: $color-white;
   text-decoration: none;
   cursor: pointer;
@@ -2364,7 +2578,7 @@ $tt-nav-h-phone: 57px;
   }
 }
 
-.tt-drawer--card.is-assembled {
+.tt-cardpanel.is-assembled {
   .tt-card__sweep {
     animation: tt-sweep 1100ms $tt-ease both;
   }
@@ -2417,6 +2631,14 @@ $tt-nav-h-phone: 57px;
 }
 
 @media (max-width: 1100px) {
+  .tt-summary__cardrow {
+    flex-direction: column;
+  }
+
+  .tt-cardpanel {
+    width: 100%;
+  }
+
   .tt-card {
     gap: 24px;
     padding: 28px;
@@ -2432,15 +2654,6 @@ $tt-nav-h-phone: 57px;
     }
   }
 
-  .tt-classes__row {
-    grid-template-columns: 200px minmax(0, 1fr);
-
-    .tt-classes__led {
-      grid-column: 2;
-      grid-row: 3;
-      white-space: normal;
-    }
-  }
 }
 
 // One tree at a time below 1024, picked by the tabs in the status rail.
@@ -2474,7 +2687,10 @@ $tt-nav-h-phone: 57px;
 
   .tt-masteries {
     grid-template-columns: 1fr;
-    gap: 0;
+  }
+
+  .tt-console__tray {
+    display: none;
   }
 }
 
@@ -2642,29 +2858,6 @@ $tt-nav-h-phone: 57px;
     margin: -22px 0 0 -22px;
   }
 
-  // Hover is the sheet here: the rail shrinks to a hint.
-  .tt-inspector {
-    padding: 8px 16px;
-
-    &__meaning,
-    &__gate,
-    &__glyph,
-    &__level,
-    &__name,
-    .tt-spend {
-      display: none;
-    }
-
-    &[data-state='idle'] &__hint {
-      display: inline;
-    }
-
-    &:not([data-state='idle'])::after {
-      content: 'Tap a node for its level and gate';
-      @include tt-rail-label;
-    }
-  }
-
   // The legend folds into the sheet.
   .tt-legend {
     padding: 10px 16px 12px;
@@ -2674,35 +2867,108 @@ $tt-nav-h-phone: 57px;
     }
   }
 
-  .tt-drawer__summary {
-    padding: 8px 16px;
+  .tt-console {
+    padding-bottom: $tt-overlap-phone;
+  }
 
-    .tt-drawer__tag {
-      display: none;
+  .tt-closing {
+    padding: 10px 16px 0;
+    font-size: 9px;
+    white-space: normal;
+  }
+
+  // The sheet: single column, inset 16px, overlapping by 24.
+  .tt-summary {
+    margin: (-$tt-overlap-phone) 16px 0;
+    padding: 18px 16px 16px;
+    gap: 10px;
+
+    &__eyebrow {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    &__counts {
+      @include tt-mono(9px, 13px);
+    }
+
+    &__cardrow {
+      gap: 20px;
+      padding-top: 14px;
+    }
+
+    &__foot {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      padding-top: 12px;
+
+      .tt-primary {
+        width: 100%;
+      }
+    }
+
+    &__line {
+      flex-basis: auto;
+      text-align: center;
+    }
+
+    &__quiet {
+      justify-content: center;
+      margin-left: 0;
     }
   }
 
-  .tt-drawer__body {
-    padding: 4px 16px 16px;
-  }
-
+  // Masteries as name and tree · tier rows, no meaning line.
   .tt-masteries__row {
-    grid-template-columns: 24px minmax(0, 1fr);
-
-    .tt-masteries__meta {
-      grid-column: 2;
-    }
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 1px;
+    min-height: 40px;
+    padding: 5px 0;
   }
 
-  .tt-classes__row {
-    grid-template-columns: 1fr;
+  .tt-masteries__glyph {
+    grid-row: 1 / span 2;
+  }
 
-    .tt-classes__line,
-    .tt-classes__led,
-    .tt-classes__family {
-      grid-column: 1;
-      grid-row: auto;
-    }
+  .tt-masteries__name {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .tt-masteries__meaning {
+    display: none;
+  }
+
+  .tt-masteries__meta {
+    grid-column: 2;
+    width: auto;
+    @include tt-mono(8.5px, 12px);
+    text-align: left;
+  }
+
+  .tt-masteries__foot {
+    min-height: 44px;
+  }
+
+  // The panel collapses to its handles: the card is the panel here.
+  .tt-cardpanel {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: $radius-md;
+  }
+
+  .tt-summary__eyebrow {
+    white-space: normal;
+  }
+
+  .tt-cardside {
+    padding-top: 0;
+    gap: 12px;
   }
 
   // The card reflows to portrait.
@@ -2735,21 +3001,6 @@ $tt-nav-h-phone: 57px;
     height: 44px;
   }
 
-  .tt-bottom {
-    padding: 14px 16px;
-
-    .tt-primary {
-      width: 100%;
-    }
-
-    &__line {
-      flex-basis: 100%;
-    }
-
-    &__quiet {
-      margin-left: 0;
-    }
-  }
 }
 
 @media (max-width: $breakpoint-xs) {
@@ -2790,8 +3041,7 @@ $tt-nav-h-phone: 57px;
   .tt-seg__item,
   .tt-stepper__btn,
   .tt-spend__btn,
-  .tt-primary,
-  .tt-drawer__caret {
+  .tt-primary {
     transition: none;
   }
 
@@ -2803,10 +3053,10 @@ $tt-nav-h-phone: 57px;
   .tt-console.is-cascade .tt-wire,
   .tt-console--build .tt-node.is-mastered .tt-node__btn,
   .tt-console--build .tt-node.is-mastered .tt-node__mastered,
-  .tt-drawer--card.is-assembled .tt-card__sweep,
-  .tt-drawer--card.is-assembled .tt-card__seg.is-full,
-  .tt-drawer--card.is-assembled .tt-card__seg-fill,
-  .tt-drawer--card.is-assembled .tt-card__stat-num {
+  .tt-cardpanel.is-assembled .tt-card__sweep,
+  .tt-cardpanel.is-assembled .tt-card__seg.is-full,
+  .tt-cardpanel.is-assembled .tt-card__seg-fill,
+  .tt-cardpanel.is-assembled .tt-card__stat-num {
     animation: none;
   }
 
@@ -2815,74 +3065,14 @@ $tt-nav-h-phone: 57px;
   }
 }
 
-// Desktop: the 1200 × 630 card at 0.54 (648 wide) with the right column beside it.
+// Desktop: the 1200 × 630 card at 0.54 (648 wide) in its panel, the reading beside it.
 @media (min-width: 1101px) {
-  .tt-drawer--card .tt-drawer__body {
-    display: grid;
-    grid-template-columns: 648px minmax(0, 1fr);
-    gap: 8px 36px;
-    align-items: start;
-  }
-
-  .tt-drawer--card .tt-cardname {
-    grid-column: 1 / -1;
-  }
-
-  .tt-drawer--card .tt-cardframe {
-    grid-column: 1;
-    margin: 0;
-  }
-
-  .tt-drawer--card .tt-cardside {
-    grid-column: 2;
-  }
-
-  .tt-classes {
-    margin-top: 4px;
-
-    &__row {
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: 2px 12px;
-      padding: 10px 0 8px;
-
-      &:last-child {
-        border-bottom: 0;
-      }
-    }
-
-    &__name {
-      font-family: $font-family-heading;
-      font-size: 17px;
-      font-weight: $font-weight-bold;
-      line-height: 20px;
-      letter-spacing: -0.01em;
-    }
-
-    &__family {
-      grid-column: 2;
-      grid-row: 1;
-      align-self: baseline;
-    }
-
-    &__line {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      color: $tt-steel-light;
-    }
-
-    &__led {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: end;
-    }
-
-    &__why {
-      margin-top: 8px;
-    }
+  .tt-cardpanel .tt-cardframe {
+    width: 648px;
   }
 
   // The card's own type at 0.54.
-  .tt-drawer--card .tt-card {
+  .tt-cardpanel .tt-card {
     gap: 10px;
     padding: 18px 22px 16px;
     border-radius: $radius-md;
@@ -2991,13 +3181,13 @@ $tt-nav-h-phone: 57px;
 // The phone card: the class steps down so a name still never breaks.
 @media (max-width: $breakpoint-md) {
   .tt-card__class {
-    font-size: 28px;
-    line-height: 30px;
+    font-size: 26px;
+    line-height: 28px;
   }
 
   .tt-card--long-class .tt-card__class {
-    font-size: 24px;
-    line-height: 26px;
+    font-size: 22px;
+    line-height: 24px;
   }
 }
 
@@ -3086,7 +3276,7 @@ $tt-nav-h-phone: 57px;
     border: 0;
     background: transparent;
     @include tt-rail-label;
-    color: $tt-paper;
+    color: $color-neutral-dark;
     cursor: pointer;
     border-radius: $radius-sm;
     @include tt-focus;
@@ -3097,7 +3287,7 @@ $tt-nav-h-phone: 57px;
     display: block;
     width: 32px;
     height: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.24);
+    border: 1px solid rgba(27, 27, 27, 0.3);
     border-radius: 9px;
     background: transparent;
     transition: background $tt-step ease, border-color $tt-step ease;
@@ -3120,16 +3310,16 @@ $tt-nav-h-phone: 57px;
   }
 
   &__toggle.is-on &__knob {
-    background: $tt-ink;
+    background: $color-white;
     transform: translateX(14px);
   }
 
   &__state {
-    color: $tt-steel;
+    color: $tt-steel-dark;
   }
 
   &__toggle.is-on &__state {
-    color: $tt-orange;
+    color: $tt-orange-deep;
   }
 
   &__line {
@@ -3140,7 +3330,7 @@ $tt-nav-h-phone: 57px;
     @include tt-mono(9px, 13px);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: rgba($tt-steel, 0.75);
+    color: $tt-steel-dark;
   }
 
   &__arc {

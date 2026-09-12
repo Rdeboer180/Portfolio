@@ -3,8 +3,8 @@
 // (jest, for the DOM: the vitest in use has no jsdom of its own.)
 //
 // Guards the contracts the console is built around: the front door's first
-// render is Ryan's tree with both drawers open (what the prerender serialises
-// and a crawler reads); the build route's first render is the empty intake
+// render is Ryan's tree with the summary sheet filled (what the prerender
+// serialises and a crawler reads); the build route's first render is the empty intake
 // with the trees dormant; the spending rules the page enforces through
 // economy.ts (a point per click, the crown locked until its foundation holds
 // three, removal by shift-click and Backspace); the sheet on a phone; and
@@ -18,11 +18,13 @@ import TalentTreePage from '../TalentTreePage';
 import { RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_INTAKE } from '../../data/talent/ryan';
 import { encodeState } from '../../data/talent/score';
 import { receiptText } from './consoleData';
+import { placeCard } from './TalentInspector';
 import { ARCHETYPES } from '../../data/talent/archetypes';
 import { buildResult } from '../../data/talent/score';
 import { TREES } from '../../data/talent/trees';
 
 let phone = false;
+let desktop = true;
 
 beforeAll(() => {
   // jsdom has neither; useReveal and the scroll helpers expect both.
@@ -33,7 +35,7 @@ beforeAll(() => {
   }
   (globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver = IO;
   window.matchMedia = ((q: string) => ({
-    matches: q.includes('max-width: 767px') ? phone : false,
+    matches: q.includes('max-width: 767px') ? phone : q.includes('min-width: 1024px') ? desktop : false,
     media: q, onchange: null,
     addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; },
   })) as unknown as typeof window.matchMedia;
@@ -42,6 +44,7 @@ beforeAll(() => {
 
 afterEach(() => {
   phone = false;
+  desktop = true;
   window.history.replaceState(null, '', '/');
 });
 
@@ -66,7 +69,7 @@ function answerIntake(years = 16) {
 }
 
 describe('the front door, /talent-tree/', () => {
-  it('renders Ryan by default: story, rails, thirty nodes, both drawers open', () => {
+  it('renders Ryan by default: story, rails, thirty nodes, the closing rail, the summary sheet', () => {
     mount('/talent-tree/');
     expect(screen.getByRole('heading', { level: 1, name: "Ryan's tree" })).toBeTruthy();
     expect(screen.getByText('Level 16 Designer · 63 craft · 21 core')).toBeTruthy();
@@ -86,30 +89,60 @@ describe('the front door, /talent-tree/', () => {
     expect(screen.queryByRole('button', { name: /^Reset/ })).toBeNull();
     expect(window.location.hash).toBe('');
 
-    // Both drawers ship open, so every word is in the static HTML.
-    const masteries = screen.getByRole('group', { name: 'Masteries' });
-    const card = screen.getByRole('group', { name: 'The card' });
-    expect(masteries).toHaveAttribute('open');
-    expect(card).toHaveAttribute('open');
-    expect(screen.getByText(/Seven nodes at 5 \/ 5/)).toBeTruthy();
-    expect(screen.getByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeTruthy();
-    expect(screen.getByText('Designs systems that continue working when he leaves the room.')).toBeTruthy();
+    // The console ends after the legend; the summary is on the sheet, every word in the static HTML.
+    expect(screen.getByText('End of the trees')).toBeTruthy();
+    expect(screen.getByText('· 30 nodes · 84 / 84 spent', { exact: false })).toBeTruthy();
+    expect(screen.getByText('Points in the node, always on')).toBeTruthy();
+    const sheet = screen.getByRole('region', { name: 'Summary' });
+    expect(within(sheet).getByText('Summary · computed from 84 points')).toBeTruthy();
+    expect(within(sheet).getByText('seven masteries · two archetypes · four stats · nothing hand-set')).toBeTruthy();
+    expect(within(sheet).getByText('7 of 30 nodes')).toBeTruthy();
+    expect(within(sheet).getByText(/six foundations and one crown · earned by time, not self-rated/)).toBeTruthy();
+    expect(within(sheet).getAllByText(/foundation|crown/, { selector: '.tt-masteries__meta' }).length).toBe(7);
+    expect(within(sheet).getByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeTruthy();
+    expect(within(sheet).getByText('Designs systems that continue working when he leaves the room.')).toBeTruthy();
+    expect(screen.queryByTestId('tt-nodecard')).toBeNull();
 
-    // The crossover and the bottom rail are plain links.
+    // The crossover and the sheet's foot are plain links.
     const build = screen.getAllByRole('link', { name: /Build your own/ });
     expect(build.length).toBe(2);
     build.forEach((a) => expect(a.getAttribute('href')).toBe('/talent-tree/build/'));
   });
 
-  it('prints a hovered node in the inspector rail, with its gate in words and the trait it feeds', () => {
+  it('floats a card beside a hovered node, with its level, gate in words, and the trait it feeds', () => {
     mount('/talent-tree/');
-    expect(screen.getByText('Hover a node for its level and gate')).toBeTruthy();
+    expect(screen.getByText('Hover a node for its meaning and gate · the card sits on the node')).toBeTruthy();
     fireEvent.mouseEnter(nodeButton(/^Production ownership, crown/));
-    expect(screen.getByText('Production ownership', { selector: '.tt-inspector__name' })).toBeTruthy();
-    expect(screen.getByText('2 / 5 · crown · Systems and build')).toBeTruthy();
-    expect(screen.getByText('Unlocked at foundation 3 · foundation holds 5 · feeds Build')).toBeTruthy();
+    const card = screen.getByTestId('tt-nodecard');
+    expect(card.getAttribute('aria-hidden')).toBe('true');
+    expect(within(card).getByText('Production ownership')).toBeTruthy();
+    expect(within(card).getByText('2 / 5')).toBeTruthy();
+    expect(card).toHaveTextContent('2 / 5 · crown · Systems');
+    expect(card).toHaveTextContent('Unlocked at foundation 3 · foundation holds 5 · feeds Build');
+    expect(card.querySelectorAll('.tt-nodecard__dot.is-on').length).toBe(2);
+    // jsdom has no layout: every box is zero, so neither side fits and the card drops below.
+    expect(card).toHaveClass('tt-nodecard--below');
+    expect(within(card).queryByRole('button')).toBeNull();
     fireEvent.mouseLeave(nodeButton(/^Production ownership, crown/));
-    expect(screen.getByText('Hover a node for its level and gate')).toBeTruthy();
+    expect(screen.queryByTestId('tt-nodecard')).toBeNull();
+  });
+
+  it('places the card right of the node, flips left at the console edge, drops below when neither fits', () => {
+    const rect = (left: number, top: number, width: number, height: number) => ({ left, top, width, height } as DOMRect);
+    const host = rect(0, 0, 1392, 752);
+    // A node centred at (300, 400): the card's left edge 34px from the centre, its caret level with it.
+    expect(placeCard(rect(278, 378, 44, 44), host)).toEqual({ left: 334, top: 384, place: 'right' });
+    // Near the right edge: the same 34px, to the left.
+    expect(placeCard(rect(1300, 378, 44, 44), host)).toEqual({ left: 1322 - 34 - 280, top: 384, place: 'left' });
+    // A narrow host where neither side fits: centred below, 34px under the centre, kept inside the edges.
+    expect(placeCard(rect(150, 378, 44, 44), rect(0, 0, 400, 752))).toEqual({ left: 32, top: 434, place: 'below' });
+  });
+
+  it('never mounts the card below 1024', () => {
+    desktop = false;
+    mount('/talent-tree/');
+    fireEvent.mouseEnter(nodeButton(/^Production ownership, crown/));
+    expect(screen.queryByTestId('tt-nodecard')).toBeNull();
   });
 
   it('sends an older ?t= link to the build route in the hash form', async () => {
@@ -131,7 +164,8 @@ describe('the build route, /talent-tree/build/', () => {
     const chips = () => within(screen.getByRole('list', { name: 'Receipt' })).queryAllByRole('listitem');
     expect(consoleEl()).toHaveClass('is-dormant');
     expect(chips().length).toBe(0);
-    expect(screen.queryByRole('group', { name: 'The card' })).toBeNull();
+    expect(screen.getByText('Your summary assembles when the last point lands')).toBeTruthy();
+    expect(screen.queryByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeNull();
 
     const foundation = () => nodeButton(/^Typography and hierarchy, foundation/);
     expect(foundation().getAttribute('aria-disabled')).toBe('true');
@@ -163,6 +197,8 @@ describe('the build route, /talent-tree/build/', () => {
     expect(pools).toHaveTextContent('Unspent63craft');
     expect(pools).toHaveTextContent('16 craft · 4 systems');
     expect(foundation().getAttribute('aria-disabled')).toBeNull();
+    expect(screen.queryByText('Your summary assembles when the last point lands')).toBeNull();
+    expect(screen.getByText('Five points in one node is a mastery. The first one prints here.')).toBeTruthy();
   });
 
   it('spends, locks the crown until the foundation holds 3, removes on shift-click and Backspace, and resets', () => {
@@ -186,11 +222,12 @@ describe('the build route, /talent-tree/build/', () => {
     fireEvent.click(crown());
     expect(crown().getAttribute('aria-label')).toMatch(/1 of 5/);
 
-    // The rails count the spend: the tree header, and the inspector's minus and plus.
+    // The rails count the spend: the tree header, and the node card's minus and plus.
     expect(screen.getByText('Root Visual craft · 4 spent · 0 mastered · 12 locked here')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Add a point to Composition, brand, and polish' }));
+    fireEvent.mouseEnter(crown());
+    fireEvent.click(screen.getByRole('button', { name: 'Add a point to Composition, brand, and polish', hidden: true }));
     expect(crown().getAttribute('aria-label')).toMatch(/2 of 5/);
-    fireEvent.click(screen.getByRole('button', { name: 'Remove a point from Composition, brand, and polish' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Remove a point from Composition, brand, and polish', hidden: true }));
     expect(crown().getAttribute('aria-label')).toMatch(/1 of 5/);
 
     fireEvent.click(foundation(), { shiftKey: true });
@@ -202,15 +239,17 @@ describe('the build route, /talent-tree/build/', () => {
     fireEvent.keyDown(foundation(), { key: 'Backspace' });
     expect(foundation().getAttribute('aria-label')).toMatch(/1 of 5/);
 
-    // Mastery: five points, the tag, the masteries drawer.
+    // Mastery: five points, the tag, the row on the sheet.
     for (let i = 0; i < 4; i += 1) fireEvent.click(foundation());
     expect(foundation().getAttribute('aria-label')).toMatch(/5 of 5/);
-    expect(screen.getByText(/One node at 5 \/ 5/)).toBeTruthy();
+    expect(screen.getByText('one mastery')).toBeTruthy();
+    expect(screen.getByText('1 of 30 nodes')).toBeTruthy();
+    expect(screen.getByText('Typography and hierarchy', { selector: '.tt-masteries__name' })).toBeTruthy();
 
     // Reset tree, free and never confirmed; then the state in the hash goes with it.
     fireEvent.click(screen.getAllByRole('button', { name: 'Reset tree' })[0]);
     expect(foundation().getAttribute('aria-label')).toMatch(/0 of 5/);
-    expect(screen.getByText(/No masteries yet/)).toBeTruthy();
+    expect(screen.getByText('Five points in one node is a mastery. The first one prints here.')).toBeTruthy();
   });
 
   it('assembles the card on Finish with points left, with the share actions and a copyable receipt', async () => {
@@ -219,12 +258,12 @@ describe('the build route, /talent-tree/build/', () => {
     mount('/talent-tree/build/');
     answerIntake();
     fireEvent.click(nodeButton(/^Tokens and variables, foundation/));
-    expect(screen.queryByRole('group', { name: 'The card' })).toBeNull();
+    expect(screen.queryByText('Level 16 Designer', { selector: '.tt-card__level' })).toBeNull();
 
     fireEvent.click(screen.getByRole('button', { name: 'Finish with points left' }));
-    const card = screen.getByRole('group', { name: 'The card' });
-    expect(card).toHaveAttribute('open');
+    const card = screen.getByRole('region', { name: 'Summary' });
     expect(within(card).getByText('Level 16 Designer', { selector: '.tt-card__level' })).toBeTruthy();
+    expect(within(card).getByText('Save as image', { selector: '.tt-primary' })).toBeTruthy();
     fireEvent.change(screen.getByLabelText('Your name'), { target: { value: 'Ada Lovelace' } });
     expect(within(card).getByText('Ada Lovelace', { selector: '.tt-card__name' })).toBeTruthy();
     expect(screen.queryByText('Designs systems that continue working when he leaves the room.')).toBeNull();
@@ -252,7 +291,7 @@ describe('the build route, /talent-tree/build/', () => {
     const { unmount } = mount('/talent-tree/build/');
     expect(await screen.findByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeTruthy();
     expect(screen.getByText('Root Visual craft · 24 spent · 2 mastered')).toBeTruthy();
-    expect(screen.getByText(/Seven nodes at 5 \/ 5/)).toBeTruthy();
+    expect(screen.getByText('seven masteries · two archetypes · four stats · nothing hand-set')).toBeTruthy();
     // Everyone is scored by the same rules: no authored card lines here.
     expect(screen.queryByText('Designs systems that continue working when he leaves the room.')).toBeNull();
     const result = buildResult(RYAN_INTAKE, RYAN_ALLOCATION, TREES, ARCHETYPES);

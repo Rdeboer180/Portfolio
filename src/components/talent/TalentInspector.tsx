@@ -1,7 +1,7 @@
 // ============================================
 // Talent console: the inspector
-// Where a node is read. On a desktop it is a rail under the trees that
-// prints whatever is hovered, focused, or pinned: the name, the level, the
+// Where a node is read. From 1024 up it is a card floating beside whatever
+// is hovered, focused, or pinned: the name, the level as five dots, the
 // tier and tree, the meaning, the gate in words, and the trait the node
 // feeds; in build mode the minus and plus that spend on it. On a phone the
 // same facts arrive as a bottom sheet (a dialog, opened by a tap, closed by
@@ -9,11 +9,12 @@
 // with the legend folded in because the legend rail is hidden there.
 //
 // The node button already carries its own accessible name and description,
-// so the rail is the sighted reader's copy of the same facts; the sheet is a
-// real dialog because on a phone it is the only place the controls live.
+// so the card is the sighted reader's copy of the same facts (aria-hidden
+// presentation; the node stays the focus target); the sheet is a real
+// dialog because on a phone it is the only place the controls live.
 // ============================================
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Allocation, TalentNode, TalentTree } from '../../data/talent/types';
 import { TRAIT_LABEL } from '../../data/talent/types';
 import { CROWN_UNLOCK_AT, MAX_POINTS_PER_NODE, isLocked } from '../../data/talent/economy';
@@ -55,13 +56,16 @@ const Spend: React.FC<{
   canAdd: boolean;
   onAdd: (id: string) => void;
   onRemove: (id: string) => void;
-  size?: 'rail' | 'sheet';
-}> = ({ node, points, locked, canAdd, onAdd, onRemove, size = 'rail' }) => (
+  size?: 'card' | 'sheet';
+}> = ({ node, points, locked, canAdd, onAdd, onRemove, size = 'card' }) => (
+  // On the card (aria-hidden presentation) the two controls are pointer-only:
+  // the node button is the focus target and spends from the keyboard itself.
   <div className={`tt-spend tt-spend--${size}`}>
     <button
       type="button"
       className="tt-spend__btn"
       aria-label={`Remove a point from ${node.name}`}
+      tabIndex={size === 'card' ? -1 : undefined}
       onClick={() => onRemove(node.id)}
       disabled={points <= 0}
     >
@@ -75,6 +79,7 @@ const Spend: React.FC<{
       type="button"
       className="tt-spend__btn tt-spend__btn--add"
       aria-label={`Add a point to ${node.name}`}
+      tabIndex={size === 'card' ? -1 : undefined}
       onClick={() => onAdd(node.id)}
       disabled={locked || !canAdd}
     >
@@ -83,7 +88,7 @@ const Spend: React.FC<{
   </div>
 );
 
-/** The legend's seven states, drawn as swatches. */
+/** The legend's seven states, drawn as swatches, and (on the rail) the level mark that is always on the node. */
 export const Legend: React.FC<{ compact?: boolean }> = ({ compact }) => (
   <ul className={`tt-legend__scale${compact ? ' tt-legend__scale--compact' : ''}`} aria-label="Node scale">
     {['unspent', 'locked', '1', '2', '3', '4', 'mastered'].map((k) => (
@@ -92,45 +97,109 @@ export const Legend: React.FC<{ compact?: boolean }> = ({ compact }) => (
         <span className="tt-legend__text">{k}</span>
       </li>
     ))}
+    {!compact && (
+      <li className="tt-legend__item tt-legend__item--count">
+        <span className="tt-legend__divider" aria-hidden="true" />
+        <span className="tt-legend__badge" aria-hidden="true">4</span>
+        <span className="tt-legend__text">Points in the node, always on</span>
+      </li>
+    )}
   </ul>
 );
 
-// ── The rail ─────────────────────────────────────────────────────────────────
+// ── The node card ────────────────────────────────────────────────────────────
+// A floating card anchored to the hovered, focused, or pinned node, from
+// 1024 up. Its place is computed in a layout effect from the node's box
+// relative to the console, so nothing is measured in render and the card is
+// never in the prerendered HTML (nothing is hovered there). Rules: the card
+// sits 34px to the right of the node's centre (22px of node, 12px of air),
+// its caret level with the node; when its right edge would pass the
+// console's, it flips to the left; when neither side fits, it drops below
+// the node with the caret on top. Presentation only, aria-hidden: the node
+// button already carries the name, the level, and the meaning.
 
-export const InspectorRail: React.FC<InspectorProps> = ({
-  selected, pinned, allocation, spends, dormant, canAdd, onAdd, onRemove, touch,
-}) => {
-  if (!selected) {
-    let hint: string;
-    if (dormant) hint = 'Answer the three questions above and the trees power up';
-    else if (touch) hint = 'Tap a node for its level and gate';
-    else if (spends) hint = 'Hover a node for its level and gate · click to spend a point · Shift-click takes one back';
-    else hint = 'Hover a node for its level and gate';
-    return (
-      <div className="tt-inspector" data-state="idle">
-        <span className="tt-inspector__key">Inspector</span>
-        <span className="tt-inspector__hint">{hint}</span>
-      </div>
-    );
+export type CardPlace = 'right' | 'left' | 'below';
+
+export interface CardPosition {
+  left: number;
+  top: number;
+  place: CardPlace;
+}
+
+export const CARD_WIDTH = 280;
+/** Node centre to the card's near edge: the 44px node's radius plus 12px of air. */
+export const CARD_GAP = 34;
+/** The caret's centre from the card's top edge (10px in, 12px wide). */
+const CARET_Y = 16;
+const EDGE = 8;
+
+/** Where the card goes for a node box, both rects in the same frame. */
+export function placeCard(node: DOMRect, host: DOMRect): CardPosition {
+  const cx = node.left + node.width / 2 - host.left;
+  const cy = node.top + node.height / 2 - host.top;
+  const rightLeft = cx + CARD_GAP;
+  if (rightLeft + CARD_WIDTH <= host.width - EDGE) {
+    return { left: Math.round(rightLeft), top: Math.round(cy - CARET_Y), place: 'right' };
   }
+  const leftLeft = cx - CARD_GAP - CARD_WIDTH;
+  if (leftLeft >= EDGE) {
+    return { left: Math.round(leftLeft), top: Math.round(cy - CARET_Y), place: 'left' };
+  }
+  const below = Math.max(EDGE, Math.min(cx - CARD_WIDTH / 2, host.width - EDGE - CARD_WIDTH));
+  return { left: Math.round(below), top: Math.round(cy + CARD_GAP), place: 'below' };
+}
+
+export interface NodeCardProps extends Omit<InspectorProps, 'pinned' | 'touch'> {
+  /** The console element the card is positioned in. */
+  hostRef: React.RefObject<HTMLElement | null>;
+  /** The DOM id of the node button the card is anchored to. */
+  anchorId: string;
+}
+
+export const NodeCard: React.FC<NodeCardProps> = ({
+  selected, allocation, spends, canAdd, onAdd, onRemove, hostRef, anchorId,
+}) => {
+  const [pos, setPos] = useState<CardPosition | null>(null);
+
+  useLayoutEffect(() => {
+    const host = hostRef.current;
+    const anchor = document.getElementById(anchorId);
+    if (!host || !anchor) {
+      setPos(null);
+      return;
+    }
+    setPos(placeCard(anchor.getBoundingClientRect(), host.getBoundingClientRect()));
+  }, [hostRef, anchorId]);
+
+  if (!selected || !pos) return null;
   const { node, tree } = selected;
   const points = pointsAt(allocation, node.id);
   const locked = isLocked(allocation, node.id);
   const trait = nodeLeadTrait(node);
+  const style = { left: `${pos.left}px`, top: `${pos.top}px`, width: `${CARD_WIDTH}px` } as React.CSSProperties;
   return (
-    <div className="tt-inspector" data-state={pinned ? 'selected' : 'hover'}>
-      <span className="tt-inspector__key">
-        {`Inspector · ${pinned ? 'selected' : 'hover'}`}
-      </span>
-      <span className="tt-inspector__glyph" aria-hidden="true"><Glyph name={node.glyph} size={16} /></span>
-      <span className="tt-inspector__name">{node.name}</span>
-      <span className="tt-inspector__level">
-        {`${points} / ${MAX_POINTS_PER_NODE} · ${node.tier} · ${tree.name}`}
-      </span>
-      <span className="tt-inspector__meaning">{node.meaning}</span>
-      <span className="tt-inspector__gate">
-        {`${gateLine(allocation, node)} · feeds ${TRAIT_LABEL[trait]}`}
-      </span>
+    <div className={`tt-nodecard tt-nodecard--${pos.place}`} style={style} aria-hidden="true" data-testid="tt-nodecard">
+      <span className="tt-nodecard__caret" />
+      <div className="tt-nodecard__head">
+        <span className="tt-nodecard__glyph"><Glyph name={node.glyph} size={18} /></span>
+        <span className="tt-nodecard__name">{node.name}</span>
+      </div>
+      <div className="tt-nodecard__level">
+        <span className="tt-nodecard__dots">
+          {Array.from({ length: MAX_POINTS_PER_NODE }, (_, i) => (
+            <span key={i} className={`tt-nodecard__dot${i < points ? ' is-on' : ''}`} />
+          ))}
+        </span>
+        <span>
+          <span className="tt-nodecard__n">{`${points} / ${MAX_POINTS_PER_NODE}`}</span>
+          {` · ${node.tier} · ${shortTreeName(tree.id)}`}
+        </span>
+      </div>
+      <p className="tt-nodecard__meaning">{node.meaning}</p>
+      <p className="tt-nodecard__gate">
+        {`${gateLine(allocation, node)} · feeds `}
+        <span className="tt-nodecard__n">{TRAIT_LABEL[trait]}</span>
+      </p>
       {spends && (
         <Spend
           node={node}
@@ -139,6 +208,7 @@ export const InspectorRail: React.FC<InspectorProps> = ({
           canAdd={canAdd(node.id)}
           onAdd={onAdd}
           onRemove={onRemove}
+          size="card"
         />
       )}
     </div>
