@@ -151,7 +151,7 @@ const TalentCard: React.FC<{ data: CardData }> = ({ data }) => (
       <div className="tt-card__mini">
         <MiniTrees trees={data.trees} />
         <span className="tt-card__mini-text">
-          {`${data.trees.length} trees · ${data.areaCount} areas · ${data.masteredCount} mastered`}
+          {`${data.trees.length} lanes · ${data.areaCount} areas · ${data.masteredCount} mastered · ${data.abilityCount} abilities`}
         </span>
       </div>
       <span className="tt-card__url">{data.url}</span>

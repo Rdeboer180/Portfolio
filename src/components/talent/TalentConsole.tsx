@@ -65,7 +65,8 @@ import type { CopyState } from './TalentSummary';
 import { nodeDomId } from './TalentNodeButton';
 import { COLUMN, ROW, nodeVars } from './geometry';
 import type { LayoutSpec } from './geometry';
-import { pointsAt, receiptText, shortTreeName, treeStats } from './consoleData';
+import { TREE_TAGLINE, pointsAt, receiptText, shortTreeName, treeStats } from './consoleData';
+import TalentForge from './TalentForge';
 import { useMediaQuery } from './useMediaQuery';
 
 export type ConsoleMode = 'ryan' | 'build';
@@ -198,6 +199,9 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   const [assembled, setAssembled] = useState(false);
   // Compare with Ryan: local, off by default, never in the URL.
   const [compare, setCompare] = useState(false);
+  // The Forge: the recipe currently up, from a hover or a click.
+  const [forgeHover, setForgeHover] = useState<string | null>(null);
+  const [forgePin, setForgePin] = useState<string | null>(null);
   const interacted = useRef(false);
   const pinnedEl = useRef<HTMLButtonElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -225,8 +229,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   const dormant = own && !live;
   const stats = useMemo(() => treeStats(allocation), [allocation]);
   const left = useMemo(() => remaining(allocation, pools, TREES), [allocation, pools]);
-  const unspent = left.craftLocked + left.systemsLocked + left.free + left.core;
-  const spentTotal = stats.craft.spent + stats.systems.spent + stats.core.spent;
+  const unspent = left.designLocked + left.codeLocked + left.free;
+  const spentTotal = stats.design.spent + stats.technical.spent + stats.code.spent;
   const anySpent = spentTotal > 0;
   const showCard = !own || revealed || (live && unspent === 0 && anySpent);
   const result = useMemo(
@@ -235,6 +239,22 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   );
   const shareUrl = useMemo(() => buildShareUrl(effIntake, allocation), [effIntake, allocation]);
   const classLabel = `${result.primary.name} / ${result.secondary.name}`;
+  const unlockedCount = result.abilities.filter((a) => a.unlocked).length;
+
+  // The recipe the Forge is holding up: node id to its minimum, so a lit node
+  // can print level over minimum on its badge.
+  const forgeId = forgeHover || forgePin;
+  const lit = useMemo(() => {
+    if (!forgeId) return null;
+    const state = result.abilities.find((a) => a.ability.id === forgeId);
+    if (!state) return null;
+    const map: Record<string, number> = {};
+    state.levels.forEach((l) => { map[l.nodeId] = l.min; });
+    return map;
+  }, [forgeId, result.abilities]);
+
+  const onForgeHover = useCallback((id: string | null) => setForgeHover(id), []);
+  const onForgePin = useCallback((id: string) => setForgePin((cur) => (cur === id ? null : id)), []);
 
   const selected: InspectorNode | null = useMemo(() => {
     const id = hoverId || pinnedId;
@@ -355,6 +375,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
     if (e.key === 'Escape' && !sheetOpen) {
       setPinnedId(null);
       setHoverId(null);
+      setForgePin(null);
+      setForgeHover(null);
     }
   }, [sheetOpen]);
 
@@ -474,22 +496,17 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   // The locked parts still to spend, shown beside a lock until they are.
   const lockedLine = (() => {
     const parts: string[] = [];
-    if (left.craftLocked > 0) parts.push(`${left.craftLocked} craft`);
-    if (left.systemsLocked > 0) parts.push(`${left.systemsLocked} systems`);
+    if (left.designLocked > 0) parts.push(`${left.designLocked} design`);
+    if (left.codeLocked > 0) parts.push(`${left.codeLocked} code`);
     return parts.join(' · ');
   })();
 
   const treeMeta = (tree: TalentTree): string => {
     const s = stats[tree.id];
     if (!own) {
-      return tree.pool === 'core'
-        ? `Root ${tree.root.name} · ${s.spent} core points · ${s.mastered} mastered`
-        : `Root ${tree.root.name} · ${s.spent} points · ${s.mastered} mastered`;
+      return `Root ${tree.root.name} · ${s.spent} points · ${s.mastered} mastered`;
     }
-    if (tree.pool === 'core') {
-      return `Root ${tree.root.name} · ${s.spent} of ${pools.core} core spent · ${s.mastered} mastered`;
-    }
-    const lockedHere = tree.id === 'craft' ? left.craftLocked : tree.id === 'systems' ? left.systemsLocked : 0;
+    const lockedHere = tree.id === 'design' ? left.designLocked : tree.id === 'code' ? left.codeLocked : 0;
     const base = `Root ${tree.root.name} · ${s.spent} spent · ${s.mastered} mastered`;
     return lockedHere > 0 ? `${base} · ${lockedHere} locked here` : base;
   };
@@ -503,12 +520,13 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
   ].filter(Boolean).join(' ');
 
   const nodeCount = TREES.reduce((acc, t) => acc + t.areas.length * 2, 0);
-  const totalPoints = pools.craft + pools.core;
+  const totalPoints = pools.total;
 
   let legendHint: string;
   if (dormant) legendHint = 'Answer the three questions above and the trees power up';
   else if (own) legendHint = 'Hover a node for its meaning and gate · click spends a point · Shift-click takes one back';
   else legendHint = 'Hover a node for its meaning and gate · the card sits on the node';
+  const forgeHint = 'Hover an ability to light its recipe · the badge prints level over minimum';
 
   return (
     <>
@@ -521,12 +539,11 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
             <span className="tt-status__name">{own ? 'Build your own' : 'Talent tree'}</span>
             {!own && <span className="tt-status__name-sub">{" · Ryan's tree"}</span>}
           </span>
-          <ul className="tt-status__trees" aria-label="Points per tree">
+          <ul className="tt-status__trees" aria-label="Points per lane">
             {TREES.map((tree) => (
               <li key={tree.id} className="tt-status__tree">
-                <span className="tt-status__tree-name">{shortTreeName(tree.id)}</span>
+                <span className="tt-status__tree-name">{tree.name}</span>
                 <span className="tt-status__n">{stats[tree.id].spent}</span>
-                <span className="tt-status__sub">{`· ${stats[tree.id].mastered} mastered`}</span>
               </li>
             ))}
           </ul>
@@ -534,9 +551,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
             {own ? (
               live ? (
                 <>
-                  <span className="tt-status__sub">Unspent</span>
-                  <span className="tt-status__n">{left.craftLocked + left.systemsLocked + left.free}</span>
-                  <span className="tt-status__sub">craft</span>
+                  <span className="tt-status__n">{`${spentTotal} / ${totalPoints}`}</span>
+                  <span className="tt-status__sub">{`spent · ${unspent} unspent`}</span>
                   {lockedLine && (
                     <span className="tt-status__lock">
                       <span className="tt-status__lock-glyph" aria-hidden="true" />
@@ -544,17 +560,15 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
                       {lockedLine}
                     </span>
                   )}
-                  <span className="tt-status__sub">·</span>
-                  <span className="tt-status__n">{left.core}</span>
-                  <span className="tt-status__sub">core</span>
+                  <span className="tt-status__sub">{`· ${stats.design.mastered + stats.technical.mastered + stats.code.mastered} mastered · ${unlockedCount} abilities`}</span>
                 </>
               ) : (
                 <span className="tt-status__sub">Unspent · after the intake</span>
               )
             ) : (
               <>
-                <span className="tt-status__n">{`${spentTotal} / ${pools.craft + pools.core}`}</span>
-                <span className="tt-status__sub">{`spent · ${unspent} unspent`}</span>
+                <span className="tt-status__n">{`${spentTotal} / ${totalPoints}`}</span>
+                <span className="tt-status__sub">{`spent · ${result.mastered.length} mastered · ${unlockedCount} abilities`}</span>
               </>
             )}
           </p>
@@ -592,14 +606,13 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
           <TalentIntakeStrip
             intake={intake}
             answered={answered}
-            craft={pools.craft}
-            core={pools.core}
+            total={pools.total}
             level={pools.level}
             onChange={changeIntake}
           />
           {live && (
             <TalentLedger
-              key={`${pools.craftLocked}-${pools.systemsLocked}-${pools.free}-${pools.core}`}
+              key={`${pools.designLocked}-${pools.codeLocked}-${pools.free}`}
               pools={pools}
               left={left}
             />
@@ -609,8 +622,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
         <div className="tt-header tt-story">
           <div className="tt-story__id">
             <h1 className="tt-story__title">{"Ryan's tree"}</h1>
-            <p className="tt-story__meta">{`Level ${pools.level} Designer · ${pools.craft} craft · ${pools.core} core`}</p>
-            <p className="tt-story__class">{classLabel}</p>
+            <p className="tt-story__meta">{`Level ${pools.level} Designer · ${pools.total} points · one pool`}</p>
+            <p className="tt-story__class">{`Class ${classLabel} · by recipe`}</p>
           </div>
           <div className="tt-story__text">
             <p className="tt-story__body">{STORY}</p>
@@ -637,7 +650,7 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
       )}
 
       {/* ── The trees ─────────────────────────────────────────────────────── */}
-      <div className="tt-trees">
+      <div className={`tt-trees${lit ? ' is-forge' : ''}`}>
         {TREES.map((tree, ti) => (
           <div
             key={tree.id}
@@ -648,7 +661,10 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
           >
             <div className="tt-tree-head">
               <div className="tt-tree-head__row">
-                <h2 className="tt-tree-head__name">{tree.name}</h2>
+                <h2 className="tt-tree-head__name">
+                  {tree.name}
+                  <span className="tt-tree-head__tagline">{` · ${TREE_TAGLINE[tree.id]}`}</span>
+                </h2>
                 {own && (
                   <button
                     type="button"
@@ -676,6 +692,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
                       treeIndex={ti}
                       points={fp}
                       locked={false}
+                      lit={lit ? lit[foundation.id] : undefined}
+                      receded={!!lit && lit[foundation.id] === undefined}
                       compare={compare ? pointsAt(RYAN_ALLOCATION, foundation.id) : undefined}
                       editable={own}
                       dormant={dormant}
@@ -692,6 +710,8 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
                       treeIndex={ti}
                       points={pointsAt(allocation, crown.id)}
                       locked={isLocked(allocation, crown.id)}
+                      lit={lit ? lit[crown.id] : undefined}
+                      receded={!!lit && lit[crown.id] === undefined}
                       foundationName={foundation.name}
                       compare={compare ? pointsAt(RYAN_ALLOCATION, crown.id) : undefined}
                       editable={own}
@@ -742,19 +762,29 @@ const TalentConsole: React.FC<TalentConsoleProps> = ({ mode }) => {
       <div className="tt-legend" id="tt-rules">
         <div className="tt-legend__row">
           <Legend />
-          <p className="tt-legend__note">{legendHint}</p>
+          <p className="tt-legend__note">{lit ? forgeHint : legendHint}</p>
         </div>
         <p className="tt-legend__rules">
           <span className="tt-legend__rules-key">How the points work</span>
-          {` · crown unlocks at foundation ${CROWN_UNLOCK_AT} · degree 4 a year, locked to its tree · years 4 a year to three, then 2 · hours 1 per 40, cap 5 · core 2 a year to five, then 1 · level = years`}
+          {` · crown unlocks at foundation ${CROWN_UNLOCK_AT} · degree 4 a year, locked to its lane · years 4 a year to three, then 2 · hours 1 per 40, cap 5 · one pool · level = years`}
         </p>
       </div>
+
+      {/* ── The Forge rail ────────────────────────────────────────────────── */}
+      <TalentForge
+        abilities={result.abilities}
+        activeId={forgeId}
+        pinnedId={forgePin}
+        onHover={onForgeHover}
+        onPin={onForgePin}
+        phone={isPhone}
+      />
 
       {/* ── Closing rail: the console ends here, the summary is on paper ─── */}
       <div className="tt-closing">
         <span className="tt-closing__left">
           <span className="tt-closing__key">End of the trees</span>
-          {` · ${nodeCount} nodes · ${live ? `${spentTotal} / ${totalPoints}` : spentTotal} spent`}
+          {` · ${nodeCount} nodes · ${live ? `${spentTotal} / ${totalPoints}` : spentTotal} spent · ${unlockedCount} abilities`}
         </span>
         <span className="tt-closing__right">The summary continues on paper ↓</span>
       </div>

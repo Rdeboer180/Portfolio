@@ -5,6 +5,8 @@
 // ============================================
 
 import type {
+  Ability,
+  AbilityState,
   Allocation,
   Archetype,
   Degree,
@@ -20,6 +22,7 @@ import type {
 import { TRAITS } from './types';
 import { NODE_LIST, TREES } from './trees';
 import { computePools, normalizeAllocation, sanitizeHours, sanitizeSplit, sanitizeYears, splitOf, withinPools } from './economy';
+import { ABILITIES, evaluateAbilities, pickClass } from './forge';
 
 // ── Trait scores ────────────────────────────────────────────────────────────
 //
@@ -238,12 +241,21 @@ export function buildResult(
   trees: TalentTree[] = TREES,
   archetypes: Archetype[],
   overrides?: ResultOverrides,
+  abilities: Ability[] = ABILITIES,
 ): TalentResult {
   const pools = computePools(intake);
   const clean = normalizeAllocation(allocation);
   const analysis = analyzeTraits(clean, trees);
   const traits = analysis.scores;
-  const { primary, secondary } = pickArchetypes(traits, archetypes);
+
+  // The class comes from the Forge now: the two strongest unlocked abilities
+  // from different families. The traits stay for the card's stat bars.
+  const states = evaluateAbilities(clean, abilities, trees);
+  const { primary: primaryState, secondary: secondaryState, provisional } = pickClass(states);
+  const byId = (id: string) => archetypes.find((a) => a.id === id);
+  const fallback = pickArchetypes(traits, archetypes);
+  const primary = byId(primaryState.ability.archetypeId) || fallback.primary;
+  const secondary = byId(secondaryState.ability.archetypeId) || fallback.secondary;
 
   const mastered = nodesOf(trees)
     .filter((n) => pointsAt(clean, n.id) === 5)
@@ -264,25 +276,29 @@ export function buildResult(
     primary,
     secondary,
     description: describe(primary, secondary),
-    passive: (overrides && overrides.passive) || primary.passive,
-    quest: (overrides && overrides.quest) || primary.quest,
+    passive: (overrides && overrides.passive) || primaryState.ability.passive || primary.passive,
+    quest: (overrides && overrides.quest) || primaryState.ability.quest || primary.quest,
     mastered,
+    abilities: states,
+    provisional,
   };
 }
 
+export type { AbilityState };
+
 // ── Share link ──────────────────────────────────────────────────────────────
 //
-// Layout: <degree letter><major letter><minor letter><years>[d<split>].<hours
+// Layout: "v5" + <degree letter><major letter><minor letter><years>[d<split>].<hours
 // band>.<one base-6 digit per node, in TREES order>.<name, URL-encoded>.
 // Everything before the name is fixed-shape, so the name may contain any
 // character. Example:
-//   bgw16.5.533130205255545243425434302000.Ryan%20DeBoer
+//   v5bgw16.5.533130205255545243425434302000.Ryan%20DeBoer
 // The split token is optional and sits on the years: "16d70" is 16 years, 70
 // percent design. A string without it decodes to an intake with no split
 // (years free), so links made before the split rule still open.
-//   bgw16d70.5.533130205255545243425434302000.Ryan%20DeBoer
-// The format before the degree rule (b16.5.<digits>.<name>) has no major and
-// minor letters and decodes to null.
+//   v5bgw16d70.5.533130205255545243425434302000.Ryan%20DeBoer
+// Every format before v5 (no prefix, and a different set of thirty nodes)
+// decodes to null: the taxonomy changed, so an old link cannot be read.
 
 const DEGREE_LETTER: Record<Degree, string> = {
   none: 'n',
@@ -297,6 +313,8 @@ const LETTER_MAJOR: Record<string, Major> = { g: 'graphic', w: 'web', o: 'other'
 const MINOR_LETTER: Record<Minor, string> = { none: 'n', graphic: 'g', web: 'w' };
 const LETTER_MINOR: Record<string, Minor> = { n: 'none', g: 'graphic', w: 'web' };
 const NAME_MAX = 60;
+/** Bumped whenever the node set changes, so links from an older tree decode to null. */
+export const STATE_VERSION = 'v5';
 
 export function encodeState(intake: Intake, allocation: Allocation): string {
   const degree = DEGREE_LETTER[intake.degree] || 'n';
@@ -308,7 +326,7 @@ export function encodeState(intake: Intake, allocation: Allocation): string {
   const hours = sanitizeHours(intake.hours);
   const digits = NODE_LIST.map((n) => String(pointsAt(allocation, n.id))).join('');
   const name = encodeURIComponent((intake.name || '').trim().slice(0, NAME_MAX));
-  return `${degree}${major}${minor}${years}${splitToken}.${hours}.${digits}.${name}`;
+  return `${STATE_VERSION}${degree}${major}${minor}${years}${splitToken}.${hours}.${digits}.${name}`;
 }
 
 /**
@@ -321,7 +339,7 @@ export function encodeState(intake: Intake, allocation: Allocation): string {
  */
 export function decodeState(value: string): { intake: Intake; allocation: Allocation } | null {
   if (typeof value !== 'string') return null;
-  const re = new RegExp(`^([nsabm])([gwo])([ngw])(\\d{1,2})(?:d(\\d{1,3}))?\\.([0-5])\\.([0-5]{${NODE_LIST.length}})\\.([\\s\\S]*)$`);
+  const re = new RegExp(`^${STATE_VERSION}([nsabm])([gwo])([ngw])(\\d{1,2})(?:d(\\d{1,3}))?\\.([0-5])\\.([0-5]{${NODE_LIST.length}})\\.([\\s\\S]*)$`);
   const m = re.exec(value.trim());
   if (!m) return null;
 

@@ -25,9 +25,9 @@ export const TRAIT_LABEL: Record<Trait, string> = {
   ai: 'AI',
 };
 
-export type TreeId = 'craft' | 'systems' | 'core';
-/** Which pool a tree spends from. Craft points cover two trees; core points cover one. */
-export type Pool = 'craft' | 'core';
+export type TreeId = 'design' | 'technical' | 'code';
+/** One pool now. Every tree spends from it; the locks inside it decide where the points may land. */
+export type Pool = 'points';
 export type Tier = 'foundation' | 'crown';
 
 export interface TalentNode {
@@ -78,8 +78,8 @@ export type Allocation = Record<string, number>;
 export type Degree = 'none' | 'self-taught' | 'associate' | 'bachelors' | 'masters';
 /**
  * What the degree was in. 'graphic' (graphic or visual design) locks the
- * degree's points to the Craft tree; 'web' (web or interactive) locks them
- * to the Systems and build tree; 'other' (a degree outside a design craft)
+ * degree's points to the Design and systems tree; 'web' (web or interactive)
+ * locks them to the Code tree; 'other' (a degree outside a design craft)
  * counts the same as self-taught: 8 points, free. Ignored when the degree
  * is 'none' or 'self-taught'.
  */
@@ -102,9 +102,8 @@ export interface Intake {
    * Asked once the years are known: the share of those years that went to
    * design rather than code, as a percent, 0..100 in steps of 10 (Ryan's
    * rule, 2026-09-11). When set, the years points are locked across the two
-   * trees by this share: the design share to the Craft tree, the rest to the
-   * Systems and build tree. When absent, the years points are free on either
-   * tree, exactly as before the rule.
+   * locked trees by this share: the design share to Design and systems, the
+   * rest to Code. When absent, the years points are free on any tree.
    */
   split?: number;
   hours: HoursBand;
@@ -116,20 +115,19 @@ export interface ReceiptLine {
   label: string;
   note: string;
   pool: Pool;
-  /** Set when the line's points may only be spent on one tree. Absent means free within the pool. */
+  /** Set when the line's points may only be spent on one tree. Absent means free. */
   lockedTo?: TreeId;
 }
 
 export interface Pools {
-  /** The TOTAL craft pool: craftLocked + systemsLocked + free. Spent on the Craft and Systems trees. */
-  craft: number;
-  /** The part of `craft` that may only go on the Craft tree (the degree or minor in graphic design, and the design share of the years when the intake splits them). */
-  craftLocked: number;
-  /** The part of `craft` that may only go on the Systems and build tree (the degree or minor in web, and the code share of the years when the intake splits them). */
-  systemsLocked: number;
-  /** The part of `craft` that may go on either tree (self-taught, other field, years without a split, hours). */
+  /** The whole pool: designLocked + codeLocked + free. */
+  total: number;
+  /** The part that may only go on the Design and systems tree (a graphic design degree or minor, and the design share of the years). */
+  designLocked: number;
+  /** The part that may only go on the Code tree (a web degree or minor, and the code share of the years). */
+  codeLocked: number;
+  /** The part that may go on any tree (self-taught, another field, years without a split, hours). */
   free: number;
-  core: number;
   /** Level is years of professional experience. */
   level: number;
   /** The receipt lines, in order, for the intake tally. */
@@ -175,6 +173,38 @@ export interface Archetype {
   quest: string;
 }
 
+/**
+ * A recipe over node levels. Abilities are unlocked, never spent: the points
+ * stay on the nodes and the ability reads them.
+ */
+export interface Ability {
+  /** kebab-case id, unique across the forge. */
+  id: string;
+  /** The archetype the copy comes from (name, line, passive, quest live there). */
+  archetypeId: string;
+  /** The forge name, which may differ from the archetype name ("Lossless Handoff"). */
+  name: string;
+  family: Family;
+  /** Every node that has to hold at least `min` points. */
+  formula: { nodeId: string; min: number }[];
+  /** One sentence. Falls back to the archetype's line when absent. */
+  line?: string;
+  /** Card: PASSIVE ABILITY. Falls back to the archetype's passive. */
+  passive?: string;
+  /** Card: CURRENT QUEST. Falls back to the archetype's quest. */
+  quest?: string;
+}
+
+export interface AbilityState {
+  ability: Ability;
+  unlocked: boolean;
+  /** Sum of (level over min) across the recipe, 0 when locked. */
+  strength: number;
+  /** Points away from unlocking, 0 when unlocked. */
+  missing: number;
+  levels: { nodeId: string; level: number; min: number }[];
+}
+
 export interface TalentResult {
   intake: Intake;
   pools: Pools;
@@ -192,4 +222,8 @@ export interface TalentResult {
   quest: string;
   /** Node ids at 5 points. */
   mastered: string[];
+  /** Every ability, sorted: unlocked first, then by strength, then by family order. */
+  abilities: AbilityState[];
+  /** True when fewer than two abilities are unlocked and the class is filled from the nearest. */
+  provisional: boolean;
 }

@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
 import type { Allocation, TalentArea, TalentNode, TalentTree } from '../data/talent/types';
-import { TREES, treeOf } from '../data/talent/trees';
+import { TREES } from '../data/talent/trees';
 import { glyph } from '../data/talent/glyphs';
 import { MAX_POINTS_PER_NODE, computePools, isLocked, treeSpend } from '../data/talent/economy';
 import { ARCHETYPES } from '../data/talent/archetypes';
@@ -33,8 +33,7 @@ const RESULT = buildResult(RYAN_INTAKE, RYAN_ALLOCATION, TREES, ARCHETYPES, RYAN
 const POOLS = computePools(RYAN_INTAKE);
 const TREE_POINTS = treeSpend(RESULT.allocation, TREES);
 
-const MASTERED_CRAFT = RESULT.mastered.filter((id) => treeOf(id)?.pool === 'craft');
-const MASTERED_CORE = RESULT.mastered.filter((id) => treeOf(id)?.pool === 'core');
+const UNLOCKED = RESULT.abilities.filter((a) => a.unlocked);
 
 const NODE_NAMES: Record<string, string> = {};
 TREES.forEach((tree) => tree.areas.forEach((a) => a.nodes.forEach((n) => { NODE_NAMES[n.id] = n.name; })));
@@ -290,8 +289,7 @@ const SkillMastery: React.FC = () => {
 
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
 
-  const craftMasteries = MASTERED_CRAFT.map(nameOf).join(' · ');
-  const coreMasteries = MASTERED_CORE.map(nameOf).join(' · ');
+  const masteries = RESULT.mastered.map(nameOf).join(' · ');
 
   return (
     <section id="mastery" className="sm">
@@ -302,7 +300,7 @@ const SkillMastery: React.FC = () => {
           </div>
 
           <p className="sm__eyebrow reveal-fade" style={delay(0)}>
-            {`Current class · earned from ${POOLS.craft} craft points and ${POOLS.core} core points`}
+            {`Current class · earned by recipe from ${POOLS.total} points`}
           </p>
           <div className="sm__title-row reveal-fade" style={delay(80)}>
             <h2 className="sm__title">
@@ -342,8 +340,8 @@ const SkillMastery: React.FC = () => {
               decorative and hidden. */}
           <div className="sm__mini reveal-fade" style={delay(0)}>
             <div className="sm__mini-head">
-              <span>{`Ryan's tree · ${TREES.length} trees · ${RESULT.pointsSpent} points spent`}</span>
-              <span>{`${MASTERED_CRAFT.length} craft masteries · ${MASTERED_CORE.length} core · ${MAX_POINTS_PER_NODE} points each`}</span>
+              <span>{`Ryan's tree · ${TREES.length} lanes · ${RESULT.pointsSpent} points spent`}</span>
+              <span>{`${RESULT.mastered.length} masteries at ${MAX_POINTS_PER_NODE} points · ${UNLOCKED.length} abilities`}</span>
             </div>
             <div className="sm__mini-trees">
               {TREES.map((tree) => (
@@ -353,11 +351,7 @@ const SkillMastery: React.FC = () => {
             <div className="sm__mini-foot">
               <span className="sm__mini-dot" aria-hidden="true" />
               <span className="sm__mini-label">Mastered</span>
-              <span className="sm__mini-list">
-                {craftMasteries}
-                {coreMasteries && <span className="sm__mini-core"> · core </span>}
-                {coreMasteries}
-              </span>
+              <span className="sm__mini-list">{masteries}</span>
             </div>
           </div>
 

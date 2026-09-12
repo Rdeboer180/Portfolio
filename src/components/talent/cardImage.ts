@@ -335,7 +335,7 @@ function draw(ctx: Ctx, d: CardData) {
   ctx.font = `400 11px ${MONO}`;
   drawTracked(
     ctx,
-    `${d.trees.length} TREES · ${d.areaCount} AREAS · ${d.masteredCount} MASTERED`,
+    `${d.trees.length} LANES · ${d.areaCount} AREAS · ${d.masteredCount} MASTERED · ${d.abilityCount} ABILITIES`,
     left + 206 + 14,
     by - 4,
     11 * 0.08,

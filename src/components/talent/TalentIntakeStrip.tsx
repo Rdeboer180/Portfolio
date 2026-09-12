@@ -14,7 +14,6 @@
 import React from 'react';
 import type { Degree, HoursBand, Intake, Major, Minor, TreeId } from '../../data/talent/types';
 import {
-  CORE_NOTE,
   DEGREE_OPTIONS,
   HOURS_NOTE,
   HOURS_OPTIONS,
@@ -22,7 +21,6 @@ import {
   MINOR_OPTIONS,
   SPLIT_OPTIONS,
   YEARS_NOTE,
-  corePoints,
   degreeOption,
   degreePoints,
   degreeTakesMajor,
@@ -76,7 +74,7 @@ export interface ReceiptChip {
   question: IntakeQuestion;
 }
 
-const TREE_SHORT: Record<TreeId, string> = { craft: 'craft', systems: 'systems', core: 'core' };
+const TREE_SHORT: Record<TreeId, string> = { design: 'design', technical: 'technical', code: 'code' };
 
 /** The receipt chips the strip prints, one per answered rule. */
 export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
@@ -107,10 +105,9 @@ export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
       chips.push({ key: 'years', question: 'years', text: `+${yearsPoints(years)} · ${label}` });
     } else {
       const ys = yearsSplit(years, split);
-      chips.push({ key: 'years-design', question: 'years', text: `+${ys.craft} craft, locked · ${label}, design` });
-      chips.push({ key: 'years-code', question: 'years', text: `+${ys.systems} systems, locked · ${label}, code` });
+      chips.push({ key: 'years-design', question: 'years', text: `+${ys.design} design, locked · ${label}, design` });
+      chips.push({ key: 'years-code', question: 'years', text: `+${ys.code} code, locked · ${label}, code` });
     }
-    chips.push({ key: 'core', question: 'years', text: `+${corePoints(years)} core` });
   }
   if (answered.hours) {
     const hours = HOURS_OPTIONS[intake.hours] || HOURS_OPTIONS[0];
@@ -122,9 +119,8 @@ export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
 export interface TalentIntakeStripProps {
   intake: Intake;
   answered: Answered;
-  /** The pools the effective intake earns, for the tally. */
-  craft: number;
-  core: number;
+  /** The whole pool the effective intake earns, for the tally. */
+  total: number;
   level: number;
   onChange: (patch: Partial<Intake>, answers?: IntakeQuestion) => void;
 }
@@ -134,7 +130,7 @@ const NO_SPLIT = -1;
 const HOURS_SHORT = ['< 40', '40+', '80+', '120+', '160+', '200+'];
 
 const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
-  intake, answered, craft, core, level, onChange,
+  intake, answered, total, level, onChange,
 }) => {
   const takesMajor = answered.degree && degreeTakesMajor(intake.degree);
   const years = intake.years;
@@ -259,7 +255,7 @@ const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
               <span className="tt-stepper__unit" aria-hidden="true">years</span>
             </div>
           </div>
-          <p className="tt-step__note">{`${YEARS_NOTE} · core ${CORE_NOTE} · level = years`}</p>
+          <p className="tt-step__note">{`${YEARS_NOTE} · one pool · level = years`}</p>
         </fieldset>
 
         {/* ── 03 · Hours ──────────────────────────────────────────────────── */}
@@ -338,11 +334,8 @@ const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
         <p className="tt-intake__total">
           {complete ? (
             <>
-              <span className="tt-intake__big">{craft}</span>
-              <span className="tt-intake__unit">craft</span>
-              <span className="tt-intake__dot" aria-hidden="true">·</span>
-              <span className="tt-intake__big">{core}</span>
-              <span className="tt-intake__unit">core</span>
+              <span className="tt-intake__big">{total}</span>
+              <span className="tt-intake__unit">points</span>
               <span className="tt-intake__dot" aria-hidden="true">·</span>
               <span className="tt-intake__level">{`Level ${level}`}</span>
             </>

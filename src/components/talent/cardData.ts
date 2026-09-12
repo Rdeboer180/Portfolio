@@ -44,6 +44,8 @@ export interface CardData {
   trees: CardMiniTree[];
   masteredCount: number;
   areaCount: number;
+  /** Abilities unlocked, for the card's foot. */
+  abilityCount: number;
   /** "rdeboerdesigns.com/talent-tree" */
   url: string;
 }
@@ -85,6 +87,7 @@ export function cardData(result: TalentResult): CardData {
       levels: tree.areas.map((a) => pointsAt(result.allocation, a.nodes[0].id)),
     })),
     masteredCount: result.mastered.length,
+    abilityCount: result.abilities.filter((a) => a.unlocked).length,
     areaCount: TREES.reduce((n, t) => n + t.areas.length, 0),
     url: `${SITE.portfolioUrl.replace(/^https?:\/\/(www\.)?/, '')}/talent-tree`,
   };

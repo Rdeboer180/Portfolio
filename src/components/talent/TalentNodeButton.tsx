@@ -42,6 +42,10 @@ export interface TalentNodeButtonProps {
   active: boolean;
   /** The phone: a tap opens the sheet rather than spending. */
   tapOpens: boolean;
+  /** The Forge is holding a recipe up and this node is in it: its minimum. */
+  lit?: number;
+  /** The Forge is holding a recipe up and this node is not in it. */
+  receded?: boolean;
   /** Compare with Ryan: his points here, drawn as an outer arc, a fifth of the circle per point. Undefined when off. */
   compare?: number;
   onAdd: (nodeId: string) => void;
@@ -116,6 +120,8 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
   active,
   tapOpens,
   compare,
+  lit,
+  receded,
   onAdd,
   onRemove,
   onHover,
@@ -163,6 +169,8 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
     locked ? 'is-locked' : '',
     mastered ? 'is-mastered' : '',
     active ? 'is-active' : '',
+    lit !== undefined ? 'is-lit' : '',
+    receded ? 'is-receded' : '',
     spends ? 'is-editable' : '',
     dormant ? 'is-dormant' : '',
   ]
@@ -193,9 +201,11 @@ const TalentNodeButton: React.FC<TalentNodeButtonProps> = ({
       >
         <Glyph name={node.glyph} className="tt-node__glyph" />
         {mastered && <span className="tt-node__mark" aria-hidden="true" />}
-        {points > 0 && (
+        {lit !== undefined ? (
+          <span className="tt-node__count" aria-hidden="true">{`${points}/${lit}`}</span>
+        ) : points > 0 ? (
           <span className="tt-node__count" aria-hidden="true">{points}</span>
-        )}
+        ) : null}
       </button>
       <span className="tt-node__label" aria-hidden="true">
         <span className="tt-node__label-text">{node.name}</span>

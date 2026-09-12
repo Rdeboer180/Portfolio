@@ -66,6 +66,21 @@ export const GLYPHS: Record<string, string> = {
     '<path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>',
   leadership: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
 
+  // Added for the v5 lanes (same 24 grid, 1.8 stroke hand).
+  storybook:
+    '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="M5.5 8h2M5.5 11.5h2M12 9h6M12 13h4"/>',
+  'state-modeling':
+    '<circle cx="5.5" cy="6.5" r="2.5"/><circle cx="18.5" cy="6.5" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 6.5h8M17 8.8l-3.4 6.9M7 8.8l3.4 6.9"/>',
+  cms:
+    '<rect x="3" y="4" width="18" height="6.5" rx="1.5"/><rect x="3" y="13.5" width="18" height="6.5" rx="1.5"/><path d="M6.5 7.25h.01M6.5 16.75h.01"/>',
+  code: '<path d="M8.5 7.5 3.5 12l5 4.5M15.5 7.5 20.5 12l-5 4.5M13.6 4.5l-3.2 15"/>',
+  react:
+    '<circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="9.5" ry="4"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(120 12 12)"/>',
+  performance:
+    '<path d="M4 17.5a9 9 0 1 1 16 0"/><path d="M12 13 16.5 9"/><circle cx="12" cy="13.5" r="1.3" fill="currentColor"/>',
+  workflow:
+    '<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><rect x="9" y="8.5" width="6" height="7" rx="1.5"/><path d="M7.5 12h1.5M15 12h1.5"/>',
+
   // Roots
   'visual-craft': '<path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M13.5 7.5l3 3"/>',
   build: '<path d="M12 4.9l7.1 7.1-3.1 3.1-7.1-7.1z"/><path d="M12.4 11.6L3.5 20.5"/>',

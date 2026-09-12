@@ -1,8 +1,8 @@
 // ============================================
 // Talent console: the points ledger
 // One tick per point in the console's header rail, build mode only, once the
-// intake is complete. Four groups, from computePools and remaining(): craft
-// locked, systems locked, free, core. A tick lights Signal Orange as its
+// intake is complete. Three groups, from computePools and remaining(): design
+// locked, code locked, free. A tick lights Signal Orange as its
 // point is spent; unspent ticks sit at white 14%. Pure DOM, no canvas; the
 // groups are keyed to the pool sizes so a change to the intake rebuilds the
 // row rather than reflowing it (ConsoleBuildDone.dc.html is the spec).
@@ -24,13 +24,12 @@ interface LedgerGroup {
   spent: number;
 }
 
-/** The four groups, in the order the rail prints them; a group with no points is left out. */
+/** The three groups, in the order the rail prints them; a group with no points is left out. */
 export function ledgerGroups(pools: Pools, left: Remaining): LedgerGroup[] {
   const groups: LedgerGroup[] = [
-    { key: 'craftLocked', label: 'Craft locked', total: pools.craftLocked, spent: pools.craftLocked - left.craftLocked },
-    { key: 'systemsLocked', label: 'Systems locked', total: pools.systemsLocked, spent: pools.systemsLocked - left.systemsLocked },
+    { key: 'designLocked', label: 'Design locked', total: pools.designLocked, spent: pools.designLocked - left.designLocked },
+    { key: 'codeLocked', label: 'Code locked', total: pools.codeLocked, spent: pools.codeLocked - left.codeLocked },
     { key: 'free', label: 'Free', total: pools.free, spent: pools.free - left.free },
-    { key: 'core', label: 'Core', total: pools.core, spent: pools.core - left.core },
   ];
   return groups
     .filter((g) => g.total > 0)

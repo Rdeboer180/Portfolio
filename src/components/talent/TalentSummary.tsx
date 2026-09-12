@@ -20,13 +20,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Allocation, TalentResult, TalentTree } from '../../data/talent/types';
+import type { AbilityState } from '../../data/talent/types';
 import { FAMILY_LABEL, TRAIT_LABEL } from '../../data/talent/types';
+import { formulaLine } from '../../data/talent/forge';
 import { RYAN_CLASS_LABEL } from '../../data/talent/ryan';
 import { getProjectsHref } from '../../utils/homeSession';
 import Glyph from './Glyph';
 import TalentCard from './TalentCard';
 import { cardData, explainArchetype, leadTrait } from './cardData';
-import { countWord, masteredNodes, shortTreeName } from './consoleData';
+import { abilityGlyph, chipStates } from './TalentForge';
+import { countWord, masteredNodes } from './consoleData';
 
 export type CopyState = 'idle' | 'copied' | 'failed';
 
@@ -39,7 +42,7 @@ export interface TalentSummaryProps {
   allocation: Allocation;
   trees: TalentTree[];
   result: TalentResult;
-  /** Points in play: the craft and core pools together. */
+  /** Points in play: the whole pool. */
   points: number;
   /** Set once on the client after the card comes into view: runs the assembling motion. */
   assembled: boolean;
@@ -120,16 +123,23 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
   const half = Math.ceil(n / 2);
   const columns = [rows.slice(0, half), rows.slice(half)];
 
-  const counts = [plural(n, 'mastery', 'masteries')];
+  const states = result.abilities;
+  const unlockedStates = states.filter((a) => a.unlocked);
+  const nextStates = chipStates(states).filter((c) => c.kind !== 'unlocked').slice(0, 2);
+  const abilityColumns: AbilityState[][] = [
+    unlockedStates.slice(0, Math.ceil(unlockedStates.length / 2)),
+    unlockedStates.slice(Math.ceil(unlockedStates.length / 2)),
+  ];
+
+  const counts = [plural(unlockedStates.length, 'ability', 'abilities'), plural(n, 'mastery', 'masteries')];
   if (showCard) {
-    counts.push(plural(2, 'archetype', 'archetypes'));
     counts.push(plural(result.topTraits.length, 'stat', 'stats'));
     counts.push('nothing hand-set');
   }
 
   const classes = [
-    { a: result.primary, trait: leadTrait(result.primary) },
-    { a: result.secondary, trait: leadTrait(result.secondary) },
+    { a: result.primary, trait: leadTrait(result.primary), state: states.find((x) => x.ability.archetypeId === result.primary.id) },
+    { a: result.secondary, trait: leadTrait(result.secondary), state: states.find((x) => x.ability.archetypeId === result.secondary.id) },
   ];
 
   const primaryLabel = showCard ? (saving ? 'Rendering' : 'Save as image') : 'Finish with points left';
@@ -141,7 +151,7 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
         <span className="tt-masteries__name">{node.name}</span>
         <span className="tt-masteries__meaning">{node.masteryLine}</span>
       </span>
-      <span className="tt-masteries__meta">{`${shortTreeName(tree.id)} · ${node.tier}`}</span>
+      <span className="tt-masteries__meta">{`${tree.name} · ${node.tier}`}</span>
     </li>
   );
 
@@ -159,7 +169,53 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
         <p className="tt-summary__pending">Your summary assembles when the last point lands</p>
       ) : (
         <>
+          {/* ── Abilities ─────────────────────────────────────────────────── */}
+          <p className="tt-sheet-eyebrow">
+            {`Abilities · ${unlockedStates.length} unlocked of ${states.length} · the top two are the class`}
+          </p>
+          <div className="tt-abilities">
+            {abilityColumns.map((col, ci) => (
+              <ul key={ci} className="tt-abilities__col">
+                {col.map((a) => (
+                  <li key={a.ability.id} className="tt-abilities__row">
+                    <span className="tt-abilities__glyph" aria-hidden="true"><Glyph name={abilityGlyph(a)} size={20} /></span>
+                    <span className="tt-abilities__text">
+                      <span className="tt-abilities__head">
+                        <span className="tt-abilities__name">{a.ability.name}</span>
+                        <span className="tt-abilities__meta">{`${a.ability.family} · unlocked`}</span>
+                      </span>
+                      <span className="tt-abilities__formula">{formulaLine(a.ability)}</span>
+                      <span className="tt-abilities__line">{a.ability.line}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ))}
+            <ul className="tt-abilities__col tt-abilities__col--next">
+              {nextStates.map(({ state: a, kind }) => (
+                <li key={a.ability.id} className="tt-abilities__row is-next">
+                  <span className="tt-abilities__glyph" aria-hidden="true"><Glyph name={abilityGlyph(a)} size={20} /></span>
+                  <span className="tt-abilities__text">
+                    <span className="tt-abilities__head">
+                      <span className="tt-abilities__name">{a.ability.name}</span>
+                      <span className="tt-abilities__meta">
+                        {kind === 'next'
+                          ? `${a.ability.family} · next · ${a.missing} ${a.missing === 1 ? 'point' : 'points'} away`
+                          : `${a.ability.family} · next`}
+                      </span>
+                    </span>
+                    <span className="tt-abilities__formula">{formulaLine(a.ability)}</span>
+                    {kind === 'next' && <span className="tt-abilities__line">{a.ability.line}</span>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* ── Masteries ─────────────────────────────────────────────────── */}
+          <p className="tt-sheet-eyebrow">
+            {n === 0 ? 'Masteries · none yet' : `Masteries · ${plural(n, 'node', 'nodes')} at 5 / 5`}
+          </p>
           <div className="tt-masteries" aria-label="Masteries">
             {n === 0 ? (
               <p className="tt-masteries__empty">
@@ -202,6 +258,9 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
                     <span className="tt-cardname__note">Shows on the card and rides in the link · nothing is stored</span>
                   </div>
                 )}
+                {result.provisional && (
+                  <p className="tt-cardprov">Provisional · unlock two abilities to earn it</p>
+                )}
                 <div className="tt-cardframe">
                   <TalentCard data={cardData(result)} />
                 </div>
@@ -209,10 +268,14 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
               <div className="tt-cardside">
                 {!own && <p className="tt-cardside__note" aria-hidden="true">the part people screenshot</p>}
                 <ul className="tt-classes">
-                  {classes.map(({ a, trait }) => (
+                  {classes.map(({ a, trait, state }) => (
                     <li key={a.id} className="tt-classes__row">
                       <span className="tt-classes__name">{a.name}</span>
-                      <span className="tt-classes__family">{`${FAMILY_LABEL[a.family]} · led by ${TRAIT_LABEL[trait]} `}<span className="tt-classes__score">{result.traits[trait]}</span></span>
+                      <span className="tt-classes__family">
+                        {state && state.unlocked
+                          ? `${FAMILY_LABEL[a.family]} · unlocked by recipe · strength ${state.strength}`
+                          : `${FAMILY_LABEL[a.family]} · led by ${TRAIT_LABEL[trait]} ${result.traits[trait]}`}
+                      </span>
                       <span className="tt-classes__line">{a.line}</span>
                     </li>
                   ))}
@@ -266,9 +329,9 @@ const TalentSummary: React.FC<TalentSummaryProps> = ({
                 )}
                 {!own && (
                   <ul className="tt-cardnotes">
-                    <li><span>The class</span> · the two strongest traits from different families, matched to an archetype signature</li>
-                    <li><span>The stats</span> · points × node weights, normalized 0 to 100 · the same rules score every tree, this one included</li>
-                    <li><span>On the build route</span> · save image at 1200 × 630 · copy link · copy receipt</li>
+                    <li><span>The class</span> · the two strongest unlocked abilities from different families · strength is level over minimum, summed</li>
+                    <li><span>The stats</span> · points × node weights, normalized 0 to 100 · the same rules score every lane</li>
+                    <li><span>On the build route</span> · save image at 1200 × 630 · copy link · copy receipt with an abilities line</li>
                   </ul>
                 )}
               </div>

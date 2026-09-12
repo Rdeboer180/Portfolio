@@ -9,6 +9,7 @@ import type { Allocation, TalentNode, TalentResult, TalentTree, Trait, TreeId } 
 import { TRAITS, TRAIT_LABEL } from '../../data/talent/types';
 import { TREES, treeOf } from '../../data/talent/trees';
 import { CROWN_UNLOCK_AT, MAX_POINTS_PER_NODE, isLocked } from '../../data/talent/economy';
+import { abilityReceiptLine } from '../../data/talent/forge';
 
 export function pointsAt(allocation: Allocation, id: string): number {
   const v = allocation[id];
@@ -68,9 +69,16 @@ export function gateLine(allocation: Allocation, node: TalentNode): string {
     : `${crown.name} unlocks at ${CROWN_UNLOCK_AT}`;
 }
 
-const SHORT_TREE: Record<TreeId, string> = { craft: 'Craft', systems: 'Systems', core: 'Core' };
+/** The lane header's second half, as the artboard prints it after the name. */
+export const TREE_TAGLINE: Record<TreeId, string> = {
+  design: 'what you define',
+  technical: 'how you connect the work',
+  code: 'what you can express in the medium',
+};
 
-/** "Craft", "Systems", "Core": the tree as the rails abbreviate it. */
+const SHORT_TREE: Record<TreeId, string> = { design: 'Design', technical: 'Technical', code: 'Code' };
+
+/** "Design", "Technical", "Code": the lane as the rails abbreviate it. */
 export function shortTreeName(id: TreeId): string {
   return SHORT_TREE[id];
 }
@@ -130,6 +138,7 @@ export function receiptText(result: TalentResult, shareUrl: string, trees: Talen
     `${result.primary.name} / ${result.secondary.name}`,
     ...rows,
     stats4,
+    abilityReceiptLine(result.abilities),
     shareUrl,
   ].join('\n');
 }
