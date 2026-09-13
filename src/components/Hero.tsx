@@ -653,7 +653,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            I design interfaces, build the tokens and components behind them, and <span className="animated-bold">stay with engineers until the details hold in production</span>. At Tire Rack that means design systems, AEM templates, and the styles the team reuses. On my own products, PlayDraft and LoopStack, <span className="animated-bold">I own the design and the agent-assisted build</span> from brand to TestFlight.
+            I design interfaces, build the tokens and components behind them, and <span className="animated-bold">stay with engineers until the details hold in production</span>. At Tire Rack, that means design systems, AEM templates, production styles, and internal tools that make the team’s everyday work easier. On my own products, PlayDraft and LoopStack, <span className="animated-bold">I own the design and the agent-assisted build</span> from brand to TestFlight.
           </p>
 
             <p className="hero__proof-line hero__reveal hero__reveal--3">

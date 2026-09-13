@@ -62,8 +62,9 @@ export const storySections: StorySection[] = [
     num: '04',
     title: 'Learning by building',
     body: [
-      'AI-assisted tools made it cheaper to test an idea. That opens the conversation earlier, but ' +
-        'it also produces more plausible work that still needs someone to judge it.',
+      'I learn best when there’s something I actually want to make. AI has opened up more of those ' +
+        'possibilities, and I keep finding new ways to use it across design, code, and the small ' +
+        'tools that support both. Some experiments stick. Others show me what I still need to learn.',
       'I use Claude, Figma Make, and code generation to explore and build. I review the design, ' +
         'the behavior, and the code before anything they produce is kept.',
       'I test that boundary in personal, volunteer, and internal products. Those projects let me ' +
