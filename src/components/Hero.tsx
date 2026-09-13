@@ -653,7 +653,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            I design interfaces, build the tokens and components behind them, and <span className="animated-bold">stay with engineers until the details hold in production</span>. At Tire Rack, that means design systems, AEM templates, production styles, and internal tools that make the team’s everyday work easier. On my own products, PlayDraft and LoopStack, <span className="animated-bold">I own the design and the agent-assisted build</span> from brand to TestFlight.
+            I build the system, design what it makes possible, then <span className="animated-bold">stay curious enough to keep refining both</span>. My work moves from tokens and components into pages, flows, and working products, shaped by user feedback, accessibility, SEO, analytics, and close collaboration with stakeholders and engineering. At Tire Rack, that means building and evolving systems and components across real production experiences. With PlayDraft and LoopStack, it means owning the full loop from brand and product decisions through an agent-assisted build and into shipped software. The tools keep changing, but the standard does not: care about the craft, stay close to the work, and <span className="animated-bold">remain responsible for what reaches the user</span>.
           </p>
 
             <p className="hero__proof-line hero__reveal hero__reveal--3">

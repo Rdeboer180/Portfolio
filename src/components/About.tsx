@@ -29,19 +29,22 @@ const About: React.FC = () => {
                   bio goes to the talent tree; it carries the branch glyph as a
                   pseudo element so it reads as a door, not a footnote. */}
               <p className="about__body">
-                I started in graphic design and learned HTML and CSS as more of the work moved into the browser. At Tire Rack that grew into <span className="animated-bold">design systems, AEM templates, and the production styles the team now reuses</span>, built alongside engineering.
+                I started in visual communications and followed the work into the browser, learning HTML and CSS because I wanted to understand what happened after a design left the canvas. At Tire Rack, that grew into <span className="animated-bold">design systems, AEM templates, and reusable components</span> shaped in close partnership with engineering.
               </p>
 
               <p className="about__body">
-                I also build my own products, PlayDraft and LoopStack, to work through the decisions that only appear once a design becomes software someone can use. <span className="animated-bold">Brand and design systems have always been my specialty.</span>
+                Today, I’m pushing that same curiosity further. I build my own products from the first idea through a self-governed system and into working software, creating custom tools and workflows along the way to remove repetition, protect the rules, and shorten the distance between an idea and something production-ready.
+              </p>
+              <p className="about__body">
+                I’m still a designer at my core, and <span className="animated-bold">brand and design systems are still my specialty.</span> My toolbelt has simply expanded around them.
               </p>
 
               <p className="about__body">
-                I don’t sit still for long. Every day, I’m exploring another way to bring AI into how I design and code. Each week, I’m building or improving internal tools at Tire Rack and working on personal projects like PlayDraft and LoopStack. Having something real to make, test, and maintain is how I learn best.
+                I try not to let what I already know become the edge of what I can do. I’m constantly exploring new ways to bring AI into how I design, build, and maintain systems. That means improving internal tools and workflows at Tire Rack while building products like PlayDraft and LoopStack outside of it. Having something real to make, test, break, refine, and maintain is how I learn best.
               </p>
 
               <p className="about__body">
-                Where sixteen years of points actually landed, and what I am still leveling up, is on my <Link to="/talent-tree/" className="about__tree-link">Design Talent Tree</Link>.
+                Where sixteen years of experience actually landed—and what I’m still leveling up—is mapped out in my <Link to="/talent-tree/" className="about__tree-link"><strong>Design Talent Tree</strong></Link>.
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>
