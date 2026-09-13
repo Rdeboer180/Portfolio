@@ -542,6 +542,10 @@
     color: $color-neutral-muted;
     max-width: 480px;
     margin-bottom: $spacing-2xl;
+
+    > p + p {
+      margin-top: $spacing-md;
+    }
   }
 
   &__body-lead {

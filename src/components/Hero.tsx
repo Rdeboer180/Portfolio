@@ -104,7 +104,7 @@ const Hero: React.FC = () => {
 
   const sectionRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLParagraphElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
   const introTimeoutsRef = useRef<number[]>([]);
   const activeIndexRef = useRef(0);
@@ -652,9 +652,17 @@ const Hero: React.FC = () => {
               </div>
             </div>
 
-            <p className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-            I build the system, design what it makes possible, then <span className="animated-bold">stay curious enough to keep refining both</span>. My work moves from tokens and components into pages, flows, and working products, shaped by user feedback, accessibility, SEO, analytics, and close collaboration with stakeholders and engineering. At Tire Rack, that means building and evolving systems and components across real production experiences. With PlayDraft and LoopStack, it means owning the full loop from brand and product decisions through an agent-assisted build and into shipped software. The tools keep changing, but the standard does not: care about the craft, stay close to the work, and <span className="animated-bold">remain responsible for what reaches the user</span>.
-          </p>
+            <div className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
+              <p>
+                I build the system, design what it makes possible, then keep refining both. Fourteen years professionally, and nearly a decade preparing before that, have sharpened the <span className="animated-bold">judgment to know what deserves to ship</span> and the direction to make it better. I bring the discernment, creative direction, and custom skills that shape everything in between and ensure the result still feels unmistakably true to the brand.
+              </p>
+              <p>
+                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that elevate not only my work but the work of my team. From tokens and components to the surface they live in. My work is grounded in user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
+              </p>
+              <p>
+                The tools keep changing. The standard doesn’t. I care about the craft, stay curious about what’s changing, and <span className="animated-bold">own what reaches the user</span>.
+              </p>
+            </div>
 
             <p className="hero__proof-line hero__reveal hero__reveal--3">
               Based in South Bend, Indiana. Open to remote roles in the US.
