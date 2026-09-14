@@ -654,10 +654,10 @@ const Hero: React.FC = () => {
 
             <div className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
               <p>
-                I build the system, design what it makes possible, then keep refining both. Fourteen years professionally, and nearly a decade preparing before that, have sharpened the <span className="animated-bold">judgment to know what deserves to ship</span> and the direction to make it better. I bring the discernment, creative direction, and custom skills that shape everything in between and ensure the result still feels unmistakably true to the brand.
+                I build the system, design what it makes possible, then keep refining both. Fourteen years professionally, and nearly a decade preparing before that, have sharpened the <span className="animated-bold">judgment to know what deserves to ship</span> and the direction to make it better.
               </p>
               <p>
-                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that elevate not only my work but the work of my team. From tokens and components to the surface they live in. My work is grounded in user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
+                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that elevate not only my work but the work of my team. From tokens and components to pages, flows, and working products, my decisions are grounded in user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
               </p>
               <p>
                 The tools keep changing. The standard doesn’t. I care about the craft, stay curious about what’s changing, and <span className="animated-bold">own what reaches the user</span>.
