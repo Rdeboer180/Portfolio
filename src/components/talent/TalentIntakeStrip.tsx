@@ -117,6 +117,7 @@ export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
 }
 
 export interface TalentIntakeStripProps {
+  headingLevel?: 'h1' | 'h2';
   intake: Intake;
   answered: Answered;
   /** The whole pool the effective intake earns, for the tally. */
@@ -130,7 +131,7 @@ const NO_SPLIT = -1;
 const HOURS_SHORT = ['< 40', '40+', '80+', '120+', '160+', '200+'];
 
 const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
-  intake, answered, total, level, onChange,
+  intake, answered, total, level, onChange, headingLevel: Heading = 'h1',
 }) => {
   const takesMajor = answered.degree && degreeTakesMajor(intake.degree);
   const years = intake.years;
@@ -147,7 +148,7 @@ const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
   return (
     <div className={`tt-intake${complete ? ' is-complete' : ''}`} data-answered={answeredCount}>
       <div className="tt-intake__head">
-        <h1 className="tt-intake__title">Build your talent tree</h1>
+        <Heading className="tt-intake__title">Build your talent tree</Heading>
         <p className="tt-intake__lede">
           Not a self-rating: you report where your time went. The tally counts up as each answer lands. The name waits for the card.
         </p>

@@ -43,6 +43,36 @@ const colorGroups = [
       { name: 'secondary-dark', value: '#5e6c7c', css: '--color-secondary-dark', light: true },
     ],
   },
+  {
+    title: 'Talent Atlas · Design territory',
+    colors: [
+      { name: 'design-700', value: '#2e5f80', css: '--talent-design-700', light: true },
+      { name: 'design-500', value: '#487d9d', css: '--talent-design-500', light: true },
+      { name: 'design-200', value: '#cbdee9', css: '--talent-design-200' },
+      { name: 'design-100', value: '#e7f0f4', css: '--talent-design-100' },
+      { name: 'design-surface', value: '#f4f8fa', css: '--talent-design-surface' },
+    ],
+  },
+  {
+    title: 'Talent Atlas · Technical territory (brand orange)',
+    colors: [
+      { name: 'technical-700', value: '#c23001', css: '--talent-technical-700', light: true },
+      { name: 'technical-500', value: '#f03d01', css: '--talent-technical-500', light: true },
+      { name: 'technical-200', value: '#f9c4b0', css: '--talent-technical-200' },
+      { name: 'technical-100', value: '#fdede9', css: '--talent-technical-100' },
+      { name: 'technical-surface', value: '#fff8f5', css: '--talent-technical-surface' },
+    ],
+  },
+  {
+    title: 'Talent Atlas · Code territory',
+    colors: [
+      { name: 'code-700', value: '#345e4b', css: '--talent-code-700', light: true },
+      { name: 'code-500', value: '#638873', css: '--talent-code-500', light: true },
+      { name: 'code-200', value: '#cbded2', css: '--talent-code-200' },
+      { name: 'code-100', value: '#e9f1ec', css: '--talent-code-100' },
+      { name: 'code-surface', value: '#f4f8f5', css: '--talent-code-surface' },
+    ],
+  },
 ];
 
 const typeScale = [

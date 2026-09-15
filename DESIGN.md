@@ -292,3 +292,11 @@ The hero's inspector chip (`class / Guardrail Architect · Lv 16`) is the same c
 - **Don't** use purple-to-blue SaaS gradients, icons inside decorative circles, pill-shaped everything, or ambient animated blobs (per ryan-design-taste).
 - **Don't** add motion that exists only to be noticed; if it does not mark state or reveal once, cut it.
 - **Don't** replace this visual world. All work extends the existing system and connects to its tokens/components (ryan-design-taste + design-system-governance are binding). A new surface preserves this language rather than inventing another.
+
+### Talent Atlas v2 — scoped territory exception (September 14, 2026)
+
+Ryan approved the light Talent Atlas reference as a successor exploration to the Ink console: Design & Systems uses muted blue, Technical uses the existing orange family, and Code uses muted sage. This is an explicit exception to the no-categorical-palette rule for the Atlas map only. Orange remains the portfolio's action/brand accent.
+
+The `--talent-design-*`, `--talent-technical-*`, and `--talent-code-*` families live in `_tokens.scss` and are shown on `/design-system/`. Use strong values for readable labels and glyphs, mid values for connectors, and pale values for territory backgrounds. Do not propagate these categories to unrelated diagrams or portfolio sections.
+
+The review route is `/talent-tree/atlas/`. See `references/core-ui-elements/patterns/talent-atlas.md` for source precedence, confirmed point/ability changes, discovery behavior, and remaining review work.
