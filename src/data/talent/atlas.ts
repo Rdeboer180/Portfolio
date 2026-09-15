@@ -26,6 +26,9 @@ export const ATLAS_SKILLS: AtlasSkill[] = [
   ...NODE_LIST.map((node): AtlasSkill => {
     const prerequisite = node.id === 'automation' ? undefined : foundationOf(node.id);
     return { ...node, territory: treeOf(node.id)!.id,
+      ...(node.id === 'css' ? { name: 'CSS/SASS',
+        meaning: 'Styling responsive interfaces with CSS and Sass, organizing reusable styles and translating design decisions into working layouts.',
+        masteryLine: 'Maintainable styles that preserve visual intent across components, states, and screen sizes.' } : {}),
       ...(prerequisite ? { prerequisite: { skillId: prerequisite.id, points: 2 } } : {}) };
   }),
   ...newCraftSkills,

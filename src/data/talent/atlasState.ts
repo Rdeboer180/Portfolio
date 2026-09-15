@@ -14,7 +14,7 @@ export interface AtlasBuild {
 
 export const RYAN_ATLAS: AtlasBuild = {
   intake: RYAN_INTAKE,
-  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5, governance: 4, prototyping: 3, 'state-modeling': 3, handoff: 4, git: 2, automation: 2, 'agent-context': 4 },
+  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5, governance: 4, prototyping: 3, 'state-modeling': 3, handoff: 4, html: 3, css: 5, git: 2, automation: 2, 'agent-context': 4 },
   craftCredit: 0,
   discovered: [],
 };

@@ -59,7 +59,7 @@ test('Ryan’s requested strengths fit the revised annual budget without a speci
   expect(RYAN_ATLAS.craftCredit).toBe(0);
   expect(atlasWithinBudget(RYAN_ATLAS.allocation, pools)).toBe(true);
   expect(Object.values(atlasSpent(RYAN_ATLAS.allocation)).reduce((a, b) => a + b, 0)).toBe(84);
-  expect(RYAN_ATLAS.allocation).toMatchObject({ governance: 4, figma: 5, storybook: 3, automation: 2, git: 2, 'ai-tools': 4, 'agent-context': 4, handoff: 4, prototyping: 3, 'state-modeling': 3 });
+  expect(RYAN_ATLAS.allocation).toMatchObject({ html: 3, css: 5, governance: 4, figma: 5, storybook: 3, automation: 2, git: 2, 'ai-tools': 4, 'agent-context': 4, handoff: 4, prototyping: 3, 'state-modeling': 3 });
   ['components', 'accessibility', 'typography', 'prototyping', 'state-modeling'].forEach(id => expect(RYAN_ATLAS.allocation[id]).toBeGreaterThanOrEqual(3));
 });
 

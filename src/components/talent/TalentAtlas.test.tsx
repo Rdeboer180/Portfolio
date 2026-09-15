@@ -17,6 +17,8 @@ test('Ryan’s Forge preserves requested talents and a persistent class while br
   expect(within(declaration).getByRole('heading')).toHaveTextContent(title!);
   expect(screen.getByRole('button', { name: /^Vector Design\. 5 of 5/ })).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Show all 32 talents' }));
+  expect(screen.getByRole('button', { name: /^CSS\/SASS\. 5 of 5/ })).toBeTruthy();
+  expect(screen.getByRole('button', { name: /^HTML\. 3 of 5/ })).toBeTruthy();
   expect(screen.getByRole('button', { name: /^Raster Craft\. 3 of 5/ })).toBeTruthy();
   expect(screen.getAllByText('+64 · 16 years').length).toBeGreaterThan(0);
 });
@@ -37,13 +39,13 @@ test('allocation earns passives, updates classification, and resets to the start
   fireEvent.click(screen.getByRole('button', { name: /^HTML\. 0 of 5/ }));
   const add = screen.getByRole('button', { name: 'Add a point to HTML' });
   fireEvent.click(add); fireEvent.click(add); fireEvent.click(add);
-  fireEvent.click(screen.getByRole('button', { name: /^CSS\. 0 of 5/ }));
-  fireEvent.click(screen.getByRole('button', { name: 'Add a point to CSS' }));
+  fireEvent.click(screen.getByRole('button', { name: /^CSS\/SASS\. 0 of 5/ }));
+  fireEvent.click(screen.getByRole('button', { name: 'Add a point to CSS/SASS' }));
   expect(screen.getByRole('heading', { name: 'Initiate Bridgewright' })).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Show all 31 proficiencies' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Add a point to CSS' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Add a point to CSS/SASS' }));
   fireEvent.click(screen.getByRole('button', { name: /^Front-End Flow\. Strengthened/ }));
-  expect(within(screen.getByRole('region', { name: 'Proficiency details' })).getByText('CSS +1')).toBeTruthy();
+  expect(within(screen.getByRole('region', { name: 'Proficiency details' })).getByText('CSS/SASS +1')).toBeTruthy();
   expect(window.location.hash).toContain('v6.');
   fireEvent.click(screen.getByRole('button', { name: 'Reset build' }));
   expect(screen.getByRole('heading', { name: 'Initiate Maker' })).toBeTruthy();
@@ -62,7 +64,7 @@ test('top proficiencies are ranked, and Show all reveals the complete collection
   expect(within(section).getByRole('heading', { name: 'Your top proficiencies' })).toBeTruthy();
   const cards = within(section).getAllByRole('button', { name: /\. (Master|Elite|Advanced|Strengthened|Unlocked)\./ });
   expect(cards).toHaveLength(6);
-  expect(cards[0]).toHaveAccessibleName('Vector Velocity. Master.');
+  expect(cards[0]).toHaveAccessibleName('Token Tactics. Master.');
   fireEvent.click(within(section).getByRole('button', { name: 'Show all 31 proficiencies' }));
   expect(within(section).getByRole('heading', { name: 'All your proficiencies' })).toBeTruthy();
   expect(within(section).getAllByRole('button')).toHaveLength(32);

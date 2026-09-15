@@ -117,3 +117,16 @@ Ryan now invests 84 points with five available. Overrides: Governance 4, Figma 5
 The proficiency collection is now explicitly “Your top proficiencies,” ordered by rank, then recipe progress, then name for deterministic ties. The six strongest active passives appear first; “Show all” exposes the complete catalog in one action, with discovery masking unchanged. No second hidden pagination step.
 
 A 12/12/12 catalog remains a proposal, not an implemented change. Candidate additions: Technical — Systems Mapping and Validation; Code — APIs & Integrations and Testing & Quality. Expansion should add meaningful proficiency routes rather than act as a reason to grant budget. The current catalog remains 32 talents and 31 proficiencies.
+
+
+## Styling emphasis — September 15
+
+The Forge talent is now labeled CSS/SASS, retaining its stable `css` ID for existing shares and recipes. Ryan's styling allocation is 5/5 and HTML is 3/5, swapping their previous values without changing the 84/89 total. Token Tactics consequently reaches Master and appears among his top proficiencies.
+
+Recommended additions to reach 12 talents per tree (pending selection):
+- Technical: Systems Mapping — dependencies, flows, boundaries, and how a product fits together. Proposed passive: Systems Mapping + State Modeling → System Clarity.
+- Technical: Validation — testing design assumptions through usability work and prototypes. Proposed passive: Validation + Prototyping → Evidence Loop.
+- Code: APIs & Integrations — connecting data and services to interfaces. Proposed passive: APIs & Integrations + TypeScript → Connected Interfaces.
+- Code: Testing & Quality — repeatable component and interaction checks in implementation. Proposed passive: Testing & Quality + Storybook → Reliable Components.
+
+Keep Validation distinct from Research (understanding the problem), and Testing & Quality distinct from QA & Analytics (release review and observed product signals). These additions describe capabilities rather than additional tool brands. New talents start unallocated until Ryan supplies their levels; they do not require another budget increase.
