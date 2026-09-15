@@ -657,7 +657,7 @@ const Hero: React.FC = () => {
                 I build the system, design what it makes possible, then refine both. Fourteen years professionally, and nearly a decade preparing before that, have sharpened the <span className="animated-bold">judgment to know what deserves to ship</span> and the direction to make it better.
               </p>
               <p>
-                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that lift my work and team. From tokens and components to pages, flows, and working products, my decisions rest on user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
+                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that lift my work and my team. From tokens and components to pages, flows, and working products, my decisions rest on user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
               </p>
               <p>
                 The tools keep changing. The standard doesn’t. I care about the craft, stay curious about what’s changing, and <span className="animated-bold">own what reaches the user</span>.
