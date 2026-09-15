@@ -1,18 +1,17 @@
 import { ATLAS_ABILITIES, ATLAS_SKILLS, atlasAbilityView, evaluateAtlas, evaluateAtlasAbility, pickAtlasClass, uncoveredAtlasSkills } from './atlas';
 import { RYAN_ATLAS, atlasPools, atlasSpent, atlasWithinBudget, changeAtlasPoint, decodeAtlas, encodeAtlas } from './atlasState';
-import { ATLAS_ABILITY_POSITIONS, ATLAS_SKILL_POSITIONS } from './atlasLayout';
 import { RYAN_ALLOCATION, RYAN_INTAKE } from './ryan';
 import { encodeState } from './score';
 
 const systemSight = ATLAS_ABILITIES.find((a) => a.id === 'system-sight')!;
 
-test('the complete 32-skill, 31-ability catalog covers every skill and map location', () => {
-  expect(ATLAS_SKILLS).toHaveLength(32);
-  expect(ATLAS_ABILITIES).toHaveLength(31);
-  expect(new Set(ATLAS_ABILITIES.map((a) => a.id)).size).toBe(31);
+test('the complete 36-talent, 35-proficiency catalog covers every talent', () => {
+  expect(ATLAS_SKILLS).toHaveLength(36);
+  expect(ATLAS_ABILITIES).toHaveLength(35);
+  expect(new Set(ATLAS_ABILITIES.map((a) => a.id)).size).toBe(35);
   expect(uncoveredAtlasSkills()).toEqual([]);
-  ATLAS_ABILITIES.forEach((a) => expect(ATLAS_ABILITY_POSITIONS[a.id]).toBeDefined());
-  ATLAS_SKILLS.forEach((s) => expect(ATLAS_SKILL_POSITIONS[s.id]).toBeDefined());
+  ['design', 'technical', 'code'].forEach(id => expect(ATLAS_SKILLS.filter(s => s.territory === id)).toHaveLength(12));
+  expect(new Set(ATLAS_SKILLS.map(s => s.id)).size).toBe(36);
 });
 
 test('charge responds continuously while rank follows the weakest ingredient', () => {
@@ -104,4 +103,11 @@ test('malformed numeric input cannot corrupt ability charge', () => {
   const state = evaluateAtlasAbility(systemSight, { tokens: NaN, components: Infinity, governance: -4 });
   expect(state.charge).toBe(0);
   expect(state.rank).toBe(0);
+});
+
+test('new talents survive shares and unlock their own proficiencies', () => {
+  const allocation = { 'systems-mapping': 2, 'validation': 2, 'apis-integrations': 2, 'testing-quality': 2, handoff: 2, 'state-modeling': 2, figma: 2, prototyping: 2, typescript: 2, storybook: 2 };
+  expect(decodeAtlas(encodeAtlas({ ...RYAN_ATLAS, allocation }))?.allocation).toEqual(allocation);
+  const states = evaluateAtlas(allocation);
+  ['system-clarity', 'evidence-loop', 'connected-interfaces', 'reliable-components'].forEach(id => expect(states.find(s => s.ability.id === id)?.rank).toBe(2));
 });

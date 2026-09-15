@@ -13,11 +13,11 @@ import type { Answered, IntakeQuestion } from './TalentIntakeStrip';
 const EMPTY_BUILD: AtlasBuild = { intake: { name: '', degree: 'bachelors', major: 'graphic', minor: 'none', years: 5, hours: 0 }, allocation: {}, craftCredit: 0, discovered: [] };
 const TREES: { id: TreeId; name: string; line: string; mark: string }[] = [
   { id: 'design', name: 'Design & Systems', line: 'People · structure · form', mark: 'structure' },
-  { id: 'technical', name: 'Technical', line: 'Tools · process · production', mark: 'realization' },
-  { id: 'code', name: 'Code', line: 'Logic · behavior · delivery', mark: 'behavior' },
+  { id: 'technical', name: 'Technical', line: 'Tools · process · production', mark: 'tree-technical' },
+  { id: 'code', name: 'Code', line: 'Logic · behavior · delivery', mark: 'tree-code' },
 ];
 export const RankRing: React.FC<{ points: number }> = ({ points }) => <svg className="atlas-rank" viewBox="0 0 64 64" aria-hidden="true">{[0, 1, 2, 3, 4].map(i => <circle key={i} cx="32" cy="32" r="29" pathLength="100" strokeDasharray="16 84" transform={`rotate(${i * 72 - 87} 32 32)`} className={i < points ? 'is-earned' : ''} />)}</svg>;
-const SkillMark: React.FC<{ id: string }> = ({ id }) => id === 'raster-craft' ? <ForgeMark id="pixel-prowess" /> : id === 'vector-design' ? <ForgeMark id="vector-velocity" /> : <Glyph name={ATLAS_SKILL_BY_ID[id].glyph} />;
+export const SkillMark: React.FC<{ id: string }> = ({ id }) => id === 'raster-craft' ? <ForgeMark id="pixel-prowess" /> : id === 'vector-design' ? <ForgeMark id="vector-velocity" /> : ['systems-mapping', 'validation', 'apis-integrations', 'testing-quality'].includes(id) ? <ForgeMark id={id}/> : <Glyph name={ATLAS_SKILL_BY_ID[id].glyph} />;
 
 const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = false, baseRoute = '/talent-tree/atlas' }) => {
   const [build, setBuild] = useState<AtlasBuild>(own ? EMPTY_BUILD : RYAN_ATLAS);
@@ -98,11 +98,11 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
   const reset = () => { setBuild(EMPTY_BUILD); setAnswered(NOTHING_ANSWERED); setDirty(false); setCopied(false); setShowAll(true); setSkillId(null); setShowAllProficiencies(false); setProficienciesOpen(false); const url = new URL(window.location.href); url.hash = ''; window.history.replaceState(null, '', url.toString()); setAnnouncement('Build reset. Your class is Initiate Maker.'); };
 
   return <main className="atlas forge" id="main-content">
-    <header className="forge-heading"><div><p className="atlas-eyebrow">The Forge</p><h1>More than a job title.</h1><p>Invest in your talents. Discover your proficiencies. See how your strengths come together.</p></div><Link className="forge-link" to={own ? `${baseRoute}/` : `${baseRoute}/build/`}>{own ? 'Explore Ryan’s build' : 'Forge your own build'} <span aria-hidden="true">↗</span></Link></header>
+    <header className="forge-heading"><div><p className="atlas-eyebrow">The Forge</p><h1>More than a job title.</h1><p>Allocate points to the talents you use. They unlock proficiencies that determine your class.</p></div><Link className="forge-link" to={own ? `${baseRoute}/` : `${baseRoute}/build/`}>{own ? 'Explore Ryan’s build' : 'Forge your own build'} <span aria-hidden="true">↗</span></Link></header>
     {own && <div className="atlas-intake tt-console"><TalentIntakeStrip headingLevel="h2" annualRate={FORGE_POINTS_PER_YEAR} intake={build.intake} answered={answered} total={pools.total} level={pools.level} onChange={changeIntake} /></div>}
     <section className="forge-declaration" aria-label="Your classification">
       <div className="forge-declaration__main"><div ref={crestRef}><ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1}/></div><div><p className="atlas-eyebrow">{own ? build.intake.name || 'Your build' : 'Ryan’s build'} · classification</p><h2>{mastery.title}</h2><p className="forge-domain">{mastery.primary ? `Mastery of ${mastery.primary.name.toLowerCase()}` : 'A practice waiting to take shape'}</p><p>{mastery.primary?.description || 'Start with the talents you use. Your first proficiencies will reveal where your strengths connect.'}</p><div className="forge-class-ranks" aria-label={`Class level ${mastery.primary?.level || 1} of 5`}>{CLASS_LEVELS.map((label, i) => <span key={label} className={i < (mastery.primary?.level || 1) ? 'is-earned' : ''} title={label}/>)}</div></div></div>
-      <dl className="forge-totals"><div><dt>Points invested</dt><dd>{spent}<small> / {pools.total}</small></dd></div><div><dt>Proficiencies active</dt><dd>{earned.length}<small> / 31</small></dd></div><div><dt>Talents mastered</dt><dd>{ATLAS_SKILLS.filter(s => atlasPoints(build.allocation, s.id) === 5).length}<small> / 32</small></dd></div></dl>
+      <dl className="forge-totals"><div><dt>Points invested</dt><dd>{spent}<small> / {pools.total}</small></dd></div><div><dt>Proficiencies active</dt><dd>{earned.length}<small> / {states.length}</small></dd></div><div><dt>Talents mastered</dt><dd>{ATLAS_SKILLS.filter(s => atlasPoints(build.allocation, s.id) === 5).length}<small> / {ATLAS_SKILLS.length}</small></dd></div></dl>
 
     </section>
     <section className="forge-support" aria-label="Build proficiencies">
@@ -116,7 +116,7 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
     </section>
       </>}</div>
     </section>
-    <div className="forge-workbench-controls"><p>{own ? `${pools.total - spent} points available${!live ? ' · Complete your experience above to invest' : ''}` : showAll ? 'Your talent allocation' : `Talents behind ${known ? proficiencyName(selected) : 'this proficiency'}`}</p><button aria-pressed={showAll} onClick={() => setShowAll(!showAll)}>{showAll ? 'Focus recipe' : 'Show all 32 talents'}</button></div>
+    <div className="forge-workbench-controls"><p>{own ? `${pools.total - spent} points available${!live ? ' · Complete your experience above to invest' : ''}` : showAll ? 'Your talent allocation' : `Talents behind ${known ? proficiencyName(selected) : 'this proficiency'}`}</p><button aria-pressed={showAll} onClick={() => setShowAll(!showAll)}>{showAll ? 'Focus recipe' : `Show all ${ATLAS_SKILLS.length} talents`}</button></div>
     <div className="forge-tree-switch" aria-label="Choose talent tree">{TREES.map(tree => <button key={tree.id} className={`atlas-territory--${tree.id}`} aria-pressed={lane === tree.id} onClick={() => setLane(tree.id)}>{tree.name}<small>{recipe.filter(id => ATLAS_SKILL_BY_ID[id].territory === tree.id).length} ingredients</small></button>)}</div>
     <div className="forge-lanes">{TREES.map(tree => {
       const talents = ATLAS_SKILLS.filter(s => s.territory === tree.id && (showAll || !known || visibleSkills.has(s.id)));
@@ -132,7 +132,7 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
     <details className="forge-rules"><summary>Your point receipt</summary><p>Professional experience earns {FORGE_POINTS_PER_YEAR} points per year, plus education and recent practice. Each talent accepts up to five points. Prerequisites unlock at 2/5; Automation is independent. Removing a prerequisite also removes investments that depend on it.</p><ul>{pools.receipt.map((line, i) => <li key={i}>{line.label}</li>)}</ul><p>{spent} of {pools.total} points invested. Some education points are reserved for their corresponding tree.</p></details>
     {own && <details className="forge-rules"><summary>Compare with Ryan’s build</summary><p>Your build: {mastery.title}. Ryan’s build: {ryanMastery.title}. Different strengths, no overall winner.</p><table><thead><tr><th>Mastery domain</th><th>You</th><th>Ryan</th></tr></thead><tbody>{mastery.domains.map((domain, i) => <tr key={domain.id}><th scope="row">{domain.name}</th><td>{domain.strength}/15</td><td>{ryanMastery.domains[i].strength}/15</td></tr>)}</tbody></table></details>}
     <div className="forge-share">{own && <label>Your name<input maxLength={60} value={build.intake.name} onChange={e => changeIntake({ name: e.target.value })}/></label>}<button className="atlas-cta" disabled={!live} onClick={copyLink}>{copied ? 'Link copied' : 'Copy build link'}</button><button className="forge-secondary" disabled={!live} onClick={exportCard}>Export build card</button>{!own && <Link className="forge-link" to={`${baseRoute}/build/#${new URLSearchParams({ s: encodeAtlas(build) })}`}>Adjust this build ↗</Link>}{own && <button className="forge-link" onClick={reset}>Reset build</button>}</div>
-    {!own && <div className="forge-invitation"><h2>Your practice has its own shape.</h2><p>Put your experience into the talents you use. See what they unlock together.</p><Link className="atlas-cta" to={`${baseRoute}/build/`}>Forge your own build ↗</Link></div>}
+    {!own && <div className="forge-invitation"><h2>Where would you put your points?</h2><p>Start with your experience, then spend your points across design, technical practice, and code.</p><Link className="atlas-cta" to={`${baseRoute}/build/`}>Forge your own build ↗</Link></div>}
   </main>;
 };
 export default TalentAtlas;

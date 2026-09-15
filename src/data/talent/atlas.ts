@@ -22,6 +22,13 @@ const newCraftSkills: AtlasSkill[] = [
   },
 ];
 
+const newPracticeSkills: AtlasSkill[] = [
+  { id: 'systems-mapping', name: 'Systems Mapping', territory: 'technical', areaId: 'systems-mapping', tier: 'foundation', glyph: 'systems-mapping', weights: { systems: .6, strategy: .4 }, meaning: 'Mapping product flows, dependencies, and boundaries so a team can see how the parts connect.', masteryLine: 'Product relationships and dependencies made clear enough to guide decisions.' },
+  { id: 'validation', name: 'Validation', territory: 'technical', areaId: 'validation', tier: 'foundation', glyph: 'validation', weights: { research: .7, exploration: .3 }, meaning: 'Testing design assumptions with prototypes and usability sessions, then revising the work from what people do.', masteryLine: 'Design decisions tested with people before they become expensive to change.' },
+  { id: 'apis-integrations', name: 'APIs & Integrations', territory: 'code', areaId: 'apis-integrations', tier: 'foundation', glyph: 'apis-integrations', weights: { build: .7, systems: .3 }, meaning: 'Connecting interfaces to data and services, including requests, responses, and failure states.', masteryLine: 'Interfaces connected to services with clear data contracts and failure handling.' },
+  { id: 'testing-quality', name: 'Testing & Quality', territory: 'code', areaId: 'testing-quality', tier: 'foundation', glyph: 'testing-quality', weights: { build: .6, systems: .4 }, meaning: 'Writing repeatable component and interaction checks that catch regressions as implementation changes.', masteryLine: 'Working behavior protected by focused tests that catch meaningful regressions.' },
+];
+
 export const ATLAS_SKILLS: AtlasSkill[] = [
   ...NODE_LIST.map((node): AtlasSkill => {
     const prerequisite = node.id === 'automation' ? undefined : foundationOf(node.id);
@@ -32,6 +39,7 @@ export const ATLAS_SKILLS: AtlasSkill[] = [
       ...(prerequisite ? { prerequisite: { skillId: prerequisite.id, points: 2 } } : {}) };
   }),
   ...newCraftSkills,
+  ...newPracticeSkills,
 ];
 export const ATLAS_SKILL_BY_ID = Object.fromEntries(ATLAS_SKILLS.map((skill) => [skill.id, skill])) as Record<string, AtlasSkill>;
 
@@ -64,7 +72,7 @@ function ability(id: string, name: string, kind: AtlasAbilityKind, family: Famil
   return { id, name, kind, family, ingredients, description, hint: hints[family] };
 }
 
-/** The 30-recipe brief plus Ryan-approved Script Spark for JavaScript coverage. */
+/** Stable recipe IDs preserve shared builds as the catalog grows. */
 export const ATLAS_ABILITIES: AtlasAbility[] = [
   ability('figma-force', 'Figma Force', 'stance', 'systems', ['figma', 'components'], 'Turn design files into reusable systems.'),
   ability('pixel-prowess', 'Pixel Prowess', 'stance', 'craft', ['raster-craft', 'layout'], 'Bring image craft, composition, and interface polish together.'),
@@ -82,6 +90,10 @@ export const ATLAS_ABILITIES: AtlasAbility[] = [
   ability('typescript-tempo', 'TypeScript Tempo', 'stance', 'build', ['typescript', 'state-modeling'], 'Give application logic and state clear contracts.'),
   ability('agent-arsenal', 'Agent Arsenal', 'stance', 'ai', ['ai-tools', 'agent-context'], 'Give agents both capability and the context to use it.'),
   ability('script-spark', 'Script Spark', 'stance', 'build', ['javascript', 'interaction'], 'Turn interaction ideas into behavior in the browser.'),
+  ability('system-clarity', 'System Clarity', 'stance', 'systems', ['systems-mapping', 'state-modeling'], 'Map how product states and dependencies affect one another.'),
+  ability('evidence-loop', 'Evidence Loop', 'stance', 'research', ['validation', 'prototyping'], 'Use a prototype to test an assumption, then revise the design.'),
+  ability('connected-interfaces', 'Connected Interfaces', 'stance', 'build', ['apis-integrations', 'typescript'], 'Connect an interface to services with explicit data contracts.'),
+  ability('reliable-components', 'Reliable Components', 'stance', 'systems', ['testing-quality', 'storybook'], 'Check component behavior as the library changes.'),
   ability('system-sight', 'System Sight', 'combo', 'systems', ['tokens', 'components', 'governance'], 'See the rules, consumers, and consequences behind a component.'),
   ability('brand-barrage', 'Brand Barrage', 'combo', 'craft', ['typography', 'raster-craft', 'vector-design'], 'Build a visual language across type, images, and scalable assets.'),
   ability('interface-instinct', 'Interface Instinct', 'combo', 'product', ['layout', 'interaction', 'prototyping'], 'Turn interface judgment into ideas people can try.'),

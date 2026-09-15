@@ -19,30 +19,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
-import type { Allocation, TalentArea, TalentNode, TalentTree } from '../data/talent/types';
-import { TREES } from '../data/talent/trees';
 import { glyph } from '../data/talent/glyphs';
-import { MAX_POINTS_PER_NODE, computePools, isLocked, treeSpend } from '../data/talent/economy';
-import { ARCHETYPES } from '../data/talent/archetypes';
-import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_OVERRIDES } from '../data/talent/ryan';
-import { buildResult } from '../data/talent/score';
+import { ATLAS_SKILLS, atlasPoints, evaluateAtlas } from '../data/talent/atlas';
+import { RYAN_ATLAS, atlasPools, atlasSpent } from '../data/talent/atlasState';
+import { resolveMastery } from '../data/talent/mastery';
 
-// ── The result, computed once ────────────────────────────────────────────────
-
-const RESULT = buildResult(RYAN_INTAKE, RYAN_ALLOCATION, TREES, ARCHETYPES, RYAN_OVERRIDES);
-const POOLS = computePools(RYAN_INTAKE);
-const TREE_POINTS = treeSpend(RESULT.allocation, TREES);
-
-const UNLOCKED = RESULT.abilities.filter((a) => a.unlocked);
-
-const NODE_NAMES: Record<string, string> = {};
-TREES.forEach((tree) => tree.areas.forEach((a) => a.nodes.forEach((n) => { NODE_NAMES[n.id] = n.name; })));
-const nameOf = (id: string) => NODE_NAMES[id] || id;
+const FORGE_STATES = evaluateAtlas(RYAN_ATLAS.allocation);
+const FORGE_MASTERY = resolveMastery(FORGE_STATES);
+const FORGE_POOLS = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit);
+const FORGE_SPENT = atlasSpent(RYAN_ATLAS.allocation);
+const FORGE_TOTAL_SPENT = Object.values(FORGE_SPENT).reduce((sum, points) => sum + points, 0);
+const FORGE_EARNED = FORGE_STATES.filter((state) => state.rank > 0).length;
+const FORGE_MASTERED = ATLAS_SKILLS.filter((skill) => atlasPoints(RYAN_ATLAS.allocation, skill.id) === 5);
+const FORGE_TREES = [
+  { id: 'design', name: 'Design & Systems' },
+  { id: 'technical', name: 'Technical' },
+  { id: 'code', name: 'Code' },
+] as const;
 
 // ── Copy (Section05 artboard, approved) ─────────────────────────────────────
 
 const EXPLANATION =
-  'Sixteen years of points, spent where the work actually went and scored by the same rules as anyone who builds a tree. A node at zero means no points landed there, not that I have never touched it. The class is the game\'s title for the result, not mine.';
+  'I spent sixteen years of points where the work actually went. Talents unlock proficiencies, and those proficiencies shape the class. A zero means no points landed there. It does not mean I have never used the skill.';
 
 const BEATS: { title: string; body: string }[] = [
   { title: 'Visual design', body: 'Type, hierarchy, and composition still decide if a screen holds up.' },
@@ -53,10 +51,10 @@ const BEATS: { title: string; body: string }[] = [
   { title: 'Agentic workflows', body: 'Agents build to my rules. PlayDraft and LoopStack are on TestFlight.' },
 ];
 
-const CAVEAT = 'earned by time, not self-rated';
+const CAVEAT = 'points come from experience and education';
 const MESSAGE =
-  'Tools turn over every few years, so instead of listing them I am showing where sixteen years of points went.';
-const CTA = 'Explore the full talent tree';
+  'A job title leaves out too much. The Forge shows the visual craft, systems work, technical practice, and code that make up how I work.';
+const CTA = 'Explore my Forge build';
 const TOOLS = 'Figma · Illustrator · Storybook · React · React Native · TypeScript · Sass · AEM · Claude Code · MCP';
 
 // ── Glyphs ───────────────────────────────────────────────────────────────────
@@ -77,201 +75,6 @@ const BadgeGlyph: React.FC<{ k: string }> = ({ k }) => (
   <svg {...GLYPH_ATTRS} aria-hidden="true" dangerouslySetInnerHTML={{ __html: glyph(k) }} />
 );
 
-// ── The miniature: node states on Ink at 20px (NodeStates artboard) ─────────
-// Percentages are alpha on the named colour. Ramp: 0 unspent · 1 40% · 2 55%
-// · 3 70% · 4 85% · 5 100% plus fill, ring, and glow. Glyph and ring take the
-// same value. Paths are unlit at 1.4px and lit at 1.6px at the upper node's
-// opacity (a root has no points, so its paths take the foundation's).
-
-const ORANGE = '#f03d01';
-const INK = '#1b1b1b';
-const COOL_PAPER = '#f4f6f7';
-const RAMP = [0, 0.4, 0.55, 0.7, 0.85, 1];
-const orange = (a: number) => `rgba(240,61,1,${a})`;
-const white = (a: number) => `rgba(255,255,255,${a})`;
-const steel = (a: number) => `rgba(143,157,175,${a})`;
-
-const STAGE_W = 204;
-const STAGE_H = 156;
-const NODE_R = 10;
-const GLYPH_PX = 11;
-const COLUMN_X = [22, 62, 102, 142, 182];
-const ROOT = { x: 102, y: 138 };
-const FOUNDATION_Y = 72;
-const CROWN_Y = 20;
-const STEM_TOP = 118; // where the root's stem ends and the five curves begin
-
-type NodeLook = {
-  fill?: string;
-  ring: string;
-  dashed?: boolean;
-  glyph: string;
-  mastered?: boolean;
-};
-
-function lookOf(points: number, locked: boolean): NodeLook {
-  if (locked) return { ring: white(0.14), dashed: true, glyph: steel(0.3) };
-  if (points <= 0) return { ring: white(0.14), glyph: steel(0.55) };
-  if (points >= MAX_POINTS_PER_NODE) return { fill: ORANGE, ring: ORANGE, glyph: INK, mastered: true };
-  const a = RAMP[points];
-  return { ring: orange(a), glyph: orange(a) };
-}
-
-const ROOT_LOOK: NodeLook = { fill: white(0.06), ring: white(0.24), glyph: COOL_PAPER };
-
-function pointsAt(allocation: Allocation, id: string): number {
-  const v = allocation[id];
-  return typeof v === 'number' && isFinite(v) ? Math.max(0, Math.min(MAX_POINTS_PER_NODE, Math.floor(v))) : 0;
-}
-
-/**
- * The five columns of a tree stage. The area whose foundation holds the most
- * points takes the centre column, straight above the root, and the other four
- * keep tree order around it (ties go to the earlier area). For Ryan that puts
- * Visual craft, Design systems, and Communication on the stems, which is the
- * arrangement the artboard approved.
- */
-function columnsOf(tree: TalentTree, allocation: Allocation): TalentArea[] {
-  let centre = 0;
-  tree.areas.forEach((area, i) => {
-    if (pointsAt(allocation, area.nodes[0].id) > pointsAt(allocation, tree.areas[centre].nodes[0].id)) centre = i;
-  });
-  const rest = tree.areas.filter((_, i) => i !== centre);
-  const mid = Math.floor(rest.length / 2);
-  return [...rest.slice(0, mid), tree.areas[centre], ...rest.slice(mid)];
-}
-
-const MiniNode: React.FC<{ cx: number; cy: number; node: TalentNode | { glyph: string }; look: NodeLook; glowId: string }> = ({
-  cx,
-  cy,
-  node,
-  look,
-  glowId,
-}) => (
-  <g>
-    {look.mastered && (
-      <>
-        {/* glow 0 0 8px 2px at 45%, then the 1px orange ring outside a 1.5px ink gap */}
-        <circle cx={cx} cy={cy} r={NODE_R + 2} fill={ORANGE} opacity={0.45} filter={`url(#${glowId})`} />
-        <circle cx={cx} cy={cy} r={NODE_R + 2} fill="none" stroke={ORANGE} strokeWidth={1} />
-        <circle cx={cx} cy={cy} r={NODE_R + 0.75} fill="none" stroke={INK} strokeWidth={1.5} />
-      </>
-    )}
-    {look.fill && <circle cx={cx} cy={cy} r={NODE_R} fill={look.fill} />}
-    {!look.mastered && (
-      <circle
-        cx={cx}
-        cy={cy}
-        r={NODE_R - 0.5}
-        fill="none"
-        stroke={look.ring}
-        strokeWidth={1}
-        strokeDasharray={look.dashed ? '2.2 2.2' : undefined}
-      />
-    )}
-    <svg
-      {...GLYPH_ATTRS}
-      x={cx - GLYPH_PX / 2}
-      y={cy - GLYPH_PX / 2}
-      width={GLYPH_PX}
-      height={GLYPH_PX}
-      style={{ color: look.glyph }}
-      dangerouslySetInnerHTML={{ __html: glyph(node.glyph) }}
-    />
-  </g>
-);
-
-const MiniTree: React.FC<{ tree: TalentTree; allocation: Allocation }> = ({ tree, allocation }) => {
-  const columns = columnsOf(tree, allocation);
-  const glowId = `sm-glow-${tree.id}`;
-  const pathGlowId = `sm-path-glow-${tree.id}`;
-
-  return (
-    <div className="sm__tree">
-      <div className="sm__tree-head">
-        <span className="sm__tree-name">{tree.name}</span>
-        <span className="sm__tree-pts">{`${TREE_POINTS[tree.id]} pts`}</span>
-      </div>
-      <svg
-        className="sm__tree-svg"
-        viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
-        width={STAGE_W}
-        height={STAGE_H}
-        fill="none"
-        strokeLinecap="round"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <defs>
-          <filter id={glowId} x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="4" />
-          </filter>
-          <filter id={pathGlowId} x="-100%" y="-100%" width="300%" height="300%">
-            <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor={ORANGE} floodOpacity="0.35" />
-          </filter>
-        </defs>
-
-        {/* Paths first, so every node sits on top of its own wires. */}
-        <path d={`M${ROOT.x} ${ROOT.y - NODE_R}V${STEM_TOP}`} stroke={white(0.24)} strokeWidth={1.4} />
-        {columns.map((area, i) => {
-          const x = COLUMN_X[i];
-          const [foundation, crown] = area.nodes;
-          const fp = pointsAt(allocation, foundation.id);
-          const cp = isLocked(allocation, crown.id) ? 0 : pointsAt(allocation, crown.id);
-          const toFoundation = `M${ROOT.x} ${STEM_TOP}C${ROOT.x} 98 ${x} 104 ${x} ${FOUNDATION_Y + NODE_R}`;
-          const toCrown = `M${x} ${FOUNDATION_Y - NODE_R}V${CROWN_Y + NODE_R}`;
-          return (
-            <g key={area.id}>
-              <path
-                d={toFoundation}
-                stroke={fp > 0 ? orange(RAMP[fp]) : white(0.12)}
-                strokeWidth={fp > 0 ? 1.6 : 1.4}
-              />
-              <path
-                d={toCrown}
-                stroke={cp > 0 ? orange(RAMP[cp]) : white(0.12)}
-                strokeWidth={cp > 0 ? 1.6 : 1.4}
-                filter={cp >= MAX_POINTS_PER_NODE ? `url(#${pathGlowId})` : undefined}
-              />
-            </g>
-          );
-        })}
-
-        <MiniNode cx={ROOT.x} cy={ROOT.y} node={tree.root} look={ROOT_LOOK} glowId={glowId} />
-        <text
-          x={ROOT.x + NODE_R + 6}
-          y={ROOT.y + 3.5}
-          className="sm__tree-root"
-        >
-          {tree.root.name.toUpperCase()}
-        </text>
-        {columns.map((area, i) => {
-          const x = COLUMN_X[i];
-          const [foundation, crown] = area.nodes;
-          return (
-            <g key={area.id}>
-              <MiniNode
-                cx={x}
-                cy={FOUNDATION_Y}
-                node={foundation}
-                look={lookOf(pointsAt(allocation, foundation.id), false)}
-                glowId={glowId}
-              />
-              <MiniNode
-                cx={x}
-                cy={CROWN_Y}
-                node={crown}
-                look={lookOf(pointsAt(allocation, crown.id), isLocked(allocation, crown.id))}
-                glowId={glowId}
-              />
-            </g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-};
-
 // ── Section ──────────────────────────────────────────────────────────────────
 
 const RailArrow: React.FC = () => (
@@ -289,7 +92,7 @@ const SkillMastery: React.FC = () => {
 
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
 
-  const masteries = RESULT.mastered.map(nameOf).join(' · ');
+  const masteries = FORGE_MASTERED.map((skill) => skill.name).join(' · ');
 
   return (
     <section id="mastery" className="sm">
@@ -300,15 +103,13 @@ const SkillMastery: React.FC = () => {
           </div>
 
           <p className="sm__eyebrow reveal-fade" style={delay(0)}>
-            {`An experiment · sixteen years scored as a talent tree · ${POOLS.total} points`}
+            {`An experiment · sixteen years allocated as talents · ${FORGE_TOTAL_SPENT} of ${FORGE_POOLS.total} points`}
           </p>
           <div className="sm__title-row reveal-fade" style={delay(80)}>
             <h2 className="sm__title">
-              {RESULT.primary.name}
-              <span className="sm__title-slash"> / </span>
-              {RESULT.secondary.name}
+              {FORGE_MASTERY.title}
             </h2>
-            <span className="sm__level">{`[ Level ${POOLS.level} Designer ]`}</span>
+            <span className="sm__level">{`[ ${FORGE_EARNED} proficiencies active ]`}</span>
           </div>
           <p className="sm__explanation reveal-fade" style={delay(160)}>{EXPLANATION}</p>
         </div>
@@ -340,13 +141,19 @@ const SkillMastery: React.FC = () => {
               decorative and hidden. */}
           <div className="sm__mini reveal-fade" style={delay(0)}>
             <div className="sm__mini-head">
-              <span>{`Ryan's tree · ${TREES.length} lanes · ${RESULT.pointsSpent} points spent`}</span>
-              <span>{`${RESULT.mastered.length} masteries at ${MAX_POINTS_PER_NODE} points · ${UNLOCKED.length} abilities`}</span>
+              <span>{`Ryan's Forge · ${FORGE_TREES.length} lanes · ${ATLAS_SKILLS.length} talents`}</span>
+              <span>{`${FORGE_TOTAL_SPENT} points spent · ${FORGE_EARNED} proficiencies active`}</span>
             </div>
             <div className="sm__mini-trees">
-              {TREES.map((tree) => (
-                <MiniTree key={tree.id} tree={tree} allocation={RESULT.allocation} />
-              ))}
+              {FORGE_TREES.map((tree) => {
+                const skills = ATLAS_SKILLS.filter((skill) => skill.territory === tree.id);
+                return <div className="sm__tree" key={tree.id}>
+                  <div className="sm__tree-head"><span className="sm__tree-name">{tree.name}</span><span className="sm__tree-pts">{`${FORGE_SPENT[tree.id]} pts`}</span></div>
+                  <div className="sm__forge-nodes" aria-label={`${tree.name}, ${skills.length} talents`}>
+                    {skills.map((skill) => <span key={skill.id} aria-hidden="true" title={`${skill.name}: ${atlasPoints(RYAN_ATLAS.allocation, skill.id)} of 5`} data-points={atlasPoints(RYAN_ATLAS.allocation, skill.id)} />)}
+                  </div>
+                </div>;
+              })}
             </div>
             <div className="sm__mini-foot">
               <span className="sm__mini-dot" aria-hidden="true" />

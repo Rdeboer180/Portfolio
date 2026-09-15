@@ -12,6 +12,17 @@ const CLASS_MARKS: Record<MasteryId | 'maker', string> = {
 };
 // Each passive has its own mark; the enclosing medallion establishes the family.
 const PASSIVE_MARKS: Record<string, string> = {
+  'tree-technical': 'M12 3 20 15l-5 6H9l-5-6 8-12Zm0 0v10M10 15a2 2 0 1 0 4 0 2 2 0 1 0-4 0M8 21h8',
+  'tree-code': 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3ZM3 8h18M6 5.5h4M13 5.5h2M8 12l-3 3 3 3M16 12l3 3-3 3M13 11l-2 8',
+  'systems-mapping': 'M9 3h6v5H9V3ZM3 16h6v5H3v-5Zm12 0h6v5h-6v-5M12 8v4M6 16v-4h12v4',
+  'validation': 'M5 3h14v18H5V3ZM9 7h6M8 13l3 3 5-6',
+  'apis-integrations': 'M8 5H4v14h4M16 5h4v14h-4M7 10h10l-3-3M17 14H7l3 3',
+  'testing-quality': 'M3 4h18v16H3V4ZM3 8h18M8 14l3 3 5-6',
+  'system-clarity': 'M3 3h6v6H3V3Zm12 12h6v6h-6v-6M9 6h9v9M3 15h6v6H3v-6M6 9v6',
+  'evidence-loop': 'M5 7a8 8 0 0 1 14 1M19 3v5h-5M19 17a8 8 0 0 1-14-1M5 21v-5h5M9 12l2 2 4-4',
+  'connected-interfaces': 'M2 4h9v7H2V4Zm11 9h9v7h-9v-7M6 11v6h7M11 7h7v6',
+  'reliable-components': 'M3 3h8v8H3V3Zm12 0h6v6h-6V3ZM3 15h6v6H3v-6M12 16l4 4 6-8',
+
   'figma-force':'M5 4h10v5H5V4Zm0 5h10v5H5V9Zm0 5h5v6H5v-6M15 9h4v5h-4',
   'pixel-prowess':'M3 4h18v16H3V4Zm0 12 6-6 4 4 3-3 5 5M16 7h1',
   'vector-velocity':'M12 3 19 14l-7 7-7-7 7-11Zm0 0v11M10 14h4M3 4h3M18 4h3',

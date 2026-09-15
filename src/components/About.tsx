@@ -44,7 +44,7 @@ const About: React.FC = () => {
               </p>
 
               <p className="about__body">
-                Where sixteen years of experience actually landed—and what I’m still leveling up—is mapped out in my <Link to="/talent-tree/" className="about__tree-link"><strong>Design Talent Tree</strong></Link>.
+                I mapped where sixteen years of experience actually landed, and what I am still leveling up, in <Link to="/talent-tree/" className="about__tree-link"><strong>The Forge</strong></Link>.
               </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>

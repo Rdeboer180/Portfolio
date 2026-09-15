@@ -30,7 +30,6 @@ const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
 const TalentAtlasPage = lazy(() => import('./components/TalentAtlasPage'));
-const TalentTreePage = lazy(() => import('./components/TalentTreePage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
 
@@ -184,15 +183,10 @@ function AppRoutes() {
         <Route path="/notes" element={<PageShell><NotesPage /></PageShell>} />
         <Route path="/notes/:slug" element={<PageShell><NotePage /></PageShell>} />
         <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
-        {/* The front door: Ryan's tree, no intake, no state in the URL. */}
-        <Route path="/talent-tree" element={<PageShell><TalentTreePage mode="ryan" /></PageShell>} />
-        {/* The build path: the intake in the console's header rail, empty trees,
-            the share state in the hash (#s=). Its own route so the prerender
-            gives it static HTML, a title, and a sitemap entry, and so a shared
-            tree lands somewhere that is not Ryan's page. */}
-        <Route path="/talent-tree/atlas" element={<PageShell><TalentAtlasPage /></PageShell>} />
-        <Route path="/talent-tree/atlas/build" element={<PageShell><TalentAtlasPage own /></PageShell>} />
-        <Route path="/talent-tree/build" element={<PageShell><TalentTreePage mode="build" /></PageShell>} />
+        <Route path="/talent-tree" element={<PageShell><TalentAtlasPage /></PageShell>} />
+        <Route path="/talent-tree/build" element={<PageShell><TalentAtlasPage own /></PageShell>} />
+        <Route path="/talent-tree/atlas" element={<Navigate to="/talent-tree/" replace />} />
+        <Route path="/talent-tree/atlas/build" element={<Navigate to="/talent-tree/build/" replace />} />
         {/* The name Ryan used in the brief; the site's routes are kebab-case with a
             trailing slash, so this is a client-side alias, not the canonical. */}
         <Route path="/talentTree" element={<Navigate to="/talent-tree/" replace />} />

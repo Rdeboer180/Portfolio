@@ -303,6 +303,30 @@
     overflow: visible;
   }
 
+  &__forge-nodes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px 22px;
+    align-content: center;
+    min-height: 156px;
+    padding: 18px 14px;
+
+    span {
+      display: block;
+      width: 18px;
+      height: 18px;
+      margin: auto;
+      border: 1px solid rgba(143, 157, 175, 0.32);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 4px var(--sm-ink);
+      background: rgba(143, 157, 175, 0.18);
+    }
+
+    span[data-points='1'], span[data-points='2'] { border-color: rgba(240, 61, 1, 0.55); background: rgba(240, 61, 1, 0.35); }
+    span[data-points='3'], span[data-points='4'] { border-color: rgba(240, 61, 1, 0.9); background: rgba(240, 61, 1, 0.72); }
+    span[data-points='5'] { border-color: $color-primary; background: $color-primary; box-shadow: 0 0 12px rgba(240, 61, 1, 0.42); }
+  }
+
   // The root's name beside it, in the panel's meta voice.
   &__tree-root {
     font-family: $font-family-mono;

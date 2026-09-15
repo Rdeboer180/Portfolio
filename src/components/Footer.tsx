@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           </p>
           <div className="footer__meta-links">
             <Link to="/notes" className="footer__site-index">Notes</Link>
-            <Link to="/talent-tree/" className="footer__site-index">Talent tree</Link>
+            <Link to="/talent-tree/" className="footer__site-index">The Forge</Link>
             <Link to="/design-system" className="footer__site-index">Design system</Link>
             <Link to="/sitemap" className="footer__site-index">Site index</Link>
           </div>

@@ -27,9 +27,9 @@ Hubot Sans, Inter, Menlo, existing spacing/radii, and orange actions remain port
 
 ## First implementation
 
-Review routes: `/talent-tree/atlas/` and `/talent-tree/atlas/build/`, both noindex. Current production tree routes remain in place until the replacement is reviewed.
+The Forge now lives at `/talent-tree/` and `/talent-tree/build/`. The former Atlas review URLs redirect to these production routes.
 
-The draft includes the map, 32 skill rings, 31 landmarks, top inspector, ingredient links, rank/charge updates, limiting ingredients, class computation, budget/gate enforcement, announcements, reset, and share links. New v6 shares use stable skill ids and preserve credit; v5 links still import. The old console/data remain untouched to keep existing links and tests stable during migration.
+The Forge includes 36 talents, 35 proficiencies, ingredient links, rank updates, limiting ingredients, class computation, budget enforcement, announcements, reset, and share links. New v6 shares use stable talent ids and preserve credit; v5 links still import.
 
 Mobile uses a fixed readable map with horizontal/vertical scrolling, territory jump controls, controlled zoom, and a persistent selection action returning to the top inspector. Keyboard users can Tab through nodes or navigate spatially with arrow keys. Numeric investment and hidden-state labels carry meaning independently of color. Motion is one-shot and disabled under Reduce Motion.
 

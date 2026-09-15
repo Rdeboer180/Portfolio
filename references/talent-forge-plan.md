@@ -116,7 +116,7 @@ Ryan now invests 84 points with five available. Overrides: Governance 4, Figma 5
 
 The proficiency collection is now explicitly “Your top proficiencies,” ordered by rank, then recipe progress, then name for deterministic ties. The six strongest active passives appear first; “Show all” exposes the complete catalog in one action, with discovery masking unchanged. No second hidden pagination step.
 
-A 12/12/12 catalog remains a proposal, not an implemented change. Candidate additions: Technical — Systems Mapping and Validation; Code — APIs & Integrations and Testing & Quality. Expansion should add meaningful proficiency routes rather than act as a reason to grant budget. The current catalog remains 32 talents and 31 proficiencies.
+A 12/12/12 catalog is now implemented. Technical adds Systems Mapping and Validation. Code adds APIs & Integrations and Testing & Quality. Each talent feeds one new proficiency route, bringing the catalog to 36 talents and 35 proficiencies. The new talents begin at zero and do not increase the point budget.
 
 
 ## Styling emphasis — September 15
@@ -136,3 +136,11 @@ Keep Validation distinct from Research (understanding the problem), and Testing 
 Removed the competing workbench heading and the repeated proficiency medallion below the talent columns. The declaration now leads into a gray, collapsed Your proficiencies drawer containing class-supporting passives, the top/full proficiency collection, and the selected recipe. All talents are visible initially; selecting a proficiency can still focus its recipe. The crest remains the only prominent identity mark in the default view.
 
 Proposed hybrid class for review: Craft Steward. Three equal pillars combine visual craft (Pixel Prowess or Brand Barrage), durable standards (Durable Standards), and creative exploration (Tangible Exploration or Prototype Pulse). Each pillar uses its strongest proficiency; alternatives do not stack. All three must be active to qualify. Level follows the weakest pillar, so rank three across the pillars produces Adept Craft Steward. Current Ryan build has 3/5 in each proposed pillar. Existing single-domain classes remain available when no hybrid qualifies. How qualifying hybrids compete with domain classes and with future hybrids needs an explicit, general rule before implementation; do not hard-code Ryan's identity. The naming and resolver proposal is pending Ryan's response, so the existing class calculation is preserved for this layout revision.
+
+## Production release
+
+The Forge replaces the legacy talent tree at `/talent-tree/` and `/talent-tree/build/`. The former review URLs redirect to the live routes. Older `?t=` share links are converted to the current build format on arrival. The page now has production metadata, canonical URLs, footer navigation, and sitemap coverage.
+
+The homepage mastery section reads directly from the Forge allocation. It reports the current class, 84 of 89 points, 36 talents across three equal lanes, 35 possible proficiencies, 23 active proficiencies, and five mastered talents. Homepage and footer links name the experience The Forge.
+
+Technical uses an authored pen-tool tree mark. Code uses an authored browser window with angle brackets and a slash, based on Ryan's supplied reference. The four new talents and their proficiency recipes also have distinct marks in the same single-stroke family.
