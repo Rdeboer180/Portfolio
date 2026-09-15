@@ -14,13 +14,15 @@ export interface AtlasBuild {
 
 export const RYAN_ATLAS: AtlasBuild = {
   intake: RYAN_INTAKE,
-  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5 },
-  craftCredit: 8,
+  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5, governance: 4, prototyping: 3, 'state-modeling': 3, handoff: 4, git: 2, automation: 2, 'agent-context': 4 },
+  craftCredit: 0,
   discovered: [],
 };
 
+export const FORGE_POINTS_PER_YEAR = 4;
+
 export function atlasPools(intake: Intake, craftCredit = 0): Pools {
-  const pools = computePools(intake);
+  const pools = computePools(intake, FORGE_POINTS_PER_YEAR);
   const credit = Number.isFinite(craftCredit) ? Math.max(0, Math.min(10, Math.floor(craftCredit))) : 0;
   return { ...pools, total: pools.total + credit, designLocked: pools.designLocked + credit,
     receipt: credit ? [...pools.receipt, { points: credit, label: `+${credit} · prior visual craft credit`, note: 'Additional credit allocated to visual craft; separate from the time-based awards.', pool: 'points', lockedTo: 'design' }] : pools.receipt };

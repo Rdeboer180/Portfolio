@@ -53,28 +53,47 @@ test('empty builds never disclose a provisional secret class', () => {
   expect(pickAtlasClass(evaluateAtlas({}))).toEqual({ primary: null, secondary: null });
 });
 
-test('Ryan’s explicit visual craft credit funds the two additions without moving existing points', () => {
+test('Ryan’s requested strengths fit the revised annual budget without a special credit', () => {
   const pools = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit);
-  expect(pools.total).toBe(71);
+  expect(pools.total).toBe(89);
+  expect(RYAN_ATLAS.craftCredit).toBe(0);
   expect(atlasWithinBudget(RYAN_ATLAS.allocation, pools)).toBe(true);
-  expect(Object.values(atlasSpent(RYAN_ATLAS.allocation)).reduce((a, b) => a + b, 0)).toBe(71);
-  Object.entries(RYAN_ALLOCATION).forEach(([id, points]) => expect(RYAN_ATLAS.allocation[id]).toBe(points));
-  expect(atlasPools(RYAN_INTAKE).total).toBe(63);
+  expect(Object.values(atlasSpent(RYAN_ATLAS.allocation)).reduce((a, b) => a + b, 0)).toBe(84);
+  expect(RYAN_ATLAS.allocation).toMatchObject({ governance: 4, figma: 5, storybook: 3, automation: 2, git: 2, 'ai-tools': 4, 'agent-context': 4, handoff: 4, prototyping: 3, 'state-modeling': 3 });
+  ['components', 'accessibility', 'typography', 'prototyping', 'state-modeling'].forEach(id => expect(RYAN_ATLAS.allocation[id]).toBeGreaterThanOrEqual(3));
 });
 
-test('spending respects gates and budgets, including the new visual skills', () => {
-  const pools = atlasPools(RYAN_INTAKE, 8);
-  expect(changeAtlasPoint(RYAN_ATLAS.allocation, 'raster-craft', 1, pools)).toBe(RYAN_ATLAS.allocation);
-  expect(changeAtlasPoint({}, 'layout', 1, pools)).toEqual({});
-  expect(changeAtlasPoint({ typography: 3, layout: 2 }, 'typography', -1, pools)).toEqual({ typography: 2 });
-  expect(changeAtlasPoint({}, 'vector-design', 1, pools)).toEqual({ 'vector-design': 1 });
+test('all prerequisites unlock at two; Automation is independent', () => {
+  const pools = atlasPools(RYAN_INTAKE);
+  ATLAS_SKILLS.filter(s => s.prerequisite).forEach(s => {
+    const prerequisite = s.prerequisite!;
+    expect(prerequisite.points).toBe(2);
+    expect(changeAtlasPoint({ [prerequisite.skillId]: 1 }, s.id, 1, pools)[s.id]).toBeUndefined();
+    expect(changeAtlasPoint({ [prerequisite.skillId]: 2 }, s.id, 1, pools)[s.id]).toBe(1);
+  });
+  expect(changeAtlasPoint({}, 'automation', 1, pools)).toEqual({ automation: 1 });
+  expect(changeAtlasPoint({ typography: 2, layout: 2 }, 'typography', -1, pools)).toEqual({ typography: 1 });
+});
+
+test('revised budget respects optional experience splits and spending limits', () => {
+  const pools = atlasPools({ ...RYAN_INTAKE, split: 50 });
+  expect(pools.total).toBe(89);
+  expect(pools.designLocked).toBe(48);
+  expect(pools.codeLocked).toBe(36);
+  expect(pools.free).toBe(5);
+  const noPoints = atlasPools({ ...RYAN_INTAKE, degree: 'none', minor: 'none', years: 0, hours: 0 });
+  const empty = {};
+  expect(changeAtlasPoint(empty, 'vector-design', 1, noPoints)).toBe(empty);
+  expect(atlasPools({ ...RYAN_INTAKE, years: 17 }).total - atlasPools(RYAN_INTAKE).total).toBe(4);
 });
 
 test('v6 shares preserve stable ids and credit while existing v5 shares still load', () => {
   const decoded = decodeAtlas(encodeAtlas(RYAN_ATLAS))!;
   expect(decoded.allocation['raster-craft']).toBe(3);
   expect(decoded.allocation['vector-design']).toBe(5);
-  expect(decoded.craftCredit).toBe(8);
+  expect(decoded.craftCredit).toBe(0);
+  const oldCredited = { ...RYAN_ATLAS, allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5 }, craftCredit: 8 };
+  expect(decodeAtlas(encodeAtlas(oldCredited))?.craftCredit).toBe(8);
   expect(decodeAtlas(encodeState(RYAN_INTAKE, RYAN_ALLOCATION))?.craftCredit).toBe(0);
   expect(decodeAtlas('v6.broken')).toBeNull();
   const invalid = `v6.${encodeURIComponent(JSON.stringify({ ...RYAN_ATLAS, allocation: { typography: 1, layout: 5 } }))}`;

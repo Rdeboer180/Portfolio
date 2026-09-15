@@ -15,6 +15,6 @@ const TalentAtlasPage: React.FC<{ own?: boolean }> = ({ own }) => {
     if (!previous) document.head.appendChild(tag);
     return () => { if (previous) tag.content = original || ''; else tag.remove(); };
   }, []);
-  return <article className="tt"><nav className="tt__nav" aria-label="Primary"><Link to="/" className="tt__nav-logo">Ryan DeBoer</Link><Link to="/talent-tree/" className="tt__nav-back">Current talent tree ↗</Link></nav><div className="tt__page"><TalentAtlas own={own} /></div></article>;
+  return <article className="tt"><nav className="tt__nav" aria-label="Primary"><Link to="/" className="tt__nav-logo">Ryan DeBoer</Link><Link to="/talent-tree/" className="tt__nav-back">Current talent tree ↗</Link></nav><div className="tt__page"><TalentAtlas key={own ? 'build' : 'ryan'} own={own} /></div></article>;
 };
 export default TalentAtlasPage;

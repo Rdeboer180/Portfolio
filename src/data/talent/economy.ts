@@ -179,9 +179,9 @@ export function minorPoints(degree: Degree, minor: Minor): number {
 }
 
 /** 4 per year for the first three years, then 2 per year. */
-export function yearsPoints(years: number): number {
+export function yearsPoints(years: number, annualRate?: number): number {
   const y = sanitizeYears(years);
-  return Math.min(y, 3) * 4 + Math.max(y - 3, 0) * 2;
+  return annualRate === undefined ? Math.min(y, 3) * 4 + Math.max(y - 3, 0) * 2 : y * annualRate;
 }
 
 /**
@@ -189,8 +189,8 @@ export function yearsPoints(years: number): number {
  * Design and systems and the remainder to Code, so the two always add up to
  * `yearsPoints(years)`.
  */
-export function yearsSplit(years: number, split: number): { design: number; code: number } {
-  const yp = yearsPoints(years);
+export function yearsSplit(years: number, split: number, annualRate?: number): { design: number; code: number } {
+  const yp = yearsPoints(years, annualRate);
   const share = sanitizeSplit(split);
   const design = Math.round((yp * share) / 100);
   return { design, code: yp - design };
@@ -231,7 +231,8 @@ function yearsLabel(years: number): string {
 }
 
 /** Ryan's rules, applied. */
-export function computePools(intake: Intake): Pools {
+export function computePools(intake: Intake, annualRate?: number): Pools {
+  const yearsNote = annualRate === undefined ? YEARS_NOTE : `${annualRate} points per year of professional experience`;
   const years = sanitizeYears(intake.years);
   const hours = sanitizeHours(intake.hours);
   const degreeOpt = degreeOption(intake.degree);
@@ -243,7 +244,7 @@ export function computePools(intake: Intake): Pools {
 
   const dp = degreePoints(degreeOpt.value, majorOpt.value);
   const mp = minorPoints(degreeOpt.value, minorOpt.value);
-  const yp = yearsPoints(years);
+  const yp = yearsPoints(years, annualRate);
   const hp = hoursPoints(hours);
 
   let designLocked = 0;
@@ -283,23 +284,23 @@ export function computePools(intake: Intake): Pools {
 
   if (split === undefined) {
     free += yp;
-    receipt.push({ points: yp, label: `+${yp} · ${yearsLabel(years)}`, note: YEARS_NOTE, pool: 'points' });
+    receipt.push({ points: yp, label: `+${yp} · ${yearsLabel(years)}`, note: yearsNote, pool: 'points' });
   } else {
-    const ys = yearsSplit(years, split);
+    const ys = yearsSplit(years, split, annualRate);
     designLocked += ys.design;
     codeLocked += ys.code;
     receipt.push(
       {
         points: ys.design,
         label: `+${ys.design} · ${yearsLabel(years)}, design · ${lockedLabel('design')}`,
-        note: `${YEARS_NOTE} · ${split} percent`,
+        note: `${yearsNote} · ${split} percent`,
         pool: 'points',
         lockedTo: 'design',
       },
       {
         points: ys.code,
         label: `+${ys.code} · ${yearsLabel(years)}, code · ${lockedLabel('code')}`,
-        note: `${YEARS_NOTE} · ${100 - split} percent`,
+        note: `${yearsNote} · ${100 - split} percent`,
         pool: 'points',
         lockedTo: 'code',
       },

@@ -24,9 +24,9 @@ const newCraftSkills: AtlasSkill[] = [
 
 export const ATLAS_SKILLS: AtlasSkill[] = [
   ...NODE_LIST.map((node): AtlasSkill => {
-    const prerequisite = foundationOf(node.id);
+    const prerequisite = node.id === 'automation' ? undefined : foundationOf(node.id);
     return { ...node, territory: treeOf(node.id)!.id,
-      ...(prerequisite ? { prerequisite: { skillId: prerequisite.id, points: 3 } } : {}) };
+      ...(prerequisite ? { prerequisite: { skillId: prerequisite.id, points: 2 } } : {}) };
   }),
   ...newCraftSkills,
 ];

@@ -2,13 +2,14 @@ import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import TalentAtlas from './TalentAtlas';
+import TalentAtlasPage from '../TalentAtlasPage';
 import { RYAN_ATLAS, encodeAtlas } from '../../data/talent/atlasState';
 
 beforeAll(() => { Element.prototype.scrollIntoView = jest.fn(); });
 afterEach(() => window.history.replaceState(null, '', '/'));
 const mount = (own = false) => render(<MemoryRouter><TalentAtlas own={own} /></MemoryRouter>);
 
-test('Ryan’s Forge preserves credited talents and a persistent class while browsing', () => {
+test('Ryan’s Forge preserves requested talents and a persistent class while browsing', () => {
   mount();
   const declaration = screen.getByRole('region', { name: 'Your classification' });
   const title = within(declaration).getByRole('heading').textContent;
@@ -17,7 +18,7 @@ test('Ryan’s Forge preserves credited talents and a persistent class while bro
   expect(screen.getByRole('button', { name: /^Vector Design\. 5 of 5/ })).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Show all 32 talents' }));
   expect(screen.getByRole('button', { name: /^Raster Craft\. 3 of 5/ })).toBeTruthy();
-  expect(screen.getByText('+8 · prior visual craft credit')).toBeTruthy();
+  expect(screen.getAllByText('+64 · 16 years').length).toBeGreaterThan(0);
 });
 test('empty builds always have a starter class without exposing hidden recipes', () => {
   mount(true);
@@ -48,9 +49,28 @@ test('allocation earns passives, updates classification, and resets to the start
   expect(screen.getByRole('heading', { name: 'Initiate Maker' })).toBeTruthy();
   expect(window.location.hash).toBe('');
 });
-test('shared builds preserve credit and all new talent allocations', () => {
+test('shared builds preserve all updated talent allocations', () => {
   window.history.replaceState(null, '', `/#${new URLSearchParams({ s: encodeAtlas(RYAN_ATLAS) })}`);
   mount(true);
   expect(screen.getByRole('button', { name: /^Vector Design\. 5 of 5/ })).toBeTruthy();
-  expect(screen.getByText('+8 · prior visual craft credit')).toBeTruthy();
+  expect(screen.getAllByText('+64 · 16 years').length).toBeGreaterThan(0);
+});
+
+test('top proficiencies are ranked, and Show all reveals the complete collection', () => {
+  mount();
+  const section = screen.getByRole('region', { name: 'Proficiency collection' });
+  expect(within(section).getByRole('heading', { name: 'Your top proficiencies' })).toBeTruthy();
+  const cards = within(section).getAllByRole('button', { name: /\. (Master|Elite|Advanced|Strengthened|Unlocked)\./ });
+  expect(cards).toHaveLength(6);
+  expect(cards[0]).toHaveAccessibleName('Vector Velocity. Master.');
+  fireEvent.click(within(section).getByRole('button', { name: 'Show all 31 proficiencies' }));
+  expect(within(section).getByRole('heading', { name: 'All your proficiencies' })).toBeTruthy();
+  expect(within(section).getAllByRole('button')).toHaveLength(32);
+});
+
+test('switching from Ryan to a visitor build resets the focused read-only view', () => {
+  const view = render(<MemoryRouter><TalentAtlasPage /></MemoryRouter>);
+  view.rerender(<MemoryRouter><TalentAtlasPage own /></MemoryRouter>);
+  expect(screen.getByRole('heading', { name: 'Initiate Maker' })).toBeTruthy();
+  expect(screen.getByRole('button', { name: /^Automation\. 0 of 5/ })).toBeTruthy();
 });

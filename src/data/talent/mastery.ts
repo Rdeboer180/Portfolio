@@ -46,3 +46,8 @@ export function resolveMastery(states: AtlasAbilityState[]) {
   const primary = [...domains].sort((a, b) => b.strength - a.strength || b.coverage - a.coverage)[0];
   return { domains, primary: primary.strength ? primary : null, title: primary.strength ? `${primary.levelName} ${primary.title}` : 'Initiate Maker' };
 }
+
+/** Strongest first; recipe progress breaks rank ties, then the visible name. */
+export function rankProficiencies(states: AtlasAbilityState[]) {
+  return [...states].sort((a, b) => b.rank - a.rank || b.charge - a.charge || proficiencyName(a).localeCompare(proficiencyName(b)));
+}

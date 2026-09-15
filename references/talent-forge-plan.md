@@ -106,3 +106,14 @@ The advancement index is the floor of average facet strength, minimum one, cappe
 The review routes now render the Forge instead of the Atlas map. They include the class crest, supporting passives, selected recipe, focused/all talent lanes, mobile tree selection, a six-card collection with expansion, receipt, sharing, export, and domain comparison. Existing recipe IDs, allocations, and link decoding remain intact. Four identity-like proficiency names have presentation aliases so they do not compete with the class declaration.
 
 Discovery visibility still follows the original brief and recalculates when points are removed. No memory policy was silently introduced. The production route remains the legacy experience while this replacement is reviewed; the review route is noindex.
+
+
+## Allocation and progression revision — September 15
+
+Current Forge rules supersede the earlier draft: professional experience earns four points per year throughout. Ryan's budget is 89 (64 professional + 16 degree + 4 minor + 5 recent practice), with the special eight-point credit removed from his current build. Older shared builds retain their stored allocations and explicit credits while receiving the revised annual budget.
+
+Ryan now invests 84 points with five available. Overrides: Governance 4, Figma 5, Storybook 3, Automation 2, Git 2, AI Tools 4, Agent Context 4, Handoff 4, Prototyping 3, State Modeling 3. Components remain 3, Accessibility 4, Typography 5; all other existing investments are preserved. Automation is independent. Every other prerequisite in the Forge unlocks at two points.
+
+The proficiency collection is now explicitly “Your top proficiencies,” ordered by rank, then recipe progress, then name for deterministic ties. The six strongest active passives appear first; “Show all” exposes the complete catalog in one action, with discovery masking unchanged. No second hidden pagination step.
+
+A 12/12/12 catalog remains a proposal, not an implemented change. Candidate additions: Technical — Systems Mapping and Validation; Code — APIs & Integrations and Testing & Quality. Expansion should add meaningful proficiency routes rather than act as a reason to grant budget. The current catalog remains 32 talents and 31 proficiencies.
