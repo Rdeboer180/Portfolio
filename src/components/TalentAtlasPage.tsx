@@ -4,9 +4,9 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import TalentAtlas from './talent/TalentAtlas';
 import '../styles/styles.scss';
 
-/** Review route while Atlas v2's visual and discovery decisions are being validated. */
+/** Review route for the Forge mastery model and proficiency exploration. */
 const TalentAtlasPage: React.FC<{ own?: boolean }> = ({ own }) => {
-  usePageMeta({ title: 'Talent Atlas preview — Ryan DeBoer', description: 'An interactive map of design experience and the abilities it creates.' });
+  usePageMeta({ title: 'The Forge preview — Ryan DeBoer', description: 'Talents unlock passive proficiencies. Discover how your strengths shape your mastery class.' });
   useEffect(() => {
     const previous = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
     const original = previous?.content;
