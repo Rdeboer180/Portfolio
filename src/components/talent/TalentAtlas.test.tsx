@@ -7,7 +7,11 @@ import { RYAN_ATLAS, encodeAtlas } from '../../data/talent/atlasState';
 
 beforeAll(() => { Element.prototype.scrollIntoView = jest.fn(); });
 afterEach(() => window.history.replaceState(null, '', '/'));
-const mount = (own = false) => render(<MemoryRouter><TalentAtlas own={own} /></MemoryRouter>);
+const mount = (own = false) => {
+  const view = render(<MemoryRouter><TalentAtlas own={own} /></MemoryRouter>);
+  fireEvent.click(screen.getByRole('button', { name: /^Your proficiencies/ }));
+  return view;
+};
 
 test('Ryan’s Forge preserves requested talents and a persistent class while browsing', () => {
   mount();
@@ -75,4 +79,18 @@ test('switching from Ryan to a visitor build resets the focused read-only view',
   view.rerender(<MemoryRouter><TalentAtlasPage own /></MemoryRouter>);
   expect(screen.getByRole('heading', { name: 'Initiate Maker' })).toBeTruthy();
   expect(screen.getByRole('button', { name: /^Automation\. 0 of 5/ })).toBeTruthy();
+});
+
+test('proficiencies are secondary and collapsed below the classification by default', () => {
+  render(<MemoryRouter><TalentAtlas /></MemoryRouter>);
+  expect(screen.queryByText('At the workbench')).toBeNull();
+  expect(screen.queryByRole('region', { name: 'Proficiency details' })).toBeNull();
+  const toggle = screen.getByRole('button', { name: /^Your proficiencies/ });
+  expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  expect(screen.getByRole('button', { name: /^CSS\/SASS\. 5 of 5/ })).toBeTruthy();
+  fireEvent.click(toggle);
+  expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  expect(within(screen.getByRole('region', { name: 'Build proficiencies' })).getByRole('region', { name: 'Proficiency details' })).toBeTruthy();
+  fireEvent.click(toggle);
+  expect(screen.queryByRole('region', { name: 'Proficiency collection' })).toBeNull();
 });

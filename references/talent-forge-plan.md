@@ -130,3 +130,9 @@ Recommended additions to reach 12 talents per tree (pending selection):
 - Code: Testing & Quality — repeatable component and interaction checks in implementation. Proposed passive: Testing & Quality + Storybook → Reliable Components.
 
 Keep Validation distinct from Research (understanding the problem), and Testing & Quality distinct from QA & Analytics (release review and observed product signals). These additions describe capabilities rather than additional tool brands. New talents start unallocated until Ryan supplies their levels; they do not require another budget increase.
+
+## Classification-first hierarchy — September 15
+
+Removed the competing workbench heading and the repeated proficiency medallion below the talent columns. The declaration now leads into a gray, collapsed Your proficiencies drawer containing class-supporting passives, the top/full proficiency collection, and the selected recipe. All talents are visible initially; selecting a proficiency can still focus its recipe. The crest remains the only prominent identity mark in the default view.
+
+Proposed hybrid class for review: Craft Steward. Three equal pillars combine visual craft (Pixel Prowess or Brand Barrage), durable standards (Durable Standards), and creative exploration (Tangible Exploration or Prototype Pulse). Each pillar uses its strongest proficiency; alternatives do not stack. All three must be active to qualify. Level follows the weakest pillar, so rank three across the pillars produces Adept Craft Steward. Current Ryan build has 3/5 in each proposed pillar. Existing single-domain classes remain available when no hybrid qualifies. How qualifying hybrids compete with domain classes and with future hybrids needs an explicit, general rule before implementation; do not hard-code Ryan's identity. The naming and resolver proposal is pending Ryan's response, so the existing class calculation is preserved for this layout revision.
