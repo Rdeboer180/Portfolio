@@ -1,19 +1,4 @@
-// ============================================
-// SkillMastery: homepage section 05, badged "Mastery"
-// Replaces the tools list (TechnicalAbilities, which stays mounted on
-// /homepage_template) with a positioning section: the class the talent tree
-// computes for Ryan, how the tree grew, a miniature of the tree itself on Ink,
-// and the door into /talent-tree/. The copy is the approved Section05
-// artboard's, verbatim; every number on the surface is read from the talent
-// data module (pools, points, masteries), never typed here.
-//
-// Hydration rules, same as SystemsInPractice: the prerender serialises the
-// live DOM, so the first client render must produce the same element tree.
-// Nothing here measures the DOM; the miniature is drawn at fixed geometry
-// (three 204 × 156 stages, 20px nodes) as plain SVG from TREES and the
-// allocation. Text that mixes copy and numbers is one template string, never
-// text nodes around an expression, so the serialised text node matches.
-// ============================================
+// Homepage summary of the live Forge build. Scores and classification share its data.
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -22,6 +7,7 @@ import { useReveal } from '../hooks/useReveal';
 import { glyph } from '../data/talent/glyphs';
 import { ATLAS_SKILLS, atlasPoints, evaluateAtlas } from '../data/talent/atlas';
 import { RYAN_ATLAS, atlasPools, atlasSpent } from '../data/talent/atlasState';
+import { ClassificationEmblem } from './talent/ForgeEmblem';
 import { resolveMastery } from '../data/talent/mastery';
 
 const FORGE_STATES = evaluateAtlas(RYAN_ATLAS.allocation);
@@ -32,15 +18,15 @@ const FORGE_TOTAL_SPENT = Object.values(FORGE_SPENT).reduce((sum, points) => sum
 const FORGE_EARNED = FORGE_STATES.filter((state) => state.rank > 0).length;
 const FORGE_MASTERED = ATLAS_SKILLS.filter((skill) => atlasPoints(RYAN_ATLAS.allocation, skill.id) === 5);
 const FORGE_TREES = [
-  { id: 'design', name: 'Design & Systems' },
-  { id: 'technical', name: 'Technical' },
-  { id: 'code', name: 'Code' },
+  { id: 'design', name: 'Design & Systems', focus: ['typography', 'vector-design', 'tokens', 'governance', 'components', 'accessibility'] },
+  { id: 'technical', name: 'Technical', focus: ['figma', 'prototyping', 'storybook', 'handoff', 'ai-tools', 'agent-context'] },
+  { id: 'code', name: 'Code', focus: ['css', 'html', 'typescript', 'react-native', 'automation', 'git'] },
 ] as const;
 
-// ── Copy (Section05 artboard, approved) ─────────────────────────────────────
+// ── Copy ─────────────────────────────────────
 
 const EXPLANATION =
-  'I allocated points from fourteen professional years and two years of earlier independent practice where the work actually went. Talents unlock proficiencies, and those proficiencies shape the class. A zero means no points landed there. It does not mean I have never used the skill.';
+  'I put the most weight on visual craft, durable standards, and creative exploration. That means shaping the interface, testing ideas in working prototypes, and giving my teams rules they can build on.';
 
 const BEATS: { title: string; body: string }[] = [
   { title: 'Visual design', body: 'Type, hierarchy, and composition still decide if a screen holds up.' },
@@ -48,12 +34,12 @@ const BEATS: { title: string; body: string }[] = [
   { title: 'Systems', body: 'One page at a time did not scale. Tokens and components did.' },
   { title: 'Design to code', body: 'HTML, CSS, and state definitions, so the rule survived the build.' },
   { title: 'Governance', body: 'Standards, accessibility, and QA that hold when I am not in the room.' },
-  { title: 'Agentic workflows', body: 'Agents build to my rules. PlayDraft and LoopStack are on TestFlight.' },
+  { title: 'Agent workflows', body: 'Agents help build PlayDraft and LoopStack. I own the product decisions, review, and release.' },
 ];
 
-const CAVEAT = 'points come from experience and education';
+const CAVEAT = 'the skills I keep coming back to';
 const MESSAGE =
-  'A job title leaves out too much. The Forge shows the visual craft, systems work, technical practice, and code that make up how I work.';
+  'The Forge makes that mix visible. Follow the talents into proficiencies, see the work behind them, or build your own combination.';
 const CTA = 'Explore my Forge build';
 const TOOLS = 'Figma · Illustrator · Storybook · React · React Native · TypeScript · Sass · AEM · Claude Code · MCP';
 
@@ -103,13 +89,13 @@ const SkillMastery: React.FC = () => {
           </div>
 
           <p className="sm__eyebrow reveal-fade" style={delay(0)}>
-            {`An experiment · fourteen professional years, plus earlier practice · ${FORGE_TOTAL_SPENT} of ${FORGE_POOLS.total} points`}
+            {`My current focus · ${FORGE_TOTAL_SPENT} of ${FORGE_POOLS.total} points`}
           </p>
           <div className="sm__title-row reveal-fade" style={delay(80)}>
-            <h2 className="sm__title">
-              {FORGE_MASTERY.title}
-            </h2>
-            <span className="sm__level">{`[ ${FORGE_EARNED} proficiencies active ]`}</span>
+            <ClassificationEmblem domain={FORGE_MASTERY.primary?.id} level={FORGE_MASTERY.primary?.level || 1} />
+            <div><h2 className="sm__title">{FORGE_MASTERY.title}</h2>
+              <span className="sm__level">{`Class level ${FORGE_MASTERY.primary?.level || 1}/5 · ${FORGE_EARNED} active proficiencies`}</span>
+            </div>
           </div>
           <p className="sm__explanation reveal-fade" style={delay(160)}>{EXPLANATION}</p>
         </div>
@@ -136,22 +122,20 @@ const SkillMastery: React.FC = () => {
 
         {/* ── The miniature and the door ── */}
         <div className={`sm__spread${spreadVisible ? ' is-visible' : ''}`} ref={spreadRef}>
-          {/* The panel's own text (header, tree names and points, the mastered
-              line) is the accessible account of the drawing; the SVGs are
-              decorative and hidden. */}
+          {/* A named selection makes the allocation readable without opening the full tree. */}
           <div className="sm__mini reveal-fade" style={delay(0)}>
             <div className="sm__mini-head">
-              <span>{`Ryan's Forge · ${FORGE_TREES.length} lanes · ${ATLAS_SKILLS.length} talents`}</span>
+              <span>{`Selected talents · ${FORGE_TREES.length} trees`}</span>
               <span>{`${FORGE_TOTAL_SPENT} points spent · ${FORGE_EARNED} proficiencies active`}</span>
             </div>
             <div className="sm__mini-trees">
               {FORGE_TREES.map((tree) => {
-                const skills = ATLAS_SKILLS.filter((skill) => skill.territory === tree.id);
-                return <div className="sm__tree" key={tree.id}>
+                const skills = tree.focus.map(id => ATLAS_SKILLS.find(skill => skill.id === id)!);
+                return <div className={`sm__tree sm__tree--${tree.id}`} key={tree.id}>
                   <div className="sm__tree-head"><span className="sm__tree-name">{tree.name}</span><span className="sm__tree-pts">{`${FORGE_SPENT[tree.id]} pts`}</span></div>
-                  <div className="sm__forge-nodes" aria-label={`${tree.name}, ${skills.length} talents`}>
-                    {skills.map((skill) => <span key={skill.id} aria-hidden="true" title={`${skill.name}: ${atlasPoints(RYAN_ATLAS.allocation, skill.id)} of 5`} data-points={atlasPoints(RYAN_ATLAS.allocation, skill.id)} />)}
-                  </div>
+                  <ul className="sm__focus-talents" aria-label={`${tree.name}, selected talents`}>
+                    {skills.map(skill => <li key={skill.id}><span>{skill.name}</span><strong>{`${atlasPoints(RYAN_ATLAS.allocation, skill.id)}/5`}</strong></li>)}
+                  </ul>
                 </div>;
               })}
             </div>
@@ -176,6 +160,7 @@ const SkillMastery: React.FC = () => {
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
+            <p className="sm__receipt reveal-fade" style={delay(400)}>The budget includes fourteen professional years, two years of earlier practice, education, and recent practice. Points show where I chose to focus.</p>
             <p className="sm__tools reveal-fade" style={delay(440)}>{TOOLS}</p>
           </div>
         </div>

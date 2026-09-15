@@ -529,3 +529,22 @@
     }
   }
 }
+
+// Reuse the Forge classification crest and name the selected talents.
+.sm__title-row { align-items: center; flex-wrap: nowrap; gap: 24px; }
+.sm__title-row .forge-crest { width: 100px; height: 110px; flex: 0 0 100px; filter: drop-shadow(0 4px 5px rgba(42,29,19,.12)); }
+.sm__title-row .sm__level { display: block; margin-top: 10px; white-space: normal; }
+.sm__tree { flex: 1 1 0; min-width: 0; width: auto; }
+.sm__tree--design { --sm-tree-color: var(--talent-design-200); }
+.sm__tree--technical { --sm-tree-color: var(--talent-technical-200); }
+.sm__tree--code { --sm-tree-color: var(--talent-code-200); }
+.sm__tree-head { padding: 10px 0; border-bottom: 2px solid var(--sm-tree-color); letter-spacing: .04em; }
+.sm__focus-talents { list-style: none; margin: 0; padding: 8px 0 16px; }
+.sm__focus-talents li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; line-height: 1.5; }
+.sm__focus-talents strong { color: var(--sm-tree-color); font: 12px/1.5 $font-family-mono; white-space: nowrap; }
+.sm__receipt { margin: 18px 0 0; font-size: 12px; line-height: 1.6; color: $color-neutral-muted; }
+@media (max-width: 639px) {
+  .sm__title-row { gap: 16px; }
+  .sm__title-row .forge-crest { width: 68px; height: 76px; flex-basis: 68px; }
+  .sm__title-row .sm__title { font-size: 26px; }
+}
