@@ -1,5 +1,5 @@
 import { ATLAS_ABILITIES, ATLAS_SKILLS, atlasAbilityView, evaluateAtlas, evaluateAtlasAbility, pickAtlasClass, uncoveredAtlasSkills } from './atlas';
-import { RYAN_ATLAS, atlasPools, atlasSpent, atlasWithinBudget, changeAtlasPoint, decodeAtlas, encodeAtlas } from './atlasState';
+import { RYAN_ATLAS, atlasPools, atlasSpent, atlasWithinBudget, normalizeAtlas, changeAtlasPoint, decodeAtlas, encodeAtlas } from './atlasState';
 import { RYAN_ALLOCATION, RYAN_INTAKE } from './ryan';
 import { encodeState } from './score';
 
@@ -53,11 +53,11 @@ test('empty builds never disclose a provisional secret class', () => {
 });
 
 test('Ryan’s requested strengths fit the revised annual budget without a special credit', () => {
-  const pools = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit);
+  const pools = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit, RYAN_ATLAS.priorPracticeYears);
   expect(pools.total).toBe(89);
   expect(RYAN_ATLAS.craftCredit).toBe(0);
   expect(atlasWithinBudget(RYAN_ATLAS.allocation, pools)).toBe(true);
-  expect(Object.values(atlasSpent(RYAN_ATLAS.allocation)).reduce((a, b) => a + b, 0)).toBe(84);
+  expect(Object.values(atlasSpent(RYAN_ATLAS.allocation)).reduce((a, b) => a + b, 0)).toBe(89);
   expect(RYAN_ATLAS.allocation).toMatchObject({ html: 3, css: 5, governance: 4, figma: 5, storybook: 3, automation: 2, git: 2, 'ai-tools': 4, 'agent-context': 4, handoff: 4, prototyping: 3, 'state-modeling': 3 });
   ['components', 'accessibility', 'typography', 'prototyping', 'state-modeling'].forEach(id => expect(RYAN_ATLAS.allocation[id]).toBeGreaterThanOrEqual(3));
 });
@@ -110,4 +110,20 @@ test('new talents survive shares and unlock their own proficiencies', () => {
   expect(decodeAtlas(encodeAtlas({ ...RYAN_ATLAS, allocation }))?.allocation).toEqual(allocation);
   const states = evaluateAtlas(allocation);
   ['system-clarity', 'evidence-loop', 'connected-interfaces', 'reliable-components'].forEach(id => expect(states.find(s => s.ability.id === id)?.rank).toBe(2));
+});
+
+test('Ryan’s 89 points distinguish professional years from earlier practice and survive sharing', () => {
+  expect(RYAN_ATLAS.intake.years).toBe(14);
+  expect(RYAN_ATLAS.priorPracticeYears).toBe(2);
+  const pools = atlasPools(RYAN_ATLAS.intake, 0, RYAN_ATLAS.priorPracticeYears);
+  expect(pools.total).toBe(89);
+  expect(pools.receipt.map(line => line.label)).toContain('+8 · 2 years of earlier independent practice');
+  expect(RYAN_ATLAS.allocation).toMatchObject({ research: 2, 'information-architecture': 1, 'systems-mapping': 2 });
+  expect(decodeAtlas(encodeAtlas(RYAN_ATLAS))).toEqual({ ...RYAN_ATLAS, allocation: normalizeAtlas(RYAN_ATLAS.allocation) });
+  for (const priorPracticeYears of [-1, 1.5, 100, '2']) {
+    expect(decodeAtlas(`v6.${encodeURIComponent(JSON.stringify({ ...RYAN_ATLAS, priorPracticeYears }))}`)).toBeNull();
+  }
+  const legacy = { ...RYAN_ATLAS, intake: { ...RYAN_ATLAS.intake, years: 16 } };
+  delete legacy.priorPracticeYears;
+  expect(decodeAtlas(encodeAtlas(legacy))).toEqual({ ...legacy, allocation: normalizeAtlas(legacy.allocation) });
 });

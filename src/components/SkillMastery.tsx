@@ -26,7 +26,7 @@ import { resolveMastery } from '../data/talent/mastery';
 
 const FORGE_STATES = evaluateAtlas(RYAN_ATLAS.allocation);
 const FORGE_MASTERY = resolveMastery(FORGE_STATES);
-const FORGE_POOLS = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit);
+const FORGE_POOLS = atlasPools(RYAN_ATLAS.intake, RYAN_ATLAS.craftCredit, RYAN_ATLAS.priorPracticeYears);
 const FORGE_SPENT = atlasSpent(RYAN_ATLAS.allocation);
 const FORGE_TOTAL_SPENT = Object.values(FORGE_SPENT).reduce((sum, points) => sum + points, 0);
 const FORGE_EARNED = FORGE_STATES.filter((state) => state.rank > 0).length;
@@ -40,7 +40,7 @@ const FORGE_TREES = [
 // ── Copy (Section05 artboard, approved) ─────────────────────────────────────
 
 const EXPLANATION =
-  'I spent sixteen years of points where the work actually went. Talents unlock proficiencies, and those proficiencies shape the class. A zero means no points landed there. It does not mean I have never used the skill.';
+  'I allocated points from fourteen professional years and two years of earlier independent practice where the work actually went. Talents unlock proficiencies, and those proficiencies shape the class. A zero means no points landed there. It does not mean I have never used the skill.';
 
 const BEATS: { title: string; body: string }[] = [
   { title: 'Visual design', body: 'Type, hierarchy, and composition still decide if a screen holds up.' },
@@ -103,7 +103,7 @@ const SkillMastery: React.FC = () => {
           </div>
 
           <p className="sm__eyebrow reveal-fade" style={delay(0)}>
-            {`An experiment · sixteen years allocated as talents · ${FORGE_TOTAL_SPENT} of ${FORGE_POOLS.total} points`}
+            {`An experiment · fourteen professional years, plus earlier practice · ${FORGE_TOTAL_SPENT} of ${FORGE_POOLS.total} points`}
           </p>
           <div className="sm__title-row reveal-fade" style={delay(80)}>
             <h2 className="sm__title">
@@ -119,7 +119,7 @@ const SkillMastery: React.FC = () => {
           <div className="sm__seam reveal-fade" style={delay(0)}>
             <h3 className="sm__seam-label">How the tree grew</h3>
             <span className="sm__seam-line" aria-hidden="true" />
-            <p className="sm__seam-note">Sixteen years, in the order the points landed.</p>
+            <p className="sm__seam-note">From visual craft to systems and working products.</p>
           </div>
 
           <ol className="sm__rail" aria-label="How the tree grew, in six beats">

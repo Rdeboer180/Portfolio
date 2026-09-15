@@ -32,3 +32,20 @@ test('class selection does not depend on order and three full facets are needed 
   const partial = evaluateMastery(evaluateAtlas({ typography: 5, layout: 5, 'raster-craft': 4, 'vector-design': 5 }))[0];
   expect(partial.levelName).toBe('Expert');
 });
+
+test('Craft Steward combines craft, standards, and exploration for any qualifying build', () => {
+  const allocation = { 'raster-craft': 3, layout: 3, tokens: 5, accessibility: 4, governance: 4, documentation: 3, figma: 5, prototyping: 3 };
+  const result = resolveMastery(evaluateAtlas(allocation));
+  expect(result.title).toBe('Adept Craft Steward');
+  expect(result.primary?.facets.map(f => f.rank)).toEqual([3, 3, 3]);
+  expect(resolveMastery(evaluateAtlas({ ...allocation, prototyping: 1 })).title).toBe('Initiate Craft Steward');
+  expect(resolveMastery(evaluateAtlas({ ...allocation, prototyping: 0 })).primary?.id).not.toBe('craft-steward');
+  expect(resolveMastery(evaluateAtlas(RYAN_ATLAS.allocation)).title).toBe('Adept Craft Steward');
+});
+
+test('hybrid alternatives never stack and Master requires all three pillars at five', () => {
+  const all = Object.fromEntries(ATLAS_ABILITIES.flatMap(a => a.ingredients).map(id => [id, 5]));
+  expect(resolveMastery(evaluateAtlas(all)).title).toBe('Master Craft Steward');
+  expect(resolveMastery(evaluateAtlas({ ...all, governance: 4 })).title).toBe('Expert Craft Steward');
+  expect(resolveMastery(evaluateAtlas(all)).primary?.strength).toBe(15);
+});

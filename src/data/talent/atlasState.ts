@@ -10,19 +10,29 @@ export interface AtlasBuild {
   /** Explicit credit approved by Ryan; separate from degree, years, and recent-hours awards. */
   craftCredit: number;
   discovered: string[];
+  /** Earlier independent practice, excluding degree study and recent-hours awards. */
+  priorPracticeYears?: number;
 }
 
 export const RYAN_ATLAS: AtlasBuild = {
-  intake: RYAN_INTAKE,
-  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5, governance: 4, prototyping: 3, 'state-modeling': 3, handoff: 4, html: 3, css: 5, git: 2, automation: 2, 'agent-context': 4 },
+  intake: { ...RYAN_INTAKE, years: 14 },
+  priorPracticeYears: 2,
+  allocation: { ...RYAN_ALLOCATION, 'raster-craft': 3, 'vector-design': 5, governance: 4, prototyping: 3, 'state-modeling': 3, handoff: 4, html: 3, css: 5, git: 2, automation: 2, 'agent-context': 4, research: 2, 'information-architecture': 1, 'systems-mapping': 2 },
   craftCredit: 0,
   discovered: [],
 };
 
 export const FORGE_POINTS_PER_YEAR = 4;
 
-export function atlasPools(intake: Intake, craftCredit = 0): Pools {
+export function atlasPools(intake: Intake, craftCredit = 0, priorPracticeYears = 0): Pools {
   const pools = computePools(intake, FORGE_POINTS_PER_YEAR);
+  const priorYears = Number.isFinite(priorPracticeYears) ? Math.max(0, Math.min(99, Math.floor(priorPracticeYears))) : 0;
+  const priorPoints = priorYears * FORGE_POINTS_PER_YEAR;
+  if (priorPoints) {
+    pools.total += priorPoints;
+    pools.free += priorPoints;
+    pools.receipt.push({ points: priorPoints, label: `+${priorPoints} · ${priorYears} years of earlier independent practice`, note: 'Practice before professional work, excluding degree study and recent-hours awards.', pool: 'points' });
+  }
   const credit = Number.isFinite(craftCredit) ? Math.max(0, Math.min(10, Math.floor(craftCredit))) : 0;
   return { ...pools, total: pools.total + credit, designLocked: pools.designLocked + credit,
     receipt: credit ? [...pools.receipt, { points: credit, label: `+${credit} · prior visual craft credit`, note: 'Additional credit allocated to visual craft; separate from the time-based awards.', pool: 'points', lockedTo: 'design' }] : pools.receipt };
@@ -86,11 +96,12 @@ export function decodeAtlas(raw: string): AtlasBuild | null {
       typeof intake.name !== 'string' || intake.name.length > 60 || !Number.isInteger(intake.years) || intake.years < 0 || intake.years > 99 ||
       !Number.isInteger(intake.hours) || intake.hours < 0 || intake.hours > 5 ||
       (intake.split !== undefined && (!Number.isInteger(intake.split) || intake.split < 0 || intake.split > 100 || intake.split % 10 !== 0)) ||
+      (build.priorPracticeYears !== undefined && (!Number.isInteger(build.priorPracticeYears) || build.priorPracticeYears < 0 || build.priorPracticeYears > 99)) ||
       !Number.isInteger(build.craftCredit) || build.craftCredit < 0 || build.craftCredit > 10 ||
       !build.allocation || typeof build.allocation !== 'object' || Array.isArray(build.allocation) ||
       !Array.isArray(build.discovered) || build.discovered.some((id) => !ATLAS_ABILITIES.some((a) => a.id === id))) return null;
     const clean = normalizeAtlas(build.allocation);
     if (Object.keys(build.allocation).some((id) => !ATLAS_SKILL_BY_ID[id] || !Number.isInteger(build.allocation[id]) || build.allocation[id] < 0 || build.allocation[id] > 5 || (clean[id] || 0) !== build.allocation[id])) return null;
-    return atlasWithinBudget(clean, atlasPools(intake, build.craftCredit)) ? { intake, allocation: clean, craftCredit: build.craftCredit, discovered: Array.from(new Set(build.discovered)) } : null;
+    return atlasWithinBudget(clean, atlasPools(intake, build.craftCredit, build.priorPracticeYears)) ? { intake, allocation: clean, craftCredit: build.craftCredit, ...(build.priorPracticeYears !== undefined ? { priorPracticeYears: build.priorPracticeYears } : {}), discovered: Array.from(new Set(build.discovered)) } : null;
   } catch { return null; }
 }

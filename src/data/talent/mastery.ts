@@ -1,6 +1,7 @@
 import type { AtlasAbilityState } from './atlas';
 
 export type MasteryId = 'form' | 'meaning' | 'behavior' | 'structure' | 'realization' | 'stewardship';
+export type ClassificationId = MasteryId | 'craft-steward';
 interface Facet { name: string; abilities: string[] }
 export interface MasteryDomain { id: MasteryId; name: string; title: string; description: string; facets: Facet[] }
 export const MASTERY_DOMAINS: MasteryDomain[] = [
@@ -24,26 +25,46 @@ export const PROFICIENCY_NAMES: Record<string, string> = {
 };
 export function proficiencyName(state: AtlasAbilityState) { return PROFICIENCY_NAMES[state.ability.id] || state.ability.name; }
 
-export function evaluateMastery(states: AtlasAbilityState[]) {
+const CRAFT_STEWARD = {
+  id: 'craft-steward' as const, name: 'Craft stewardship', title: 'Craft Steward',
+  description: 'You explore ideas, give them a precise visual form, and build standards that help the craft hold up as the work grows.',
+  facets: [
+    { name: 'Visual craft', abilities: ['pixel-prowess', 'brand-barrage'] },
+    { name: 'Durable standards', abilities: ['guardrail-architect'] },
+    { name: 'Creative exploration', abilities: ['prototype-alchemist', 'prototype-pulse'] },
+  ],
+};
+
+function evaluateDomains<T extends { facets: Facet[] }>(states: AtlasAbilityState[], catalog: T[]) {
   const byId = new Map(states.map(state => [state.ability.id, state]));
-  return MASTERY_DOMAINS.map(domain => {
+  return catalog.map(domain => {
     // Alternatives in one facet never stack. Inactive remembered discoveries score zero.
     const facets = domain.facets.map(facet => {
       const candidates = facet.abilities.map(id => byId.get(id)).filter((s): s is AtlasAbilityState => Boolean(s && s.rank > 0));
-      const strongest = candidates.sort((a, b) => b.rank - a.rank || a.ability.id.localeCompare(b.ability.id))[0];
+      const strongest = candidates.sort((a, b) => b.rank - a.rank)[0];
       return { ...facet, rank: strongest?.rank || 0, strongest };
     });
     const strength = facets.reduce((sum, facet) => sum + facet.rank, 0);
     const coverage = facets.filter(facet => facet.rank > 0).length;
     // A single facet stays Initiate; Master requires all three facets at rank five.
     const level = strength === 15 ? 5 : Math.min(coverage === 3 ? 4 : coverage === 2 ? 2 : 1, Math.max(1, Math.floor(strength / 3)));
-    return { ...domain, facets, strength, coverage, level, levelName: CLASS_LEVELS[level - 1] };
+    return { ...(domain as Omit<T, 'facets'>), facets, strength, coverage, level, levelName: CLASS_LEVELS[level - 1] };
   });
+}
+export function evaluateMastery(states: AtlasAbilityState[]) {
+  return evaluateDomains(states, MASTERY_DOMAINS);
 }
 export function resolveMastery(states: AtlasAbilityState[]) {
   const domains = evaluateMastery(states);
   // Catalog order is the stable final tie-breaker: independent of click/history order.
-  const primary = [...domains].sort((a, b) => b.strength - a.strength || b.coverage - a.coverage)[0];
+  const strongestDomain = [...domains].sort((a, b) => b.strength - a.strength || b.coverage - a.coverage)[0];
+  const hybrid = evaluateDomains(states, [CRAFT_STEWARD])[0];
+  // A complete combination takes precedence; its weakest pillar sets its level.
+  // This rule applies to every build, independent of identity or discovery order.
+  const hybridLevel = Math.min(...hybrid.facets.map(facet => facet.rank));
+  const primary = hybrid.coverage === 3
+    ? { ...hybrid, level: hybridLevel, levelName: CLASS_LEVELS[hybridLevel - 1] }
+    : strongestDomain;
   return { domains, primary: primary.strength ? primary : null, title: primary.strength ? `${primary.levelName} ${primary.title}` : 'Initiate Maker' };
 }
 

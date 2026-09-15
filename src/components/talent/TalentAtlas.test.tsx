@@ -24,7 +24,7 @@ test('Ryan’s Forge preserves requested talents and a persistent class while br
   expect(screen.getByRole('button', { name: /^CSS\/SASS\. 5 of 5/ })).toBeTruthy();
   expect(screen.getByRole('button', { name: /^HTML\. 3 of 5/ })).toBeTruthy();
   expect(screen.getByRole('button', { name: /^Raster Craft\. 3 of 5/ })).toBeTruthy();
-  expect(screen.getAllByText('+64 · 16 years').length).toBeGreaterThan(0);
+  expect(screen.getAllByText('+56 · 14 years').length).toBeGreaterThan(0);
 });
 test('empty builds always have a starter class without exposing hidden recipes', () => {
   mount(true);
@@ -59,7 +59,7 @@ test('shared builds preserve all updated talent allocations', () => {
   window.history.replaceState(null, '', `/#${new URLSearchParams({ s: encodeAtlas(RYAN_ATLAS) })}`);
   mount(true);
   expect(screen.getByRole('button', { name: /^Vector Design\. 5 of 5/ })).toBeTruthy();
-  expect(screen.getAllByText('+64 · 16 years').length).toBeGreaterThan(0);
+  expect(screen.getAllByText('+56 · 14 years').length).toBeGreaterThan(0);
 });
 
 test('top proficiencies are ranked, and Show all reveals the complete collection', () => {
@@ -93,4 +93,13 @@ test('proficiencies are secondary and collapsed below the classification by defa
   expect(within(screen.getByRole('region', { name: 'Build proficiencies' })).getByRole('region', { name: 'Proficiency details' })).toBeTruthy();
   fireEvent.click(toggle);
   expect(screen.queryByRole('region', { name: 'Proficiency collection' })).toBeNull();
+});
+
+test('Ryan’s combined class shows public evidence without opening the proficiency drawer', () => {
+  render(<MemoryRouter><TalentAtlas /></MemoryRouter>);
+  const declaration = screen.getByRole('region', { name: 'Your classification' });
+  expect(within(declaration).getByRole('heading', { name: 'Adept Craft Steward' })).toBeTruthy();
+  expect(within(declaration).getByRole('link', { name: 'Standards' })).toHaveAttribute('href', '/work/wheelrack/');
+  fireEvent.click(screen.getByRole('button', { name: /^Your proficiencies/ }));
+  expect(within(screen.getByRole('region', { name: 'Proficiency details' })).getByRole('link', { name: /WheelRack/ })).toBeTruthy();
 });

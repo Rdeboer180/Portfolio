@@ -1,8 +1,9 @@
 import React, { useId } from 'react';
-import type { MasteryId } from '../../data/talent/mastery';
+import type { ClassificationId } from '../../data/talent/mastery';
 
-const CLASS_MARKS: Record<MasteryId | 'maker', string> = {
+const CLASS_MARKS: Record<ClassificationId | 'maker', string> = {
   maker: 'M12 4v16M4 12h16M6 6l12 12M18 6 6 18',
+  'craft-steward': 'M12 2 21 6v7c0 4-5 7-9 9-4-2-9-5-9-9V6l9-4ZM12 6l5 7-5 5-5-5 5-7Zm0 0v7M10 13h4',
   form: 'M4 18 12 4l8 14H4ZM8 18l4-7 4 7M7 13h10',
   meaning: 'M4 5h6l2 3 2-3h6v13h-6l-2 2-2-2H4V5Zm8 3v12M7 9h2M7 12h2M15 9h2M15 12h2',
   behavior: 'M4 7h8l4 5-4 5H4M8 7l4 5-4 5M16 7h4v10h-4',
@@ -55,9 +56,9 @@ const PASSIVE_MARKS: Record<string, string> = {
   'system-memory':'M3 7l9-4 9 4-9 4-9-4Zm0 5 9 4 9-4M3 17l9 4 9-4M12 11v10',
   'shipwright':'M3 14h18l-4 6H7l-4-6Zm9-11v11M12 4l7 7h-7M9 8H5v6',
 };
-export const ForgeMark: React.FC<{ id: string; size?: number }> = ({ id, size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={PASSIVE_MARKS[id] || CLASS_MARKS[id as MasteryId] || CLASS_MARKS.maker} /></svg>;
+export const ForgeMark: React.FC<{ id: string; size?: number }> = ({ id, size = 24 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={PASSIVE_MARKS[id] || CLASS_MARKS[id as ClassificationId] || CLASS_MARKS.maker} /></svg>;
 
-export const ClassificationEmblem: React.FC<{ domain?: MasteryId; level: number }> = ({ domain, level }) => {
+export const ClassificationEmblem: React.FC<{ domain?: ClassificationId; level: number }> = ({ domain, level }) => {
   const id = useId().replace(/:/g, '');
   return <svg className="forge-crest" viewBox="0 0 128 140" aria-hidden="true">
     <defs><linearGradient id={`${id}-rim`} x1="0" y1="0" x2="1" y2="1"><stop stopColor="#ffbc75"/><stop offset=".4" stopColor="#f03d01"/><stop offset="1" stopColor="#9c2909"/></linearGradient><linearGradient id={`${id}-ink`} x1="0" y1="0" x2="1" y2="1"><stop stopColor="#34434a"/><stop offset="1" stopColor="#141d22"/></linearGradient></defs>
