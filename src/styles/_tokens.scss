@@ -157,3 +157,22 @@
   --container-max: 1186px;
   --container-px: 32px;
 }
+
+// Talent Atlas territory colors. Scoped semantic extensions; orange remains the action accent.
+:root {
+  --talent-design-700: #2e5f80;
+  --talent-design-500: #487d9d;
+  --talent-design-200: #cbdee9;
+  --talent-design-100: #e7f0f4;
+  --talent-design-surface: #f4f8fa;
+  --talent-technical-700: var(--color-primary-dark);
+  --talent-technical-500: var(--color-primary);
+  --talent-technical-200: #f9c4b0;
+  --talent-technical-100: var(--color-primary-light);
+  --talent-technical-surface: #fff8f5;
+  --talent-code-700: #345e4b;
+  --talent-code-500: #638873;
+  --talent-code-200: #cbded2;
+  --talent-code-100: #e9f1ec;
+  --talent-code-surface: #f4f8f5;
+}

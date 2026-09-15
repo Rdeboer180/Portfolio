@@ -77,7 +77,7 @@ export interface ReceiptChip {
 const TREE_SHORT: Record<TreeId, string> = { design: 'design', technical: 'technical', code: 'code' };
 
 /** The receipt chips the strip prints, one per answered rule. */
-export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
+export function intakeChips(intake: Intake, answered: Answered, annualRate?: number): ReceiptChip[] {
   const chips: ReceiptChip[] = [];
   if (answered.degree) {
     const degree = degreeOption(intake.degree);
@@ -102,9 +102,9 @@ export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
     const label = `${years} ${years === 1 ? 'year' : 'years'}`;
     const split = typeof intake.split === 'number' && isFinite(intake.split) ? sanitizeSplit(intake.split) : undefined;
     if (split === undefined) {
-      chips.push({ key: 'years', question: 'years', text: `+${yearsPoints(years)} · ${label}` });
+      chips.push({ key: 'years', question: 'years', text: `+${yearsPoints(years, annualRate)} · ${label}` });
     } else {
-      const ys = yearsSplit(years, split);
+      const ys = yearsSplit(years, split, annualRate);
       chips.push({ key: 'years-design', question: 'years', text: `+${ys.design} design, locked · ${label}, design` });
       chips.push({ key: 'years-code', question: 'years', text: `+${ys.code} code, locked · ${label}, code` });
     }
@@ -117,6 +117,8 @@ export function intakeChips(intake: Intake, answered: Answered): ReceiptChip[] {
 }
 
 export interface TalentIntakeStripProps {
+  headingLevel?: 'h1' | 'h2';
+  annualRate?: number;
   intake: Intake;
   answered: Answered;
   /** The whole pool the effective intake earns, for the tally. */
@@ -130,12 +132,12 @@ const NO_SPLIT = -1;
 const HOURS_SHORT = ['< 40', '40+', '80+', '120+', '160+', '200+'];
 
 const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
-  intake, answered, total, level, onChange,
+  intake, answered, total, level, onChange, headingLevel: Heading = 'h1', annualRate,
 }) => {
   const takesMajor = answered.degree && degreeTakesMajor(intake.degree);
   const years = intake.years;
   const split = typeof intake.split === 'number' && isFinite(intake.split) ? sanitizeSplit(intake.split) : undefined;
-  const chips = intakeChips(intake, answered);
+  const chips = intakeChips(intake, answered, annualRate);
   const complete = intakeComplete(answered);
   const answeredCount = [answered.degree, answered.years, answered.hours].filter(Boolean).length;
 
@@ -147,7 +149,7 @@ const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
   return (
     <div className={`tt-intake${complete ? ' is-complete' : ''}`} data-answered={answeredCount}>
       <div className="tt-intake__head">
-        <h1 className="tt-intake__title">Build your talent tree</h1>
+        <Heading className="tt-intake__title">Build your talent tree</Heading>
         <p className="tt-intake__lede">
           Not a self-rating: you report where your time went. The tally counts up as each answer lands. The name waits for the card.
         </p>
@@ -255,7 +257,7 @@ const TalentIntakeStrip: React.FC<TalentIntakeStripProps> = ({
               <span className="tt-stepper__unit" aria-hidden="true">years</span>
             </div>
           </div>
-          <p className="tt-step__note">{`${YEARS_NOTE} · one pool · level = years`}</p>
+          <p className="tt-step__note">{`${annualRate === undefined ? YEARS_NOTE : `${annualRate} points per year of professional experience`} · one pool · level = years`}</p>
         </fieldset>
 
         {/* ── 03 · Hours ──────────────────────────────────────────────────── */}

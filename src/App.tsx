@@ -29,6 +29,7 @@ const AboutPage = lazy(() => import('./components/AboutPage'));
 const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
+const TalentAtlasPage = lazy(() => import('./components/TalentAtlasPage'));
 const TalentTreePage = lazy(() => import('./components/TalentTreePage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
@@ -189,6 +190,8 @@ function AppRoutes() {
             the share state in the hash (#s=). Its own route so the prerender
             gives it static HTML, a title, and a sitemap entry, and so a shared
             tree lands somewhere that is not Ryan's page. */}
+        <Route path="/talent-tree/atlas" element={<PageShell><TalentAtlasPage /></PageShell>} />
+        <Route path="/talent-tree/atlas/build" element={<PageShell><TalentAtlasPage own /></PageShell>} />
         <Route path="/talent-tree/build" element={<PageShell><TalentTreePage mode="build" /></PageShell>} />
         {/* The name Ryan used in the brief; the site's routes are kebab-case with a
             trailing slash, so this is a client-side alias, not the canonical. */}
