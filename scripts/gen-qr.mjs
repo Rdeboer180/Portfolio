@@ -10,16 +10,17 @@
 // ============================================
 
 import QRCode from 'qrcode';
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const OUT_DIR = 'public/images/qr';
+const playdraft = JSON.parse(await readFile(new URL('../src/data/playdraft.json', import.meta.url), 'utf8'));
 
 // slug → URL. Set a TestFlight public link (App Store Connect → TestFlight →
 // external group → Enable Public Link) and re-run to activate that code.
 const TARGETS = {
   'loopstack-demo': 'https://www.rdeboerdesigns.com/loopstack-demo/',
-  'playdraft-testflight': 'https://testflight.apple.com/join/swanYSs1',
+  [playdraft.qrSlug]: playdraft.appStoreUrl,
   'bolus-binder-testflight': 'https://testflight.apple.com/join/YSyjkS3k',
   // 'loopstack-testflight': 'https://testflight.apple.com/join/XXXXXXXX',
 };

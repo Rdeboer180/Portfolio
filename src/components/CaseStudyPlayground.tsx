@@ -16,6 +16,8 @@ import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
+import { PlayDraftStoreLink } from './PlayDraftRelease';
+import playdraft from '../data/playdraft.json';
 
 const PreviewLockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
@@ -530,20 +532,24 @@ const CaseStudyPlayground: React.FC = () => {
             const hasPlate = isProtected(card.stream) && hasSchematic(card.slug);
             const plated = locked && hasPlate;
             return (
-              <Link
+              <article
                 key={card.slug}
-                to={`/work/${card.slug}`}
                 className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}${
                   plated ? ' case-playground__card--plated' : ''
                 }`}
                 data-slug={card.slug}
-                aria-describedby={locked ? `lock-${card.slug}` : undefined}
-                onClick={(e) => handleCardClick(e, card)}
                 onMouseEnter={isTouch ? undefined : () => handleEnter(card.slug)}
                 onMouseLeave={isTouch ? undefined : () => handleLeave(card.slug)}
                 onFocus={isTouch ? undefined : () => handleEnter(card.slug)}
                 onBlur={isTouch ? undefined : () => handleLeave(card.slug)}
               >
+                <Link
+                  to={`/work/${card.slug}`}
+                  className="case-playground__story-link"
+                  aria-label={`View case study: ${card.title}`}
+                  aria-describedby={locked ? `lock-${card.slug}` : undefined}
+                  onClick={(e) => handleCardClick(e, card)}
+                >
                 {/* Top — preview (cover loop plays while active; primary loops always) */}
                 <div
                   className={`case-playground__preview${
@@ -566,7 +572,7 @@ const CaseStudyPlayground: React.FC = () => {
                     <span
                       className={`case-playground__stream case-playground__stream--${card.stream}`}
                     >
-                      {STREAM_LABEL[card.stream]}
+                      {card.slug === 'playdraft' ? '[ Live on the App Store ]' : STREAM_LABEL[card.stream]}
                     </span>
                   )}
                   {card.video && !posterOnly ? (
@@ -600,6 +606,16 @@ const CaseStudyPlayground: React.FC = () => {
                   </span>
                 </div>
 
+                </Link>
+                {card.slug === 'playdraft' && (
+                  <div className="case-playground__release">
+                    <PlayDraftStoreLink className="case-playground__store-link">
+                      <img src={playdraft.icon} alt="" width="32" height="32" loading="lazy" />
+                      Download for iPhone
+                    </PlayDraftStoreLink>
+                  </div>
+                )}
+
                 {/* Bottom — tool coin tray (decorative) */}
                 <div className="case-playground__tray" aria-hidden="true">
                   <span className="case-playground__tray-label">[ Made With ]</span>
@@ -618,7 +634,7 @@ const CaseStudyPlayground: React.FC = () => {
                     </motion.span>
                   ))}
                 </div>
-              </Link>
+              </article>
             );
           })}
         </div>

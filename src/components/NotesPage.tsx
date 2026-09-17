@@ -6,6 +6,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { NOTES_BY_DATE, KIND_LABEL } from '../data/notes';
 import Footer from './Footer';
 import LinkedInLink from './LinkedInLink';
+import { PlayDraftLaunch } from './PlayDraftRelease';
 import '../styles/styles.scss';
 
 // ============================================
@@ -74,6 +75,8 @@ const NotesPage: React.FC = () => {
         </div>
       </section>
       </div>
+
+      <div className="notes__release notes__release--index"><PlayDraftLaunch context="index" /></div>
 
       {/* Each stream is a rail plus its rows: the rail carries the number at
           display scale, the name, the count and one handwritten aside; the rows

@@ -1428,10 +1428,8 @@ Frame every output as:
   },
 
   // =============================================
-  // 7. PlayDraft — Social drafting app (in progress, direct-link only)
+  // 7. PlayDraft — Social drafting app (launched on iOS)
   // =============================================
-  // PlayDraft is intentionally hidden from public project listings while
-  // the app is still in active prototype. Direct-link only: #/work/playdraft.
   {
     slug: 'playdraft',
     thesis: 'Take the best mechanic in fantasy sports and set it loose on anything.',
@@ -1440,23 +1438,23 @@ Frame every output as:
       gaps: 'The mechanic is universal. A casual product to host it was not.',
       constraints: 'Solo builder, real App Store rules, no lawyer on retainer.',
       approach: 'No screen without a reference, even for AI output.',
-      outcome: 'Brand to TestFlight in twelve weeks, solo.',
+      outcome: 'Brand to TestFlight in twelve weeks, then launched on iOS.',
     },
     stream: 'passion',
     client: 'PlayDraft (personal product)',
-    title: 'PlayDraft: A Social Drafting Game Built From Brand to TestFlight',
+    title: 'PlayDraft: A Social Drafting Game Built From Brand to App Store',
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft: a 0→1 Social Game Designed & Built With Agents in React Native',
-    summary: 'Friends pick a topic, take turns drafting on the clock, and compare boards at the end. I designed the brand, the game, and the mobile interface, then built the Expo and Supabase app with agents to a working TestFlight build in twelve weeks. The biggest change came from playing it: drafts originally ended in community voting, which pushed the verdict to the next day, so I replaced it with instant scoring and a group can finish in one session.',
-    cardHook: 'A drafting game for snacks, movies, or anything a group writes in. I designed the brand and the game and built the Expo app with agents; it reached TestFlight in twelve weeks.',
+    summary: 'Friends pick a topic, take turns drafting on the clock, and compare boards at the end. I designed the brand, the game, and the mobile interface, then built the Expo and Supabase app with agents. It reached TestFlight in twelve weeks and is now on the App Store. The biggest change came from playing it: drafts originally ended in community voting, which pushed the verdict to the next day, so I replaced it with instant scoring and a group can finish in one session.',
+    cardHook: 'Draft snacks, movies, or anything your group writes in. I designed the brand, game, and system, then built and released the iPhone app with agents.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
     role: 'Product Strategy · Game Design · Brand · UX/UI · Design System · Agent-Assisted Build (React Native) · Content & Legal Ops · QA',
     tools: ['Figma', 'Figma MCP', 'Claude Code', 'Expo / React Native', 'TypeScript', 'Expo Router', 'Supabase', 'RevenueCat', 'Maestro', 'Xcode / TestFlight'],
-    timeline: 'April → July 2026 · TestFlight',
+    timeline: '2026 · App Store launch',
     featured: '/images/work/playdraft/playdraft-cover-v2.png',
     featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
-    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Currently in App Store submission prep: coins-only economy at launch, cash purchases behind a feature flag until a lawyer has reviewed them.',
+    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Now live on the App Store with a coins-only economy; cash purchases remain behind a feature flag pending legal review.',
 
     // ── 01 Problem ──
     problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports, but it has stayed locked to sports.',
@@ -1635,7 +1633,7 @@ export const packs = {
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'PlayDraft is on TestFlight. On device, a group can choose or write a topic, draft on the clock, get an instant scored winner, share the board, and level up. There are no launch metrics yet. Third-party packs stay free under those content rules, and some promotional surfaces are drawn but not wired. What exists is the full loop working.',
+    outcomeNote: 'PlayDraft is live on the App Store for iPhone. A group can choose or write a topic, draft on the clock, get an instant scored winner, share the board, and level up. There are no launch metrics to report yet. Third-party packs stay free under those content rules, and some promotional surfaces are drawn but not wired. The full loop is available to play.',
     takeaways: [
       'Community voting was the app’s reason to exist, and it was wrong. A casual group wants a verdict tonight, not after a day of strangers voting, so I retired it in June.',
       'Any token with no rendering on the live /design-system screen gets deleted. That rule, not a style guide, is what held the AI-scaffolded screens to the system.',
@@ -1645,9 +1643,9 @@ export const packs = {
     outcomeImages: [
       {
         src: '/images/work/playdraft/playdraft-home-current.png',
-        alt: 'PlayDraft home screen from the current TestFlight build: level and wallet header with coins and ticket counts, a no-live-drafts card, and this week’s three competitive rooms as a 3-up row above a join button, sitting on the Home / Packs / Collection / Store tab bar',
+        alt: 'PlayDraft home screen from the iOS app: level and wallet header with coins and ticket counts, a no-live-drafts card, and this week’s three competitive rooms as a 3-up row above a join button, sitting on the Home / Packs / Collection / Store tab bar',
         layout: 'half',
-        caption: 'The shipped home surface from the build now on TestFlight: wallet, live drafts, and the week’s competitive rooms over the four-tab IA',
+        caption: 'The shipped home surface: wallet, live drafts, and the week’s competitive rooms over the four-tab IA',
         mobile: true,
       },
       {
@@ -1657,19 +1655,8 @@ export const packs = {
         caption: 'The share board from the same build: the winner is named in plain language, every pick stays readable at thumbnail size, and the link back is the last thing you read',
       },
     ],
-    outcomeLiveLinksLabel: 'Install the build',
-    outcomeLiveLinks: [
-      { label: 'Join the TestFlight beta', url: 'https://testflight.apple.com/join/swanYSs1' },
-    ],
-    outcomeInstall: {
-      label: 'Scan to install on iPhone',
-      url: 'https://testflight.apple.com/join/swanYSs1',
-      linkText: 'testflight.apple.com/join/swanYSs1',
-      caption: 'Opens TestFlight and installs the current build. Drafting works best with a friend.',
-      qr: 'playdraft-testflight',
-    },
     metrics: [
-      { value: '12 wks', label: 'First logo sketch → TestFlight (Apr–Jul 2026, solo)' },
+      { value: 'Launched', label: 'on the iOS App Store · Solo design & build' },
       { value: '133', label: 'Components on a token-governed design system' },
       { value: '59', label: 'Screens & routes across the shipped Expo Router app' },
       { value: '17', label: 'Draft packs in the launch catalog, every third-party topic checked against content rules written without counsel' },

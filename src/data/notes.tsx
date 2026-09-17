@@ -131,6 +131,8 @@ export interface Note {
   dek: string;       // one-line summary — index row + meta description
   read: string;      // estimated read time, e.g. '3 min' — index + article meta
   body: React.ReactNode;
+  /** Explicit relationship: current product updates can accompany dated essays. */
+  relatedProject?: 'playdraft';
   /** Optional downloadable artifact shown in the note header. */
   artifact?: { label: string; href: string };
 }
@@ -150,6 +152,7 @@ export const NOTES: Note[] = [
   // rather than re-arguing.
   {
     slug: 'a-system-to-maintain',
+    relatedProject: 'playdraft',
     read: '4 min',
     kind: 'essay',
     date: 'August 2026',
@@ -175,7 +178,7 @@ export const NOTES: Note[] = [
         <p>
           So I paid for Claude and Codex out of pocket, picked a product I genuinely wanted to
           exist, and started building. <Link to="/work/playdraft/">PlayDraft</Link> began as a
-          design exploration and is now a React Native app on TestFlight. Getting it there ran
+          design exploration and is now a React Native app on the App Store. Getting it there ran
           through product strategy, game mechanics, a token-governed design system, front-end
           implementation, testing, and App Store constraints.
         </p>
@@ -241,6 +244,7 @@ export const NOTES: Note[] = [
   // opens and the framing is signed off.
   {
     slug: 'already-the-audience',
+    relatedProject: 'playdraft',
     read: '4 min',
     kind: 'log',
     date: 'August 2026',
@@ -349,6 +353,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'nobody-clapped',
+    relatedProject: 'playdraft',
     read: '5 min',
     kind: 'essay',
     date: 'August 2026',
@@ -463,6 +468,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'what-id-keep',
+    relatedProject: 'playdraft',
     read: '5 min',
     kind: 'essay',
     date: 'August 2026',
@@ -578,6 +584,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'eight-wrong-first-drafts',
+    relatedProject: 'playdraft',
     read: '6 min',
     kind: 'log',
     date: 'August 2026',
@@ -733,6 +740,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'overscroll-tactics',
+    relatedProject: 'playdraft',
     read: '6 min',
     kind: 'log',
     date: 'August 2026',
@@ -905,7 +913,7 @@ excluded    Angle brackets, pixel grids, terminal type,
 
         <h2>Two products and an empty slot</h2>
         <Umbrella parent="Overscroll Tactics">
-          <StackItem name={<Link to="/work/playdraft/">PlayDraft</Link>} status="In TestFlight">
+          <StackItem name={<Link to="/work/playdraft/">PlayDraft</Link>} status="On the App Store">
             Social drafting product with its own brand and design-system foundation, built in
             React Native and Expo.
           </StackItem>
@@ -1067,6 +1075,7 @@ excluded    Angle brackets, pixel grids, terminal type,
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'ryan-design-taste-skill',
+    relatedProject: 'playdraft',
     read: '4 min',
     kind: 'skill',
     date: 'July 2026',
@@ -1195,6 +1204,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'where-is-my-role-moving',
+    relatedProject: 'playdraft',
     read: '3 min',
     kind: 'essay',
     date: 'July 2026',
@@ -1316,6 +1326,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'ai-doesnt-care-about-your-customers',
+    relatedProject: 'playdraft',
     read: '2 min',
     kind: 'essay',
     date: 'July 2026',
@@ -1370,6 +1381,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'systems-that-make-better-decisions-easier',
+    relatedProject: 'playdraft',
     read: '3 min',
     kind: 'essay',
     date: 'July 2026',

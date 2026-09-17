@@ -168,6 +168,11 @@
     }
   }
 
+  // A phone shows one card at a time; adjacent copy should not determine its height.
+  @media (max-width: 600px) {
+    &__grid { align-items: flex-start; }
+  }
+
   // ── Card (the shadowbox) ───────────────────────────────────────────────────
 
   &__card {
@@ -193,10 +198,33 @@
       border-color: rgba($color-primary, 0.35);
     }
 
-    &:focus-visible {
+    &:focus-within {
       outline: 2px solid $color-primary;
       outline-offset: 3px;
     }
+  }
+
+  &__story-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -3px; }
+  }
+
+  &__release { padding: 0 $spacing-xl $spacing-lg; }
+
+  &__store-link {
+    display: flex;
+    width: 100%;
+    gap: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-border-default;
+
+    img { flex-shrink: 0; }
+    .pd-release__arrow { margin-left: auto; }
   }
 
   // Top — preview
@@ -360,7 +388,7 @@
 
     &--passion {
       background: $color-white;
-      color: $color-primary;
+      color: $color-primary-text;
       border: 1px dashed $color-primary;
     }
   }

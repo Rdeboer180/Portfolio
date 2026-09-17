@@ -5,6 +5,7 @@ import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getNote, KIND_LABEL } from '../data/notes';
 import Footer from './Footer';
+import { PlayDraftLaunch } from './PlayDraftRelease';
 import '../styles/styles.scss';
 
 // ============================================
@@ -62,6 +63,9 @@ const NotePage: React.FC = () => {
         )}
       </header>
 
+      {note.relatedProject === 'playdraft' && (
+        <div className="notes__release"><PlayDraftLaunch context="note" /></div>
+      )}
       <div className="notes__body">{note.body}</div>
 
       {/* Close rail is a statement, not a nav. "All notes" lives in the header

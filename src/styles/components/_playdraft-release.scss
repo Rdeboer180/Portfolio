@@ -1,0 +1,153 @@
+@import '../variables';
+
+// Release UI belongs to the portfolio system. Product color stays in the icon.
+.pd-release {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-lg 0;
+  border-block: 1px solid $color-border-default;
+
+  &--study { margin: $spacing-xl 0; }
+
+  &__icon { flex: 0 0 auto; width: 44px; height: 44px; }
+  &__copy { min-width: 0; }
+
+  &__eyebrow {
+    display: block;
+    margin-bottom: 4px;
+    color: $color-text-tertiary;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-md;
+    min-height: 44px;
+    color: $color-primary-text;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    line-height: 1.4;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; text-underline-offset: 4px; }
+    &:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
+  }
+
+  &__arrow { flex-shrink: 0; }
+
+  &__copy p {
+    margin: 0;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+    color: $color-text-secondary;
+  }
+
+  &__platform {
+    margin-left: auto;
+    color: $color-text-tertiary;
+    font-size: $font-size-caption;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    &__platform { display: none; }
+    &--note, &--index { align-items: flex-start; }
+    &--note &__icon, &--index &__icon { margin-top: 4px; }
+  }
+}
+
+.pd-download {
+  margin-top: $spacing-4xl;
+  padding: clamp(#{$spacing-xl}, 5vw, #{$spacing-3xl});
+  border-radius: $radius-xl;
+  background: $color-neutral-dark;
+  color: $color-text-inverse;
+
+  &__identity {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    padding-bottom: $spacing-xl;
+    border-bottom: 1px solid rgba($color-white, .2);
+  }
+
+  &__identity img { flex-shrink: 0; width: 56px; height: 56px; }
+  &__name { display: block; font-family: $font-family-heading; font-weight: $font-weight-bold; font-size: $font-size-h5; }
+  &__status { display: block; margin-top: 4px; color: $color-primary-md; font-size: $font-size-body-sm; }
+
+  &__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 160px;
+    align-items: end;
+    gap: $spacing-3xl;
+    padding-top: $spacing-2xl;
+  }
+
+  &__copy h2 {
+    margin: 0 0 $spacing-lg;
+    color: $color-text-inverse;
+    font-family: $font-family-heading;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: $font-weight-bold;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+  }
+
+  &__copy p {
+    max-width: 39ch;
+    margin: 0 0 $spacing-xl;
+    color: $color-neutral-light;
+    font-size: $font-size-body;
+    line-height: 1.6;
+  }
+
+  &__button {
+    display: inline-flex;
+    justify-content: space-between;
+    min-height: $button-height-lg;
+    padding: $spacing-md $spacing-xl;
+    border-radius: $button-radius;
+    background: $color-white;
+    color: $color-neutral-dark;
+    font-size: $font-size-body-sm;
+
+    &:hover { background: $color-primary-light; text-decoration: none; }
+    &:focus-visible { outline-color: $color-white; }
+    &:active { background: $color-primary-md; }
+  }
+
+  &__scan { margin: 0; text-align: center; }
+  &__scan img {
+    display: block;
+    width: 144px;
+    height: 144px;
+    margin: 0 auto $spacing-md;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    background: $color-white;
+  }
+  &__scan figcaption { color: $color-neutral-light; font-size: $font-size-caption; line-height: 1.5; }
+
+  @media (max-width: 600px) {
+    &__content { grid-template-columns: minmax(0, 1fr); }
+    &__scan { display: none; }
+    &__button { width: 100%; }
+  }
+}
+
+.notes__release {
+  width: 100%;
+  max-width: $container-text-width;
+  margin: 0 auto $spacing-lg;
+  padding: 0 $spacing-2xl;
+
+  &--index { max-width: $container-max-width; margin-bottom: $spacing-3xl; }
+
+  @media (max-width: $breakpoint-md) { padding-inline: $spacing-lg; }
+}

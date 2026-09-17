@@ -6,6 +6,7 @@ import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import LinkedInLink from './LinkedInLink';
+import { PlayDraftDownload, PlayDraftLaunch } from './PlayDraftRelease';
 import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -629,6 +630,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           {project.summary && (
             <p className="cs__summary">{redactClient(project.summary, locked)}</p>
           )}
+          {project.slug === 'playdraft' && <PlayDraftLaunch />}
           <div className="cs__tags">
             {project.tags.map((tag) => (
               <span key={tag} className="cs__tag">{tag}</span>
@@ -996,6 +998,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <span className="cs__time-to-live-value">{redactClient(project.timeToLive, locked)}</span>
               </div>
             )}
+            {project.slug === 'playdraft' && <PlayDraftDownload />}
           </>
 
         {/* ==================== Continue — quiet close rail (every layout) ==================== */}
