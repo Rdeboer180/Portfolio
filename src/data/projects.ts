@@ -113,6 +113,8 @@ export interface Project {
   // primary media — autoplay/loop/muted from mount, not hover-to-play.
   // Reduced motion still renders the poster still.
   featuredVideoPrimary?: boolean;
+  /** Case-study hero reel, distinct from the short homepage card loop. */
+  featuredReel?: { src: string; poster: string; alt: string; caption?: string };
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
   // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
@@ -1454,6 +1456,12 @@ Frame every output as:
     timeline: '2026 · App Store launch',
     featured: '/images/work/playdraft/playdraft-cover-v2.png',
     featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
+    featuredReel: {
+      src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
+      poster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
+      alt: 'PlayDraft product reel: picking a DraftPack, tuning the draft and inviting a group, live snake-draft picks on the clock, DraftLab solo games, the store economy, the winner scored on draft-day value, the competitive sliced board and season standings, and sharing the final board',
+      caption: 'PlayDraft in 89 seconds. Narrated and subtitled, captured in the real app against the live backend.',
+    },
     timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Now live on the App Store with a coins-only economy; cash purchases remain behind a feature flag pending legal review.',
 
     // ── 01 Problem ──
@@ -1462,21 +1470,8 @@ Frame every output as:
       'The rituals of a fantasy draft (on-the-clock pressure, sleeper picks, post-draft debates, the group chat after) work because everyone at the table wants the same pick and only one of them gets it. Outside of fantasy sports, almost nobody runs a draft.',
       'PlayDraft makes the format the product. Pick a topic (Snacks, Movies, Super Powers, GOAT Athletes, or a written-in “Best road trip snacks”), draft it with friends, settle it in one session.',
     ],
-    // The product reel sits right after the intro — the 89-second narrated
-    // scan (reel v16, 2026-09-08; v13 ran here until the winner ceremony was
-    // rebuilt as the podium, which is what section 6 now shows). Every frame
-    // is the real app captured on-simulator against the live backend —
-    // Maestro flows + simctl recordings — not a motion mockup.
-    problemImages: [
-      {
-        src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
-        alt: 'PlayDraft product reel: picking a DraftPack, tuning the draft and inviting a group, live snake-draft picks on the clock, DraftLab solo games, the store economy, the winner scored on draft-day value, the competitive sliced board and season standings, and sharing the final board',
-        layout: 'full',
-        caption: 'The product in 89 seconds, narrated and subtitled. Real app, captured on-simulator against the live backend: pick a pack → make it yours → draft on the clock → DraftLab daily → earn DraftCoins → the board decides → competitive changes everything → sleepers pay → argue it → take it public',
-        isVideo: true,
-        videoPoster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
-      },
-    ],
+    // The narrated product reel lives in the hero. The Problem stays focused on
+    // the mechanic and decision rather than repeating the video below.
 
     // ── 02 Gaps & Opportunity ──
     gapsPunch: 'The mechanic is universal. The product to host it casually was not.',
@@ -1613,22 +1608,6 @@ export const packs = {
         key: 'iteration',
         label: 'Playing it killed the feature the app was built around',
         description: 'The original loop settled drafts by community vote: bracketed sessions, a 24-hour pre-draft gate, daily coins for voters. In June I retired voting and put the DraftLab confidence pool in its place: solo mini-games rank every item in a pack, so each finished draft gets an instant, explainable winner. The economy followed the same finding. Dailies pay XP, coins come from leveling, a win funds the next ticket.',
-        images: [
-          {
-            src: '/images/work/playdraft/playdraft-results-ceremony.png',
-            alt: 'PlayDraft winner ceremony screen: a gold crown over the champion’s tinted avatar emblem, “The crown goes elsewhere” headline, the winning five-pick board outlined in gold, and +20 XP toward the season bar',
-            layout: 'half',
-            caption: 'The pivot, visible. Every draft now ends in an instant ceremony: crowned winner, the winning board, XP into the season bar',
-            mobile: true,
-          },
-          {
-            src: '/images/work/playdraft/playdraft-custom-draft-writein.png',
-            alt: 'Custom Draft room: a teal write-in pick (“Gas Station Slushie”) landing on the live board next to the gold on-the-clock cell, with the write-in field and “anything on-topic goes, duplicates bounce” helper below',
-            layout: 'half',
-            caption: 'Custom Drafts, the second big swing: every pick is a write-in, the group authors the topic, and the payoff is deliberately social',
-            mobile: true,
-          },
-        ],
       },
     ],
 
@@ -1639,21 +1618,6 @@ export const packs = {
       'Any token with no rendering on the live /design-system screen gets deleted. That rule, not a style guide, is what held the AI-scaffolded screens to the system.',
       'Scripting the demo reel in Maestro caught a pick clock that never auto-picked at zero, and the fix went in instead of a caption.',
       'App Store rules shaped the product: “Bet on Myself” became coin-only “Podium Boost” for guideline 5.3, and non-functional cash UI came out for 2.1.',
-    ],
-    outcomeImages: [
-      {
-        src: '/images/work/playdraft/playdraft-home-current.png',
-        alt: 'PlayDraft home screen from the iOS app: level and wallet header with coins and ticket counts, a no-live-drafts card, and this week’s three competitive rooms as a 3-up row above a join button, sitting on the Home / Packs / Collection / Store tab bar',
-        layout: 'half',
-        caption: 'The shipped home surface: wallet, live drafts, and the week’s competitive rooms over the four-tab IA',
-        mobile: true,
-      },
-      {
-        src: '/images/work/playdraft/playdraft-share-card-current.png',
-        alt: 'The PlayDraft share board as it renders in the current build: a “Settle it” wordmark, the Snacks Royale final board, “@kev drafted it best” in a gold highlight, a three-squads / five-picks / final line, all three rosters with every pick numbered and legible, then a See the board button over a short link and the line “Draft yours. Settle it.”',
-        layout: 'half',
-        caption: 'The share board from the same build: the winner is named in plain language, every pick stays readable at thumbnail size, and the link back is the last thing you read',
-      },
     ],
     metrics: [
       { value: 'Launched', label: 'on the iOS App Store · Solo design & build' },

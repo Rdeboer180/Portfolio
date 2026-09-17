@@ -645,7 +645,22 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             pointer-events none, so it never blocks a click or a scroll.
             Reduced motion arrives resolved. The corner tab keeps the working
             one glance away after the resolve. */}
-        {!locked && project.featured && (
+        {!locked && project.featuredReel && (
+          <figure className="cs__featured-image cs__featured-image--video">
+            <video
+              src={project.featuredReel.src}
+              poster={project.featuredReel.poster}
+              aria-label={project.featuredReel.alt}
+              controls
+              playsInline
+              preload="metadata"
+            />
+            {project.featuredReel.caption && (
+              <figcaption className="cs__caption">{project.featuredReel.caption}</figcaption>
+            )}
+          </figure>
+        )}
+        {!locked && !project.featuredReel && project.featured && (
           <div
             className={`cs__featured-image${
               project.openerSchematic && hasSchematic(project.slug) ? ' cs__featured-image--opener' : ''

@@ -156,6 +156,21 @@
       object-position: top;
       display: block;
     }
+
+    &--video {
+      margin: 0 0 $spacing-3xl;
+      overflow: visible;
+
+      video {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: $card-border-radius-lg;
+        background: $color-neutral-dark;
+      }
+
+      .cs__caption { margin-top: $spacing-md; }
+    }
   }
 
   // ==========================================
