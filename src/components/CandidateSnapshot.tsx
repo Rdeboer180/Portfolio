@@ -19,7 +19,7 @@ const FACTS = [
   { label: 'Experience', value: '16+ years' },
 ];
 
-const STACK = ['Figma', 'React', 'React Native', 'Storybook', 'Adobe Experience Manager', 'SCSS / Front-End'];
+const STACK = ['Figma', 'React systems', 'Agent-assisted React Native / Expo', 'Storybook', 'Adobe Experience Manager', 'SCSS / Front-End'];
 
 const Facts: React.FC = () => (
   <dl className="candidate-snapshot__facts">
@@ -105,7 +105,7 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
           what better looks like and keep pushing for refinement and polish.
         </p>
         <div className="candidate-snapshot__stack">
-          <span className="candidate-snapshot__stack-label">Core stack</span>
+          <span className="candidate-snapshot__stack-label">Current working stack</span>
           <ul className="candidate-snapshot__chips">
             {STACK.map((s) => (
               <li key={s}>{s}</li>
