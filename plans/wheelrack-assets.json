@@ -1,0 +1,34 @@
+[
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/Front and Rear error states.png",
+    "output": "public/images/work/wheelrack/evidence/fitment-states.png",
+    "status": "original with CSS viewport crop",
+    "productState": "designed",
+    "placement": "Opening product view and availability warning",
+    "notes": "Original retained; full board opens in lightbox. Documentation capture dates not verified."
+  },
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/productDetails.png",
+    "output": "public/images/work/wheelrack/evidence/product-variants.png",
+    "status": "original with CSS viewport crop",
+    "productState": "designed",
+    "placement": "Interactive front/rear and quote comparison",
+    "notes": "Original retained; full board opens in lightbox. Documentation capture dates not verified."
+  },
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/Documentation_form-elements.png",
+    "output": "public/images/work/wheelrack/evidence/form-documentation.png",
+    "status": "original with CSS viewport crop",
+    "productState": "designed",
+    "placement": "Form state documentation",
+    "notes": "Original retained; full board opens in lightbox. Documentation capture dates not verified."
+  },
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/Accordion.png",
+    "output": "public/images/work/wheelrack/evidence/filter-states.png",
+    "status": "original with CSS viewport crop",
+    "productState": "designed",
+    "placement": "Filter interaction rules",
+    "notes": "Original retained; full board opens in lightbox. Documentation capture dates not verified."
+  }
+]

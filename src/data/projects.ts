@@ -27,6 +27,8 @@ export interface ProjectBeat {
 }
 
 export interface ProjectImage {
+  /** Pixel coordinates into the original board; presentation only, original remains in the lightbox. */
+  crop?: { x: number; y: number; width: number; height: number; sourceWidth: number; sourceHeight: number };
   src?: string;
   alt: string;
   layout: 'full' | 'half';
@@ -67,6 +69,8 @@ export interface ApproachSubsection {
   /** Optional list rendered after the description, for subsections that are an
    *  inventory rather than an argument. */
   bullets?: string[];
+  variants?: { label: string; image: ProjectImage }[];
+  quote?: { text: string; name: string; role: string };
 }
 
 export interface Project {
@@ -106,6 +110,9 @@ export interface Project {
   tools: string[];
   timeline: string;
   featured?: string;
+  studyHero?: ProjectImage;
+  ownership?: string;
+  compactStory?: boolean;
   // Optional muted looping cover video (compressed web loop); `featured` doubles
   // as its poster. Rendered on homepage playground cards when present.
   featuredVideo?: string;
@@ -190,148 +197,146 @@ const projects: Project[] = [
     slug: 'wheelrack',
     stream: 'professional',
     client: 'Tire Rack · WheelRack',
-    title: 'WheelRack Design System & Full Customer Journey Redesign',
+    title: 'WheelRack: A shared system for the dealer journey',
     seoTitle: 'WheelRack: Enterprise React Design System for a Wholesale Ecommerce Platform',
-    thesis: 'One shared vocabulary, held in Figma and Storybook at the same time.',
+    thesis: 'Shared rules for the details that make wheel fitment complicated.',
+    summary: 'WheelRack’s dealer experience had grown across six retail partners without a shared design system or responsive foundation. I built its first token and component library and redesigned the journey from vehicle selection through checkout, partnering with a senior React developer on implementation.',
+    ownership: 'I owned system design, component behavior, responsive rules, and edge cases. Cheryl Carpenter owned the React build.',
+    cardHook: 'A 20-year-old dealer platform had no shared foundation. I built its first design system and redesigned the journey from vehicle selection through checkout.',
+    compactStory: true,
     annotations: {
-      problem: 'Every team kept rebuilding the same thing, a little differently.',
-      gaps: 'Design and dev were describing the same button two different ways.',
-      constraints: 'Dealers on tablets, real fitment data, no room to guess.',
-      approach: 'Neither file was the source of truth. Figma and Storybook had to agree.',
+      problem: 'Dealers were already on tablets. The interface had to catch up.',
+      approach: 'The difficult states belong in the system, too.',
       outcome: 'The framework outlived the project. Wholesale picked it up next.',
     },
-    summary: 'I built WheelRack’s first design system and redesigned the dealer journey from vehicle selection through checkout. Partner adoption grew from six to ten while retailers were seeing the new interface in progress. The product is now live.',
-    cardHook: 'A 20-year-old dealer platform had no design system behind it. One was built from scratch. Partner adoption grew from 6 to 10 while the redesign was still in progress.',
     openerSchematic: true,
-    year: '2023\u20132024',
-    tags: ['Design Systems', 'UX/UI Design', 'Responsive', 'React', 'Storybook', 'Design Tokens'],
+    year: '2023 to 2024 design · 2026 launch',
+    tags: ['Design Systems', 'Product Design', 'Responsive', 'Storybook'],
     role: 'Senior Web Designer / UX Engineer',
-    tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS', 'JavaScript', 'Jira'],
-    timeline: '~4 months dedicated (12+ months total with API delays)',
+    tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS'],
+    timeline: '~4 months dedicated across 12+ months, including API delays',
     featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
     featuredVideo: '/assets/portfolio-safe/wheelrack/cover-loop.mp4',
-    timeToLive: 'Live as of June 4, 2026 at wheelrack.com/pitstop/search. System and partner brand builds complete; rollout continuing across additional retailers.',
-
-    // ── 01 Problem ──
-    problemPunch: 'A 20-year-old platform. No design system. No responsive design. Six partners, zero consistency.',
+    studyHero: {
+      src: '/images/work/wheelrack/evidence/fitment-states.png',
+      alt: 'WheelRack dealer interface with wheel filters, vehicle preview, and separate front and rear wheel configurations',
+      layout: 'full',
+      crop: { x: 158, y: 190, width: 1367, height: 1575, sourceWidth: 6466, sourceHeight: 7179 },
+      caption: 'The dealer view brings filters, a vehicle preview, and front/rear purchasing options into one responsive experience. Design artifact.',
+    },
+    timeToLive: 'Launched June 4, 2026. The system and partner brand builds are complete; rollout continues across additional retailers.',
+    problemPunch: 'A dealer interface built for six different partners.',
     problem: [
-      'WheelRack was a roughly 20-year-old aftermarket wheel visualizer used by dealers across six retail partners.',
-      'Dealers used it on tablets, but the interface was not responsive and every partner carried a slightly different version of the experience.',
-      'The redesign also had to prove that Tire Rack’s future React and microservices stack could support a real customer journey.',
+      'Dealers used the roughly 20-year-old wheel visualizer on tablets, but the interface was not responsive. Six retail partners carried different versions of the experience, without shared tokens or components.',
+      'The redesign had to accommodate partner branding and purchasing rules while proving that the new React and microservices stack could support the full journey.',
     ],
-    // ── 02 Gaps & Opportunity ──
-    gapsPunch: 'Every partner was a one-off. No tokens, no components, no shared language between design and engineering.',
-    gaps: [
-      'There were no shared tokens or components. Each partner variant was handled as a separate exception.',
-      'I completed an 80+ hour Figma Masterclass covering Atomic Design, tokens and variables, responsive behavior, and handoff.',
-      'I partnered with senior React developer Cheryl Carpenter. I owned system design, token structure, component logic, responsive behavior, and edge cases; Cheryl owned the React build and stress-tested behavior across viewports. Work moved Figma \u2192 Tokens Studio \u2192 Storybook \u2192 React.',
-      'This work predated Figma Variables. Tokens Studio held the token sets and exported them to Storybook and React.',
-    ],
-    // ── 03 Constraints ──
-    constraintsPunch: 'Waterfall to Agile mid-project. Split attention. Six partners with different rules.',
-    constraints: [
-      'Sprint 0 followed Waterfall; future sprints shifted to Agile, a new methodology for the team.',
-      'Design time split across higher priority retail projects, with 10\u201320 day windows per task.',
-      'A single wheel model could carry several colors and sizes on one tile.',
-      'Front and rear tire sizes could differ on the same vehicle.',
-      'The visualizer had to stay separate from product information and shopping.',
-      'Filters were complex and carried accessibility requirements.',
-      'Custom headers/footers per partner with additional filters or cart integration.',
-      'Coordinated with in-house photography team for vehicle and wheel images at specific angles.',
-    ],
-    insightCallout: 'Built 200+ tokens and 50+ components from scratch, giving design and engineering one shared vocabulary to build the React app against.',
-
-    // ── 04 Approach (subsections) ──
     approachSubsections: [
       {
-        key: 'alignment',
-        label: 'The flow and the primary user, agreed before drawing',
-        description: 'Full stakeholder meeting to review objectives. Worked with UX design manager and teammates to map the page flow and identify the primary user: dealers on tablets.',
-        images: [],
+        key: 'journey',
+        label: 'Define the journey around dealer tasks',
+        description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes. Those rules gave the team a shared starting point for each screen.',
+        images: [{
+          src: '/images/work/wheelrack/wheelrack-ux-wireframe-03_blurred.png',
+          alt: 'Annotated vehicle-selection wireframe describing autocomplete and responsive behavior',
+          layout: 'full',
+          caption: 'Behavior specifications accompanied the journey wireframes. Internal details are obscured in this portfolio copy.',
+        }],
       },
       {
-        key: 'structure',
-        label: 'Wireframes that carried behavior specs, not just layout',
-        description: 'Wireframed the full customer journey: vehicle selection, search results, product detail, and checkout. Annotated behavior specs for autocomplete, responsive states, and error handling.',
-        gridColumns: 2,
-        images: [
+        key: 'foundation',
+        label: 'Give repeated controls the same rules',
+        systemMarker: 'Shared foundation',
+        description: 'I defined color, spacing, typography, and shadow tokens, then built the controls and larger components from them. The original work used Tokens Studio before Figma Variables. The same token vocabulary carried into Storybook and React; each component’s states and responsive behavior still needed to be specified.',
+        images: [{
+          src: '/images/work/wheelrack/evidence/filter-states.png',
+          alt: 'Filter component specifications showing resting, hover, and keyboard-focus states',
+          layout: 'full',
+          crop: { x: 120, y: 335, width: 1860, height: 455, sourceWidth: 3604, sourceHeight: 5185 },
+          caption: 'Filter controls share explicit resting, hover, and focus states. The rules apply across the filter categories below them.',
+        }],
+      },
+      {
+        key: 'fitment',
+        label: 'Resolve fitment inside the product component',
+        systemMarker: 'Component behavior',
+        description: 'A wheel model could carry several finishes and sizes, and front and rear configurations could differ on the same vehicle. I designed variants for those combinations, partner-specific cart or quote actions, and availability warnings. The purchasing component had to account for each case before it could be reused across the journey.',
+        variants: [
           {
-            src: '/images/work/wheelrack/wheelrack-ux-wireframe-03_blurred.png',
-            alt: 'Detailed wireframe with annotated UI behavior specs for vehicle selector and search flow',
-            layout: 'full',
-            caption: 'Wireframe with behavior specs: autocomplete, dynamic selection, responsive breakpoints',
+            label: 'Front / rear',
+            image: {
+              src: '/images/work/wheelrack/evidence/product-variants.png',
+              alt: 'Product component with separate front and rear size selections, quantities, and a combined add-to-cart total',
+              layout: 'full',
+              crop: { x: 80, y: 1650, width: 850, height: 485, sourceWidth: 6901, sourceHeight: 9906 },
+              caption: 'Separate front and rear selections feed a shared total and purchase action.',
+            },
+          },
+          {
+            label: 'Get quote',
+            image: {
+              src: '/images/work/wheelrack/evidence/product-variants.png',
+              alt: 'Front and rear product component using the Get Quote action',
+              layout: 'full',
+              crop: { x: 3690, y: 1650, width: 850, height: 485, sourceWidth: 6901, sourceHeight: 9906 },
+              caption: 'The quote variant keeps the configuration structure while changing the partner’s purchasing action.',
+            },
+          },
+          {
+            label: 'Unavailable combination',
+            image: {
+              src: '/images/work/wheelrack/evidence/fitment-states.png',
+              alt: 'Front and rear wheel configuration with an availability warning beneath the purchase action',
+              layout: 'full',
+              crop: { x: 2600, y: 1060, width: 955, height: 565, sourceWidth: 6466, sourceHeight: 7179 },
+              caption: 'The warning explains that the selected finish/fitment combination is unavailable and the closest alternative has been selected.',
+            },
           },
         ],
       },
       {
-        key: 'system',
-        label: 'Atomic tokens first, then everything built from them',
-        description: 'Established atomic tokens (color, spacing, typography, shadow) that evolved into buttons, inputs, headers, modals, product cards, and visualizer views. Each component built in Figma, validated in Storybook.',
-        systemMarker: 'Figma ↔ Codebase',
-        gridColumns: 2,
-        images: [
-          {
-            src: '/images/work/wheelrack/supporting/opportunity/wheelrack-design-system-02.png',
-            alt: 'Color token ramps for neutral, primary, secondary, success, warning, and error roles with documented usage notes',
-            layout: 'half',
-            caption: 'Color tokens: every ramp documented with its role, the source of truth across Figma and code',
-          },
-          {
-            src: '/images/work/wheelrack/supporting/opportunity/wheelrack-design-system-05.png',
-            alt: 'Full button state matrix showing primary and secondary variants across sizes',
-            layout: 'half',
-            caption: 'Button component: full state matrix across sizes and variants',
-          },
-        ],
+        key: 'documentation',
+        label: 'Make the rules usable by engineering',
+        systemMarker: 'Design + engineering',
+        description: 'Cheryl and I worked together daily through Slack threads and calls. I supplied behavior specifications for complex components; she owned the React implementation and stress-tested behavior across viewports. The form documentation shown here makes the intended input sizes, icon placements, and focus, error, and disabled states explicit.',
+        images: [{
+          src: '/images/work/wheelrack/evidence/form-documentation.png',
+          alt: 'Form input documentation showing two sizes, icon placements, and placeholder, active, focus, error, and disabled states',
+          layout: 'full',
+          crop: { x: 458, y: 1428, width: 1120, height: 550, sourceWidth: 2100, sourceHeight: 3569 },
+          caption: 'Form library reference: two input sizes with consistent icon placement and interaction states.',
+        }],
+        quote: {
+          text: 'That gave us one vocabulary to work from instead of two, and it made my half of the work a lot easier to do well.',
+          name: 'Cheryl Carpenter',
+          role: 'React Front-End Developer · WheelRack build partner',
+        },
       },
       {
-        key: 'build',
-        label: 'Daily with the React developer, not a handoff at the end',
-        description: 'Partnered daily with the React developer over Slack threads and calls. Supplied front-end behavior specs for every complex component.',
-        systemMarker: 'Team',
-        images: [
-          {
-            alt: 'Placeholder for omitted internal Storybook artifact',
-            layout: 'full',
-            caption: 'Storybook detail available on request.',
-            isOverlay: true,
-            overlayText: "This part of the work includes internal tooling and workflows I cannot share publicly. I am happy to walk through it in detail."
-          },
-        ],
-      },
-      {
-        key: 'iteration',
-        label: '40+ hours reconciling the React build against Figma',
-        systemMarker: 'QA',
-        description: 'Presented weekly to a large stakeholder group for review and sign-off. Spent 40+ hours comparing the React build against Figma styles, reviewing token names, responsive behavior, and component fidelity screen by screen.',
-        images: [],
+        key: 'reconciliation',
+        label: 'Check the build and feed corrections back',
+        systemMarker: 'Implementation review',
+        description: 'A shared vocabulary did not remove the reconciliation work. I spent 40+ hours comparing the React build against Figma, reviewing token names, responsive behavior, and component fidelity screen by screen. Weekly stakeholder reviews kept decisions moving as the work progressed.',
+        images: [{
+          src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',
+          alt: 'WheelRack interface with numbered callouts mapped to written behavior specifications',
+          layout: 'full',
+          caption: 'Numbered callouts connect the interface to the behavior specifications used by engineering.',
+        }],
       },
     ],
-
-    // ── 05 Outcome ──
-    outcomeNote: 'WheelRack is live from vehicle selection through checkout. Partner adoption grew from six to ten during the build as more retailers saw the interface, although the final count reflects business factors beyond the redesign. The Storybook library gave Cheryl and the React team one component source to build against. Six months later, Tire Rack extended the same framework into Wholesale, and I helped three or four more designers join that workflow.',
+    outcomeNote: 'WheelRack is live from vehicle selection through checkout. Six months after the build, Tire Rack extended the framework into Wholesale, and I helped additional designers join that workflow. Partner adoption grew from six to ten during the build; that growth also reflects business factors beyond the redesign.',
     takeaways: [
-      'Tokens Studio was the right choice because the work predated Figma Variables. Today I would start in Variables and evaluate an external pipeline from there.',
-      'A shared token vocabulary did not remove the reconciliation pass. Comparing the React build against Figma still took 40+ hours, screen by screen.',
-      'I owned the edge cases, including a wheel model shown in several colors and sizes on one tile, and front and rear tire sizes that differ on the same vehicle.',
-      'About four months of dedicated design spread across 12+ months: 10 to 20 day windows between higher-priority retail projects, plus API delays.',
+      'I would plan the design/build comparison into the work from the start. Tokens gave us common names, but we still had to check how the components behaved on screen.',
     ],
     outcomeLiveLinks: [
-      { label: 'View the live WheelRack PitStop experience', url: 'https://wheelrack.com/pitstop/search' },
+      { label: 'Explore the live WheelRack experience', url: 'https://wheelrack.com/pitstop/search' },
     ],
-    outcomeImages: [
-      {
-        src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',
-        alt: 'Annotated WheelRack proof page: numbered UI callouts mapped to written behavior specs for the visualizer, filters, and product grid',
-        layout: 'full',
-        caption: 'The annotated proof: numbered callouts mapped to behavior specs, the exact document engineering built from',
-      },
-    ],
+    outcomeLiveLinksLabel: 'Live product',
     metrics: [
-      { value: '200+', label: 'Atomic-level design tokens' },
+      { value: 'Wholesale', label: 'Framework reused 6 months after the build' },
+      { value: '200+', label: 'Design tokens' },
       { value: '50+', label: 'Storybook-integrated components' },
-      { value: '6 \u2192 10', label: 'Partners during build (influenced adoption)' },
-      { value: 'Wholesale', label: 'System extended 6 months post-build' },
+      { value: '6 → 10', label: 'Partners during the build; multiple contributing factors' },
     ],
   },
 

@@ -105,16 +105,20 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
     });
   };
   addSection(project.problemImages);
+  if (project.studyHero) addSection([project.studyHero]);
   addSection(project.gapsImages);
   addSection(project.constraintsImages);
   // Approach: subsections or legacy flat images
   if (project.approachSubsections) {
-    project.approachSubsections.forEach((sub) => addSection(sub.images));
+    project.approachSubsections.forEach((sub) => {
+      addSection(sub.images);
+      addSection(sub.variants?.map((variant) => variant.image));
+    });
   }
   addSection(project.approachImages);
   addSection(project.outcomeImages);
   addSection(project.outcomeGridImages);
-  return imgs;
+  return imgs.filter((img, index) => imgs.findIndex((other) => other.src === img.src) === index);
 };
 
 const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approach', 'Outcome'];
@@ -270,6 +274,16 @@ const InlineVideo: React.FC<{ src: string; poster?: string; alt: string }> = ({ 
   );
 };
 
+const ArtifactImage: React.FC<{ image: ProjectImage; priority?: boolean }> = ({ image, priority }) => {
+  const crop = image.crop;
+  return crop ? (
+    <span className="cs__artifact-crop" style={{ aspectRatio: `${crop.width} / ${crop.height}` }}>
+      <img width={crop.sourceWidth} height={crop.sourceHeight} src={image.src} alt={image.alt} loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : undefined}
+        style={{ width: `${crop.sourceWidth / crop.width * 100}%`, height: 'auto', left: `${-crop.x / crop.width * 100}%`, top: `${-crop.y / crop.height * 100}%` }} />
+    </span>
+  ) : <img src={image.src} alt={image.alt} loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : undefined} />;
+};
+
 const SectionImages: React.FC<{
   images: ProjectImage[];
   allImages: { src: string; alt: string }[];
@@ -344,7 +358,7 @@ const SectionImages: React.FC<{
         aria-label={`Open ${img.alt} at full size`}
         onClick={(e) => onOpen(img.src!, img.alt, findGlobalIndex(img.src!), e.currentTarget)}
       >
-        <img src={img.src} alt="" loading="lazy" />
+        <ArtifactImage image={img} />
         <span className="cs__zoom-hint">&#x26F6; View full</span>
       </button>
     );
@@ -400,6 +414,29 @@ const SectionImages: React.FC<{
     }
   }
   return <div className="cs__section-images">{elements}</div>;
+};
+
+const ArtifactSequence: React.FC<{
+  variants: NonNullable<NonNullable<Project['approachSubsections']>[number]['variants']>;
+  allImages: { src: string; alt: string }[];
+  onOpen: React.ComponentProps<typeof SectionImages>['onOpen'];
+}> = ({ variants, allImages, onOpen }) => {
+  const [selected, setSelected] = useState(0);
+  return (
+    <div className="cs__artifact-sequence">
+      <p className="cs__caption">Explore the designed component states</p>
+      <div className="cs__artifact-controls" role="group" aria-label="Product component states">
+        {variants.map((variant, index) => (
+          <button key={variant.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>
+            {variant.label}
+          </button>
+        ))}
+      </div>
+      <div aria-live="polite" aria-atomic="true">
+        <SectionImages images={[variants[selected].image]} allImages={allImages} onOpen={onOpen} />
+      </div>
+    </div>
+  );
 };
 
 /* ─── Main Component ─── */
@@ -630,6 +667,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
           {project.summary && (
             <p className="cs__summary">{redactClient(project.summary, locked)}</p>
           )}
+          {!locked && project.ownership && <p className="cs__ownership">{project.ownership}</p>}
           {project.slug === 'playdraft' && <PlayDraftLaunch />}
           <div className="cs__tags">
             {project.tags.map((tag) => (
@@ -660,7 +698,13 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             )}
           </figure>
         )}
-        {!locked && !project.featuredReel && project.featured && (
+        {!locked && project.studyHero && (
+          <figure className="cs__featured-image cs__featured-image--artifact">
+            <ArtifactImage image={project.studyHero} priority />
+            <figcaption className="cs__caption">{project.studyHero.caption}</figcaption>
+          </figure>
+        )}
+        {!locked && !project.studyHero && !project.featuredReel && project.featured && (
           <div
             className={`cs__featured-image${
               project.openerSchematic && hasSchematic(project.slug) ? ' cs__featured-image--opener' : ''
@@ -722,7 +766,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                 <div className="cs__section-header">
                   <span className="cs__section-number">01</span>
                   <span className="cs__micro-label">The Problem</span>
-                  <h2 className="cs__section-heading">{SECTION_LABELS[0]}</h2>
+                  <h2 className="cs__section-heading">{project.compactStory ? 'The dealer experience' : SECTION_LABELS[0]}</h2>
                   {project.annotations?.problem && (
                     <p className="cs__section-aside">{project.annotations.problem}</p>
                   )}
@@ -745,7 +789,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     public — so it locks with the rest. --- */}
             {locked ? (
               <>
-                <CaseStudyLocked onUnlock={openPrompt} />
+                <CaseStudyLocked onUnlock={() => openPrompt()} />
                 {/* Metric beats restate numbers already public in
                     OutcomeMetrics, so they survive the gate. Image beats are
                     media and stay behind it with the rest. */}
@@ -755,7 +799,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                     floating under the lock panel. */}
                 <section className="cs__section cs__section--outcome">
                   <div className="cs__section-header">
-                    <span className="cs__section-number">05</span>
+                    <span className="cs__section-number">{project.compactStory ? '03' : '05'}</span>
                     <span className="cs__micro-label">What Changed</span>
                     <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
                   </div>
@@ -822,9 +866,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             {project.approachSubsections && project.approachSubsections.length > 0 ? (
               <section className="cs__section cs__section--alt">
                 <div className="cs__section-header">
-                  <span className="cs__section-number">04</span>
+                  <span className="cs__section-number">{project.compactStory ? '02' : '04'}</span>
                   <span className="cs__micro-label">How It Came Together</span>
-                  <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
+                  <h2 className="cs__section-heading">{project.compactStory ? 'Building the shared system' : SECTION_LABELS[3]}</h2>
                   {project.annotations?.approach && (
                     <p className="cs__section-aside">{project.annotations.approach}</p>
                   )}
@@ -837,6 +881,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
+                      {sub.variants && <ArtifactSequence variants={sub.variants} allImages={lbImages} onOpen={openLightbox} />}
                       {sub.bullets && sub.bullets.length > 0 && (
                         <ul className="cs__approach-sub-list">
                           {sub.bullets.map((item, i) => (
@@ -877,6 +922,12 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                           <SectionImages images={sub.images} allImages={lbImages} onOpen={openLightbox} isUnlocked={isUnlocked} onOverlayClick={handleOverlayClick} />
                         </div>
                       )}
+                      {sub.quote && (
+                        <figure className="cs__quote">
+                          <blockquote><p>{sub.quote.text}</p></blockquote>
+                          <figcaption>{sub.quote.name}<span>{sub.quote.role}</span></figcaption>
+                        </figure>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -913,7 +964,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             {/* --- 05 Outcome --- */}
             <section className="cs__section cs__section--outcome">
               <div className="cs__section-header">
-                <span className="cs__section-number">05</span>
+                  <span className="cs__section-number">{project.compactStory ? '03' : '05'}</span>
                 <span className="cs__micro-label">What Changed</span>
                 <h2 className="cs__section-heading">{SECTION_LABELS[4]}</h2>
                 {project.annotations?.outcome && (
@@ -1009,7 +1060,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             {/* --- Time to Live --- */}
             {project.timeToLive && (
               <div className="cs__time-to-live">
-                <span className="cs__time-to-live-label">Time to Live</span>
+                <span className="cs__time-to-live-label">{project.compactStory ? 'Launch & rollout' : 'Time to Live'}</span>
                 <span className="cs__time-to-live-value">{redactClient(project.timeToLive, locked)}</span>
               </div>
             )}
@@ -1018,7 +1069,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
 
         {/* ==================== Continue — quiet close rail (every layout) ==================== */}
         <aside className="cs__continue">
-          <span className="cs__continue-label">[ In Progress ]</span>
+          <span className="cs__continue-label">{project.compactStory ? 'Ongoing notes' : '[ In Progress ]'}</span>
           <p className="cs__continue-body">
             Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
           </p>
