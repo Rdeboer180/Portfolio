@@ -71,6 +71,7 @@ export interface ApproachSubsection {
   bullets?: string[];
   variants?: { label: string; image: ProjectImage }[];
   quote?: { text: string; name: string; role: string };
+  libraryTour?: boolean;
 }
 
 export interface Project {
@@ -235,12 +236,7 @@ const projects: Project[] = [
         key: 'journey',
         label: 'Define the journey around dealer tasks',
         description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes. Those rules gave the team a shared starting point for each screen.',
-        images: [{
-          src: '/images/work/wheelrack/wheelrack-ux-wireframe-03_blurred.png',
-          alt: 'Annotated vehicle-selection wireframe describing autocomplete and responsive behavior',
-          layout: 'full',
-          caption: 'Behavior specifications accompanied the journey wireframes. Internal details are obscured in this portfolio copy.',
-        }],
+        libraryTour: true,
       },
       {
         key: 'foundation',

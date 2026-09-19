@@ -42,6 +42,7 @@ test('locked case study keeps new artifacts, ownership detail, and comparison be
   mockUnlocked = false;
   const { container } = mount();
   expect(screen.queryByRole('group', { name: 'Product component states' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('group', { name: 'Library tour chapters' })).not.toBeInTheDocument();
   expect(container.querySelector('img[src*="/evidence/"]')).toBeNull();
   expect(screen.queryByText(/Cheryl Carpenter owned/)).not.toBeInTheDocument();
   expect(screen.queryByText('Cheryl Carpenter')).not.toBeInTheDocument();

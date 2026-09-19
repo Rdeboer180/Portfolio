@@ -30,5 +30,21 @@
     "productState": "designed",
     "placement": "Filter interaction rules",
     "notes": "Original retained; full board opens in lightbox. Documentation capture dates not verified."
+  },
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/Primatives_text.png",
+    "output": "public/images/work/wheelrack/evidence/typography.png",
+    "status": "original with SVG viewport crop",
+    "productState": "designed",
+    "placement": "Animated component library tour",
+    "notes": "Original retained. Documentation capture dates not verified."
+  },
+  {
+    "source": "/Users/ryandeboer/Library/Mobile Documents/com~apple~CloudDocs/wheelrack/Primatives_other.png",
+    "output": "public/images/work/wheelrack/evidence/structure-tokens.png",
+    "status": "original with SVG viewport crop",
+    "productState": "designed",
+    "placement": "Animated component library tour",
+    "notes": "Original retained. Documentation capture dates not verified."
   }
 ]

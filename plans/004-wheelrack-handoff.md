@@ -26,3 +26,14 @@ Avoid adding more complete token boards or decorative device mockups. A real tab
 ## Asset mapping
 
 See `wheelrack-assets.json`. The four source copies are in `public/images/work/wheelrack/evidence/`. Crop coordinates and captions live alongside the case-study content in `src/data/projects.ts`.
+
+
+## Component library tour
+
+Replaced the vehicle-selection wireframe with a 28-second camera tour of 16 original artifact windows. The first input view holds for about five seconds. Controls, filters, purchasing, and unavailable states follow. The final third introduces responsive screens and foundations more quickly, then holds the full library overview.
+
+Six chapter buttons offer manual still views. Pause, play, and replay are available. Playback waits for images and pauses offscreen or in a hidden tab. Reduced motion presents the overview without autoplay and keeps chapter navigation. SVG windows clip the actual source images; no component UI was recreated. The tour remains inside the existing case-study gate.
+
+Taste and humanizer review: kept annotations specific to the visible controls, removed the generic “each state has a place” line, and retained the existing orange handwritten-note treatment. Copy describes design artifacts without claiming that the animation is a recording of the live product.
+
+Validation: desktop and 414px mobile visual checks, timeline and reduced-motion tests, gate regression test, TypeScript, and production prerender. Individual 2x frame exports remain the best next improvement for image decode/memory cost. A real product recording would add behavioral evidence beyond this library presentation.

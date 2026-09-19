@@ -11,6 +11,7 @@ import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
+import WheelRackLibraryTour from './WheelRackLibraryTour';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -881,6 +882,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
                       )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
+                      {sub.libraryTour && <WheelRackLibraryTour />}
                       {sub.variants && <ArtifactSequence variants={sub.variants} allImages={lbImages} onOpen={openLightbox} />}
                       {sub.bullets && sub.bullets.length > 0 && (
                         <ul className="cs__approach-sub-list">

@@ -1,0 +1,103 @@
+@import '../variables';
+
+.wr-tour {
+  margin: $spacing-2xl 0 0;
+  border: 1px solid $color-neutral-light;
+  border-radius: $radius-xl;
+  background: $color-white;
+  overflow: hidden;
+
+  &__heading {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: $spacing-sm;
+    padding: $spacing-xl $spacing-xl $spacing-lg;
+
+    p { grid-column: 1 / -1; margin: 0; font-family: $font-family-heading; font-size: $font-size-body-lg; line-height: 1.4; font-weight: $font-weight-semibold; }
+  }
+
+  &__eyebrow, &__index { font-family: $font-family-mono; font-size: $font-size-caption; line-height: 1.4; color: $color-neutral-muted; }
+  &__index { color: $color-primary-text; }
+
+  &__viewport {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: $color-secondary-lightest;
+    background-image: radial-gradient($color-secondary-light 0.7px, transparent 0.7px);
+    background-size: 20px 20px;
+    border-block: 1px solid $color-neutral-light;
+  }
+
+  &__camera { position: absolute; inset: 0; transform-origin: 0 0; }
+  &__card {
+    position: absolute;
+    width: 22%;
+    height: 21.5%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $color-secondary-light;
+    border-radius: 4px;
+    background: $color-white;
+    overflow: hidden;
+  }
+  &__card-label {
+    padding: 5% 5% 3%;
+    font-family: $font-family-mono; font-size: clamp(4px, 0.65vw, 9px); font-weight: 500; line-height: 1.3;
+    color: $color-neutral-standard;
+    border-bottom: 1px solid $color-secondary-lightest;
+    flex-shrink: 0;
+  }
+  &__sample { display: flex; align-items: center; justify-content: center; min-height: 0; flex: 1; padding: 4%; overflow: hidden; }
+  &__sample svg { display: block; overflow: hidden; }
+  &__viewport.is-loading &__camera { visibility: hidden; }
+  &__loading { position: absolute; inset: 0; display: grid; place-items: center; font-size: $font-size-body-sm; color: $color-neutral-muted; }
+  &__annotation {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-xl;
+    min-height: 70px;
+    color: $color-primary-text;
+
+    > span { font-size: 26px; }
+    p { margin: 0; font-family: $font-family-hand; font-size: 24px; line-height: 1.25; }
+  }
+  &__progress {
+    height: 2px;
+    background: $color-neutral-lightest;
+    overflow: hidden;
+    span { display: block; height: 100%; background: $color-primary; transform: scaleX(0); transform-origin: left; }
+  }
+  &__controls { display: flex; align-items: center; justify-content: space-between; gap: $spacing-md; padding: $spacing-sm $spacing-md; }
+  &__chapters { display: flex; flex-wrap: wrap; gap: 2px; }
+  &__controls button {
+    appearance: none;
+    min-height: 44px;
+    padding: $spacing-sm;
+    border: 1px solid transparent;
+    background: transparent;
+    color: $color-neutral-standard;
+    border-radius: $radius-sm;
+    font-family: $font-family-primary; font-size: $font-size-caption; line-height: 1.4;
+    cursor: pointer;
+
+    &[aria-pressed='true'] { color: $color-neutral-dark; border-bottom-color: $color-primary; font-weight: $font-weight-semibold; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+    &:disabled { cursor: default; opacity: 0.6; }
+  }
+  &__controls &__play { border-color: $color-neutral-light; white-space: nowrap; }
+  > .cs__caption { margin: 0; padding: $spacing-sm $spacing-xl $spacing-lg; text-align: left; }
+
+  @media (max-width: 600px) {
+    &__heading { padding: $spacing-lg; }
+    &__heading p { font-size: $font-size-body; min-height: 45px; }
+    &__eyebrow, &__index { font-size: 10px; }
+    &__annotation { padding: $spacing-md $spacing-lg; min-height: 85px; }
+    &__annotation p { font-size: 21px; }
+    &__controls { flex-wrap: wrap; }
+    &__chapters { width: 100%; justify-content: space-between; }
+    &__controls button { font-size: 11px; padding: 6px; }
+  }
+}
