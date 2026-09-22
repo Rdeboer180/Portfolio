@@ -45,9 +45,9 @@ interface Testimonial {
 // the rest of the site is built on, so the developer who did the build vouches
 // for it early rather than fifth:
 // 1. Leadership & Delivery (Adam) → 2. Design-Engineering Partnership (Cheryl)
-// → 3. Cross-Team Trust (Urbano) → 4. Craft, Care, and Growth (Amanda)
+// → 3. Process Improvement & Shared Learning (Rob) → 4. Craft, Care, and Growth (Amanda)
 // → 5. Systems Thinking (Kokesh) → 6. Mentorship & Confidence (Gina)
-// The seniority spread still runs manager → build partner → cross-team engineer
+// The seniority spread still runs manager → build partner → senior design peer
 // → AVP → UX manager → the junior designer he mentored, so a reader scanning top
 // to bottom is still shown him vouched for from every direction.
 //
@@ -82,16 +82,15 @@ const testimonials: Testimonial[] = [
     year: '2026',
   },
   {
-    title: 'Cross-Team Trust',
+    title: 'Process Improvement & Shared Learning',
     quote: (
       <>
-        <p>Ryan is a super talented design professional. It has truly been amazing to work with him at Tire Rack over the last 3 years and <H>he has made my job a lot easier on many occasions</H>.</p>
-        <p><H>His eye for design and communication skills are top notch</H>.</p>
-        <p>More importantly to me is that he&rsquo;s a great person and <H>cares about the people he works with and the work he does</H>.</p>
+        <p>I worked with Ryan for <H>over 10 years</H> and got to know him quite well, both as a designer and as a person. He truly has a passion for improvement in both his professional and personal life. He is always looking for <H>better and more efficient ways to do things</H>. He loves trying new tools and <H>refining existing processes</H>.</p>
+        <p>&hellip; He&rsquo;s always eager to ask questions, see what others have been working on, and find what knowledge he can glean from them. At the same time, he&rsquo;s <H>happy to share his own knowledge and what he has learned</H> from the work he&rsquo;s been doing.</p>
       </>
     ),
-    name: 'Urbano Baz',
-    role: 'Software Engineer, Tire Rack (partner team)',
+    name: 'Rob Oxley',
+    role: 'Senior Web Designer, Tire Rack (design peer for over 10 years)',
     year: '2026',
   },
   {

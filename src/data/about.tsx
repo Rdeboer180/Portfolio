@@ -257,7 +257,7 @@ export const processCloser = {
 // homepage because it asserted 22 phrases with no way to check any of them.
 // Here each surviving phrase is grouped by who the work was with and paired
 // with the person who said it — a verbatim fragment of a recommendation that
-// appears in full in the homepage Testimonials section and on LinkedIn — or,
+// is excerpted in the homepage Testimonials section and available on LinkedIn — or,
 // for the writing row, with the artifact itself.
 //
 // WHAT DID NOT SURVIVE, and why (so nothing was dropped silently):
@@ -324,12 +324,6 @@ export const strengthRows: StrengthRow[] = [
         name: 'Adam Payne',
         role: 'Web Design Manager, Ryan’s direct manager',
       },
-      {
-        kind: 'person',
-        quote: 'communication skills are top notch',
-        name: 'Urbano Baz',
-        role: 'Software Engineer, partner team',
-      },
     ],
   },
   {
@@ -352,13 +346,19 @@ export const strengthRows: StrengthRow[] = [
   },
   {
     with: 'Over the long run',
-    phrases: ['Systems thinking'],
+    phrases: ['Systems thinking', 'Process improvement'],
     vouchers: [
       {
         kind: 'person',
         quote: 'what’s worked, what hasn’t, and why',
         name: 'Ryan Kokesh',
         role: 'Senior UX Manager, 2022–2024',
+      },
+      {
+        kind: 'person',
+        quote: 'better and more efficient ways to do things',
+        name: 'Rob Oxley',
+        role: 'Senior Web Designer, Tire Rack; design peer for over 10 years',
       },
     ],
   },
