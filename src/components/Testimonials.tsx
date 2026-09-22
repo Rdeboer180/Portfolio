@@ -45,10 +45,10 @@ interface Testimonial {
 // the rest of the site is built on, so the developer who did the build vouches
 // for it early rather than fifth:
 // 1. Leadership & Delivery (Adam) → 2. Design-Engineering Partnership (Cheryl)
-// → 3. Process Improvement & Shared Learning (Rob) → 4. Craft, Care, and Growth (Amanda)
-// → 5. Systems Thinking (Kokesh) → 6. Mentorship & Confidence (Gina)
-// The seniority spread still runs manager → build partner → senior design peer
-// → AVP → UX manager → the junior designer he mentored, so a reader scanning top
+// → 3. Craft, Care, and Growth (Amanda) → 4. Process Improvement & Shared Learning (Rob)
+// → 5. Systems Knowledge & Cross-Team Trust (Kokesh) → 6. Mentorship & Confidence (Gina)
+// The seniority spread still runs manager → build partner → AVP → senior design peer
+// → UX manager → the junior designer he mentored, so a reader scanning top
 // to bottom is still shown him vouched for from every direction.
 //
 // Cards carry no per-quote links. Six identical "see all recommendations" links
@@ -82,18 +82,6 @@ const testimonials: Testimonial[] = [
     year: '2026',
   },
   {
-    title: 'Process Improvement & Shared Learning',
-    quote: (
-      <>
-        <p>I worked with Ryan for <H>over 10 years</H> and got to know him quite well, both as a designer and as a person. He truly has a passion for improvement in both his professional and personal life. He is always looking for <H>better and more efficient ways to do things</H>. He loves trying new tools and <H>refining existing processes</H>.</p>
-        <p>&hellip; He&rsquo;s always eager to ask questions, see what others have been working on, and find what knowledge he can glean from them. At the same time, he&rsquo;s <H>happy to share his own knowledge and what he has learned</H> from the work he&rsquo;s been doing.</p>
-      </>
-    ),
-    name: 'Rob Oxley',
-    role: 'Senior Web Designer, Tire Rack (design peer for over 10 years)',
-    year: '2026',
-  },
-  {
     title: 'Craft, Care, and Growth',
     quote: (
       <>
@@ -107,9 +95,24 @@ const testimonials: Testimonial[] = [
     year: '2026',
   },
   {
-    title: 'Systems Thinking',
+    title: 'Process Improvement & Shared Learning',
     quote: (
-      <>Ryan has a lot of <H>institutional knowledge</H>. He understands what we&rsquo;ve done in the past, <H>what&rsquo;s worked, what hasn&rsquo;t, and why</H>. Combined with his technical skills, he has been very effective in project work.</>
+      <>
+        <p>I worked with Ryan for <H>over 10 years</H> and got to know him quite well, both as a designer and as a person. He truly has a passion for improvement in both his professional and personal life. He is always looking for <H>better and more efficient ways to do things</H>. He loves trying new tools and <H>refining existing processes</H>.</p>
+        <p>&hellip; He&rsquo;s always eager to ask questions, see what others have been working on, and find what knowledge he can glean from them. At the same time, he&rsquo;s <H>happy to share his own knowledge and what he has learned</H> from the work he&rsquo;s been doing.</p>
+      </>
+    ),
+    name: 'Rob Oxley',
+    role: 'Senior Web Designer, Tire Rack (design peer for over 10 years)',
+    year: '2026',
+  },
+  {
+    title: 'Systems Knowledge & Cross-Team Trust',
+    quote: (
+      <>
+        <p>Ryan has a lot of <H>institutional knowledge</H>. He understands what we&rsquo;ve done in the past, <H>what&rsquo;s worked, what hasn&rsquo;t, and why</H>. Combined with his technical skills, he has been very effective in project work.</p>
+        <p>He consistently takes the initiative to engage relevant teams&mdash;including UX, UXR, Analytics, Imaging, and SEO&mdash;whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. It&rsquo;s also evident that he genuinely <H>values and cares for his colleagues</H>.</p>
+      </>
     ),
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
