@@ -70,6 +70,7 @@ const ResumePage: React.FC = () => {
         </div>
       </nav>
 
+      <div className="resume-page__canvas" role="region" aria-label="Letter-size resume" tabIndex={0}>
       <article className="resume-page__paper">
         <header className="resume-page__header">
           <p className="resume-page__eyebrow">Product Design · Design Systems · Design Engineering</p>
@@ -77,8 +78,7 @@ const ResumePage: React.FC = () => {
             <h1 className="resume-page__name">Ryan DeBoer</h1>
             <div className="resume-page__contact">
               <strong>{CONTACT.title}</strong>
-              <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-              <a href={CONTACT.portfolioUrl}>rdeboerdesigns.com</a>
+              <div className="resume-page__contact-row"><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a><span>·</span><a href={CONTACT.portfolioUrl}>rdeboerdesigns.com</a></div>
               <a href={CONTACT.linkedinUrl}>linkedin.com/in/ryandeboerdesigns</a>
               <span>{CONTACT.city} · Remote</span>
             </div>
@@ -105,7 +105,7 @@ const ResumePage: React.FC = () => {
 
             <section className="resume-page__section">
               <h2 className="resume-page__section-title">Education</h2>
-              <p><strong>Kendall College of Art and Design</strong><br />BFA, Graphic Design<br />Minor in Digital Media (Web)</p>
+              <p><strong className="resume-page__education-name">Kendall College of<br />Art and Design</strong>BFA, Graphic Design<br />Minor in Digital Media (Web)</p>
             </section>
 
             <section className="resume-page__section">
@@ -155,6 +155,7 @@ const ResumePage: React.FC = () => {
           </div>
         </div>
       </article>
+      </div>
     </div>
   );
 };
