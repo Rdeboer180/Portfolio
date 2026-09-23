@@ -168,7 +168,8 @@ $card-border: 1px solid $color-border-default;
 // ============================================
 
 $container-max-width: 1186px;
-$container-text-width: 720px;
+// Keep existing copy-block consumers connected to the runtime layout token.
+$container-text-width: var(--copy-max-width);
 // Wide content column — case-study shells, about proof blocks, resume paper
 $container-wide: 960px;
 $container-padding-x: $spacing-2xl;

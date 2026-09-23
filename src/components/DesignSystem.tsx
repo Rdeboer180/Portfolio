@@ -240,6 +240,17 @@ const AtomsContent: React.FC = () => (
       </div>
     </section>
 
+    {/* ======================== COPY WIDTH ======================== */}
+    <section className="ds__section">
+      <h2 className="ds__section-title">Copy width</h2>
+      <p className="copy-block">
+        <code>--copy-max-width: 900px</code> is the shared maximum for prose and
+        section introductions. Copy stays fluid below this width, and narrower
+        cards or split-layout columns still constrain it. The homepage hero uses
+        a separate 540px copy column.
+      </p>
+    </section>
+
     {/* ======================== BORDER RADIUS ======================== */}
     <section className="ds__section">
       <h2 className="ds__section-title">Border Radius</h2>

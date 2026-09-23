@@ -164,7 +164,7 @@
     font-size: $font-size-body;
     line-height: 1.75;
     color: rgba(255, 255, 255, 0.9);
-    max-width: 540px;
+    max-width: $container-text-width;
 
     & + & {
       margin-top: $spacing-lg;
@@ -190,7 +190,7 @@
     font-size: $font-size-body;
     line-height: 1.75;
     color: rgba(255, 255, 255, 0.9);
-    max-width: 540px;
+    max-width: $container-text-width;
     margin-top: $spacing-lg;
   }
 

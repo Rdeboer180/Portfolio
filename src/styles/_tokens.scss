@@ -156,6 +156,8 @@
 
   --container-max: 1186px;
   --container-px: 32px;
+  // Default ceiling for prose; smaller parent columns still constrain it.
+  --copy-max-width: 900px;
 }
 
 // Talent Atlas territory colors. Scoped semantic extensions; orange remains the action accent.

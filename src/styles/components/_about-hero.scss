@@ -127,7 +127,7 @@
 
   &__intro {
     margin: $spacing-2xl 0 0;
-    max-width: 560px;
+    max-width: $container-text-width;
 
     p {
       font-family: $font-family-primary;

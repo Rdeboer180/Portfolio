@@ -131,7 +131,7 @@
     font-size: $font-size-body-lg;
     line-height: $line-height-body-lg;
     color: $color-neutral-standard;
-    max-width: 60ch;
+    max-width: $container-text-width;
     margin: 0;
   }
 
@@ -164,7 +164,7 @@
     }
   }
 
-  // Article pages keep the 720 reading measure — the wide tier is index chrome
+  // Article pages use the shared copy measure — the wide tier is index chrome
   &--single &__header {
     max-width: $container-text-width;
     padding-top: $spacing-4xl;
@@ -558,7 +558,7 @@
     font-size: $font-size-body-sm;
     line-height: $line-height-body-sm;
     color: $color-neutral-muted;
-    max-width: 60ch;
+    max-width: $container-text-width;
     margin: 0;
   }
 
@@ -582,7 +582,7 @@
       font-size: $font-size-body;
       line-height: 1.7;
       color: $color-neutral-standard;
-      max-width: 68ch;
+      max-width: $container-text-width;
     }
 
     p {
@@ -659,7 +659,7 @@
     border-radius: 0 $card-border-radius-lg $card-border-radius-lg 0;
     padding: $spacing-xl $spacing-2xl;
     margin: $spacing-2xl 0;
-    max-width: 68ch;
+    max-width: $container-text-width;
   }
 
   &__callout-marker {
@@ -729,7 +729,7 @@
   // The <s> on each dead name carries the state without relying on color.
   .notes__graveyard {
     list-style: none;
-    max-width: 68ch;
+    max-width: $container-text-width;
     margin: $spacing-2xl 0;
     padding: 0 0 0 $spacing-xl;
     border-left: 1px solid $color-neutral-light;
@@ -813,7 +813,7 @@
 
   .notes__branch-verdict {
     margin: 0;
-    max-width: 60ch;
+    max-width: $container-text-width;
     font-size: $font-size-body-sm;
     line-height: 1.6;
     color: $color-neutral-standard;
@@ -823,7 +823,7 @@
   .notes__turn {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    max-width: 68ch;
+    max-width: $container-text-width;
     margin: $spacing-2xl 0;
     background: $color-secondary-lightest;
     border: 1px solid $color-border-default;
@@ -889,7 +889,7 @@
 
   // ── Term split — dictionary treatment for a two-part name ────────────────
   .notes__split {
-    max-width: 68ch;
+    max-width: $container-text-width;
     margin: $spacing-2xl 0;
     border-top: 2px solid $color-neutral-dark;
   }
@@ -958,7 +958,7 @@
   // relationship, drawn the same way. The open slot is a hollow node — an
   // honest empty state instead of a tidier list of two.
   .notes__umbrella {
-    max-width: 68ch;
+    max-width: $container-text-width;
     margin: $spacing-2xl 0;
   }
 
@@ -1110,7 +1110,7 @@
     }
 
     &__stream-arrow { display: none; }
-    &__stream-sub { grid-column: 1 / -1; max-width: 60ch; }
+    &__stream-sub { grid-column: 1 / -1; max-width: $container-text-width; }
 
     // Meta rail stacks above the title once the row is a single column.
     &__row {
@@ -1207,7 +1207,7 @@
 // caption in the same voice as the body.
 .notes__body .notes__figure {
   margin: $spacing-2xl 0;
-  max-width: 68ch;
+  max-width: $container-text-width;
 
   img {
     display: block;

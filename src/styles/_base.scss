@@ -262,7 +262,8 @@ svg {
   padding: 0 $container-padding-x;
 }
 
-.container__text {
+.container__text,
+.copy-block {
   max-width: $container-text-width;
 }
 

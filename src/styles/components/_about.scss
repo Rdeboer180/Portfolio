@@ -264,10 +264,10 @@ $select-b: blue($color-primary-light);
   }
 }
 
-// Wide variant (targeted homepages)
+// Targeted homepages use the same prose ceiling as the main homepage.
 .about--wide {
   .about__content {
-    max-width: $container-wide;
+    max-width: $container-text-width;
   }
 }
 

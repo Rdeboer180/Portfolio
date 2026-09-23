@@ -39,7 +39,7 @@
   // ── Intro ──────────────────────────────────────────────────────────────────
 
   &__intro {
-    max-width: 640px;
+    max-width: $container-text-width;
   }
 
   &__title {

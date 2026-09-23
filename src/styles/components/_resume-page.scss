@@ -10,8 +10,8 @@
 
 @import '../variables';
 
-// Paper width: the 720px reading column plus the paper's own padding.
-$resume-paper-width: $container-text-width + ($spacing-3xl * 2);
+// Screen paper follows the shared copy width; print dimensions stay separate.
+$resume-paper-width: calc(#{$container-text-width} + #{$spacing-3xl * 2});
 
 .resume-page {
   min-height: 100vh;

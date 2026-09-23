@@ -63,7 +63,11 @@
 }
 
 .hero {
-  min-height: 100vh;
+  // Paper spacing study: 540px copy + 64px gap + 518px visual at full width.
+  --hero-copy-max-width: 540px;
+  // Let the tighter composition determine its height instead of redistributing
+  // the saved space around the vertically centered content on tall viewports.
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: $color-white;
@@ -256,14 +260,14 @@
     justify-content: center;
     max-width: $container-max-width;
     margin: 0 auto;
-    padding: 150px $spacing-2xl calc(#{$spacing-4xl} * 1.5);
+    padding: 150px $spacing-2xl $spacing-4xl;
     width: 100%;
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-3xl;
+    grid-template-columns: minmax(0, 540fr) minmax(0, 518fr);
+    gap: $spacing-4xl;
     align-items: center;
   }
 
@@ -271,18 +275,22 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    max-width: var(--hero-copy-max-width);
   }
 
   &__eyebrow {
     align-items: baseline;
     gap: $spacing-xs;
-    font-family: $font-family-heading;
+    font-family: $font-family-primary;
     font-size: $font-size-caption;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.14em;
+    line-height: var(--leading-caption);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: $color-neutral-muted;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-xs;
   }
 
   &__eyebrow-title {
@@ -347,12 +355,13 @@
   &__typed-wrap {
     position: relative;
     font-family: $font-family-heading;
-    font-size: 52px;
-    line-height: 1.1;
-    font-weight: $font-weight-bold;
+    // Keep the heading fitted as the two-column layout reaches full width.
+    font-size: clamp(44px, calc(44px + (100vw - 1024px) * 8 / 162), 52px);
+    line-height: calc(58 / 52);
+    font-weight: $font-weight-extrabold;
     color: $color-neutral-dark;
-    letter-spacing: -0.02em;
-    margin-bottom: $spacing-xs;
+    letter-spacing: -0.04em;
+    margin-bottom: $spacing-md;
     // Sizer-stack layout: the invisible sizer and the live typed group share
     // one grid cell, so the wrap's height always equals the tallest phrase's
     // real rendered height at the current width — no fixed min-height, no
@@ -538,13 +547,17 @@
 
   &__body {
     font-size: $font-size-body;
-    line-height: $line-height-body;
+    line-height: var(--leading-body);
     color: $color-neutral-muted;
-    max-width: 480px;
-    margin-bottom: $spacing-2xl;
+    max-width: var(--hero-copy-max-width);
+    margin-bottom: $spacing-md;
+
+    > p {
+      line-height: inherit;
+    }
 
     > p + p {
-      margin-top: $spacing-md;
+      margin-top: $spacing-lg;
     }
   }
 
@@ -557,8 +570,8 @@
     line-height: $line-height-body-sm;
     color: $color-neutral-muted;
     font-style: italic;
-    max-width: 480px;
-    margin-bottom: $spacing-2xl;
+    max-width: var(--hero-copy-max-width);
+    margin-bottom: $spacing-md;
   }
 
   &__actions {
@@ -2246,8 +2259,12 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     &__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       text-align: center;
+    }
+
+    &__text {
+      margin-inline: auto;
     }
 
     &__typed-wrap {

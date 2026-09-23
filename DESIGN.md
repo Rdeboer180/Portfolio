@@ -131,13 +131,13 @@ The site looks like the surface of someone who builds, and it leaves the constru
 
 Underneath the marks, the system is disciplined and flat. Surfaces are paper-white or a cool off-white separated by hairline borders rather than shadows. Type carries the hierarchy: a tight, confident Hubot Sans for headings against a calm Inter for reading. Signal Orange is the one voice that carries emphasis and state. Depth is earned, not ambient. A card lifts, a border lights, a comet traces once, only when the reader touches it or scrolls it into view.
 
-Density is editorial. Generous vertical rhythm (96px between sections), a 720px reading column, and an 1186px max width keep long pages calm and scannable. The result should feel like a working designer's bench: precise, legible, evidence-first, with just enough hand in it to prove a person made the calls.
+Density is editorial. Generous vertical rhythm (96px between sections), a 900px reading column, and an 1186px max width keep long pages calm and scannable. The result should feel like a working designer's bench: precise, legible, evidence-first, with just enough hand in it to prove a person made the calls.
 
 **Key Characteristics:**
 - Visible construction: Caveat annotations, numbered rules, selection handles, and tool-vernacular marks
 - Flat by default; hairline borders carry structure, and shadow or motion appears only on state
 - Hubot Sans headings over Inter body, with Signal Orange as the single accent
-- Editorial rhythm: 96px section spacing, a 720px reading column, 1186px max width
+- Editorial rhythm: 96px section spacing, a 900px reading column, 1186px max width
 - Evidence-first, calm, and honest about the making
 
 ## Colors
@@ -187,7 +187,7 @@ On the talent tree's Ink panel, orange is spent only on earned state: the ramp a
 - **Display** (Hubot Sans, 800, 38px, line-height 1.25, tracking -0.02em): Page and hero headlines. The hero scales larger via clamp; 38px is the token ceiling for standard H1s.
 - **Headline** (Hubot Sans, 700, 34px, line-height 1.25, tracking -0.02em): Section titles (H2).
 - **Title** (Hubot Sans, 700, 22px-30px): Sub-section and card titles. Card titles often drop to 16px-17px semibold in dense grids.
-- **Body** (Inter, 400, 16px, line-height 1.6): Reading text. Hold the reading column near 720px (roughly 65-75 characters).
+- **Body** (Inter, 400, 16px, line-height 1.6): Reading text. Hold the reading column near 900px (the shared `--copy-max-width` ceiling; narrower columns still constrain it).
 - **Label** (Hubot Sans, 700, 14px, tracking 0.08em, UPPERCASE): Eyebrows, badges, and micro-labels. Buttons use the same face at weight 800.
 - **Mono** (Menlo, 400, 14px): System markers (e.g. `CONTEXT LAYER`), status chips like `[ Essay ]`, and code blocks in notes.
 - **Annotation** (Caveat, 600, ~20px): Handwritten margin marks only.
@@ -199,7 +199,7 @@ On the talent tree's Ink panel, orange is spent only on earned state: the ramp a
 
 ## Layout
 
-A single centered column system. `max-width: 1186px` for full sections, a `720px` text column for reading (About narrative, notes, FAQ answers), and a `960px` wide column for case-study shells and proof blocks. Horizontal padding is 32px. Vertical rhythm between homepage sections is a uniform 96px (`$section-pad-y`), which is the primary device that keeps long pages calm.
+A single centered column system. `max-width: 1186px` for full sections, a `900px` text column for reading (About narrative, notes, FAQ answers), and a `960px` wide column for case-study shells and proof blocks. Horizontal padding is 32px. Vertical rhythm between homepage sections is a uniform 96px (`$section-pad-y`), which is the primary device that keeps long pages calm.
 
 Grids are a 12-column model with 24px-32px gutters. Card grids step down responsively: 3 columns to 2 (`≤1024px`) to 1 (`≤640px`). Breakpoints: 480 / 640 / 768 / 1024 / 1280 / 1536px. Mobile is treated as a real product state (stacked, static positioning replaces sticky, padding tightens), not a scaled crop.
 
@@ -279,7 +279,7 @@ The hero's inspector chip (`class / Guardrail Architect · Lv 16`) is the same c
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set headings in Hubot Sans (Title Case, negative tracking) over Inter body, and hold reading columns near 720px.
+- **Do** set headings in Hubot Sans (Title Case, negative tracking) over Inter body, and hold reading columns near 900px.
 - **Do** keep surfaces flat and let hairline borders and paper/cool-paper grounds carry structure. Reach for a shadow only as a state response (Shadow SM on hover).
 - **Do** treat Signal Orange as the single accent for both emphasis and state, and make each orange mean something.
 - **Do** reserve Caveat for hand-drawn craft marks and Menlo for system markers and code.
@@ -300,3 +300,9 @@ Ryan approved the light Talent Atlas reference as a successor exploration to the
 The `--talent-design-*`, `--talent-technical-*`, and `--talent-code-*` families live in `_tokens.scss` and are shown on `/design-system/`. Use strong values for readable labels and glyphs, mid values for connectors, and pale values for territory backgrounds. Do not propagate these categories to unrelated diagrams or portfolio sections.
 
 The review route is `/talent-tree/atlas/`. See `references/core-ui-elements/patterns/talent-atlas.md` for source precedence, confirmed point/ability changes, discovery behavior, and remaining review work.
+
+### Homepage spacing study — September 2026
+
+`--copy-max-width: 900px` is the standard maximum for copy blocks. The existing Sass `$container-text-width` alias resolves to this CSS token, so About, notes, case-study prose, page introductions, and `.copy-block` share one adjustable ceiling. Cards, sidebars, and split layouts remain constrained by their parent columns.
+
+The homepage hero is a deliberate narrower composition: 540px copy, a 64px column gap, and a 518px visual at the full desktop container width. Its eyebrow uses 0.08em tracking with a 6px gap to the headline; the headline uses 52px / 58px, weight 800, and −0.04em tracking. The heading scales from 44px to 52px between the tablet breakpoint and the full desktop container. Heading-to-body, body-to-location, and location-to-actions gaps are 12px. Paragraphs are separated by 16px. The existing responsive portrait order, animation, and heading height reservation remain in use.
