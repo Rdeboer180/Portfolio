@@ -98,7 +98,7 @@ const ResumePage: React.FC = () => {
             <section className="resume-page__section">
               <h2 className="resume-page__section-title">Design + Systems</h2>
               <div className="resume-page__skill-group"><h3>Design systems</h3><p>Tokens, components, governance, accessibility.</p></div>
-              <div className="resume-page__skill-group"><h3>Product &amp; visual design</h3><p>Typography, responsive UX/UI, interaction, prototyping.</p></div>
+              <div className="resume-page__skill-group"><h3>Product &amp; visual design</h3><p>Typography, responsive UX/UI, interaction, prototyping with Paper.design.</p></div>
               <div className="resume-page__skill-group"><h3>Technical fluency</h3><p>HTML, CSS/Sass, React, Storybook, AEM.</p></div>
               <div className="resume-page__skill-group"><h3>AI-assisted workflows</h3><p>Prototyping, documentation, design review, and QA.</p></div>
             </section>
