@@ -70,13 +70,6 @@ const ResumePage: React.FC = () => {
     ogType: 'profile',
   });
 
-  // Native print produces a PDF with clickable links and selectable, ATS-readable
-  // text (unlike a rasterized canvas export), using the @media print styles.
-  // The print block is tuned so the document is one US Letter page.
-  const handleExportPDF = () => {
-    window.print();
-  };
-
   // Downloadable vCard so recruiters can add Ryan to their contacts in one click.
   const handleDownloadVCard = () => {
     const { firstName, lastName, title, email, city, region, country, portfolioUrl, linkedinUrl } = CONTACT;
@@ -121,14 +114,18 @@ const ResumePage: React.FC = () => {
             </svg>
             Save contact
           </button>
-          <button className="btn btn--primary btn--md resume-page__print-btn" onClick={handleExportPDF}>
+          <a
+            className="btn btn--primary btn--md resume-page__download-btn"
+            href="/Ryan-DeBoer-Resume.pdf"
+            download="Ryan-DeBoer-Resume.pdf"
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-              <polyline points="6 9 6 2 18 2 18 9" />
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-              <rect x="6" y="14" width="12" height="8" />
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            Save as PDF
-          </button>
+            Download résumé
+          </a>
           <Link to={getHomeHref()} className="resume-page__nav-back">&larr; Back to Portfolio</Link>
         </div>
       </nav>

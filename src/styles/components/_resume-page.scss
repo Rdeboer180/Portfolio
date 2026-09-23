@@ -1,11 +1,8 @@
 // ============================================
 // Resume Page — one document, on screen and on paper
 //
-// The screen and the print are the same single column in the same reading
-// order. The screen adds a nav and a paper card; the print block below
-// re-sizes the same markup to fit one US Letter page at 0.55in margins.
-// Export is window.print(): native print keeps the links clickable and the
-// text selectable / ATS-readable, which a rasterized export would not.
+// The on-screen document remains available for reading. The nav offers the
+// approved one-page PDF as a direct download, preserving its link annotations.
 // ============================================
 
 @import '../variables';
@@ -54,13 +51,13 @@ $resume-paper-width: calc(#{$container-text-width} + #{$spacing-3xl * 2});
     gap: $spacing-xl;
   }
 
-  // "Save as PDF" and "Save contact" are the site's `.btn--primary` and
+  // "Download résumé" and "Save contact" are the site's `.btn--primary` and
   // `.btn--secondary` at `--md` (the footer runs the same pair). That is
   // where the face (Hubot Sans 800), the AA-safe Orange Deep at rest, the
   // text-warms-and-lifts hover, and the ink inversion for secondary come
   // from. Before this they were Inter 600 with their own hover, and read as
   // a third button style the site does not have. Only the icon gap is local.
-  &__print-btn,
+  &__download-btn,
   &__vcard-btn {
     gap: $spacing-sm;
 
@@ -372,7 +369,7 @@ $resume-paper-width: calc(#{$container-text-width} + #{$spacing-3xl * 2});
   }
 }
 
-// At <=480 the nav row could not fit the logo, "Save contact", "Save as PDF"
+// At <=480 the nav row could not fit the logo, "Save contact", "Download résumé"
 // and the back link on one line: the logo wrapped under the buttons and the
 // back link was sliced by the viewport edge — unreachable, because
 // `overflow-x: clip` removes the scrollbar that would have recovered it.
@@ -389,7 +386,7 @@ $resume-paper-width: calc(#{$container-text-width} + #{$spacing-3xl * 2});
     justify-content: flex-start;
   }
 
-  .resume-page__print-btn,
+  .resume-page__download-btn,
   .resume-page__vcard-btn {
     white-space: nowrap;
   }
