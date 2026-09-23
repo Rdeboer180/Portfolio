@@ -4,125 +4,65 @@ import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 
-// Shared contact details come from data/site.ts; the resume adds its own
-// display fields (name split for the vCard, address parts, link labels).
-//
-// `title` is the positioning string, not the job title. The job title is
-// "Senior Web Designer" and lives on the Tire Rack entry below, where it
-// belongs; the positioning string is what the header and the vCard carry.
-//
-// The site joins these three with a middle dot. The résumé joins them with a
-// hyphen, per Ryan, which also keeps the vCard TITLE in ASCII: desktop Outlook
-// has imported .vcf files as Windows-1252 and would render the dot as "Â·" on
-// a recruiter's contact card. The pipe stays as furniture on the contact and
-// job lines, so the title is visibly the title.
-const TITLE_PARTS = ['Product Design Engineer', 'Design Systems', 'Agentic Workflows'];
-
 const CONTACT = {
   firstName: 'Ryan',
   lastName: 'DeBoer',
-  title: TITLE_PARTS.join(' - '),
   email: SITE.email,
-  city: 'South Bend',
-  region: 'Indiana',
-  country: 'USA',
+  city: 'South Bend, Indiana',
+  title: 'Product Design & Design Systems',
   portfolioUrl: SITE.portfolioUrl,
-  portfolioLabel: 'rdeboerdesigns.com',
   linkedinUrl: SITE.linkedinUrl,
-  linkedinLabel: 'linkedin.com/in/ryandeboerdesigns',
 };
 
-// Absolute links (not bare #hashes) so they stay clickable from an exported PDF.
 const caseStudyUrl = (slug: string) => `${CONTACT.portfolioUrl}/work/${slug}/`;
-
-// One line per entry. The numbers are the case studies' own (data/projects.ts);
-// change them there first, then here.
-const SELECTED_WORK: { name: string; slug: string; note: string }[] = [
-  {
-    name: 'WheelRack',
-    slug: 'wheelrack',
-    note: 'Designed a 200+ token system and 50+ Storybook components for a dealer journey spanning vehicle selection through checkout; partner adoption grew from six to ten.',
-  },
-  {
-    name: 'PlayDraft',
-    slug: 'playdraft',
-    note: 'Took a social drafting game from its first identity sketch to TestFlight in 12 weeks, owning product design, the design system, and an agent-assisted React Native build.',
-  },
-  {
-    name: 'Internal Tooling',
-    slug: 'design-enablement',
-    note: 'Shipped a Figma metadata plugin, production-accurate crop simulator, and presentation system used across Design, UX, and Photography.',
-  },
-  {
-    name: 'AEM Component System',
-    slug: 'aem-component-system',
-    note: 'Defined and shipped 10+ reusable components with Sass, responsive behavior, accessibility rules, and documentation; WebPageTest measured 60% faster loads.',
-  },
-];
 
 const ResumePage: React.FC = () => {
   usePageMeta({
     title: 'Résumé — Ryan DeBoer, Product Design Engineer',
     description:
-      'Ryan DeBoer is a product design engineer with 16+ years of experience designing systems, ecommerce experiences, and agent-assisted products across web and native.',
+      'Ryan DeBoer is a product design engineer with 12+ years at Tire Rack, shaping ecommerce, partner platforms, and internal design tools.',
     canonical: `${SITE.portfolioUrl}/resume/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
   });
 
-  // Downloadable vCard so recruiters can add Ryan to their contacts in one click.
   const handleDownloadVCard = () => {
-    const { firstName, lastName, title, email, city, region, country, portfolioUrl, linkedinUrl } = CONTACT;
     const vcard = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      `N:${lastName};${firstName};;;`,
-      `FN:${firstName} ${lastName}`,
-      `TITLE:${title}`,
-      `EMAIL;TYPE=INTERNET,PREF:${email}`,
-      `URL:${portfolioUrl}`,
-      `X-SOCIALPROFILE;TYPE=linkedin:${linkedinUrl}`,
-      `ADR;TYPE=HOME:;;;${city};${region};;${country}`,
+      `N:${CONTACT.lastName};${CONTACT.firstName};;;`,
+      `FN:${CONTACT.firstName} ${CONTACT.lastName}`,
+      `TITLE:${CONTACT.title}`,
+      `EMAIL;TYPE=INTERNET,PREF:${CONTACT.email}`,
+      `URL:${CONTACT.portfolioUrl}`,
+      `X-SOCIALPROFILE;TYPE=linkedin:${CONTACT.linkedinUrl}`,
+      `ADR;TYPE=HOME:;;;${CONTACT.city};;;;`,
       'END:VCARD',
     ].join('\r\n');
-
-    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${firstName}_${lastName}.vcf`;
+    link.download = 'Ryan_DeBoer.vcf';
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    link.remove();
     URL.revokeObjectURL(url);
   };
 
   return (
     <div className="resume-page">
-      {/* Screen-only nav */}
       <nav className="resume-page__nav" aria-label="Primary">
         <Link to={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</Link>
         <div className="resume-page__nav-actions">
-          {/* The site's own button pair (footer uses the same two at --md);
-              the résumé classes only add the icon gap. */}
           <button className="btn btn--secondary btn--md resume-page__vcard-btn" onClick={handleDownloadVCard}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <line x1="19" y1="8" x2="19" y2="14" />
-              <line x1="22" y1="11" x2="16" y2="11" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" y1="8" x2="19" y2="14" /><line x1="22" y1="11" x2="16" y2="11" />
             </svg>
             Save contact
           </button>
-          <a
-            className="btn btn--primary btn--md resume-page__download-btn"
-            href="/Ryan-DeBoer-Resume.pdf"
-            download="Ryan-DeBoer-Resume.pdf"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
+          <a className="btn btn--primary btn--md resume-page__download-btn" href="/Ryan-DeBoer-Resume.pdf" download="Ryan-DeBoer-Resume.pdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
             </svg>
             Download résumé
           </a>
@@ -130,133 +70,90 @@ const ResumePage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Resume document — one column, in reading order, so the print and the
-          screen are the same document and an ATS reads it top to bottom. */}
       <article className="resume-page__paper">
-        {/* Header */}
         <header className="resume-page__header">
-          <h1 className="resume-page__name">Ryan DeBoer</h1>
-          {/* Same pipe-as-furniture treatment as the contact line below, so
-              the separators read as steel on screen and as " | " in the text. */}
-          <p className="resume-page__tagline">
-            {TITLE_PARTS.map((part, i) => (
-              <React.Fragment key={part}>
-                {i > 0 && <>{' '}<span className="resume-page__job-sep" aria-hidden="true">-</span>{' '}</>}
-                {part}
-              </React.Fragment>
-            ))}
-          </p>
-          {/* Full URLs shown as text so every link is also readable on paper.
-              Each separator travels with the item after it, so if the line
-              ever wraps it never leaves a pipe hanging at the end of a line. */}
-          <p className="resume-page__contact">
-            <span className="resume-page__contact-item">{CONTACT.city}, {CONTACT.region}</span>
-            <span className="resume-page__contact-item">
-              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
+          <p className="resume-page__eyebrow">Product Design · Design Systems · Design Engineering</p>
+          <div className="resume-page__masthead">
+            <h1 className="resume-page__name">Ryan DeBoer</h1>
+            <div className="resume-page__contact">
+              <strong>{CONTACT.title}</strong>
               <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-            </span>
-            <span className="resume-page__contact-item">
-              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
-              <a href={CONTACT.portfolioUrl} target="_blank" rel="noopener noreferrer">{CONTACT.portfolioLabel}<span className="sr-only"> (opens in a new tab)</span></a>
-            </span>
-            <span className="resume-page__contact-item">
-              <span className="resume-page__contact-sep" aria-hidden="true">|</span>{' '}
-              <a href={CONTACT.linkedinUrl} target="_blank" rel="noopener noreferrer">{CONTACT.linkedinLabel}<span className="sr-only"> (opens in a new tab)</span></a>
-            </span>
-          </p>
+              <a href={CONTACT.portfolioUrl}>rdeboerdesigns.com</a>
+              <a href={CONTACT.linkedinUrl}>linkedin.com/in/ryandeboerdesigns</a>
+              <span>{CONTACT.city} · Remote</span>
+            </div>
+          </div>
         </header>
 
-        <div className="resume-page__rule" role="presentation" />
+        <ul className="resume-page__skills-strip" aria-label="Core skills">
+          {['Design Systems', 'Figma', 'UX/UI', 'Storybook', 'Design to Code', 'AEM'].map((skill) => <li key={skill}>{skill}</li>)}
+        </ul>
 
-        {/* Summary. The promotion was a bullet until it read as a standalone
-            boast, and it is the one line on this page a recruiter cannot
-            corroborate elsewhere on the site. As a subordinate clause it dates
-            the scope instead of asking to be admired. */}
         <p className="resume-page__summary">
-          Product design engineer with 12+ years at Tire Rack and 16+ years across visual design
-          and responsive web. Since 2021, when I was one of two designers promoted to Senior, my
-          scope has spanned product, UX, design systems, and implementation QA. I build the
-          systems connecting Figma, production code, documentation, and internal tooling so
-          designers and engineers move faster without the work drifting. AI accelerates
-          exploration. I remain responsible for the decisions and details behind what ships.
+          Senior web designer with 12+ years at Tire Rack shaping ecommerce, partner platforms, and internal tools. Combines visual craft, reusable design systems, and front-end fluency to carry work from concept through accessible production. Uses AI-assisted workflows for exploration, prototyping, and QA, with responsibility for the decisions and quality behind what ships.
         </p>
 
-        {/* Core capabilities */}
-        <section className="resume-page__section">
-          <h2 className="resume-page__section-title">Core capabilities</h2>
-          <ul className="resume-page__capabilities">
-            <li>
-              <strong>Systems:</strong> Design systems, tokens, components, documentation, governance, accessibility
-            </li>
-            <li>
-              <strong>Tools:</strong> Figma, Storybook, React, React Native, TypeScript, HTML, CSS, Sass, AEM
-            </li>
-            <li>
-              <strong>Workflow:</strong> Product design, prototyping, implementation QA, internal tooling, agentic workflows
-            </li>
-          </ul>
-        </section>
+        <div className="resume-page__columns">
+          <aside className="resume-page__sidebar">
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Design + Systems</h2>
+              <div className="resume-page__skill-group"><h3>Design systems</h3><p>Tokens, components, governance, accessibility.</p></div>
+              <div className="resume-page__skill-group"><h3>Product &amp; visual design</h3><p>Typography, responsive UX/UI, interaction, prototyping.</p></div>
+              <div className="resume-page__skill-group"><h3>Technical fluency</h3><p>HTML, CSS/Sass, React, Storybook, AEM.</p></div>
+              <div className="resume-page__skill-group"><h3>AI-assisted workflows</h3><p>Prototyping, documentation, design review, and QA.</p></div>
+            </section>
 
-        {/* Professional experience */}
-        <section className="resume-page__section">
-          <h2 className="resume-page__section-title">Professional experience</h2>
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Education</h2>
+              <p><strong>Kendall College of Art and Design</strong><br />BFA, Graphic Design<br />Minor in Digital Media (Web)</p>
+            </section>
 
-          <div className="resume-page__job">
-            <div className="resume-page__job-header">
-              <h3 className="resume-page__job-title">
-                Tire Rack <span className="resume-page__job-sep" aria-hidden="true">|</span> Senior Web Designer
-              </h3>
-              <span className="resume-page__job-date">2021 to present</span>
-            </div>
-            <ul className="resume-page__job-list">
-              <li>Turn product direction into responsive systems, component contracts, production styles, and implementation QA across React and AEM.</li>
-              <li>Redesigned high-traffic category experiences; in the first month, top pages recorded up to a 50% conversion lift and category entry grew up to 400%, both measured against the month before launch.</li>
-            </ul>
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Selected outcomes</h2>
+              <ul className="resume-page__outcomes">
+                <li><strong>200+ tokens</strong><br />50+ Storybook components</li>
+                <li><strong>60% faster page loads</strong><br />AEM · WebPageTest</li>
+                <li><strong>1–2 week launch cycles</strong><br />Previously about one month</li>
+              </ul>
+            </section>
+          </aside>
+
+          <div className="resume-page__main">
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Experience</h2>
+              <div className="resume-page__job">
+                <div className="resume-page__job-header"><h3 className="resume-page__job-title">Tire Rack · Senior Web Designer</h3><span className="resume-page__job-date">2021–Present</span></div>
+                <ul className="resume-page__job-list">
+                  <li>Built WheelRack’s design system and dealer journey, from vehicle selection through checkout. Partner adoption grew from six to ten during the build.</li>
+                  <li>Established governed AEM templates after designing 50+ landing pages, with reusable patterns used by two junior designers.</li>
+                  <li>Redesigned 30+ tire-category experiences. Top pages recorded up to a 50% conversion lift in the first month.</li>
+                  <li>Built three connected tools for Design, UX, and Photography; mentor designers through critique, accessibility reviews, and design-to-code QA.</li>
+                </ul>
+              </div>
+
+              <div className="resume-page__job">
+                <div className="resume-page__job-header"><h3 className="resume-page__job-title">Tire Rack · Web Designer</h3><span className="resume-page__job-date">2014–2021</span></div>
+                <ul className="resume-page__job-list">
+                  <li>Designed and implemented responsive ecommerce, editorial, and marketing experiences using HTML, CSS/Sass, and enterprise CMS platforms.</li>
+                  <li>Built a seasonal content system using 20+ AEM Experience Fragments across six high-traffic pages.</li>
+                </ul>
+              </div>
+
+              <div className="resume-page__job">
+                <div className="resume-page__job-header"><h3 className="resume-page__job-title">Round 2 Corp. · Designer</h3><span className="resume-page__job-date">2013–2014</span></div>
+                <p className="resume-page__job-description">Created product and packaging experiences for entertainment and toy brands, with a focus on typography, visual systems, and production craft.</p>
+              </div>
+            </section>
+
+            <section className="resume-page__section">
+              <h2 className="resume-page__section-title">Selected work</h2>
+              <div className="resume-page__work-grid">
+                <a className="resume-page__work-card" href={caseStudyUrl('wheelrack')}><strong>WheelRack</strong><span>Design system and dealer journey across partner brands. Figma, tokens, Storybook, and React.</span></a>
+                <a className="resume-page__work-card" href={caseStudyUrl('playdraft')}><strong>PlayDraft</strong><span>Ongoing personal project. Concept to TestFlight in 12 weeks: brand, UX/UI, React Native, and QA.</span></a>
+              </div>
+            </section>
           </div>
-
-          <div className="resume-page__job">
-            <div className="resume-page__job-header">
-              <h3 className="resume-page__job-title">
-                Tire Rack <span className="resume-page__job-sep" aria-hidden="true">|</span> Web Designer
-              </h3>
-              <span className="resume-page__job-date">2014 to 2021</span>
-            </div>
-            <ul className="resume-page__job-list">
-              <li>Designed and implemented responsive ecommerce and marketing experiences in HTML, CSS, and AEM, partnering with product, engineering, SEO, analytics, and brand through launch.</li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Selected work */}
-        <section className="resume-page__section">
-          <h2 className="resume-page__section-title">Selected work</h2>
-          <ul className="resume-page__work-list">
-            {SELECTED_WORK.map((w) => (
-              <li key={w.slug} className="resume-page__work-item">
-                <a href={caseStudyUrl(w.slug)} className="resume-page__work-link">{w.name}</a>: {w.note}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Additional experience and education. Label-then-gloss takes the
-            colon the rest of the site uses; the site was swept of em dashes. */}
-        <section className="resume-page__section">
-          <h2 className="resume-page__section-title">Additional experience and education</h2>
-          <ul className="resume-page__extra-list">
-            <li>
-              <strong>Independent design work</strong>
-              {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
-              <span className="resume-page__extra-date">2009 to 2024</span>:{' '}
-              Identity and responsive web work for small businesses and university communications.
-            </li>
-            <li>
-              <strong>BFA, Graphic Design</strong>, Minor in Digital Media
-              {' '}<span className="resume-page__job-sep" aria-hidden="true">|</span>{' '}
-              <span className="resume-page__extra-date">Kendall College of Art and Design</span>
-            </li>
-          </ul>
-        </section>
+        </div>
       </article>
     </div>
   );

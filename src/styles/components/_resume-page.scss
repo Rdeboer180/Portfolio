@@ -1,563 +1,308 @@
-// ============================================
-// Resume Page — one document, on screen and on paper
-//
-// The on-screen document remains available for reading. The nav offers the
-// approved one-page PDF as a direct download, preserving its link annotations.
-// ============================================
-
+// Resume page mirrors the downloadable one-page Letter PDF at screen scale.
+// The surrounding nav and browser canvas stay outside the document itself.
 @import '../variables';
-
-// Screen paper follows the shared copy width; print dimensions stay separate.
-$resume-paper-width: calc(#{$container-text-width} + #{$spacing-3xl * 2});
 
 .resume-page {
   min-height: 100vh;
+  padding-bottom: $spacing-2xl;
   background: $color-neutral-lightest;
-  font-family: $font-family-primary;
   color: $color-neutral-standard;
+  font-family: $font-family-primary;
 
-  // ==========================================
-  // Screen-only nav
-  // ==========================================
-  // Same bar as the About page and the hero: 24px/48px padding, 92% paper,
-  // 12px blur, hairline underneath. It was 16px/48px here, and the résumé
-  // nav read 26px shorter than every other page's.
   &__nav {
     position: sticky;
     top: 0;
     z-index: $z-index-sticky;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: $spacing-xl $spacing-3xl;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    justify-content: space-between;
+    gap: $spacing-lg;
+    padding: $spacing-lg $spacing-3xl;
+    background: rgba(255, 255, 255, 0.94);
     border-bottom: 1px solid $color-border-light;
+    backdrop-filter: blur(12px);
   }
 
   &__nav-logo {
+    flex-shrink: 0;
+    color: $color-neutral-dark;
     font-family: $font-family-heading;
     font-size: $font-size-body;
     font-weight: $font-weight-bold;
-    color: $color-neutral-dark;
     text-decoration: none;
-    letter-spacing: -0.02em;
   }
 
   &__nav-actions {
     display: flex;
     align-items: center;
-    gap: $spacing-xl;
+    justify-content: flex-end;
+    gap: $spacing-md;
   }
 
-  // "Download résumé" and "Save contact" are the site's `.btn--primary` and
-  // `.btn--secondary` at `--md` (the footer runs the same pair). That is
-  // where the face (Hubot Sans 800), the AA-safe Orange Deep at rest, the
-  // text-warms-and-lifts hover, and the ink inversion for secondary come
-  // from. Before this they were Inter 600 with their own hover, and read as
-  // a third button style the site does not have. Only the icon gap is local.
   &__download-btn,
   &__vcard-btn {
     gap: $spacing-sm;
+    white-space: nowrap;
 
-    svg {
-      flex-shrink: 0;
-    }
+    svg { flex-shrink: 0; }
   }
 
   &__nav-back {
-    font-size: $font-size-body-sm;
     color: $color-neutral-muted;
+    font-size: $font-size-body-sm;
     text-decoration: none;
-    transition: color $transition-fast;
+    white-space: nowrap;
 
-    &:hover {
-      color: $color-primary-text;
-    }
+    &:hover { color: $color-primary-text; }
   }
 
-  // ==========================================
-  // Paper — the resume document
-  // Flat by default: a hairline, not a shadow, separates it from the ground.
-  // ==========================================
   &__paper {
-    max-width: $resume-paper-width;
-    margin: $spacing-2xl auto;
-    padding: $spacing-3xl;
+    box-sizing: border-box;
+    width: min(816px, calc(100% - 48px));
+    margin: $spacing-2xl auto 0;
+    padding: 32px 40px;
+    border-top: 4px solid $color-primary;
+    border-bottom: 4px solid $color-primary;
     background: $color-white;
-    border: 1px solid $color-border-default;
-    // The card radius, not the button radius it had (10px is `$button-radius`).
-    border-radius: $card-border-radius;
-  }
-
-  // ==========================================
-  // Header
-  // ==========================================
-  &__name {
-    font-family: $font-family-heading;
-    font-size: $font-size-h1;
-    font-weight: $font-weight-extrabold;
     color: $color-neutral-dark;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin: 0;
+    overflow: visible;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  &__tagline {
-    font-size: $font-size-body;
-    font-weight: $font-weight-medium;
-    color: $color-neutral-standard;
-    line-height: $line-height-body;
-    margin: $spacing-xs 0 0;
+  &__eyebrow {
+    margin: 0 0 24px;
+    color: $color-primary-dark;
+    font-family: $font-family-heading;
+    font-size: 11px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.12em;
+    line-height: 16px;
+    text-transform: uppercase;
+  }
+
+  &__masthead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  &__name {
+    margin: 0;
+    color: $color-neutral-dark;
+    font-family: $font-family-heading;
+    font-size: 42px;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: -0.04em;
+    line-height: 46px;
   }
 
   &__contact {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: $spacing-xs;
-    margin: $spacing-sm 0 0;
-    font-size: $font-size-body-sm;
-    line-height: $line-height-body-sm;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
     color: $color-neutral-standard;
+    font-size: 11px;
+    line-height: 15px;
+    text-align: right;
 
-    a {
-      color: $color-primary-text;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+    strong { color: $color-neutral-dark; }
+    a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   }
 
-  // Separator and link wrap as one unit (see the markup comment).
-  &__contact-item {
-    white-space: nowrap;
-  }
-
-  // Separators are furniture, so they take the quiet steel, not the accent.
-  // Spacing around them is real spaces in the markup, not margin, so the
-  // DOM text, the PDF text, and the rendered page all agree.
-  &__contact-sep,
-  &__job-sep {
-    color: $color-secondary;
-    font-weight: $font-weight-regular;
-  }
-
-  // ==========================================
-  // The orange rule — the one branded mark on the document
-  // ==========================================
-  &__rule {
-    height: 3px;
-    background: $color-primary;
-    border-radius: 2px;
-    margin: $spacing-lg 0 $spacing-xl;
-  }
-
-  // ==========================================
-  // Summary
-  // ==========================================
-  &__summary {
-    font-size: $font-size-body;
-    line-height: $line-height-body;
-    color: $color-neutral-standard;
-    margin: 0;
-  }
-
-  // ==========================================
-  // Sections
-  // ==========================================
-  &__section {
-    margin-top: $spacing-2xl;
-  }
-
-  // The Label style: Hubot Sans, uppercase, tracked. Sits on a hairline.
-  &__section-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-bold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $color-neutral-dark;
-    line-height: $line-height-body-sm;
-    padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-neutral-light;
-    margin: 0 0 $spacing-md;
-  }
-
-  // ==========================================
-  // Core capabilities — three lines, label then list
-  // ==========================================
-  &__capabilities {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      font-size: $font-size-body-sm;
-      line-height: $line-height-body-sm;
-      color: $color-neutral-standard;
-
-      & + li {
-        margin-top: $spacing-xs;
-      }
-
-      strong {
-        font-weight: $font-weight-semibold;
-        color: $color-neutral-dark;
-      }
-    }
-  }
-
-  // ==========================================
-  // Jobs
-  // ==========================================
-  &__job {
-    margin-bottom: $spacing-lg;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  // Title and date share the first line; the role sub-line wraps beneath.
-  // DOM order stays title → date → role so a text extraction reads the way
-  // a résumé is expected to read.
-  &__job-header {
+  &__skills-strip {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    column-gap: $spacing-lg;
-    margin-bottom: $spacing-sm;
+    gap: 8px;
+    list-style: none;
+    margin: 24px 0 16px;
+    padding: 0;
+
+    li {
+      padding: 4px 8px;
+      border: 1px solid $color-neutral-light;
+      border-radius: 4px;
+      color: $color-neutral-standard;
+      font-size: 10px;
+      font-weight: $font-weight-bold;
+      letter-spacing: 0.04em;
+      line-height: 14px;
+      text-transform: uppercase;
+    }
   }
 
-  // An h3, so it takes the heading face: the system sets structure in Hubot
-  // Sans and content in Inter, and the inline <strong> labels further down
-  // stay Inter because they are emphasis inside a line, not a heading. This
-  // is the dense-grid card-title size (16px, bold, tight tracking).
-  &__job-title {
-    flex: 1 1 auto;
+  &__summary {
+    margin: 0 0 20px;
+    padding: 16px 0;
+    border-top: 1px solid $color-neutral-light;
+    border-bottom: 1px solid $color-neutral-light;
+    color: $color-neutral-standard;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 186px minmax(0, 1fr);
+    gap: 44px;
+    align-items: stretch;
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-right: 20px;
+    border-right: 1px solid $color-neutral-light;
+    color: $color-neutral-standard;
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  &__main {
+    min-width: 0;
+    color: $color-neutral-standard;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  &__main > &__section + &__section { margin-top: 20px; }
+  &__sidebar > &__section + &__section { margin-top: 12px; }
+
+  &__section-title {
+    margin: 0 0 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $color-neutral-light;
+    color: $color-primary-dark;
     font-family: $font-family-heading;
-    font-size: $font-size-body;
+    font-size: 12px;
     font-weight: $font-weight-bold;
-    letter-spacing: -0.02em;
-    color: $color-neutral-dark;
-    line-height: $line-height-body;
+    letter-spacing: 0.08em;
+    line-height: 16px;
+    text-transform: uppercase;
+  }
+
+  &__skill-group + &__skill-group { margin-top: 6px; }
+
+  &__skill-group h3,
+  &__job-title,
+  &__work-card strong {
     margin: 0;
+    color: $color-neutral-dark;
+    font-family: $font-family-heading;
+    font-size: 12px;
+    font-weight: $font-weight-bold;
+    line-height: 16px;
   }
 
-  &__job-date,
-  &__extra-date {
-    font-size: $font-size-body-sm;
-    line-height: $line-height-body-sm;
-    color: $color-neutral-muted;
+  &__skill-group p,
+  &__sidebar section > p { margin: 0; }
+
+  &__sidebar .resume-page__skill-group h3 { font-size: 10px; line-height: 12px; }
+
+  &__sidebar strong { color: $color-neutral-dark; }
+
+  &__outcomes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li + li { margin-top: 8px; }
+    strong { color: $color-neutral-standard; font-weight: $font-weight-regular; }
   }
 
-  // Only the job date holds its line; the inline dates below must be free
-  // to wrap on narrow screens.
+  &__job + &__job { margin-top: 16px; }
+
+  &__job-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  &__job-title { font-size: 15px; }
+
   &__job-date {
-    white-space: nowrap;
-  }
-
-  &__job-role {
-    flex-basis: 100%;
-    font-size: $font-size-body-sm;
-    line-height: $line-height-body-sm;
+    flex-shrink: 0;
     color: $color-neutral-muted;
-    margin: 2px 0 0;
+    font-size: 11px;
+    line-height: 15px;
+    white-space: nowrap;
   }
 
   &__job-list {
-    // _base.scss strips markers from every list; accomplishments get theirs back.
     list-style: disc;
-    padding-left: $spacing-xl;
     margin: 0;
+    padding-left: 10px;
 
-    li {
-      font-size: $font-size-body-sm;
-      line-height: $line-height-body-sm;
-      color: $color-neutral-standard;
-
-      & + li {
-        margin-top: $spacing-xs;
-      }
-
-      &::marker {
-        color: $color-neutral-standard;
-      }
-    }
+    li + li { margin-top: 6px; }
+    li::marker { color: $color-neutral-standard; }
   }
 
-  // ==========================================
-  // Selected work + additional experience — one line per entry
-  // ==========================================
-  &__work-list,
-  &__extra-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  &__job-description { margin: 0; }
 
-    li {
-      font-size: $font-size-body-sm;
-      line-height: $line-height-body-sm;
-      color: $color-neutral-standard;
-
-      & + li {
-        margin-top: $spacing-sm;
-      }
-
-      strong {
-        font-weight: $font-weight-semibold;
-        color: $color-neutral-dark;
-      }
-    }
+  &__work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  &__work-link {
-    font-weight: $font-weight-semibold;
-    color: $color-primary-text;
+  &__work-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid $color-neutral-light;
+    border-radius: 6px;
+    color: $color-neutral-standard;
     text-decoration: none;
 
-    &:hover {
-      text-decoration: underline;
-    }
+    &:hover { border-color: $color-secondary; }
+    &:focus-visible { outline: 3px solid $color-primary; outline-offset: 3px; }
+  }
+
+  &__work-card strong { font-size: 14px; }
+
+  @media (max-width: $breakpoint-md) {
+    &__nav { padding: $spacing-lg $spacing-xl; }
+    &__nav-actions { gap: $spacing-sm; }
+    &__paper { width: min(816px, calc(100% - 32px)); padding: 28px 32px; }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    &__nav { flex-wrap: wrap; padding: $spacing-md $spacing-lg; }
+    &__nav-actions { flex-wrap: wrap; justify-content: flex-start; width: 100%; }
+    &__nav-back { margin-left: auto; }
+    &__paper { width: 100%; margin-top: 0; padding: 24px 20px; border-radius: 0; }
+    &__eyebrow { margin-bottom: 16px; font-size: 9px; }
+    &__masthead { flex-direction: column; gap: 12px; }
+    &__name { font-size: 36px; line-height: 40px; }
+    &__contact { align-items: flex-start; text-align: left; }
+    &__skills-strip { margin-top: 16px; }
+    &__columns { grid-template-columns: 1fr; gap: 24px; }
+    &__sidebar { padding: 0 0 20px; border-right: 0; border-bottom: 1px solid $color-neutral-light; }
+    &__job-header { flex-wrap: wrap; column-gap: 10px; }
   }
 }
 
-// ==========================================
-// Responsive
-// ==========================================
-@media (max-width: $breakpoint-md) {
-  .resume-page {
-    &__nav {
-      padding: $spacing-lg $spacing-xl;
-    }
-
-    &__paper {
-      margin: $spacing-lg;
-      padding: $spacing-2xl;
-    }
-  }
-}
-
-@media (max-width: $breakpoint-sm) {
-  .resume-page {
-    &__paper {
-      margin: $spacing-sm;
-      padding: $spacing-lg;
-      border-radius: 0;
-    }
-
-    &__name {
-      font-size: $font-size-h2;
-    }
-
-    &__contact {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    &__contact-sep {
-      display: none;
-    }
-
-    &__job-title {
-      flex-basis: 100%;
-    }
-  }
-}
-
-// At <=480 the nav row could not fit the logo, "Save contact", "Download résumé"
-// and the back link on one line: the logo wrapped under the buttons and the
-// back link was sliced by the viewport edge — unreachable, because
-// `overflow-x: clip` removes the scrollbar that would have recovered it.
-@media (max-width: $breakpoint-sm) {
-  .resume-page__nav {
-    flex-wrap: wrap;
-    row-gap: $spacing-sm;
-  }
-
-  .resume-page__nav-actions {
-    flex-wrap: wrap;
-    row-gap: $spacing-sm;
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .resume-page__download-btn,
-  .resume-page__vcard-btn {
-    white-space: nowrap;
-  }
-}
-
-// ==========================================
-// Print — one US Letter page
-//
-// Budget: 8.5×11in at 0.5in margins leaves 7.5×10in. The lede is 10.5pt on
-// 13.5pt, the lists 10pt on 13pt (the same lede-over-list step the screen
-// has), the name 24pt. Sizes are in pt because that is the unit the page is
-// measured in; screen sizes above are px because that is the unit the
-// viewport is measured in.
-//
-// The page is deliberately not full at 100%. A print dialog set to 110%
-// shrinks the box to 6.8×9.1in and re-wraps every line, and the document
-// has to stay one page there too; anything fuller than ~85% at 100% spills
-// at 110%. Measured 2026-09-08: 83% at 100%, 95% at 110%, one page in
-// Chromium at Letter and A4, and under the box in Firefox and WebKit.
-// Check the page count after any copy change.
-// ==========================================
 @media print {
-  @page {
-    size: letter;
-    margin: 0.5in;
-  }
+  @page { size: letter; margin: 0; }
 
-  html,
-  body {
-    background: $color-white !important;
+  html, body { margin: 0; padding: 0; background: #fff !important; }
+  .resume-page { min-height: 0; padding: 0; background: #fff; }
+  .resume-page__nav { display: none !important; }
+  .resume-page__paper {
+    width: 9.45in;
+    height: 11.5in;
+    min-height: 11in;
+    zoom: 0.9;
     margin: 0;
-    padding: 0;
-    // _base.scss gives body min-height: 100vh; on paper that is a page box.
-    min-height: 0;
-  }
-
-  .resume-page__nav {
-    display: none !important;
-  }
-
-  .resume-page {
-    background: $color-white;
-    min-height: auto;
-    // The orange rule must print. Inherited by everything below.
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-
-    // Hidden text meant for screen readers has no reader in a PDF, and an
-    // extractor would surface it mid-sentence.
-    .sr-only {
-      display: none;
-    }
-
-    &__paper {
-      max-width: none;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-    }
-
-    &__name {
-      font-size: 24pt;
-      line-height: 1.1;
-    }
-
-    &__tagline {
-      font-size: 11pt;
-      line-height: 14pt;
-      margin-top: 3pt;
-    }
-
-    &__contact {
-      font-size: 10pt;
-      line-height: 13.5pt;
-      gap: 0 5pt;
-      margin-top: 3pt;
-      // The phone breakpoint must not fire on paper. Chromium evaluates print
-      // media queries against the print dialog's margins before @page replaces
-      // them: a 1in dialog margin makes the width 6.5in, under 640px, and the
-      // screen rules below stacked the contact line inside a 7.5in box. Same
-      // guard on the separator and the job title.
-      flex-direction: row;
-      align-items: baseline;
-    }
-
-    &__contact-sep {
-      display: inline;
-    }
-
-    &__rule {
-      height: 2pt;
-      border-radius: 1pt;
-      margin: 7pt 0 8pt;
-    }
-
-    &__summary {
-      font-size: 10.5pt;
-      line-height: 13.5pt;
-    }
-
-    &__section {
-      margin-top: 10pt;
-      break-inside: avoid;
-    }
-
-    &__section-title {
-      font-size: 9pt;
-      line-height: 12pt;
-      padding-bottom: 3pt;
-      margin-bottom: 5pt;
-    }
-
-    &__capabilities li,
-    &__job-list li,
-    &__work-list li,
-    &__extra-list li {
-      font-size: 10pt;
-      line-height: 13pt;
-    }
-
-    &__capabilities li + li {
-      margin-top: 1pt;
-    }
-
-    &__job {
-      margin-bottom: 8pt;
-      break-inside: avoid;
-    }
-
-    &__job-header {
-      column-gap: 12pt;
-      margin-bottom: 2pt;
-    }
-
-    &__job-title {
-      font-size: 11pt;
-      line-height: 13pt;
-      // Title and date share the line on paper (see the breakpoint note above).
-      flex-basis: auto;
-    }
-
-    &__job-date,
-    &__job-role,
-    &__extra-date {
-      font-size: 10pt;
-      line-height: 13pt;
-    }
-
-    &__job-role {
-      margin-top: 0;
-    }
-
-    &__job-list {
-      padding-left: 12pt;
-
-      li + li {
-        margin-top: 2pt;
-      }
-    }
-
-    &__work-list li + li,
-    &__extra-list li + li {
-      margin-top: 3pt;
-    }
-
-    // Links stay links: real anchors, the text-safe accent so a reader can
-    // tell them apart, and the URL is already printed as the link text.
-    a {
-      color: $color-primary-text;
-      text-decoration: none;
-    }
+    padding: 32px 40px;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
