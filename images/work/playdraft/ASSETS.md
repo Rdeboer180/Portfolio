@@ -1,6 +1,6 @@
 # PlayDraft case-study asset manifest
 
-Page: `#/work/playdraft` · Data: `src/data/projects.ts` (slug `playdraft`) · Updated 2026-07-18
+Page: `/work/playdraft/` · Data: `src/data/projects.ts` (slug `playdraft`) · Updated 2026-09-17
 
 All files here are **web-ready copies**. Source originals live untouched in the
 PlayDraft repo (`~/Ryan's Folder/Claude/PlayDraft`) at the paths noted below.
@@ -9,8 +9,8 @@ PlayDraft repo (`~/Ryan's Folder/Claude/PlayDraft`) at the paths noted below.
 
 | File | Source original | Notes |
 |---|---|---|
-| `playdraft-howtoplay-reel.mp4` | `assets/videos/get-started.mp4` (= `demo-reel/cuts/fast-cut-v9-wide.mp4`, 2026-07-18) | 65.6s, 1080p H.264, `+faststart`. v9 = full motion-director revision: 8-section story (opening promise → topic → rules → invite → draft → reveal → vote → public → close), per-section punch-in device framing, 0.24s crossfades, re-captured rules/chat beats on the new UI. Optional SFX variant `fast-cut-v9-wide-sfx.mp4` in the PlayDraft repo. Earlier content beats: Cheetos Flamin' Hot Puffs 1.01 flip and the new chat banter ("Wow that was a reach" / "I can't believe Lay's Classic fell to me at 1.04") reacting to real picks. v5/v6 preserved in the PlayDraft repo. |
-| `playdraft-howtoplay-poster.jpg` | `assets/videos/get-started-poster.jpg` | Poster frame ("Choose a topic — or make your own", v9 topic beat). |
+| `playdraft-howtoplay-reel.mp4` | PlayDraft demo reel | 89-second narrated product reel, now the case-study hero. Click to play with sound and captions; not repeated in The Problem. |
+| `playdraft-howtoplay-poster.jpg` | PlayDraft demo reel poster | Poster frame shown before the hero reel plays. |
 | `playdraft-draft-flow-demo.mp4` / `playdraft-voting-flow-demo.mp4` | earlier prototype clips | Legacy May-era clips. Retired from the page (superseded by the reel) but kept on disk. |
 
 ## Product screens (from raw simulator footage, `demo-reel/raw/`)
@@ -38,7 +38,7 @@ PlayDraft repo (`~/Ryan's Folder/Claude/PlayDraft`) at the paths noted below.
 | `playdraft-design-system-v01-board.png` | `playDraftLogos/playDraft Design System.pdf` | v0.1 design-system one-pager sliced into a 3-column contact sheet |
 | `playdraft-avatar-emblems.png` | `assets/profile_emblems/*.svg` (8 of 16) | Illustrated avatar emblem set (grayscale base, tinted in-app) |
 | `playdraft-pack-shields.png` | `assets/icons/pack_icons/WebP/*` (10 of 20) | Pack shield artwork on navy |
-| `playdraft-cover-v2.png` | composite (rebuilt 2026-07-18) | Thumbnail/hero: wordmark + four top-aligned screens — current home / pack lobby / draft room / ceremony |
+| `playdraft-cover-v2.png` | composite (rebuilt 2026-07-18) | Homepage card thumbnail: wordmark + four top-aligned screens — current home / pack lobby / draft room / ceremony. No longer the case-study hero. |
 
 ## May-era boards still in use (unchanged)
 

@@ -1,6 +1,6 @@
 {
   "short_name": "Ryan DeBoer",
-  "name": "Ryan DeBoer | Design Strategist",
+  "name": "Ryan DeBoer — Product Design Engineer",
   "icons": [
     {
       "src": "favicon.svg",
@@ -25,6 +25,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#FF6B35",
+  "theme_color": "#f03d01",
   "background_color": "#ffffff"
 }
