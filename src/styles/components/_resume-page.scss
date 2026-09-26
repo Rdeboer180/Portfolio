@@ -1,13 +1,11 @@
-// Resume page mirrors the downloadable one-page Letter PDF at screen scale.
-// The surrounding nav and browser canvas stay outside the document itself.
 @import '../variables';
 
 .resume-page {
   min-height: 100vh;
-  padding-bottom: $spacing-2xl;
-  background: $color-neutral-lightest;
-  color: $color-neutral-standard;
-  font-family: $font-family-primary;
+  padding-bottom: 36px;
+  background: #f1f1f1;
+  color: #242424;
+  font-family: Arial, Helvetica, sans-serif;
 
   &__nav {
     position: sticky;
@@ -16,266 +14,58 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $spacing-lg;
-    padding: $spacing-lg $spacing-3xl;
-    background: rgba(255, 255, 255, 0.94);
-    border-bottom: 1px solid $color-border-light;
+    gap: 20px;
+    padding: 14px 32px;
+    background: rgba(255, 255, 255, .96);
+    border-bottom: 1px solid #dedede;
     backdrop-filter: blur(12px);
   }
 
-  &__nav-logo {
-    flex-shrink: 0;
-    color: $color-neutral-dark;
-    font-family: $font-family-heading;
-    font-size: $font-size-body;
-    font-weight: $font-weight-bold;
-    text-decoration: none;
-  }
-
-  &__nav-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: $spacing-md;
-  }
-
-  &__download-btn,
-  &__vcard-btn {
-    gap: $spacing-sm;
-    white-space: nowrap;
-
-    svg { flex-shrink: 0; }
-  }
-
-  &__nav-back {
-    color: $color-neutral-muted;
-    font-size: $font-size-body-sm;
-    text-decoration: none;
-    white-space: nowrap;
-
-    &:hover { color: $color-primary-text; }
-  }
+  &__nav-logo { color: #222; font-size: 15px; font-weight: 700; text-decoration: none; }
+  &__nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  &__download-btn, &__vcard-btn { white-space: nowrap; }
+  &__nav-back { color: #555; font-size: 13px; text-decoration: none; white-space: nowrap; }
+  &__nav-back:hover { color: $color-primary-text; }
 
   &__paper {
     box-sizing: border-box;
     width: 816px;
     min-height: 1056px;
-    margin: $spacing-2xl auto 0;
-    padding: 32px 40px;
-    border-top: 4px solid $color-primary;
-    border-bottom: 4px solid $color-primary;
-    background: $color-white;
-    color: $color-neutral-dark;
-    overflow: visible;
+    margin: 26px auto 0;
+    padding: 48px 54px 40px;
+    background: #fff;
+    color: #242424;
+    font-size: 11.4px;
+    line-height: 1.28;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  &__eyebrow {
-    margin: 0 0 24px;
-    color: $color-primary-dark;
-    font-family: $font-family-heading;
-    font-size: 11px;
-    font-weight: $font-weight-bold;
-    letter-spacing: 0.12em;
-    line-height: 16px;
-    text-transform: uppercase;
-  }
+  &__header { padding-bottom: 14px; border-bottom: 2px solid #f03d01; }
+  &__name { margin: 0; font-size: 31px; font-weight: 400; letter-spacing: -.035em; line-height: 1.15; }
+  &__role { margin: 2px 0 5px; font-size: 13.5px; line-height: 1.2; }
+  &__contact { display: flex; flex-direction: column; gap: 1px; margin: 0; color: #555; font-size: 10.5px; line-height: 1.25; }
+  &__contact a, &__job a { color: #c23001; text-decoration: none; }
+  &__contact a:hover, &__job a:hover { text-decoration: underline; }
 
-  &__masthead {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-  }
-
-  &__name {
-    margin: 0;
-    color: $color-neutral-dark;
-    font-family: $font-family-heading;
-    font-size: 42px;
-    font-weight: $font-weight-extrabold;
-    letter-spacing: -0.04em;
-    line-height: 46px;
-  }
-
-  &__contact {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-    color: $color-neutral-standard;
-    font-size: 11px;
-    line-height: 15px;
-    text-align: right;
-
-    strong { color: $color-neutral-dark; }
-    a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-  }
-
-  &__skills-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    list-style: none;
-    margin: 20px 0;
-    padding: 0;
-
-    li {
-      padding: 4px 8px;
-      border: 1px solid $color-neutral-light;
-      border-radius: 4px;
-      color: $color-neutral-standard;
-      font-size: 10px;
-      font-weight: $font-weight-bold;
-      letter-spacing: 0.04em;
-      line-height: 14px;
-      text-transform: uppercase;
-    }
-  }
-
-  &__summary {
-    margin: 0 0 20px;
-    padding: 16px 0;
-    border-top: 1px solid $color-neutral-light;
-    border-bottom: 1px solid $color-neutral-light;
-    color: $color-neutral-standard;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  &__columns {
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    gap: 24px;
-    align-items: stretch;
-  }
-
-  &__sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding-right: 20px;
-    border-right: 1px solid $color-neutral-light;
-    color: $color-neutral-standard;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  &__main {
-    min-width: 0;
-    color: $color-neutral-standard;
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  &__main > &__section + &__section { margin-top: 16px; }
-  &__sidebar > &__section + &__section { margin-top: 24px; }
-
-  &__section-title {
-    margin: 0 0 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid $color-neutral-light;
-    color: $color-primary-dark;
-    font-family: $font-family-heading;
-    font-size: 12px;
-    font-weight: $font-weight-bold;
-    letter-spacing: 0.08em;
-    line-height: 16px;
-    text-transform: uppercase;
-  }
-
-  &__skill-group + &__skill-group { margin-top: 10px; }
-
-  &__skill-group h3,
-  &__job-title,
-  &__work-card strong {
-    margin: 0;
-    color: $color-neutral-dark;
-    font-family: $font-family-heading;
-    font-size: 12px;
-    font-weight: $font-weight-bold;
-    line-height: 16px;
-  }
-
-  &__skill-group p,
-  &__sidebar section > p { margin: 0; font-size: inherit; line-height: inherit; }
-
-  &__sidebar .resume-page__skill-group h3 { font-family: $font-family-primary; font-size: 13px; line-height: 18px; }
-
-  &__education-name { display: block; margin-bottom: 10px; }
-  &__contact-row { display: flex; gap: 5px; }
-  &__main > &__section > &__section-title { margin-bottom: 16px; }
-
-  &__sidebar strong { color: $color-neutral-dark; }
-
-  &__outcomes {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    li + li { margin-top: 10px; }
-    strong { color: $color-neutral-standard; font-weight: $font-weight-regular; }
-  }
-
-  &__job + &__job { margin-top: 16px; }
-
-  &__job-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
-
-  &__job-title { font-size: 15px; line-height: 20px; font-weight: 800; }
-
-  &__job-date {
-    flex-shrink: 0;
-    color: $color-neutral-muted;
-    font-size: 11px;
-    line-height: 15px;
-    white-space: nowrap;
-  }
-
-  &__job-list {
-    list-style: disc;
-    margin: 0;
-    padding-left: 10px;
-
-    li + li { margin-top: 8px; }
-    li::marker { color: $color-neutral-standard; }
-  }
-
-  &__job-description { margin: 0; font-size: inherit; line-height: inherit; }
-
-  &__work-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  &__work-card {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-    padding: 12px;
-    border: 1px solid $color-neutral-light;
-    border-radius: 6px;
-    color: $color-neutral-standard;
-    text-decoration: none;
-
-    &:hover { border-color: $color-secondary; }
-    &:focus-visible { outline: 3px solid $color-primary; outline-offset: 3px; }
-  }
-
-  &__work-card strong { font-family: $font-family-primary; font-size: 13px; line-height: 18px; }
+  &__section { margin-top: 12px; break-inside: avoid; }
+  &__section-title { margin: 0 0 5px; color: #d93608; font-size: 13px; font-weight: 400; line-height: 1.2; }
+  &__section p { margin: 0; }
+  &__section > p + p { margin-top: 3px; }
+  &__section strong { font-weight: 700; }
+  &__job { margin-top: 6px; break-inside: avoid; }
+  &__job h3 { margin: 0; font-size: 11.6px; font-weight: 400; line-height: 1.22; }
+  &__job h3 span { display: block; color: #555; font-size: 10.5px; }
+  &__job p { margin: 2px 0 0; }
+  &__job ul { margin: 2px 0 0; padding-left: 14px; }
+  &__job li { padding-left: 0; }
+  &__job li + li { margin-top: 2px; }
+  &__note { margin: 8px 0 0; color: #555; font-size: 10.5px; }
+  &__education { margin-top: 9px; }
 
   @media screen and (max-width: 863px) {
-    &__nav { flex-wrap: wrap; padding: $spacing-md $spacing-lg; }
-    &__nav-actions { flex-wrap: wrap; justify-content: flex-start; }
-    // Keep the Letter sheet intact; narrower screens can scroll the document.
+    &__nav { flex-wrap: wrap; padding: 12px 16px; }
+    &__nav-actions { flex-wrap: wrap; justify-content: flex-start; gap: 10px 14px; }
     &__canvas { overflow-x: auto; }
     &__paper { margin: 16px auto; }
   }
@@ -283,9 +73,18 @@
 
 @media print {
   @page { size: letter; margin: 0; }
-  html, body { margin: 0; padding: 0; background: #fff !important; }
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
   .resume-page { min-height: 0; padding: 0; background: #fff; }
   .resume-page__nav { display: none !important; }
   .resume-page__canvas { overflow: visible; }
-  .resume-page__paper { width: 8.5in; min-height: 11in; margin: 0; box-shadow: none; }
+  .resume-page__paper {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0;
+    padding: 0.5in 0.56in 0.4in;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  .resume-page__section, .resume-page__job { break-inside: avoid; }
+  a { color: inherit; }
 }
