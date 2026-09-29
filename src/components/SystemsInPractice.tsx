@@ -1,5 +1,5 @@
 // ============================================
-// SystemsInPractice — "Good product work has to travel."
+// SystemsInPractice — "Shared language. Better product decisions."
 // Homepage section 03, badged "How I work". An ecosystem board of eight nodes —
 // Shared Product Context at the centre, the Figma ⇄ Codebase working pair, and
 // five extended surfaces — built as real HTML/CSS, with the connective linework in one SVG overlay
@@ -114,10 +114,10 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     id: 'system',
     tier: 'center',
     title: 'Shared Product Context',
-    meta: 'System knowledge',
+    meta: 'Start here · Return here',
     // No `lines`: the sentence breaks on its own at every board width without
     // stranding a word, which the old three-line body could not do.
-    body: 'Intent, decisions, and standards that can travel.',
+    body: 'Intent, states, props, tokens, and reuse. A shared plan for every component change.',
     relation:
       'Two-way with every surface on the board: Figma, the codebase, documentation, agent workflows, QA, the team, and governance.',
     icon: ICON.system,
@@ -127,17 +127,17 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'pair',
     title: 'Figma / Canvas',
     meta: 'Design · Explore · Align',
-    body: 'Figma still starts and steers the conversation.',
+    body: 'Explore layout, expression, and supported states from the shared plan.',
     relation: 'Two-way with the Codebase and with the Shared Product Context.',
     icon: ICON.figma,
   },
   {
     id: 'code',
     tier: 'pair',
-    title: 'Codebase',
+    title: 'Codebase + Storybook',
     meta: 'Implement · Maintain · Scale',
-    body: 'Turn system decisions into real products. Feed what production teaches back into the system.',
-    relation: 'Two-way with Figma and with the Shared Product Context.',
+    body: 'Implement shared behavior. Inspect states in Storybook and map production components back to Figma.',
+    relation: 'Shared Product Context → Codebase + Storybook → Code Connect → Figma → Shared Product Context.',
     icon: ICON.code,
   },
   {
@@ -145,16 +145,16 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'surface',
     title: 'Documentation',
     meta: 'Reference',
-    body: 'Write the system down so people who never open the Figma file or the code can still use it.',
+    body: 'Record the contract, implementation mappings, and intentional differences between design and code.',
     relation: 'Two-way with the Shared Product Context.',
     icon: ICON.docs,
   },
   {
     id: 'prompts',
     tier: 'surface',
-    title: 'Agent workflows',
-    meta: 'Apply',
-    body: 'Carry system context into AI workflows, prototypes, and implementation requests.',
+    title: 'MCP + Agent workflows',
+    meta: 'Inspect · Plan · Execute',
+    body: 'Custom MCP + Figma MCP bring code and design into planning. Agents help inspect and execute; I own the decisions.',
     relation: 'Two-way with the Shared Product Context.',
     icon: ICON.prompts,
   },
@@ -163,7 +163,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'surface',
     title: 'QA',
     meta: 'Validate',
-    body: 'Catch drift, accessibility issues, and system mismatches before they ship.',
+    body: 'Check supported states, accessibility, and design intent. Return gaps to the shared plan.',
     relation: 'Two-way with the Shared Product Context.',
     icon: ICON.qa,
   },
@@ -172,7 +172,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'surface',
     title: 'Team',
     meta: 'Collaborate',
-    body: 'Help specialists share context, challenge decisions, and evolve the system together.',
+    body: 'Agree on intent, challenge tradeoffs, and decide what each surface needs to express.',
     relation: 'Two-way with the Shared Product Context.',
     icon: ICON.people,
   },
@@ -181,7 +181,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
     tier: 'surface',
     title: 'Governance',
     meta: 'Guide',
-    body: 'Define guardrails, handle exceptions, and decide when patterns should change.',
+    body: 'Search before adding. Decide when to reuse, extend, or create, and record the cost of exceptions.',
     relation: 'Two-way with the Shared Product Context.',
     icon: ICON.governance,
   },
@@ -212,7 +212,7 @@ export const SystemNode: React.FC<{ node: SystemNodeData; lit?: boolean }> = ({ 
 
 // ── The loop ─────────────────────────────────────────────────────────────────
 // Four beats, in Ryan's words, beneath the board. Each beat claims the nodes
-// it works on and every node is claimed exactly once — that is what makes the
+// it works on; the center and working pair recur as the loop closes — that is what makes the
 // two halves one section. Hovering or focusing a beat lights its nodes and
 // recedes the rest; with nothing active the whole board is lit, which is what
 // the first paint, a thumbnail and a crawler get. The claim is also written
@@ -232,30 +232,31 @@ export interface BeatData {
 export const BEATS: BeatData[] = [
   {
     n: 1,
-    title: 'Define the rules',
+    title: 'Start with shared context',
     body: (
       <>
-        Starts at the <strong>Shared Product Context</strong>. Problem, people, constraints, and proof come
-        before a tool picks the direction.
+        Define intent, states, props, tokens, reuse, and what each surface needs to express.
+        <strong> Custom MCP + Figma MCP</strong> bring existing design and code into that planning context.
+        I own the decisions.
       </>
     ),
-    nodes: ['system'],
+    nodes: ['system', 'prompts', 'people', 'governance'],
   },
   {
     n: 2,
-    title: 'Explore across surfaces',
+    title: 'Build from the same plan',
     body: (
       <>
-        <strong>Figma / Canvas</strong> and the <strong>Codebase</strong>, in whichever order
-        answers fastest. Either is allowed to change the system. The Figma MCP server hands an
-        agent the mapped component and its tokens rather than a screenshot of the frame.
+        <strong>Figma / Canvas</strong> and <strong>Codebase + Storybook</strong> express the same
+        decisions in different ways. The code and the canvas don’t need identical structures.
+        They need a shared contract.
       </>
     ),
     nodes: ['figma', 'code'],
   },
   {
     n: 3,
-    title: 'Learn from what becomes real',
+    title: 'Test what becomes real',
     body: (
       <>
         <strong>QA</strong> and the <strong>Team</strong> report back: edge cases, accessibility gaps,
@@ -266,18 +267,20 @@ export const BEATS: BeatData[] = [
   },
   {
     n: 4,
-    title: 'Feed it back into the system',
+    title: 'Map it back to the center',
     body: (
       // No `{' '}` anywhere in these bodies: text either side of an expression
       // is two text nodes, and the prerender flattens them into one — the
       // hydration mismatch the header describes. Keep each run of text on
       // one side of an element, in one string.
       <>
-        Into <strong>Documentation</strong>, <strong>Agent workflows</strong>, and <strong>Governance</strong>:
-        the guidance the next designer, engineer, or agent starts from.
+        Map production components from <strong>Codebase + Storybook</strong> back to Figma through
+        <strong> Code Connect</strong>. Capture that relationship and any intentional differences in
+        <strong> Shared Product Context</strong> for the next change. Those differences belong
+        in the system, rather than in tribal knowledge.
       </>
     ),
-    nodes: ['docs', 'prompts', 'governance'],
+    nodes: ['code', 'figma', 'system', 'docs'],
   },
 ];
 
@@ -319,7 +322,7 @@ const LINKS: LinkDef[] = [
   { id: 'pair-b', nodes: ['figma', 'code'], delay: 540, pair: true },
   { id: 'figma-system', nodes: ['figma', 'system'], delay: 640 },
   { id: 'code-system', nodes: ['code', 'system'], delay: 700 },
-  { id: 'trunk', nodes: ['system'], delay: 720 },
+  { id: 'trunk', nodes: ['system', 'prompts', 'people', 'governance'], delay: 720 },
   { id: 'docs-system', nodes: ['docs', 'system'], delay: 800 },
   { id: 'prompts-system', nodes: ['prompts', 'system'], delay: 860 },
   { id: 'qa-system', nodes: ['qa', 'system'], delay: 940 },
@@ -685,23 +688,26 @@ const SystemsInPractice: React.FC = () => {
             <h2 className="sip__title">
               <span className="reveal-mask">
                 <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
-                  Good product work has to travel.
+                  Shared language. Better product decisions.
                 </span>
               </span>
             </h2>
             <p className="sip__body reveal-fade" style={delay(240)}>
-              I don’t treat Figma, code, documentation, or a prompt as the finish line. They’re
-              working surfaces for the same product decision. I move between them depending on
-              what will answer the question fastest, and{' '}
-              <span className="animated-bold">
-                what I learn in one should be allowed to change the others.
+              Every new or edited component starts with a shared language: what it needs to do,
+              what already exists, and what design and code each need to express.
+              <span className="animated-bold"> Shared Product Context is both the starting point and the return point.
               </span>
             </p>
             <p className="sip__body reveal-fade" style={delay(320)}>
-              Design systems make that movement easier, but they aren’t the whole job. The work is
-              defining the problem, making tradeoffs visible, testing what becomes real, and leaving
-              enough context for the next designer, engineer, or agent to make a good decision
-              without me in the room.
+              My recent exploration brings Figma and custom MCP tools into that planning context.
+              They help me inspect and execute; I own the decisions. Figma and code build from the
+              same plan, then Code Connect captures the implementation relationship back in Figma.
+              Each change should leave a clearer map between intent, design, and production.
+            </p>
+            <p className="sip__body reveal-fade" style={delay(380)}>
+              The code and the canvas don’t need identical structures. They need a shared
+              contract, and every intentional difference between them should be part of the
+              system rather than tribal knowledge.
             </p>
             <div className="sip__actions reveal-fade" style={delay(420)}>
               {/* PlayDraft is the public study where the whole loop is visible:
@@ -725,9 +731,9 @@ const SystemsInPractice: React.FC = () => {
                 below 1280) — stacked, it would just be a second handwritten
                 line above the board's own. */}
             <p className="sip__mark reveal-fade" aria-hidden="true" style={delay(560)}>
-              <span className="sip__mark-line">Use the surface</span>
+              <span className="sip__mark-line">One shared plan.</span>
               <span className="sip__mark-line sip__mark-line--drawn">
-                that answers fastest.
+                Room to explore.
                 <svg
                   className="sip__mark-underline"
                   viewBox="0 0 240 14"
@@ -750,7 +756,7 @@ const SystemsInPractice: React.FC = () => {
             {/* The mark above the file: a craft note in the margin, pointing at it. Its
                 quieter sibling sits at the foot of the editorial column. */}
             <p className="sip__note reveal-fade" style={delay(300)}>
-              <span className="sip__note-text">The file is not the finish line.</span>
+              <span className="sip__note-text">Start here. Return with more context.</span>
               <svg className="sip__note-arrow" viewBox="0 0 32 40" aria-hidden="true" focusable="false">
                 <path d="M5 4 C 9 9, 16 16, 24 33" pathLength={1} className="reveal-draw" style={delay(700)} />
                 <path d="M17.5 30.5 L24 33 L26.5 26.5" pathLength={1} className="reveal-draw" style={delay(1000)} />
@@ -778,7 +784,7 @@ const SystemsInPractice: React.FC = () => {
                     <li
                       role="presentation"
                       className={`sip__cell sip__cell--connect reveal-fade${
-                        activeBeat === 2 ? ' is-lit' : ''
+                        (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''
                       }${active === 'figma' || active === 'code' ? ' is-active' : ''}`}
                       style={delay(760)}
                     >
@@ -804,7 +810,7 @@ const SystemsInPractice: React.FC = () => {
                     key={link.id}
                     className={`sip__link${link.pair ? ' sip__link--pair' : ''}${
                       active && link.nodes.includes(active) ? ' is-active' : ''
-                    }${link.pair && activeBeat === 2 ? ' is-lit' : ''}`}
+                    }${link.pair && (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''}`}
                     style={delay(link.delay)}
                   >
                     <path
@@ -850,7 +856,7 @@ const SystemsInPractice: React.FC = () => {
             <h3 className="sip__seam-label">The loop</h3>
             <span className="sip__seam-line" aria-hidden="true" />
             <p className="sip__seam-note">
-              How the board gets used: four beats, and the fourth feeds the first.
+              Shared context → design + code → validation → context for the next change.
             </p>
           </div>
 
@@ -964,6 +970,9 @@ const SystemsInPractice: React.FC = () => {
               </p>
             </div>
           </div>
+          <p className="sip__body reveal-fade" style={delay(1080)}>
+            As the system grows, so does the shared context.
+          </p>
         </div>
       </div>
     </section>
