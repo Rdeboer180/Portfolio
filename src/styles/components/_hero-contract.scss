@@ -156,7 +156,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hero--contract .layers-panel__fold { transition: none; }
 }
-// The panel is now a content control, including on phones.
+// Desktop role controls; the stacked layout uses the product-design introduction.
 .hero--contract .hero-intro__roles { display: block; }
 
 .hero--contract .hero-intro__location {
@@ -174,4 +174,50 @@
 @media (max-width: 850px) {
   .hero--contract .hero-intro__location { align-items: flex-start; }
   .hero--contract .hero-intro__location .hero-intro__availability svg { margin-left: 0; }
+}
+
+.hero--contract .hero-intro__mobile-role { display: none; }
+
+// Paper's compact, portrait-first direction, using the site's spacing scale.
+@media (max-width: 850px) {
+  .hero--contract {
+    --profile-shell-size: calc(var(--profile-size) + var(--space-2xl));
+    .hero-intro { padding-top: calc(var(--space-4xl) + var(--space-3xl)); padding-bottom: var(--space-3xl); }
+    .hero-intro__meta { text-align: center; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg); }
+    .hero-intro__location { align-items: center; }
+    .hero-intro__location .hero-intro__availability svg { display: none; }
+    .hero-intro__grid { gap: var(--space-lg); }
+    .hero-intro__portrait {
+      width: min(100%, var(--profile-shell-size));
+      height: auto;
+      aspect-ratio: 1;
+      padding: 0;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .hero__image-container { width: 100%; height: 100%; }
+    .hero__profile-shell { width: 100%; height: 100%; }
+    .hero__profile-selection { width: calc(var(--profile-size) + var(--space-lg)); height: calc(var(--profile-size) + var(--space-lg)); }
+    .hero-intro__roles,
+    .hero-intro__token-map,
+    .hero__profile-label,
+    .hero__profile-handle,
+    .hero__intro-note,
+    .hero__intro-arrow,
+    .hero__intro-crop,
+    .hero__intro-cursor,
+    .hero__intro-menu,
+    .hero__intro-grid,
+    .hero__intro-scrawl,
+    .hero__intro-scrawl-remnant,
+    .hero__intro-eraser,
+    .hero-intro__role-story { display: none; }
+    .hero-intro__mobile-role { display: block; }
+  }
+}
+@media (max-width: 767px) {
+  .hero--contract .hero-intro { padding-top: calc(var(--space-4xl) + var(--space-lg)); }
+}
+@media (max-width: 480px) {
+  .hero--contract { --profile-size: min(260px, calc(100vw - var(--space-4xl) - var(--space-lg))); }
 }

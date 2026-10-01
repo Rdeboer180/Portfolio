@@ -24,11 +24,11 @@ const Hero: React.FC = () => {
     const play = () => {
       setIntroStage(mobile ? 'sketch' : 'scrawl');
       const steps: [number, string][] = mobile
-        ? [[650, 'lowfi'], [1250, 'final'], [1850, 'panel'], [2550, 'done']]
+        ? [[650, 'lowfi'], [1250, 'final'], [1850, 'done']]
         : [[700, 'sketch'], [1500, 'lowfi'], [2150, 'cursor'], [2900, 'final'], [3500, 'panel'], [4200, 'done']];
       steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
     };
-    // On small screens the portrait follows the copy; start when it can be seen.
+    // Start the portrait construction when it enters view.
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { play(); observer.disconnect(); }
     }, { threshold: 0.2 });
@@ -106,6 +106,7 @@ const Hero: React.FC = () => {
           <div className="hero-intro__copy">
             <h1 className="hero__typed-wrap"><span className="hero__typed-final-gradient">Designer by foundation.</span><span>Builder by curiosity.</span></h1>
             <p>I’m a product designer with deep roots in visual craft and <a href="#systems" className="about__inline-link">design systems</a>. I turn complex workflows into clear interfaces, and use code, agents, and custom tools to carry those decisions into working products.</p>
+            <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
             <div className="hero-intro__role-story">
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
               {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true">{description}</p>)}
