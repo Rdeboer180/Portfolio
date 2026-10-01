@@ -1,499 +1,62 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/styles.scss';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
-import ProficiencyDock from './ProficiencyDock';
 import { useUnlock } from '../context/UnlockContext';
+import { useHighlightSweep } from '../hooks/useHighlightSweep';
 
-// Animated H1 sequence — a craft arc that resolves on the final, static line.
-// Each phrase is short (3–4 words) so it stays legible mid-swap on mobile.
-const roles = [
-  'Fluent in tools',
-  'Grounded in craft',
-  'Close to code',
-  'Care for what ships',
+const roles = ['Product Designer', 'Design Systems Designer', 'Design Engineer', 'UI/UX Designer'];
+const roleDescriptions = [
+  'In product design, I work through flows, states, and tradeoffs with the team, then test whether the experience solves the right problem.',
+  'In design systems, I turn shared decisions into tokens, components, and guidance that help designers and engineers build consistently as the product grows.',
+  'In design engineering, I build prototypes and tools to test behavior, catch edge cases, and make the decisions behind a product easier to carry through.',
+  'In UI/UX design, I connect clear user flows with thoughtful hierarchy, interactions, and states, then test the details across screens and real tasks.',
 ];
-const FINAL_INDEX = roles.length - 1;
-
-// The final phrase resolves with an orange highlight on its lead words only.
-// "Care for" gets the gradient treatment; " what ships" stays in normal H1 styling.
-const FINAL_HIGHLIGHT = 'Care for';
-const FINAL_TRAILING = ' what ships';
-
-// Subtle per-role tool action that maps to a CSS modifier on the bbox
-const roleActions: Array<'nudge' | 'align' | 'rename' | null> = [
-  'nudge', // Fluent in tools — gets selected and slightly nudged
-  'align', // Grounded in craft — snaps to alignment guide
-  null,    // Close to code — clean swap
-  null,    // Care for what ships — leads into the final highlight reveal
-];
-
-type Phase =
-  | 'typing'
-  | 'cycling'
-  | 'paused-final'
-  | 'cursor-backtrack'
-  | 'editing-final'
-  | 'gradient-final'
-  | 'complete'
-  | 'static'; // user clicked a non-final layer post-load — render text, no animation
-
-// ── Intro stage conductor ───────────────────────────────────────────────────
-// Single mount effect drives all stage advances from one t0, collected into
-// one timeout array. The type machine is gated behind 'type' | 'done'.
-// Stage order: scrawl → sketch → lowfi → cursor → final → panel → type → done
-// Desktop: sketch@800, lowfi@1700, cursor@2400, final@3200, panel@3750, type via animationend + 4800ms fallback
-// Mobile:  sketch@0 (initial), lowfi@400, final@800 (no cursor), type@1300
-type IntroStage = 'scrawl' | 'sketch' | 'lowfi' | 'cursor' | 'final' | 'panel' | 'type' | 'done';
 
 const Hero: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  // Pre-place "Designer" so the headline shows the role + cursor from page load.
-  // When introStage reaches 'type' the cycling machine sees displayText.length === target.length
-  // and schedules the hold → cycling transition automatically.
-  const [displayText, setDisplayText] = useState(roles[0]);
-  const [phase, setPhase] = useState<Phase>('typing');
-  // (the old "-First" rename insertion state has been removed)
-  const [showBBox, setShowBBox] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  // Mobile nav menu (inline links hide below $breakpoint-sm)
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const [introStage, setIntroStage] = useState('done');
+  useLayoutEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motion.matches) return;
+    const mobile = window.matchMedia('(max-width: 850px)').matches;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const play = () => {
+      setIntroStage(mobile ? 'sketch' : 'scrawl');
+      const steps: [number, string][] = mobile
+        ? [[650, 'lowfi'], [1250, 'final'], [1850, 'panel'], [2550, 'done']]
+        : [[700, 'sketch'], [1500, 'lowfi'], [2150, 'cursor'], [2900, 'final'], [3500, 'panel'], [4200, 'done']];
+      steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
+    };
+    // On small screens the portrait follows the copy; start when it can be seen.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { play(); observer.disconnect(); }
+    }, { threshold: 0.2 });
+    if (portraitRef.current) observer.observe(portraitRef.current);
+    const settle = () => {
+      if (motion.matches) { observer.disconnect(); timers.forEach(clearTimeout); setIntroStage('done'); }
+    };
+    motion.addEventListener('change', settle);
+    return () => { observer.disconnect(); timers.forEach(clearTimeout); motion.removeEventListener('change', settle); };
+  }, []);
+  const [selectedRole, setSelectedRole] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
-
-  // "My Work" raises the prompt for a locked visitor. The anchor still resolves,
-  // so the section is already in place behind the modal when it's dismissed.
   const { unlocked, openPrompt } = useUnlock();
-  const handleWorkNav = () => {
-    setNavOpen(false);
-    if (!unlocked) openPrompt();
-  };
+  const handleWorkNav = () => { setNavOpen(false); if (!unlocked) openPrompt(); };
+  const sectionRef = useHighlightSweep<HTMLElement>({ selector: '.animated-bold', activeClass: 'animated-bold--active', settledClass: 'animated-bold--settled', settleOffset: 850, cycleTime: 1900, threshold: 0.15 });
   useEffect(() => {
     if (!navOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setNavOpen(false);
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setNavOpen(false); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen]);
-  const isMobileInitial = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-  const [introStage, setIntroStage] = useState<IntroStage>(isMobileInitial ? 'sketch' : 'scrawl');
-
-  /**
-   * Hydration gate — the first client render must be the frame the static file
-   * already holds.
-   *
-   * scripts/prerender.mjs drives this page in a `reducedMotion: 'reduce'`
-   * browser context on purpose, so the HTML it serialises is the *settled*
-   * hero: data-intro-stage="done", the resolved headline, the layers panel on
-   * its last row. The client, meanwhile, used to start its first render at
-   * stage one — a genuinely different set of elements inside
-   * .hero__typed-group than the markup it was hydrating onto. React answered
-   * with error #418 and threw the entire prerendered tree away on every single
-   * load, which is the whole architecture PRODUCT.md is built on.
-   *
-   * suppressHydrationWarning was never going to fix that. It silences differing
-   * text and attributes; it says nothing about a differing element tree.
-   *
-   * So: the same shape as UnlockChrome in App.tsx. Render the settled frame
-   * until a post-mount flag flips, then run the real sequence. The flag is set
-   * in a *layout* effect — after hydration commits, before the browser paints —
-   * so the intro still begins on frame one and no resolved hero flashes past
-   * on the way in.
-   */
-  const [introArmed, setIntroArmed] = useState(false);
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const timeoutsRef = useRef<number[]>([]);
-  const introTimeoutsRef = useRef<number[]>([]);
-  const activeIndexRef = useRef(0);
-  const lastFlashedRef = useRef<string>('');
-  const [flashKey, setFlashKey] = useState(0);
-  const highlightsAppliedRef = useRef(false);
-  const panelAnimEndRef = useRef<(() => void) | null>(null);
-
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
-
-  const clearAllTimeouts = useCallback(() => {
-    timeoutsRef.current.forEach((id) => window.clearTimeout(id));
-    timeoutsRef.current = [];
-  }, []);
-
-  const scheduleTimeout = useCallback((cb: () => void, ms: number) => {
-    const id = window.setTimeout(() => {
-      timeoutsRef.current = timeoutsRef.current.filter((t) => t !== id);
-      cb();
-    }, ms);
-    timeoutsRef.current.push(id);
-    return id;
-  }, []);
-
-  // ── Arm the intro — layout effect, so it lands before the first paint ────
-  // Deliberately not a passive effect: a `useEffect` here can let the browser
-  // paint the settled hero once before the sequence starts. See the
-  // `introArmed` comment above.
-  useLayoutEffect(() => {
-    // A reduced-motion visitor's settled frame IS the pre-armed frame, so move
-    // the machine there *before* arming. Both updates land in the same commit,
-    // so arming can never expose stage one for a frame on the way past.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDisplayText(roles[FINAL_INDEX]);
-      setActiveIndex(FINAL_INDEX);
-      activeIndexRef.current = FINAL_INDEX;
-      setPhase('complete');
-      setShowBBox(false);
-      setIntroStage('done');
-    }
-    setIntroArmed(true);
-  }, []);
-
-  // ── Intro conductor — single mount effect ──────────────────────────────
-  useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (isReducedMotion) {
-      // Jump straight to done — everything renders as final frame immediately
-      setIntroStage('done');
-      return;
-    }
-
-    const ids: number[] = [];
-    const schedule = (stage: IntroStage, at: number) => {
-      const id = window.setTimeout(() => setIntroStage(stage), at);
-      ids.push(id);
-    };
-
-    if (isMobile) {
-      // Mobile: compact 3-beat build — no scrawl, no cursor stage, no menu, no
-      // panel dock. Beats are long enough for the craft marks (crop corners,
-      // notes, arrows) to pop + draw before they erase to remnants at 'final'.
-      schedule('lowfi', 650);
-      schedule('final', 1250);
-      schedule('type', 1550);
-    } else {
-      // Desktop: scrawl@0, sketch@600, lowfi@1400, cursor@2000, final@2750, panel@3250.
-      // Trimmed ~600ms vs the prior schedule so the resolved headline lands sooner;
-      // the eyebrow (positioning) + pre-placed first phrase are readable from ~0.5s
-      // regardless. cursor window = 750ms (2000→2750), covers the ~690ms cursor beat.
-      // 'type' is triggered by animationend on the panel dock, with a 4200ms fallback.
-      schedule('sketch', 600);
-      schedule('lowfi', 1400);
-      schedule('cursor', 2000);
-      schedule('final', 2750);
-      schedule('panel', 3250);
-
-      const fallbackId = window.setTimeout(() => {
-        setIntroStage((current) => {
-          if (current === 'panel' || current === 'cursor') return 'type';
-          return current;
-        });
-      }, 4200);
-      ids.push(fallbackId);
-    }
-
-    introTimeoutsRef.current = ids;
-    return () => {
-      ids.forEach((id) => window.clearTimeout(id));
-    };
-  }, []);
-
-  // Listen for the panel dock animationend to trigger the 'type' stage (desktop)
-  useEffect(() => {
-    if (introStage !== 'panel') return;
-    const panelWrapper = document.querySelector('.hero__ui-element--layers') as HTMLElement | null;
-    if (!panelWrapper) return;
-
-    const handler = () => {
-      setIntroStage('type');
-    };
-    panelWrapper.addEventListener('animationend', handler);
-    panelAnimEndRef.current = handler;
-
-    return () => {
-      panelWrapper.removeEventListener('animationend', handler);
-      panelAnimEndRef.current = null;
-    };
-  }, [introStage]);
-
-  // Mark 'done' once type machine reaches 'complete'
-  useEffect(() => {
-    if (phase === 'complete' && introStage === 'type') {
-      setIntroStage('done');
-    }
-  }, [phase, introStage]);
-
-  // Pause when out of view or tab hidden
-  useEffect(() => {
-    const updateVisibilityPause = (inView: boolean) => {
-      const tabHidden = document.hidden;
-      setIsPaused(!inView || tabHidden);
-    };
-
-    let inViewRef = true;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inViewRef = entry.isIntersecting;
-        updateVisibilityPause(inViewRef);
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-
-    const handleVisibilityChange = () => updateVisibilityPause(inViewRef);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
-  // (Reduced motion resolves the type machine in the arming layout effect
-  // above — it has to happen there, not in a passive effect, or the settled
-  // state arrives a paint too late.)
-
-  // Flash an orange selection bbox whenever a new layer/role becomes active.
-  // Mirrors Adobe/Figma's "I just clicked this layer" feedback before the cursor lands.
-  // Gated behind 'type'/'done' so the first flash fires only when the intro completes.
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'typing' && phase !== 'cycling') return;
-    const key = `${activeIndex}-sel`;
-    if (key === lastFlashedRef.current) return;
-    lastFlashedRef.current = key;
-    setFlashKey((k) => k + 1);
-  }, [activeIndex, phase, introStage]);
-
-  // Typing first role — gated behind intro stage, first character delayed so flash plays first.
-  // Timing compressed ~30% vs original (55ms per char, 200ms first-char delay).
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'typing' || isPaused) return;
-    const target = roles[0];
-
-    if (displayText.length === target.length) {
-      scheduleTimeout(() => setPhase('cycling'), 600); // was 900ms
-      return () => clearAllTimeouts();
-    }
-
-    const delay = displayText.length === 0 ? 200 : 55; // was 360 / 70ms
-    scheduleTimeout(() => {
-      setDisplayText(target.substring(0, displayText.length + 1));
-    }, delay);
-
-    return () => clearAllTimeouts();
-  }, [displayText, phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Cycle remaining roles once
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'cycling' || isPaused) return;
-
-    const advance = () => {
-      const next = activeIndexRef.current + 1;
-      activeIndexRef.current = next;
-      setActiveIndex(next);
-      setDisplayText(roles[next]);
-
-      if (next >= FINAL_INDEX) {
-        // Final phrase "Care for what ships" has landed plainly — hold a beat,
-        // then resolve it (selection sweep + orange highlight on "Care for").
-        scheduleTimeout(() => {
-          setShowBBox(false);
-          setPhase('paused-final');
-        }, 600);
-        return;
-      }
-
-      scheduleTimeout(advance, 750);
-    };
-
-    scheduleTimeout(advance, 750);
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Pause on final word, then show bbox and begin backtrack
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'paused-final' || isPaused) return;
-
-    // Move H1 to the resolved final title
-    activeIndexRef.current = FINAL_INDEX;
-    setActiveIndex(FINAL_INDEX);
-
-    scheduleTimeout(() => {
-      setShowBBox(true);
-      setPhase('cursor-backtrack');
-    }, 50);
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Cursor moves to the start of "Care for" — compressed 350ms
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'cursor-backtrack' || isPaused) return;
-
-    scheduleTimeout(() => {
-      setPhase('editing-final');
-    }, 350); // was 450ms
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Selection drag across "Care for" — compressed 850ms
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'editing-final' || isPaused) return;
-
-    scheduleTimeout(() => {
-      setShowBBox(false);
-      setPhase('gradient-final');
-    }, 850); // was 1100ms
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Gradient reveal then complete — compressed 400ms (was 500ms)
-  useEffect(() => {
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase !== 'gradient-final' || isPaused) return;
-
-    scheduleTimeout(() => {
-      setPhase('complete');
-    }, 400); // was 500ms
-
-    return () => clearAllTimeouts();
-  }, [phase, isPaused, introStage, scheduleTimeout, clearAllTimeouts]);
-
-  // Brand-orange selection flash — fires when a new role layer becomes active
-  useEffect(() => {
-    const isCyclingNewRole = phase === 'cycling' && activeIndex > 0;
-    if (!isCyclingNewRole) return;
-
-    const key = `${phase}-${activeIndex}`;
-    if (lastFlashedRef.current === key) return;
-    lastFlashedRef.current = key;
-    setFlashKey((k) => k + 1);
-  }, [phase, activeIndex]);
-
-  // After H1 resolves, sweep + bold the highlight spans in the supporting paragraph one at a time.
-  // Runs only on the FIRST time phase reaches 'complete' so later clicks don't re-trigger the sweep.
-  useEffect(() => {
-    if (phase !== 'complete' || highlightsAppliedRef.current) return;
-    const body = bodyRef.current;
-    if (!body) return;
-
-    const highlights = body.querySelectorAll('.animated-bold, .about__highlight');
-    if (highlights.length === 0) return;
-
-    highlightsAppliedRef.current = true;
-
-    // Match the About-section pacing (1.2s per highlight)
-    const sweepDuration = 420;
-    const holdDuration = 240;
-    const fadeOut = 360;
-    const cycleTime = sweepDuration + holdDuration + fadeOut + 180;
-    // Small breathing room after the gradient lands before the first sweep starts
-    const initialDelay = 250;
-
-    const ids: number[] = [];
-    highlights.forEach((el, i) => {
-      // Match modifier prefix to the element's base class so the shared
-      // paintbrush rule fires correctly for either .animated-bold or
-      // .about__highlight (BEM modifiers are class-name based).
-      const base = el.classList.contains('animated-bold')
-        ? 'animated-bold'
-        : 'about__highlight';
-      const baseDelay = initialDelay + i * cycleTime;
-      ids.push(
-        window.setTimeout(() => {
-          el.classList.add(`${base}--active`);
-        }, baseDelay)
-      );
-      ids.push(
-        window.setTimeout(() => {
-          el.classList.add(`${base}--bold`);
-          el.classList.remove(`${base}--active`);
-        }, baseDelay + sweepDuration + holdDuration)
-      );
-    });
-
-    return () => {
-      ids.forEach((id) => window.clearTimeout(id));
-    };
-  }, [phase]);
-
-  const handleLayerClick = useCallback((index: number) => {
-    // Only allow clicks after the intro has handed control to the type machine
-    if (introStage !== 'type' && introStage !== 'done') return;
-    if (phase === 'typing' || index === activeIndexRef.current) return;
-
-    clearAllTimeouts();
-    activeIndexRef.current = index;
-    setActiveIndex(index);
-    setShowBBox(false);
-
-    if (index === FINAL_INDEX) {
-      // Final layer is permanent: jump straight to the resolved highlighted title.
-      setDisplayText(roles[FINAL_INDEX]);
-      setPhase('complete');
-    } else {
-      // Non-final click: just statically display the role text — no cycle, no flash, no action animation.
-      setDisplayText(roles[index]);
-      setPhase('static');
-    }
-  }, [phase, introStage, clearAllTimeouts]);
-
-  useEffect(() => {
-    return () => clearAllTimeouts();
-  }, [clearAllTimeouts]);
-
-  // Every value the markup below reads goes through one of these, so the single
-  // `introArmed` flag swaps the whole hero between the settled frame the static
-  // HTML carries and the live state machine. Nothing downstream branches on the
-  // raw state.
-  const renderStage: IntroStage = introArmed ? introStage : 'done';
-  const renderPhase: Phase = introArmed ? phase : 'complete';
-  const renderIndex = introArmed ? activeIndex : FINAL_INDEX;
-  const renderText = introArmed ? displayText : roles[FINAL_INDEX];
-  const renderBBox = introArmed ? showBBox : false;
-
-  const showResolved =
-    renderPhase === 'paused-final' ||
-    renderPhase === 'cursor-backtrack' ||
-    renderPhase === 'editing-final' ||
-    renderPhase === 'gradient-final' ||
-    renderPhase === 'complete';
-  const showGradient = renderPhase === 'gradient-final' || renderPhase === 'complete';
-  // Only animate the per-role tool action during the automatic cycle — never on user clicks.
-  const isAutoCycle = renderPhase === 'cycling';
-  const currentAction = isAutoCycle ? roleActions[renderIndex] || null : null;
-
-  // Panel layer list mirrors the role list 1:1 — the four animated phrases.
-  const dynamicRoles = roles;
-
   return (
-    // `renderStage` is "done" until the intro is armed, which is exactly what
-    // the prerendered HTML carries — see the `introArmed` note above. No
-    // suppressHydrationWarning needed: server and client now agree.
-    <section
-      className="hero"
-      ref={sectionRef}
-      data-intro-stage={renderStage}
-    >
+    <section className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage}>
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
-          <Link to="/about">About Me</Link>
-          <a href="#projects" onClick={handleWorkNav}>My Work</a>
+          <Link to="/about">About</Link>
+          <a href="#projects" onClick={handleWorkNav}>Work</a>
           <Link to="/notes">Notes</Link>
           <Link to="/resume">Resume</Link>
           <a href={EMAIL_HREF} className="hero__nav-cta">Get in touch</a>
@@ -521,8 +84,8 @@ const Hero: React.FC = () => {
         </div>
         {navOpen && (
           <div id="hero-nav-menu" className="hero__nav-menu">
-            <Link to="/about" onClick={() => setNavOpen(false)}>About Me</Link>
-            <a href="#projects" onClick={handleWorkNav}>My Work</a>
+            <Link to="/about" onClick={() => setNavOpen(false)}>About</Link>
+            <a href="#projects" onClick={handleWorkNav}>Work</a>
             <Link to="/notes" onClick={() => setNavOpen(false)}>Notes</Link>
             <Link to="/resume" onClick={() => setNavOpen(false)}>Resume</Link>
             <a href={EMAIL_HREF} className="hero__nav-menu-cta" onClick={() => setNavOpen(false)}>
@@ -532,157 +95,31 @@ const Hero: React.FC = () => {
         )}
       </nav>
 
-      <div className="hero__content">
-        <div className="hero__grid">
-          <div className="hero__text">
-            <p className="hero__eyebrow hero__reveal hero__reveal--1">
-              <span className="hero__eyebrow-title">
-                {/* Each term is held whole above the phone breakpoint (see
-                    _hero.scss) so the line breaks at a separator, not inside
-                    "Agentic Workflows". */}
-                <span className="hero__eyebrow-term">Design Engineer</span> · <span className="hero__eyebrow-term">Design Systems</span> · <span className="hero__eyebrow-term">Agentic Workflows</span>
-              </span>
-            </p>
-
-            <div className="hero__typed-wrap hero__reveal hero__reveal--2">
-              {/* The h1 makes the claim; the phrases support it.
-                  It used to be the four animated aphorisms verbatim — "Fluent in
-                  tools. Grounded in craft. …" — which is a mood, not a subject.
-                  Anything reading the page structurally (a crawler, a screen
-                  reader pulling a heading list, a preview card) got four
-                  sentences with no subject in them, while the one line that
-                  actually said what Ryan does sat above in a 12px eyebrow. The
-                  visual sequence below is untouched; only what the h1 asserts
-                  has changed. */}
-              <h1 className="hero__h1-sr-only">
-                Ryan DeBoer is a Product Design Engineer who builds design systems that live across Figma, production code, and the tools connecting them.
-              </h1>
-
-              {/* The animated phrases still reach assistive tech: the visual
-                  sequence is aria-hidden, so without this they'd be lost. */}
-              <p className="sr-only">
-                Fluent in tools. Grounded in craft. Close to code. Care for what ships.
-              </p>
-
-              {/* Invisible sizer — stacks every phrase in one grid cell so the
-                  wrap reserves exactly the tallest phrase's rendered height at
-                  the current width. Replaces the old fixed min-height, which
-                  left a large empty band under the H1 on phones where the
-                  final line didn't actually wrap. */}
-              <span className="hero__typed-sizer" aria-hidden="true">
-                {roles.slice(0, FINAL_INDEX).map((r) => (
-                  <span key={r}>{r}</span>
-                ))}
-                <span>
-                  <span className="hero__final-word-wrap">{FINAL_HIGHLIGHT}</span>
-                  {FINAL_TRAILING}
-                </span>
-              </span>
-
-              {/* The prerender captures the RESOLVED headline here — a crawler
-                  and a JS-disabled visitor should see the finished sentence,
-                  not animation frame one. Reading `renderPhase`/`renderText`
-                  rather than the raw state is what lets the client's first
-                  render put back that same resolved tree, element for element,
-                  before the sequence takes over a beat later. The real <h1>
-                  above carries the full sentence for AT either way, and this
-                  node is aria-hidden. */}
-              <div className="hero__typed-group">
-                <span
-                  key={renderPhase === 'typing' ? 'typing' : `role-${renderIndex}-${renderPhase}`}
-                  className={`hero__typed${renderPhase !== 'typing' ? ' hero__typed--swap' : ''}`}
-                  aria-hidden="true"
-                >
-                  {showResolved ? (
-                    <>
-                      <span className="hero__final-word-wrap">
-                        <span
-                          className={`hero__selection${
-                            renderPhase === 'editing-final' ? ' hero__selection--active' : ''
-                          }`}
-                          aria-hidden="true"
-                        />
-                        <span
-                          className={
-                            showGradient
-                              ? 'hero__typed-final-gradient'
-                              : 'hero__typed-final-word'
-                          }
-                        >
-                          {FINAL_HIGHLIGHT}
-                        </span>
-                        <span
-                          className={`hero__cursor hero__cursor--absolute${
-                            renderPhase === 'cursor-backtrack' ? ' hero__cursor--backtrack' : ''
-                          }${
-                            renderPhase === 'editing-final' ? ' hero__cursor--selecting' : ''
-                          }${
-                            renderPhase === 'complete' ? ' hero__cursor--hide' : ''
-                          }`}
-                        />
-                      </span>
-                      {FINAL_TRAILING}
-                    </>
-                  ) : (
-                    <>
-                      {renderText}
-                      {renderPhase === 'typing' && renderText.length > 0 && <span className="hero__cursor" />}
-                    </>
-                  )}
-                </span>
-
-                {(renderPhase === 'typing' || renderPhase === 'cycling') && (
-                  <span
-                    key={flashKey}
-                    className="hero__bbox-flash"
-                    aria-hidden="true"
-                  />
-                )}
-
-                <div className={`hero__bbox${renderBBox ? ' hero__bbox--visible' : ''}${currentAction ? ` hero__bbox--${currentAction}` : ''}`}>
-                  <span className="hero__bbox-handle hero__bbox-handle--tl" />
-                  <span className="hero__bbox-handle hero__bbox-handle--tr" />
-                  <span className="hero__bbox-handle hero__bbox-handle--bl" />
-                  <span className="hero__bbox-handle hero__bbox-handle--br" />
-                  <span className="hero__bbox-handle hero__bbox-handle--tm" />
-                  <span className="hero__bbox-handle hero__bbox-handle--bm" />
-                  <span className="hero__bbox-handle hero__bbox-handle--ml" />
-                  <span className="hero__bbox-handle hero__bbox-handle--mr" />
-                </div>
+      <div className="hero-intro">
+        <div className="hero-intro__meta"><span>Product design · Design systems · Design engineering</span><div className="hero-intro__location"><span>South Bend, IN / Remote US</span>
+            <a href={EMAIL_HREF} className="hero-intro__availability">
+              Open to new work opportunities
+              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </a>
+</div></div>
+        <div className="hero-intro__grid">
+          <div className="hero-intro__copy">
+            <h1 className="hero__typed-wrap"><span className="hero__typed-final-gradient">Designer by foundation.</span><span>Builder by curiosity.</span></h1>
+            <p>I’m a product designer with deep roots in visual craft and <a href="#systems" className="about__inline-link">design systems</a>. I turn complex workflows into clear interfaces, and use code, agents, and custom tools to carry those decisions into working products.</p>
+            <div className="hero-intro__role-story">
+              {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
+              {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true">{description}</p>)}
+              <div className="hero-intro__role-live" aria-live="polite" aria-atomic="true">
+                <p key={selectedRole} className="hero-intro__role-paragraph">{roleDescriptions[selectedRole]}</p>
               </div>
             </div>
+            <div className="hero-intro__actions"><a href="#projects" className="btn btn--primary btn--lg">Explore my work ↓</a></div>
 
-            <div className="hero__body hero__reveal hero__reveal--3" ref={bodyRef}>
-              <p>
-                I build the system, design what it makes possible, then refine both. Fourteen years professionally, and nearly a decade preparing before that, have sharpened the <span className="animated-bold">judgment to know what deserves to ship</span> and the direction to make it better.
-              </p>
-              <p>
-                I use AI to automate repetition, prototype faster, test ideas, and encode taste and guardrails that lift my work and my teams. From tokens and components to pages, flows, and working products, my decisions rest on user feedback, accessibility, SEO, analytics, and close collaboration with engineering.
-              </p>
-              <p>
-                The tools keep changing. The standard doesn’t. I care about the craft, stay curious about what’s changing, and <span className="animated-bold">own what reaches the user</span>.
-              </p>
-            </div>
-
-            <p className="hero__proof-line hero__reveal hero__reveal--3">
-              Based in South Bend, Indiana. Open to remote roles in the US.
-            </p>
-
-            <div className="hero__actions hero__reveal hero__reveal--4">
-              <a href="#projects" className="btn btn--primary btn--lg">
-                View selected work
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <polyline points="19 12 12 19 5 12" />
-                </svg>
-              </a>
-              <Link to="/resume" className="btn btn--secondary btn--lg">
-                View résumé
-              </Link>
-            </div>
           </div>
-
-          <div className="hero__visual">
+          <div className="hero-intro__portrait" ref={portraitRef}>
+            <div className="hero-intro__token-map" aria-label="Portrait border radius token">
+              <code>borderRadius: tokens.radius.full</code>
+            </div>
             {/* ── Intro-only overlay elements — aria-hidden + pointer-events:none ── */}
             {/* Construction-line grid background */}
             <div className="hero__intro-grid" aria-hidden="true" />
@@ -914,6 +351,7 @@ const Hero: React.FC = () => {
                 <span className="hero__intro-crop__bl" />
                 <span className="hero__intro-crop__br" />
               </div>
+
               <div className="hero__image-wrapper hero__profile">
                 <div className="hero__profile-shell">
                   <div className="hero__profile-selection" aria-hidden="true">
@@ -937,42 +375,13 @@ const Hero: React.FC = () => {
                 </div>
               </div>
 
-              {/* DevTools-style tag indicator pointing at the portrait layer */}
-              <div
-                className="hero__ui-element hero__ui-element--tag-indicator"
-                aria-hidden="true"
-              >
-                <div className="hero__tag-indicator">
-                  <span className="hero__tag-indicator-selector">
-                    <span className="hero__tag-indicator-tag">div</span>
-                    <span className="hero__tag-indicator-class">.hero__profile-shell</span>
-                  </span>
-                  <span className="hero__tag-indicator-dims">480&thinsp;&times;&thinsp;480</span>
-                </div>
-              </div>
-              <div className="hero__ui-element hero__ui-element--layers">
-                <LayersPanel
-                  ref={panelRef}
-                  activeIndex={renderIndex}
-                  onLayerClick={handleLayerClick}
-                  roles={dynamicRoles}
-                  action={currentAction}
-                  showProfileGroup={true}
-                />
-              </div>
+
             </div>
+            <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={setSelectedRole} compact /></div>
           </div>
         </div>
-      </div>
-
-      <div className="hero__proof-band">
-        <div className="hero__proof-inner">
-          <ProficiencyDock testimonialsHref="#testimonials" />
-        </div>
-        <div className="hero__proof-angle" />
       </div>
     </section>
   );
 };
-
 export default Hero;

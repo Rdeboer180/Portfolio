@@ -292,3 +292,134 @@ $select-b: blue($color-primary-light);
     }
   }
 }
+
+// One About destination: working philosophy, evidence, then background.
+.about--integrated {
+  padding: 0;
+  .about__differentiator {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--space-xl));
+      left: 0;
+      width: 100%;
+      height: var(--space-xl);
+      background: var(--color-bg-secondary);
+      clip-path: polygon(0 0, 100% 0, 100% 0%, 0 100%);
+      pointer-events: none;
+    }
+    padding: var(--space-3xl) 0 var(--space-4xl);
+    background: var(--color-bg-secondary);
+  }
+  .about__differentiator-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: var(--space-4xl);
+    margin-top: var(--space-2xl);
+    align-items: start;
+  }
+  .about__signature {
+    margin: 0;
+    font-family: $font-family-hand;
+    font-size: $font-size-h1;
+    line-height: $line-height-h1;
+    font-weight: $font-weight-semibold;
+    color: var(--color-primary-dark);
+    span { display: block; }
+  }
+  .about__signature-underline { display: block; width: 220px; max-width: 100%; height: 16px; margin-top: var(--space-sm); color: var(--color-primary); }
+  .about__body { margin-top: 0; margin-bottom: var(--space-xl); }
+  .about__evidence-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    margin-top: var(--space-2xl);
+    .about__read-more { margin: 0; }
+  }
+  .about__read-more { color: var(--color-primary-dark); }
+  .about__background { padding: var(--space-4xl) 0; }
+  .about__background .about__title { margin-top: 0; }
+  .about__background .about__cta-links { margin-bottom: 0; }
+  @media (max-width: 850px) {
+    .about__differentiator-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
+    .about__signature > .reveal-mask { display: inline-block; vertical-align: bottom; }
+  }
+}
+
+// Visible chronology: a single rail and short chapters, no hidden biography.
+.about__timeline-heading {
+  max-width: var(--copy-max-width);
+  margin-bottom: var(--space-3xl);
+}
+.career-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-2xl);
+  &__step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 128px minmax(0, 240px) minmax(0, 1fr);
+    gap: var(--space-2xl);
+    padding: 0 0 var(--space-2xl) var(--space-xl);
+    border-left: 1px solid var(--color-secondary-muted);
+    &::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: var(--space-sm);
+      width: var(--space-sm);
+      height: var(--space-sm);
+      border-radius: var(--radius-full);
+      background: var(--color-secondary-dark);
+    }
+    &:last-child { padding-bottom: 0; &::before { background: var(--color-primary); } }
+  }
+  &__date { font: var(--weight-semibold) var(--text-body-sm)/var(--leading-body-lg) var(--font-mono); color: var(--color-primary-dark); }
+  &__title { margin: 0; font: var(--weight-bold) var(--text-h5)/var(--leading-h5) var(--font-heading); }
+  &__detail p { margin: 0; font: var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-text-secondary); }
+  &__detail .about__read-more { margin-top: var(--space-sm); font-size: var(--text-body-sm); }
+  @media (max-width: 850px) {
+    &__step { grid-template-columns: 110px minmax(0, 1fr); gap: var(--space-sm) var(--space-xl); }
+    &__detail { grid-column: 2; }
+  }
+  @media (max-width: 540px) {
+    &__step { grid-template-columns: minmax(0, 1fr); }
+    &__detail { grid-column: 1; }
+  }
+}
+
+.career-timeline {
+  &__rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1px;
+    width: 1px;
+    background: var(--color-primary);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--transition-base);
+    pointer-events: none;
+  }
+  &__marker {
+    position: absolute;
+    top: var(--space-sm);
+    left: -4px;
+    width: var(--space-sm);
+    height: var(--space-sm);
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+  }
+  &__step.is-visible > &__rail { transform: scaleY(1); }
+  &__step.is-visible > &__marker { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    &__rail { transform: none; opacity: 0; transition: opacity var(--transition-fast); }
+    &__step.is-visible > &__rail { opacity: 1; }
+  }
+}
+.about__timeline-closing { max-width: var(--copy-max-width); }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import SectionBadge from './SectionBadge';
 import { SITE } from '../data/site';
 
@@ -23,12 +23,6 @@ const QuoteMark = () => (
   </svg>
 );
 
-const StarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 2.5l2.95 6.55 7.05.75-5.3 4.85 1.5 7.1L12 18l-6.2 3.75 1.5-7.1L2 9.8l7.05-.75L12 2.5z" />
-  </svg>
-);
-
 const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
 );
@@ -41,19 +35,7 @@ interface Testimonial {
   year: string;
 }
 
-// Cheryl sits second, per Ryan. The design-engineering partnership is the claim
-// the rest of the site is built on, so the developer who did the build vouches
-// for it early rather than fifth:
-// 1. Leadership & Delivery (Adam) → 2. Design-Engineering Partnership (Cheryl)
-// → 3. Craft, Care, and Growth (Amanda) → 4. Process Improvement & Shared Learning (Rob)
-// → 5. Systems Knowledge & Cross-Team Trust (Kokesh) → 6. Mentorship & Confidence (Gina)
-// The seniority spread still runs manager → build partner → AVP → senior design peer
-// → UX manager → the junior designer he mentored, so a reader scanning top
-// to bottom is still shown him vouched for from every direction.
-//
-// Cards carry no per-quote links. Six identical "see all recommendations" links
-// was repetition pretending to be evidence — the section CTA now does that job
-// once, pointing at the LinkedIn recommendations tab.
+// Preserve the existing recommendations verbatim; excerpts below are direct selections.
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -134,165 +116,38 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-const teamScoreTags = [
-  'Systems ownership',
-  'Remote collaboration',
-  'Design into code',
-  'Mentorship',
+const excerpts = [
+  { index: 0, text: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.' },
+  { index: 1, text: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens—he designs the whole experience.' },
+  { index: 4, text: 'He consistently takes the initiative to engage relevant teams—including UX, UXR, Analytics, Imaging, and SEO—whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.' },
 ];
 
-const Testimonials: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+export const FeaturedEndorsement: React.FC = () => (
+  <figure className="featured-endorsement">
+    <blockquote>“That gave us one vocabulary to work from instead of two, and it made my half of the work a lot easier to do well.”</blockquote>
+    <figcaption><strong>Cheryl Carpenter</strong> · React Front-End Developer, Tire Rack · WheelRack build partner, on the token and component library, 2026. <a href="#testimonials" className="about__inline-link">Read the recommendations</a></figcaption>
+  </figure>
+);
 
-  // Single IntersectionObserver drives both the TeamScore-card stack reveal
-  // and the testimonial-card stagger. Each card gets `--in` toggled when it
-  // crosses ~25% into the viewport. Reduced-motion is honored entirely in CSS.
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const reveals = section.querySelectorAll<HTMLElement>('[data-reveal]');
-    if (reveals.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('testimonials__reveal--in');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.25, rootMargin: '0px 0px -8% 0px' }
-    );
-
-    reveals.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <section id="testimonials" className="testimonials" ref={sectionRef}>
-      <div className="testimonials__container">
-        {/* ==== Zone A — Hero proof area ==================================== */}
-        <div className="testimonials__hero">
-          <div className="testimonials__hero-text">
-            <SectionBadge icon={<QuoteIcon />} label="Peer Reviewed" index="04" />
-            <h2 className="testimonials__lede">
-              Hear from the people I build with
-            </h2>
-            <p className="testimonials__subline">
-              The claims elsewhere on this site are mine. These are the people who saw how I
-              worked when the project got difficult.
-            </p>
-            <p className="testimonials__micro">Managers, peers, the engineers who built the work, and the designers I&rsquo;ve mentored</p>
-            <a
-              href={SITE.linkedinRecommendationsUrl}
-              className="testimonials__cta"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Read my LinkedIn recommendations
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </a>
-          </div>
-
-          {/* ==== TeamScore stacked card ================================== */}
-          <figure
-            className="testimonials__team-score testimonials__reveal"
-            data-reveal
-          >
-            <span
-              className="testimonials__team-score-shadow testimonials__team-score-shadow--back"
-              aria-hidden="true"
-            />
-            <span
-              className="testimonials__team-score-shadow testimonials__team-score-shadow--mid"
-              aria-hidden="true"
-            />
-            <div className="testimonials__team-score-card">
-              <div className="testimonials__team-score-header">
-                <span className="testimonials__team-score-mark">
-                  <span className="testimonials__team-score-mark-glyph" aria-hidden="true">★</span>
-                  <span className="testimonials__team-score-mark-text">Recommendations</span>
-                </span>
-                <div
-                  className="testimonials__team-score-stars"
-                  aria-hidden="true"
-                >
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <span
-                      key={i}
-                      className={`testimonials__team-score-star testimonials__team-score-star--${i + 1}`}
-                      aria-hidden="true"
-                    >
-                      <StarIcon />
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <figcaption className="testimonials__team-score-body">
-                <p className="testimonials__team-score-rating">
-                  <span className="testimonials__team-score-label">Peer evidence</span>
-                  <span className="testimonials__team-score-score">
-                    <strong>6</strong> voices
-                  </span>
-                </p>
-                <p className="testimonials__team-score-basis">
-                  A manager, an executive, two engineering partners, a UX leader, and a designer
-                  I mentored. Their words are below.
-                </p>
-                <ul className="testimonials__team-score-tags">
-                  {teamScoreTags.map((tag) => (
-                    <li key={tag} className="testimonials__team-score-tag">{tag}</li>
-                  ))}
-                </ul>
-              </figcaption>
-            </div>
-          </figure>
-        </div>
-
-        {/* ==== Zone B — Divider =========================================== */}
-        <div className="testimonials__divider">
-          <h3 id="peer-reviews" className="testimonials__divider-label">
-            What the people I work with say
-          </h3>
-        </div>
-
-        {/* ==== Zone C — Testimonial grid ================================== */}
-        <div className="testimonials__grid">
-          {testimonials.map((t, i) => (
-            <blockquote
-              key={i}
-              className="testimonials__card testimonials__reveal"
-              data-reveal
-              style={{ ['--reveal-delay' as string]: `${i * 90}ms` }}
-            >
-              <QuoteMark />
-              <span className="testimonials__card-title">{t.title}</span>
-              <div className="testimonials__quote">{t.quote}</div>
-              <cite className="testimonials__author">
-                <span className="testimonials__name">&mdash; {t.name}</span>
-                <span className="testimonials__role">{t.role}, {t.year}</span>
-              </cite>
-            </blockquote>
-          ))}
-        </div>
+const Testimonials: React.FC = () => (
+  <section id="testimonials" className="testimonials testimonials--concise" aria-labelledby="testimonials-heading">
+    <div className="testimonials__container">
+      <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
+      <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
+      <div className="testimonials__grid">
+        {excerpts.map(({ index, text }) => {
+          const t = testimonials[index];
+          return <figure key={t.name} className="testimonials__card">
+            <QuoteMark />
+            <span className="testimonials__card-title">{t.title}</span>
+            <blockquote className="testimonials__quote">{text}</blockquote>
+            <figcaption className="testimonials__author"><span className="testimonials__name">{t.name}</span><span className="testimonials__role">{t.role}, {t.year}</span></figcaption>
+          </figure>;
+        })}
       </div>
-    </section>
-  );
-};
+      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer">Read the full recommendations on LinkedIn →</a>
+    </div>
+  </section>
+);
 
 export default Testimonials;

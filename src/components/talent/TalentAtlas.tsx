@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ATLAS_RANK_LABELS, ATLAS_SKILLS, ATLAS_SKILL_BY_ID, atlasPoints, evaluateAtlas } from '../../data/talent/atlas';
 import { AtlasBuild, RYAN_ATLAS, FORGE_POINTS_PER_YEAR, atlasPools, atlasSpent, changeAtlasPoint, clampAtlas, decodeAtlas, encodeAtlas } from '../../data/talent/atlasState';
 import { CLASS_LEVELS, proficiencyName, rankProficiencies, resolveMastery } from '../../data/talent/mastery';
+import { RYAN_OVERRIDES } from '../../data/talent/ryan';
 import type { Intake, TreeId } from '../../data/talent/types';
 import { scrollBehavior } from '../../utils/motion';
 import Glyph from './Glyph';
@@ -10,6 +11,15 @@ import { PROFICIENCY_EVIDENCE, TALENT_EVIDENCE } from '../../data/talent/evidenc
 import { ClassificationEmblem, ForgeMark } from './ForgeEmblem';
 import TalentIntakeStrip, { ALL_ANSWERED, NOTHING_ANSWERED, effectiveIntake, intakeComplete } from './TalentIntakeStrip';
 import type { Answered, IntakeQuestion } from './TalentIntakeStrip';
+
+const PRODUCT_PATH = [
+  { name: 'Frame the problem', skill: 'research', question: 'Who is struggling, and what do we need to understand before choosing a solution?' },
+  { name: 'Weigh the evidence', skill: 'qa-and-analytics', question: 'What do research, feedback, and product signals support—and what is still an assumption?' },
+  { name: 'Choose the scope', skill: 'systems-mapping', question: 'Which part of the workflow matters most, and what dependencies or tradeoffs shape the first release?' },
+  { name: 'Make it testable', skill: 'prototyping', question: 'What is the smallest prototype that can help us decide whether to pursue the idea?' },
+  { name: 'Evaluate the outcome', skill: 'validation', question: 'Did the experience help people complete the task? What should change based on what we learned?' },
+  { name: 'Carry learning forward', skill: 'governance', question: 'Which decisions belong in shared patterns and guidance so the next change starts from what we know?' },
+];
 
 const EMPTY_BUILD: AtlasBuild = { intake: { name: '', degree: 'bachelors', major: 'graphic', minor: 'none', years: 5, hours: 0 }, allocation: {}, craftCredit: 0, discovered: [] };
 const TREES: { id: TreeId; name: string; line: string; mark: string }[] = [
@@ -100,13 +110,28 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
   const reset = () => { setBuild(EMPTY_BUILD); setAnswered(NOTHING_ANSWERED); setDirty(false); setCopied(false); setShowAll(true); setSkillId(null); setShowAllProficiencies(false); setProficienciesOpen(false); const url = new URL(window.location.href); url.hash = ''; window.history.replaceState(null, '', url.toString()); setAnnouncement('Build reset. Your class is Initiate Maker.'); };
 
   return <main className="atlas forge" id="main-content">
-    <header className="forge-heading"><div><p className="atlas-eyebrow">The Forge</p><h1>More than a job title.</h1><p>Allocate points to the talents you use. They unlock proficiencies that determine your class.</p></div><Link className="forge-link" to={own ? `${baseRoute}/` : `${baseRoute}/build/`}>{own ? 'Explore Ryan’s build' : 'Forge your own build'} <span aria-hidden="true">↗</span></Link></header>
+    <header className="forge-heading"><div><p className="atlas-eyebrow">The Forge</p><h1>{own ? 'More than a job title.' : 'Product designer. Systems focus.'}</h1><p>{own ? 'Allocate points to the talents you use. They unlock proficiencies that determine your class.' : RYAN_OVERRIDES.passive}</p></div><Link className="forge-link" to={own ? `${baseRoute}/` : `${baseRoute}/build/`}>{own ? 'Explore Ryan’s build' : 'Forge your own build'} <span aria-hidden="true">↗</span></Link></header>
     {own && <div className="atlas-intake tt-console"><TalentIntakeStrip headingLevel="h2" annualRate={FORGE_POINTS_PER_YEAR} intake={build.intake} answered={answered} total={pools.total} level={pools.level} onChange={changeIntake} /></div>}
     <section className="forge-declaration" aria-label="Your classification">
       <div className="forge-declaration__main"><div ref={crestRef}><ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1}/></div><div><p className="atlas-eyebrow">{own ? build.intake.name || 'Your build' : 'Ryan’s build'} · classification</p><h2>{mastery.title}</h2><p className="forge-domain">{mastery.primary ? `Mastery of ${mastery.primary.name.toLowerCase()}` : 'A practice waiting to take shape'}</p><p>{mastery.primary?.description || 'Start with the talents you use. Your first proficiencies will reveal where your strengths connect.'}</p>{!own && mastery.primary?.id === 'craft-steward' && <p className="forge-class-evidence">See the work: <Link to="/work/heatherwood/">Visual craft</Link> · <Link to="/work/wheelrack/">Standards</Link> · <Link to="/work/design-enablement/">Exploration</Link></p>}<div className="forge-class-ranks" aria-label={`Class level ${mastery.primary?.level || 1} of 5`}>{CLASS_LEVELS.map((label, i) => <span key={label} className={i < (mastery.primary?.level || 1) ? 'is-earned' : ''} title={label}/>)}</div></div></div>
       <dl className="forge-totals"><div><dt>Points invested</dt><dd>{spent}<small> / {pools.total}</small></dd></div><div><dt>Proficiencies active</dt><dd>{earned.length}<small> / {states.length}</small></dd></div><div><dt>Talents mastered</dt><dd>{ATLAS_SKILLS.filter(s => atlasPoints(build.allocation, s.id) === 5).length}<small> / {ATLAS_SKILLS.length}</small></dd></div></dl>
 
     </section>
+    {!own && <section className="forge-product-path" aria-labelledby="forge-product-heading">
+      <div className="forge-section-heading"><div><h2 id="forge-product-heading">The decisions behind the skills.</h2><p>A product lens on the existing map. Each question connects to a talent you can inspect.</p></div></div>
+      <ol>{PRODUCT_PATH.map(step => <li key={step.skill}>
+        <h3>{step.name}</h3><p>{step.question}</p>
+        <button className="forge-link" onClick={() => {
+          setShowAll(true); setLane(ATLAS_SKILL_BY_ID[step.skill].territory); setSkillId(step.skill);
+          requestAnimationFrame(() => {
+            const target = document.getElementById(`forge-talent-${step.skill}`);
+            target?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
+            target?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+          });
+        }}>Explore {ATLAS_SKILL_BY_ID[step.skill].name} ↗</button>
+      </li>)}</ol>
+      <p className="forge-product-path__next"><strong>Developing next.</strong> {RYAN_OVERRIDES.quest} My focus is problem framing, prioritization, and outcome evaluation.</p>
+    </section>}
     <section className="forge-support" aria-label="Build proficiencies">
       <button className="forge-support__toggle" aria-expanded={proficienciesOpen} aria-controls="forge-proficiency-panel" onClick={() => setProficienciesOpen(!proficienciesOpen)}><span>Your proficiencies<small>{earned.length} active · Supporting your classification</small></span><span aria-hidden="true">{proficienciesOpen ? '−' : '+'}</span></button>
       <div id="forge-proficiency-panel" hidden={!proficienciesOpen}>{proficienciesOpen && <>
@@ -127,7 +152,7 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
       return <section key={tree.id} className={`forge-lane atlas-territory--${tree.id}${lane === tree.id ? ' is-current' : ''}${contributes ? ' has-recipe' : ''}`} aria-label={`${tree.name} talents`}><header><span className="forge-tree-mark"><ForgeMark id={tree.mark}/></span><h3>{tree.name}</h3><p>{tree.line}</p><small>{spentByTree[tree.id]} points invested</small></header><div className="forge-talent-list">{talents.map(skill => {
         const points = atlasPoints(build.allocation, skill.id);
         const locked = skill.prerequisite && atlasPoints(build.allocation, skill.prerequisite.skillId) < skill.prerequisite.points;
-        return <div key={skill.id} className={`forge-talent${recipe.includes(skill.id) ? ' is-ingredient' : ''}${points === 5 ? ' is-mastered' : ''}${skillId === skill.id ? ' is-selected' : ''}`}><button className="forge-talent__select" aria-pressed={skillId === skill.id} aria-label={`${skill.name}. ${points} of 5 talent points invested.${locked ? ` Locked: requires ${ATLAS_SKILL_BY_ID[skill.prerequisite!.skillId].name} at ${skill.prerequisite!.points}.` : ''}`} onClick={() => setSkillId(skillId === skill.id ? null : skill.id)}><span className="forge-orb"><RankRing points={points}/><SkillMark id={skill.id}/></span><span><strong>{skill.name}</strong><small>{points}/5 {locked ? '· Locked' : points === 5 ? '· Mastered' : recipe.includes(skill.id) ? '· Recipe ingredient' : !showAll && known ? '· Prerequisite' : '· Talent'}</small></span></button>{skillId === skill.id && <div className="forge-talent__details"><p>{skill.meaning}</p>{!own && TALENT_EVIDENCE[skill.id] && <p>{TALENT_EVIDENCE[skill.id].detail} <Link to={TALENT_EVIDENCE[skill.id].href}>See {TALENT_EVIDENCE[skill.id].title}</Link></p>}{!own && points === 0 && <p>No points allocated in this build. This is a snapshot of emphasis, not a claim that I have never used the skill.</p>}{skill.prerequisite && <p>Requires {ATLAS_SKILL_BY_ID[skill.prerequisite.skillId].name} at {skill.prerequisite.points}/5.</p>}{own && <div className="forge-spend"><button aria-label={`Remove a point from ${skill.name}`} disabled={!live || changeAtlasPoint(build.allocation, skill.id, -1, pools) === build.allocation} onClick={() => changePoint(skill.id, -1)}>−</button><span>{points}/5</span><button aria-label={`Add a point to ${skill.name}`} disabled={!live || changeAtlasPoint(build.allocation, skill.id, 1, pools) === build.allocation} onClick={() => changePoint(skill.id, 1)}>+</button></div>}</div>}</div>;
+        return <div id={`forge-talent-${skill.id}`} key={skill.id} className={`forge-talent${recipe.includes(skill.id) ? ' is-ingredient' : ''}${points === 5 ? ' is-mastered' : ''}${skillId === skill.id ? ' is-selected' : ''}`}><button className="forge-talent__select" aria-pressed={skillId === skill.id} aria-label={`${skill.name}. ${points} of 5 talent points invested.${locked ? ` Locked: requires ${ATLAS_SKILL_BY_ID[skill.prerequisite!.skillId].name} at ${skill.prerequisite!.points}.` : ''}`} onClick={() => setSkillId(skillId === skill.id ? null : skill.id)}><span className="forge-orb"><RankRing points={points}/><SkillMark id={skill.id}/></span><span><strong>{skill.name}</strong><small>{points}/5 {locked ? '· Locked' : points === 5 ? '· Mastered' : recipe.includes(skill.id) ? '· Recipe ingredient' : !showAll && known ? '· Prerequisite' : '· Talent'}</small></span></button>{skillId === skill.id && <div className="forge-talent__details"><p>{skill.meaning}</p>{!own && TALENT_EVIDENCE[skill.id] && <p>{TALENT_EVIDENCE[skill.id].detail} <Link to={TALENT_EVIDENCE[skill.id].href}>See {TALENT_EVIDENCE[skill.id].title}</Link></p>}{!own && points === 0 && <p>No points allocated in this build. This is a snapshot of emphasis, not a claim that I have never used the skill.</p>}{skill.prerequisite && <p>Requires {ATLAS_SKILL_BY_ID[skill.prerequisite.skillId].name} at {skill.prerequisite.points}/5.</p>}{own && <div className="forge-spend"><button aria-label={`Remove a point from ${skill.name}`} disabled={!live || changeAtlasPoint(build.allocation, skill.id, -1, pools) === build.allocation} onClick={() => changePoint(skill.id, -1)}>−</button><span>{points}/5</span><button aria-label={`Add a point to ${skill.name}`} disabled={!live || changeAtlasPoint(build.allocation, skill.id, 1, pools) === build.allocation} onClick={() => changePoint(skill.id, 1)}>+</button></div>}</div>}</div>;
       })}{!talents.length && <p className="forge-empty-lane">This recipe doesn’t use {tree.name} talents.<button onClick={() => setShowAll(true)}>Explore this tree</button></p>}</div></section>;
     })}</div>
     <p className="forge-announcement" role="status" aria-live="polite">{announcement}</p>

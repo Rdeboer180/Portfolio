@@ -1,4 +1,5 @@
 import React from 'react';
+import ScrollReveal from './ScrollReveal';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import { ClassificationEmblem } from './talent/ForgeEmblem';
@@ -16,7 +17,7 @@ const capabilities = [
   {
     name: 'Design systems & governance',
     tools: [{ text: 'Figma Variables · Tokens Studio · Storybook' }],
-    practice: 'Large-scale web and React Native design systems: component contracts, states, props, and token governance. Agent-assisted React Native code output in TypeScript/TSX (JSX), with code-linked documentation and adoption support.',
+    practice: 'Enterprise web design systems at Tire Rack, with component contracts, states, tokens, documentation, and adoption support. React Native system design through PlayDraft, built with agents and validated in the working app.',
   },
   {
     name: 'Product implementation',
@@ -52,24 +53,26 @@ const SkillMastery: React.FC = () => (
   // Preserve existing homepage anchors while making capabilities the primary content.
   <section id="mastery" className="sm" aria-labelledby="capabilities-title">
     <div className="sm__container">
+      <ScrollReveal>
       <div className="sm__rule">
         <SectionBadge index="05" label="Capabilities" icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13" /></svg>} />
       </div>
-      <h2 id="capabilities-title" className="sm__title">The tools behind the work.</h2>
+      <h2 id="capabilities-title" className="sm__title">What I bring to a product team.</h2>
       <p className="sm__intro">Visual craft and design systems are my strongest ground. I carry that work into products through hands-on web implementation and agent-assisted React and React Native builds.</p>
+      </ScrollReveal>
       <div className="sm__capabilities">
-        {capabilities.map(row => <section className="sm__capability" key={row.name} aria-label={row.name}>
+        {capabilities.map(row => <ScrollReveal key={row.name}><section className="sm__capability" aria-label={row.name}>
           <h3>{row.name}</h3>
           <div className="sm__stack"><p className="sm__label">Tools &amp; stack</p>{row.tools.map(tool => <p key={tool.text}>{'label' in tool && <span className="sm__method">{tool.label}: </span>}{tool.text}</p>)}</div>
           <div className="sm__practice"><p className="sm__label">In practice</p><p>{row.practice}</p></div>
-        </section>)}
+        </section></ScrollReveal>)}
       </div>
-      <nav className="sm__evidence" aria-label="Capabilities in practice"><span className="sm__label">See it in use</span><ul>{evidence.map(item => <li key={item.href}><Link to={item.href}>{item.label}<span>{item.project} <span aria-hidden="true">↗</span></span></Link></li>)}</ul></nav>
-      <aside className="sm__forge" aria-labelledby="forge-teaser-title">
+      <ScrollReveal><nav className="sm__evidence" aria-label="Capabilities in practice"><span className="sm__label">See it in use</span><ul>{evidence.map(item => <li key={item.href}><Link to={item.href}>{item.label}<span>{item.project} <span aria-hidden="true">↗</span></span></Link></li>)}</ul></nav></ScrollReveal>
+      <ScrollReveal><aside className="sm__forge" aria-labelledby="forge-teaser-title">
         <ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1} />
         <div><p className="sm__label">A different way to explore</p><h3 id="forge-teaser-title">How these skills connect.</h3><p>I built the Forge to map the mix behind my work. Explore my talent tree, or build your own.</p></div>
         <Link to="/talent-tree/">Explore the Forge <span aria-hidden="true">↗</span></Link>
-      </aside>
+      </aside></ScrollReveal>
     </div>
   </section>
 );

@@ -82,8 +82,8 @@ export const RYAN_ALLOCATION: Allocation = {
 
 /** The two authored card lines. Everyone else gets their primary ability's. */
 export const RYAN_OVERRIDES = {
-  passive: 'Designs systems that continue working when he leaves the room.',
-  quest: 'Make designers and agents speak the same language.',
+  passive: 'Turns complex workflows into clear product experiences and shared patterns teams can build on.',
+  quest: 'Strengthen the connection between discovery, product priorities, and measurable outcomes.',
 };
 
 /**

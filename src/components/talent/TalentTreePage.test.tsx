@@ -115,7 +115,7 @@ describe('the front door, /talent-tree/', () => {
     expect(within(sheet).getByText('4 of 30 nodes')).toBeTruthy();
     expect(within(sheet).getByText(/four foundations · earned by time, not self-rated/)).toBeTruthy();
     expect(within(sheet).getByText('Ryan DeBoer', { selector: '.tt-card__name' })).toBeTruthy();
-    expect(within(sheet).getByText('Designs systems that continue working when he leaves the room.')).toBeTruthy();
+    expect(within(sheet).getByText('Turns complex workflows into clear product experiences and shared patterns teams can build on.')).toBeTruthy();
     expect(within(sheet).getByText(/unlocked by recipe · strength 1/)).toBeTruthy();
     expect(within(sheet).queryByText(/Provisional/)).toBeNull();
     expect(screen.queryByTestId('tt-nodecard')).toBeNull();
@@ -369,7 +369,7 @@ describe('the build route, /talent-tree/build/', () => {
     expect(screen.getByText('Root Visual craft · 25 spent · 2 mastered')).toBeTruthy();
     expect(screen.getByText('four abilities · four masteries · four stats · nothing hand-set')).toBeTruthy();
     // Everyone is scored by the same rules: no authored card lines here.
-    expect(screen.queryByText('Designs systems that continue working when he leaves the room.')).toBeNull();
+    expect(screen.queryByText('Turns complex workflows into clear product experiences and shared patterns teams can build on.')).toBeNull();
     const result = buildResult(RYAN_INTAKE, RYAN_ALLOCATION, TREES, ARCHETYPES);
     expect(screen.getByText(result.passive)).toBeTruthy();
     // The hash round-trips.

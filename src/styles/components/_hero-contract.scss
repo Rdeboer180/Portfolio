@@ -1,0 +1,176 @@
+// Homepage refinement: existing portrait, panel, badges, buttons, and token scale.
+.hero--contract {
+  .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2) var(--container-px) var(--space-4xl); }
+  .hero-intro__meta { display: flex; justify-content: space-between; gap: var(--space-xl); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); margin-bottom: var(--space-3xl); }
+  .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
+  .hero-intro__copy { min-width: 0; }
+  .hero-intro__copy h1 { margin: 0 0 var(--space-xl); font-size: 44px; }
+  .hero-intro__copy h1 .hero__typed-final-gradient { animation: none; }
+  .hero-intro__copy p { font: var(--text-body-lg)/var(--leading-body-lg) var(--font-body); color: var(--color-text-secondary); margin: 0 0 var(--space-xl); }
+  .hero-intro__actions { display: flex; flex-wrap: wrap; gap: var(--space-lg); }
+  .hero-intro__portrait { position: relative; min-width: 0; height: 560px; padding-top: var(--space-4xl); }
+  .hero__image-container { width: 100%; height: 480px; }
+  .hero__profile-shell { width: 100%; max-width: 480px; }
+  .hero__profile-frame { border-radius: var(--radius-full); box-shadow: none; }
+  .hero__profile-label--layer { left: 0; bottom: 10%; }
+  .hero-intro__roles { position: absolute; right: 0; top: auto; bottom: 0; z-index: 10; width: 224px; }
+  .hero-intro__token-map { position: absolute; top: var(--space-4xl); left: 0; z-index: 5; padding: var(--space-xs) var(--space-sm); background: var(--color-bg-primary); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); }
+  .hero-intro__token-map code { font: inherit; padding: 0; background: transparent; }
+  .hero-intro__availability { display: block; width: fit-content; max-width: 100%; margin-top: var(--space-xl); color: var(--color-primary-dark); font: var(--weight-medium) var(--text-h4)/var(--leading-h4) $font-family-hand; text-decoration: none; }
+  .hero-intro__availability svg { display: block; width: 220px; max-width: 100%; height: 24px; margin-top: var(--space-xs); }
+  .hero-intro__availability:hover { color: var(--color-text-primary); }
+  .layers-panel--roles { width: 100%; }
+  .layers-panel--roles .layers-panel__top, .layers-panel--roles .layers-panel__toolbar, .layers-panel--roles .layers-panel__lockbar, .layers-panel--roles .layers-panel__footer { display: none; }
+  .layers-panel--roles .layers-panel__layer { cursor: pointer; min-height: var(--space-2xl); }
+  .layers-panel--roles .layers-panel__name { overflow: visible; text-overflow: clip; }
+}
+@media (max-width: 1100px) {
+  .hero--contract { --profile-size: 320px; --profile-shell-size: 400px; }
+  .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: var(--space-2xl); }
+  .hero--contract .hero-intro__portrait { height: 530px; }
+}
+@media (max-width: 850px) {
+  .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr); }
+  .hero--contract .hero-intro__meta { flex-direction: column; gap: var(--space-sm); }
+  .hero--contract .hero-intro__portrait { width: min(100%, 480px); margin: 0 auto; height: 520px; }
+  .hero--contract .hero-intro__copy { max-width: var(--copy-max-width); }
+  .hero--contract .hero-intro__actions .btn { white-space: normal; text-align: center; }
+}
+@media (max-width: 480px) {
+  .hero--contract { --profile-size: 260px; --profile-shell-size: 300px; }
+  .hero--contract .hero-intro { padding-inline: var(--space-xl); }
+  .hero--contract .hero-intro__portrait { height: 530px; }
+  .hero--contract .hero__image-container { height: 350px; }
+  .hero--contract .hero-intro__roles { width: 210px; }
+  .hero--contract .hero__profile-label--layer { bottom: 8%; }
+  .hero--contract .hero-intro__actions { flex-direction: column; align-items: stretch; }
+}
+.hero--contract .layers-panel--roles {
+  max-width: none;
+  background: var(--color-neutral-dark);
+  color: var(--color-text-inverse);
+  border-color: var(--color-neutral-standard);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  .layers-panel__titlebar { background: var(--color-neutral-dark); height: var(--space-2xl); }
+  .layers-panel__title { font-size: var(--text-body-sm); color: var(--color-text-inverse); }
+  .layers-panel__modebar, .layers-panel__eye, .layers-panel__lock { display: none; }
+  .layers-panel__layers { background: var(--color-neutral-dark); }
+  .layers-panel__layer { display: grid; grid-template-columns: 16px 1fr; gap: var(--space-sm); padding: var(--space-sm); height: auto; }
+  .layers-panel__name { font-size: var(--text-caption); line-height: var(--leading-caption); color: inherit; white-space: normal; }
+  .layers-panel__layer--selected { background: var(--color-primary-light); color: var(--color-text-primary); }
+  .layers-panel__thumb { color: inherit; border: 0; background: transparent; font-size: var(--text-caption); }
+}
+@media (max-width: 850px) {
+  .hero--contract .hero-intro__copy { grid-row: 1; }
+}
+
+.hero--contract:is([data-intro-stage="scrawl"], [data-intro-stage="sketch"]) .hero__profile-frame { opacity: 0; }
+.hero--contract .hero-intro__token-map { transition: opacity 200ms ease; }
+.hero--contract:is([data-intro-stage="scrawl"], [data-intro-stage="sketch"], [data-intro-stage="lowfi"], [data-intro-stage="cursor"]) .hero-intro__token-map { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hero--contract .hero-intro__token-map { transition: none; }
+}
+// Keep the construction circle aligned with the photo at every portrait size.
+.hero--contract .hero__intro-ring,
+.hero--contract .hero__intro-sketch {
+  inset: 0;
+  margin: auto;
+  width: calc(var(--profile-size) * 1.055);
+  height: calc(var(--profile-size) * 1.055);
+}
+
+.hero--contract .layers-panel--roles {
+  .layers-panel__layers[hidden] { display: none; }
+  .layers-panel__layer:not(.layers-panel__layer--selected):hover { background: var(--color-neutral-standard); }
+  .layers-panel__minimize {
+    display: grid;
+    place-items: center;
+    width: var(--space-2xl);
+    height: var(--space-2xl);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-inverse);
+    font: inherit;
+    font-size: var(--text-body-lg);
+    cursor: pointer;
+    &:hover { background: var(--color-neutral-standard); }
+  }
+  .layers-panel__minimize:focus-visible,
+  .layers-panel__layer:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+}
+
+@media (max-width: 480px) {
+  .hero--contract .hero-intro__copy h1 { font-size: var(--text-h1); }
+}
+
+// Reserve the expanded panel's footprint; its header stays put when rows collapse.
+.hero--contract .hero-intro__roles {
+  height: calc(var(--space-2xl) * 7 + var(--space-sm));
+  box-shadow: none;
+}
+.hero--contract[data-intro-stage="done"] .hero-intro__roles { animation: none; }
+.hero--contract .hero-intro__role-story {
+  display: grid;
+  position: relative;
+  margin-bottom: var(--space-xl);
+  > .hero-intro__role-sizer,
+  > .hero-intro__role-live { grid-area: 1 / 1; min-width: 0; }
+  .hero-intro__role-sizer { visibility: hidden; pointer-events: none; margin: 0; }
+  .hero-intro__role-paragraph { margin: 0; animation: heroRoleLayerIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+}
+.hero--contract .hero-intro__role-live { position: relative; }
+.hero--contract .hero-intro__role-paragraph::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--space-sm));
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--space-xs) var(--space-xs) 0 var(--color-primary-light);
+  pointer-events: none;
+  animation: heroRoleLayerOutline 600ms ease both;
+}
+@keyframes heroRoleLayerIn {
+  from { opacity: 0; transform: translate(8px, 8px); }
+  to { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes heroRoleLayerOutline {
+  0%, 40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero--contract .hero-intro__role-paragraph { animation: none; }
+  .hero--contract .hero-intro__role-paragraph::before { display: none; }
+}
+
+.hero--contract .layers-panel__fold {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 220ms ease;
+  > .layers-panel__layers { min-height: 0; overflow: hidden; }
+  &--closed { grid-template-rows: 0fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero--contract .layers-panel__fold { transition: none; }
+}
+// The panel is now a content control, including on phones.
+.hero--contract .hero-intro__roles { display: block; }
+
+.hero--contract .hero-intro__location {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  .hero-intro__availability {
+    margin-top: 0;
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+  .hero-intro__availability svg { width: 140px; height: 14px; margin-top: 0; margin-left: auto; }
+}
+@media (max-width: 850px) {
+  .hero--contract .hero-intro__location { align-items: flex-start; }
+  .hero--contract .hero-intro__location .hero-intro__availability svg { margin-left: 0; }
+}

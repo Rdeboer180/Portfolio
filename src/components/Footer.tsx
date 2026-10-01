@@ -10,8 +10,8 @@ const Footer: React.FC = () => {
           <div className="footer__cta">
             <span className="footer__eyebrow">Get in touch</span>
             <p className="footer__lead">
-              Looking for someone who can connect design and implementation? I am open to remote
-              roles in the US. If my work fits what your team needs, I would be glad to talk.
+              I’m open to remote product design, design systems, and design engineering roles in the US.
+              If my work fits what your team needs, I would be glad to talk.
             </p>
           </div>
           <div className="footer__actions">

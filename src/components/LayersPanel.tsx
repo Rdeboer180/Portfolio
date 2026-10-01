@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId, useState } from 'react';
 
 const defaultRoles = [
   'Web Designer',
@@ -12,6 +12,7 @@ type LayerAction = 'nudge' | 'align' | 'rename' | null;
 
 interface LayersPanelProps {
   activeIndex: number;
+  compact?: boolean;
   onLayerClick?: (index: number) => void;
   roles?: string[];
   grouping?: boolean;
@@ -42,12 +43,14 @@ const LockIcon = () => (
 );
 
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, onLayerClick, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
+  ({ activeIndex, compact = false, onLayerClick, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
+    const [minimized, setMinimized] = useState(false);
+    const layersId = useId();
     return (
       <div
-        className={`layers-panel${grouping ? ' layers-panel--grouping' : ''}`}
+        className={`layers-panel${compact ? ' layers-panel--roles' : ''}${grouping ? ' layers-panel--grouping' : ''}`}
         ref={ref}
-        aria-label="Photoshop layers panel mockup"
+        aria-label={compact ? "Design roles" : "Photoshop layers panel mockup"}
       >
         {/* Decorative Photoshop chrome — hidden from assistive tech; only the
             layer rows below are meaningful/interactive. */}
@@ -56,9 +59,16 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           <span>&laquo;</span>
         </div>
 
-        <div className="layers-panel__titlebar" aria-hidden="true">
-          <div className="layers-panel__title">Layers</div>
-          <div className="layers-panel__menu">&equiv;</div>
+        <div className="layers-panel__titlebar" aria-hidden={compact ? undefined : true}>
+          <div className="layers-panel__title">{compact ? "Roles / Layers" : "Layers"}</div>
+          {compact ? (
+            <button type="button" className="layers-panel__minimize"
+              aria-label={minimized ? 'Expand role layers' : 'Minimize role layers'}
+              aria-expanded={!minimized} aria-controls={layersId}
+              onClick={() => setMinimized(value => !value)}>
+              <span aria-hidden="true">{minimized ? '+' : '−'}</span>
+            </button>
+          ) : <div className="layers-panel__menu">&equiv;</div>}
         </div>
 
         <div className="layers-panel__toolbar" aria-hidden="true">
@@ -90,6 +100,7 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           <div className="layers-panel__stat"><span>Fill:</span><span className="layers-panel__stat-field">100%</span></div>
         </div>
 
+        <div id={layersId} className={`layers-panel__fold${compact && minimized ? ' layers-panel__fold--closed' : ''}`} inert={compact && minimized} aria-hidden={compact && minimized ? true : undefined}>
         <div className={`layers-panel__layers${grouping ? ' layers-panel__layers--grouping' : ''}`}>
           {grouping && <span className="layers-panel__group-bracket" aria-hidden="true" />}
 
@@ -141,14 +152,14 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
                 className={`layers-panel__layer${
                   isActive || grouping ? ' layers-panel__layer--selected layers-panel__layer--active' : ''
                 }${layerAction ? ` layers-panel__layer--${layerAction}` : ''}`}
-                role="button"
-                tabIndex={0}
-                aria-pressed={isActive}
+                role={onLayerClick ? "button" : undefined}
+                tabIndex={onLayerClick ? 0 : undefined}
+                aria-pressed={onLayerClick ? isActive : undefined}
                 onClick={() => onLayerClick?.(i)}
                 onKeyDown={handleKeyDown}
               >
                 {/* The eye, the "T" thumbnail and the lock slot are Figma
-                    vernacular, not information — but a role="button" takes its
+                    vernacular, not information — but a role={onLayerClick ? "button" : undefined} takes its
                     accessible name from its contents, so a screen reader read
                     every row as "T <layer name>". Marking the decoration as
                     decoration leaves the name as just the layer. */}
@@ -161,6 +172,8 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
               </div>
             );
           })}
+        </div>
+
         </div>
 
         <div className="layers-panel__footer" aria-hidden="true">

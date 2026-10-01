@@ -12,10 +12,10 @@ const TalentAtlasPage: React.FC<{ own?: boolean }> = ({ own }) => {
   const navigate = useNavigate();
   const route = own ? '/talent-tree/build/' : '/talent-tree/';
   usePageMeta({
-    title: own ? 'Build your talent tree | The Forge' : 'The Forge | Ryan DeBoer’s talent tree',
+    title: own ? 'Build your talent tree | The Forge' : 'The Forge | Ryan DeBoer · Product Designer, Systems Focus',
     description: own
       ? 'Start with your experience, allocate talent points, and discover the proficiencies and class they unlock.'
-      : 'See where Ryan DeBoer’s experience points landed across visual craft, systems, technical practice, and code.',
+      : 'Explore how Ryan DeBoer’s visual craft, systems thinking, and implementation skills support product decisions, plus the strategy skills he is developing next.',
     canonical: `${SITE.portfolioUrl}${route}`,
     ogType: 'website',
   });

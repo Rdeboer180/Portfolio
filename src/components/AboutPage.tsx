@@ -25,7 +25,7 @@ const AboutPage: React.FC = () => {
   usePageMeta({
     title: 'About — Ryan DeBoer, Product Design Engineer',
     description:
-      '16+ years turning craft, front-end constraints, and production realities into design systems that ship. Ryan DeBoer is a Product Design Engineer in South Bend, Indiana, open to remote roles.',
+      'Fourteen professional years, building on earlier design practice, connecting visual craft with front-end constraints and production realities. Ryan DeBoer is a Product Design Engineer in South Bend, Indiana, open to remote roles.',
     canonical: `${SITE.portfolioUrl}/about/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',

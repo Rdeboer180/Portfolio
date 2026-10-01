@@ -274,7 +274,7 @@ export const BEATS: BeatData[] = [
       // hydration mismatch the header describes. Keep each run of text on
       // one side of an element, in one string.
       <>
-        Map production components from <strong>Codebase + Storybook</strong> back to Figma through
+        After validation, map production components from <strong>Codebase + Storybook</strong> back to Figma through
         <strong> Code Connect</strong>. Capture that relationship and any intentional differences in
         <strong> Shared Product Context</strong> for the next change. Those differences belong
         in the system, rather than in tribal knowledge.
@@ -693,7 +693,7 @@ const SystemsInPractice: React.FC = () => {
               </span>
             </h2>
             <p className="sip__body reveal-fade" style={delay(240)}>
-              Every new or edited component starts with a shared language: what it needs to do,
+              For a new or changed system component, I start with a shared language: what it needs to do,
               what already exists, and what design and code each need to express.
               <span className="animated-bold"> Shared Product Context is both the starting point and the return point.
               </span>
@@ -701,7 +701,7 @@ const SystemsInPractice: React.FC = () => {
             <p className="sip__body reveal-fade" style={delay(320)}>
               My recent exploration brings Figma and custom MCP tools into that planning context.
               They help me inspect and execute; I own the decisions. Figma and code build from the
-              same plan, then Code Connect captures the implementation relationship back in Figma.
+              same plan. After validation, Code Connect captures the implementation relationship back in Figma.
               Each change should leave a clearer map between intent, design, and production.
             </p>
             <p className="sip__body reveal-fade" style={delay(380)}>

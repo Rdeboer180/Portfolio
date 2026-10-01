@@ -555,3 +555,19 @@
     &__team-score-shadow--mid { transform: translate(10px, 10px) rotate(-1.5deg); }
   }
 }
+
+// Short, attributed peer evidence; LinkedIn is the source for full recommendations.
+.testimonials--concise {
+  .testimonials__lede { margin: var(--space-xl) 0 var(--space-2xl); }
+  .testimonials__card { padding: var(--space-xl); gap: var(--space-lg); }
+  .testimonials__quote { font-style: normal; }
+  .testimonials__cta { margin-top: var(--space-2xl); }
+}
+.featured-endorsement {
+  margin: 0 0 var(--space-2xl);
+  padding: var(--space-lg) var(--space-xl);
+  border-left: 2px solid var(--color-primary);
+  max-width: var(--copy-max-width);
+  blockquote { margin: 0 0 var(--space-sm); font: var(--text-body-lg)/var(--leading-body-lg) var(--font-body); color: var(--color-text-primary); }
+  figcaption { font: var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-text-secondary); }
+}

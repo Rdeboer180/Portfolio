@@ -1,4 +1,5 @@
 import React from 'react';
+import ScrollReveal from './ScrollReveal';
 import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
@@ -46,16 +47,16 @@ const NotesPage: React.FC = () => {
           instead of pushing Start Here below the fold. Collapses to a single
           column at the same breakpoint the stream rails do, header first. */}
       <div className="notes__intro">
-      <header className="notes__header">
+      <ScrollReveal className="notes__header"><header>
         <p className="notes__eyebrow">[ Notes ]</p>
         <h1 className="notes__title">Writing from the work</h1>
         <p className="notes__lede">
           Craft is the through-line. Essays argue a judgment, build logs follow a decision while
           it is still moving, and skill and system entries publish the artifact that encodes it.
         </p>
-      </header>
+      </header></ScrollReveal>
 
-      <section className="notes__pinned-wrap" aria-label="Start here">
+      <ScrollReveal className="notes__pinned-wrap"><section aria-label="Start here">
         <div className="notes__pinned">
           <span className="notes__pinned-label">[ Start Here ]</span>
           <div className="notes__pinned-links">
@@ -73,10 +74,10 @@ const NotesPage: React.FC = () => {
           </Link>
           </div>
         </div>
-      </section>
+      </section></ScrollReveal>
       </div>
 
-      <div className="notes__release notes__release--index"><PlayDraftLaunch context="index" /></div>
+      <ScrollReveal className="notes__release notes__release--index"><PlayDraftLaunch context="index" /></ScrollReveal>
 
       {/* Each stream is a rail plus its rows: the rail carries the number at
           display scale, the name, the count and one handwritten aside; the rows
@@ -144,7 +145,7 @@ const NoteStream: React.FC<{
         and one handwritten aside, all in one column against a vertical edge.
         Only the first stream takes the accent — one section at a time. */}
     <div className="notes__section-grid">
-      <div className="notes__section-rail">
+      <ScrollReveal className="notes__section-rail">
         <span className="notes__stream-index" aria-hidden="true">{index}</span>
         <h2 className="notes__stream-label">{label}</h2>
         <span className="notes__section-count">
@@ -160,11 +161,10 @@ const NoteStream: React.FC<{
         </svg>
         <p className="notes__stream-sub">{sub}</p>
         {rail}
-      </div>
+      </ScrollReveal>
       <div className="notes__section-rows">
         {notes.map((note) => (
-          <Link
-            key={note.slug}
+          <ScrollReveal key={note.slug}><Link
             to={`/notes/${note.slug}/`}
             className={`notes__row${note.slug === newestSlug ? ' notes__row--newest' : ''}`}
           >
@@ -190,7 +190,7 @@ const NoteStream: React.FC<{
                 <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
               </svg>
             </div>
-          </Link>
+          </Link></ScrollReveal>
         ))}
       </div>
     </div>

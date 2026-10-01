@@ -92,3 +92,15 @@
 .forge-evidence { margin: 0; padding: 16px 24px; border-top: 1px solid var(--color-border-default); font-size: 13px; line-height: 1.6; display: grid; gap: 4px; span { color: var(--color-text-secondary); } }
 .forge-class-evidence a, .forge-evidence a, .forge-talent__details a { color: var(--color-primary-dark); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 680px) { .forge-evidence { padding: 16px; } }
+
+.forge-product-path {
+  margin-bottom: var(--space-2xl);
+  ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xl); padding: 0; list-style: none; }
+  li { border-top: 1px solid var(--color-border-default); padding-top: var(--space-lg); }
+  h3 { font-size: var(--text-body-lg); }
+  li p, &__next { font-size: var(--text-body-sm); color: var(--color-text-secondary); }
+  li p { margin-bottom: 0; }
+  .forge-link { text-align: left; padding: 0; }
+  &__next { border-top: 1px solid var(--color-border-default); padding-top: var(--space-lg); }
+  @media (max-width: 700px) { ol { grid-template-columns: 1fr; gap: var(--space-lg); } }
+}

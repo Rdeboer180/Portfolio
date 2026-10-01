@@ -1,3 +1,4 @@
+import { FeaturedEndorsement } from './Testimonials';
 // ============================================
 // CaseStudyPlayground — "shadowbox + tool coin tray" case studies carousel
 // All public case studies as shadowbox cards (preview / minimal copy / coin
@@ -497,6 +498,8 @@ const CaseStudyPlayground: React.FC = () => {
             </button>
           )}
         </div>
+
+        <FeaturedEndorsement />
 
         {/* The threshold — stage line into the playground */}
 
