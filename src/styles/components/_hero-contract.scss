@@ -62,7 +62,8 @@
   .layers-panel__thumb { color: inherit; border: 0; background: transparent; font-size: var(--text-caption); }
 }
 @media (max-width: 850px) {
-  .hero--contract .hero-intro__copy { grid-row: 1; }
+  .hero--contract .hero-intro__portrait { grid-row: 1; }
+  .hero--contract .hero-intro__copy { grid-row: 2; }
 }
 
 .hero--contract:is([data-intro-stage="scrawl"], [data-intro-stage="sketch"]) .hero__profile-frame { opacity: 0; }
