@@ -1,7 +1,7 @@
 // Homepage refinement: existing portrait, panel, badges, buttons, and token scale.
 .hero--contract {
   .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2) var(--container-px) var(--space-4xl); }
-  .hero-intro__meta { display: flex; justify-content: space-between; gap: var(--space-xl); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); margin-bottom: var(--space-3xl); }
+  .hero-intro__meta { display: flex; justify-content: space-between; gap: var(--space-xl); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); margin-bottom: var(--space-xl); }
   .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
   .hero-intro__copy { min-width: 0; }
   .hero-intro__copy h1 { margin: 0 0 var(--space-xl); font-size: 44px; }
