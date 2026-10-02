@@ -71,6 +71,8 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           ) : <div className="layers-panel__menu">&equiv;</div>}
         </div>
 
+        <div id={layersId} className={`layers-panel__fold${compact && minimized ? ' layers-panel__fold--closed' : ''}`} inert={compact && minimized} aria-hidden={compact && minimized ? true : undefined}>
+        <div className="layers-panel__fold-content">
         <div className="layers-panel__toolbar" aria-hidden="true">
           <div className="layers-panel__search">&lceil; <span>Kind</span></div>
           <div className="layers-panel__dropdown">&darr;</div>
@@ -100,7 +102,6 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           <div className="layers-panel__stat"><span>Fill:</span><span className="layers-panel__stat-field">100%</span></div>
         </div>
 
-        <div id={layersId} className={`layers-panel__fold${compact && minimized ? ' layers-panel__fold--closed' : ''}`} inert={compact && minimized} aria-hidden={compact && minimized ? true : undefined}>
         <div className={`layers-panel__layers${grouping ? ' layers-panel__layers--grouping' : ''}`}>
           {grouping && <span className="layers-panel__group-bracket" aria-hidden="true" />}
 
@@ -174,8 +175,6 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
           })}
         </div>
 
-        </div>
-
         <div className="layers-panel__footer" aria-hidden="true">
           <div className="layers-panel__footer-left">
             <span className="layers-panel__footer-icon" title="Link layers">
@@ -205,6 +204,8 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
               </svg>
             </span>
           </div>
+        </div>
+        </div>
         </div>
       </div>
     );
