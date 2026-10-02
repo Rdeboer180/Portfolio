@@ -63,6 +63,28 @@ function RouteEffects() {
 }
 
 function HomeRoute() {
+  useEffect(() => {
+    const grounds = document.querySelectorAll<HTMLElement>('.ink-ground');
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).dataset.inkSettled = 'true';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    grounds.forEach(el => observer.observe(el));
+    const settle = () => {
+      if (motion.matches) {
+        observer.disconnect();
+        grounds.forEach(el => { el.dataset.inkSettled = 'true'; });
+      }
+    };
+    settle();
+    motion.addEventListener('change', settle);
+    return () => { observer.disconnect(); motion.removeEventListener('change', settle); };
+  }, []);
   usePageMeta({
     title: 'Ryan DeBoer | Product Design Engineer · Design Systems · Agentic Workflows',
     description:

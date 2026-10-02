@@ -687,3 +687,13 @@
 
     svg { width: 100%; height: 100%; }
   }
+
+// Quieter card hierarchy: preview, concise story, outcome, then the tool tray.
+.case-playground {
+  &__body { gap: var(--space-sm); padding: var(--space-lg); }
+  &__card-line { line-height: 1.5; }
+  &__metric { font-family: var(--font-body); letter-spacing: 0; line-height: 1.4; color: var(--color-text-secondary); }
+  &__cta { padding-top: 0; }
+  &__release { padding: 0 var(--space-lg) var(--space-sm); }
+  &__store-link { padding-top: var(--space-sm); gap: var(--space-sm); }
+}

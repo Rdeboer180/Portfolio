@@ -63,7 +63,7 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="faq">
+    <section id="faq" className="faq ink-ground">
       <div className="faq__container">
         <div className="faq__left">
           <span className="faq__eyebrow">FAQ</span>

@@ -160,6 +160,20 @@ interface PlaygroundCard {
   coins: Coin[];
 }
 
+// Card copy previews the story; the case study holds the full context.
+const CARD_PREVIEWS: Record<string, { title: string; line: string }> = {
+  wheelrack: { title: 'WheelRack: The dealer journey', line: 'I built the platform’s first design system and redesigned the path from vehicle selection to checkout.' },
+  'design-enablement': { title: 'Tools that scale design', line: 'Three internal tools carry the system into project setup, crop validation, and stakeholder decks.' },
+  playdraft: { title: 'PlayDraft: A social drafting game', line: 'I designed the brand, game, and system, then built and released the iPhone app with agents.' },
+  loopstack: { title: 'LoopStack: Patterns worth reviewing', line: 'I designed and built a Type 1 diabetes app for reviewing meal and glucose patterns with a care team.' },
+  'aem-component-system': { title: 'AEM: A reusable foundation', line: 'I rebuilt page authoring around shared components, replacing one-off builds with a foundation design and engineering share.' },
+  'tire-categories': { title: 'A clearer path to the right tire', line: 'I rebuilt 30+ category pages into a guided system that helps shoppers choose without tire expertise.' },
+  'seasonal-content-system': { title: 'Seasonal content, without rebuilds', line: 'An AEM fragment system lets the team swap seasonal storefront content through authoring instead of development.' },
+  'overscroll-tactics': { title: 'Overscroll Tactics: A studio identity', line: 'I built the identity behind PlayDraft, carrying one mark and motion system across web and native.' },
+  heatherwood: { title: 'Heatherwood: Built for its owner', line: 'A new identity and WordPress site built around family needs and straightforward updates for the riding academy’s owner.' },
+  'landing-pages': { title: 'AEM: A governed landing-page system', line: 'Reusable templates and clear guidance help junior designers ship complex landing pages in weeks instead of a month.' },
+};
+
 const CARDS: PlaygroundCard[] = [
   {
     slug: 'wheelrack',
@@ -470,7 +484,7 @@ const CaseStudyPlayground: React.FC = () => {
   return (
     <section
       id="projects"
-      className={`case-playground${revealed ? ' case-playground--revealed' : ''}${
+      className={`case-playground ink-ground${revealed ? ' case-playground--revealed' : ''}${
         resolving ? ' case-playground--resolving' : ''
       }`}
       ref={sectionRef}
@@ -534,6 +548,7 @@ const CaseStudyPlayground: React.FC = () => {
             // only applies while actually locked.
             const hasPlate = isProtected(card.stream) && hasSchematic(card.slug);
             const plated = locked && hasPlate;
+            const previewCopy = CARD_PREVIEWS[card.slug] ?? card;
             return (
               <article
                 key={card.slug}
@@ -593,13 +608,8 @@ const CaseStudyPlayground: React.FC = () => {
 
                 {/* Middle — minimal content */}
                 <div className="case-playground__body">
-                  <h3 className="case-playground__card-title">{card.title}</h3>
-                  <p className="case-playground__card-line">{card.line}</p>
-                  <div className="case-playground__tags">
-                    {card.tags.map((tag) => (
-                      <span key={tag} className="case-playground__tag">{tag}</span>
-                    ))}
-                  </div>
+                  <h3 className="case-playground__card-title">{previewCopy.title}</h3>
+                  <p className="case-playground__card-line">{previewCopy.line}</p>
                   <p className="case-playground__metric">{card.metric}</p>
                   <span className="case-playground__cta" aria-hidden="true">
                     View case study

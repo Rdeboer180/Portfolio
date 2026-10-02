@@ -4,6 +4,7 @@ import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
 import { useUnlock } from '../context/UnlockContext';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
+import { useReveal } from '../hooks/useReveal';
 
 const roles = ['Product Designer', 'Design Systems Designer', 'Design Engineer', 'UI/UX Designer'];
 const roleDescriptions = [
@@ -14,14 +15,17 @@ const roleDescriptions = [
 ];
 
 const Hero: React.FC = () => {
+  const [headlineRef, headlineVisible] = useReveal<HTMLHeadingElement>(0.3);
   const portraitRef = useRef<HTMLDivElement>(null);
   const [introStage, setIntroStage] = useState('done');
+  const [inkStarted, setInkStarted] = useState(false);
   useLayoutEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motion.matches) return;
+    if (motion.matches) { setInkStarted(true); return; }
     const mobile = window.matchMedia('(max-width: 850px)').matches;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const play = () => {
+      setInkStarted(true);
       setIntroStage(mobile ? 'sketch' : 'scrawl');
       const steps: [number, string][] = mobile
         ? [[650, 'lowfi'], [1250, 'final'], [1850, 'done']]
@@ -33,8 +37,10 @@ const Hero: React.FC = () => {
       if (entry.isIntersecting) { play(); observer.disconnect(); }
     }, { threshold: 0.2 });
     if (portraitRef.current) observer.observe(portraitRef.current);
+    // Direct links below the hero still receive the settled section background.
+    timers.push(setTimeout(() => setInkStarted(true), 4200));
     const settle = () => {
-      if (motion.matches) { observer.disconnect(); timers.forEach(clearTimeout); setIntroStage('done'); }
+      if (motion.matches) { observer.disconnect(); timers.forEach(clearTimeout); setIntroStage('done'); setInkStarted(true); }
     };
     motion.addEventListener('change', settle);
     return () => { observer.disconnect(); timers.forEach(clearTimeout); motion.removeEventListener('change', settle); };
@@ -51,7 +57,7 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen]);
   return (
-    <section className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage}>
+    <section className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage} data-ink-started={inkStarted}>
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
@@ -104,8 +110,11 @@ const Hero: React.FC = () => {
 </div></div>
         <div className="hero-intro__grid">
           <div className="hero-intro__copy">
-            <h1 className="hero__typed-wrap"><span className="hero__typed-final-gradient">Designer by foundation.</span><span>Builder by curiosity.</span></h1>
-            <p>I’m a product designer with deep roots in visual craft and <a href="#systems" className="about__inline-link">design systems</a>. I turn complex workflows into clear interfaces, and use code, agents, and custom tools to carry those decisions into working products.</p>
+            <h1 ref={headlineRef} className={`hero__typed-wrap hero-intro__headline${headlineVisible ? ' is-visible' : ''}`}>
+              <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
+              <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
+            </h1>
+            <p>I’m a product designer with deep roots in visual craft and <a href="#systems" className="about__inline-link">design systems</a>. I turn complex workflows into clear interfaces, and use code, agents, and custom tools to carry those decisions into working products. Design is changing, and if you’re not building in your free time, you’re falling behind. <strong className="animated-bold">The tools are now negotiable. Giving a damn isn’t.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
             <div className="hero-intro__role-story">
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
@@ -114,7 +123,7 @@ const Hero: React.FC = () => {
                 <p key={selectedRole} className="hero-intro__role-paragraph">{roleDescriptions[selectedRole]}</p>
               </div>
             </div>
-            <div className="hero-intro__actions"><a href="#projects" className="btn btn--primary btn--lg">Explore my work ↓</a></div>
+            <a href="#projects" className="hero-intro__work-link">Skip to what I’ve designed and what I’m building <span aria-hidden="true">→</span></a>
 
           </div>
           <div className="hero-intro__portrait" ref={portraitRef}>

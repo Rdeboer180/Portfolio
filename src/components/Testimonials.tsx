@@ -130,7 +130,7 @@ export const FeaturedEndorsement: React.FC = () => (
 );
 
 const Testimonials: React.FC = () => (
-  <section id="testimonials" className="testimonials testimonials--concise" aria-labelledby="testimonials-heading">
+  <section id="testimonials" className="testimonials testimonials--concise ink-ground" aria-labelledby="testimonials-heading">
     <div className="testimonials__container">
       <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
       <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>

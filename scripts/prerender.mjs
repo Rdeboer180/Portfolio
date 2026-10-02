@@ -151,9 +151,11 @@ async function main() {
       // client renders first.
       const clone = document.documentElement.cloneNode(true);
       clone.classList.remove('has-unlock-bar');
+      clone.querySelector('.hero--contract')?.setAttribute('data-ink-started', 'false');
+      clone.querySelectorAll('.ink-ground').forEach(el => el.removeAttribute('data-ink-settled'));
       // Reduced-motion prerendering settles these reveals immediately. Restore
       // their initial React state so hydration can trigger the in-view motion.
-      clone.querySelectorAll('.about__signature, .career-timeline__step')
+      clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline')
         .forEach((el) => el.classList.remove('is-visible'));
       // `.case-playground__unlock` is the same thing wearing its current
       // clothes: the standing unlock offer moved out of the site chrome and
