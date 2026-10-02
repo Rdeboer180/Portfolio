@@ -151,6 +151,10 @@ async function main() {
       // client renders first.
       const clone = document.documentElement.cloneNode(true);
       clone.classList.remove('has-unlock-bar');
+      // Reduced-motion prerendering settles these reveals immediately. Restore
+      // their initial React state so hydration can trigger the in-view motion.
+      clone.querySelectorAll('.about__signature, .career-timeline__step')
+        .forEach((el) => el.classList.remove('is-visible'));
       // `.case-playground__unlock` is the same thing wearing its current
       // clothes: the standing unlock offer moved out of the site chrome and
       // into the work section, but it is still gated on `lockedReady`, still

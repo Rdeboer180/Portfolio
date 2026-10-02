@@ -22,9 +22,9 @@ const CareerMilestone: React.FC<{ step: typeof progression[number] }> = ({ step 
     <li ref={ref} className={`career-timeline__step${visible ? ' is-visible' : ''}`}>
       <span className="career-timeline__rail" aria-hidden="true" />
       <span className="career-timeline__marker" aria-hidden="true" />
-      <span className="career-timeline__date">{step.date}</span>
-      <h4 className="career-timeline__title">{step.title}</h4>
-      <div className="career-timeline__detail">
+      <span className="career-timeline__date reveal-fade">{step.date}</span>
+      <h4 className="career-timeline__title reveal-fade" style={{ '--reveal-delay': '60ms' } as React.CSSProperties}>{step.title}</h4>
+      <div className="career-timeline__detail reveal-fade" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
         <p>{step.body}</p>
         {step.href && <Link to={step.href} className="about__read-more">{step.link} →</Link>}
       </div>
