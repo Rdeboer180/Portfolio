@@ -56,9 +56,9 @@ const About: React.FC = () => {
               <svg className="about__signature-underline" viewBox="0 0 320 16" fill="none" aria-hidden="true"><path className="reveal-draw" pathLength={1} style={{ '--reveal-delay': '960ms' } as React.CSSProperties} d="M4 10 C 80 3, 220 3, 316 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg>
             </h2>
             <div className="about__differentiator-copy">
-              <p className="about__body">Curiosity gets me building and testing ideas. Care means making the details repeatable through components and clear decisions. <Link to="/talent-tree/" className="about__inline-link">The Forge</Link> maps the skills behind that work and what I’m developing next.</p>
-              <p className="about__body"><span className="animated-bold">Relationships make the system work.</span> I bring designers and engineers into the decisions early, so we can question assumptions and build from a shared understanding. <a href="#testimonials" className="about__inline-link">My collaborators describe what that looks like in practice.</a></p>
-
+              <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth—where I’ve invested my time, sharpened my skills, and developed the strategic perspective I bring to product design.</p>
+              <p className="about__body">Care means making good decisions repeatable through components, documentation, and attention to detail. <span className="animated-bold">Relationships are central to my work.</span> When communication breaks down, design and implementation drift. <a href="#testimonials" className="about__inline-link">The people I build with</a> can speak to how I help keep them connected.</p>
+              <p className="about__body">A system grows with its team. I want people to understand the decisions, challenge them, and help shape what comes next.</p>
             </div>
           </div>
         </div>
