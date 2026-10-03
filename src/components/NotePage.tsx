@@ -49,7 +49,7 @@ const NotePage: React.FC = () => {
           <time dateTime={note.dateISO}>{note.date}</time>
           <span>·</span>
           <span>{note.read} read</span>
-          {note.kind === 'essay' && (
+          {note.kind === 'essay' && note.origin !== 'portfolio' && (
             <span className="notes__meta-source">· first thought out loud on LinkedIn</span>
           )}
         </p>
@@ -72,9 +72,11 @@ const NotePage: React.FC = () => {
           and contact lives in the shared footer below. Build logs get their own
           close, because the LinkedIn-rough-cut line isn't true of them. */}
       <aside className="notes__close">
-        <span className="notes__close-label">[ In Progress ]</span>
+        <span className="notes__close-label">{note.origin === 'portfolio' ? '[ Exploration ]' : '[ In Progress ]'}</span>
         <p className="notes__close-body">
-          {note.kind === 'log' ? (
+          {note.origin === 'portfolio' ? (
+            <>These captures document a recent exploration. The working site is where I keep testing what earns its place.</>
+          ) : note.kind === 'log' ? (
             <>
               This one is still moving. The decisions above aren&rsquo;t final, and the entry gets
               updated as they land rather than rewritten once it looks tidy.

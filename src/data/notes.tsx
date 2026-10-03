@@ -131,6 +131,8 @@ export interface Note {
   dek: string;       // one-line summary — index row + meta description
   read: string;      // estimated read time, e.g. '3 min' — index + article meta
   body: React.ReactNode;
+  /** Original site essays do not imply a prior LinkedIn publication. */
+  origin?: 'portfolio';
   /** Explicit relationship: current product updates can accompany dated essays. */
   relatedProject?: 'playdraft';
   /** Optional downloadable artifact shown in the note header. */
@@ -145,6 +147,42 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  {
+    slug: 'exploring-my-portfolio-in-paper',
+    kind: 'essay',
+    origin: 'portfolio',
+    date: 'October 3, 2026',
+    dateISO: '2026-10-03',
+    title: 'Exploring my portfolio in Paper',
+    dek: 'What changed when I used Paper to explore the story, then tested those decisions in the working site.',
+    read: '3 min',
+    body: (
+      <>
+        <p>I’ve been using my portfolio to explore a different way of working between the canvas and code. Paper gave me somewhere to try a direction, change the copy, and compare ideas before committing them to the site.</p>
+        <p>The first question was about how I introduce myself. I’m applying for product design and systems roles, but my curiosity has taken me further into building. I wanted the opening to show that range without making someone sort through a collection of job titles to understand where I fit.</p>
+        <p>We explored three directions in Paper, then combined the systems thinking with the creative builder angle. I moved the portrait, tried different headline treatments, and turned the layer panel into roles I can occupy. The shared product context stayed at the center of the systems story: decide what something needs to mean, build it, then bring what we learn back into the next decision.</p>
+        <figure className="notes__figure">
+          <img src="/images/notes/paper-exploration/paper-hero-exploration.webp" width="1345" height="2000" loading="lazy" alt="Early Paper concept pairing a portrait and roles panel with systems and creative builder copy." />
+          <figcaption>An early Paper direction. The composition brought systems thinking and the creative builder story together; the wording and hierarchy were still being explored.</figcaption>
+        </figure>
+        <p><strong>The useful part was having something concrete to disagree with.</strong> I could point at a frame, change it, and ask for a version with less copy. The tools helped generate and revise alternatives. I still had to decide which one sounded like me, which details earned their space, and what the page needed to communicate first.</p>
+        <p>The mobile pass made that distinction clearer. We brought the hero into an editable frame so I could adjust it directly. That frame gave us the direction; the site's spacing and typography tokens governed the implementation. On smaller screens, the role panel and annotations came off the portrait. The image came first, followed by the product-design copy. The circle animation had to fit inside that composition instead of spilling into the next section.</p>
+        <figure className="notes__figure notes__figure--mobile">
+          <img src="/images/notes/paper-exploration/paper-mobile-direction.webp" width="390" height="1000" loading="lazy" alt="Edited mobile Paper frame with the portrait above the headline and product design introduction." />
+          <figcaption>My mobile direction in Paper. Removing the panels gave the portrait and introduction room; the site’s tokens still governed the final spacing.</figcaption>
+        </figure>
+        <p>There was a cost to the exploration. I kept finding interesting things to explain, and the portfolio grew more talkative. A polished frame could make that feel resolved before the working page showed how much reading it asked of someone. The local preview was where spacing, motion, and the weight of the copy became easier to judge.</p>
+        <figure className="notes__figure">
+          <img src="/images/notes/paper-exploration/implemented-hero.webp" width="1440" height="1100" loading="lazy" alt="Implemented portfolio hero with Passionate Designer and Curious Builder headline, portrait and interactive roles panel." />
+          <figcaption>The implemented hero before this next editing pass. Motion and responsive behavior made the reading load easier to judge than a static frame.</figcaption>
+        </figure>
+        <p>I’m still exploring this workflow. It hasn’t replaced Figma or become a rule for every project. It has given me another way to put a decision in front of me early and test whether it survives implementation.</p>
+        <p>That same curiosity is part of why I keep <Link to="/work/playdraft/">building and evolving PlayDraft</Link>. The app brings a different set of constraints: behavior, edge cases, and a release that has to work beyond the frame. Paper helps me explore the direction. A working product tells me where it needs another pass.
+</p>
+      </>
+    ),
+  },
+
   // ──────────────────────────────────────────────────────────────────────────
   // Adjacent to studying-the-tape, what-id-keep and photoshop-taught-me, all of
   // which touch "the tools changed". Scoped hard to what those do not have: the

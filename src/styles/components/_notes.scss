@@ -1241,3 +1241,8 @@
     animation: none;
   }
 }
+
+.notes__body .notes__figure--mobile {
+  max-width: 390px;
+  margin-inline: auto;
+}
