@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useParams, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import PageShell from './components/PageShell';
+import { isPanelRoute } from './utils/panelRoutes';
+import { usePanelNavigation } from './hooks/usePanelNavigation';
 import ProjectPanel from './components/ProjectPanel';
 import NotFoundPage from './components/NotFoundPage';
 
@@ -55,7 +57,7 @@ function RouteEffects() {
   useEffect(() => {
     const returningTo = previousPanelBackground.current;
     const restoreScroll = previousPanelHasReturnScroll.current;
-    const panelBackground = window.matchMedia('(min-width: 851px)').matches && /^\/work\/[^/]+\/?$/.test(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
+    const panelBackground = isPanelRoute(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
     previousPanelBackground.current = panelBackground;
     previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
@@ -198,17 +200,13 @@ function UnlockChrome() {
 
 function AppRoutes() {
   const location = useLocation();
-  const [desktop, setDesktop] = useState(false);
+  usePanelNavigation();
+  const [panelsEnabled, setPanelsEnabled] = useState(false);
   useEffect(() => {
-    // Prerender the full article; first hydration matches on desktop and mobile.
-    if ((window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) return;
-    const query = window.matchMedia('(min-width: 851px)');
-    const update = () => setDesktop(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
+    // Keep static articles and first hydration identical at every screen size.
+    if (!(window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) setPanelsEnabled(true);
   }, []);
-  const background = desktop && /^\/work\/[^/]+\/?$/.test(location.pathname) ? (location.state?.backgroundLocation || { pathname: '/', search: '', hash: '', state: null, key: 'project-background' }) : undefined;
+  const background = panelsEnabled && isPanelRoute(location.pathname) ? (location.state?.backgroundLocation || { pathname: location.pathname.startsWith('/notes/') ? '/notes' : '/', search: '', hash: '', state: null, key: 'reading-background' }) : undefined;
   return (
     <>
       <RouteEffects />
@@ -247,8 +245,9 @@ function AppRoutes() {
             duplicated the entire page with a dead copy on top. */}
         <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
       </Routes>
-      {background && <ProjectPanel><Routes location={location}>
+      {background && <ProjectPanel key={location.pathname}><Routes location={location}>
         <Route path="/work/:slug" element={<PanelCaseStudy />} />
+        <Route path="/notes/:slug" element={<NotePage />} />
       </Routes><UnlockChrome /></ProjectPanel>}
     </>
   );

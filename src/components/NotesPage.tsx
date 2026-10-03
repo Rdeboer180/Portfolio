@@ -1,6 +1,6 @@
 import React from 'react';
 import ScrollReveal from './ScrollReveal';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -19,6 +19,7 @@ import '../styles/styles.scss';
 // ============================================
 
 const NotesPage: React.FC = () => {
+  const location = useLocation();
   const essays = NOTES_BY_DATE.filter((n) => n.kind === 'essay');
   const logs = NOTES_BY_DATE.filter((n) => n.kind === 'log');
   const resolved = NOTES_BY_DATE.filter((n) => n.kind === 'skill' || n.kind === 'system');
@@ -31,7 +32,7 @@ const NotesPage: React.FC = () => {
       'Writing from the work: design systems that outlive their designer, AI with human judgment, published agent skills, naming an LLC, and how this site is built.',
     canonical: `${SITE.portfolioUrl}/notes/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
-  });
+  }, location.key);
 
   return (
     <article className="notes">

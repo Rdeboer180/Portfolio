@@ -9,7 +9,8 @@ export default function ProjectPanel({ children }: { children: React.ReactNode }
   const navigate = useNavigate();
   const { dismissPrompt } = useUnlock();
   const location = useLocation();
-  const close = () => location.state?.backgroundLocation ? navigate(-1) : navigate('/#projects', { replace: true });
+  const article = location.pathname.startsWith('/notes/');
+  const close = () => location.state?.backgroundLocation ? navigate(-1) : navigate(article ? '/notes' : '/#projects', { replace: true });
   useEffect(() => {
     const el = dialog.current!;
     const target = document.activeElement as HTMLElement | null;
@@ -58,10 +59,10 @@ export default function ProjectPanel({ children }: { children: React.ReactNode }
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   };
-  return <dialog onKeyDown={trapFocus} ref={dialog} className="project-panel" aria-label="Project case study" onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
+  return <dialog onKeyDown={trapFocus} ref={dialog} className="project-panel" aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
     <header className="project-panel__header">
       <Link to={getHomeHref()} className="project-panel__name">Ryan DeBoer</Link>
-      <button type="button" className="project-panel__close" onClick={close} aria-label="Close case study">Close <span aria-hidden="true">×</span></button>
+      <button type="button" className="project-panel__close" onClick={close} aria-label={article ? 'Close article' : 'Close case study'}>Close <span aria-hidden="true">×</span></button>
     </header>
     <div className="project-panel__article"><Suspense fallback={<p className="project-panel__loading" role="status">Loading case study…</p>}>{children}</Suspense></div>
   </dialog>;

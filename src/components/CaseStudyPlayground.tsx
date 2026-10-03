@@ -320,12 +320,6 @@ const CaseStudyPlayground: React.FC = () => {
 
   // Reaching for a locked case study is what raises the prompt — not arrival.
   // The href rides along so the unlock lands on the study they actually wanted.
-  const handleCardClick = (e: React.MouseEvent, card: { slug: string; stream?: string }) => {
-    if (window.matchMedia('(min-width: 851px)').matches || !isLocked(card.stream)) return;
-    e.preventDefault();
-    openPrompt(`/work/${card.slug}`);
-  };
-
   const variants = reduceMotion ? coinVariantsReduced : coinVariants;
 
   /**
@@ -430,7 +424,6 @@ const CaseStudyPlayground: React.FC = () => {
                   className="case-playground__story-link"
                   aria-label={`View case study: ${card.title}`}
                   aria-describedby={locked ? `lock-${card.slug}` : undefined}
-                  onClick={(e) => handleCardClick(e, card)}
                 >
                 {/* Top — preview (cover loop plays while active; primary loops always) */}
                 <div
