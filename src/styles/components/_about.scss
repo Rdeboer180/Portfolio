@@ -110,6 +110,11 @@ $select-b: blue($color-primary-light);
   }
 }
 
+.about__inline-link:focus-visible {
+  outline: 2px solid $color-primary-text;
+  outline-offset: 3px;
+}
+
 // The bio's one door to the talent tree. Semibold on the text-safe orange,
 // with the branch glyph (the same mark the hero chip and section 05 carry)
 // drawn as a pseudo element in currentColor, so the link reads as a place to
@@ -423,3 +428,95 @@ $select-b: blue($color-primary-light);
   }
 }
 .about__timeline-closing { max-width: var(--copy-max-width); }
+
+// Homepage writing follows the Notes index's editorial rows, using the
+// existing type, spacing, and link treatment rather than another card grid.
+.selected-writing {
+  padding: $spacing-4xl 0;
+  background: $color-white;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+
+    h2 {
+      margin: 0;
+      font-family: $font-family-heading;
+      font-size: $font-size-h2;
+      line-height: $line-height-h2;
+      letter-spacing: -0.02em;
+    }
+
+    > a { flex-shrink: 0; }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid $color-border-default;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.25fr) 1fr auto;
+    gap: $spacing-xl;
+    align-items: baseline;
+    padding: $spacing-xl 0;
+    border-bottom: 1px solid $color-border-default;
+    color: $color-text-primary;
+    text-decoration: none;
+
+    &:hover .selected-writing__title,
+    &:focus-visible .selected-writing__title {
+      color: $color-primary-text;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-text;
+      outline-offset: 4px;
+    }
+  }
+
+  &__meta {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-text-secondary;
+  }
+
+  &__title {
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-medium;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  &__arrow { color: $color-primary-text; }
+
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-3xl 0;
+
+    &__header {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: $spacing-lg;
+    }
+
+    &__row {
+      grid-template-columns: 1fr auto;
+      gap: $spacing-md;
+    }
+
+    &__meta { grid-column: 1 / -1; }
+  }
+}

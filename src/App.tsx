@@ -1,11 +1,13 @@
-import React, { useEffect, useState, lazy } from 'react';
+import React, { useEffect, useState, useRef, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useParams, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import PageShell from './components/PageShell';
+import ProjectPanel from './components/ProjectPanel';
 import NotFoundPage from './components/NotFoundPage';
 
 // Home-page sections load in the initial chunk — home is the default route.
 import Hero from './components/Hero';
 import About from './components/About';
+import SelectedWriting from './components/SelectedWriting';
 import SkillMastery from './components/SkillMastery';
 import CaseStudyPlayground from './components/CaseStudyPlayground';
 import SystemsInPractice from './components/SystemsInPractice';
@@ -38,6 +40,8 @@ const NotePage = lazy(() => import('./components/NotePage'));
 function RouteEffects() {
   const location = useLocation();
   const navigate = useNavigate();
+  const previousPanelBackground = useRef<string | undefined>(undefined);
+  const previousPanelHasReturnScroll = useRef(false);
 
   // One-time: an old hash link like #/work/wheelrack lands on "/" — send it home to the path.
   useEffect(() => {
@@ -49,6 +53,12 @@ function RouteEffects() {
   }, []);
 
   useEffect(() => {
+    const returningTo = previousPanelBackground.current;
+    const restoreScroll = previousPanelHasReturnScroll.current;
+    const panelBackground = window.matchMedia('(min-width: 851px)').matches && /^\/work\/[^/]+\/?$/.test(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
+    previousPanelBackground.current = panelBackground;
+    previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
+    if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
     if (location.hash && location.hash !== '#main-content') {
       const id = location.hash.slice(1);
       requestAnimationFrame(() => {
@@ -57,12 +67,13 @@ function RouteEffects() {
     } else {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname, location.hash]);
+  }, [location.pathname, location.hash, location.state?.backgroundLocation?.pathname, location.state?.returnScroll]);
 
   return null;
 }
 
 function HomeRoute() {
+  const homeLocation = useLocation();
   useEffect(() => {
     const grounds = document.querySelectorAll<HTMLElement>('.ink-ground');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -86,19 +97,20 @@ function HomeRoute() {
     return () => { observer.disconnect(); motion.removeEventListener('change', settle); };
   }, []);
   usePageMeta({
-    title: 'Ryan DeBoer | Product Design Engineer · Design Systems · Agentic Workflows',
+    title: 'Ryan DeBoer | Product Designer · Design Systems · Design Engineering',
     description:
-      'Product Design Engineer specializing in design systems, tokens and components, React and Storybook, implementation QA, and AI-assisted product development. Remote, US.',
+      'Product designer with a systems focus and deep roots in visual craft. Clear interfaces, shared components, and close collaboration with engineering. South Bend, Indiana · Remote US.',
     canonical: `${SITE.portfolioUrl}/`,
-    ogDescription: 'Product Design Engineer. Design systems, ecommerce, and agent-assisted mobile builds, from Figma tokens to TestFlight.',
+    ogDescription: 'Product designer with a systems focus. Enterprise interfaces, shared components, and PlayDraft, a personal product on the App Store.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
-  });
+  }, homeLocation.key);
   return (
     <PageShell>
       <Hero />
-      <About />
       <CaseStudyPlayground />
+      <SelectedWriting />
+      <About compact />
       <SystemsInPractice />
       <Testimonials />
       <SkillMastery />
@@ -106,6 +118,11 @@ function HomeRoute() {
       <Footer />
     </PageShell>
   );
+}
+
+function PanelCaseStudy() {
+  const { slug } = useParams<{ slug: string }>();
+  return <CaseStudyPage slug={slug ?? ''} />;
 }
 
 function CaseStudyRoute() {
@@ -180,11 +197,23 @@ function UnlockChrome() {
 }
 
 function AppRoutes() {
+  const location = useLocation();
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    // Prerender the full article; first hydration matches on desktop and mobile.
+    if ((window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) return;
+    const query = window.matchMedia('(min-width: 851px)');
+    const update = () => setDesktop(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  const background = desktop && /^\/work\/[^/]+\/?$/.test(location.pathname) ? (location.state?.backgroundLocation || { pathname: '/', search: '', hash: '', state: null, key: 'project-background' }) : undefined;
   return (
     <>
       <RouteEffects />
-      <UnlockChrome />
-      <Routes>
+      {!background && <UnlockChrome />}
+      <Routes location={background || location}>
         <Route path="/" element={<HomeRoute />} />
         <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
         <Route path="/resume" element={<PageShell><ResumePage /></PageShell>} />
@@ -218,6 +247,9 @@ function AppRoutes() {
             duplicated the entire page with a dead copy on top. */}
         <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
       </Routes>
+      {background && <ProjectPanel><Routes location={location}>
+        <Route path="/work/:slug" element={<PanelCaseStudy />} />
+      </Routes><UnlockChrome /></ProjectPanel>}
     </>
   );
 }

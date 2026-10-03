@@ -116,6 +116,7 @@ async function main() {
   // no password modal on top. Real first-time visitors still get the modal after
   // hydration; initial render state matches, so hydration stays clean.
   await context.addInitScript(() => {
+    window.__PORTFOLIO_PRERENDER__ = true;
     const orig = localStorage.getItem.bind(localStorage);
     localStorage.getItem = (key) => (key.startsWith('project-dismissed-') ? 'true' : orig(key));
   });
@@ -151,6 +152,9 @@ async function main() {
       // client renders first.
       const clone = document.documentElement.cloneNode(true);
       clone.classList.remove('has-unlock-bar');
+      // Native modal state is established after hydration, not via an open attribute.
+      clone.querySelectorAll('dialog.project-panel').forEach(el => el.removeAttribute('open'));
+      clone.querySelectorAll('.tool-bucket .case-playground__coin').forEach(el => el.remove());
       clone.querySelector('.hero--contract')?.setAttribute('data-ink-started', 'false');
       clone.querySelectorAll('.ink-ground').forEach(el => el.removeAttribute('data-ink-settled'));
       // Reduced-motion prerendering settles these reveals immediately. Restore
@@ -223,11 +227,10 @@ async function main() {
         //    it, so its children are the boundary's children. If that ever
         //    stops being true the failure mode is the mismatch we started with,
         //    not something worse — but keep the two in step.
-        const main = root.querySelector('#main-content');
-        if (main) {
-          main.insertBefore(document.createComment('$'), main.firstChild);
-          main.appendChild(document.createComment('/$'));
-        }
+        root.querySelectorAll('#main-content, .project-panel__article').forEach(boundary => {
+          boundary.insertBefore(document.createComment('$'), boundary.firstChild);
+          boundary.appendChild(document.createComment('/$'));
+        });
       }
 
       return clone.outerHTML;

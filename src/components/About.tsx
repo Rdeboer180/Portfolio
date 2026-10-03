@@ -32,7 +32,7 @@ const CareerMilestone: React.FC<{ step: typeof progression[number] }> = ({ step 
   );
 };
 
-const About: React.FC = () => {
+const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   const [signatureRef, signatureVisible] = useReveal<HTMLHeadingElement>(0.3);
   const introRef = useHighlightSweep<HTMLDivElement>({
     selector: '.animated-bold',
@@ -45,9 +45,9 @@ const About: React.FC = () => {
 
   return (
     <section id="about" className="about about--integrated" aria-labelledby="about-differentiator-title">
-      <div className="about__differentiator" ref={introRef}>
+      <div className="about__differentiator ink-ground" ref={introRef}>
         <div className="about__container">
-          <SectionBadge icon={<UserIcon />} label="Why me?" index="01" />
+          <SectionBadge icon={<UserIcon />} label="Why me?" index="02" />
           <div className="about__differentiator-grid">
             <h2 id="about-differentiator-title" ref={signatureRef} className={`about__signature${signatureVisible ? ' is-visible' : ''}`}>
               {['Curiosity.', 'Care.', 'Collaboration.'].map((word, index) => (
@@ -56,13 +56,28 @@ const About: React.FC = () => {
               <svg className="about__signature-underline" viewBox="0 0 320 16" fill="none" aria-hidden="true"><path className="reveal-draw" pathLength={1} style={{ '--reveal-delay': '960ms' } as React.CSSProperties} d="M4 10 C 80 3, 220 3, 316 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg>
             </h2>
             <div className="about__differentiator-copy">
+              {compact ? (
+                <>
+                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth—the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
+                  <p className="about__body">Care means making good decisions repeatable through components, documentation, and attention to detail. <span className="animated-bold">Relationships are central to my work.</span> When communication breaks down, design and implementation drift. <a href="#testimonials" className="about__inline-link">The people I build with</a> can speak to how I help keep them connected.</p>
+                  <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
+                </>
+              ) : (
+                <>
               <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth—where I’ve invested my time, sharpened my skills, and developed the strategic perspective I bring to product design.</p>
               <p className="about__body">Care means making good decisions repeatable through components, documentation, and attention to detail. <span className="animated-bold">Relationships are central to my work.</span> When communication breaks down, design and implementation drift. <a href="#testimonials" className="about__inline-link">The people I build with</a> can speak to how I help keep them connected.</p>
               <p className="about__body">A system grows with its team. I want people to understand the decisions, challenge them, and help shape what comes next.</p>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
+      {!compact && <CareerTimeline />}
+    </section>
+  );
+};
+export const CareerTimeline: React.FC<{ showMore?: boolean }> = ({ showMore = true }) => (
       <div className="about__background">
         <div className="about__container">
           <div className="about__timeline-heading">
@@ -73,12 +88,13 @@ const About: React.FC = () => {
             {progression.map((step) => <CareerMilestone key={step.date} step={step} />)}
           </ol>
           <p className="about__body about__timeline-closing">Alongside the team work, <Link to="/work/playdraft/" className="about__inline-link">PlayDraft</Link> and <Link to="/work/loopstack/" className="about__inline-link">LoopStack</Link> keep me close to the tradeoffs, edge cases, and maintenance decisions that only appear in a working product.</p>
-          <div className="about__cta-links">
-            <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
-          </div>
+          {showMore && (
+            <div className="about__cta-links">
+              <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
+            </div>
+          )}
         </div>
       </div>
-    </section>
-  );
-};
+);
+
 export default About;

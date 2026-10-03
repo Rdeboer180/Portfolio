@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import { getHomeHref } from '../utils/homeSession';
 import AboutHero from './AboutHero';
+import { CareerTimeline } from './About';
 import AboutStorySections from './AboutStorySections';
 import ProcessPrinciples from './ProcessPrinciples';
 import ProcessStrengths from './ProcessStrengths';
@@ -67,6 +68,7 @@ const AboutPage: React.FC = () => {
 
         {/* ── Story — six text-first beats (career evolution, not tabs) ─── */}
         <AboutStorySections />
+        <CareerTimeline showMore={false} />
 
         {/* ── Transition — single orange dot-matrix card ─────────────────── */}
         <div className="about-page__transition-card">

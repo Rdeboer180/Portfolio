@@ -1,3 +1,4 @@
+import ProjectLink from './ProjectLink';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
@@ -8,10 +9,10 @@ import { useReveal } from '../hooks/useReveal';
 
 const roles = ['Product Designer', 'Design Systems Designer', 'Design Engineer', 'UI/UX Designer'];
 const roleDescriptions = [
-  'In product design, I work through flows, states, and tradeoffs with the team, then test whether the experience solves the right problem.',
-  'In design systems, I turn shared decisions into tokens, components, and guidance that help designers and engineers build consistently as the product grows.',
-  'In design engineering, I build prototypes and tools to test behavior, catch edge cases, and make the decisions behind a product easier to carry through.',
-  'In UI/UX design, I connect clear user flows with thoughtful hierarchy, interactions, and states, then test the details across screens and real tasks.',
+  'I stay close to product strategy: clarify the problem, weigh tradeoffs with the team, and test whether we’re building the right thing.',
+  'I turn shared decisions into tokens, components, and guidance, working with engineering to keep design intent clear and help the team build consistently.',
+  'I use code and agents to prototype behavior, catch edge cases, and build tools that remove repetition. I own the design judgment behind them.',
+  'I bring visual craft to complex workflows: make the next step clear, give feedback purpose, and refine the interaction details with the team.',
 ];
 
 const Hero: React.FC = () => {
@@ -114,7 +115,7 @@ const Hero: React.FC = () => {
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>I’m a product designer with deep roots in visual craft and <a href="#systems" className="about__inline-link">design systems</a>. I turn complex workflows into clear interfaces, and use code, agents, and custom tools to carry those decisions into working products. Design is changing, and if you’re not building in your free time, you’re falling behind. <strong className="animated-bold">The tools are now negotiable. Giving a damn isn’t.</strong></p>
+            <p>I’m a product designer with a <a href="#systems" className="about__inline-link">systems focus</a> and deep roots in visual craft. I turn complex workflows into clear interfaces and shared components. Outside work, I’m building and evolving <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> and exploring <Link to="/notes/exploring-my-portfolio-in-paper/" className="about__inline-link">new workflows</Link> to keep learning as design evolves. I test what helps me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn doesn’t.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
             <div className="hero-intro__role-story">
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
@@ -371,7 +372,7 @@ const Hero: React.FC = () => {
                   <div className="hero__profile-frame">
                     <img
                       src="/images/hero/ryan-deboer-2026.jpeg"
-                      alt="Ryan DeBoer, Product Design Engineer"
+                      alt="Ryan DeBoer, product designer"
                       className="hero__profile-img"
                       width={1600}
                       height={1600}

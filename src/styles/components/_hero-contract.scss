@@ -337,7 +337,8 @@
 }
 @media (min-width: 851px) {
   .hero--contract .hero-intro__portrait { z-index: 1; }
-  .hero--contract + .about--integrated {
+  .hero--contract + .about--integrated,
+  .hero--contract + .case-playground {
     margin-top: calc(-1 * var(--space-3xl));
     .about__differentiator { padding-top: calc(var(--space-4xl) + var(--space-2xl)); }
   }
@@ -370,7 +371,8 @@
 }
 
 // Other gray section grounds settle once as they reach the viewport.
-.hero--contract ~ .ink-ground {
+.hero--contract ~ .ink-ground,
+.hero--contract ~ .about--integrated .ink-ground {
   position: relative;
   isolation: isolate;
   background: var(--color-bg-primary);
@@ -388,5 +390,26 @@
   &.footer::before { background: var(--color-neutral-lightest); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero--contract ~ .ink-ground::before { opacity: 1; transition: none; }
+  .hero--contract ~ .ink-ground::before,
+  .hero--contract ~ .about--integrated .ink-ground::before { opacity: 1; transition: none; }
+}
+
+// Contextual proof stays in the reading flow; underline and focus remain visible.
+.hero--contract .hero-intro__copy .about__inline-link,
+.about--integrated .about__inline-link {
+  color: var(--color-text-secondary);
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  &:hover, &:focus-visible { color: var(--color-primary-dark); }
+}
+
+.hero--contract ~ .about--integrated .ink-ground::after {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.hero--contract ~ .about--integrated .ink-ground[data-ink-settled="true"]::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero--contract ~ .about--integrated .ink-ground::after { opacity: 1; transition: none; }
 }

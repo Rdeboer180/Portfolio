@@ -11,6 +11,7 @@ import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
+import ProjectOverview from './ProjectOverview';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
 import '../styles/styles.scss';
 
@@ -443,6 +444,7 @@ const ArtifactSequence: React.FC<{
 /* ─── Main Component ─── */
 interface CaseStudyPageProps {
   slug: string;
+  detailOnly?: boolean;
 }
 
 /**
@@ -491,7 +493,7 @@ const OutcomeMetrics: React.FC<{ project: Project; locked: boolean }> = ({ proje
   </>
 );
 
-const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
+const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false }) => {
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
 
@@ -609,15 +611,20 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
       ? visibleProjects[(visibleIndex - 1 + visibleProjects.length) % visibleProjects.length]
       : undefined;
 
+  if (project.overview && !locked && !detailOnly) {
+    return <ProjectOverview project={project} depth={<CaseStudyPage slug={slug} detailOnly />} />;
+  }
+
   return (
-    <article className="cs">
+    <article className={`cs${detailOnly ? ' cs--detail-only' : ''}`}>
       {/* Fixed nav */}
-      <nav className="cs__nav" aria-label="Case study">
+      {!detailOnly && <nav className="cs__nav" aria-label="Case study">
         <Link to={getHomeHref()} className="cs__nav-logo">Ryan DeBoer</Link>
         <Link to={getProjectsHref()} className="cs__nav-back">&larr; All Projects</Link>
-      </nav>
+      </nav>}
 
       <div className="cs__container">
+        {!detailOnly && <>
         {/* ==================== Header ==================== */}
         <header className="cs__header">
           <span className="cs__eyebrow">
@@ -753,6 +760,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug }) => {
             <span className="cs__meta-value">{project.year}</span>
           </div>
         </div>
+
+        </>}
 
         {/* ==================== NEW SECTION LAYOUT ==================== */}
         {/* The only case-study layout. The pre-2026 "Brief / Challenge /

@@ -43,7 +43,7 @@ function upsertLink(rel: string, href: string) {
   el.setAttribute('href', href);
 }
 
-export function usePageMeta(meta: PageMeta): void {
+export function usePageMeta(meta: PageMeta, refreshKey?: string): void {
   const jsonLdStr = meta.jsonLd ? JSON.stringify(meta.jsonLd) : '';
   useEffect(() => {
     if (meta.title) document.title = meta.title;
@@ -107,5 +107,6 @@ export function usePageMeta(meta: PageMeta): void {
     meta.ogImage,
     meta.ogType,
     jsonLdStr,
+    refreshKey,
   ]);
 }

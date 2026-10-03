@@ -74,7 +74,21 @@ export interface ApproachSubsection {
   libraryTour?: boolean;
 }
 
+export interface ProjectOverview {
+  title: string;
+  deck: string;
+  ownership: string;
+  status: string;
+  category?: string;
+  role?: string;
+  opening?: ProjectImage;
+  relatedNote?: { href: string; label: string };
+  decisions: { title: string; body: string; image?: ProjectImage }[];
+  outcome: string;
+}
+
 export interface Project {
+  overview?: ProjectOverview;
   slug: string;
   client: string;
   title: string;
@@ -1435,6 +1449,33 @@ Frame every output as:
   // =============================================
   {
     slug: 'playdraft',
+    overview: {
+      title: 'PlayDraft',
+      category: 'Personal product',
+      role: 'Product design · Design system · Agent-assisted build',
+      relatedNote: { href: '/notes/a-system-to-maintain/', label: 'Read why I built a product to maintain' },
+      deck: 'A social drafting game for snacks, movies, or anything your group writes in. Pick a topic, draft on the clock, and compare boards together.',
+      ownership: 'I designed the brand, game, interface, and design system, then built the Expo and Supabase app with agents. This was a solo, nights-and-weekends product.',
+      status: 'Available on the App Store · iPhone',
+      decisions: [
+        {
+          title: 'Settle it in one session',
+          body: 'Community voting originally pushed the verdict to the next day. Playing the game changed the brief: instant scoring now gives the group a winner while everyone is still together.',
+          image: { src: '/images/work/playdraft/playdraft-results-ceremony.png', alt: 'PlayDraft winner ceremony with the winning board and earned XP', layout: 'full', caption: 'The winner ceremony closes the draft.' },
+        },
+        {
+          title: 'Keep the live draft in one place',
+          body: 'Board, clock, queue, roster, and chat share the draft room. Search handles partial names, and custom drafts let the group write its own picks without duplicates.',
+          image: { src: '/images/work/playdraft/playdraft-draft-room-live.png', alt: 'Live PlayDraft room showing the draft board, pick clock, and browse sheet', layout: 'full', caption: 'A capture from the running app.' },
+        },
+        {
+          title: 'Give every new screen a reference',
+          body: 'Shared tokens, component recipes, and a living reference screen constrain agent-assisted implementation. I kept the product decisions and reviewed the output against that system.',
+          image: { src: '/images/work/playdraft/playdraft-design-system-live-screen.png', alt: 'PlayDraft living design-system screen with named semantic tokens and typography specimens', layout: 'full', caption: 'The system rendered on-device.' },
+        },
+      ],
+      outcome: 'From first logo sketch to TestFlight in about twelve weeks, then released on the App Store. The live economy uses coins; cash purchases remain behind a feature flag pending legal review.',
+    },
     thesis: 'Take the best mechanic in fantasy sports and set it loose on anything.',
     annotations: {
       problem: 'Drafting is the most fun part of fantasy sports, and it is stuck there.',
@@ -1955,5 +1996,139 @@ export const packs = {
     ],
   },
 ];
+
+// Compact editions reference the original artifacts so captions, crops, and
+// provenance stay attached. The full narrative remains available on demand.
+const evidence = (project: Project, key: string, index = 0): ProjectImage | undefined =>
+  project.approachSubsections?.find(section => section.key === key)?.images?.filter(image => image.src && !image.isOverlay)[index];
+
+const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
+  wheelrack: p => ({
+    title: 'WheelRack', category: 'Professional work', role: 'System design · Product design',
+    status: 'Live · Dealer platform',
+    deck: 'A shared system for a dealer journey that had grown across six retail partners. The redesign connects vehicle selection, wheel fitment, and checkout.',
+    ownership: p.ownership!, opening: p.studyHero,
+    decisions: [
+      { title: 'Make repeated controls predictable', body: 'I defined shared tokens and the resting, hover, and focus states of repeated controls. Those specifications gave the Figma library, Storybook, and React build a common vocabulary.', image: evidence(p, 'foundation') },
+      { title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability, and partner-specific purchasing actions needed explicit variants. I resolved those combinations before the component was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
+      { title: 'Specify behavior, then check the build', body: 'I supplied component behavior and responsive specifications. Cheryl Carpenter owned the React implementation; we worked together daily to reconcile the build against the design.', image: evidence(p, 'documentation') },
+    ],
+    outcome: 'The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.',
+  }),
+  'design-enablement': p => ({
+    title: 'Design Enablement', category: 'Internal tools', role: 'Product design · AI-assisted build',
+    status: 'In daily team use',
+    deck: 'Three tools carry shared rules into project setup, image validation, and stakeholder presentations, where a component library alone could not help.',
+    ownership: 'I designed and built the tools alongside production work, partnering with our Lead Product Manager on project context and workflow needs.',
+    opening: evidence(p, 'crop-simulator'),
+    decisions: [
+      { title: 'Put project context inside the file', body: 'The Figma plugin turns exported Workfront data into a searchable title card. IDs, owners, and planning context arrive as facts instead of assumptions an agent has to make.', image: evidence(p, 'metadata') },
+      { title: 'Check the crop before the AEM placement', body: 'The simulator reproduces production breakpoints, gradients, and safe zones. Design and Photography can judge the same image across viewports before committing it to a page.', image: evidence(p, 'crop-simulator') },
+      { title: 'Reuse the presentation structure', body: 'Layouts, charts, status markers, and callouts became Figma components. Teams assemble the review around the project instead of rebuilding the deck first.', image: evidence(p, 'presentation') },
+    ],
+    outcome: 'All three tools entered the team’s normal workflow. They supply file context, move crop decisions earlier, and remove repeat presentation setup. I maintain them alongside the work they support.',
+  }),
+  'tire-categories': p => ({
+    title: 'Tire Categories', category: 'Professional work', status: 'Live · 30+ category pages',
+    deck: 'A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.',
+    ownership: 'I designed the hierarchy and icon system and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.',
+    opening: evidence(p, 'system'),
+    decisions: [
+      { title: 'Put comparison before supporting copy', body: 'I organized the page around category hierarchy, icon meaning, performance comparison, and search content. The comparison and product list lead; deeper content supports the choice.', image: p.outcomeImages?.[0] },
+      { title: 'Make differences visible without motion', body: 'Primary icons show broad strengths; supporting icons distinguish categories. The performance chart includes reduced-motion behavior, text fallback, and screen-reader labels.', image: evidence(p, 'system') },
+      { title: 'Let authors change the data', body: 'Reusable AEM components give content teams control of category copy and performance data without waiting for engineering.' },
+    ],
+    outcome: p.outcomeNote!,
+  }),
+  'seasonal-content-system': p => ({
+    title: 'Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
+    deck: 'An AEM fragment system changes seasonal content across six landing pages while keeping the underlying page structure intact.',
+    ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
+    opening: evidence(p, 'system'),
+    decisions: [
+      { title: 'Separate seasonal content from page structure', body: 'Five reusable fragment types carry content fields, links, and calls to action. More than twenty modules can change without rebuilding the pages.', image: p.outcomeImages?.[0] },
+      { title: 'Write down the authoring rules', body: 'Documentation and hands-on onboarding let junior designers make the swaps while I retain approval and responsibility for exceptions.' },
+      { title: 'Change the rules when indexing suffers', body: 'SEO findings shifted the program toward visual-first winterization in 2025–2026. The seasonal distinction remains without relying on different text for the same URLs.' },
+    ],
+    outcome: 'Two junior designers now author seasonal swaps. I govern the system and resolve AEM/Target mismatches. Winter conversion has generally strengthened, but weather, marketing, and product changes also contribute.',
+  }),
+  heatherwood: p => ({
+    title: 'Heatherwood', category: 'Independent client work', status: 'Live · Owner-managed WordPress site',
+    deck: 'A riding academy’s brand and website, organized around the services families search for and built for its owner to maintain.',
+    ownership: 'I designed the identity and website, built it in WordPress, configured forms and search basics, and trained founder Deborah Clements to manage the content.',
+    opening: evidence(p, 'system'),
+    decisions: [
+      { title: 'Give every service its own entrance', body: 'Dedicated service pages answer parent questions and offer a relevant contact form. Families can arrive directly at the activity they searched for.', image: evidence(p, 'system', 1) },
+      { title: 'Carry one identity across the site', body: 'Logo, color, and typography rules extend into reusable service cards, FAQ accordions, and contact sidebars.', image: evidence(p, 'system') },
+      { title: 'Design the handover, too', body: 'WordPress, Elementor, and clear training let Deborah update content independently. The site did not require an ongoing developer relationship to stay useful.' },
+    ],
+    outcome: 'Deborah still manages the content herself. Rough inbox counts rose from three or four inquiries a month to four or five a day in the weeks after launch. These are unfiltered form counts; the change reflects brand, content, search, and the inquiry path together.',
+  }),
+  'landing-pages': p => ({
+    title: 'Landing Page System', category: 'Professional work', status: 'Live · Governed AEM templates',
+    deck: 'After designing more than fifty landing pages, I turned their recurring decisions into templates that other designers can use.',
+    ownership: 'I designed and built the pages and template patterns, then documented their use. I govern component-level changes and review work by two junior designers.',
+    opening: p.outcomeImages?.[0],
+    decisions: [
+      { title: 'Let search intent set the order', body: 'The query and page goal determine where product evidence, FAQs, promotions, and internal links belong.', image: p.outcomeGridImages?.[0] },
+      { title: 'Turn recurring layouts into starting points', body: 'Reusable hero, product, FAQ, and promotion patterns preserve a recognizable structure while letting content and emphasis change.', image: p.outcomeGridImages?.[1] },
+      { title: 'Keep exceptions visible', body: 'Template limitations become component requests. Review depth follows risk, with system-level updates remaining under my oversight.', image: p.outcomeGridImages?.[2] },
+    ],
+    outcome: 'Two junior designers use the templates. Complex pages now take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. Page-specific revenue reporting is documented in the full study with its attribution limits.',
+  }),
+  'aem-component-system': p => ({
+    title: 'AEM Components', category: 'Professional work', status: 'Live · Shared authoring foundation',
+    deck: 'A reusable component foundation replaces one-off page authoring across the homepage, tires hub, events, and packages.',
+    ownership: 'I wrote component specifications and production Sass alongside AEM engineering. Patrick Steins reviewed my branches; SEO and accessibility leads helped define the contracts.',
+    opening: evidence(p, 'system'),
+    decisions: [
+      { title: 'Specify authoring before implementation', body: 'Fields, variants, responsive behavior, and edge cases became a written contract shared by design and engineering.' },
+      { title: 'Ship variants with their rules', body: 'Eight core variants shipped with Sass, authoring defaults, and documentation. For three additional API-driven components, I specified behavior and styles alongside the engineering team.', image: evidence(p, 'system', 1) },
+      { title: 'Make the shared styles real', body: 'The global variable layer and component Sass shipped into production. Authors now work against the fields and variants engineering supports.', image: evidence(p, 'system') },
+    ],
+    outcome: 'The components power live pages. WebPageTest measured 60% faster loads on pages using them; the full study retains the measurement context. Shared documentation helps junior designers choose the right variant.',
+  }),
+  loopstack: p => ({
+    title: 'LoopStack', category: 'Personal product', status: 'TestFlight · Personal pattern-review tool',
+    deck: 'A Type 1 diabetes app for reviewing recurring meal and glucose patterns, with evidence shown beside each observation.',
+    ownership: 'I designed and built the product with AI assistance and tested it against my own Loop data. It supports pattern review and care-team discussion, not dosing advice.',
+    opening: p.approachSubsections?.flatMap(s => s.images ?? []).find(i => i.isVideo && i.src),
+    decisions: [
+      { title: 'Capture the context around the meal', body: 'Ingredients, timing, activity, and supporting evidence help explain a response instead of reducing the meal to one number.', image: evidence(p, 'structure') },
+      { title: 'Say where each number comes from', body: 'Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.', image: evidence(p, 'system', 1) },
+      { title: 'Require repetition before confidence', body: 'Repeated meal outcomes accumulate evidence before a pattern earns a stronger tier. Until then, the app keeps it an observation.', image: evidence(p, 'iteration') },
+    ],
+    outcome: p.outcomeNote!,
+  }),
+  'overscroll-tactics': p => ({
+    title: 'Overscroll Tactics', category: 'Studio identity', status: 'Live · Web and PlayDraft',
+    deck: 'The identity behind PlayDraft: a studio mark cut from a completed falling-block game, carried across the website and native app.',
+    ownership: 'I designed the identity, motion, and documentation, then built the web and React Native implementations with agent assistance.',
+    opening: evidence(p, 'mark'),
+    decisions: [
+      { title: 'Write down the geometry', body: 'The arch, knocked-out wheel slot, and three descending steps stay fixed. The resting mark is flat ink; orange belongs to interaction and motion.', image: evidence(p, 'mark') },
+      { title: 'Make the ident obey the game', body: 'Four pieces fill the board through collision-legal, whole-cell moves. The completed stack supplies the material for the cut.', image: evidence(p, 'game') },
+      { title: 'Let the cut reveal the mark', body: 'The offcuts follow the logo geometry. Web and app share the same rules, and reduced motion goes straight to the finished identity.', image: evidence(p, 'game', 1) },
+    ],
+    outcome: 'Live on the studio website and inside PlayDraft. The app mounts behind the ident, so the first screen is ready when it clears. Both versions show the finished mark immediately with reduced motion.',
+  }),
+  'bolus-binder': p => ({
+    title: 'Bolus Binder', category: 'Personal product · Clinic identity system', status: 'TestFlight · React Native build',
+    deck: 'A recipe keeper that retains meal history alongside nutrition, built on the T1D Hub identity system I created for a local clinic.',
+    ownership: 'I designed the product, brand application, and system, then built the React Native app with agents. The identity artifacts below document the system; they are not screenshots of the app.',
+    opening: evidence(p, 'system', 1),
+    decisions: [
+      { title: 'Keep recipes separate from meal events', body: 'The recipe stays stable while each meal records what happened. Repeats build a personal history instead of overwriting earlier experience.' },
+      { title: 'Reserve color for meaning', body: 'The inherited system separates brand colors from clinically meaningful alert colors. Those alerts are not decorative accents.', image: evidence(p, 'system', 2) },
+      { title: 'Give readings their own type role', body: 'The type system separates display, body copy, and numeric readings so data stays recognizable.', image: evidence(p, 'system', 3) },
+    ],
+    outcome: 'The React Native build is in TestFlight. Wider brand application and web work remain future scope. This is a record of meal behavior, not a prescription for a dose.',
+  }),
+};
+
+for (const project of projects) {
+  const edition = compactEditions[project.slug];
+  if (edition) project.overview = edition(project);
+}
 
 export default projects;
