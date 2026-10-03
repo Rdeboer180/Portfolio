@@ -74,6 +74,7 @@
   .notes__header--article { padding-top: $spacing-2xl; }
 
   @media (max-width: 850px) {
+    width: 95vw;
     &__header { padding-inline: $spacing-lg; gap: $spacing-md; }
     .project-overview { display: block; padding: $spacing-xl; }
     .project-overview__rail { position: static; max-height: none; overflow: visible; padding: 0; margin-bottom: $spacing-2xl; gap: $spacing-lg; }
