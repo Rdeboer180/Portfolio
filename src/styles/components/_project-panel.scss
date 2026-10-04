@@ -5,7 +5,7 @@
   margin: 0;
   border: 0;
   padding: 0;
-  width: 90vw;
+  width: 95vw;
   max-width: none;
   height: 100dvh;
   max-height: none;
@@ -95,3 +95,9 @@
     .notes__title { overflow-wrap: anywhere; }
   }
 }
+
+// Freeze the underlying page while a reading drawer owns attention.
+.reading-panel-open #main-content,
+.reading-panel-open #main-content *,
+.reading-panel-open #main-content *::before,
+.reading-panel-open #main-content *::after { animation-play-state: paused !important; }

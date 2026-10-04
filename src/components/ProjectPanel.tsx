@@ -62,6 +62,9 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
     closing.current = false;
     setPhase('opening');
     el.showModal();
+    document.documentElement.classList.add('reading-panel-open');
+    const backgroundAnimations = document.querySelector('#main-content')?.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running') ?? [];
+    backgroundAnimations.forEach(animation => animation.pause());
     document.dispatchEvent(new CustomEvent('portfolio:reading-panel', { detail: true }));
     void el.offsetWidth;
     const frame = requestAnimationFrame(() => { if (!closing.current) setPhase('open'); });
@@ -72,6 +75,8 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
       finishExit.current = null;
       dismissPrompt();
       el.close();
+      document.documentElement.classList.remove('reading-panel-open');
+      backgroundAnimations.forEach(animation => { if (animation.playState === 'paused') animation.play(); });
       document.dispatchEvent(new CustomEvent('portfolio:reading-panel', { detail: false }));
       document.body.style.overflow = overflow;
       requestAnimationFrame(() => requestAnimationFrame(() => {

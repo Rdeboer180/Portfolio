@@ -891,7 +891,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                       )}
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
-                      {sub.libraryTour && !detailOnly && <WheelRackLibraryTour />}
+                      {sub.libraryTour && <WheelRackLibraryTour />}
                       {sub.variants && <ArtifactSequence variants={sub.variants} allImages={lbImages} onOpen={openLightbox} />}
                       {sub.bullets && sub.bullets.length > 0 && (
                         <ul className="cs__approach-sub-list">

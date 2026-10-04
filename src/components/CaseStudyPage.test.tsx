@@ -19,10 +19,13 @@ jest.mock('framer-motion', () => {
 });
 
 beforeEach(() => {
+  jest.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => {});
   mockUnlocked = true;
   mockOpenPrompt.mockClear();
   window.matchMedia = jest.fn().mockReturnValue({ matches: true });
 });
+
+afterEach(() => jest.restoreAllMocks());
 
 const mount = (detailOnly = false) => render(<MemoryRouter><CaseStudyPage slug="wheelrack" detailOnly={detailOnly} /></MemoryRouter>);
 
@@ -58,11 +61,12 @@ test('locked case study keeps new artifacts, ownership detail, and comparison be
   expect(mockOpenPrompt).toHaveBeenCalledWith();
 });
 
-test('PlayDraft opens on a controlled walkthrough and keeps detailed evidence available on demand', () => {
+test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available on demand', () => {
   const { container } = render(<MemoryRouter><CaseStudyPage slug="playdraft" /></MemoryRouter>);
   expect(screen.getByRole('heading', { level: 1, name: 'PlayDraft' })).toBeInTheDocument();
+  expect(container.querySelectorAll('#project-walkthrough video')).toHaveLength(1);
   const video = container.querySelector('.project-overview__reel video');
-  expect(video).toHaveAttribute('controls');
+  expect(video).not.toHaveAttribute('controls');
   expect(video).not.toHaveAttribute('autoplay');
   expect(video).toHaveAttribute('poster', '/images/work/playdraft/playdraft-howtoplay-poster.jpg');
   expect(screen.getByText('Settle it in one session')).toBeInTheDocument();
@@ -76,13 +80,13 @@ test('PlayDraft opens on a controlled walkthrough and keeps detailed evidence av
 
 
 test.each(projects.filter(project => project.overview).map(project => [project.slug]))(
-  '%s renders its own compact overview and controlled media when unlocked', slug => {
+  '%s renders its own compact overview and silent media when unlocked', slug => {
     const project = projects.find(item => item.slug === slug)!;
     const { container } = render(<MemoryRouter><CaseStudyPage slug={slug} /></MemoryRouter>);
     expect(screen.getByRole('heading', { level: 1, name: project.overview!.title })).toBeInTheDocument();
     expect(screen.getByText(project.overview!.ownership)).toBeInTheDocument();
     container.querySelectorAll('video').forEach(video => {
-      expect(video).toHaveAttribute('controls');
+      expect(video).not.toHaveAttribute('controls');
       expect(video).not.toHaveAttribute('autoplay');
     });
     expect(screen.queryByText('Read why I built a product to maintain →') !== null).toBe(slug === 'playdraft');

@@ -90,3 +90,9 @@
 .project-overview__body > section > .wr-tour { margin: $spacing-2xl 0; }
 
 .project-overview .project-overview__cropped-evidence { height: auto; max-height: none; width: 100%; object-fit: contain; }
+
+.project-loop-video {
+  cursor: pointer;
+  touch-action: manipulation;
+  &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 4px; }
+}

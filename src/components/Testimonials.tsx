@@ -145,7 +145,7 @@ const Testimonials: React.FC = () => (
           </figure>;
         })}
       </div>
-      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer">Read the full recommendations on LinkedIn →</a>
+      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer"><span>Read recommendations on LinkedIn <span aria-hidden="true">↗</span></span><span className="sr-only"> (opens in a new tab)</span></a>
     </div>
   </section>
 );

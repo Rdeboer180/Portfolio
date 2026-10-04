@@ -69,27 +69,27 @@
   &__cta {
     display: inline-flex;
     align-items: center;
-    gap: $spacing-xs;
     align-self: flex-start;
+    max-width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
     margin-top: $spacing-sm;
-    padding: $spacing-sm $spacing-lg;
-    background: $color-neutral-dark;
-    color: $color-white;
-    font-family: $font-family-heading;
+    padding: $spacing-xs 0;
+    color: $color-primary-text;
+    font-family: $font-family-primary;
     font-size: $font-size-body-sm;
-    font-weight: $font-weight-bold;
-    text-decoration: none;
-    border-radius: $radius-full;
-    transition: transform $transition-fast, background-color $transition-fast;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-body-sm;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 
-    svg { transition: transform $transition-fast; }
-
-    &:hover,
+    &:hover { text-decoration-thickness: 2px; }
     &:focus-visible {
-      background: $color-primary;
-      color: $color-white;
-      transform: translateY(-1px);
-      svg { transform: translateX(3px); }
+      outline: 2px solid $color-primary-text;
+      outline-offset: 4px;
     }
   }
 

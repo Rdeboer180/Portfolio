@@ -2046,7 +2046,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     title: 'Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
     deck: 'An AEM fragment system changes seasonal content across six landing pages while keeping the underlying page structure intact.',
     ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
-    opening: evidence(p, 'system'),
+    opening: { src: p.featured, alt: 'AEM winter seasonal content — homepage project card', layout: 'full' },
     decisions: [
       { title: 'Separate seasonal content from page structure', body: 'Five reusable fragment types carry content fields, links, and calls to action. More than twenty modules can change without rebuilding the pages.', image: p.outcomeImages?.[0] },
       { title: 'Write down the authoring rules', body: 'Documentation and hands-on onboarding let junior designers make the swaps while I retain approval and responsibility for exceptions.' },
