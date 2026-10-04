@@ -42,16 +42,20 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
   useEffect(() => {
     const el = scroller.current;
     if (!el) return;
-    let saved = navigationType === 'POP' ? readingPositions.get(location.key) : undefined;
+    const positionKey = `${location.pathname}:${location.key}`;
+    let saved = navigationType === 'POP' ? readingPositions.get(positionKey) : undefined;
     if (navigationType === 'POP' && saved === undefined) {
-      try { const stored = sessionStorage.getItem(`reading-scroll:${location.key}`); if (stored !== null) saved = Number(stored); } catch { /* Storage can be unavailable in private browsing. */ }
+      try { const stored = sessionStorage.getItem(`reading-scroll:${positionKey}`); if (stored !== null) saved = Number(stored); } catch { /* Storage can be unavailable in private browsing. */ }
     }
+    if (saved !== undefined) readingPositions.set(positionKey, saved);
     const settle = () => {
       const heading = el.querySelector<HTMLElement>('h1');
       if (!heading) return false;
       if (!document.querySelector('.password-modal')) {
-        heading.tabIndex = -1;
-        heading.focus({ preventScroll: true });
+        // Focusing an off-screen title can pull Safari away from the restored position.
+        const focusTarget = saved ? el : heading;
+        focusTarget.tabIndex = -1;
+        focusTarget.focus({ preventScroll: true });
       }
       setAnnouncement(heading.textContent ?? '');
       if (saved !== undefined) el.scrollTop = saved;
@@ -61,12 +65,13 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
     };
     const observer = new MutationObserver(() => { if (settle()) observer.disconnect(); });
     const frame = requestAnimationFrame(() => { if (!settle()) observer.observe(el, { childList: true, subtree: true }); });
-    const save = () => {
-      readingPositions.set(location.key, el.scrollTop);
-      try { sessionStorage.setItem(`reading-scroll:${location.key}`, String(el.scrollTop)); } catch { /* In-memory restoration still works. */ }
+    const save = () => readingPositions.set(positionKey, el.scrollTop);
+    const persist = () => {
+      try { sessionStorage.setItem(`reading-scroll:${positionKey}`, String(readingPositions.get(positionKey) ?? el.scrollTop)); } catch { /* In-memory restoration still works. */ }
     };
     el.addEventListener('scroll', save, { passive: true });
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); el.removeEventListener('scroll', save); };
+    window.addEventListener('pagehide', persist);
+    return () => { persist(); cancelAnimationFrame(frame); observer.disconnect(); el.removeEventListener('scroll', save); window.removeEventListener('pagehide', persist); };
     // Hash navigation scrolls within the current reading page without replaying it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, location.key]);

@@ -133,6 +133,8 @@ export interface Note {
   body: React.ReactNode;
   /** Original site essays do not imply a prior LinkedIn publication. */
   origin?: 'portfolio';
+  /** Drafts remain visibly marked while the title and essay are being refined. */
+  status?: 'draft';
   /** Explicit relationship: current product updates can accompany dated essays. */
   relatedProject?: 'playdraft';
   /** Optional downloadable artifact shown in the note header. */
@@ -147,6 +149,45 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  {
+    slug: 'the-fundamentals-make-room-for-more',
+    kind: 'essay',
+    origin: 'portfolio',
+    status: 'draft',
+    date: 'October 2026',
+    dateISO: '2026-10-04',
+    title: 'The fundamentals make room for more',
+    dek: 'Sixteen years of design fundamentals, new workflows, and the ideas I now get to try.',
+    read: '4 min',
+    body: (
+      <>
+        <p>I took <Link to="/work/playdraft/">PlayDraft</Link> from an idea to a full mobile app build in two months. That's crazy to me.</p>
+        <p>For a long time, an idea like that came with a second thought: when would I ever find the time to learn everything needed to make it? I could imagine the experience I wanted. Getting it into something I could actually use was a much bigger commitment.</p>
+        <p>Agentic tools gave me a way to start. I could build, ask questions, change things, and learn through an app I wanted to exist. React Native became something I was learning with a reason to keep going.</p>
+        <p>I keep coming back to how good that feels. There are ideas I now get to try that I would previously have left alone.</p>
+        <h2>More ideas feel possible</h2>
+        <p>Motion and video are part of that excitement too. I can have an idea for how something should move or how a story might unfold, then get help making a version I can react to. I don't have to put every idea behind months of learning a new production tool before I find out whether there is anything in it.</p>
+        <p>I'm still learning. I just get to do more of that learning while making the thing.</p>
+        <p><Link to="/notes/exploring-my-portfolio-in-paper/">Paper has been giving me that feeling</Link> with my portfolio. I can prompt a direction, look at it on the canvas, make adjustments, and try again. I can get specific about what I want to change while the idea is still fresh.</p>
+        <p>That is where the speed matters to me. I get to spend less time wondering whether something might work and more time looking at a version of it. Sometimes that gives me a better direction. Sometimes it makes the problem with the idea obvious. Either way, I have something to work with.</p>
+        <h2>I still have to know what I am looking at</h2>
+        <p><strong>The fundamentals give me discernment and direction. Agentic tools give me more ways to act on both.</strong></p>
+        <p>Sixteen years of design still show up in what I notice. I look at where my eye goes first and whether that is where it should go. I can enjoy an animation and still decide it is pulling attention away from what someone needs to do.</p>
+        <p>Those are the things I am using when I look at an agent's output. I need to know what is working, explain what feels wrong, and choose what deserves another pass.</p>
+        <p>My portfolio exploration made that very clear. It became easy to generate more things to say and more ways to present them. The page got too talkative. On mobile, I ended up removing the role panel and annotations around the portrait so the introduction had room.</p>
+        <p>The tools helped me produce and revise the alternatives. I had to decide what earned its place.</p>
+        <p>That is why the fundamentals matter so much to me in this workflow. They help me <Link to="/notes/ryan-design-taste-skill/">give useful direction before a prompt</Link> and make a decision after it. The ability to produce more versions makes that judgment something I use more often.</p>
+        <h2>The people are part of what is fueling me</h2>
+        <p>I've just joined the Dive Club Discord, and I'm excited to get involved.</p>
+        <p>I've spent months working through the Dive Club catalog, and Dive Radio has become part of my week. I come away wanting to open a project and try something I just saw.</p>
+        <p>I think some of the most talented designers in the industry are gathering around these conversations. What I like is how willing they are to explore the tools and show their work while they are figuring things out. Every week seems to bring another model or another possibility to make sense of.</p>
+        <p>Joining the Discord gives me a place to bring my own experiments into that conversation. I want to see what other people are trying, share what I am making, and follow an idea further because somebody helped me see another possibility in it.</p>
+        <p>There is a lot I want to explore, and being around that kind of curiosity makes me want to keep going.</p>
+        <p>I built a mobile app in two months. Now I'm looking again at the other ideas I thought I would never have time to make.</p>
+        <p>A lot more of them feel worth starting.</p>
+      </>
+    ),
+  },
   {
     slug: 'exploring-my-portfolio-in-paper',
     kind: 'essay',

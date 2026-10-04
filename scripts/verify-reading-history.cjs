@@ -40,6 +40,20 @@ async function verify(browser, width) {
   await drawer.getByRole('button', { name: 'All notes', exact: true }).click();
   await drawer.waitFor({ state: 'detached' });
   assert.equal(new URL(page.url()).pathname, '/notes');
+  // A direct refresh restores its own position, never another page's default history key.
+  await page.goto(`${origin}/notes/how-this-site-works/`, { waitUntil: 'domcontentloaded' });
+  await scroller.locator('h1').waitFor();
+  await page.waitForTimeout(300);
+  await scroller.evaluate(element => { element.scrollTop = 900; });
+  await page.waitForTimeout(100);
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await scroller.locator('h1').waitFor();
+  await page.waitForTimeout(400);
+  assert.equal(await scroller.evaluate(element => element.scrollTop), 900);
+  await page.goto(`${origin}/notes/governance-in-markdown/`, { waitUntil: 'domcontentloaded' });
+  await scroller.locator('h1').waitFor();
+  await page.waitForTimeout(300);
+  assert.equal(await scroller.evaluate(element => element.scrollTop), 0);
   assert.deepEqual(errors, []);
   await page.close();
 }
@@ -50,7 +64,7 @@ async function verify(browser, width) {
     try {
       for (const width of [390, 1440]) {
         await verify(browser, width);
-        console.log(`${engine.name()} ${width}: history, scroll, focus, stable shell, session close and direct exit passed`);
+        console.log(`${engine.name()} ${width}: history, scroll, focus, stable shell, session close, direct exit and isolated refresh positions passed`);
       }
     } finally {
       await browser.close();

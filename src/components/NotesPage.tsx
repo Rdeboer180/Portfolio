@@ -172,7 +172,7 @@ const NoteStream: React.FC<{
             <div className="notes__row-meta">
               <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
               <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
-                {KIND_LABEL[note.kind]}
+                {KIND_LABEL[note.kind]}{note.status === 'draft' ? ' · Draft' : ''}
               </span>
             </div>
             <div className="notes__row-main">

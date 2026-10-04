@@ -48,7 +48,7 @@ const NotePage: React.FC = () => {
           </span>
           <time dateTime={note.dateISO}>{note.date}</time>
           <span>·</span>
-          <span>{note.read} read</span>
+          <span>{note.status === 'draft' ? 'Draft' : `${note.read} read`}</span>
           {note.kind === 'essay' && note.origin !== 'portfolio' && (
             <span className="notes__meta-source">· first thought out loud on LinkedIn</span>
           )}
@@ -71,7 +71,7 @@ const NotePage: React.FC = () => {
       {/* Close rail is a statement, not a nav. "All notes" lives in the header
           and contact lives in the shared footer below. Build logs get their own
           close, because the LinkedIn-rough-cut line isn't true of them. */}
-      <aside className="notes__close">
+      {note.status !== 'draft' && <aside className="notes__close">
         <span className="notes__close-label">{note.origin === 'portfolio' ? '[ Exploration ]' : '[ In Progress ]'}</span>
         <p className="notes__close-body">
           {note.origin === 'portfolio' ? (
@@ -88,7 +88,7 @@ const NotePage: React.FC = () => {
             </>
           )}
         </p>
-      </aside>
+      </aside>}
 
       <Footer />
     </article>
