@@ -3,11 +3,18 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
 import ProjectPreview from './ProjectPreview';
 import LoopVideo from './LoopVideo';
-import { Project, ProjectImage } from '../data/projects';
+import { Project, ProjectImage, ProjectOverview as ProjectOverviewData } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import { PlayDraftStoreLink } from './PlayDraftRelease';
 import '../styles/components/_project-overview.scss';
 
+/** Keep related work in the sentence, with the same route-backed drawer navigation. */
+const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
+  const link = decision.bodyLink;
+  const index = link ? decision.body.indexOf(link.text) : -1;
+  if (!link || index < 0) return <>{decision.body}</>;
+  return <>{decision.body.slice(0, index)}<Link to={link.to}>{link.text}</Link>{decision.body.slice(index + link.text.length)}</>;
+};
 
 /** Original project artifacts retain their captions and crops. */
 const OverviewMedia: React.FC<{ image: ProjectImage; opening?: boolean }> = ({ image, opening }) => {
@@ -81,7 +88,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
             <div>
               <span className="project-overview__number" aria-hidden="true">0{index + 1}</span>
               <h3>{decision.title}</h3>
-              <p>{decision.body}</p>
+              <p><DecisionCopy decision={decision} /></p>
             </div>
             {decision.image && <OverviewMedia image={decision.image} />}
           </section>)}
