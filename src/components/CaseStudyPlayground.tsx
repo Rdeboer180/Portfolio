@@ -56,6 +56,12 @@ const CardVideo: React.FC<{
 }> = ({ src, poster, alt, playing, primary }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [inView, setInView] = useState(false);
+  const [reading, setReading] = useState(() => Boolean(document.querySelector('dialog.project-panel[open]')));
+  useEffect(() => {
+    const update = (event: Event) => setReading(Boolean((event as CustomEvent<boolean>).detail));
+    document.addEventListener('portfolio:reading-panel', update);
+    return () => document.removeEventListener('portfolio:reading-panel', update);
+  }, []);
 
   // Primary loops drive themselves from visibility, not hover
   useEffect(() => {
@@ -70,7 +76,7 @@ const CardVideo: React.FC<{
     return () => observer.disconnect();
   }, [primary]);
 
-  const shouldPlay = primary ? inView : playing;
+  const shouldPlay = !reading && (primary ? inView : playing);
 
   useEffect(() => {
     const el = ref.current;

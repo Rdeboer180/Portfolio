@@ -19,7 +19,7 @@ beforeEach(() => {
 
 const mount = () => {
   const result = render(<WheelRackLibraryTour />);
-  result.container.querySelectorAll('image').forEach(image => fireEvent.load(image));
+  result.container.querySelectorAll('img').forEach(image => fireEvent.load(image));
   return result;
 };
 
@@ -27,7 +27,7 @@ test('waits for artifacts, then supports pause, chapter seeking, and replay', ()
   const result = render(<WheelRackLibraryTour />);
   expect(screen.getByRole('button', { name: 'Pause tour' })).toBeDisabled();
   expect(animations).toHaveLength(0);
-  result.container.querySelectorAll('image').forEach(image => fireEvent.load(image));
+  result.container.querySelectorAll('img').forEach(image => fireEvent.load(image));
   expect(animations[0].play).toHaveBeenCalled();
   fireEvent.click(screen.getByRole('button', { name: 'Pause tour' }));
   expect(screen.getByRole('button', { name: 'Play tour' })).toBeEnabled();
@@ -49,6 +49,7 @@ test('holds the final overview when playback completes', () => {
   act(() => animations[0].onfinish?.());
   expect(screen.getByRole('button', { name: 'Replay tour' })).toBeEnabled();
   expect(screen.getByRole('button', { name: 'Library' })).toHaveAttribute('aria-pressed', 'true');
+  expect(animations.every(animation => animation.currentTime === 28000)).toBe(true);
 });
 
 test('pauses while the tab is hidden and resumes only if playback was active', () => {

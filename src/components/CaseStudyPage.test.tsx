@@ -61,7 +61,7 @@ test('locked case study keeps new artifacts, ownership detail, and comparison be
 test('PlayDraft opens on a controlled walkthrough and keeps detailed evidence available on demand', () => {
   const { container } = render(<MemoryRouter><CaseStudyPage slug="playdraft" /></MemoryRouter>);
   expect(screen.getByRole('heading', { level: 1, name: 'PlayDraft' })).toBeInTheDocument();
-  const video = container.querySelector('video');
+  const video = container.querySelector('.project-overview__reel video');
   expect(video).toHaveAttribute('controls');
   expect(video).not.toHaveAttribute('autoplay');
   expect(video).toHaveAttribute('poster', '/images/work/playdraft/playdraft-howtoplay-poster.jpg');

@@ -1,0 +1,104 @@
+[
+  {
+    "source": "/images/work/wheelrack/evidence/fitment-states.png",
+    "display": "/images/work/wheelrack/overview-samples/fitment-states-158-190-1367-1575.webp",
+    "sourceSha256": "6a1be3b4e2482739c84d3bcb1ba9724605866a9d1e3507494df8742d21fe347f",
+    "crop": {
+      "x": 158,
+      "y": 190,
+      "width": 1367,
+      "height": 1575,
+      "sourceWidth": 6466,
+      "sourceHeight": 7179
+    },
+    "size": [
+      1111,
+      1280
+    ]
+  },
+  {
+    "source": "/images/work/wheelrack/evidence/filter-states.png",
+    "display": "/images/work/wheelrack/overview-samples/filter-states-120-335-1860-455.webp",
+    "sourceSha256": "49890c01ef16df9aa8fa4e29a314a349642eeae9a58e7621d6d94ca6696bf64a",
+    "crop": {
+      "x": 120,
+      "y": 335,
+      "width": 1860,
+      "height": 455,
+      "sourceWidth": 3604,
+      "sourceHeight": 5185
+    },
+    "size": [
+      1280,
+      313
+    ]
+  },
+  {
+    "source": "/images/work/wheelrack/evidence/product-variants.png",
+    "display": "/images/work/wheelrack/overview-samples/product-variants-80-1650-850-485.webp",
+    "sourceSha256": "4eb353de871f564617990a803abd5c470a9da45907683ce38665342f40d7dd43",
+    "crop": {
+      "x": 80,
+      "y": 1650,
+      "width": 850,
+      "height": 485,
+      "sourceWidth": 6901,
+      "sourceHeight": 9906
+    },
+    "size": [
+      850,
+      485
+    ]
+  },
+  {
+    "source": "/images/work/wheelrack/evidence/form-documentation.png",
+    "display": "/images/work/wheelrack/overview-samples/form-documentation-458-1428-1120-550.webp",
+    "sourceSha256": "3959c58b8aa56ae090ddda5cd564616bdb5aed180bf21a90c486936b93f71ecb",
+    "crop": {
+      "x": 458,
+      "y": 1428,
+      "width": 1120,
+      "height": 550,
+      "sourceWidth": 2100,
+      "sourceHeight": 3569
+    },
+    "size": [
+      1120,
+      550
+    ]
+  },
+  {
+    "source": "/images/work/aem-component-system/FinalComponentBuildout_Teasers_safe.jpeg",
+    "display": "/images/work/aem-component-system/overview-samples/FinalComponentBuildout_Teasers_safe-0-256-428-328.webp",
+    "sourceSha256": "91f89e9657ec3236472867f7ff463b435ae6bc1977893edde4fdd5fc7d0aa8d2",
+    "crop": {
+      "x": 0,
+      "y": 256,
+      "width": 428,
+      "height": 328,
+      "sourceWidth": 428,
+      "sourceHeight": 1536
+    },
+    "size": [
+      428,
+      328
+    ]
+  },
+  {
+    "source": "/images/work/aem-component-system/FinalComponentBuildout_Hero_safe.jpeg",
+    "display": "/images/work/aem-component-system/overview-samples/FinalComponentBuildout_Hero_safe-0-54-428-481.webp",
+    "sourceSha256": "0b5caa4e38e4225607b2b471da4c8af3eba264fe2e6f812a77313b7b3ae8ed59",
+    "crop": {
+      "x": 0,
+      "y": 54,
+      "width": 428,
+      "height": 481,
+      "sourceWidth": 428,
+      "sourceHeight": 1536
+    },
+    "size": [
+      428,
+      481
+    ]
+  }
+]

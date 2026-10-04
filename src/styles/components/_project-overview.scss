@@ -82,3 +82,11 @@
   --case-study-icon-size: 48px;
   border-radius: var(--radius-lg);
 }
+
+.project-overview__preview {
+  margin-bottom: $spacing-2xl !important;
+  video { display: block; width: 100%; max-height: 620px; aspect-ratio: 16 / 9; object-fit: contain; background: $color-neutral-lightest; border-radius: $radius-lg; }
+}
+.project-overview__body > section > .wr-tour { margin: $spacing-2xl 0; }
+
+.project-overview .project-overview__cropped-evidence { height: auto; max-height: none; width: 100%; object-fit: contain; }

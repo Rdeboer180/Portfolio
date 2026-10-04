@@ -120,9 +120,14 @@ export default function WheelRackLibraryTour() {
     });
     animations.current = [tour, meter, ...cards];
     animations.current.forEach(animation => { animation.pause(); animation.currentTime = 0; });
-    tour.onfinish = () => { setFinished(true); setPlaying(false); setChapter(5); };
+    tour.onfinish = () => {
+      // Freeze every track at the same final frame, then stop the frame loop.
+      activeChapter.current = 5;
+      animations.current.forEach(animation => { animation.pause(); animation.currentTime = DURATION; });
+      setFinished(true); setPlaying(false); setChapter(5);
+    };
     setPrepared(true);
-    return () => { animations.current.forEach(animation => animation.cancel()); animations.current = []; };
+    return () => { tour.onfinish = null; animations.current.forEach(animation => animation.cancel()); animations.current = []; };
   }, [ready, reduced]);
 
   useEffect(() => {
@@ -170,18 +175,14 @@ export default function WheelRackLibraryTour() {
       <div className={`wr-tour__viewport${!prepared ? ' is-loading' : ''}`} aria-hidden="true">
         <div ref={camera} className="wr-tour__camera">
           {near && VIEWS.map((view, index) => {
-            const [src, width, height] = SOURCES[view.source];
-            const [x, y, cropWidth, cropHeight] = view.crop;
+            const [src] = SOURCES[view.source];
             return (
               <div key={view.label} className="wr-tour__card" style={{ left: `${3 + index % 4 * 24}%`, top: `${3 + Math.floor(index / 4) * 24}%` }}>
                 <span className="wr-tour__card-label">{view.label}</span>
                 <div className="wr-tour__sample">
-                  <svg viewBox={`0 0 ${cropWidth} ${cropHeight}`} width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
-                    <svg viewBox={`${x} ${y} ${cropWidth} ${cropHeight}`} width={cropWidth} height={cropHeight} overflow="hidden">
-                      <image href={ROOT + src} width={width} height={height}
-                        onLoad={() => onLoad(index)} onError={() => { setFailed(true); onLoad(index); }} />
-                    </svg>
-                  </svg>
+                  <img src={`${ROOT}tour-samples/${String(index + 1).padStart(2, '0')}.webp`}
+                    data-original-source={ROOT + src} alt="" decoding="async"
+                    onLoad={() => onLoad(index)} onError={() => { setFailed(true); onLoad(index); }} />
                 </div>
               </div>
             );

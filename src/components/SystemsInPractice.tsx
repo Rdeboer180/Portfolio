@@ -1,3 +1,4 @@
+import { observeLayout } from '../utils/observeLayout';
 // ============================================
 // SystemsInPractice — "Shared language. Better product decisions."
 // Homepage section 03, badged "How I work". An ecosystem board of eight nodes —
@@ -523,7 +524,7 @@ const SystemsInPractice: React.FC = () => {
     const board = boardRef.current;
     if (!board) return;
 
-    const set = (key: string, d: string) => wireRefs.current[key]?.setAttribute('d', d);
+    const set = (key: string, d: string) => { const path = wireRefs.current[key]; if (path && path.getAttribute('d') !== d) path.setAttribute('d', d); };
     const write = (id: LinkId, wire: Wire) => {
       set(`${id}:shaft`, wire.d);
       set(`${id}:a`, wire.headA);
@@ -583,14 +584,7 @@ const SystemsInPractice: React.FC = () => {
 
     draw();
 
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', draw);
-      return () => window.removeEventListener('resize', draw);
-    }
-    const ro = new ResizeObserver(draw);
-    ro.observe(board);
-    Object.values(cellRefs.current).forEach((el) => el && ro.observe(el));
-    return () => ro.disconnect();
+    return observeLayout([board, ...Object.values(cellRefs.current).filter((el): el is HTMLLIElement => Boolean(el))], draw);
   }, []);
 
   // The loop's wires: same mechanism as the board's, measured from the track.
@@ -599,7 +593,7 @@ const SystemsInPractice: React.FC = () => {
     const list = beatsRef.current;
     if (!track || !list) return;
 
-    const set = (key: string, d: string) => loopWireRefs.current[key]?.setAttribute('d', d);
+    const set = (key: string, d: string) => { const path = loopWireRefs.current[key]; if (path && path.getAttribute('d') !== d) path.setAttribute('d', d); };
     const write = (id: LoopLinkId, wire: Wire) => {
       set(`${id}:shaft`, wire.d);
       set(`${id}:a`, wire.headA);
@@ -661,15 +655,7 @@ const SystemsInPractice: React.FC = () => {
 
     draw();
 
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', draw);
-      return () => window.removeEventListener('resize', draw);
-    }
-    const ro = new ResizeObserver(draw);
-    ro.observe(track);
-    ro.observe(list);
-    Object.values(beatRefs.current).forEach((el) => el && ro.observe(el));
-    return () => ro.disconnect();
+    return observeLayout([track, list, ...Object.values(beatRefs.current).filter((el): el is HTMLLIElement => Boolean(el))], draw);
   }, []);
 
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);

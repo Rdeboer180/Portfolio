@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
+import ProjectPreview from './ProjectPreview';
+import WheelRackLibraryTour from './WheelRackLibraryTour';
 import { Project, ProjectImage } from '../data/projects';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import { PlayDraftStoreLink } from './PlayDraftRelease';
 import '../styles/components/_project-overview.scss';
 
 
-/** Existing project artifacts retain their caption and crop; videos never autoplay. */
+/** Original project artifacts retain their captions and crops. */
 const OverviewMedia: React.FC<{ image: ProjectImage; opening?: boolean }> = ({ image, opening }) => {
   if (!image.src || image.isOverlay) return null;
   const crop = image.crop;
   return <figure className={opening ? 'project-overview__opening' : undefined}>
     {image.isVideo ? <video src={image.src} poster={image.videoPoster} controls playsInline preload="metadata" aria-label={image.alt} /> :
       <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`View full image: ${image.alt} (opens in a new tab)`}>
-        {crop ? <span className="project-overview__crop" style={{ aspectRatio: `${crop.width} / ${crop.height}`, maxWidth: opening ? 620 * crop.width / crop.height : undefined, margin: '0 auto' }}>
+        {image.displaySrc ? <img className="project-overview__cropped-evidence" src={image.displaySrc} alt={image.alt} loading={opening ? 'eager' : 'lazy'} /> : crop ? <span className="project-overview__crop" style={{ aspectRatio: `${crop.width} / ${crop.height}`, maxWidth: opening ? 620 * crop.width / crop.height : undefined, margin: '0 auto' }}>
           <img src={image.src} alt={image.alt} width={crop.sourceWidth} height={crop.sourceHeight} loading={opening ? 'eager' : 'lazy'}
             style={{ width: `${crop.sourceWidth / crop.width * 100}%`, maxWidth: 'none', height: 'auto', left: `${-crop.x / crop.width * 100}%`, top: `${-crop.y / crop.height * 100}%` }} />
         </span> : <img src={image.src} alt={image.alt} loading={opening ? 'eager' : 'lazy'} />}
@@ -64,11 +66,13 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
       </aside>
       <div className="project-overview__body">
         <section id="project-walkthrough" aria-label={reel || overview.opening?.isVideo ? 'Product walkthrough' : 'Project evidence'}>
+          <ProjectPreview project={project} />
+          {project.slug === 'wheelrack' && <WheelRackLibraryTour />}
           {reel && <figure className="project-overview__reel">
             <video src={reel.src} poster={reel.poster} controls playsInline preload="metadata" aria-label={reel.alt} />
             <figcaption>{reel.caption}</figcaption>
           </figure>}
-          {!reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
+          {!project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
           <p className="project-overview__deck">{overview.deck}</p>
           <p className="project-overview__ownership">{overview.ownership}</p>
         </section>

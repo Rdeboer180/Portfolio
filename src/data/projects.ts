@@ -30,6 +30,8 @@ export interface ProjectImage {
   /** Pixel coordinates into the original board; presentation only, original remains in the lightbox. */
   crop?: { x: number; y: number; width: number; height: number; sourceWidth: number; sourceHeight: number };
   src?: string;
+  /** Optimized crop of src for display; src still opens the untouched evidence. */
+  displaySrc?: string;
   alt: string;
   layout: 'full' | 'half';
   caption?: string;
@@ -2083,8 +2085,8 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     opening: evidence(p, 'system'),
     decisions: [
       { title: 'Specify authoring before implementation', body: 'Fields, variants, responsive behavior, and edge cases became a written contract shared by design and engineering.' },
-      { title: 'Ship variants with their rules', body: 'Eight core variants shipped with Sass, authoring defaults, and documentation. For three additional API-driven components, I specified behavior and styles alongside the engineering team.', image: evidence(p, 'system', 1) },
-      { title: 'Make the shared styles real', body: 'The global variable layer and component Sass shipped into production. Authors now work against the fields and variants engineering supports.', image: evidence(p, 'system') },
+      { title: 'Ship variants with their rules', body: 'Eight core variants shipped with Sass, authoring defaults, and documentation. For three additional API-driven components, I specified behavior and styles alongside the engineering team.', image: { ...evidence(p, 'system', 1)!, crop: { x: 0, y: 256, width: 428, height: 328, sourceWidth: 428, sourceHeight: 1536 } } },
+      { title: 'Make the shared styles real', body: 'The global variable layer and component Sass shipped into production. Authors now work against the fields and variants engineering supports.', image: { ...evidence(p, 'system')!, crop: { x: 0, y: 54, width: 428, height: 481, sourceWidth: 428, sourceHeight: 1536 } } },
     ],
     outcome: 'The components power live pages. WebPageTest measured 60% faster loads on pages using them; the full study retains the measurement context. Shared documentation helps junior designers choose the right variant.',
   }),
@@ -2129,6 +2131,13 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
 for (const project of projects) {
   const edition = compactEditions[project.slug];
   if (edition) project.overview = edition(project);
+  const images = [project.overview?.opening, ...(project.overview?.decisions.map(decision => decision.image) ?? [])];
+  for (const image of images) {
+    if (!image?.src || !image.crop) continue;
+    const { x, y, width, height } = image.crop;
+    const stem = image.src.split('/').pop()!.replace(/\.[^.]+$/, '');
+    image.displaySrc = `/images/work/${project.slug}/overview-samples/${stem}-${x}-${y}-${width}-${height}.webp`;
+  }
 }
 
 export default projects;

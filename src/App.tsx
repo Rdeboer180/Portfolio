@@ -245,10 +245,10 @@ function AppRoutes() {
             duplicated the entire page with a dead copy on top. */}
         <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
       </Routes>
-      {background && <ProjectPanel key={location.pathname}><Routes location={location}>
+      {background && <ProjectPanel overlay={<UnlockChrome />}><Routes key={location.pathname} location={location}>
         <Route path="/work/:slug" element={<PanelCaseStudy />} />
         <Route path="/notes/:slug" element={<NotePage />} />
-      </Routes><UnlockChrome /></ProjectPanel>}
+      </Routes></ProjectPanel>}
     </>
   );
 }

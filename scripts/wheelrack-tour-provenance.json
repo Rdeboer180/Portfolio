@@ -1,0 +1,258 @@
+[
+  {
+    "file": "01.webp",
+    "label": "Inputs / every state",
+    "source": "evidence/form-documentation.png",
+    "sourceSha256": "3959c58b8aa56ae090ddda5cd564616bdb5aed180bf21a90c486936b93f71ecb",
+    "crop": [
+      455,
+      1425,
+      1125,
+      550
+    ],
+    "size": [
+      1125,
+      550
+    ]
+  },
+  {
+    "file": "02.webp",
+    "label": "Checkboxes + radios",
+    "source": "evidence/form-documentation.png",
+    "sourceSha256": "3959c58b8aa56ae090ddda5cd564616bdb5aed180bf21a90c486936b93f71ecb",
+    "crop": [
+      485,
+      2100,
+      1260,
+      255
+    ],
+    "size": [
+      1260,
+      255
+    ]
+  },
+  {
+    "file": "03.webp",
+    "label": "Dropdowns / open + closed",
+    "source": "evidence/form-documentation.png",
+    "sourceSha256": "3959c58b8aa56ae090ddda5cd564616bdb5aed180bf21a90c486936b93f71ecb",
+    "crop": [
+      480,
+      2460,
+      1550,
+      1010
+    ],
+    "size": [
+      1280,
+      834
+    ]
+  },
+  {
+    "file": "04.webp",
+    "label": "Buttons / size + icon",
+    "source": "supporting/opportunity/wheelrack-design-system-05.png",
+    "sourceSha256": "baec2a7a1db7b249ae0a198104ff432e494a6b79f9a97eeb8b25f8adff0d8991",
+    "crop": [
+      450,
+      335,
+      815,
+      545
+    ],
+    "size": [
+      815,
+      545
+    ]
+  },
+  {
+    "file": "05.webp",
+    "label": "Filters / hover + focus",
+    "source": "evidence/filter-states.png",
+    "sourceSha256": "49890c01ef16df9aa8fa4e29a314a349642eeae9a58e7621d6d94ca6696bf64a",
+    "crop": [
+      120,
+      335,
+      1860,
+      455
+    ],
+    "size": [
+      1280,
+      313
+    ]
+  },
+  {
+    "file": "06.webp",
+    "label": "Pricing / expanded",
+    "source": "evidence/filter-states.png",
+    "sourceSha256": "49890c01ef16df9aa8fa4e29a314a349642eeae9a58e7621d6d94ca6696bf64a",
+    "crop": [
+      825,
+      1350,
+      335,
+      880
+    ],
+    "size": [
+      335,
+      880
+    ]
+  },
+  {
+    "file": "07.webp",
+    "label": "Front + rear / add to cart",
+    "source": "evidence/product-variants.png",
+    "sourceSha256": "4eb353de871f564617990a803abd5c470a9da45907683ce38665342f40d7dd43",
+    "crop": [
+      80,
+      1650,
+      850,
+      485
+    ],
+    "size": [
+      850,
+      485
+    ]
+  },
+  {
+    "file": "08.webp",
+    "label": "Partner variant / get quote",
+    "source": "evidence/product-variants.png",
+    "sourceSha256": "4eb353de871f564617990a803abd5c470a9da45907683ce38665342f40d7dd43",
+    "crop": [
+      3690,
+      1650,
+      850,
+      485
+    ],
+    "size": [
+      850,
+      485
+    ]
+  },
+  {
+    "file": "09.webp",
+    "label": "Availability / recovery",
+    "source": "evidence/fitment-states.png",
+    "sourceSha256": "6a1be3b4e2482739c84d3bcb1ba9724605866a9d1e3507494df8742d21fe347f",
+    "crop": [
+      2600,
+      1060,
+      955,
+      565
+    ],
+    "size": [
+      955,
+      565
+    ]
+  },
+  {
+    "file": "10.webp",
+    "label": "Dealer view / desktop",
+    "source": "evidence/fitment-states.png",
+    "sourceSha256": "6a1be3b4e2482739c84d3bcb1ba9724605866a9d1e3507494df8742d21fe347f",
+    "crop": [
+      158,
+      190,
+      1367,
+      1575
+    ],
+    "size": [
+      1111,
+      1280
+    ]
+  },
+  {
+    "file": "11.webp",
+    "label": "Dealer view / mobile",
+    "source": "evidence/fitment-states.png",
+    "sourceSha256": "6a1be3b4e2482739c84d3bcb1ba9724605866a9d1e3507494df8742d21fe347f",
+    "crop": [
+      1610,
+      190,
+      380,
+      2270
+    ],
+    "size": [
+      214,
+      1280
+    ]
+  },
+  {
+    "file": "12.webp",
+    "label": "Empty results / next step",
+    "source": "evidence/fitment-states.png",
+    "sourceSha256": "6a1be3b4e2482739c84d3bcb1ba9724605866a9d1e3507494df8742d21fe347f",
+    "crop": [
+      2220,
+      3850,
+      1320,
+      1120
+    ],
+    "size": [
+      1280,
+      1086
+    ]
+  },
+  {
+    "file": "13.webp",
+    "label": "Color / shared palette",
+    "source": "supporting/opportunity/wheelrack-design-system-02.png",
+    "sourceSha256": "12ef908f44b1391a8c7a161e4bde3d8a2f22e26037a296d32ce699febcd2c37e",
+    "crop": [
+      0,
+      0,
+      2794,
+      1407
+    ],
+    "size": [
+      1280,
+      645
+    ]
+  },
+  {
+    "file": "14.webp",
+    "label": "Typography / partner exception",
+    "source": "evidence/typography.png",
+    "sourceSha256": "5221a2b46163aff8d9e9d8a0158e27a8ad98e4c180055b67381391c0772e2ae1",
+    "crop": [
+      475,
+      175,
+      920,
+      420
+    ],
+    "size": [
+      920,
+      420
+    ]
+  },
+  {
+    "file": "15.webp",
+    "label": "Spacing / shared values",
+    "source": "evidence/structure-tokens.png",
+    "sourceSha256": "d5392bde76b7210afc6a89b2b6e874b3cd9893a0b0a8cf9d157cea48d81b451f",
+    "crop": [
+      480,
+      167,
+      880,
+      220
+    ],
+    "size": [
+      880,
+      220
+    ]
+  },
+  {
+    "file": "16.webp",
+    "label": "Radius + icon scale",
+    "source": "evidence/structure-tokens.png",
+    "sourceSha256": "d5392bde76b7210afc6a89b2b6e874b3cd9893a0b0a8cf9d157cea48d81b451f",
+    "crop": [
+      480,
+      410,
+      880,
+      545
+    ],
+    "size": [
+      880,
+      545
+    ]
+  }
+]
