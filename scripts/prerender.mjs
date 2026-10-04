@@ -152,8 +152,14 @@ async function main() {
       // client renders first.
       const clone = document.documentElement.cloneNode(true);
       clone.classList.remove('has-unlock-bar');
-      // Native modal state is established after hydration, not via an open attribute.
-      clone.querySelectorAll('dialog.project-panel').forEach(el => el.removeAttribute('open'));
+      // Keep direct arrivals in their final drawer shell; hydration promotes it to a modal.
+      clone.querySelectorAll('dialog.project-panel').forEach(el => { el.setAttribute('open', ''); el.setAttribute('data-phase', 'open'); });
+      clone.classList.remove('reading-panel-open');
+      if (clone.querySelector('dialog.project-panel')) {
+        clone.querySelector('body').style.removeProperty('overflow');
+        clone.querySelectorAll('.project-panel [role="status"]').forEach(el => { el.textContent = ''; });
+        clone.querySelectorAll('.project-panel h1').forEach(el => el.removeAttribute('tabindex'));
+      }
       clone.querySelectorAll('.tool-bucket .case-playground__coin').forEach(el => el.remove());
       clone.querySelector('.hero--contract')?.setAttribute('data-ink-started', 'false');
       clone.querySelectorAll('.ink-ground').forEach(el => el.removeAttribute('data-ink-settled'));

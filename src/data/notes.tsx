@@ -1052,7 +1052,7 @@ excluded    Angle brackets, pixel grids, terminal type,
         <p>
           When someone asks how I work, this site is the thing I point at. Not the case studies
           on it. The site itself. It went through{' '}
-          <Link to="/work/wheelrack/">the same loop I use on product work</Link>: start from a
+          <Link to="/work/wheelrack/">the workflow in my WheelRack case study</Link>: start from a
           reference, build tokens before components, add motion only when it carries meaning, and
           keep AI out of the final call.
         </p>
@@ -1097,10 +1097,10 @@ excluded    Angle brackets, pixel grids, terminal type,
           Agents audit this site constantly. Accessibility passes, copy passes against a
           hiring-manager lens, dead-link sweeps, image consistency checks. They draft, too. But
           every visual direction starts from a reference I picked, every finding gets verified
-          before it ships, and the judgment layer is written down as{' '}
-          <Link to="/notes/ryan-design-taste-skill">an installable skill</Link> so the tools
+          before it ships, and the judgment layer is documented in{' '}
+          <Link to="/notes/ryan-design-taste-skill">my note on the installable design-taste skill</Link> so the tools
           inherit my standards instead of their defaults. The brand rules themselves live in{' '}
-          <Link to="/notes/governance-in-markdown">two files an agent reads before it builds</Link>.
+          <Link to="/notes/governance-in-markdown">my note on the two files an agent reads before it builds</Link>.
         </p>
         <p>
           AI speeds up exploration. I stay responsible for the decisions, the details, and the
@@ -1176,7 +1176,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
         <p>
           You can read the rules, then look at{' '}
           <Link to="/design-system">the system this site runs on</Link> and the{' '}
-          <Link to="/work/playdraft/">products built under it</Link>, and decide for yourself
+          <Link to="/work/playdraft/">PlayDraft case study</Link>, and decide for yourself
           whether the output matches the standard. The selection-frame cards and the
           text-selection highlight both came out of this loop. An agent proposed directions, the
           skill constrained them, I made the call.
@@ -1283,9 +1283,9 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
           Looking back at sixteen years of visual design, front-end code, design systems, and now
           AI-assisted product work, the constant was never a tool or even a discipline. It was
           refusing to hand off something I didn&rsquo;t understand. Learning the CMS well enough
-          to <Link to="/work/seasonal-content-system/">author a seasonal storefront in it</Link>.
-          Learning Sass well enough to ship it. Learning the token pipeline well enough to{' '}
-          <Link to="/work/wheelrack/">argue with it across a design system</Link>.
+          to author a seasonal storefront, as shown in <Link to="/work/seasonal-content-system/">the seasonal content case study</Link>.
+          Learning Sass well enough to ship it. Learning the token pipeline well enough to challenge decisions across a design system, as shown in{' '}
+          <Link to="/work/wheelrack/">the WheelRack case study</Link>.
         </p>
         <p>
           That instinct is why this moment reads as an opening to me rather than a threat. The

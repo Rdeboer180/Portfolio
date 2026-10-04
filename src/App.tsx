@@ -201,12 +201,11 @@ function UnlockChrome() {
 function AppRoutes() {
   const location = useLocation();
   usePanelNavigation();
-  const [panelsEnabled, setPanelsEnabled] = useState(false);
+  const [readingReady, setReadingReady] = useState(false);
   useEffect(() => {
-    // Keep static articles and first hydration identical at every screen size.
-    if (!(window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) setPanelsEnabled(true);
+    if (!(window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) setReadingReady(true);
   }, []);
-  const background = panelsEnabled && isPanelRoute(location.pathname) ? (location.state?.backgroundLocation || { pathname: location.pathname.startsWith('/notes/') ? '/notes' : '/', search: '', hash: '', state: null, key: 'reading-background' }) : undefined;
+  const background = isPanelRoute(location.pathname) ? ((readingReady && location.state?.backgroundLocation) || { pathname: location.pathname.startsWith('/notes/') ? '/notes' : '/', search: '', hash: '', state: null, key: 'reading-background' }) : undefined;
   return (
     <>
       <RouteEffects />
@@ -245,7 +244,8 @@ function AppRoutes() {
             duplicated the entire page with a dead copy on top. */}
         <Route path="*" element={<PageShell><NotFoundPage /></PageShell>} />
       </Routes>
-      {background && <ProjectPanel overlay={<UnlockChrome />}><Routes key={location.pathname} location={location}>
+      {background && <ProjectPanel fromNavigation={readingReady} overlay={<UnlockChrome />}><Routes key={location.pathname} location={location}>
+        <Route path="/work/tire-rack-winter" element={<Navigate to="/work/seasonal-content-system" replace />} />
         <Route path="/work/:slug" element={<PanelCaseStudy />} />
         <Route path="/notes/:slug" element={<NotePage />} />
       </Routes></ProjectPanel>}

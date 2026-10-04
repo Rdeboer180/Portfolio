@@ -101,3 +101,18 @@
 .reading-panel-open #main-content *,
 .reading-panel-open #main-content *::before,
 .reading-panel-open #main-content *::after { animation-play-state: paused !important; }
+
+.project-panel__identity { display: flex; align-items: center; gap: $spacing-xl; min-width: 0; }
+.project-panel__back {
+  border: 0; background: transparent; color: $color-primary-text;
+  font: inherit; text-align: left; min-height: 44px; padding: $spacing-xs 0;
+  cursor: pointer;
+  &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 3px; }
+}
+.project-panel__content { animation: reading-content-in 140ms ease-out; }
+.project-panel__content h1:focus { outline: none; }
+@keyframes reading-content-in { from { opacity: .65; } to { opacity: 1; } }
+@media (max-width: 850px) {
+  .project-panel__identity:has(.project-panel__back) .project-panel__name { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .project-panel__content { animation: none; } }

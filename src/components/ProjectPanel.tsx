@@ -1,14 +1,19 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import '../styles/components/_project-panel.scss';
 import { useUnlock } from '../context/UnlockContext';
 import { getHomeHref } from '../utils/homeSession';
 import ReadingErrorBoundary from './ReadingErrorBoundary';
 
-export default function ProjectPanel({ children, overlay }: { children: React.ReactNode; overlay?: React.ReactNode }) {
+const readingPositions = new Map<string, number>();
+
+export default function ProjectPanel({ children, overlay, fromNavigation = false }: { children: React.ReactNode; overlay?: React.ReactNode; fromNavigation?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<'opening' | 'open' | 'closing'>('opening');
+  const initialDirect = useRef(!fromNavigation);
+  const [phase, setPhase] = useState<'opening' | 'open' | 'closing'>(initialDirect.current ? 'open' : 'opening');
+  const navigationType = useNavigationType();
+  const [announcement, setAnnouncement] = useState('');
   const closing = useRef(false);
   const exitTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const finishExit = useRef<(() => void) | null>(null);
@@ -16,6 +21,8 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
   const { dismissPrompt } = useUnlock();
   const location = useLocation();
   const article = location.pathname.startsWith('/notes/');
+  const [stateReady, setStateReady] = useState(fromNavigation);
+  const panelState = stateReady ? location.state : null;
   const close = () => {
     if (closing.current) return;
     closing.current = true;
@@ -23,8 +30,8 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
       if (!finishExit.current) return;
       finishExit.current = null;
       clearTimeout(exitTimer.current);
-      if (location.state?.backgroundLocation) navigate(-1);
-      else navigate(article ? '/notes' : '/#projects', { replace: true });
+      if (location.state?.backgroundLocation) navigate(-((location.state?.readingDepth ?? 0) + 1));
+      else navigate(location.state?.readingOrigin ?? (article ? '/notes' : '/#projects'), { replace: true });
     };
     finishExit.current = finish;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
@@ -35,21 +42,34 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
   useEffect(() => {
     const el = scroller.current;
     if (!el) return;
-    el.scrollTop = 0;
-    if (!location.hash) return;
-    const revealAnchor = () => {
-      const target = document.getElementById(location.hash.slice(1));
-      if (!target || !el.contains(target)) return false;
-      target.scrollIntoView({ block: 'start' });
+    let saved = navigationType === 'POP' ? readingPositions.get(location.key) : undefined;
+    if (navigationType === 'POP' && saved === undefined) {
+      try { const stored = sessionStorage.getItem(`reading-scroll:${location.key}`); if (stored !== null) saved = Number(stored); } catch { /* Storage can be unavailable in private browsing. */ }
+    }
+    const settle = () => {
+      const heading = el.querySelector<HTMLElement>('h1');
+      if (!heading) return false;
+      if (!document.querySelector('.password-modal')) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+      }
+      setAnnouncement(heading.textContent ?? '');
+      if (saved !== undefined) el.scrollTop = saved;
+      else if (location.hash) el.querySelector(`[id="${CSS.escape(location.hash.slice(1))}"]`)?.scrollIntoView({ block: 'start' });
+      else el.scrollTop = 0;
       return true;
     };
-    if (revealAnchor()) return;
-    const observer = new MutationObserver(() => { if (revealAnchor()) observer.disconnect(); });
-    observer.observe(el, { childList: true, subtree: true });
-    return () => observer.disconnect();
-    // Section links handle their own scrolling; reset only when reading material changes.
+    const observer = new MutationObserver(() => { if (settle()) observer.disconnect(); });
+    const frame = requestAnimationFrame(() => { if (!settle()) observer.observe(el, { childList: true, subtree: true }); });
+    const save = () => {
+      readingPositions.set(location.key, el.scrollTop);
+      try { sessionStorage.setItem(`reading-scroll:${location.key}`, String(el.scrollTop)); } catch { /* In-memory restoration still works. */ }
+    };
+    el.addEventListener('scroll', save, { passive: true });
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); el.removeEventListener('scroll', save); };
+    // Hash navigation scrolls within the current reading page without replaying it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [location.pathname, location.key]);
   useEffect(() => {
     const el = dialog.current!;
     const target = document.activeElement as HTMLElement | null;
@@ -60,7 +80,9 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
     const returnClass = location.state?.returnFocusClass;
     const returnMeta = location.state?.returnMeta;
     closing.current = false;
-    setPhase('opening');
+    if (!(window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) setStateReady(true);
+    setPhase(initialDirect.current ? 'open' : 'opening');
+    if (el.open) el.close();
     el.showModal();
     document.documentElement.classList.add('reading-panel-open');
     const backgroundAnimations = document.querySelector('#main-content')?.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running') ?? [];
@@ -112,12 +134,16 @@ export default function ProjectPanel({ children, overlay }: { children: React.Re
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   };
-  return <dialog onKeyDown={trapFocus} ref={dialog} className="project-panel" data-phase={phase} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'transform' && closing.current) finishExit.current?.(); }} aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
+  return <dialog open={initialDirect.current} onKeyDown={trapFocus} ref={dialog} className="project-panel" data-phase={phase} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'transform' && closing.current) finishExit.current?.(); }} aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
     <header className="project-panel__header">
-      <Link to={getHomeHref()} className="project-panel__name">Ryan DeBoer</Link>
-      <button type="button" className="project-panel__close" onClick={close} aria-label={article ? 'Close article' : 'Close case study'}>Close <span aria-hidden="true">×</span></button>
+      <div className="project-panel__identity">
+        <Link to={getHomeHref()} className="project-panel__name">Ryan DeBoer</Link>
+        {panelState?.previousReading && <button className="project-panel__back" onClick={() => navigate(-1)}>← Previous {panelState.previousReading}</button>}
+      </div>
+      <button type="button" className="project-panel__close" onClick={close} aria-label={panelState?.backgroundLocation ? (article ? 'Close article' : 'Close case study') : (panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article) ? 'All notes' : 'All work')}>{panelState?.backgroundLocation ? 'Close' : (panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article) ? 'All notes' : 'All work')} <span aria-hidden="true">×</span></button>
     </header>
-    <div ref={scroller} className="project-panel__article"><ReadingErrorBoundary key={location.pathname}><Suspense fallback={<p className="project-panel__loading" role="status">Loading {article ? 'article' : 'case study'}…</p>}>{children}</Suspense></ReadingErrorBoundary></div>
+    <span className="sr-only" role="status" aria-live="polite">{announcement}</span>
+    <div ref={scroller} className="project-panel__article"><ReadingErrorBoundary key={location.pathname}><Suspense fallback={<p className="project-panel__loading" role="status">Loading {article ? 'article' : 'case study'}…</p>}><div key={location.pathname} className="project-panel__content">{children}</div></Suspense></ReadingErrorBoundary></div>
     {overlay}
   </dialog>;
 }

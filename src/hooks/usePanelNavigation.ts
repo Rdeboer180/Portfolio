@@ -13,9 +13,15 @@ export function usePanelNavigation() {
       const url = new URL(anchor.href, window.location.href);
       if (url.origin !== window.location.origin || !isPanelRoute(url.pathname)) return;
       // Same-page anchors retain their own scrolling behavior.
-      if (url.pathname === location.pathname) return;
+      if (url.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '')) return;
       event.preventDefault();
-      const state = isPanelRoute(location.pathname) ? location.state : {
+      const state = isPanelRoute(location.pathname) ? {
+        ...location.state,
+        readingDepth: (location.state?.readingDepth ?? 0) + 1,
+        previousReading: location.pathname.startsWith('/notes/') ? 'article' : 'project',
+        readingOrigin: location.state?.readingOrigin ?? (location.pathname.startsWith('/notes/') ? '/notes' : '/#projects'),
+      } : {
+        readingDepth: 0,
         backgroundLocation: location,
         returnScroll: window.scrollY,
         returnFocusHref: anchor.getAttribute('href'),
@@ -26,8 +32,8 @@ export function usePanelNavigation() {
           tags: Array.from(document.querySelectorAll<HTMLMetaElement>('meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]')).map(meta => ({ name: meta.name, property: meta.getAttribute('property'), content: meta.content })),
         },
       };
-      // Switching reading material keeps one panel and one return destination.
-      navigate(url.pathname + url.search + url.hash, { state, replace: isPanelRoute(location.pathname) });
+      // Preserve browser history while keeping one panel and one return destination.
+      navigate(url.pathname.replace(/\/$/, '') + '/' + url.search + url.hash, { state });
     };
     document.addEventListener('click', open, true);
     return () => document.removeEventListener('click', open, true);
