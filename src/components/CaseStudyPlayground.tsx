@@ -311,6 +311,7 @@ const CaseStudyPlayground: React.FC = () => {
         stream: project.stream,
         video,
         videoPrimary: Boolean(video && project.featuredVideoPrimary),
+        status: project.cardStatus,
       }];
     });
   }, []);
@@ -452,7 +453,7 @@ const CaseStudyPlayground: React.FC = () => {
                     <span
                       className={`case-playground__stream case-playground__stream--${card.stream}`}
                     >
-                      {card.slug === 'playdraft' ? '[ Live on the App Store ]' : STREAM_LABEL[card.stream]}
+                      {card.status ?? (card.slug === 'playdraft' ? '[ Live on the App Store ]' : STREAM_LABEL[card.stream])}
                     </span>
                   )}
                   {card.video && !posterOnly ? (

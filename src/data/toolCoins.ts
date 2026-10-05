@@ -61,6 +61,12 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 77, rot: 9, lift: 0, z: 2 },],
   },
   {
+    slug: 'bolus-binder',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 9, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 57, rot: -6, lift: 0, z: 2 }],
+  },
+  {
     slug: 'seasonal-content-system',
     coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -10, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 27, rot: 8, lift: 3, z: 3 },
