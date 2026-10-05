@@ -523,9 +523,9 @@ const projects: Project[] = [
     timeline: 'April → August 2026 · TestFlight',
     stream: 'passion',
     featured: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
-    featuredVideo: '/images/work/bolus-binder/bolus-binder-app-preview.mp4',
+    featuredVideo: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
     featuredReel: {
-      src: '/images/work/bolus-binder/bolus-binder-app-preview.mp4',
+      src: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
       poster: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
       alt: 'Bolus Binder recipe library, recipe detail, nutrition, recipe folders, meal planning, and cook mode',
       caption: 'A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.',
