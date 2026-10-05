@@ -13,7 +13,8 @@ type LayerAction = 'nudge' | 'align' | 'rename' | null;
 interface LayersPanelProps {
   activeIndex: number;
   compact?: boolean;
-  onLayerClick?: (index: number) => void;
+  onLayerClick?: (index: number, input?: 'pointer' | 'keyboard') => void;
+  controlsId?: string;
   roles?: string[];
   grouping?: boolean;
   action?: LayerAction;
@@ -43,7 +44,7 @@ const LockIcon = () => (
 );
 
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, compact = false, onLayerClick, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
+  ({ activeIndex, compact = false, onLayerClick, controlsId, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
     const [minimized, setMinimized] = useState(false);
     const layersId = useId();
     return (
@@ -143,8 +144,8 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
             const isActive = i === activeIndex;
             const layerAction = isActive ? action : null;
             const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-              if (e.key === 'Enter') { onLayerClick?.(i); }
-              if (e.key === ' ') { e.preventDefault(); onLayerClick?.(i); }
+              if (e.key === 'Enter') { onLayerClick?.(i, 'keyboard'); }
+              if (e.key === ' ') { e.preventDefault(); onLayerClick?.(i, 'keyboard'); }
             };
             return (
               <div
@@ -156,7 +157,8 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
                 role={onLayerClick ? "button" : undefined}
                 tabIndex={onLayerClick ? 0 : undefined}
                 aria-pressed={onLayerClick ? isActive : undefined}
-                onClick={() => onLayerClick?.(i)}
+                aria-controls={onLayerClick ? controlsId : undefined}
+                onClick={event => onLayerClick?.(i, event.detail === 0 ? 'keyboard' : 'pointer')}
                 onKeyDown={handleKeyDown}
               >
                 {/* The eye, the "T" thumbnail and the lock slot are Figma

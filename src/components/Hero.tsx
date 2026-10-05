@@ -1,11 +1,12 @@
 import ProjectLink from './ProjectLink';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
 import { useUnlock } from '../context/UnlockContext';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
 import { useReveal } from '../hooks/useReveal';
+import { useHeroRoleTransition } from '../hooks/useHeroRoleTransition';
 
 const roles = ['Product Designer', 'Design Systems Designer', 'Design Engineer', 'UI/UX Designer'];
 const roleDescriptions = [
@@ -46,7 +47,8 @@ const Hero: React.FC = () => {
     motion.addEventListener('change', settle);
     return () => { observer.disconnect(); timers.forEach(clearTimeout); motion.removeEventListener('change', settle); };
   }, []);
-  const [selectedRole, setSelectedRole] = useState(0);
+  const { selectedRole, displayedRole, switching, input, selectRole } = useHeroRoleTransition();
+  const roleStoryId = useId();
   const [navOpen, setNavOpen] = useState(false);
   const { unlocked, openPrompt } = useUnlock();
   const handleWorkNav = () => { setNavOpen(false); if (!unlocked) openPrompt(); };
@@ -117,12 +119,13 @@ const Hero: React.FC = () => {
             </h1>
             <p>I’m a product designer with a <a href="#systems" className="about__inline-link">systems focus</a> and deep roots in visual craft. I turn complex workflows into clear interfaces and shared components. Outside work, I’m building and evolving <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> and exploring <Link to="/notes/exploring-my-portfolio-in-paper/" className="about__inline-link">new workflows</Link> to keep learning as design evolves. I test what helps me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn doesn’t.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
-            <div className="hero-intro__role-story">
+            <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
               {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true">{description}</p>)}
-              <div className="hero-intro__role-live" aria-live="polite" aria-atomic="true">
-                <p key={selectedRole} className="hero-intro__role-paragraph">{roleDescriptions[selectedRole]}</p>
+              <div id={roleStoryId} className="hero-intro__role-live" aria-live="polite" aria-atomic="true" aria-busy={switching}>
+                <p className="hero-intro__role-paragraph">{roleDescriptions[displayedRole]}</p>
               </div>
+              {switching && <span key={selectedRole} className="hero-intro__role-orb" aria-hidden="true"><span /></span>}
             </div>
           </div>
           <div className="hero-intro__portrait" ref={portraitRef}>
@@ -386,7 +389,7 @@ const Hero: React.FC = () => {
 
 
             </div>
-            <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={setSelectedRole} compact /></div>
+            <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={selectRole} controlsId={roleStoryId} compact /></div>
           </div>
         </div>
       </div>

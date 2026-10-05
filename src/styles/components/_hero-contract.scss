@@ -120,30 +120,45 @@
   > .hero-intro__role-sizer,
   > .hero-intro__role-live { grid-area: 1 / 1; min-width: 0; }
   .hero-intro__role-sizer { visibility: hidden; pointer-events: none; margin: 0; }
-  .hero-intro__role-paragraph { margin: 0; animation: heroRoleLayerIn 360ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .hero-intro__role-paragraph {
+    margin: 0;
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+    transition: opacity 90ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 90ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 90ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  &--switching .hero-intro__role-paragraph { opacity: 0.28; filter: blur(4px); transform: translateY(4px); }
+  &[data-role-input='keyboard'] .hero-intro__role-paragraph { transition: none; }
 }
 .hero--contract .hero-intro__role-live { position: relative; }
-.hero--contract .hero-intro__role-paragraph::before {
-  content: '';
-  position: absolute;
-  inset: calc(-1 * var(--space-sm));
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--space-xs) var(--space-xs) 0 var(--color-primary-light);
+.hero--contract .hero-intro__role-orb {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
   pointer-events: none;
-  animation: heroRoleLayerOutline 600ms ease both;
+  animation: heroRoleOrbPresence 400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  > span {
+    position: relative;
+    display: block;
+    width: var(--icon-xl); height: var(--icon-xl);
+    border-radius: var(--radius-full);
+    // A luminous contour in the site's ink colors, not an AI/network status.
+    background: conic-gradient(from 25deg, transparent 0deg, var(--color-primary-muted) 70deg, var(--color-primary) 115deg, transparent 155deg, var(--color-primary-dark) 240deg, var(--color-primary-muted) 285deg, transparent 330deg);
+    mask: radial-gradient(circle, transparent 53%, black 60%, black 66%, transparent 74%);
+    animation: heroRoleOrbTurn 400ms linear both;
+  }
 }
-@keyframes heroRoleLayerIn {
-  from { opacity: 0; transform: translate(8px, 8px); }
-  to { opacity: 1; transform: translate(0, 0); }
+@keyframes heroRoleOrbTurn {
+  from { transform: rotate(-35deg); }
+  to { transform: rotate(265deg); }
 }
-@keyframes heroRoleLayerOutline {
-  0%, 40% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes heroRoleOrbPresence {
+  0% { opacity: 0; transform: scale(0.92); }
+  18%, 72% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.96); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero--contract .hero-intro__role-paragraph { animation: none; }
-  .hero--contract .hero-intro__role-paragraph::before { display: none; }
+  .hero--contract .hero-intro__role-story .hero-intro__role-paragraph { transition: none; opacity: 1; filter: none; transform: none; }
+  .hero--contract .hero-intro__role-orb { display: none; }
 }
 
 .hero--contract .layers-panel__fold {
