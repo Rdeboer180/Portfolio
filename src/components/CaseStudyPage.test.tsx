@@ -56,7 +56,7 @@ test('locked case study keeps new artifacts, ownership detail, and comparison be
   expect(container.querySelector('img[src*="/evidence/"]')).toBeNull();
   expect(screen.queryByText(/Cheryl Carpenter owned/)).not.toBeInTheDocument();
   expect(screen.queryByText('Cheryl Carpenter')).not.toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: /WheelRack: A shared system/ })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /WheelRack:/ })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /Enter password/i }));
   expect(mockOpenPrompt).toHaveBeenCalledWith();
 });

@@ -124,8 +124,6 @@ const Hero: React.FC = () => {
                 <p key={selectedRole} className="hero-intro__role-paragraph">{roleDescriptions[selectedRole]}</p>
               </div>
             </div>
-            <a href="#projects" className="hero-intro__work-link">Skip to what I’ve designed and what I’m building <span aria-hidden="true">→</span></a>
-
           </div>
           <div className="hero-intro__portrait" ref={portraitRef}>
             <div className="hero-intro__token-map" aria-label="Portrait border radius token">

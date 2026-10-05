@@ -214,12 +214,13 @@ const projects: Project[] = [
     slug: 'wheelrack',
     stream: 'professional',
     client: 'Tire Rack · WheelRack',
-    title: 'WheelRack: A shared system for the dealer journey',
+    title: 'WheelRack: A complete design system and dealer product',
+    cardTitle: 'WheelRack: Design system to full product',
     seoTitle: 'WheelRack: Enterprise React Design System for a Wholesale Ecommerce Platform',
     thesis: 'Shared rules for the details that make wheel fitment complicated.',
-    summary: 'WheelRack’s dealer experience had grown across six retail partners without a shared design system or responsive foundation. I built its first token and component library and redesigned the journey from vehicle selection through checkout, partnering with a senior React developer on implementation.',
-    ownership: 'I owned system design, component behavior, responsive rules, and edge cases. Cheryl Carpenter owned the React build.',
-    cardHook: 'A 20-year-old dealer platform had no shared foundation. I built its first design system and redesigned the journey from vehicle selection through checkout.',
+    summary: 'I built WheelRack’s complete design system and designed the full dealer product, from vehicle search through checkout. I defined tokens, components, responsive behavior, and edge cases, partnering with engineering on the React and Storybook implementation across six retail partners.',
+    ownership: 'I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.',
+    cardHook: 'I built the full design system, partnered with engineering on React and Storybook, and designed the complete dealer product—edge cases included.',
     compactStory: true,
     annotations: {
       problem: 'Dealers were already on tablets. The interface had to catch up.',
@@ -233,7 +234,7 @@ const projects: Project[] = [
     tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS'],
     timeline: '~4 months dedicated across 12+ months, including API delays',
     featured: '/images/work/wheelrack/CS_thumbnail_wheelrack_designSystem_safe.jpg',
-    featuredVideo: '/assets/portfolio-safe/wheelrack/cover-loop.mp4',
+    featuredVideo: '/images/work/wheelrack/wheelrack-system-to-product.mp4',
     studyHero: {
       src: '/images/work/wheelrack/evidence/fitment-states.png',
       alt: 'WheelRack dealer interface with wheel filters, vehicle preview, and separate front and rear wheel configurations',
@@ -339,6 +340,7 @@ const projects: Project[] = [
     outcomeNote: 'WheelRack is live from vehicle selection through checkout. Six months after the build, Tire Rack extended the framework into Wholesale, and I helped additional designers join that workflow. Partner adoption grew from six to ten during the build; that growth also reflects business factors beyond the redesign.',
     takeaways: [
       'I would plan the design/build comparison into the work from the start. Tokens gave us common names, but we still had to check how the components behaved on screen.',
+      'Working with Cheryl on React web components and Storybook sharpened my understanding of props, states, and reuse. That vocabulary helped prepare me to explore React Native, while learning what needed to change for a native app.',
     ],
     outcomeLiveLinks: [
       { label: 'Explore the live WheelRack experience', url: 'https://wheelrack.com/pitstop/search' },
@@ -2006,14 +2008,14 @@ const evidence = (project: Project, key: string, index = 0): ProjectImage | unde
 
 const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   wheelrack: p => ({
-    title: 'WheelRack', category: 'Professional work', role: 'System design · Product design',
+    title: 'WheelRack', category: 'Professional work', role: 'I built the full design system and designed the complete dealer product, partnering with engineering on React and Storybook.',
     status: 'Live · Dealer platform',
-    deck: 'A shared system for a dealer journey that had grown across six retail partners. The redesign connects vehicle selection, wheel fitment, and checkout.',
+    deck: 'Tokens, components, responsive rules, and edge cases became one shared library, applied across vehicle search, wheel fitment, and checkout for six retail partners.',
     ownership: p.ownership!, opening: p.studyHero,
     decisions: [
       { title: 'Make repeated controls predictable', body: 'I defined shared tokens and the resting, hover, and focus states of repeated controls. Those specifications gave the Figma library, Storybook, and React build a common vocabulary.', image: evidence(p, 'foundation') },
       { title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability, and partner-specific purchasing actions needed explicit variants. I resolved those combinations before the component was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
-      { title: 'Specify behavior, then check the build', body: 'I supplied component behavior and responsive specifications. Cheryl Carpenter owned the React implementation; we worked together daily to reconcile the build against the design.', image: evidence(p, 'documentation') },
+      { title: 'Specify behavior, then check the build', body: 'I specified behavior and responsive rules while Cheryl Carpenter owned the React web build. Reviewing it together sharpened my understanding of props, states, and reusable components—a foundation I later carried into building PlayDraft in React Native with agents.', bodyLink: { text: 'building PlayDraft in React Native', to: '/work/playdraft/' }, image: evidence(p, 'documentation') },
     ],
     outcome: 'The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.',
   }),

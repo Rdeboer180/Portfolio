@@ -155,7 +155,6 @@ const CtaArrow = () => (
 
 // Card copy previews the story; the case study holds the full context.
 const CARD_PREVIEWS: Record<string, { title: string; line: string }> = {
-  wheelrack: { title: 'WheelRack: The dealer journey', line: 'I built the platform’s first design system and redesigned the path from vehicle selection to checkout.' },
   'design-enablement': { title: 'Tools that scale design', line: 'Three internal tools carry the system into project setup, crop validation, and stakeholder decks.' },
   playdraft: { title: 'PlayDraft: A social drafting game', line: 'I designed the brand, game, and system, then built and released the iPhone app with agents.' },
   loopstack: { title: 'LoopStack: Patterns worth reviewing', line: 'I designed and built a Type 1 diabetes app for reviewing meal and glucose patterns with a care team.' },

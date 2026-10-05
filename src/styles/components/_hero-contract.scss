@@ -327,14 +327,6 @@
   }
 }
 
-.hero--contract .hero-intro__work-link {
-  display: inline-block;
-  color: var(--color-primary-dark);
-  font: var(--weight-semibold) var(--text-body)/var(--leading-body) var(--font-body);
-  text-decoration: none;
-  &:hover { text-decoration: underline; text-underline-offset: 3px; }
-  &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: var(--space-xs); }
-}
 @media (min-width: 851px) {
   .hero--contract .hero-intro__portrait { z-index: 1; }
   .hero--contract + .about--integrated,
