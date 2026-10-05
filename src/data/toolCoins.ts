@@ -37,20 +37,20 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
   },
   {
-    slug: 'loopstack',
-    coins: [{ icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
-      { icon: 'figma-dark.svg', name: 'Figma', x: 24, rot: 8, lift: 4, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -5, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 59, rot: 13, lift: 2, z: 2 },
-      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },],
-  },
-  {
     slug: 'aem-component-system',
     coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
       { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
       { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
       { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
       { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
+  },
+  {
+    slug: 'loopstack',
+    coins: [{ icon: 'claude.svg', name: 'Claude', x: 7, rot: -11, lift: 0, z: 2 },
+      { icon: 'figma-dark.svg', name: 'Figma', x: 24, rot: 8, lift: 4, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 43, rot: -5, lift: 0, z: 1 },
+      { icon: 'github.svg', name: 'GitHub', x: 59, rot: 13, lift: 2, z: 2 },
+      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 76, rot: -9, lift: 0, z: 1 },],
   },
   {
     slug: 'tire-categories',
