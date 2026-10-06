@@ -6,11 +6,14 @@
 // ============================================
 
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { getHomeHref } from '../utils/homeSession';
 import { useReveal } from '../hooks/useReveal';
 
 const TOOL_GROUPS = [
   { label: 'Visual design', tools: 'Figma, Illustrator, Photoshop' },
-  { label: 'Building and testing', tools: 'HTML, CSS, code and AI-assisted workflows' },
+  { label: 'Web and CMS', tools: 'HTML, CSS/Sass, AEM and WordPress' },
+  { label: 'Agent-assisted builds', tools: 'React, React Native, Expo and TypeScript' },
 ];
 
 const d = (ms: number) => ({ ['--reveal-delay' as string]: `${ms}ms` });
@@ -75,7 +78,7 @@ const AboutHero: React.FC = () => {
 
           <div className="about-hero__intro reveal-fade" style={d(1000)}>
             <p>
-              I'm a senior designer who kept moving closer to how the work gets built.
+              I'm a senior product designer who kept moving closer to how the work gets built.
             </p>
             <p>
               I started in visual design, learned HTML and CSS because the browser
@@ -96,6 +99,7 @@ const AboutHero: React.FC = () => {
                 </div>
               ))}
             </dl>
+            <Link to={`${getHomeHref()}#mastery`} className="about__read-more">Explore my capabilities and project evidence →</Link>
           </section>
         </div>
 

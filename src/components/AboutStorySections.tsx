@@ -6,6 +6,7 @@
 // ============================================
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { storySections, StorySection } from '../data/about';
 import { useReveal } from '../hooks/useReveal';
 
@@ -35,6 +36,7 @@ const StoryBeat: React.FC<{ section: StorySection }> = ({ section: s }) => {
             {para}
           </p>
         ))}
+        {s.related && <Link to={s.related.to} className="about__read-more">{s.related.label} →</Link>}
       </div>
 
       {s.annotation && <div className="about-story__aside">

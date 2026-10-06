@@ -12,6 +12,7 @@ export interface StorySection {
   num: string;        // "01"
   title: string;
   body: string[];     // one entry per paragraph
+  related?: { to: string; label: string };
   annotation: string; // the single orange handwritten mark
 }
 
@@ -57,10 +58,12 @@ export const storySections: StorySection[] = [
         'and improve it after launch.',
     ],
     annotation: 'Built to outlast the launch meeting.',
+    related: { to: '/work/aem-component-system/', label: 'See the AEM component system' },
   },
   {
     num: '04',
     title: 'Learning by building',
+    related: { to: '/work/playdraft/', label: 'See how I designed and built PlayDraft' },
     body: [
       'I learn best when there’s something I actually want to make. AI has opened up more of those ' +
         'possibilities, and I keep finding new ways to use it across design, code, and the small ' +

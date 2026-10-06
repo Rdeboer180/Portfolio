@@ -7,7 +7,7 @@ import { useReveal } from '../hooks/useReveal';
 
 // Dates follow the résumé and project histories; early roles are Ryan's account.
 const progression = [
-  { date: 'By 2013', title: 'Craft before the title.', body: 'Four-plus design jobs before and during college grounded me in Adobe Creative Suite and visual craft. At Kendall College of Art and Design, I earned a bachelor’s degree majoring in Visual Communications, with a minor and curriculum focus on UX and front-end development.' },
+  { date: 'By 2013', title: 'Craft before the title.', body: 'Four-plus design jobs before and during college grounded me in Adobe Creative Suite and visual craft. At Kendall College of Art and Design, I earned a BFA in Graphic Design with a minor in Web Animation.' },
   { date: '2014', title: 'Into the browser.', body: 'Joining Tire Rack immersed me in web design. Questions, annual conferences, and hands-on HTML/CSS work brought graphic craft closer to UX, UI, and front-end engineering.' },
   { date: '2021', title: 'A wider responsibility.', body: 'Promoted to Senior Web Designer, I took on broader product, UX, systems, and implementation work. The responsibility grew from making the page to helping the team build consistently.' },
   { date: '2022', title: 'Collaboration and Leadership', body: 'Co-founded and led an internal professional development program serving approximately 90 digital team members, creating structured learning opportunities across technical, product, and leadership disciplines.' },
