@@ -1,12 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getNote, KIND_LABEL } from '../data/notes';
+import { NOTES_BY_DATE, KIND_LABEL } from '../data/notes';
 
-const selectedSlugs = [
-  'exploring-my-portfolio-in-paper',
-  'systems-that-make-better-decisions-easier',
-  'eight-wrong-first-drafts',
-];
+const latestNotes = NOTES_BY_DATE.slice(0, 3);
 
 const SelectedWriting: React.FC = () => (
   <section className="selected-writing" aria-labelledby="selected-writing-title">
@@ -16,19 +12,15 @@ const SelectedWriting: React.FC = () => (
         <Link to="/notes/" className="about__inline-link">All notes</Link>
       </div>
       <ul className="selected-writing__list">
-        {selectedSlugs.map(slug => {
-          const note = getNote(slug);
-          if (!note) return null;
-          return (
-            <li key={slug}>
-              <Link to={`/notes/${slug}/`} className="selected-writing__row">
-                <span className="selected-writing__meta">{KIND_LABEL[note.kind]} · {note.read}</span>
-                <span className="selected-writing__title">{note.title}</span>
-                <span className="selected-writing__arrow" aria-hidden="true">→</span>
-              </Link>
-            </li>
-          );
-        })}
+        {latestNotes.map(note => (
+          <li key={note.slug}>
+            <Link to={`/notes/${note.slug}/`} className="selected-writing__row">
+              <span className="selected-writing__meta">{KIND_LABEL[note.kind]} · {note.read}</span>
+              <span className="selected-writing__title">{note.title}</span>
+              <span className="selected-writing__arrow" aria-hidden="true">→</span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
