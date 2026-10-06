@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import projects from '../data/projects';
+import ProjectBrand from './ProjectBrand';
+import { useUnlock } from '../context/UnlockContext';
 
 const BriefcaseIcon = () => (
   <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
@@ -15,6 +17,7 @@ const BriefcaseIcon = () => (
 );
 
 const SelectedWork: React.FC = () => {
+  const { unlocked } = useUnlock();
   return (
     <section id="projects" className="selected-work">
       <div className="selected-work__container">
@@ -53,9 +56,12 @@ const SelectedWork: React.FC = () => {
                     ))}
                   </div>
                 )}
-                <span className="selected-work__card-cta" aria-hidden="true">
-                  View case study &rarr;
-                </span>
+                <div className="selected-work__card-footer">
+                  <span className="selected-work__card-cta" aria-hidden="true">
+                    View case study &rarr;
+                  </span>
+                  <ProjectBrand project={project} locked={!unlocked && project.stream === 'professional'} />
+                </div>
               </div>
               <div className="selected-work__card-visual">
                 <div className="selected-work__card-visual-inner">

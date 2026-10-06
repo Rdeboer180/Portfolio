@@ -158,6 +158,16 @@
   }
 
   // "View case study →" affordance label — decorative CTA, aria-hidden
+  &__card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+  }
+
+  &__card-footer &__card-cta { margin-top: 0; }
+
   &__card-cta {
     display: inline-block;
     margin-top: $spacing-md;

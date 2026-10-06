@@ -1,0 +1,54 @@
+@import '../variables';
+
+.project-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $spacing-sm;
+  min-height: 40px;
+  color: $color-text-primary;
+  font-family: $font-family-heading;
+  font-size: $font-size-h5;
+  font-weight: $font-weight-semibold;
+  line-height: 1.2;
+  text-align: left;
+
+  img {
+    display: block;
+    flex: 0 0 auto;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  &:not(&--wordmark) img { width: 40px; height: 40px; }
+
+  &--context {
+    margin: $spacing-2xl 0 $spacing-md;
+
+    &::after {
+      content: '';
+      flex: 1;
+      min-width: $spacing-xl;
+      margin-left: $spacing-md;
+      height: 1px;
+      background: $color-border-default;
+    }
+  }
+
+  &--card {
+    min-height: 0;
+    height: 24px;
+    flex: 0 0 auto;
+    gap: $spacing-xs * 0.8;
+    font-size: $font-size-caption * 0.8;
+    white-space: nowrap;
+
+    img, &:not(.project-brand--wordmark) img { width: 16px; height: 16px; }
+    &.project-brand--wordmark img { width: auto; height: 17.6px; max-width: 86.4px; }
+    // The heavy uppercase wordmark needs less height than the fine-line marks.
+    &.project-brand--tire-rack img { height: 14px; }
+  }
+}
+
+.project-brand + .project-overview__context,
+.project-brand + .cs__context { margin-top: 0; }

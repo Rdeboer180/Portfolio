@@ -18,8 +18,7 @@ import projects from '../data/projects';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
-import { PlayDraftStoreLink } from './PlayDraftRelease';
-import playdraft from '../data/playdraft.json';
+import ProjectBrand from './ProjectBrand';
 
 const PreviewLockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
@@ -298,6 +297,7 @@ const CaseStudyPlayground: React.FC = () => {
       return [{
         ...card,
         title: project.cardTitle ?? project.title,
+        client: project.client,
         // The proof formula (problem, then the shipped thing and what it did)
         // when a project defines one; the study summary otherwise.
         line: project.cardHook ?? project.summary ?? '',
@@ -474,23 +474,18 @@ const CaseStudyPlayground: React.FC = () => {
                   <h3 className="case-playground__card-title">{previewCopy.title}</h3>
                   <p className="case-playground__card-line">{previewCopy.line}</p>
                   <p className="case-playground__metric">{card.metric}</p>
-                  <span className="case-playground__cta" aria-hidden="true">
-                    View case study
-                    <span className="case-playground__cta-arrow">
-                      <CtaArrow />
+                  <div className="case-playground__footer">
+                    <span className="case-playground__cta" aria-hidden="true">
+                      View case study
+                      <span className="case-playground__cta-arrow">
+                        <CtaArrow />
+                      </span>
                     </span>
-                  </span>
+                    <ProjectBrand project={card} locked={locked} />
+                  </div>
                 </div>
 
                 </ProjectLink>
-                {card.slug === 'playdraft' && (
-                  <div className="case-playground__release">
-                    <PlayDraftStoreLink className="case-playground__store-link">
-                      <img src={playdraft.icon} alt="" width="32" height="32" loading="lazy" />
-                      Download for iPhone
-                    </PlayDraftStoreLink>
-                  </div>
-                )}
 
                 {/* Bottom — tool coin tray (decorative) */}
                 <div className="case-playground__tray" aria-hidden="true">

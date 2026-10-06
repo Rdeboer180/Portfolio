@@ -12,6 +12,7 @@ import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
 import ProjectOverview from './ProjectOverview';
+import ProjectBrand from './ProjectBrand';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
 import '../styles/styles.scss';
 
@@ -673,7 +674,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
             </div>
           )}
           {project.context && (
-            <p className="cs__context">{locked && project.publicContext ? project.publicContext : redactClient(project.context, locked)}</p>
+            <>
+              <ProjectBrand project={project} locked={locked} placement="context" />
+              <p className="cs__context">{locked && project.publicContext ? project.publicContext : redactClient(project.context, locked)}</p>
+            </>
           )}
           {project.summary && (
             <p className="cs__summary">{redactClient(project.summary, locked)}</p>
