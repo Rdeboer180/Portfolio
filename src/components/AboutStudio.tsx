@@ -36,9 +36,7 @@ const STUDIO_POINTS: StudioPoint[] = [
     title: 'Keep design and build in the same conversation',
     body: (
       <>
-        A screen rarely gets the final say. I move between{' '}
-        <strong>Figma, working prototypes, front-end code, and the shipped product</strong>, and
-        keep them close enough to challenge each other. A component that works in Figma and
+        I check the design in <strong>Figma, in code, and in the running product</strong>. A component that works in Figma and
         breaks in production is not finished. Code that ships clean and drifts from the system
         is not either.
       </>
@@ -50,7 +48,7 @@ const STUDIO_POINTS: StudioPoint[] = [
     id: 'system-wall',
     number: '02',
     label: 'The system wall',
-    title: 'Make the rules visible enough to travel',
+    title: 'Write down the rules the team needs',
     body: (
       <>
         A design system gets fragile when its logic lives only in a file or in one
@@ -119,9 +117,8 @@ const STUDIO_POINTS: StudioPoint[] = [
           Dive Club
         </a>{' '}
         interviews with Dan Mall on design systems, Loredana Crisan on Figma, Meaghan Choi on
-        Claude Code. Tommy Geoco and Michael Riddering are the standing argument. Not to keep
-        up. To close the gap I have named:{' '}
-        <strong>emerging tools and the workflows around them</strong>.
+        Claude Code. I also follow Tommy Geoco and Michael Riddering. I'm working on a gap in
+        my own practice: <strong>emerging tools and how to use them</strong>.
       </>
     ),
     proof: 'The rule is from the note Studying the tape: if watching it doesn’t change what you make on Monday, it was entertainment. In late 2025 I was using an LLM as a better search box. PlayDraft on TestFlight and an installable design-taste skill came after.',
@@ -604,16 +601,12 @@ const AboutStudio: React.FC = () => {
             drafts to become something other people can use.
           </p>
           <p>
-            The room is personal. The way it works is not:{' '}
-            <b className="studio-mock__emphasis">
-              keep the system close, keep the build close, and keep feeding what you learn back
-              into both.
-            </b>
+            This is my room, but the habits carry into team projects. I check the build against
+            the designs and update both when testing exposes a problem.
           </p>
           <p className="studio-mock__intro-note">
-            Built as a drawing rather than a walkthrough. The room answers when you
-            ask it something — which is the part worth having, and the part that
-            still works on a slow connection.
+            Built as a drawing rather than a walkthrough. Select an object to read about the
+            work I do there. The drawing also works on a slow connection.
           </p>
         </div>
       </div>

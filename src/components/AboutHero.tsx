@@ -8,24 +8,12 @@
 import React from 'react';
 import { useReveal } from '../hooks/useReveal';
 
-// Tool path — the craft → AI through-line
-const TOOLS = ['Photoshop', 'Illustrator', 'Code', 'Figma', 'Systems', 'AI'];
-const CARRY = ['fundamentals', 'implementation', 'systems', 'judgment', 'what ships'];
+const TOOL_GROUPS = [
+  { label: 'Visual design', tools: 'Figma, Illustrator, Photoshop' },
+  { label: 'Building and testing', tools: 'HTML, CSS, code and AI-assisted workflows' },
+];
 
-// Inline --reveal-delay helper
 const d = (ms: number) => ({ ['--reveal-delay' as string]: `${ms}ms` });
-
-const Check = () => (
-  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-    <path
-      d="M2 7 L5 10 L11 2.5"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
 const AboutHero: React.FC = () => {
   const [ref, visible] = useReveal<HTMLElement>(0.15);
@@ -85,25 +73,6 @@ const AboutHero: React.FC = () => {
             </span>
           </h1>
 
-          {/* Tool path */}
-          <div className="about-hero__tools" aria-label="Tools, from visual craft to AI">
-            {TOOLS.map((tool, i) => (
-              <React.Fragment key={tool}>
-                {i > 0 && (
-                  <span className="about-hero__tool-arrow" aria-hidden="true">→</span>
-                )}
-                <span
-                  className={`about-hero__tool reveal-fade${
-                    tool === 'AI' ? ' about-hero__tool--accent' : ''
-                  }`}
-                  style={d(900 + i * 50)}
-                >
-                  {tool}
-                </span>
-              </React.Fragment>
-            ))}
-          </div>
-
           <div className="about-hero__intro reveal-fade" style={d(1000)}>
             <p>
               I'm a senior designer who kept moving closer to how the work gets built.
@@ -115,26 +84,25 @@ const AboutHero: React.FC = () => {
               ideas in front of people sooner.
             </p>
           </div>
+
+          <section className="about-hero__practice reveal-fade" style={d(1100)} aria-labelledby="about-practice-heading">
+            <h2 id="about-practice-heading">What I carry into the work</h2>
+            <p>Visual fundamentals, reusable systems, and the judgment to check what actually ships.</p>
+            <dl className="about-hero__tools">
+              {TOOL_GROUPS.map(({ label, tools }) => (
+                <div className="about-hero__tool-group" key={label}>
+                  <dt>{label}</dt>
+                  <dd>{tools}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
         </div>
 
         {/* Right margin — artifact cluster (decoration), revealed last */}
         <aside className="about-hero__artifacts" aria-label="Margin notes">
           <div className="reveal-fade" style={d(1150)}>
             <div className="about-hero__note">the file is not the finish line</div>
-          </div>
-
-          <div className="reveal-fade" style={d(1260)}>
-            <div className="about-hero__checklist">
-              <div className="about-hero__checklist-label">What I carry</div>
-              <ul className="about-hero__checklist-items">
-                {CARRY.map((item) => (
-                  <li key={item}>
-                    <Check />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
 
           <div className="about-hero__comment reveal-fade" style={d(1370)}>

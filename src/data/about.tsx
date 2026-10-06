@@ -25,8 +25,8 @@ export const storySections: StorySection[] = [
         'eventually Kendall College of Art and ' +
         'Design, where I studied Graphic Design with a minor in Web Animation.',
       'That path taught me composition, hierarchy, typography, pacing, and brand. More important, ' +
-        'it taught me to tell the difference between something considered and something merely ' +
-        'assembled. I still use that distinction every day.',
+        'it taught me to notice when a layout looked assembled instead of designed. ' +
+        'I still use that distinction every day.',
     ],
     annotation: '',
   },
@@ -49,12 +49,12 @@ export const storySections: StorySection[] = [
     title: 'Building systems that last',
     body: [
       'A lot of my best work sits behind the interface: components, documentation, accessibility, ' +
-        'governance, reusable templates, and CMS logic. Those are the pieces that let a team keep ' +
-        'making good decisions after the launch meeting ends.',
+        'governance, reusable templates, and CMS logic. Those pieces help the team build and ' +
+        'maintain the product after launch.',
       'Across twelve years at Tire Rack, I moved between UX strategy, testing, analytics, ' +
         'SEO-informed information architecture, AEM components, production styles, and pattern ' +
-        'documentation. I became a lead for the template and style layer because I kept staying ' +
-        'with the work after the first version shipped.',
+        'documentation. I became a lead for the template and style layer by continuing to maintain ' +
+        'and improve it after launch.',
     ],
     annotation: 'Built to outlast the launch meeting.',
   },
@@ -76,12 +76,12 @@ export const storySections: StorySection[] = [
     body: [
       'I’m a husband and father first. My wife Stephanie, our kids, and the life we are building ' +
         'at home shape the kind of work I want and the pace I can sustain.',
-      'Outside of work, my life is built around the people I keep showing up for: Survivor nights ' +
+      'Outside work, I spend time with the people I\'ve known longest: Survivor nights ' +
         'with my mom and childhood best friend, Sunday family dinners, board games with cousins, ' +
         'and a dynasty fantasy football league that has somehow become a decade-long strategy ' +
         'system.',
-      'I like traditions, systems that evolve, and investing in something long enough to make it ' +
-        'better. That is probably the cleanest line between my life and my work.',
+      'I like traditions and sticking with something long enough to make it better. ' +
+        'That carries into my work too.',
     ],
     annotation: 'Show up. Stay invested. Build things that last.',
   },
@@ -90,12 +90,10 @@ export const storySections: StorySection[] = [
     title: 'Building better bridges',
     body: [
       'Remote work gives me room for focused design and lets me stay present for my family. It ' +
-        'works best when a team replaces accidental hallway context with deliberate communication.',
+        'works best when people share the context others would miss outside the office.',
       'At Tire Rack, I’ve been a founding leader of MPG, an internal group built around ' +
-        'connection, shared learning, and cross-functional conversation. That work has shaped how ' +
-        'I think about team culture. Collaboration takes more than proximity. It is ' +
-        'trust, context, shared language, and people choosing to keep professional relationships ' +
-        'strong even when the work happens across screens.',
+        'connection, shared learning, and cross-functional conversation. That group has taught me ' +
+        'to make time for conversations beyond the immediate project, especially when we work remotely.',
     ],
     annotation: '',
   },
@@ -111,10 +109,10 @@ export const storySections: StorySection[] = [
     num: '07',
     title: 'What I hold myself to',
     body: [
-      'My bar is practical. The work should survive scrutiny, the team should be able to extend it ' +
-        'without me, and I should not need an invitation to fix an obvious gap.',
-      'The best teams I’ve worked with were more than talented. They were honest, aligned, willing ' +
-        'to give and receive feedback, and committed to making each other better. That is the kind ' +
+      'I want to explain my decisions, leave work the team can extend, and fix obvious gaps ' +
+        'without waiting to be asked.',
+      'The best teams I\'ve worked with were honest with each other. They shared direction, ' +
+        'gave useful feedback, and helped each other improve. That is the kind ' +
         'of environment I try to help build.',
     ],
     annotation: 'Care is a production skill.',
@@ -163,8 +161,8 @@ export const processBeats: ProcessBeat[] = [
     title: 'Define the rules',
     meta: 'intent · constraints · foundations',
     body:
-      'Before anything gets drawn I want to know which decision is stuck and what the product has ' +
-      'to survive after launch. Then I take stock of what is already there: the tokens and ' +
+      'Before I draw anything, I want to know which decision we\'re trying to make and what ' +
+      'the product will need after launch. Then I take stock of what is already there: the tokens and ' +
       'patterns, and the rules written down for people and agents alike. A polished answer to the ' +
       'wrong question is still wrong.',
     cost: 'I spent six weeks on studio names before I asked which question a name had to answer.',
@@ -176,8 +174,8 @@ export const processBeats: ProcessBeat[] = [
     title: 'Explore across surfaces',
     meta: 'Figma · prototypes · code',
     body:
-      'PlayDraft has a red line. No screen gets built without a reference on the Figma canvas ' +
-      'first. That same canvas holds the observations from testing the running app. Prototypes ' +
+      'For PlayDraft, every screen starts with a reference on the Figma canvas. That same canvas ' +
+      'holds the observations from testing the running app. Prototypes ' +
       'are cheap enough now that the first thing a stakeholder sees often runs. Testing the ' +
       'running app changes both the Figma designs and the shared components.',
     cost: 'Stay in the file and the screen gets built twice, the second time after someone approved the first.',
@@ -193,8 +191,8 @@ export const processBeats: ProcessBeat[] = [
     meta: 'QA · edge cases · accessibility · production',
     body:
       'The browser exposes what the frame hid: responsive behavior, the state nobody drew, the ' +
-      'orange that fails contrast at 14px. I stay through QA and past launch, and I keep the ' +
-      'claim as narrow as the evidence.',
+      'orange that fails contrast at 14px. I stay through QA and after launch. When I report ' +
+      'results, I separate what we measured from what I think contributed.',
     cost: 'PlayDraft\u2019s competitive clock is thirty seconds. The notification that shipped told players they had two minutes.',
     evidence: { label: 'Eight times my first idea was wrong', to: '/notes/eight-wrong-first-drafts' },
     relation: 'Two-way with 02. Leads to 04.',

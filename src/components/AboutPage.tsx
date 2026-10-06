@@ -70,21 +70,16 @@ const AboutPage: React.FC = () => {
         <AboutStorySections />
         <CareerTimeline showMore={false} />
 
-        {/* ── Transition — single orange dot-matrix card ─────────────────── */}
-        <div className="about-page__transition-card">
+        {/* ── Bridge — editorial transition into the working process ─────── */}
+        <section className="about-page__transition-card" aria-labelledby="about-work-bridge-heading">
           <div className="about-page__transition-inner">
-            <p className="about-page__transition-label">[ Bridge ]</p>
-            <h2 className="about-page__transition-headline">
+            <h2 id="about-work-bridge-heading" className="about-page__transition-headline">
               How that shows up in the work
             </h2>
+            <div className="about-page__transition-copy">
             <p className="about-page__transition-body">
-              The path changed, but one habit stayed: follow the decision past the frame. I want
-              to see how it behaves in the system, what implementation exposes, and what the next
-              release should learn from it.
-            </p>
-            <p className="about-page__transition-body">
-              That habit connects the visual work, the front-end code, the design systems, and the
-              AI-assisted products. The tools change. The responsibility stays mine.
+              I keep working on a design after it leaves Figma. I check how it behaves in the
+              product and use what implementation reveals to improve the next version.
             </p>
             <p className="about-page__transition-note">
               This site is one working example. The decisions behind it live in{' '}
@@ -96,8 +91,9 @@ const AboutPage: React.FC = () => {
               surface="about_bridge"
               className="about-page__transition-link"
             />
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* ── How I work — the four-beat loop, drawn as a closed circuit ── */}
         <ProcessPrinciples />

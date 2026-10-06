@@ -104,111 +104,74 @@
     }
   }
 
-  // ── Transition card — the single orange dot-matrix signature moment ───────────
+  // ── Editorial bridge — shared page measure, type, and hairline rules ────────
 
   &__transition-card {
     max-width: $container-max-width;
-    margin: 0 auto;
+    margin: $spacing-3xl auto 0;
     padding: 0 $container-padding-x;
-    z-index: 2;
   }
 
   &__transition-inner {
-    position: relative;
-    background: $color-primary-muted;
-    border-radius: $radius-2xl;
-    padding: $spacing-3xl;
-    overflow: hidden;
-
-    // Dot-matrix overlay: white dots at low opacity over the orange fill
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-      background-size: 6px 6px;
-      opacity: 0.6;
-      pointer-events: none;
-      border-radius: inherit;
-    }
-  }
-
-  &__transition-label {
-    position: relative;
-    z-index: 1;
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    font-weight: $font-weight-medium;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: $spacing-lg;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: $spacing-3xl;
+    padding: $spacing-3xl 0;
+    border-top: 1px solid $color-neutral-light;
+    border-bottom: 1px solid $color-neutral-light;
   }
 
   &__transition-headline {
-    position: relative;
-    z-index: 1;
+    margin: 0;
+    max-width: 15ch;
     font-family: $font-family-heading;
     font-size: $font-size-h3;
     font-weight: $font-weight-bold;
-    color: $color-white;
+    color: $color-neutral-dark;
     letter-spacing: -0.02em;
     line-height: 1.2;
-    margin-bottom: $spacing-xl;
+    text-wrap: balance;
   }
 
-  &__transition-body {
-    position: relative;
-    z-index: 1;
+  &__transition-copy {
+    min-width: 0;
+    max-width: $container-text-width;
+  }
+
+  &__transition-body,
+  &__transition-note {
+    margin: 0;
     font-family: $font-family-primary;
     font-size: $font-size-body;
     line-height: 1.75;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: $container-text-width;
-
-    & + & {
-      margin-top: $spacing-lg;
-    }
-  }
-
-  &__transition-notes-link {
-    color: $color-white;
-    font-weight: $font-weight-semibold;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-
-    &:hover,
-    &:focus-visible {
-      text-decoration-thickness: 2px;
-    }
+    color: $color-neutral-standard;
   }
 
   &__transition-note {
-    position: relative;
-    z-index: 1;
-    font-family: $font-family-primary;
-    font-size: $font-size-body;
-    line-height: 1.75;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: $container-text-width;
     margin-top: $spacing-lg;
   }
 
-  // White variant of the shared LinkedIn atom — the card is orange, so the
-  // atom's default $color-primary would vanish. Compound selector keeps the
-  // override winning regardless of import order; glyph follows currentColor.
-  &__transition-link {
-    &.linkedin-link {
-      position: relative;
-      z-index: 1;
-      margin-top: $spacing-sm;
-      color: $color-white;
+  &__transition-notes-link {
+    color: $color-primary-text;
+    font-weight: $font-weight-semibold;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 
-      &:focus-visible {
-        outline-color: $color-white;
-      }
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+      border-radius: $radius-sm;
     }
   }
+
+  &__transition-link.linkedin-link {
+    margin-top: $spacing-lg;
+  }
+
 }
 
 // ── Responsive ───────────────────────────────────────────────────────────────
@@ -220,7 +183,9 @@
     }
 
     &__transition-inner {
-      padding: $spacing-2xl;
+      grid-template-columns: 1fr;
+      gap: $spacing-xl;
+      padding: $spacing-2xl 0;
     }
 
     &__transition-headline {
@@ -232,7 +197,7 @@
 @media (max-width: $breakpoint-sm) {
   .about-page {
     &__transition-inner {
-      padding: $spacing-xl $spacing-lg;
+      padding: $spacing-2xl 0;
     }
 
     &__transition-headline {
