@@ -46,6 +46,8 @@
   &__decision--text { grid-template-columns: 1fr !important; max-width: 66ch; }
   &__reel video { display: block; width: 100%; aspect-ratio: 16 / 9; background: $color-neutral-dark; object-fit: contain; }
   &__deck { font-size: $font-size-body-lg; max-width: 60ch; margin: $spacing-2xl 0 $spacing-md; }
+  &__context { max-width: 66ch; margin: $spacing-2xl 0 $spacing-md; }
+  &__context + &__deck { margin-top: $spacing-md; }
   &__ownership { color: $color-text-secondary; max-width: 66ch; margin-bottom: $spacing-4xl; }
   &__decision {
     display: grid;

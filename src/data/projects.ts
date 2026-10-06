@@ -93,6 +93,10 @@ export interface Project {
   overview?: ProjectOverview;
   slug: string;
   client: string;
+  /** Company or product background shown before the opening project summary. */
+  context?: string;
+  /** Anonymous background for the public opening of a protected study. */
+  publicContext?: string;
   title: string;
   /** Descriptive, search-oriented title for the case-study page <title>/H1 and
    *  sitemap. Keeps the branded `title` while adding the searchable problem. */
@@ -208,6 +212,9 @@ export interface Project {
   process?: { label: string; description: string }[];
 }
 
+const TIRE_RACK_CONTEXT = 'Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.';
+const PUBLIC_RETAILER_CONTEXT = 'The client is a national US online tire and wheel retailer. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.';
+
 const projects: Project[] = [
   // =============================================
   // 0. WheelRack — Design System & Customer Journey  [image LEFT]
@@ -216,6 +223,8 @@ const projects: Project[] = [
     slug: 'wheelrack',
     stream: 'professional',
     client: 'Tire Rack · WheelRack',
+    context: 'Tire Rack is a national online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
+    publicContext: 'The client is a national US online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
     title: 'WheelRack: A complete design system and dealer product',
     cardTitle: 'WheelRack: Design system to full product',
     seoTitle: 'WheelRack: Enterprise React Design System for a Wholesale Ecommerce Platform',
@@ -361,6 +370,8 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-categories',
+    context: TIRE_RACK_CONTEXT,
+    publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Turn 40 confusing categories into choices people can actually make.',
     annotations: {
       problem: 'Too many choices, too much text. People could not decide.',
@@ -508,6 +519,7 @@ const projects: Project[] = [
   {
     slug: 'bolus-binder',
     client: 'Bolus Binder (personal product) · T1D Hub (local clinic)',
+    context: 'Bolus Binder is my independent recipe app for people living with Type 1 diabetes. Its visual system draws on T1D Hub, a separate identity engagement for a local Type 1 diabetes clinic.',
     title: 'Bolus Binder: A diabetes-aware recipe keeper',
     cardTitle: 'Bolus Binder: Cooking comes first',
     cardHook: 'I designed and built a React Native recipe app around living with Type 1 diabetes, keeping portions, nutrition, and meal planning close to the food.',
@@ -623,6 +635,8 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'seasonal-content-system',
+    context: TIRE_RACK_CONTEXT,
+    publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Documented well enough that someone else can run the season.',
     annotations: {
       problem: 'Manual seasonal updates, and everyone saw the same content.',
@@ -766,6 +780,7 @@ const projects: Project[] = [
     },
     stream: 'passion',
     client: 'Heatherwood Equestrian Academy',
+    context: 'Heatherwood Equestrian Academy is a riding academy serving the South Bend, Indiana area. It offers horseback riding lessons, camps, boarding, and activities for families.',
     title: 'Heatherwood: A Brand and Site the Owner Can Run Herself',
     seoTitle: 'Brand Identity & WordPress Site for a Local Equestrian Academy',
     summary: 'I rebuilt Heatherwood’s identity and WordPress site around the services families actually search for. In the weeks after launch, website inquiries moved from roughly three or four a month to four or five a day.',
@@ -894,6 +909,8 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'landing-pages',
+    context: TIRE_RACK_CONTEXT,
+    publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Make landing pages a system, not a fire drill.',
     annotations: {
       problem: 'Every landing page started from scratch. No templates, no patterns.',
@@ -1037,6 +1054,8 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'aem-component-system',
+    context: TIRE_RACK_CONTEXT,
+    publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Stop authoring and engineering from solving the same problem twice.',
     annotations: {
       problem: 'A decade of AEM authoring with no core system underneath.',
@@ -1227,6 +1246,8 @@ $mobile-max-width: 768px;
     },
     stream: 'professional',
     client: 'Tire Rack · Internal Tooling',
+    context: 'Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
+    publicContext: 'The client is a national US online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
     title: 'Scaling Design Through Internal Tooling',
     seoTitle: 'Design Enablement: Internal Figma Plugins & AI-Assisted Tooling',
     summary:
@@ -1373,6 +1394,7 @@ $mobile-max-width: 768px;
     },
     stream: 'passion',
     client: 'LoopStack (personal project)',
+    context: 'LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.',
     title: 'LoopStack: Pattern Review for Meals and Glucose',
     seoTitle: 'LoopStack: Trends-First Health-Data UX for Type 1 Diabetes (React/TypeScript)',
     summary: 'A Type 1 diabetes app that compares what Loop predicted with what happened after a meal, then groups repeated glucose curves into patterns worth reviewing with a care team. It runs on TestFlight with 90 days of my HealthKit CGM data and never gives dosing advice.',
@@ -1610,6 +1632,7 @@ Frame every output as:
     },
     stream: 'passion',
     client: 'PlayDraft (personal product)',
+    context: 'PlayDraft is my independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics, build competing boards, and get a verdict in the same session.',
     title: 'PlayDraft: A Social Drafting Game Built From Brand to App Store',
     cardTitle: 'PlayDraft: A Social Drafting Game',
     seoTitle: 'PlayDraft: a 0→1 Social Game Designed & Built With Agents in React Native',
@@ -1802,6 +1825,7 @@ export const packs = {
   {
     slug: 'overscroll-tactics',
     client: 'Overscroll Tactics (self-initiated)',
+    context: 'Overscroll Tactics is my independent studio identity for the games and digital products I build. Its OTC Games identity appears in PlayDraft.',
     title: 'Overscroll Tactics: A Studio Mark Die-Cut From a Game That Just Finished',
     cardTitle: 'Overscroll Tactics: A Studio Identity',
     seoTitle: 'Overscroll Tactics studio identity: brand mark, motion ident, and two runtimes from one geometry',
@@ -1941,6 +1965,7 @@ export const packs = {
     stream: 'professional',
     hidden: true,
     client: 'Internal Tool',
+    context: 'This project supports an internal photography team preparing and reviewing images for digital production. The team needs tools it can use directly in its daily workflow.',
     title: 'Photography Workflow Agent',
     seoTitle: 'Photography Workflow Agent: AI-Assisted Internal Design Tooling',
     summary: 'A zero-install internal tool that packages a repetitive photography workflow into one interface the team can run, preview, and check themselves. I used Claude to accelerate the build, then tested it against the team’s real tasks.',

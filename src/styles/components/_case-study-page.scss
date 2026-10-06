@@ -117,6 +117,14 @@
     overflow: visible;
   }
 
+  &__context {
+    max-width: $container-text-width;
+    margin: 0 0 $spacing-lg;
+    font-size: $font-size-body;
+    line-height: $line-height-body;
+    color: $color-neutral-standard;
+  }
+
   &__summary {
     font-family: $font-family-primary;
     font-size: $font-size-body-lg;

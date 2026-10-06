@@ -79,6 +79,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
             <figcaption>{reel.caption}</figcaption>
           </figure>}
           {!project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
+          {project.context && <p className="project-overview__context">{project.context}</p>}
           <p className="project-overview__deck">{overview.deck}</p>
           <p className="project-overview__ownership">{overview.ownership}</p>
         </section>

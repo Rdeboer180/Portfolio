@@ -76,6 +76,7 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
   fireEvent(details, new Event('toggle'));
   expect(container.querySelector('.cs--detail-only')).toBeInTheDocument();
   expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  expect(screen.getAllByText(projects.find(project => project.slug === 'playdraft')!.context!)).toHaveLength(1);
 });
 
 
@@ -84,6 +85,7 @@ test.each(projects.filter(project => project.overview).map(project => [project.s
     const project = projects.find(item => item.slug === slug)!;
     const { container } = render(<MemoryRouter><CaseStudyPage slug={slug} /></MemoryRouter>);
     expect(screen.getByRole('heading', { level: 1, name: project.overview!.title })).toBeInTheDocument();
+    expect(screen.getByText(project.context!)).toBeInTheDocument();
     expect(screen.getByText(project.overview!.ownership)).toBeInTheDocument();
     container.querySelectorAll('video').forEach(video => {
       expect(video).not.toHaveAttribute('controls');
@@ -98,6 +100,17 @@ test.each(projects.filter(project => project.overview && project.stream === 'pro
     mockUnlocked = false;
     const { container } = render(<MemoryRouter><CaseStudyPage slug={slug} /></MemoryRouter>);
     expect(container.querySelector('.project-overview')).toBeNull();
+    const project = projects.find(item => item.slug === slug)!;
+    expect(screen.getByText(project.publicContext!)).toBeInTheDocument();
+    expect(screen.queryByText(project.context!)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Enter password/i })).toBeInTheDocument();
   }
 );
+
+test('the hidden photography study shows its neutral team context in the full opening', () => {
+  mockUnlocked = false;
+  const project = projects.find(item => item.slug === 'photography-workflow-agent')!;
+  render(<MemoryRouter><CaseStudyPage slug={project.slug} /></MemoryRouter>);
+  expect(screen.getByText(project.context!)).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Enter password/i })).toBeInTheDocument();
+});
