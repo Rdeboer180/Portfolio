@@ -117,7 +117,7 @@ const Hero: React.FC = () => {
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>I'm a product designer who builds interfaces, <a href="#systems" className="about__inline-link">component systems</a>, and the tools teams use to maintain them. Outside work, I designed and built <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink>, a social drafting game for iPhone. <strong className="animated-bold">The tools can change. Giving a damn doesn’t.</strong></p>
+            <p>I’m a product designer with a <a href="#systems" className="about__inline-link">systems focus</a> and deep roots in visual craft. I turn complex workflows into clear interfaces and shared components. Outside work, I designed and built <ProjectLink to="/work/playdraft/" className="about__inline-link"><strong>PlayDraft</strong></ProjectLink>, a social drafting game for iPhone. I'm continuously learning and leveraging new workflows to evolve as design does. I test what helps me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn doesn’t.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
             <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
