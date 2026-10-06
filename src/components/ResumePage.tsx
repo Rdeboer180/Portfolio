@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
+import { RESUME, ResumeBullet, ResumeEntry } from '../data/resume';
 import { usePageMeta } from '../hooks/usePageMeta';
 
 const CONTACT = {
@@ -9,10 +10,26 @@ const CONTACT = {
   lastName: 'DeBoer',
   email: SITE.email,
   city: 'Granger, IN',
-  title: 'Product Designer · Systems · UI Engineering',
+  title: RESUME.title,
   portfolioUrl: SITE.portfolioUrl,
   linkedinUrl: SITE.linkedinUrl,
 };
+
+const BulletCopy: React.FC<{ bullet: ResumeBullet }> = ({ bullet }) => {
+  const index = bullet.emphasis ? bullet.text.indexOf(bullet.emphasis) : -1;
+  if (!bullet.emphasis || index < 0) return <>{bullet.text}</>;
+  return <>{bullet.text.slice(0, index)}<strong>{bullet.emphasis}</strong>{bullet.text.slice(index + bullet.emphasis.length)}</>;
+};
+
+const Entry: React.FC<{ entry: ResumeEntry }> = ({ entry }) => (
+  <div className="resume-page__job">
+    <h3><strong>{entry.name}</strong> · {entry.title}{entry.location && <span className="resume-page__location"> · {entry.location}</span>}</h3>
+    <p className="resume-page__date">{entry.dates}</p>
+    {entry.summary && <p>{entry.summary}</p>}
+    <ul>{entry.bullets.map(bullet => <li key={bullet.text}><BulletCopy bullet={bullet} /></li>)}</ul>
+    {entry.href && <p className="resume-page__project-link"><Link to={entry.href}>{entry.name} case study →</Link></p>}
+  </div>
+);
 
 const ResumePage: React.FC = () => {
   usePageMeta({
@@ -45,77 +62,57 @@ const ResumePage: React.FC = () => {
       <nav className="resume-page__nav" aria-label="Primary">
         <Link to={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</Link>
         <div className="resume-page__nav-actions">
+          <a className="btn btn--primary btn--md resume-page__download-btn" href={RESUME.downloadHref} download={RESUME.downloadFilename}>Download résumé <span className="resume-page__download-format">PDF</span></a>
           <button className="btn btn--secondary btn--md resume-page__vcard-btn" onClick={handleDownloadVCard}>Save contact</button>
-          <a className="btn btn--primary btn--md resume-page__download-btn" href="/Ryan-DeBoer-Resume.pdf" download="Ryan_DeBoer_Product_Design_Generalist.pdf">Download résumé</a>
           <Link to={getHomeHref()} className="resume-page__nav-back">&larr; Back to Portfolio</Link>
         </div>
       </nav>
 
-      <div className="resume-page__canvas" role="region" aria-label="Letter-size resume" tabIndex={0}>
-        <article className="resume-page__paper">
+      <div className="resume-page__canvas">
+        <article className="resume-page__paper" aria-labelledby="resume-name">
           <header className="resume-page__header">
-            <h1 className="resume-page__name">Ryan DeBoer</h1>
+            <h1 id="resume-name" className="resume-page__name">Ryan DeBoer</h1>
             <p className="resume-page__role">{CONTACT.title}</p>
-            <p className="resume-page__contact">
+            <div className="resume-page__contact">
               <span>Portfolio: <a href={CONTACT.portfolioUrl}>{CONTACT.portfolioUrl.replace(/^https?:\/\//, '')}</a> | Pass: #showWork</span>
               <span>{CONTACT.city} · US Remote · Eastern Time · <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></span>
               <a href={CONTACT.linkedinUrl}>{CONTACT.linkedinUrl.replace(/^https?:\/\//, '')}</a>
-            </p>
+            </div>
           </header>
 
           <section className="resume-page__section">
             <h2 className="resume-page__section-title">Summary</h2>
-            <p>I connect product design, design systems, and implementation to carry complex experiences from first decision through production. More than a decade at Tire Rack spans ecommerce and dealer journeys, reusable systems, accessible interaction patterns, and hands-on web implementation. In independent mobile work, I direct agent-assisted builds and review the resulting behavior, design, and release quality.</p>
+            <p>{RESUME.summary}</p>
           </section>
 
           <section className="resume-page__section">
             <h2 className="resume-page__section-title">Skills</h2>
-            <p><strong>Product and experience design:</strong> Product strategy, UX/UI, interaction design, information architecture, user flows, prototyping, responsive design, accessibility.</p>
-            <p><strong>Design systems:</strong> Tokens, semantic naming, component contracts, variants and states, governance, documentation, adoption, contribution guidance.</p>
-            <p><strong>Implementation and delivery:</strong> HTML, CSS, Sass, AEM, Figma, Storybook collaboration, React Native/Expo/TypeScript agent-assisted builds, implementation QA.</p>
-            <p><strong>Evidence and workflow:</strong> Adobe Analytics, WebPageTest, stakeholder collaboration, SEO-informed structure, Claude Code, Figma MCP, Git/GitHub.</p>
+            {RESUME.skills.map(skill => <p key={skill.label}><strong>{skill.label}:</strong> {skill.text}</p>)}
           </section>
 
           <section className="resume-page__section">
             <h2 className="resume-page__section-title">Experience</h2>
-            <div className="resume-page__job">
-              <h3>Tire Rack · Senior Web Designer · South Bend, IN <span>May 2021 – Present</span></h3>
-              <p>Lead product and interface design across ecommerce, dealer workflows, reusable content systems, and internal tools, partnering with UX, engineering, analytics, SEO, and content teams.</p>
-              <ul>
-                <li>Co-founded and led an internal professional development program for approximately 90 digital team members, creating structured learning across technical, product, and leadership disciplines.</li>
-                <li>Redesigned 30+ tire category pages around shared comparison, icon, and content patterns; first-month results included up to 50% conversion lift on top pages and up to 400% category-entry growth.</li>
-                <li>Led the WheelRack dealer journey from vehicle selection through checkout and built its first design system: 200+ tokens and 50+ Storybook-integrated components. Partnered with a senior React developer; the framework later extended into Wholesale.</li>
-                <li>Designed and built 50+ landing pages, then established governed AEM templates that moved complex-page delivery from about a month to 1–2 weeks. Partnered on 10+ reusable AEM components; WebPageTest measured 60% faster loads on pages using them.</li>
-                <li>Built three AI-assisted internal tools used by Design, UX, and Photography; shipped accessible comparison charts and a two-tier icon system that grew beyond 100 icons.</li>
-              </ul>
-            </div>
-            <div className="resume-page__job">
-              <h3>Tire Rack · Web Designer · South Bend, IN <span>2014 – 2021</span></h3>
-              <p>Owned responsive ecommerce UI from visual design through HTML/CSS/Sass implementation. Created reusable AEM page and component patterns with engineering, SEO, content, and analytics partners.</p>
-            </div>
-            <div className="resume-page__job">
-              <h3>Round 2 Corp. · Designer <span>2013 – 2014</span></h3>
-              <p>Created brand, packaging, and product graphics with an emphasis on typography, composition, and production accuracy.</p>
-            </div>
+            {RESUME.experience.map(entry => <Entry key={`${entry.name}-${entry.title}`} entry={entry} />)}
           </section>
 
           <section className="resume-page__section">
-            <h2 className="resume-page__section-title">Selected Independent Projects</h2>
-            <div className="resume-page__job">
-              <h3>PlayDraft · Independent Product Designer &amp; Agent-Assisted Builder <span>2026 – Present</span></h3>
-              <p>Led product direction, brand, UX/UI, game rules, and release QA for an iPhone social drafting game; reached TestFlight in 12 weeks and released on the App Store. Play feedback led me to replace next-day community voting with instant scoring for a satisfying single-session result. Directed agent-assisted React Native/Expo/TypeScript implementation. <a href={`${SITE.portfolioUrl}/work/playdraft/`}>Case study</a></p>
-            </div>
-            <div className="resume-page__job">
-              <h3>LoopStack · Independent Product Designer &amp; Agent-Assisted Builder <span>2026 – Present</span></h3>
-              <p>Designed an iOS pattern-review experience using real HealthKit CGM history, making evidence strength visible and keeping developing patterns within review and care-team discussion boundaries. <a href={`${SITE.portfolioUrl}/work/loopstack/`}>Case study</a></p>
-            </div>
+            <h2 className="resume-page__section-title">Projects</h2>
+            {RESUME.projects.map(entry => <Entry key={entry.name} entry={entry} />)}
           </section>
 
           <section className="resume-page__section resume-page__education">
             <h2 className="resume-page__section-title">Education</h2>
-            <p><strong>BFA, Graphic Design</strong> · Kendall College of Art and Design · Minor in Web Animation</p>
+            {RESUME.education.map(line => <p key={line}>{line}</p>)}
           </section>
-          <p className="resume-page__note">Selected work: WheelRack · Tire categories · Systems overview. Employer-work case studies use the portfolio password above.</p>
+          <section className="resume-page__section">
+            <h2 className="resume-page__section-title">Selected work &amp; recommendations</h2>
+            <ul className="resume-page__work-links">
+              <li><Link to="/work/wheelrack/">WheelRack</Link></li>
+              <li><Link to="/work/tire-categories/">Tire categories</Link></li>
+              <li><Link to="/#systems">Systems overview</Link></li>
+            </ul>
+            <p className="resume-page__note">Employer-work case studies use the portfolio password above.</p>
+          </section>
         </article>
       </div>
     </div>

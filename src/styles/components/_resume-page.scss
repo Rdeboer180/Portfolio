@@ -2,10 +2,11 @@
 
 .resume-page {
   min-height: 100vh;
-  padding-bottom: 36px;
-  background: #f1f1f1;
-  color: #242424;
-  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: $spacing-4xl;
+  background: $color-background-secondary;
+  color: $color-text-primary;
+  font-family: $font-family-primary;
+  text-align: left;
 
   &__nav {
     position: sticky;
@@ -14,77 +15,133 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 14px 32px;
-    background: rgba(255, 255, 255, .96);
-    border-bottom: 1px solid #dedede;
-    backdrop-filter: blur(12px);
+    gap: $spacing-xl;
+    padding: $spacing-lg $spacing-2xl;
+    background: $color-white;
+    border-bottom: 1px solid $color-border-default;
   }
 
-  &__nav-logo { color: #222; font-size: 15px; font-weight: 700; text-decoration: none; }
-  &__nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  &__nav-logo { color: $color-text-primary; font-weight: $font-weight-bold; text-decoration: none; }
+  &__nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: $spacing-lg; }
   &__download-btn, &__vcard-btn { white-space: nowrap; }
-  &__nav-back { color: #555; font-size: 13px; text-decoration: none; white-space: nowrap; }
+  &__download-format { font-size: $font-size-caption; margin-left: $spacing-sm; }
+  &__nav-back { color: $color-text-secondary; font-size: $font-size-body-sm; text-decoration: none; white-space: nowrap; }
   &__nav-back:hover { color: $color-primary-text; }
+  a:focus-visible, button:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 4px; }
 
+  &__canvas { padding: $spacing-2xl; }
   &__paper {
     box-sizing: border-box;
-    width: 816px;
-    min-height: 1056px;
-    margin: 26px auto 0;
-    padding: 48px 54px 40px;
-    background: #fff;
-    color: #242424;
-    font-size: 11.4px;
-    line-height: 1.28;
+    width: 100%;
+    max-width: $container-wide;
+    margin: 0 auto;
+    padding: $spacing-3xl $spacing-4xl;
+    background: $color-white;
+    font-size: $font-size-body;
+    line-height: 1.6;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  &__header { padding-bottom: 14px; border-bottom: 2px solid #f03d01; }
-  &__name { margin: 0; font-size: 31px; font-weight: 400; letter-spacing: -.035em; line-height: 1.15; }
-  &__role { margin: 2px 0 5px; font-size: 13.5px; line-height: 1.2; }
-  &__contact { display: flex; flex-direction: column; gap: 1px; margin: 0; color: #555; font-size: 10.5px; line-height: 1.25; }
-  &__contact a, &__job a { color: #c23001; text-decoration: none; }
-  &__contact a:hover, &__job a:hover { text-decoration: underline; }
+  &__header { margin-bottom: $spacing-2xl; }
+  &__name {
+    width: max-content;
+    max-width: 100%;
+    margin: 0 0 $spacing-lg -9px;
+    padding: 4px 8px;
+    border: 1px solid $color-primary-muted;
+    background-image: linear-gradient($color-primary, $color-primary), linear-gradient($color-primary, $color-primary), linear-gradient($color-primary, $color-primary), linear-gradient($color-primary, $color-primary);
+    background-position: left top, right top, left bottom, right bottom;
+    background-repeat: no-repeat;
+    background-size: 5px 5px;
+    font-family: $font-family-heading;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: $font-weight-extrabold;
+    letter-spacing: -.04em;
+    line-height: 1.05;
+  }
+  &__role {
+    margin: 0 0 $spacing-lg;
+    color: $color-primary-text;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    letter-spacing: .055em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+  &__contact { display: flex; flex-direction: column; gap: 2px; color: $color-text-secondary; font-size: $font-size-body-sm; overflow-wrap: anywhere; }
+  &__paper a { color: $color-primary-text; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  &__paper a:hover { text-decoration-thickness: 2px; }
+  &__section { margin-top: $spacing-2xl; }
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    margin: 0 0 $spacing-lg;
+    font-family: $font-family-primary;
+    color: $color-text-secondary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    line-height: 1.4;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    break-after: avoid;
+    &::after { content: ''; height: 1px; min-width: $spacing-xl; flex: 1; background: $color-secondary-light; }
+  }
+  &__section > p { margin: 0; }
+  &__section > p, &__job > p { font-size: inherit; line-height: inherit; }
+  &__section > p + p { margin-top: $spacing-sm; }
+  &__paper strong { font-weight: $font-weight-semibold; }
+  &__job + &__job { margin-top: $spacing-xl; }
+  &__job h3 { margin: 0; font-family: $font-family-primary; font-size: $font-size-body; font-weight: $font-weight-regular; line-height: 1.5; break-after: avoid; }
+  &__location { color: $color-text-secondary; font-size: $font-size-body-sm; }
+  &__job > p { margin: $spacing-sm 0 0; }
+  &__job .resume-page__date { margin: 2px 0 $spacing-md; color: $color-secondary-dark; font-size: $font-size-body-sm; break-after: avoid; }
+  &__job ul { margin: $spacing-md 0 0; padding-left: 20px; list-style: disc; }
+  &__job li { padding-left: 2px; break-inside: avoid; }
+  &__job li + li { margin-top: $spacing-sm; }
+  &__job li::marker { color: $color-neutral-muted; }
+  &__job .resume-page__project-link { font-size: $font-size-body-sm; }
+  &__work-links { display: flex; flex-wrap: wrap; gap: $spacing-sm $spacing-xl; padding: 0; margin: 0 0 $spacing-md; list-style: none; }
+  &__section .resume-page__note { color: $color-text-secondary; font-size: $font-size-body-sm; }
 
-  &__section { margin-top: 12px; break-inside: avoid; }
-  &__section-title { margin: 0 0 5px; color: #d93608; font-size: 13px; font-weight: 400; line-height: 1.2; }
-  &__section p { margin: 0; }
-  &__section > p + p { margin-top: 3px; }
-  &__section strong { font-weight: 700; }
-  &__job { margin-top: 6px; break-inside: avoid; }
-  &__job h3 { margin: 0; font-size: 11.6px; font-weight: 400; line-height: 1.22; }
-  &__job h3 span { display: block; color: #555; font-size: 10.5px; }
-  &__job p { margin: 2px 0 0; }
-  &__job ul { margin: 2px 0 0; padding-left: 14px; }
-  &__job li { padding-left: 0; }
-  &__job li + li { margin-top: 2px; }
-  &__note { margin: 8px 0 0; color: #555; font-size: 10.5px; }
-  &__education { margin-top: 9px; }
-
-  @media screen and (max-width: 863px) {
-    &__nav { flex-wrap: wrap; padding: 12px 16px; }
-    &__nav-actions { flex-wrap: wrap; justify-content: flex-start; gap: 10px 14px; }
-    &__canvas { overflow-x: auto; }
-    &__paper { margin: 16px auto; }
+  @media screen and (max-width: 700px) {
+    padding-bottom: 0;
+    &__nav { position: static; flex-wrap: wrap; gap: $spacing-md; padding: $spacing-lg $spacing-xl; }
+    &__nav-actions { flex-wrap: wrap; justify-content: flex-start; gap: $spacing-md; }
+    &__vcard-btn { min-height: 44px; padding: 0; border: 0; background: transparent; }
+    &__canvas { padding: 0; }
+    &__paper { padding: $spacing-2xl $spacing-xl $spacing-3xl; }
+    &__contact { line-height: 1.6; }
+    &__location { display: block; }
   }
 }
 
 @media print {
-  @page { size: letter; margin: 0; }
-  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-  .resume-page { min-height: 0; padding: 0; background: #fff; }
-  .resume-page__nav { display: none !important; }
-  .resume-page__canvas { overflow: visible; }
-  .resume-page__paper {
-    width: 8.5in;
-    min-height: 11in;
-    margin: 0;
-    padding: 0.5in 0.56in 0.4in;
-    box-shadow: none;
-    overflow: hidden;
+  @page { size: letter; margin: 32pt 38pt; }
+  .resume-page {
+    min-height: 0;
+    padding: 0;
+    background: $color-white;
+    &__nav { display: none !important; }
+    &__canvas { padding: 0; }
+    &__paper { width: auto; max-width: none; margin: 0; padding: 0; font-size: 9.5pt; line-height: 1.32; }
+    &__header { margin-bottom: 12pt; }
+    &__name { font-size: 30pt; margin: 0 0 9pt -6.6pt; padding: 4pt 6pt; border-width: .6pt; background-size: 3.5pt 3.5pt; }
+    &__role { font-size: 9pt; line-height: 1.3; margin-bottom: 9pt; }
+    &__contact { font-size: 8.3pt; line-height: 1.38; gap: 0; }
+    &__section { margin-top: 12pt; }
+    &__section-title { font-size: 8pt; line-height: 1.2; margin-bottom: 7pt; gap: 10pt; }
+    &__section > p + p { margin-top: 3pt; }
+    &__job + .resume-page__job { margin-top: 11pt; }
+    &__job h3 { font-size: 10pt; line-height: 1.25; margin-bottom: 3pt; }
+    &__location { font-size: 8.5pt; }
+    &__job .resume-page__date { font-size: 8.2pt; line-height: 1.2; margin: 0 0 7pt; }
+    &__job > p { margin: 0 0 5pt; }
+    &__job ul { margin: 5pt 0 0; padding-left: 11pt; }
+    &__job li { padding-left: 2pt; margin: 0 0 3pt; }
+    &__job li + li { margin-top: 0; }
+    &__job .resume-page__project-link, &__section .resume-page__note { font-size: 8.3pt; }
+    &__work-links { font-size: 8.6pt; margin-bottom: 6pt; }
   }
-  .resume-page__section, .resume-page__job { break-inside: avoid; }
-  a { color: inherit; }
 }

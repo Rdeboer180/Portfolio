@@ -214,6 +214,9 @@ function AppRoutes() {
         <Route path="/" element={<HomeRoute />} />
         <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
         <Route path="/resume" element={<PageShell><ResumePage /></PageShell>} />
+        {/* Preserve the case-study URLs linked from the approved resume PDF. */}
+        <Route path="/wheelrack" element={<Navigate to="/work/wheelrack/" replace />} />
+        <Route path="/tirecategories" element={<Navigate to="/work/tire-categories/" replace />} />
         <Route path="/design-system" element={<PageShell><DesignSystem /></PageShell>} />
         {/* Targeted-homepage template preview (unlinked). Add real deployments as
             additional routes rendering <HomepageTargeted content={...} />. */}
