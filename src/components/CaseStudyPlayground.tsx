@@ -155,10 +155,10 @@ const CtaArrow = () => (
 
 // Card copy previews the story; the case study holds the full context.
 const CARD_PREVIEWS: Record<string, { title: string; line: string }> = {
-  'design-enablement': { title: 'Tools that scale design', line: 'Three internal tools carry the system into project setup, crop validation, and stakeholder decks.' },
+  'design-enablement': { title: 'Tools that scale design', line: 'I built a Figma project-data plugin, a responsive crop simulator, and reusable presentation components for the team.' },
   playdraft: { title: 'PlayDraft: A social drafting game', line: 'I designed the brand, game, and system, then built and released the iPhone app with agents.' },
   loopstack: { title: 'LoopStack: Patterns worth reviewing', line: 'I designed and built a Type 1 diabetes app for reviewing meal and glucose patterns with a care team.' },
-  'aem-component-system': { title: 'AEM Component System', line: 'I rebuilt page authoring around shared components, replacing one-off builds with a foundation design and engineering share.' },
+  'aem-component-system': { title: 'AEM Component System', line: 'I wrote AEM component specifications and production Sass so designers could author pages with shared templates and variants.' },
   'tire-categories': { title: 'Tire Category Redesign: Path to the right tire', line: 'I rebuilt 30+ category pages into a guided system that helps shoppers choose without tire expertise.' },
   'seasonal-content-system': { title: 'Seasonal content, without rebuilds', line: 'An AEM fragment system lets the team swap seasonal storefront content through authoring instead of development.' },
   'overscroll-tactics': { title: 'Overscroll Tactics: A studio identity', line: 'I built the identity behind PlayDraft, carrying one mark and motion system across web and native.' },

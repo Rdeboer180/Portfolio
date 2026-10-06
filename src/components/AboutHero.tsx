@@ -106,18 +106,13 @@ const AboutHero: React.FC = () => {
 
           <div className="about-hero__intro reveal-fade" style={d(1000)}>
             <p>
-              I’m a senior designer who kept moving closer to how the work gets built. The title
-              covers part of that story, but not all of it.
+              I'm a senior designer who kept moving closer to how the work gets built.
             </p>
             <p>
               I started in visual design, learned HTML and CSS because the browser
               kept exposing gaps in my files, then built systems that design and engineering could
               share. Now I use AI-assisted workflows to explore more directions and get working
               ideas in front of people sooner.
-            </p>
-            <p>
-              The tools changed. My responsibility did not: understand the idea, stay close to the
-              implementation, and care about what people actually receive.
             </p>
           </div>
         </div>

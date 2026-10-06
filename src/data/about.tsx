@@ -28,7 +28,7 @@ export const storySections: StorySection[] = [
         'it taught me to tell the difference between something considered and something merely ' +
         'assembled. I still use that distinction every day.',
     ],
-    annotation: 'The tools changed. The foundation stayed.',
+    annotation: '',
   },
   {
     num: '02',
@@ -67,11 +67,8 @@ export const storySections: StorySection[] = [
         'tools that support both. Some experiments stick. Others show me what I still need to learn.',
       'I use Claude, Figma Make, and code generation to explore and build. I review the design, ' +
         'the behavior, and the code before anything they produce is kept.',
-      'I test that boundary in personal, volunteer, and internal products. Those projects let me ' +
-        'follow an idea through strategy, interface, code, and use, including the parts that do not ' +
-        'survive contact with the working product.',
     ],
-    annotation: 'When making things look real gets easier, judgment matters more.',
+    annotation: '',
   },
   {
     num: '05',
@@ -99,12 +96,8 @@ export const storySections: StorySection[] = [
         'I think about team culture. Collaboration takes more than proximity. It is ' +
         'trust, context, shared language, and people choosing to keep professional relationships ' +
         'strong even when the work happens across screens.',
-      'Tools like Claude can help here too. A product idea or rough workflow can become something ' +
-        'the team can react to before it hardens into a plan. That does not settle the design. It ' +
-        'gives product, design, engineering, and subject-matter experts a more concrete place to ' +
-        'start.',
     ],
-    annotation: 'Collaboration is not proximity. It is trust, context, and intent.',
+    annotation: '',
   },
   // Was "How I work", and opened with a one-paragraph restatement of the loop
   // (find the decision → stay close to implementation → ship what holds up →
@@ -185,8 +178,8 @@ export const processBeats: ProcessBeat[] = [
     body:
       'PlayDraft has a red line. No screen gets built without a reference on the Figma canvas ' +
       'first. That same canvas holds the observations from testing the running app. Prototypes ' +
-      'are cheap enough now that the first thing a stakeholder sees often runs. Either surface is ' +
-      'allowed to change the system.',
+      'are cheap enough now that the first thing a stakeholder sees often runs. Testing the ' +
+      'running app changes both the Figma designs and the shared components.',
     cost: 'Stay in the file and the screen gets built twice, the second time after someone approved the first.',
     evidence: {
       label: 'PlayDraft: Figma to React Native to TestFlight in twelve weeks',
@@ -220,35 +213,14 @@ export const processBeats: ProcessBeat[] = [
   },
 ];
 
-/**
- * Under the circuit. The first sentence is unchanged from the previous deck.
- * The second paragraph is the old fifth principle ("Keep putting in the reps"),
- * which was never a step in the loop; it is the reason the loop keeps turning,
- * so it moves here. Its opening clause is a DRAFT; the last two sentences are
- * Ryan's, unchanged.
- *
- * The people and shows Ryan studies used to be listed here. They are named
- * once now, on the studio tab's walking pad (AboutStudio.tsx, point 03),
- * because that is where the listening physically happens — the pad is the
- * object, this paragraph is the argument. Naming them in both places was the
- * same duplication the rest of this page was cleaned of, so this paragraph
- * points at the room instead of restating the list.
- *
- * "Putting in the reps" stays here, and only here and in the story above.
- * The studio's walking-pad title was going to carry the phrase too ("Put in
- * the reps between releases"); it says "Stay in shape between releases"
- * instead, so one page does not use the same line three times.
- */
+// Close with how ongoing study changes the next build.
 export const processCloser = {
   lead:
-    'The tools will keep changing, so I do not build the process around a tool. I build it ' +
-    'around a harder standard: ',
-  emphasis: 'care for what ships',
+    'I keep reviewing and improving the work because I ',
+  emphasis: 'care about what ships',
   reps:
-    'The loop keeps turning because I keep putting in the reps: studying the people and ' +
-    'communities whose standards make me inspect my own work more closely. They are named in ' +
-    'the studio, on the walking pad, where most of that studying gets done. The useful part is ' +
-    'not the inspiration. It is the habit or rule that changes what I build next.',
+    'I study the people and communities named in the studio, often while I am on the walking ' +
+    'pad. I use what I learn to revise components, document rules, and check the next build.',
 };
 
 // ============================================

@@ -37,14 +37,14 @@ const StoryBeat: React.FC<{ section: StorySection }> = ({ section: s }) => {
         ))}
       </div>
 
-      <div className="about-story__aside">
+      {s.annotation && <div className="about-story__aside">
         <span
           className="about-story__annotation reveal-fade"
           style={d(220 + s.body.length * 70 + 80)}
         >
           {s.annotation}
         </span>
-      </div>
+      </div>}
     </article>
   );
 };

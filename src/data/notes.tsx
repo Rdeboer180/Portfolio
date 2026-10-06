@@ -348,12 +348,15 @@ export const NOTES: Note[] = [
         </p>
         <p>
           What I brought first was a mark and a small design system, plus a working prototype to
-          argue from rather than a deck. What turned out to matter more was the document behind it:
-          a vision handoff describing what the thing could eventually become, which is not a
-          brochure site. It is a personalized portal that onboards someone by where they actually
-          are in their diabetes journey, an education library closer to a course platform than a
-          resources page, and somewhere for people to not feel alone in it. Most of that is years
-          out. Writing it down early is what keeps the first version from foreclosing it.
+          discuss with Brian.
+        </p>
+        <p>
+          I also wrote a vision handoff for a personalized portal. It describes onboarding based
+          on someone's diabetes experience, an education library organized as courses, and a place
+          to find support.
+        </p>
+        <p>
+          Most of that is years out. Writing it down early helps us make room for it in the first version.
         </p>
         <figure className="notes__figure">
           <img
@@ -396,9 +399,14 @@ export const NOTES: Note[] = [
           then says &ldquo;brand this for X&rdquo; and gets back a framed image in the show&rsquo;s
           treatment, header and footer, handle and link, in either of two styles. It runs in batches
           and carries its own fonts and marks, so there is nothing to download and nothing to
-          remember. This is the same move as{' '}
-          <Link to="/notes/ryan-design-taste-skill/">publishing my own taste as a skill</Link>:
-          the agent executes it, but the rules it follows are decisions I made and wrote down.
+          remember.
+        </p>
+        <p>
+          Like{' '}
+          <Link to="/notes/ryan-design-taste-skill/">my design-taste skill</Link>, it gives the agent
+          written rules to follow on each request.
+        </p>
+        <p>
           My favorite detail is the least visible one. It pads the image before it frames it, so
           the branding can never cover the first or last line of text in the screenshot. That bug
           would have shown up on the first real post, and the brand would have quietly become the

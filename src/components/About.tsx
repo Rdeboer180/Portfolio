@@ -58,14 +58,14 @@ const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
             <div className="about__differentiator-copy">
               {compact ? (
                 <>
-                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth—the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
-                  <p className="about__body">Care means making good decisions repeatable through components, documentation, and attention to detail. <span className="animated-bold">Relationships are central to my work.</span> When communication breaks down, design and implementation drift. <a href="#testimonials" className="about__inline-link">The people I build with</a> can speak to how I help keep them connected.</p>
+                  <p className="about__body">At Tire Rack, I designed AEM components and the WheelRack dealer experience. Outside work, I build products of my own. <Link to="/talent-tree/" className="about__inline-link">My Designer Forge</Link> maps the skills I've developed over 16 years.</p>
+                  <p className="about__body">I review implementation with engineering and document component rules for the designers who use them. <span className="animated-bold">Relationships are central to my work.</span> <a href="#testimonials" className="about__inline-link">The people I build with</a> describe how we work together.</p>
                   <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
                 </>
               ) : (
                 <>
-              <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth—where I’ve invested my time, sharpened my skills, and developed the strategic perspective I bring to product design.</p>
-              <p className="about__body">Care means making good decisions repeatable through components, documentation, and attention to detail. <span className="animated-bold">Relationships are central to my work.</span> When communication breaks down, design and implementation drift. <a href="#testimonials" className="about__inline-link">The people I build with</a> can speak to how I help keep them connected.</p>
+              <p className="about__body">At Tire Rack, I designed AEM components and the WheelRack dealer experience. Outside work, I build products of my own. <Link to="/talent-tree/" className="about__inline-link">My Designer Forge</Link> maps the skills I've developed over 16 years.</p>
+              <p className="about__body">I review implementation with engineering and document component rules for the designers who use them. <span className="animated-bold">Relationships are central to my work.</span> <a href="#testimonials" className="about__inline-link">The people I build with</a> describe how we work together.</p>
               <p className="about__body">A system grows with its team. I want people to understand the decisions, challenge them, and help shape what comes next.</p>
                 </>
               )}
