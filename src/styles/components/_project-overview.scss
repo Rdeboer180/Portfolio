@@ -72,6 +72,16 @@
     figure { background: $color-white; }
     img { display: block; width: 100%; height: 340px; object-fit: contain; background: $color-neutral-lightest; }
   }
+  &__decision--comparison { grid-template-columns: 1fr; }
+  &__comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $spacing-xl;
+    figure { margin: 0; min-width: 0; }
+    img { height: auto; background: $color-white; }
+    figure:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    @media (max-width: 700px) { grid-template-columns: 1fr; }
+  }
   &__number { font: $font-size-caption $font-family-mono; color: $color-text-secondary; }
   &__outcome { padding: $spacing-2xl 0; border-top: 1px solid $color-border-default; h2 { font-size: $font-size-h4; } }
   &__depth { border-block: 1px solid $color-border-default; summary { cursor: pointer; padding: $spacing-xl 0; font-weight: 600; } }
@@ -110,3 +120,5 @@
   touch-action: manipulation;
   &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 4px; }
 }
+
+.project-overview .project-overview__comparison img { height: auto; }

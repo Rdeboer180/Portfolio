@@ -1,0 +1,66 @@
+[
+  {
+    "file": "public/images/work/aem-component-system/live-components/hero-suspension.jpg",
+    "alt": "Suspension thin Hero Teaser",
+    "source": "core-component-showcase.html",
+    "imageIndex": 2,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/teaser-lighting.jpg",
+    "alt": "Three teaser cards on the Lighting page",
+    "source": "core-component-showcase.html",
+    "imageIndex": 4,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/carousel-batteries.jpg",
+    "alt": "Lightweight Braille Batteries carousel slide",
+    "source": "core-component-showcase.html",
+    "imageIndex": 8,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/accordion-shipping.jpg",
+    "alt": "Shipping FAQ accordion",
+    "source": "core-component-showcase.html",
+    "imageIndex": 10,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/title-text-returns.jpg",
+    "alt": "Returns policy page built from Title and Text components",
+    "source": "core-component-showcase.html",
+    "imageIndex": 12,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/hero-about.jpg",
+    "alt": "40 Years of Tires Hero Teaser on the live /about page",
+    "source": "core-component-showcase.html",
+    "imageIndex": 1,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/teaser-featured-decision-guide.jpg",
+    "alt": "Three featured icon teasers on the Tire Decision Guide",
+    "source": "core-component-showcase.html",
+    "imageIndex": 5,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  },
+  {
+    "file": "public/images/work/aem-component-system/live-components/teaser-full-width-about.jpg",
+    "alt": "Full-width teaser on the About page",
+    "source": "core-component-showcase.html",
+    "imageIndex": 6,
+    "captureDate": "2026-10-07",
+    "treatment": "Original embedded live-page capture, unchanged"
+  }
+]

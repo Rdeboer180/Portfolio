@@ -87,7 +87,7 @@ export interface ProjectOverview {
   /** Project artifacts grouped beneath the overview introduction; available after unlock. */
   evidence?: ProjectImage[];
   relatedNote?: { href: string; label: string };
-  decisions: { title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage }[];
+  decisions: { title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage; images?: ProjectImage[] }[];
   outcome: string;
 }
 
@@ -220,6 +220,12 @@ export interface Project {
 
 const TIRE_RACK_CONTEXT = 'Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.';
 const PUBLIC_RETAILER_CONTEXT = 'The client is a national US online tire and wheel retailer. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.';
+
+// Live component captures supplied in the October 7 field guide.
+const liveComponent = (name: string, alt: string, caption: string): ProjectImage => ({
+  src: `/images/work/aem-component-system/live-components/${name}.jpg`,
+  alt, caption, layout: 'full',
+});
 
 const projects: Project[] = [
   {
@@ -804,8 +810,8 @@ const projects: Project[] = [
       },
       {
         key: 'structure',
-        label: 'One architecture, twenty modules that swap at once',
-        description: "I designed the Experience Fragment types, variant rules and swap logic so more than twenty modules could change without rebuilding the pages. The updated AEM core components give authors a shared structure for editing and replacing content across those surfaces.",
+        label: 'Trace a section to its fragment and Target experience',
+        description: "I mapped the seasonal sections in Figma to named Experience Fragments in AEM and their Adobe Target experiences. That map lets us trace an incorrect regional placement back to its content or targeting configuration.",
         images: [
           {
             alt: 'Placeholder for omitted internal documentation artifact',
@@ -840,7 +846,7 @@ const projects: Project[] = [
         key: 'iteration',
         label: "Keep the season visible while the page text stays consistent",
         systemMarker: 'Governance',
-        description: "In 2018, I reduced swaps to the highest-traffic surfaces. Later, natural-search traffic to seasonally swapped pages declined over successive years. After reviewing that trend with SEO, we moved toward visual seasonal changes in 2025 and 2026 while keeping text consistent on the same URLs.",
+        description: "In 2018, I reduced swaps to the highest-traffic surfaces. Later, natural-search traffic to seasonally swapped pages declined over successive years. After reviewing that trend with SEO, we moved toward visual seasonal changes in 2025 and 2026 while keeping text consistent on the same URLs. We swap imagery or change content order for seasonal and geographic audiences, with SEO reviewing the annual refresh.",
         images: [],
       },
     ],
@@ -1020,7 +1026,7 @@ const projects: Project[] = [
       gaps: 'The same decisions, remade on every request.',
       constraints: 'Thin briefs, two audiences, AEM’s limits, and speed as the expectation.',
       approach: 'Invest in the system, and speed stops costing quality.',
-      outcome: 'Turnaround went from a month to days, under one QA issue per page.',
+      outcome: 'Complex pages take one to two weeks instead of about a month.',
     },
     stream: 'professional',
     client: 'Tire Rack',
@@ -1077,19 +1083,19 @@ const projects: Project[] = [
         key: 'alignment',
         label: 'The search intent decides the order of the page',
         description: "SEO requirements were part of the brief: the H1, metadata and keywords reflected where the customer was in the shopping journey. I used that starting point to order product evidence, supporting copy and FAQs around the questions the page needed to answer.",
-        images: [],
+        images: [liveComponent('accordion-shipping', 'Shipping FAQ accordion', 'Shared AEM component on a live page. Capture, October 7, 2026.')],
       },
       {
         key: 'structure',
         label: 'Assembled from patterns, not drawn from scratch',
         description: 'In Figma, I assemble the page from reusable hero, product, FAQ, promotion, and link patterns. The structure stays recognizable while the content and emphasis change with the query.',
-        images: [],
+        images: [liveComponent('teaser-lighting', 'Lighting page Teaser cards', 'Shared AEM component on a live page. Capture, October 7, 2026.')],
       },
       {
         key: 'system',
         label: 'The recurring shapes became governed templates',
         description: "I turned recurring page layouts into templates for size, category, promotion and product launches. Pages are moving onto the shared AEM core component foundation, so the same authoring rules carry through different content needs.",
-        images: [],
+        images: [liveComponent('hero-suspension', 'Suspension category Hero Teaser', 'Shared AEM component on a live page. Capture, October 7, 2026.')],
       },
       {
         key: 'iteration',
@@ -1330,7 +1336,7 @@ $mobile-max-width: 768px;
     metrics: [
       { value: '60%', label: 'Faster page loads (WebPageTest)' },
       { value: '10+', label: 'Reusable components shipped to production' },
-      { value: '15 yrs', label: 'DAM governance debt resolved' },
+      { value: '100+', label: 'Images covered by DAM cleanup' },
     ],
   },
 
@@ -1339,53 +1345,52 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'design-enablement',
-    thesis: 'The design system had to travel with the work.',
+    thesis: 'Check the image before it reaches the page.',
     annotations: {
-      problem: 'Repetitive design work and messy handoffs slowed the team down.',
-      gaps: 'The workarounds worked. They did not share context.',
+      problem: 'Crop problems surfaced after the asset reached AEM.',
+      gaps: 'Photography needed to see the production crop before handoff.',
       constraints: 'Production work did not pause, so scope stayed surgical.',
-      approach: 'Connected plugins and apps into one workflow layer.',
-      outcome: 'Fewer manual review cycles across design, UX, and photography.',
+      approach: 'Bring production crop rules into the preview.',
+      outcome: 'The photography task went from three steps to one.',
     },
     stream: 'professional',
     client: 'Tire Rack · Internal Tooling',
     context: 'Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
     publicContext: 'The client is a national US online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
     title: 'Scaling Design Through Internal Tooling',
-    seoTitle: 'Design Enablement: Internal Figma Plugins & AI-Assisted Tooling',
+    seoTitle: 'Design Enablement: Responsive Crop Validation & Review Tools',
     summary:
-      'I built three internal tools that carry the system’s rules into daily work: a Figma metadata plugin, a production-accurate crop simulator, and a presentation system used across Design, UX, and Photography.',
-    cardHook: 'Repetitive production work was eating design time. Three connected internal tools now carry the system into project setup, crop validation, and stakeholder decks, places the component library never reached.',
+      'I built a browser-based crop simulator so Design and Photography could check responsive imagery before placing it in AEM. Reusable Figma presentation components support the stakeholder review that follows.',
+    cardHook: 'A crop simulator brings production breakpoints, gradients, and safe zones into image review before an asset reaches AEM.',
     year: '2025–2026',
     tags: [
       'Design Enablement',
       'Internal Tooling',
-      'Figma Plugin',
       'AI-Assisted Build',
       'Workflow Automation',
       'Design Systems',
     ],
     role: 'Product Design · UX Engineering · AI-Assisted Build',
-    tools: ['Figma', 'Claude', 'TypeScript', 'React', 'VS Code', 'Workfront'],
+    tools: ['Figma', 'Claude', 'TypeScript', 'React', 'VS Code'],
     timeline: 'Ongoing (tools shipped iteratively alongside production work)',
     featured: '/assets/portfolio-safe/web-apps/cover-poster.jpg',
     featuredVideo: '/assets/portfolio-safe/web-apps/cover-loop.mp4',
 
     // ── 01 Problem ──
     problemPunch:
-      'The team’s biggest friction was not the work. It was the process around the work.',
+      'A crop problem found in AEM was already a late-stage problem.',
     problem: [
   "I had been using AI-assisted builds to remove repetition from my own work. My manager noticed and brought me a request from Photography: make hero crop decisions easier before the image reached AEM.",
-  "That request grew into a set of tools for recurring setup, asset review and presentation work. Project context was still scattered across spreadsheets and Figma files.",
+  "Photography needed a preview that matched the live site, while Design and UX needed a reusable format for stakeholder reviews.",
   "Checking crops in AEM pushed breakpoint and safe-zone problems late into the workflow, after other people had already committed time to the asset."
 ],
 
     // ── 02 Gaps & Opportunity ──
-    gapsPunch: 'Each problem had a point solution. Nobody was designing the workflow itself.',
+    gapsPunch: 'The image needed to work at every production breakpoint.',
     gaps: [
-      'Project metadata, image validation, and stakeholder reviews each had a workaround, but the workarounds did not share context.',
-      'AI and MCP tools could infer structure, but they could not know an internal project ID, owner, or planning note. The workflow had to supply that context explicitly.',
-      'Every stakeholder deck started from an empty file, so teams spent review time rebuilding the container around the work.',
+      'Desktop crops could hide important parts of an image on mobile, especially behind copy and gradients.',
+      'Reviewing an image outside its production layout did not reveal those conflicts.',
+      'Stakeholder decks also required repeated layout work before teams could review the project.',
     ],
 
     // ── 03 Constraints ──
@@ -1397,26 +1402,10 @@ $mobile-max-width: 768px;
     ],
 
     // ── Key Insight (portable-governance thesis) ──
-    insightCallout:
-      'The design system had to travel with the work. Its rules now live in the plugin, the simulator, the presentation components, the code, and the documentation rather than waiting in a library someone has to remember to open.',
+    insightCallout: 'The preview had to use the same crop behavior as the live site. Otherwise it could approve an image that failed in production.',
 
     // ── 04 Approach — one subsection per tool ──
     approachSubsections: [
-      {
-        key: 'metadata',
-        label: 'Figma Project Metadata Plugin',
-        systemMarker: 'CONTEXT LAYER',
-        description:
-          'I worked with our Lead Product Manager on a Figma plugin that reads an exported Workfront spreadsheet and builds the project title card inside the design file. It fills what an agent cannot infer: the internal ID, owner, business context, and planning metadata. Hundreds of active files now have one searchable entry point instead of another naming convention someone has to remember.',
-        images: [
-          {
-            src: '/assets/portfolio-safe/web-apps/internalTool_figmaPlugin.png',
-            alt: 'Figma project metadata plugin generating a standardized project title card',
-            layout: 'full',
-            caption: 'Workfront metadata flowing into a standardized, searchable title card inside Figma.',
-          },
-        ],
-      },
       {
         key: 'crop-simulator',
         label: 'Hero Crop Simulator',
@@ -1450,34 +1439,24 @@ $mobile-max-width: 768px;
           },
         ],
       },
-      {
-        key: 'connected-layer',
-        label: "Extend shared rules into the team's daily work",
-        systemMarker: 'PLATFORM',
-        description:
-          "The metadata plugin, crop simulator and presentation components carry the system into setup and review. My manager's requests extended the work to other teams, and further tools are in development. I keep the shipped tools focused on recurring tasks and maintain them alongside production work.",
-      },
     ],
 
     // ── 05 Outcome ──
     timeToLive: 'In daily use by the design team, maintained alongside core project work rather than as a separate initiative.',
     outcomeNote:
-      "All three tools are part of the team's workflow. The photography task went from three steps to one. The team has also seen related projects reach QA and launch weeks earlier. The metadata plugin keeps context in Figma, and the presentation components reduce repeated setup.",
+      "The crop simulator is in the team's workflow, and the photography task went from three steps to one. Figma presentation components reduce repeated review setup. I maintain both alongside production work.",
     takeaways: [
   "The crop simulator started as a Photography request after my manager saw the tools I was building for my own work.",
-  "Project IDs, owners and planning notes come from supplied metadata, rather than an agent's inference.",
   "Production crop rules and internal sign-in solve different problems: one supports a useful preview, the other controls access.",
-  "The photography task went from three steps to one. The team has also seen earlier QA and launch timing on related projects."
+  "The photography task went from three steps to one. I keep the preview aligned with production behavior."
 ],
     outcomeArtifacts: [
-      'Figma Project Metadata Plugin',
       'Hero Crop Simulator',
       'Component-Based Presentation System',
     ],
     metrics: [
-      { value: '3', label: 'Connected internal tools shipped' },
+      { value: '3 → 1', label: 'Steps in the photography task' },
       { value: '3 teams', label: 'Design, UX & Photography workflows served' },
-      { value: '100s', label: 'Of active design files given searchable context' },
       { value: 'Zero', label: 'AEM placements needed to validate hero crops' },
     ],
   },
@@ -2157,17 +2136,16 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     outcome: 'The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.',
   }),
   'design-enablement': p => ({
-    title: 'Design Enablement', category: 'Internal tools', role: 'Product design · AI-assisted build',
+    title: 'Tools that scale design', category: 'Internal tools', role: 'Product design · AI-assisted build',
     status: 'In daily team use',
-    deck: 'Three tools carry shared rules into project setup, image validation, and stakeholder presentations, where a component library alone could not help.',
-    ownership: "I designed and built the tools alongside production work. Our Lead Product Manager partnered on project context; our AI team helped host the crop tool internally behind company sign-in.",
+    deck: 'I built a browser-based crop simulator so Photography and Design could check an image against the live site before placing it in AEM. Shared Figma presentation components carry the work into stakeholder review.',
+    ownership: 'I designed and built the tools alongside production work. Our AI team helped host the simulator internally behind company sign-in.',
     opening: evidence(p, 'crop-simulator'),
     decisions: [
-      { title: 'Put project context inside the file', body: 'The Figma plugin turns exported Workfront data into a searchable title card. IDs, owners, and planning context arrive as facts instead of assumptions an agent has to make.', image: evidence(p, 'metadata') },
-      { title: "Solve the crop decision before the AEM placement", body: "After seeing my own workflow tools, my manager brought me Photography's crop-review problem. The simulator uses production breakpoints, gradients and safe zones so teams can judge an asset before placing it in AEM.", image: evidence(p, 'crop-simulator') },
-      { title: 'Reuse the presentation structure', body: 'Layouts, charts, status markers, and callouts became Figma components. Teams assemble the review around the project instead of rebuilding the deck first.', image: evidence(p, 'presentation') },
+      { title: 'Use the production rules in the preview', body: 'The simulator uses the live responsive CSS, gradients, and safe zones. Teams can compare desktop, tablet, and mobile crops before committing the image to a page.' },
+      { title: 'Spend the review on the work', body: 'Reusable Figma layouts, charts, status markers, and callouts give stakeholder presentations a shared structure. The related Figma starter and plugin workflow covers project setup through handoff.', image: evidence(p, 'presentation'), bodyLink: { text: 'Figma starter and plugin workflow', to: '/work/figma-template-governance/' } },
     ],
-    outcome: "Three tools are in the team's workflow. The photography task went from three steps to one, and the team has seen related projects reach QA and launch weeks earlier. I maintain the tools alongside production work.",
+    outcome: 'The photography task went from three steps to one. Teams now validate hero crops without placing an image in AEM first, and the presentation components reduce repeated review setup. I maintain the tools alongside production work.',
   }),
   'tire-categories': p => ({
     title: 'Tire Categories', category: 'Professional work', status: 'Live · 30+ category pages',
@@ -2183,15 +2161,15 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   }),
   'seasonal-content-system': p => ({
     title: 'AEM Targeting & Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
-    deck: "Reusable AEM Experience Fragments support A/B testing and geographically targeted experiences with Adobe Target. Authors update seasonal content across six landing pages within a documented review workflow.",
+    deck: "More than twenty AEM Experience Fragments serve six pages through Adobe Target. The current program uses a geo-based audience split, with seasonal imagery and content order adapted for winter and southern-state customers.",
     ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
     opening: { src: p.featured, alt: 'AEM winter seasonal content — homepage project card', layout: 'full' },
     decisions: [
-      { title: 'Separate seasonal content from page structure', body: "The updated AEM core components give authors shared editing rules. Five fragment types carry content, links and calls to action, letting more than twenty modules change across pages without a rebuild.", image: p.outcomeImages?.[0] },
-      { title: 'Write down the authoring rules', body: 'Documentation and hands-on onboarding let junior designers make the swaps while I retain approval and responsibility for exceptions.' },
-      { title: "Keep seasonal changes visible without changing the page text", body: "Natural-search traffic to swapped pages declined over successive years. After reviewing it with SEO, we shifted toward visual winterization in 2025 and 2026 while keeping text consistent on the same URLs." },
+      { title: 'Map the content to its audience', body: 'Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics so each page receives the intended experience.', image: p.outcomeImages?.[0] },
+      { title: 'Trace each swap through Figma, AEM, and Target', body: 'I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I retain approval and responsibility for exceptions.' },
+      { title: "Keep seasonal changes visible without changing the page text", body: "Natural-search traffic to swapped pages declined over successive years. After reviewing it with SEO, we shifted toward visual winterization in 2025 and 2026 while keeping text consistent on the same URLs. We swap imagery or change content order for seasonal and geographic audiences, with SEO reviewing the annual refresh." },
     ],
-    outcome: 'Two junior designers now author seasonal swaps. I govern the system and resolve AEM/Target mismatches. Winter conversion has generally strengthened, but weather, marketing, and product changes also contribute.',
+    outcome: 'The geo-based seasonal program is live. Two junior designers author the swaps, and I handle final review and AEM/Target sync issues. Winter conversion has generally strengthened, but weather, marketing, and product changes also contribute.',
   }),
   heatherwood: p => ({
     title: 'Heatherwood', category: 'Independent client work', status: 'Live · Owner-managed WordPress site',
@@ -2207,27 +2185,34 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   }),
   'landing-pages': p => ({
     title: 'Landing Page System', category: 'Professional work', status: 'Live · Governed AEM templates',
-    deck: 'After designing more than fifty landing pages, I built reusable AEM templates with authoring rules and template permissions. Other designers can adapt the content while I govern component changes and review exceptions.',
-    ownership: 'I designed and built the pages and template patterns, then documented their use. I govern component-level changes and review work by two junior designers.',
+    deck: 'Fifty-plus landing pages taught me which layouts kept repeating. I turned those patterns into AEM templates, with component variants and permissions that let junior designers build within the system.',
+    ownership: 'I designed and built the pages, defined the template patterns, and documented authoring rules. Two junior designers use them; I review component changes and exceptions.',
     opening: p.outcomeImages?.[0],
     decisions: [
-      { title: 'Let search intent set the order', body: "SEO briefs set the H1, metadata and target keywords for a customer's shopping stage. I organize the product evidence and answers around that intent, so the page helps someone act on the search that brought them there.", image: p.outcomeGridImages?.[0] },
-      { title: 'Turn recurring layouts into starting points', body: "Pages now share the AEM component foundation, with recurring hero, product, FAQ and promotion layouts. Template permissions and documented authoring rules define what designers can change. I review component-level updates and keep exceptions visible.", image: p.outcomeGridImages?.[1] , bodyLink: {"text":"AEM component foundation","to":"/work/aem-component-system/"} },
-      { title: "Make new needs reusable", body: "New product or client needs usually become component variants. When content does not fit an existing pattern, HTML markup components still allow an on-brand exploration within the template. I keep those exceptions under review.", image: p.outcomeGridImages?.[2] },
+      { title: 'Choose a starting point for the brief', body: 'Size, category, promotion, and product-launch pages have recurring layouts. I assemble those layouts from the shared library in Figma, then authors adapt the content in AEM.', image: liveComponent('teaser-lighting', 'Three product teaser cards on the live Tire Rack lighting page', 'One Teaser pattern, repeated for lighting advice and shopping links. Live capture, October 7, 2026.') },
+      { title: 'Keep the answer close to the product', body: 'SEO briefs set the heading, metadata, and search intent. Shared FAQ accordions let authors put the supporting answers on the page, with the same interaction across shipping, support, and category content.', image: liveComponent('accordion-shipping', 'Shipping FAQ accordion on the live Tire Rack site', 'The shared Accordion in use on Shipping. Live capture, October 7, 2026.') },
+      { title: 'Match the review to the risk', body: 'Template permissions define what authors can edit. High-impact pages go through senior, SEO, analytics, and QA review; lower-risk pages receive senior review and live validation. Requests beyond the template become scoped changes to the AEM component foundation.', image: liveComponent('hero-suspension', 'Thin Hero Teaser on the live Tire Rack suspension page', 'The thin Hero Teaser gives category pages a shared starting point. Live capture, October 7, 2026.'), bodyLink: { text: 'AEM component foundation', to: '/work/aem-component-system/' } },
     ],
-    outcome: 'Two junior designers use the templates. Complex pages now take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. Page-specific revenue reporting is documented in the full study with its attribution limits.',
+    outcome: 'Two junior designers use the templates. Complex pages take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. The October 7 inventory shows the shared components in use across category and support pages. Migration and content QA continue.',
   }),
   'aem-component-system': p => ({
     title: 'AEM Components', category: 'Professional work', status: 'Live · Shared authoring foundation',
-    deck: 'Eight AEM core-component variants, plus three API-driven components built with engineering, form a shared library for the homepage, tires hub, events, and packages. Each variant carries its authoring rules and implementation contract.',
+    deck: 'Eight core-component variants and three API-driven components form a shared library. The live examples below show how the same component supports different page needs.',
     ownership: 'I wrote component specifications and production Sass alongside AEM engineering. Patrick Steins reviewed my branches; SEO and accessibility leads helped define the contracts.',
     opening: evidence(p, 'system'),
     decisions: [
-      { title: "Extend core components with clear exceptions", body: "I extended familiar core components through selectable styles and written authoring rules. The Hero needed its own heading-level options and an eyebrow integrated into the heading. I made those differences explicit in its contract." },
-      { title: 'Ship variants with their rules', body: 'Eight core variants shipped with Sass, authoring defaults, and documentation. For three additional API-driven components, I specified behavior and styles alongside the engineering team.', image: { ...evidence(p, 'system', 1)!, crop: { x: 0, y: 256, width: 428, height: 328, sourceWidth: 428, sourceHeight: 1536 } } },
-      { title: "Pay the migration cost once", body: "Every page needed a rebuild on its new core template. That took months, but the templates now accept new component variants without repeating the overhaul. Shared fields and documentation give authors a clearer starting point.", image: { ...evidence(p, 'system')!, crop: { x: 0, y: 54, width: 428, height: 481, sourceWidth: 428, sourceHeight: 1536 } } },
+      { title: 'Give the hero two distinct treatments', body: 'The thin Hero Teaser introduces category and support pages. The default, full-height treatment gives brand stories more room. Both use the Hero contract, with explicit heading-level and eyebrow controls.', images: [
+        liveComponent('hero-suspension', 'Thin Hero Teaser on the Suspension page', 'Thin variant · Suspension. A compact category introduction.'),
+        liveComponent('hero-about', 'Default full-height Hero Teaser on the About page', 'Default variant · About. More space for the brand story.'),
+      ] },
+      { title: 'Let teaser styles change the layout', body: 'Selectable styles turn the Teaser into product cards, icon-led steps, or a full-width story. The live comparisons show those variants in their page context.', images: [
+        liveComponent('teaser-lighting', 'Card and three-column Teaser variants on the Lighting page', 'Card + three-column · Lighting. Image, copy, and a call to action.'),
+        liveComponent('teaser-featured-decision-guide', 'Featured icon-led Teasers on the Tire Decision Guide', 'Featured · Tire Decision Guide. Icons explain the steps.'),
+        liveComponent('teaser-full-width-about', 'Full-width Teaser story band on the About page', 'Full-width · About. A story band with image and copy.'),
+      ] },
+      { title: 'Make the next variant easier to ship', body: 'The move to core templates required months of page rebuilding. Each variant now ships with Sass, authoring defaults, and documentation. I supplied behavior and styles for three additional API-driven components alongside engineering.' },
     ],
-    outcome: "The components power live pages, with WebPageTest reporting 60% faster loads. Load-speed, screen-reader and SEO checks informed the wider rollout. Designers now author within the same templates and variant rules engineering supports.",
+    outcome: 'The library powers live pages. WebPageTest reported 60% faster loads on pages using the new components. These captures come from the October 7 live inventory; the full study includes the production Sass and component specifications.',
   }),
   loopstack: p => ({
     title: 'LoopStack', category: 'Personal product', status: 'TestFlight · Personal pattern-review tool',

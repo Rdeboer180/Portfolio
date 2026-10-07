@@ -686,7 +686,7 @@ export const NOTES: Note[] = [
         <p>
           This work is harder to show. A Figma file is a portfolio piece &mdash; you open it and
           the craft is right there. A Markdown file that keeps a brand from drifting, an{' '}
-          <Link to="/work/design-enablement/">internal plugin that removes a repetitive step</Link>,
+          <Link to="/work/figma-template-governance/">internal plugin that removes a repetitive step</Link>,
           a test that catches a bug before a user does: all real, all close to invisible. Half of
           my strongest work now lives inside systems I can describe but can&rsquo;t open, which is
           why the independent products exist at all. That is a genuine trade, not a humblebrag.

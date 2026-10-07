@@ -178,7 +178,7 @@ const DesignEnablementPlate: React.FC<{ title?: string }> = ({ title = 'Plate 05
       <line x1="244" y1="132" x2="288" y2="132" className="cs-steel" />
       <line x1="244" y1="128" x2="244" y2="136" className="cs-steel" />
       <line x1="288" y1="128" x2="288" y2="136" className="cs-steel" />
-      <text x="266" y="147" textAnchor="middle" className="cs-mono">3 tools</text>
+      <text x="266" y="147" textAnchor="middle" className="cs-mono">3 → 1 steps</text>
     </g>
     <g className="cover-schematic__callout">
       <path d="M 130 182 L 116 164" className="cs-keep-thin" />

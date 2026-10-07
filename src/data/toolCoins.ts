@@ -22,14 +22,6 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'slack.svg', name: 'Slack', x: 75, rot: -6, lift: 0, z: 1 },],
   },
   {
-    slug: 'aem-component-system',
-    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
-      { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
-      { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
-      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
-  },
-  {
     slug: 'playdraft',
     coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
       { icon: 'claude.svg', name: 'Claude', x: 26, rot: 9, lift: 3, z: 3 },
@@ -37,10 +29,12 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
   },
   {
-    slug: 'figma-template-governance',
-    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -9, lift: 0, z: 2 },
-      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 10, lift: 3, z: 3 },
-      { icon: 'workfront.svg', name: 'Workfront', x: 57, rot: -6, lift: 0, z: 1 }],
+    slug: 'aem-component-system',
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 8, rot: -8, lift: 0, z: 2 },
+      { icon: 'figma-dark.svg', name: 'Figma', x: 26, rot: 11, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 45, rot: -6, lift: 0, z: 1 },
+      { icon: 'github.svg', name: 'GitHub', x: 62, rot: 8, lift: 4, z: 2 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 79, rot: -12, lift: 0, z: 1 },],
   },
   {
     slug: 'tire-categories',
@@ -67,10 +61,18 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'github.svg', name: 'GitHub', x: 76, rot: 8, lift: 0, z: 1 },],
   },
   {
-    slug: 'bolus-binder',
-    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
-      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 9, lift: 3, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 57, rot: -6, lift: 0, z: 2 }],
+    slug: 'figma-template-governance',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -9, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 10, lift: 3, z: 3 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 57, rot: -6, lift: 0, z: 1 }],
+  },
+  {
+    slug: 'landing-pages',
+    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 7, rot: 9, lift: 0, z: 2 },
+      { icon: 'figma-dark.svg', name: 'Figma', x: 25, rot: -11, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 44, rot: 7, lift: 0, z: 1 },
+      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 61, rot: -6, lift: 4, z: 2 },
+      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 78, rot: 10, lift: 0, z: 1 },],
   },
   {
     slug: 'seasonal-content-system',
@@ -78,6 +80,12 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'figma-dark.svg', name: 'Figma', x: 27, rot: 8, lift: 3, z: 3 },
       { icon: 'photoshop.svg', name: 'Photoshop', x: 47, rot: -7, lift: 0, z: 1 },
       { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 66, rot: 12, lift: 2, z: 2 },],
+  },
+  {
+    slug: 'bolus-binder',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -10, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 9, lift: 3, z: 3 },
+      { icon: 'vscode.svg', name: 'VS Code', x: 57, rot: -6, lift: 0, z: 2 }],
   },
   {
     slug: 'overscroll-tactics',
@@ -93,14 +101,6 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'illustrator.svg', name: 'Adobe Illustrator', x: 28, rot: -9, lift: 4, z: 3 },
       { icon: 'photoshop.svg', name: 'Photoshop', x: 48, rot: 6, lift: 0, z: 2 },
       { icon: 'vscode.svg', name: 'VS Code', x: 67, rot: -12, lift: 2, z: 1 },],
-  },
-  {
-    slug: 'landing-pages',
-    coins: [{ icon: 'experience-manager.svg', name: 'Adobe Experience Manager', x: 7, rot: 9, lift: 0, z: 2 },
-      { icon: 'figma-dark.svg', name: 'Figma', x: 25, rot: -11, lift: 3, z: 3 },
-      { icon: 'vscode.svg', name: 'VS Code', x: 44, rot: 7, lift: 0, z: 1 },
-      { icon: 'openai-chatgpt.svg', name: 'ChatGPT', x: 61, rot: -6, lift: 4, z: 2 },
-      { icon: 'adobe-analytics.svg', name: 'Adobe Analytics', x: 78, rot: 10, lift: 0, z: 1 },],
   },
 ];
 

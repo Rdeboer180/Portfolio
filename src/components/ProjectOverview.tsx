@@ -94,13 +94,15 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
         </section>
         <section id="project-decisions" aria-labelledby="project-decisions-title">
           <h2 id="project-decisions-title" className="project-overview__eyebrow">Key decisions</h2>
-          {overview.decisions.map((decision, index) => <section className={`project-overview__decision${decision.image ? '' : ' project-overview__decision--text'}`} key={decision.title}>
+          {overview.decisions.map((decision, index) => <section className={`project-overview__decision${decision.images?.length ? ' project-overview__decision--comparison' : decision.image ? '' : ' project-overview__decision--text'}`} key={decision.title}>
             <div>
               <span className="project-overview__number" aria-hidden="true">0{index + 1}</span>
               <h3>{decision.title}</h3>
               <p><DecisionCopy decision={decision} /></p>
             </div>
-            {decision.image && <OverviewMedia image={decision.image} />}
+            {decision.images?.length ? <div className="project-overview__comparison" aria-label={`${decision.title}: live variants`}>
+              {decision.images.map(image => <OverviewMedia key={image.src} image={image} />)}
+            </div> : decision.image && <OverviewMedia image={decision.image} />}
           </section>)}
         </section>
         <section id="project-outcome" className="project-overview__outcome">
