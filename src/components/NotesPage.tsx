@@ -14,14 +14,13 @@ import '../styles/styles.scss';
 // Notes index — the writing stream. Editorial list (rows, not cards):
 // date · kind chip · title · dek. A pinned "start here" block wears the
 // selection frame and puts the design system + taste skill front and center.
-// Three streams, ordered by how settled the thinking is: raw thought (essays
-// off LinkedIn), work still moving (build logs), then the resolved artifacts.
+// Three streams, ordered by how settled the thinking is: field notes, work still moving (build logs), then the resolved artifacts.
 // ============================================
 
 const NotesPage: React.FC = () => {
   const location = useLocation();
-  const essays = NOTES_BY_DATE.filter((n) => n.kind === 'essay');
-  const logs = NOTES_BY_DATE.filter((n) => n.kind === 'log');
+  const fieldNotes = NOTES_BY_DATE.filter((n) => ['reflection', 'exploration', 'practice'].includes(n.kind) && !n.inProgress);
+  const logs = NOTES_BY_DATE.filter((n) => n.inProgress);
   const resolved = NOTES_BY_DATE.filter((n) => n.kind === 'skill' || n.kind === 'system');
   // NOTES_BY_DATE is sorted newest first, so the head of it is the one entry
   // that gets the tint and the selection frame.
@@ -52,8 +51,8 @@ const NotesPage: React.FC = () => {
         <p className="notes__eyebrow">[ Notes ]</p>
         <h1 className="notes__title">Writing from the work</h1>
         <p className="notes__lede">
-          Craft is the through-line. Essays argue a judgment, build logs follow a decision while
-          it is still moving, and skill and system entries publish the artifact that encodes it.
+          Reflections, explorations, and practice notes capture what I’m learning and how I work.
+          Skill and system entries share the tools and rules behind it.
         </p>
       </header></ScrollReveal>
 
@@ -86,12 +85,12 @@ const NotesPage: React.FC = () => {
           alone takes the accent, so orange still means one thing on the page. */}
       <NoteStream
         index="01"
-        label="Thinking Out Loud"
-        ariaLabel="Notes from LinkedIn"
-        sub="Blog-like thoughts that started as public LinkedIn posts. Lightly edited, still warm."
+        label="Field Notes"
+        ariaLabel="Field notes"
+        sub="Observations, experiments, and plans from the work. Some start on LinkedIn; others begin here."
         aside="the rough cut is on LinkedIn"
-        count={essays.length}
-        notes={essays}
+        count={fieldNotes.length}
+        notes={fieldNotes}
         accent
         newestSlug={newestSlug}
         rail={<LinkedInLink label="Read them as they land" surface="notes_stream" />}
@@ -99,7 +98,7 @@ const NotesPage: React.FC = () => {
       <NoteStream
         index="02"
         label="In Progress"
-        ariaLabel="Build logs"
+        ariaLabel="Explorations in progress"
         sub="Work that isn't settled. Published while the decisions are still moving, discarded directions included."
         aside="dated because they will age"
         count={logs.length}

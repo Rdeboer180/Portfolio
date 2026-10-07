@@ -37,6 +37,12 @@ export const CARDS: PlaygroundCard[] = [
       { icon: 'github.svg', name: 'GitHub', x: 63, rot: 11, lift: 2, z: 2 },],
   },
   {
+    slug: 'figma-template-governance',
+    coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 8, rot: -9, lift: 0, z: 2 },
+      { icon: 'claude.svg', name: 'Claude', x: 32, rot: 10, lift: 3, z: 3 },
+      { icon: 'workfront.svg', name: 'Workfront', x: 57, rot: -6, lift: 0, z: 1 }],
+  },
+  {
     slug: 'design-enablement',
     coins: [{ icon: 'figma-dark.svg', name: 'Figma', x: 7, rot: 10, lift: 0, z: 2 },
       { icon: 'claude.svg', name: 'Claude', x: 24, rot: -7, lift: 4, z: 3 },

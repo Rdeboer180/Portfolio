@@ -86,6 +86,11 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
           </>}
           <p className="project-overview__deck">{overview.deck}</p>
           <p className="project-overview__ownership">{overview.ownership}</p>
+          {overview.evidence?.length ? (
+            <div className="project-overview__evidence" aria-label="Starter template and internal tools">
+              {overview.evidence.map(image => <OverviewMedia key={image.src} image={image} />)}
+            </div>
+          ) : project.publicPreview && <div style={{ maxWidth: project.publicPreview.maxWidth, margin: '24px auto' }}><OverviewMedia image={project.publicPreview} /></div>}
         </section>
         <section id="project-decisions" aria-labelledby="project-decisions-title">
           <h2 id="project-decisions-title" className="project-overview__eyebrow">Key decisions</h2>

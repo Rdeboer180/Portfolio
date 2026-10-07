@@ -156,9 +156,9 @@ const AemPlate: React.FC = () => (
 );
 
 /** A plugin panel automating the repetitive part of production. */
-const DesignEnablementPlate: React.FC = () => (
+const DesignEnablementPlate: React.FC<{ title?: string }> = ({ title = 'Plate 05' }) => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 05</text>
+    <text x="160" y="22" textAnchor="middle" className="cs-mono">{title}</text>
     <rect x="36" y="38" width="176" height="128" className="cs-ink" />
     <rect x="36" y="38" width="176" height="16" className="cs-mist" />
     <circle cx="46" cy="46" r="2.5" className="cs-steel-fill" />
@@ -221,12 +221,15 @@ const LandingPagesPlate: React.FC = () => (
   </>
 );
 
+const FigmaGovernancePlate: React.FC = () => <DesignEnablementPlate title="Plate 10 · 4 plugins" />;
+
 const PLATES: Record<string, React.FC> = {
   wheelrack: WheelrackPlate,
   'tire-categories': TireCategoriesPlate,
   'seasonal-content-system': SeasonalPlate,
   'aem-component-system': AemPlate,
   'design-enablement': DesignEnablementPlate,
+  'figma-template-governance': FigmaGovernancePlate,
   'landing-pages': LandingPagesPlate,
 };
 

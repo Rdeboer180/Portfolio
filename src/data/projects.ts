@@ -84,6 +84,8 @@ export interface ProjectOverview {
   category?: string;
   role?: string;
   opening?: ProjectImage;
+  /** Project artifacts grouped beneath the overview introduction; available after unlock. */
+  evidence?: ProjectImage[];
   relatedNote?: { href: string; label: string };
   decisions: { title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage }[];
   outcome: string;
@@ -132,6 +134,8 @@ export interface Project {
   timeline: string;
   featured?: string;
   studyHero?: ProjectImage;
+  /** Explicitly approved image that may render before unlock. */
+  publicPreview?: ProjectImage;
   ownership?: string;
   compactStory?: boolean;
   // Optional muted looping cover video (compressed web loop); `featured` doubles
@@ -143,6 +147,8 @@ export interface Project {
   // primary media — autoplay/loop/muted from mount, not hover-to-play.
   // Reduced motion still renders the poster still.
   featuredVideoPrimary?: boolean;
+  /** Reviewed cover footage explicitly approved for display before unlock. */
+  featuredVideoPublic?: boolean;
   /** Case-study hero reel, distinct from the short homepage card loop. */
   featuredReel?: { src: string; poster: string; alt: string; caption?: string };
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
@@ -216,6 +222,103 @@ const TIRE_RACK_CONTEXT = 'Tire Rack is a national online retailer of tires, whe
 const PUBLIC_RETAILER_CONTEXT = 'The client is a national US online tire and wheel retailer. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.';
 
 const projects: Project[] = [
+  {
+    slug: 'figma-template-governance',
+    client: 'Tire Rack · Design & UX',
+    context: 'Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.',
+    publicContext: 'A national US online tire and wheel retailer, with project tracking and approvals in Workfront.',
+    stream: 'professional',
+    title: 'Figma Design & UX: Starter Template Governance and Plugin Development',
+    cardTitle: 'Figma starter template & governance',
+    seoTitle: 'Figma Design & UX Governance: Starter Templates and Four Internal Plugins',
+    summary: 'I built a shared Figma starter template and four internal plugins with agent assistance for a team of 15+ Web and UX designers. Together, they carry the project brief through design, proofing, and handoff.',
+    cardHook: 'A shared starter template and four internal plugins for a team of 15+ Web and UX designers, from project setup through handoff.',
+    thesis: 'A shared starting point. A clearer handoff.',
+    year: '2026',
+    role: 'Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development',
+    ownership: 'I designed the template and plugin workflows, built the tools with agent assistance, and worked with the lead PM on the metadata export.',
+    tools: ['Figma', 'Claude', 'Workfront'],
+    tags: ['Design Governance', 'Figma Plugins', 'UX Workflows', 'Agent-Assisted Build'],
+    timeline: 'Ongoing internal initiative',
+    cardStatus: '[ Internal tools published ]',
+    featured: '/images/work/figma-template-governance/plugin-suite.png',
+    publicPreview: { src: '/images/work/figma-template-governance/plugin-suite.png', alt: 'Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup', layout: 'half', maxWidth: 360, caption: 'The four tools, published to the team’s Figma workspace.' },
+    featuredVideo: '/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4',
+    featuredVideoPrimary: true,
+    featuredVideoPublic: true,
+    featuredReel: {
+      src: '/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4',
+      poster: '/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg',
+      alt: 'Quick tour of four internal Figma plugins using original screenshots and footage',
+      caption: '16-second tour using original screenshots and footage. Layer Cleanup is shown in the published tools list.',
+    },
+    metrics: [
+      { value: '4', label: 'Internal Figma plugins built with agent assistance' },
+      { value: '15+', label: 'Web and UX designers the shared template and tools are built for' },
+    ],
+    problemPunch: 'A reviewer should not have to reconstruct the project from the file.',
+    problem: [
+      'Project context lived in Workfront while the design evolved in Figma. Reviewers needed a consistent way to find the brief, inspect the proof, and see what was ready for handoff.',
+      'I moved proof preparation from Figma Slides into the working design file, where the team was already comfortable.',
+    ],
+    gapsPunch: 'Put the guidance beside the work.',
+    gaps: ['A starter template sets the structure. The plugins help keep the project cover, proof snapshots, layer names, and handoff checklist current.'],
+    constraintsPunch: 'Designers control what is ready for review.',
+    constraints: [
+      'Proof snapshots update on an explicit refresh, so ongoing edits cannot silently change an approved proof.',
+      'The edit uses original footage and screenshots. Team adoption and time savings have not yet been measured.',
+    ],
+    insightCallout: 'The file should help the next person understand the work without needing its original designer in the room.',
+    approachSubsections: [
+      {
+        key: 'shared-template',
+        label: 'Give Design and UX one starting structure',
+        description: 'The starter gives Web and UX designers shared pages for project context, research, working designs, proofs, local components, and an archive. Short guides explain what belongs where.',
+      },
+      {
+        key: 'project-context',
+        label: 'Project Title Card Generator: bring the brief into the file',
+        description: 'The Title Card Generator imports a Workfront CSV or accepts manual input. It fills the cover with the project goal, identifier, status, and links so reviewers can find the brief without leaving the file.',
+      },
+      {
+        key: 'proof-assist',
+        label: 'Proof Assist: link review evidence to its source',
+        description: 'Proof Assist links snapshot slots to source frames. Designers choose the frame, adjust its fit, and refresh the proof when it is ready for review.',
+        images: [{ src: '/images/work/figma-template-governance/proof-template.png', alt: 'Original proof template showing desktop and mobile design snapshots', layout: 'full', caption: 'Original project capture.' }],
+      },
+      {
+        key: 'layer-cleanup',
+        label: 'Layer Cleanup: make the working file legible',
+        description: 'Layer Cleanup applies naming conventions using the layer type and surrounding frame as context, helping another designer pick up the file.',
+      },
+      {
+        key: 'project-checklist',
+        label: 'Project Checklist: make completion and exceptions explicit',
+        description: 'Project Checklist saves progress with the file and exports a completion report, including notes about skipped steps, for senior review.',
+        images: [{ src: '/images/work/figma-template-governance/actual-checklist-frame.jpg', alt: 'Project Checklist open in the original Figma recording', layout: 'full', caption: 'Original project capture.' }],
+      },
+    ],
+    timeToLive: 'Internally published. Team rollout is ongoing.',
+    outcomeNote: 'Four plugins are published internally for a team of 15+ Web and UX designers. The next step is testing the workflow with teammates through setup, review, and handoff.',
+    outcomeArtifacts: ['Shared Design & UX starter template', 'Project Title Card Generator', 'Proof Assist', 'Layer Cleanup', 'Project Checklist'],
+    overview: {
+      title: 'Figma Template Governance',
+      category: 'Professional work',
+      status: 'Internally published · Governance and rollout ongoing',
+      deck: 'A shared Figma starter and four internal plugins for a team of 15+ Web and UX designers.',
+      ownership: 'I designed the template and workflows, built the plugins with agent assistance, and partnered with the lead PM on project metadata.',
+      evidence: [
+        { src: '/images/work/figma-template-governance/starter-template-cover.png', alt: 'Original Figma starter-template cover with the Project Info Card, plugin instructions, and supporting links', layout: 'full', caption: 'The starter-template cover keeps the brief, guide, and project links together.' },
+        { src: '/images/work/figma-template-governance/plugin-suite.png', alt: 'Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup', layout: 'half', caption: 'Four tools published to the team’s Figma workspace.' },
+      ],
+      decisions: [
+        { title: 'Put the project context where the work starts', body: 'A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.' },
+        { title: 'Keep proof preparation with the design', body: 'Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.', image: { src: '/images/work/figma-template-governance/proof-template.png', alt: 'Original proof template with desktop and mobile snapshots', layout: 'full', caption: 'Proofs use shared layouts and explicit snapshot refreshes.' } },
+        { title: 'Make handoff readiness explainable', body: 'Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.', image: { src: '/images/work/figma-template-governance/actual-checklist-frame.jpg', alt: 'Project Checklist in the original working Figma file', layout: 'full' } },
+      ],
+      outcome: 'Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.',
+    },
+  },
   // =============================================
   // 0. WheelRack — Design System & Customer Journey  [image LEFT]
   // =============================================
@@ -649,8 +752,8 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'Seasonal Content Swap: AEM Experience Fragments & Adobe Target',
     seoTitle: 'Seasonal Ecommerce Content System: AEM Experience Fragments & Adobe Target',
-    summary: 'I built and still govern an AEM system that swaps more than 20 seasonal fragments across six landing pages. The same URLs can serve winter and southern-state audiences without rebuilding the pages each year.',
-    cardHook: 'Seasonal storefronts were rebuilt by hand every year. An AEM fragment system now swaps 20+ components a season through authoring, not development.',
+    summary: 'I built and still govern reusable AEM Experience Fragments for A/B testing and geographic targeting with Adobe Target. More than 20 seasonal fragments serve six landing pages, supported by documented authoring rules, junior-designer onboarding, and final review.',
+    cardHook: 'Reusable AEM Experience Fragments support A/B testing and geographic targeting with Adobe Target. Authors update 20+ seasonal fragments across six pages within a shared review workflow.',
     beat: {
       kind: 'image',
       src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
@@ -923,8 +1026,8 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
     seoTitle: 'AEM Landing-Page & SEO Template System for Ecommerce',
-    summary: 'Designed 50+ landing pages personally, then built the governed AEM template system that two junior designers now use. Turnaround moved from ~1 month to 1\u20132 weeks for complex pages and 1\u20132 days for simple launches.',
-    cardHook: 'Every landing page took a designer about a month. A governed AEM template system moved complex pages to 1\u20132 weeks. Junior designers ship them now.',
+    summary: 'I designed 50+ landing pages, then built reusable AEM templates with authoring rules and template permissions. Two junior designers now use the system under my review, with complex pages moving from about a month to 1\u20132 weeks.',
+    cardHook: 'Reusable AEM templates, authoring rules, and template permissions help junior designers ship. Complex pages moved from about a month to 1\u20132 weeks.',
     year: '2023\u2013Present',
     tags: ['UX/UI Design', 'Front-End Development', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
@@ -1068,8 +1171,8 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'AEM Component System Rebuild',
     seoTitle: 'Adobe Experience Manager Design System & Storefront Performance Rebuild',
-    summary: 'I partnered with a new AEM engineering team to replace one-off authoring with more than ten reusable components. The components now power the homepage, tires hub, events, and packages pages, with WebPageTest showing 60% faster loads.',
-    cardHook: 'Every page was a one-off build. Authoring was rebuilt around 10+ reusable core components. Pages load 60% faster, on a foundation design and dev share.',
+    summary: 'I built eight AEM core-component variants with production Sass, authoring defaults, and documented contracts, and partnered with engineering on three API-driven components. The shared library powers the homepage, tires hub, events, and packages, with WebPageTest showing 60% faster loads.',
+    cardHook: 'Eight core-component variants and three API-driven components replaced one-off builds. Shared authoring rules connect the library to production, with WebPageTest showing 60% faster loads.',
     year: '2024\u20132025',
     tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
     role: 'Senior Web Designer / UX Engineer',
@@ -2079,8 +2182,8 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     outcome: p.outcomeNote!,
   }),
   'seasonal-content-system': p => ({
-    title: 'Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
-    deck: "Help customers prepare for winter before the first snowfall. A shared AEM fragment system updates seasonal content across six landing pages without rebuilding them each year.",
+    title: 'AEM Targeting & Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
+    deck: "Reusable AEM Experience Fragments support A/B testing and geographically targeted experiences with Adobe Target. Authors update seasonal content across six landing pages within a documented review workflow.",
     ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
     opening: { src: p.featured, alt: 'AEM winter seasonal content — homepage project card', layout: 'full' },
     decisions: [
@@ -2104,19 +2207,19 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   }),
   'landing-pages': p => ({
     title: 'Landing Page System', category: 'Professional work', status: 'Live · Governed AEM templates',
-    deck: 'After designing more than fifty landing pages, I turned their recurring decisions into templates that other designers can use.',
+    deck: 'After designing more than fifty landing pages, I built reusable AEM templates with authoring rules and template permissions. Other designers can adapt the content while I govern component changes and review exceptions.',
     ownership: 'I designed and built the pages and template patterns, then documented their use. I govern component-level changes and review work by two junior designers.',
     opening: p.outcomeImages?.[0],
     decisions: [
       { title: 'Let search intent set the order', body: "SEO briefs set the H1, metadata and target keywords for a customer's shopping stage. I organize the product evidence and answers around that intent, so the page helps someone act on the search that brought them there.", image: p.outcomeGridImages?.[0] },
-      { title: 'Turn recurring layouts into starting points', body: "Pages now share the AEM component foundation, with recurring hero, product, FAQ and promotion layouts. Content and emphasis can change while authors work within familiar rules.", image: p.outcomeGridImages?.[1] , bodyLink: {"text":"AEM component foundation","to":"/work/aem-component-system/"} },
+      { title: 'Turn recurring layouts into starting points', body: "Pages now share the AEM component foundation, with recurring hero, product, FAQ and promotion layouts. Template permissions and documented authoring rules define what designers can change. I review component-level updates and keep exceptions visible.", image: p.outcomeGridImages?.[1] , bodyLink: {"text":"AEM component foundation","to":"/work/aem-component-system/"} },
       { title: "Make new needs reusable", body: "New product or client needs usually become component variants. When content does not fit an existing pattern, HTML markup components still allow an on-brand exploration within the template. I keep those exceptions under review.", image: p.outcomeGridImages?.[2] },
     ],
     outcome: 'Two junior designers use the templates. Complex pages now take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. Page-specific revenue reporting is documented in the full study with its attribution limits.',
   }),
   'aem-component-system': p => ({
     title: 'AEM Components', category: 'Professional work', status: 'Live · Shared authoring foundation',
-    deck: 'A reusable component foundation replaces one-off page authoring across the homepage, tires hub, events, and packages.',
+    deck: 'Eight AEM core-component variants, plus three API-driven components built with engineering, form a shared library for the homepage, tires hub, events, and packages. Each variant carries its authoring rules and implementation contract.',
     ownership: 'I wrote component specifications and production Sass alongside AEM engineering. Patrick Steins reviewed my branches; SEO and accessibility leads helped define the contracts.',
     opening: evidence(p, 'system'),
     decisions: [

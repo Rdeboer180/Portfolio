@@ -49,6 +49,18 @@
   &__context { max-width: 66ch; margin: $spacing-2xl 0 $spacing-md; }
   &__context + &__deck { margin-top: $spacing-md; }
   &__ownership { color: $color-text-secondary; max-width: 66ch; margin-bottom: $spacing-4xl; }
+  &__evidence {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    gap: $spacing-xl;
+    align-items: start;
+    margin-bottom: $spacing-2xl;
+    img { display: block; width: 100%; height: auto; }
+    @media (max-width: 1000px) {
+      grid-template-columns: 1fr;
+      figure:last-child { max-width: 260px; margin-inline: auto; }
+    }
+  }
   &__decision {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

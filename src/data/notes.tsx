@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import LinkedInLink from '../components/LinkedInLink';
 
 // ============================================
-// Notes — the writing stream. Craft is the through-line: essays argue a
+// Notes — the writing stream. Craft is the through-line: field notes record a
 // judgment, skill entries publish the actual artifact that encodes it, and
 // system entries point at the running proof. Bodies are JSX so entries can
 // link into the site (design system, case studies, demos) and reuse the
 // site's own vocabulary. Newest first in the NOTES array.
 // ============================================
 
-export type NoteKind = 'essay' | 'log' | 'skill' | 'system';
+export type NoteKind = 'reflection' | 'exploration' | 'practice' | 'skill' | 'system';
 
 // Moment frame — the case-study insight-callout vocabulary, carried into
 // notes: one marked, quotable judgment per piece.
@@ -125,33 +125,80 @@ const StackItem: React.FC<{
 export interface Note {
   slug: string;
   kind: NoteKind;
+  /** Explorations published while decisions are still moving. */
+  inProgress?: boolean;
   date: string;      // display date, e.g. 'July 2026'
   dateISO: string;   // for <time> + sorting, e.g. '2026-07'
   title: string;
   dek: string;       // one-line summary — index row + meta description
   read: string;      // estimated read time, e.g. '3 min' — index + article meta
   body: React.ReactNode;
-  /** Original site essays do not imply a prior LinkedIn publication. */
+  /** Original site notes do not imply a prior LinkedIn publication. */
   origin?: 'portfolio';
-  /** Drafts remain visibly marked while the title and essay are being refined. */
+  /** Drafts remain visibly marked while the title and note are being refined. */
   status?: 'draft';
-  /** Explicit relationship: current product updates can accompany dated essays. */
+  /** Explicit relationship: current product updates can accompany dated notes. */
   relatedProject?: 'playdraft';
   /** Optional downloadable artifact shown in the note header. */
   artifact?: { label: string; href: string };
 }
 
 export const KIND_LABEL: Record<NoteKind, string> = {
-  essay: '[ Essay ]',
-  log: '[ Build Log ]',
+  reflection: '[ Reflection ]',
+  exploration: '[ Exploration ]',
+  practice: '[ Practice ]',
   skill: '[ Agent Skill ]',
   system: '[ System ]',
 };
 
 export const NOTES: Note[] = [
   {
+    slug: 'aem-meeting-authors-where-they-work',
+    kind: 'practice',
+    origin: 'portfolio',
+    status: 'draft',
+    date: 'October 7, 2026',
+    dateISO: '2026-10-07',
+    title: 'AEM is starting to meet authors where they work',
+    dek: 'My plan to test Experience Workspace with design, SEO, and content teams, using one landing page and our existing component rules.',
+    read: '5 min',
+    body: (
+      <>
+        <p>The tools change every time I blink. I get comfortable with a workflow, another release lands, and I have a new list of things to try.</p>
+        <p>Adobe's Experience Workspace has my attention because I have spent years building in AEM and helping other people use it.</p>
+        <p>AEM has been one of the harder tools to onboard people into. I have worked with people who know their content and their customers but have been reluctant to open AEM for years. A simple copy change can come with a lot of CMS training.</p>
+        <p>That is why I'm eager to test <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">this new rollout for Experience Workspace</a>. It gives authors ways to work that already feel familiar. I spend most of my day in Claude now, so bringing AEM into that workflow feels like a natural next step. I'll start with a small pilot to see whether more of the team can make everyday changes without needing someone beside them.</p>
+
+        <h2>The split view caught my attention</h2>
+        <p>At <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI&t=358s" target="_blank" rel="noopener noreferrer">5:58 in the demo</a>, the visual page and document view work side by side. Authors can edit the rendered page or work through the text in a document view. More complex blocks have structured forms. The views stay in sync, and a page outline helps authors find the section they need.</p>
+        <p>A designer can see the layout while an SEO teammate works through the copy. A content manager can choose the view they prefer. That is an easier starting point for training.</p>
+        <p>The chat follows what the author is editing. Around <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI&t=596s" target="_blank" rel="noopener noreferrer">9:56</a>, Coworker uses the selected content as context. Later, the Commerce demo retrieves catalog information through an MCP connection and drafts a product page. I want to test that kind of connection with our own component library.</p>
+        <p>Adobe's MCP work has felt late compared with the tools I've been using. This gives me a reason to bring it into the daily work of design, UX, SEO, and content management.</p>
+
+        <h2>Carry our component decisions into the draft</h2>
+        <p>My <Link to="/work/aem-component-system/">AEM component work</Link> includes core-component variants, production styles, authoring defaults, and written contracts. The <Link to="/work/landing-pages/">template system</Link> defines how other designers use that foundation. Experience Fragments and Adobe Target support <Link to="/work/seasonal-content-system/">testing and geographically targeted content</Link>. I still maintain the rules and review the changes.</p>
+        <p>I plan to connect our product-design Figma MCP workflow with the AEM MCP tools that fit our setup. I want the draft to use approved components and variants, with the content requirements and design decisions attached.</p>
+        <p>I'll use a familiar landing page for the first experiment. The agent will get the design context and an approved component mapping. I'll ask it to prepare a draft and flag any missing patterns for review.</p>
+        <p>I'm aiming for a fraction of the old turnaround. Engineering and I will define the mapping and check the result. I'll include that setup time when measuring what the workflow saves.</p>
+
+        <h2>SEO should be able to change the words with confidence</h2>
+        <p>I want our SEO team to see which component they're editing and how its headings fit into the page. They should be able to change the text without accidentally changing its heading level or component settings.</p>
+        <p>I'll test a headline change and compare the rendered markup before and after. The heading level, links, and component settings should stay intact. Structural changes will get a separate review.</p>
+        <p>I'll check what Experience Workspace shows about the markup and where we need a skill or review tool. The team needs a way to verify the structure after a copy edit.</p>
+
+        <h2>Start with one page and a small group</h2>
+        <p>First, engineering and I will confirm where Experience Workspace fits our setup. <a href="https://www.aem.live/docs/ew/da-is-ew" target="_blank" rel="noopener noreferrer">Adobe currently documents Experience Workspace for the document-based repository of Edge Delivery Services</a>. Our existing core components won't transfer automatically. We'll map what we can reuse and what needs a different implementation, then choose a page for the pilot.</p>
+        <p>I'll invite a designer, an SEO teammate, and a content manager into a sandbox, including someone who has been reluctant to use AEM. After a short introduction, I'll give them a real content task. I want to see where they get stuck and whether they can explain what they changed.</p>
+        <p>We'll start with text edits and approved variants, and review changes before publishing. Then we'll try the Figma-to-draft experiment. I'll compare time to a reviewed draft, help needed, and corrections against the current workflow. If the draft is faster but the cleanup takes longer, I'll revise the workflow before adding more people.</p>
+        <p>Adobe also documents a <a href="https://www.aem.live/docs/ew/administering/request-publish" target="_blank" rel="noopener noreferrer">Request Publish workflow</a> with separate setup and permissions. I'll test its permissions and document who prepares and approves changes before widening access.</p>
+        <p><strong>The result I want is a teammate who feels comfortable opening AEM again tomorrow.</strong></p>
+        <p>That is what I'll look for before expanding the rollout. Can people make useful changes with less training and fewer requests for help? I'll use those results to update the guidance and choose what we test next.</p>
+      </>
+    ),
+  },
+  {
     slug: 'the-fundamentals-make-room-for-more',
-    kind: 'essay',
+    kind: 'reflection',
     origin: 'portfolio',
     status: 'draft',
     date: 'October 2026',
@@ -190,7 +237,7 @@ export const NOTES: Note[] = [
   },
   {
     slug: 'exploring-my-portfolio-in-paper',
-    kind: 'essay',
+    kind: 'exploration',
     origin: 'portfolio',
     date: 'October 3, 2026',
     dateISO: '2026-10-03',
@@ -233,7 +280,7 @@ export const NOTES: Note[] = [
     slug: 'a-system-to-maintain',
     relatedProject: 'playdraft',
     read: '4 min',
-    kind: 'essay',
+    kind: 'practice',
     date: 'August 2026',
     dateISO: '2026-08-31',
     title: 'I cannot learn a tool from a tutorial. I have to build something I will have to maintain.',
@@ -325,7 +372,8 @@ export const NOTES: Note[] = [
     slug: 'already-the-audience',
     relatedProject: 'playdraft',
     read: '4 min',
-    kind: 'log',
+    kind: 'exploration',
+    inProgress: true,
     date: 'August 2026',
     dateISO: '2026-08-31',
     title: 'The brief came second: two projects where I was already the audience',
@@ -442,7 +490,7 @@ export const NOTES: Note[] = [
     slug: 'nobody-clapped',
     relatedProject: 'playdraft',
     read: '5 min',
-    kind: 'essay',
+    kind: 'reflection',
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'Build the thing you would still care about if nobody clapped',
@@ -557,7 +605,7 @@ export const NOTES: Note[] = [
     slug: 'what-id-keep',
     relatedProject: 'playdraft',
     read: '5 min',
-    kind: 'essay',
+    kind: 'reflection',
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'I worried the new tools were taking me away from design. They made me specific about it.',
@@ -673,7 +721,8 @@ export const NOTES: Note[] = [
     slug: 'eight-wrong-first-drafts',
     relatedProject: 'playdraft',
     read: '6 min',
-    kind: 'log',
+    kind: 'exploration',
+    inProgress: true,
     date: 'August 2026',
     dateISO: '2026-08-24',
     title: 'Eight times my first idea was wrong. What changed was the cost of finding out.',
@@ -829,7 +878,8 @@ export const NOTES: Note[] = [
     slug: 'overscroll-tactics',
     relatedProject: 'playdraft',
     read: '6 min',
-    kind: 'log',
+    kind: 'exploration',
+    inProgress: true,
     date: 'August 2026',
     dateISO: '2026-08-12',
     title: 'I needed an LLC. I ended up naming my design practice.',
@@ -1242,7 +1292,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   {
     slug: 'walking-in-with-the-question',
     read: '2 min',
-    kind: 'essay',
+    kind: 'reflection',
     date: 'July 2026',
     dateISO: '2026-07-23',
     title: 'I used to think being a good communicator meant walking in with the answer',
@@ -1293,7 +1343,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     slug: 'where-is-my-role-moving',
     relatedProject: 'playdraft',
     read: '3 min',
-    kind: 'essay',
+    kind: 'reflection',
     date: 'July 2026',
     dateISO: '2026-07-21',
     title: 'Where the heck is my role moving forward?',
@@ -1360,7 +1410,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
   {
     slug: 'studying-the-tape',
     read: '2 min',
-    kind: 'essay',
+    kind: 'practice',
     date: 'July 2026',
     dateISO: '2026-07-19',
     title: 'Studying the tape',
@@ -1415,7 +1465,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     slug: 'ai-doesnt-care-about-your-customers',
     relatedProject: 'playdraft',
     read: '2 min',
-    kind: 'essay',
+    kind: 'practice',
     date: 'July 2026',
     dateISO: '2026-07-15',
     title: 'AI doesn’t care about your customers',
@@ -1470,7 +1520,7 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     slug: 'systems-that-make-better-decisions-easier',
     relatedProject: 'playdraft',
     read: '3 min',
-    kind: 'essay',
+    kind: 'practice',
     date: 'July 2026',
     dateISO: '2026-07-13',
     title: 'A good design system makes better decisions easier',
@@ -1550,7 +1600,7 @@ description: Conservative product-risk framework for DraftPacks
   {
     slug: 'photoshop-taught-me-composition',
     read: '2 min',
-    kind: 'essay',
+    kind: 'reflection',
     date: 'June 2026',
     dateISO: '2026-06-24',
     title: 'Photoshop taught me composition. The tools changed. The eye didn’t.',

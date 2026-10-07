@@ -691,9 +691,10 @@ const SystemsInPractice: React.FC = () => {
               Each change should leave a clearer map between intent, design, and production.
             </p>
             <p className="sip__body reveal-fade" style={delay(380)}>
-              The code and the canvas don’t need identical structures. They need a shared
-              contract, and every intentional difference between them should be part of the
-              system rather than tribal knowledge.
+              In AEM, that means core-component variants, template permissions, and Experience
+              Fragments for A/B testing and geographic targeting with Adobe Target. I design the
+              authoring and review workflows too, so the team knows what it can change and how
+              to extend the system.
             </p>
             <div className="sip__actions reveal-fade" style={delay(420)}>
               {/* PlayDraft is the public study where the whole loop is visible:

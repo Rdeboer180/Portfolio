@@ -691,6 +691,13 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
           </div>
         </header>
 
+        {project.publicPreview && (
+          <figure className="cs__featured-image" style={{ maxWidth: project.publicPreview.maxWidth, margin: '0 auto' }}>
+            <img src={project.publicPreview.src} alt={project.publicPreview.alt} />
+            <figcaption className="cs__caption">{project.publicPreview.caption}</figcaption>
+          </figure>
+        )}
+
         {/* ==================== Featured Image (optional) ==================== */}
         {/* Opener studies keep the visual thread from the index: the card the
             visitor clicked becomes the frame that opens. Unlocked, the plate

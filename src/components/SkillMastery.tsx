@@ -20,6 +20,11 @@ const capabilities = [
     practice: 'Enterprise web design systems at Tire Rack, with component contracts, states, tokens, documentation, and adoption support. React Native system design through PlayDraft, built with agents and validated in the working app.',
   },
   {
+    name: 'AEM & content systems',
+    tools: [{ text: 'Adobe Experience Manager · Adobe Target' }],
+    practice: 'Core-component variants, reusable component libraries, and template permissions. Experience Fragments for A/B testing and geographic targeting, with authoring, approval, and publishing workflows the team can maintain.',
+  },
+  {
     name: 'Product implementation',
     tools: [
       { label: 'Direct', text: 'HTML · CSS/Sass · AEM · WordPress' },

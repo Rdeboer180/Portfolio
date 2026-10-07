@@ -114,3 +114,18 @@ test('the hidden photography study shows its neutral team context in the full op
   expect(screen.getByText(project.context!)).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /Enter password/i })).toBeInTheDocument();
 });
+
+
+test('Figma governance shows the approved tools capture while keeping the demo and details gated', () => {
+  mockUnlocked = false;
+  const { container } = render(<MemoryRouter><CaseStudyPage slug="figma-template-governance" /></MemoryRouter>);
+  expect(screen.getByRole('heading', { name: /Starter Template Governance and Plugin Development/ })).toBeInTheDocument();
+  expect(screen.getByText(/four internal plugins with agent assistance for a team of 15/)).toBeInTheDocument();
+  expect(screen.queryByText(/Project Title Card Generator: bring the brief/)).not.toBeInTheDocument();
+  expect(container.querySelector('video')).toBeNull();
+  expect(screen.getByRole('img', { name: /Four internal Figma plugins:/ })).toHaveAttribute('src', '/images/work/figma-template-governance/plugin-suite.png');
+  expect(container.querySelector('img[src*="-demo.png"]')).toBeNull();
+  expect(container.querySelector('img[src*="starter-template-cover"]')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: /Enter password/i }));
+  expect(mockOpenPrompt).toHaveBeenCalledWith();
+});

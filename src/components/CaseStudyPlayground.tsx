@@ -311,6 +311,7 @@ const CaseStudyPlayground: React.FC = () => {
         stream: project.stream,
         video,
         videoPrimary: Boolean(video && project.featuredVideoPrimary),
+        publicVideo: Boolean(video && project.featuredVideoPublic),
         status: project.cardStatus,
       }];
     });
@@ -410,7 +411,8 @@ const CaseStudyPlayground: React.FC = () => {
             // protected card that has one (like the scrim, so unlocking can
             // fade it rather than cut); --plated gates the hover grammar and
             // only applies while actually locked.
-            const hasPlate = isProtected(card.stream) && hasSchematic(card.slug);
+            const mediaLocked = locked && !card.publicVideo;
+            const hasPlate = isProtected(card.stream) && !card.publicVideo && hasSchematic(card.slug);
             const plated = locked && hasPlate;
             const previewCopy = CARD_PREVIEWS[card.slug] ?? card;
             return (
@@ -434,7 +436,7 @@ const CaseStudyPlayground: React.FC = () => {
                 {/* Top — preview (cover loop plays while active; primary loops always) */}
                 <div
                   className={`case-playground__preview${
-                    locked ? ' case-playground__preview--locked' : ''
+                    mediaLocked ? ' case-playground__preview--locked' : ''
                   }${hasPlate ? ' case-playground__preview--plate' : ''}`}
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
@@ -443,6 +445,7 @@ const CaseStudyPlayground: React.FC = () => {
                     <p
                       id={`lock-${card.slug}`}
                       className="case-playground__lock"
+                      style={card.publicVideo && locked ? { opacity: 1 } : undefined}
                       aria-hidden={!locked}
                     >
                       <span className="case-playground__lock-icon"><PreviewLockIcon /></span>

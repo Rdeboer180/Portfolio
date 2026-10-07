@@ -49,13 +49,15 @@ export const storySections: StorySection[] = [
     num: '03',
     title: 'Building systems that last',
     body: [
-      'A lot of my best work sits behind the interface: components, documentation, accessibility, ' +
-        'governance, reusable templates, and CMS logic. Those pieces help the team build and ' +
-        'maintain the product after launch.',
+      'I think about the system an author inherits as carefully as the page a customer sees. ' +
+        'In AEM, I build reusable component variants and define template permissions, authoring ' +
+        'rules, and review workflows. Those decisions give the team room to change content ' +
+        'while keeping the shared structure dependable.',
       'Across twelve years at Tire Rack, I moved between UX strategy, testing, analytics, ' +
         'SEO-informed information architecture, AEM components, production styles, and pattern ' +
-        'documentation. I became a lead for the template and style layer by continuing to maintain ' +
-        'and improve it after launch.',
+        'documentation. That work includes Experience Fragments for A/B testing and geographic ' +
+        'targeting with Adobe Target. I became a lead for the template and style layer by ' +
+        'continuing to maintain and improve it after launch.',
     ],
     annotation: 'Built to outlast the launch meeting.',
     related: { to: '/work/aem-component-system/', label: 'See the AEM component system' },

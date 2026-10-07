@@ -1,0 +1,39 @@
+{
+  "slug": "figma-template-governance",
+  "assets": [
+    {
+      "output": "public/images/work/figma-template-governance/plugin-suite.png",
+      "status": "original-upload",
+      "placement": "public"
+    },
+    {
+      "output": "public/images/work/figma-template-governance/proof-template.png",
+      "status": "original-upload",
+      "placement": "unlocked"
+    },
+    {
+      "output": "public/images/work/figma-template-governance/actual-checklist-frame.jpg",
+      "status": "frame-from-edited-original-video",
+      "placement": "unlocked"
+    },
+    {
+      "output": "public/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4",
+      "status": "edited-original-footage-and-screenshots",
+      "placement": "public card preview and unlocked study",
+      "durationSeconds": 16
+    },
+    {
+      "output": "public/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg",
+      "status": "frame-from-edited-original-video",
+      "placement": "public card preview and unlocked study",
+      "durationSeconds": 16
+    },
+    {
+      "output": "public/images/work/figma-template-governance/starter-template-cover.png",
+      "status": "original-upload",
+      "placement": "unlocked overview",
+      "purpose": "Starter cover paired with tools list, explicitly requested by Ryan"
+    }
+  ],
+  "sensitiveOriginalsDeployed": false
+}
