@@ -31,9 +31,9 @@ const COPY: Record<Variant, {
   },
   site: {
     title: 'See the full case studies',
-    body: 'Project screens and implementation details are password protected because they include employer or client work. Enter the password once and this device stays unlocked. Everything else on the site is open either way.',
+    body: "Project screens and implementation details are password protected because they include employer or client work. Enter the password once and this device stays unlocked. Continue without a password to read the public overviews. We'll remember your choice on this device and won't prompt you again unless you choose to unlock the work.",
     primary: 'Unlock the work',
-    secondary: 'Keep browsing without it',
+    secondary: 'Continue without a password',
   },
 };
 

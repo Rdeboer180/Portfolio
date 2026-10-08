@@ -28,16 +28,6 @@ const PreviewLockIcon = () => (
   </svg>
 );
 
-// ── Stream chips — two-stream taxonomy ──────────────────────────────────────
-// Treatment-based, both orange (no second hue): professional = solid filled
-// pill, passion = dashed outline pill. Labels stay short; full stream names
-// live in the section intro + case-study hero.
-
-const STREAM_LABEL: Record<'professional' | 'passion', string> = {
-  professional: '[ Shipped ]',
-  passion: '[ Self-Built ]',
-};
-
 // ── Card cover video ─────────────────────────────────────────────────────────
 // Default: plays only while its card is active — poster (the featured image)
 // everywhere else, playback driven by the same phase machine as the coin tray
@@ -441,7 +431,7 @@ const CaseStudyPlayground: React.FC = () => {
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
-                  {isProtected(card.stream) && (
+                  {lockedReady && locked && (
                     <p
                       id={`lock-${card.slug}`}
                       className="case-playground__lock"
@@ -451,13 +441,6 @@ const CaseStudyPlayground: React.FC = () => {
                       <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
                       Password protected
                     </p>
-                  )}
-                  {card.stream && (
-                    <span
-                      className={`case-playground__stream case-playground__stream--${card.stream}`}
-                    >
-                      {card.status ?? (card.slug === 'playdraft' ? '[ Live on the App Store ]' : STREAM_LABEL[card.stream])}
-                    </span>
                   )}
                   {card.video && !posterOnly ? (
                     <CardVideo

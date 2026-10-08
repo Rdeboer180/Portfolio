@@ -67,3 +67,8 @@ export const persistUnlock = (): void => {
   // Keep the legacy key in step so a mid-session reload can't re-lock.
   write(sessionStorage, LEGACY_SESSION_KEY);
 };
+
+/** Remember an explicit choice to browse without automatic password prompts. */
+const SKIP_PROMPT_KEY = 'rd-skip-password-prompt';
+export const skipsPasswordPrompt = (): boolean => read(localStorage, SKIP_PROMPT_KEY);
+export const persistSkipPasswordPrompt = (): void => write(localStorage, SKIP_PROMPT_KEY);

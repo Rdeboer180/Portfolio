@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import projects from '../data/projects';
+import { useUnlock } from '../context/UnlockContext';
 import { isPanelRoute } from '../utils/panelRoutes';
 
 /** Preserve the source page for every internal reading link, including prose links. */
 export function usePanelNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { unlocked, skipAutomaticPrompt, openPrompt } = useUnlock();
   useEffect(() => {
     const open = (event: MouseEvent) => {
       const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
@@ -33,9 +36,16 @@ export function usePanelNavigation() {
         },
       };
       // Preserve browser history while keeping one panel and one return destination.
-      navigate(url.pathname.replace(/\/$/, '') + '/' + url.search + url.hash, { state });
+      const href = url.pathname.replace(/\/$/, '') + '/' + url.search + url.hash;
+      const slug = url.pathname.match(/^\/work\/([^/]+)/)?.[1];
+      const protectedWork = projects.some(project => project.slug === slug && project.stream === 'professional');
+      if (protectedWork && !unlocked && !skipAutomaticPrompt) {
+        openPrompt(href, { state });
+        return;
+      }
+      navigate(href, { state });
     };
     document.addEventListener('click', open, true);
     return () => document.removeEventListener('click', open, true);
-  }, [location, navigate]);
+  }, [location, navigate, unlocked, skipAutomaticPrompt, openPrompt]);
 }

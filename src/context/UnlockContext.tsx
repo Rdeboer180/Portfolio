@@ -1,12 +1,13 @@
 import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { isUnlocked, persistUnlock } from '../utils/unlock';
+import { useNavigate, NavigateOptions } from 'react-router-dom';
+import { isUnlocked, persistUnlock, skipsPasswordPrompt, persistSkipPasswordPrompt } from '../utils/unlock';
 
 interface UnlockValue {
   /** Protected media and case-study overlays are visible. */
   unlocked: boolean;
+  skipAutomaticPrompt: boolean;
   /** The password modal is on screen. */
   promptOpen: boolean;
   /** Locked and hydrated — surfaces offering an unlock affordance may show it. */
@@ -20,7 +21,7 @@ interface UnlockValue {
    * Open the prompt. Pass the route the visitor was reaching for and they'll be
    * taken there once they unlock — the click isn't wasted.
    */
-  openPrompt: (pendingHref?: string) => void;
+  openPrompt: (pendingHref?: string, options?: NavigateOptions) => void;
   unlock: () => void;
   /** Cancel — close and stay put. The X and Escape. */
   dismissPrompt: () => void;
@@ -55,19 +56,23 @@ const NAVIGATE_AFTER_MS = 1150;
  * bar nor modal and hydration has nothing to correct.
  */
 export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [skipAutomaticPrompt, setSkipAutomaticPrompt] = useState(false);
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const [resolving, setResolving] = useState(false);
   const pendingHref = useRef<string | null>(null);
+  const pendingOptions = useRef<NavigateOptions | undefined>(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isUnlocked()) setUnlocked(true);
+    setSkipAutomaticPrompt(skipsPasswordPrompt());
     setReady(true);
   }, []);
 
-  const openPrompt = useCallback((href?: string) => {
+  const openPrompt = useCallback((href?: string, options?: NavigateOptions) => {
+    pendingOptions.current = options;
     pendingHref.current = href ?? null;
     setPromptOpen(true);
   }, []);
@@ -83,7 +88,9 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // navigating instantly would throw away the moment the visitor just paid for.
     const href = pendingHref.current;
     pendingHref.current = null;
-    if (href) window.setTimeout(() => navigate(href), NAVIGATE_AFTER_MS);
+    const options = pendingOptions.current;
+    pendingOptions.current = undefined;
+    if (href) window.setTimeout(() => navigate(href, options), NAVIGATE_AFTER_MS);
   }, [navigate]);
 
   const dismissPrompt = useCallback(() => {
@@ -92,12 +99,16 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   const continueLocked = useCallback(() => {
+    persistSkipPasswordPrompt();
+    setSkipAutomaticPrompt(true);
     const href = pendingHref.current;
     pendingHref.current = null;
     setPromptOpen(false);
     // No pending href means the prompt came from the bar or the nav — there's
     // nowhere to continue to, so closing is the whole action.
-    if (href) navigate(href);
+    const options = pendingOptions.current;
+    pendingOptions.current = undefined;
+    if (href) navigate(href, options);
   }, [navigate]);
 
   // Gated on `ready` so the affordance never renders during hydration (the
@@ -107,10 +118,10 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const value = useMemo<UnlockValue>(
     () => ({
-      unlocked, promptOpen, lockedReady, resolving,
+      unlocked, skipAutomaticPrompt, promptOpen, lockedReady, resolving,
       openPrompt, unlock, dismissPrompt, continueLocked,
     }),
-    [unlocked, promptOpen, lockedReady, resolving,
+    [unlocked, skipAutomaticPrompt, promptOpen, lockedReady, resolving,
      openPrompt, unlock, dismissPrompt, continueLocked]
   );
 
