@@ -160,39 +160,54 @@ export const NOTES: Note[] = [
     date: 'October 7, 2026',
     dateISO: '2026-10-07',
     title: 'AEM is starting to meet authors where they work',
-    dek: 'My plan to test Experience Workspace with design, SEO, and content teams, using one landing page and our existing component rules.',
-    read: '5 min',
+    dek: 'Testing Claude and AEM together, putting component governance into custom skills, and exploring a path from our production library back to Figma.',
+    read: '6 min',
     body: (
       <>
-        <p>The tools change every time I blink. I get comfortable with a workflow, another release lands, and I have a new list of things to try.</p>
-        <p>Adobe's Experience Workspace has my attention because I have spent years building in AEM and helping other people use it.</p>
-        <p>AEM has been one of the harder tools to onboard people into. I have worked with people who know their content and their customers but have been reluctant to open AEM for years. A simple copy change can come with a lot of CMS training.</p>
-        <p>That is why I'm eager to test <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">this new rollout for Experience Workspace</a>. It gives authors ways to work that already feel familiar. I spend most of my day in Claude now, so bringing AEM into that workflow feels like a natural next step. I'll start with a small pilot to see whether more of the team can make everyday changes without needing someone beside them.</p>
+        <p><em>Updated October 8, 2026, as I start testing the AEM connection in Claude.</em></p>
+        <p>The tools change every time I blink. Yesterday I was watching <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">Adobe's Experience Workspace rollout</a>. Now I'm playing with Claude's AEM MCP connection and exploring what Adobe's Coworker and Figma-to-AEM workflows make possible.</p>
+        <p>I spend most of my day in Claude already, building tools for our internal team, automating routine tasks, and working on governance for our shared component library and brand assets. Bringing AEM into that process feels like a natural next step.</p>
+        <p>I've spent years building in AEM and helping people use it. Some teammates know their content and customers inside out but have been reluctant to open AEM for years. A simple copy change can come with a lot of CMS training. This gives me a reason to revisit that onboarding with our product design, SEO, and content teams.</p>
 
-        <h2>The split view caught my attention</h2>
-        <p>At <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI&t=358s" target="_blank" rel="noopener noreferrer">5:58 in the demo</a>, the visual page and document view work side by side. Authors can edit the rendered page or work through the text in a document view. More complex blocks have structured forms. The views stay in sync, and a page outline helps authors find the section they need.</p>
-        <p>A designer can see the layout while an SEO teammate works through the copy. A content manager can choose the view they prefer. That is an easier starting point for training.</p>
-        <p>The chat follows what the author is editing. Around <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI&t=596s" target="_blank" rel="noopener noreferrer">9:56</a>, Coworker uses the selected content as context. Later, the Commerce demo retrieves catalog information through an MCP connection and drafts a product page. I want to test that kind of connection with our own component library.</p>
-        <p>Adobe's MCP work has felt late compared with the tools I've been using. This gives me a reason to bring it into the daily work of design, UX, SEO, and content management.</p>
+        <h2>Start with a content change</h2>
+        <p>The first task I'm testing is small: find a Content Fragment, update its copy through natural language, and review the change. <a href="https://claude.com/marketplace/connectors/adobe-experience-manager" target="_blank" rel="noopener noreferrer">Adobe's AEM connector for Claude</a> supports editing pages and Content Fragments through chat while respecting the signed-in user's AEM permissions.</p>
+        <p>That is a useful entry point for an SEO teammate. I'll test whether they can find the right content, make an edit, and understand where it appears without learning the full authoring interface first. For page copy, I'll compare the rendered markup before and after so we can check that heading levels, links, and component settings stay intact.</p>
+        <p>There are a few related workflows here. Experience Workspace's document-based authoring, Claude connected to AEM through MCP, and Adobe's Coworker aren't interchangeable. <a href="https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/overview" target="_blank" rel="noopener noreferrer">Adobe documents both Claude and Coworker as clients for its AEM MCP server</a>. I'll use the connection and skills that fit our AEM setup.</p>
 
-        <h2>Carry our component decisions into the draft</h2>
-        <p>My <Link to="/work/aem-component-system/">AEM component work</Link> includes core-component variants, production styles, authoring defaults, and written contracts. The <Link to="/work/landing-pages/">template system</Link> defines how other designers use that foundation. Experience Fragments and Adobe Target support <Link to="/work/seasonal-content-system/">testing and geographically targeted content</Link>. I still maintain the rules and review the changes.</p>
-        <p>I plan to connect our product-design Figma MCP workflow with the AEM MCP tools that fit our setup. I want the draft to use approved components and variants, with the content requirements and design decisions attached.</p>
-        <p>I'll use a familiar landing page for the first experiment. The agent will get the design context and an approved component mapping. I'll ask it to prepare a draft and flag any missing patterns for review.</p>
-        <p>I'm aiming for a fraction of the old turnaround. Engineering and I will define the mapping and check the result. I'll include that setup time when measuring what the workflow saves.</p>
+        <h2>Give the skill our component rules</h2>
+        <p>The Figma-to-AEM demo is what got me thinking beyond copy edits. Seeing a design evaluated against an existing template, then mapped to the components that template allows, gets me excited about AEM work again.</p>
+        <figure className="notes__figure">
+          <a href="/images/notes/aem-authoring/figma-to-aem.png" target="_blank" rel="noopener noreferrer" aria-label="Open the Figma-to-AEM demo frame at full size">
+            <img src="/images/notes/aem-authoring/figma-to-aem.png" width="3490" height="1816" loading="lazy" alt="Adobe demo comparing a cycling page in Figma with its authored AEM page." />
+          </a>
+          <figcaption>Adobe demo: a Figma design carried into AEM. These frames show the demonstrated workflow; my own testing is still underway. Open any frame for the full-size image.</figcaption>
+        </figure>
+        <p>For our team, the brand governance needs to be in place first. My <Link to="/work/aem-component-system/">AEM component work</Link> already covers variants, production styles, and authoring defaults. The <Link to="/work/landing-pages/">template system</Link> sets the boundaries for using them. A skill needs those decisions as context.</p>
+        <p>I'll start with a mapping between Figma components and their AEM equivalents. Where that mapping is incomplete, I'll provide approved template and component references, including examples of the variants it can use. Anything that doesn't fit should come back as a question for review.</p>
+        <p>Custom skills are where I plan to package that guidance: which templates to consider, which brand assets to use, how to choose a variant, and when to stop for a decision. I'm studying <a href="https://github.com/adobe/skills" target="_blank" rel="noopener noreferrer">Adobe's published skills</a> as a starting point. Their Figma-to-content skill targets Edge Delivery Services, so I'll adapt the approach to our component system rather than assume it transfers unchanged.</p>
+        <figure className="notes__figure">
+          <a href="/images/notes/aem-authoring/template-mapping.png" target="_blank" rel="noopener noreferrer" aria-label="Open the template evaluation frame at full size">
+            <img src="/images/notes/aem-authoring/template-mapping.png" width="3744" height="2594" loading="lazy" alt="Coworker evaluates a content-page template, identifies its allowed components, and proposes mappings from design blocks to Teaser, Separator, Text, and Title." />
+          </a>
+          <figcaption>The demo checks the template's allowed components and accounts for header and footer Experience Fragments before proposing the page mapping. That is the behavior I want to test against our own rules.</figcaption>
+        </figure>
 
-        <h2>SEO should be able to change the words with confidence</h2>
-        <p>I want our SEO team to see which component they're editing and how its headings fit into the page. They should be able to change the text without accidentally changing its heading level or component settings.</p>
-        <p>I'll test a headline change and compare the rendered markup before and after. The heading level, links, and component settings should stay intact. Structural changes will get a separate review.</p>
-        <p>I'll check what Experience Workspace shows about the markup and where we need a skill or review tool. The team needs a way to verify the structure after a copy edit.</p>
+        <h2>Then try the other direction</h2>
+        <p>What I'm even more excited to explore is bringing our AEM component library back into Figma and our design system. I want to reverse-engineer the approach behind the Figma-to-AEM skill and build a workflow that starts with what we already have in production.</p>
+        <p>I'll begin with one component family and its approved variants. I'll document its properties, content limits, responsive behavior, and template restrictions, then use that information to build or update its Figma counterpart. Engineering and I will compare it with the rendered component before adding more.</p>
+        <p>The design team could then iterate with a more accurate picture of what AEM can deliver. A designer choosing a teaser variant should be working with the same options an author will see. Gaps between the library and production should become easier to spot.</p>
+        <p>This is an experiment I plan to build. I haven't proved the reverse workflow yet, but it connects directly to the governance work I'm already doing.</p>
 
-        <h2>Start with one page and a small group</h2>
-        <p>First, engineering and I will confirm where Experience Workspace fits our setup. <a href="https://www.aem.live/docs/ew/da-is-ew" target="_blank" rel="noopener noreferrer">Adobe currently documents Experience Workspace for the document-based repository of Edge Delivery Services</a>. Our existing core components won't transfer automatically. We'll map what we can reuse and what needs a different implementation, then choose a page for the pilot.</p>
-        <p>I'll invite a designer, an SEO teammate, and a content manager into a sandbox, including someone who has been reluctant to use AEM. After a short introduction, I'll give them a real content task. I want to see where they get stuck and whether they can explain what they changed.</p>
-        <p>We'll start with text edits and approved variants, and review changes before publishing. Then we'll try the Figma-to-draft experiment. I'll compare time to a reviewed draft, help needed, and corrections against the current workflow. If the draft is faster but the cleanup takes longer, I'll revise the workflow before adding more people.</p>
-        <p>Adobe also documents a <a href="https://www.aem.live/docs/ew/administering/request-publish" target="_blank" rel="noopener noreferrer">Request Publish workflow</a> with separate setup and permissions. I'll test its permissions and document who prepares and approves changes before widening access.</p>
-        <p><strong>The result I want is a teammate who feels comfortable opening AEM again tomorrow.</strong></p>
-        <p>That is what I'll look for before expanding the rollout. Can people make useful changes with less training and fewer requests for help? I'll use those results to update the guidance and choose what we test next.</p>
+        <h2>Make the first pilot useful</h2>
+        <p>I'll bring a designer, an SEO teammate, and a content manager into a sandbox with one familiar landing page. We'll start with copy and Content Fragment updates, then try a draft built from an approved Figma design. I'll track time to a reviewed draft, requests for help, and corrections, including the time spent preparing the skill and component mapping.</p>
+        <figure className="notes__figure">
+          <a href="/images/notes/aem-authoring/authored-page-summary.png" target="_blank" rel="noopener noreferrer" aria-label="Open the authored page summary at full size">
+            <img src="/images/notes/aem-authoring/authored-page-summary.png" width="5120" height="2880" loading="lazy" alt="Adobe Coworker summary lists nine authored components, four imported images, inherited header and footer fragments, and CTA links still needing real destinations." />
+          </a>
+          <figcaption>The demo's completion summary leaves a useful review trail. It also flags placeholder CTA links that an author still needs to resolve before publishing.</figcaption>
+        </figure>
+        <p>That last detail matters. I'll review the component choices, content, links, and rendered page before anything is published. The skill should make unfinished work visible so the next person knows what still needs attention.</p>
+        <p>I'm excited to see these pieces coming together: the internal tools I build in Claude, the component rules we've established, and a more approachable way for the team to author content. The result I want is simple: a teammate who feels comfortable opening AEM again tomorrow.</p>
       </>
     ),
   },
