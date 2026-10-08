@@ -165,7 +165,7 @@ export const NOTES: Note[] = [
     body: (
       <>
         <p><em>Updated October 8, 2026, as I start testing the AEM connection in Claude.</em></p>
-        <p>The tools change every time I blink. Yesterday I was watching <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">Adobe's Experience Workspace rollout</a>. Now I'm playing with Claude's AEM MCP connection and exploring what Adobe's Coworker and Figma-to-AEM workflows make possible.</p>
+        <p>The tools change every time I blink. These notes grew out of the sessions and demos from this year's DevCon, including <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">Adobe's Experience Workspace rollout</a>. I'm excited to see AEM finally catching up with the way our teams want to work and becoming more user friendly. Now I'm playing with Claude's AEM MCP connection and exploring what Adobe's Coworker and Figma-to-AEM workflows make possible.</p>
         <p>I spend most of my day in Claude already, building tools for our internal team, automating routine tasks, and working on governance for our shared component library and brand assets. Bringing AEM into that process feels like a natural next step.</p>
         <p>I've spent years building in AEM and helping people use it. Some teammates know their content and customers inside out but have been reluctant to open AEM for years. A simple copy change can come with a lot of CMS training. This gives me a reason to revisit that onboarding with our product design, SEO, and content teams.</p>
 
