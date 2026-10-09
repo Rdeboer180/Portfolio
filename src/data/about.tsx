@@ -1,3 +1,6 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 // ============================================
 // About Page — Structured copy data
 // All copy lives here, not in markup.
@@ -11,7 +14,7 @@
 export interface StorySection {
   num: string;        // "01"
   title: string;
-  body: string[];     // one entry per paragraph
+  body: React.ReactNode[];     // one entry per paragraph
   related?: { to: string; label: string };
   annotation: string; // the single orange handwritten mark
 }
@@ -49,15 +52,30 @@ export const storySections: StorySection[] = [
     num: '03',
     title: 'Building systems that last',
     body: [
+      <>My systems work connects the customer experience, the brand, and the people building
+        and maintaining the product. With engineering partners, I turn UX and visual decisions
+        into shared components, tokens, and documented behavior. That includes the
+        {' '}<Link to="/work/wheelrack/">React system behind WheelRack</Link> and the
+        {' '}<Link to="/work/playdraft/">React Native product work in PlayDraft</Link>.</>,
       'I think about the system an author inherits as carefully as the page a customer sees. ' +
         'In AEM, I build reusable component variants and define template permissions, authoring ' +
         'rules, and review workflows. Those decisions give the team room to change content ' +
         'while keeping the shared structure dependable.',
-      'Across twelve years at Tire Rack, I moved between UX strategy, testing, analytics, ' +
+      'Across 12+ years at Tire Rack, I moved between UX strategy, testing, analytics, ' +
         'SEO-informed information architecture, AEM components, production styles, and pattern ' +
         'documentation. That work includes Experience Fragments for A/B testing and geographic ' +
-        'targeting with Adobe Target. I became a lead for the template and style layer by ' +
-        'continuing to maintain and improve it after launch.',
+        'targeting with Adobe Target. I work closely with engineers and contribute template and ' +
+        'Sass code to our internal CMS framework, maintaining the system after launch.',
+      <>I also build internal agentic tools and reusable skills to help people use those systems.
+        My <Link to="/work/figma-template-governance/">Figma starter template and four internal plugins</Link>
+        {' '}support a team of 15+ Web and UX designers. The goal is to reduce repeated setup,
+        make reviews easier, and shorten the path to production for my team and our partners.
+        I want the time saved to extend beyond my own workflow.</>,
+      <>I'm eagerly exploring internal adoption of Adobe Experience Workspace, the agentic
+        authoring tool Adobe demonstrated in September 2026. I want our product design, SEO,
+        and content teams to have an easier path from a content change to a reviewed, published
+        page. I'm starting with our existing component rules and a small pilot.
+        {' '}<Link to="/notes/aem-meeting-authors-where-they-work/">Read what I'm testing and how I plan to roll it out</Link>.</>,
     ],
     annotation: 'Built to outlast the launch meeting.',
     related: { to: '/work/aem-component-system/', label: 'See the AEM component system' },

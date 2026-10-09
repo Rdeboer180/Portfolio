@@ -81,10 +81,16 @@ const AboutHero: React.FC = () => {
               I'm a senior product designer who kept moving closer to how the work gets built.
             </p>
             <p>
-              I started in visual design, learned HTML and CSS because the browser
-              kept exposing gaps in my files, then built systems that design and engineering could
-              share. Now I use AI-assisted workflows to explore more directions and get working
-              ideas in front of people sooner.
+              My work spans UX, product design, and design systems for the web and React Native.
+              I partner with engineers to carry interaction and brand decisions into reusable
+              components and working products.
+            </p>
+            <p>
+              At Tire Rack, that includes 12+ years of AEM front-end authoring, building
+              component variants and guardrails, and contributing template and Sass code to
+              our internal CMS framework. I also build internal agentic tools and reusable
+              skills to reduce repetitive work and help my team and the teams we work with
+              get from an idea to production sooner.
             </p>
           </div>
 
