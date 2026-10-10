@@ -260,7 +260,24 @@
   .layers-panel__footer-icon:hover { transform: none; color: inherit; }
 }
 @media (min-width: 851px) {
-  .hero--contract .hero-intro__roles { width: 216px; bottom: calc(25px - var(--space-2xl)); right: -10px; }
+  .hero--contract .hero-intro__roles {
+    // Follow the portrait size, keeping the panel beside the face as it narrows.
+    width: clamp(176px, calc(var(--profile-size) * 0.54), 216px);
+    bottom: calc(25px - var(--space-lg));
+    right: calc(-1 * var(--space-xl));
+  }
+}
+@media (min-width: 851px) and (max-width: 1100px) {
+  .hero--contract .layers-panel--roles {
+    // Compact the decorative chrome and row spacing, not the role labels.
+    .layers-panel__toolbar,
+    .layers-panel__modebar,
+    .layers-panel__footer { height: var(--space-xl); }
+    .layers-panel__layer {
+      min-height: calc(var(--space-2xl) + var(--space-xs));
+      padding-block: var(--space-xs);
+    }
+  }
 }
 
 .hero--contract .layers-panel--roles {
