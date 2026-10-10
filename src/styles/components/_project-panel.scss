@@ -9,7 +9,9 @@
   max-width: none;
   height: 100dvh;
   max-height: none;
-  overflow: hidden;
+  // Only the article scrolls. `hidden` still lets focus navigation scroll the
+  // outer dialog, shifting its header/content up and exposing a blank tail.
+  overflow: clip;
   &[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
   overscroll-behavior: contain;
   background: $color-white;

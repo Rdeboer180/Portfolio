@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LinkedInLink from '../components/LinkedInLink';
+import PaperArtboardGallery from '../components/PaperArtboardGallery';
 
 // ============================================
 // Notes — the writing stream. Craft is the through-line: field notes record a
@@ -152,6 +153,62 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  {
+    slug: 'simplifying-playdraft-without-losing-the-game',
+    kind: 'exploration',
+    origin: 'portfolio',
+    inProgress: true,
+    relatedProject: 'playdraft',
+    date: 'October 9, 2026',
+    dateISO: '2026-10-09',
+    title: 'I simplified PlayDraft until it stopped feeling like a game',
+    dek: 'A simpler drafting flow went too far. Working through the correction with multiple LLMs, then making the decisions visible across nine Paper artboards.',
+    read: '5 min',
+    body: (
+      <>
+        <p>I wanted PlayDraft to get back to its simplest idea: draft anything draftable. Pick a pack, bring people together, take turns, and see what everyone chose. The app had accumulated a lot around that loop. Competitive modes, a Binder, a Store, and progression each gave me another system to maintain and another thing to explain.</p>
+        <p>Today's work started with taking those extras out of the next version. Custom packs and ready-made packs could share a drafting flow. A short clock and an eight-hour clock could use the same rules. Drafts needed a clearer home, and the recap deserved more attention.</p>
+        <p>Then I looked at the simplified screens. They felt like a list app. I'd asked for less complexity and ended up with less PlayDraft.</p>
+
+        <h2>Where I pulled it back</h2>
+        <p>The avatars, pack shields, condensed type, and a little visual depth were doing useful work. They helped people recognize themselves, find a pack, and feel like they were about to play something. I wanted to keep that character while reducing the mechanics around it.</p>
+        <p>I pushed for a middle ground. Home could still have a strong opening moment, but only one. When a draft needs your turn, that card takes the lead. Pack artwork stays recognizable. Characters represent people, rather than becoming another set of illustrations to generate for every draft choice.</p>
+        <p>Some of the corrections were small and very specific. I asked to try the actual Big Shoulders Display font. We reduced the pack shields to 80% of their previous size without shrinking the whole card. Saving a custom pack also needed to work independently of hosting a game. People should be able to put an idea down and come back to it.</p>
+
+        <figure className="notes__figure">
+          <a href="/images/notes/playdraft-system/home.png" target="_blank" rel="noopener noreferrer">
+            <img src="/images/notes/playdraft-system/home.png" alt="Paper artboard showing the revised PlayDraft Home, Drafts, and Packs screens, with mascot avatars, textured pack shields, and gold actions." width={1380} height={1088} loading="lazy" />
+          </a>
+          <figcaption>The revised Home, Drafts, and Packs direction in Paper. The pack artwork and player identity survived the simplification. Open the image to inspect it at full size.</figcaption>
+        </figure>
+
+        <h2>The back and forth mattered</h2>
+        <p>I worked through the direction with Astra, brought a Claude Fable review back into the thread, and used the wider Opus audit work as context. Passing work between models gave us more chances to question a decision. I still had to decide which feedback fit the game.</p>
+        <p>One review questioned the Gold Rush avatar accent because gold also marks selection and live turns. Removing the accent would have made the rules tidier, but it would have changed an established avatar. We kept its color and gave the current player a small YOU badge. That solved the identification problem without stripping another piece of character.</p>
+        <p>The native review caught things the presentation hadn't made obvious. Player labels overlapped. A green pack shield had picked up a blue glow. Casing drifted between screens. Those were useful disagreements because we could point to a specific frame and fix the rule behind it.</p>
+
+        <PaperArtboardGallery conversation boards={[
+          ['chat-direction', 'My feedback on pack artwork and repeatable patterns', 2066, 1632],
+          ['chat-handoff', 'The Opus and Astra handoff before implementation', 2020, 1464],
+          ['chat-review', 'Bringing Fable’s review back and approving the corrections', 2304, 1966],
+        ]} />
+        <p>In these exchanges, I kept the existing shields, questioned how the pitch would translate into code, and brought the review back into the working thread. The fixes needed my decisions before the next pass.</p>
+
+        <h2>Give the decisions a place to live</h2>
+        <p>Once the direction felt right, we worked backward into the system. A live-turn card needs a named pattern. A pack tile needs rules for its shield, texture, label, and accent. A configuration choice needs to look and behave differently from a filter. Otherwise every new screen starts inventing those answers again.</p>
+        <p>The v2 review now lives across nine artboards in Paper. Foundations and type sit alongside surfaces, controls, repeated patterns, the main screens, the drafting journey, and states. It gives me one place to inspect whether the same decisions hold up across the app.</p>
+        <p>These boards came from the runtime definitions and component work. It's a one-way review snapshot. Paper isn't automatically syncing changes back into the app, and a clean board still needs a native check. Even the display font needed care: Paper uses outlines from the bundled font where it couldn't resolve the exact face.</p>
+
+        <PaperArtboardGallery />
+        <p>You can also <a href="https://app.paper.design/file/01M4GJP6G86WS4Y93D79YZRDQQ/p-1-0" target="_blank" rel="noopener noreferrer">open the review in Paper</a>.</p>
+
+        <h2>Bring it back into the app</h2>
+        <p>Home is the first integration. The rest of the app still needs to move over in steps. I'm checking large text, player stacks, empty states, and what happens when a draft needs attention. VoiceOver and smaller devices need their own pass. A system that works in a review board can still fall apart when someone's name is long or the keyboard opens.</p>
+        <p>I'm glad we caught the over-simplification before treating it as the new direction. I can explain PlayDraft more easily now, and the revised system gives me a way to keep its personality as I build the next screens.</p>
+        <p><Link to="/work/playdraft/">See the PlayDraft case study</Link>.</p>
+      </>
+    ),
+  },
   {
     slug: 'aem-meeting-authors-where-they-work',
     kind: 'practice',
