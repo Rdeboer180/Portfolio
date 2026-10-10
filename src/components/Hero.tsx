@@ -8,12 +8,14 @@ import { useHighlightSweep } from '../hooks/useHighlightSweep';
 import { useReveal } from '../hooks/useReveal';
 import { useHeroRoleTransition } from '../hooks/useHeroRoleTransition';
 
-const roles = ['Product Designer', 'Design Systems Designer', 'Design Engineer', 'UI/UX Designer'];
-const roleDescriptions = [
-  'I stay close to product strategy: clarify the problem, weigh tradeoffs with the team, and test whether we’re building the right thing.',
-  'I turn shared decisions into tokens, components, and guidance, working with engineering to keep design intent clear and help the team build consistently.',
-  'I use code and agents to prototype behavior, catch edge cases, and build tools that remove repetition.',
-  'I bring visual craft to complex workflows: make the next step clear, give feedback purpose, and refine the interaction details with the team.',
+const roles = ['Product Designer', 'System Designer', 'Design Engineer', 'UI/UX Designer', 'Brand Engineer'];
+const defaultRole = 1;
+const roleDescriptions: React.ReactNode[] = [
+  <>I define the problem, weigh scope, and carry the product through release. For <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>, I designed the dealer journey from vehicle selection through checkout. With <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink>, I took a social drafting game from concept to the App Store and am now simplifying it around the core game.</>,
+  <>I build the rules a page inherits. Across 12+ years at Tire Rack, that has meant <ProjectLink to="/work/aem-component-system/" className="about__inline-link">AEM component variants</ProjectLink> in production Sass, DAM tagging and cleanup, and <ProjectLink to="/work/landing-pages/" className="about__inline-link">template permissions</ProjectLink> that set what authors can change. Design and SEO teams update content within those rules. Next, I am piloting agentic authoring on the same foundation.</>,
+  <>I build and test the details behind the interface. In <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>, I partnered with engineering on tokens, component states, and responsive behavior in React and Storybook. For the <ProjectLink to="/work/aem-component-system/" className="about__inline-link">AEM component system</ProjectLink>, I wrote the specifications and production Sass.</>,
+  <>I make complex information easier to compare and act on. The <ProjectLink to="/work/tire-categories/" className="about__inline-link">tire-category redesign</ProjectLink> uses icons, performance charts, and a shared page structure to help shoppers choose. <ProjectLink to="/work/loopstack/" className="about__inline-link">LoopStack</ProjectLink> separates meal and glucose patterns ready for review from those that need more data.</>,
+  <>I put brand standards into the tools people already use. I built a <ProjectLink to="/work/figma-template-governance/" className="about__inline-link">Figma starter kit and four internal plugins</ProjectLink> for 15+ Web and UX designers, with shared project structure and proof layouts. My <ProjectLink to="/work/design-enablement/" className="about__inline-link">responsive crop simulator</ProjectLink> lets Design and Photography check imagery against the live site's rules before it reaches AEM.</>,
 ];
 
 const Hero: React.FC = () => {
@@ -47,7 +49,7 @@ const Hero: React.FC = () => {
     motion.addEventListener('change', settle);
     return () => { observer.disconnect(); timers.forEach(clearTimeout); motion.removeEventListener('change', settle); };
   }, []);
-  const { selectedRole, displayedRole, switching, input, selectRole } = useHeroRoleTransition();
+  const { selectedRole, displayedRole, switching, input, selectRole } = useHeroRoleTransition(defaultRole);
   const roleStoryId = useId();
   const [navOpen, setNavOpen] = useState(false);
   const { unlocked, openPrompt } = useUnlock();
@@ -117,11 +119,11 @@ const Hero: React.FC = () => {
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>I’m a product designer with a <a href="#systems" className="about__inline-link">systems focus</a> and deep roots in visual craft. I turn complex workflows into clear interfaces and shared components. Outside work, I designed and built <ProjectLink to="/work/playdraft/" className="about__inline-link"><strong>PlayDraft</strong></ProjectLink>, a social drafting game for iPhone. I'm continuously learning and leveraging new workflows to evolve as design does. I test what helps me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn doesn’t.</strong></p>
-            <p className="hero-intro__mobile-role">{roleDescriptions[0]}</p>
+            <p>I am a multidisciplinary product designer working across UX and UI. I keep learning as design changes, testing new workflows that help me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn does not.</strong></p>
+            <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
             <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
-              {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true">{description}</p>)}
+              {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true" inert>{description}</p>)}
               <div id={roleStoryId} className="hero-intro__role-live" aria-live="polite" aria-atomic="true" aria-busy={switching}>
                 <p className="hero-intro__role-paragraph">{roleDescriptions[displayedRole]}</p>
               </div>

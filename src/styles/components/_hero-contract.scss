@@ -109,7 +109,7 @@
 
 // Reserve the expanded panel's footprint; its header stays put when rows collapse.
 .hero--contract .hero-intro__roles {
-  height: calc(var(--space-2xl) * 7 + var(--space-sm));
+  height: calc(var(--space-2xl) * 8 + var(--space-sm));
   box-shadow: none;
 }
 .hero--contract[data-intro-stage="done"] .hero-intro__roles { animation: none; }
@@ -260,7 +260,7 @@
   .layers-panel__footer-icon:hover { transform: none; color: inherit; }
 }
 @media (min-width: 851px) {
-  .hero--contract .hero-intro__roles { width: 216px; bottom: 25px; right: -10px; }
+  .hero--contract .hero-intro__roles { width: 216px; bottom: calc(25px - var(--space-2xl)); right: -10px; }
 }
 
 .hero--contract .layers-panel--roles {
@@ -348,6 +348,9 @@
   .hero--contract + .case-playground {
     margin-top: calc(-1 * var(--space-3xl));
     .about__differentiator { padding-top: calc(var(--space-4xl) + var(--space-2xl)); }
+  }
+  .hero--contract + .case-playground {
+    margin-top: calc(var(--space-2xl) - var(--space-3xl));
   }
 }
 

@@ -4,13 +4,13 @@ export type RoleInput = 'pointer' | 'keyboard';
 export const HERO_ROLE_TRANSITION_MS = 400;
 
 /** A brief presentation beat, not a network request. The latest selection wins. */
-export function useHeroRoleTransition() {
-  const [selectedRole, setSelectedRole] = useState(0);
-  const [displayedRole, setDisplayedRole] = useState(0);
+export function useHeroRoleTransition(initialRole = 0) {
+  const [selectedRole, setSelectedRole] = useState(initialRole);
+  const [displayedRole, setDisplayedRole] = useState(initialRole);
   const [switching, setSwitching] = useState(false);
   const [input, setInput] = useState<RoleInput>('pointer');
-  const selected = useRef(0);
-  const displayed = useRef(0);
+  const selected = useRef(initialRole);
+  const displayed = useRef(initialRole);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cancel = () => {

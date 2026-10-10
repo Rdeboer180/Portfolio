@@ -16,6 +16,16 @@ beforeEach(() => {
 });
 afterEach(() => { jest.clearAllTimers(); jest.useRealTimers(); });
 
+it('starts on the supplied role and can transition away from it', () => {
+  const { result } = renderHook(() => useHeroRoleTransition(1));
+  expect(result.current.selectedRole).toBe(1);
+  expect(result.current.displayedRole).toBe(1);
+  act(() => result.current.selectRole(0));
+  expect(result.current.switching).toBe(true);
+  act(() => jest.advanceTimersByTime(400));
+  expect(result.current.displayedRole).toBe(0);
+});
+
 it('selects immediately, keeps the current paragraph during the beat, then reveals the choice', () => {
   const { result } = renderHook(useHeroRoleTransition);
   act(() => result.current.selectRole(1));
