@@ -377,7 +377,8 @@
   }
 }
 
-// Other gray section grounds settle once as they reach the viewport.
+// Gray grounds are structural, so they must survive hydration and work before
+// any observer fires. Keep the existing section colors visible by default.
 .hero--contract ~ .ink-ground,
 .hero--contract ~ .about--integrated .ink-ground {
   position: relative;
@@ -389,7 +390,7 @@
     inset: 0;
     z-index: -1;
     background: $color-secondary-lightest;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
     pointer-events: none;
   }
@@ -413,7 +414,7 @@
 }
 
 .hero--contract ~ .about--integrated .ink-ground::after {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .hero--contract ~ .about--integrated .ink-ground[data-ink-settled="true"]::after { opacity: 1; }
