@@ -107,7 +107,7 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
           <li><Link to="/work/aem-component-system/">AEM component system</Link>: core-component variants, production Sass, and authoring defaults.</li>
           <li><Link to="/work/landing-pages/">Landing page system</Link>: reusable templates and governance for content authors.</li>
           <li><Link to="/work/wheelrack/">WheelRack</Link>: enterprise design systems, tokens, and Storybook components.</li>
-          <li><Link to="/notes/aem-meeting-authors-where-they-work/">Agentic AEM authoring</Link>: current experiments with Claude, MCP, and governed components.</li>
+          <li><Link to="/notes/aem-meeting-authors-where-they-work/">Agentic AEM authoring</Link>: evaluating Claude and MCP for content updates within our component rules.</li>
         </ul>
         <div className="candidate-snapshot__stack">
           <span className="candidate-snapshot__stack-label">Current working stack</span>

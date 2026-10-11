@@ -71,11 +71,12 @@ export const storySections: StorySection[] = [
         {' '}support a team of 15+ Web and UX designers. The goal is to reduce repeated setup,
         make reviews easier, and shorten the path to production for my team and our partners.
         I want the time saved to extend beyond my own workflow.</>,
-      <>I'm eagerly exploring internal adoption of Adobe Experience Workspace, the agentic
-        authoring tool Adobe demonstrated in September 2026. I want our product design, SEO,
-        and content teams to have an easier path from a content change to a reviewed, published
-        page. I'm starting with our existing component rules and a small pilot.
-        {' '}<Link to="/notes/aem-meeting-authors-where-they-work/">Read what I'm testing and how I plan to roll it out</Link>.</>,
+      <>I want content changes to take less CMS training for our design, SEO, and content
+        teams. I am evaluating AEM's MCP connection and Adobe Experience Workspace toward
+        that goal. Workspace is in early access for document-based Edge Delivery Services
+        projects. I'll confirm what our setup supports and what we can access before
+        planning a sandbox pilot around one page and our existing component rules.
+        {' '}<Link to="/notes/aem-meeting-authors-where-they-work/">Read my evaluation and pilot plan</Link>.</>,
     ],
     annotation: 'Built to outlast the launch meeting.',
     related: { to: '/work/aem-component-system/', label: 'See the AEM component system' },
