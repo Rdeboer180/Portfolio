@@ -19,7 +19,7 @@ const FACTS = [
   { label: 'Experience', value: '16+ years' },
 ];
 
-const STACK = ['Figma', 'React systems', 'Agent-assisted React Native / Expo', 'Storybook', 'Adobe Experience Manager', 'SCSS / Front-End'];
+const STACK = ['Adobe Experience Manager', 'Figma', 'Production Sass', 'Storybook', 'React systems', 'Agent-assisted React Native / Expo'];
 
 const Facts: React.FC = () => (
   <dl className="candidate-snapshot__facts">
@@ -58,7 +58,7 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
               aria-controls={panelId}
               onClick={() => setOpen((o) => !o)}
             >
-              <span>Ryan DeBoer, Product Design Engineer</span>
+              <span>Ryan DeBoer, Design Systems &amp; AEM</span>
               <svg
                 className="candidate-snapshot__chevron"
                 viewBox="0 0 16 16"
@@ -93,17 +93,22 @@ const CandidateSnapshot: React.FC<CandidateSnapshotProps> = ({ variant = 'full' 
       <div className="candidate-snapshot__inner">
         <p className="candidate-snapshot__eyebrow">At a glance</p>
         <h2 id={headingId} className="candidate-snapshot__name">
-          Ryan DeBoer, Product Design Engineer
+          Ryan DeBoer, Design Systems &amp; AEM
         </h2>
         <Facts />
         <p className="candidate-snapshot__summary">
-          I design the system and stay close to the build, from Figma tokens and states through
-          Storybook, implementation QA, and agent-assisted React Native builds. Recent work
-          includes a 50-component enterprise design system, an ecommerce redesign with up to 400%
-          category-entry growth, and a social game taken from the first brand sketch to TestFlight
-          in twelve weeks. I do my best work beside skilled specialists who share a picture of
-          what better looks like and keep pushing for refinement and polish.
+          I design and build governed component systems in Adobe Experience Manager (AEM).
+          Across 12+ years at Tire Rack, my work connects Figma, production Sass, content
+          authoring, and collaboration with engineering, SEO, and design teams. I am open to
+          remote US roles focused on design systems, AEM, and product design, with hands-on
+          UX/UI experience.
         </p>
+        <ul className="candidate-snapshot__evidence" aria-label="Selected project evidence">
+          <li><Link to="/work/aem-component-system/">AEM component system</Link>: core-component variants, production Sass, and authoring defaults.</li>
+          <li><Link to="/work/landing-pages/">Landing page system</Link>: reusable templates and governance for content authors.</li>
+          <li><Link to="/work/wheelrack/">WheelRack</Link>: enterprise design systems, tokens, and Storybook components.</li>
+          <li><Link to="/notes/aem-meeting-authors-where-they-work/">Agentic AEM authoring</Link>: current experiments with Claude, MCP, and governed components.</li>
+        </ul>
         <div className="candidate-snapshot__stack">
           <span className="candidate-snapshot__stack-label">Current working stack</span>
           <ul className="candidate-snapshot__chips">

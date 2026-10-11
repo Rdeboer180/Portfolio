@@ -17,6 +17,7 @@ import CandidateSnapshot from './CandidateSnapshot';
 import AboutModeSwitcher, { AboutMode } from './AboutModeSwitcher';
 import AboutStudio from './AboutStudio';
 import { SITE } from '../data/site';
+import { SEARCH_META, profileJsonLd } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import '../styles/styles.scss';
 
@@ -24,12 +25,11 @@ const AboutPage: React.FC = () => {
   const [activeMode, setActiveMode] = useState<AboutMode>('approach');
 
   usePageMeta({
-    title: 'About — Ryan DeBoer, Product Design Engineer',
-    description:
-      'Product designer with a systems focus and deep roots in visual craft. The story behind my design systems, hands-on web work, and agent-assisted product builds. South Bend, Indiana. Open to remote US roles.',
+    ...SEARCH_META.about,
     canonical: `${SITE.portfolioUrl}/about/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',
+    jsonLd: profileJsonLd(`${SITE.portfolioUrl}/about/`, SEARCH_META.about.title),
   });
   return (
     <article className="about-page">

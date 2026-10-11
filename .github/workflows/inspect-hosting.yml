@@ -1,0 +1,27 @@
+name: Inspect portfolio hosting
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Install SSH helper
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+      - name: Read portfolio HTTPS configuration
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 \
+            "$SSH_USER@$SSH_HOST" 'bash -s' < scripts/inspect-hosting.sh

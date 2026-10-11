@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
+import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getNote, KIND_LABEL } from '../data/notes';
 import Footer from './Footer';
@@ -25,6 +26,20 @@ const NotePage: React.FC = () => {
           canonical: `${SITE.portfolioUrl}/notes/${note.slug}/`,
           ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
           ogType: 'article',
+          jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            '@id': `${SITE.portfolioUrl}/notes/${note.slug}/#article`,
+            url: `${SITE.portfolioUrl}/notes/${note.slug}/`,
+            mainEntityOfPage: `${SITE.portfolioUrl}/notes/${note.slug}/`,
+            headline: note.title,
+            description: note.dek,
+            // Month-only dates are display labels, not invented publication days.
+            ...(/^\d{4}-\d{2}-\d{2}$/.test(note.dateISO) ? { datePublished: note.dateISO } : {}),
+            author: AUTHOR,
+            publisher: AUTHOR,
+            inLanguage: 'en-US',
+          },
         }
       : { title: 'Notes — Ryan DeBoer' }
   );
@@ -43,6 +58,7 @@ const NotePage: React.FC = () => {
 
       <header className="notes__header notes__header--article">
         <p className="notes__meta">
+          <Link to="/about/" rel="author">By Ryan DeBoer</Link>
           <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
             {KIND_LABEL[note.kind]}
           </span>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { PERSON_ID, PERSON_JSON_LD } from '../data/seo';
 
 // Per-route document metadata. Each route calls this with its own title,
 // description, canonical, and social tags; the Playwright prerender step
@@ -43,9 +44,22 @@ function upsertLink(rel: string, href: string) {
   el.setAttribute('href', href);
 }
 
-export function usePageMeta(meta: PageMeta, refreshKey?: string): void {
-  const jsonLdStr = meta.jsonLd ? JSON.stringify(meta.jsonLd) : '';
+export function usePageMeta(meta: PageMeta, refreshKey?: string, enabled = true): void {
+  // Reading panels leave their background route mounted. Only the route in the
+  // address bar may own metadata, including when a background re-renders.
+  const canonicalPath = meta.canonical ? new URL(meta.canonical).pathname.replace(/\/+$/, '') : null;
+  const active = enabled && (canonicalPath === null || canonicalPath === window.location.pathname.replace(/\/+$/, ''));
+  const jsonLdStr = JSON.stringify(meta.jsonLd ?? (meta.canonical ? {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${meta.canonical}#webpage`,
+    url: meta.canonical,
+    name: meta.title,
+    description: meta.description,
+    about: { '@id': PERSON_ID },
+  } : null));
   useEffect(() => {
+    if (!active) return;
     if (meta.title) document.title = meta.title;
 
     const ogTitle = meta.ogTitle ?? meta.title;
@@ -84,9 +98,20 @@ export function usePageMeta(meta: PageMeta, refreshKey?: string): void {
       removeMeta('name', 'twitter:image');
     }
 
-    // Page-specific JSON-LD (tagged so it can be removed on route change).
+    let identity = document.head.querySelector<HTMLScriptElement>('script[data-person-jsonld]');
+    if (!identity) {
+      identity = document.createElement('script');
+      identity.type = 'application/ld+json';
+      identity.setAttribute('data-person-jsonld', '');
+      document.head.appendChild(identity);
+    }
+    identity.textContent = JSON.stringify(PERSON_JSON_LD);
+
+    // Replace the prerendered page script on hydration instead of duplicating
+    // it. Cleanup only removes the script created by this effect.
+    document.head.querySelectorAll('script[data-page-jsonld]').forEach(el => el.remove());
     let script: HTMLScriptElement | null = null;
-    if (jsonLdStr) {
+    if (jsonLdStr !== 'null') {
       script = document.createElement('script');
       script.type = 'application/ld+json';
       script.setAttribute('data-page-jsonld', '');
@@ -108,5 +133,6 @@ export function usePageMeta(meta: PageMeta, refreshKey?: string): void {
     meta.ogType,
     jsonLdStr,
     refreshKey,
+    active,
   ]);
 }

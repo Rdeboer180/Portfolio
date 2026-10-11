@@ -71,6 +71,16 @@
     margin-bottom: $spacing-lg;
   }
 
+  &__evidence {
+    font-size: $font-size-body;
+    line-height: $line-height-body-relaxed;
+    color: $color-neutral-standard;
+    margin: 0 0 $spacing-lg;
+    padding-left: $spacing-xl;
+
+    li + li { margin-top: $spacing-sm; }
+  }
+
   &__stack-label {
     font-size: $font-size-caption;
     font-weight: $font-weight-semibold;

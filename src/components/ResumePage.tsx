@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
+import { SEARCH_META } from '../data/seo';
 import { RESUME, ResumeBullet, ResumeEntry } from '../data/resume';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -33,8 +34,7 @@ const Entry: React.FC<{ entry: ResumeEntry }> = ({ entry }) => (
 
 const ResumePage: React.FC = () => {
   usePageMeta({
-    title: 'Résumé — Ryan DeBoer, Product Designer',
-    description: 'Product designer connecting product design, design systems, and implementation across ecommerce, dealer platforms, and independent products.',
+    ...SEARCH_META.resume,
     canonical: `${SITE.portfolioUrl}/resume/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'profile',

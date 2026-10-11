@@ -9,6 +9,7 @@ import LinkedInLink from './LinkedInLink';
 import { PlayDraftDownload, PlayDraftLaunch } from './PlayDraftRelease';
 import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
+import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
 import ProjectOverview from './ProjectOverview';
@@ -498,8 +499,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
   const projectIndex = projects.findIndex((p) => p.slug === slug);
   const project = projects[projectIndex];
 
-  // Trailing slash matches the URL nginx serves directly over https (a slashless
-  // /work/x 301-redirects and downgrades to http), so it's the clean canonical.
+  // Match the prerendered directory URL in the canonical and sitemap.
   const pageUrl = `${SITE.portfolioUrl}/work/${slug}/`;
   const socialImage = `${SITE.portfolioUrl}/images/social/cs-${slug}.jpg`;
   usePageMeta(
@@ -513,6 +513,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
           jsonLd: {
             '@context': 'https://schema.org',
             '@type': 'CreativeWork',
+            '@id': `${pageUrl}#project`,
             name: project.seoTitle ?? project.title,
             headline: project.title,
             description: project.summary,
@@ -520,11 +521,13 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
             image: socialImage,
             temporalCoverage: project.year,
             keywords: project.tags,
-            creator: { '@type': 'Person', name: 'Ryan DeBoer', url: `${SITE.portfolioUrl}/` },
-            author: { '@type': 'Person', name: 'Ryan DeBoer', url: `${SITE.portfolioUrl}/` },
+            creator: AUTHOR,
+            author: AUTHOR,
           },
         }
-      : { title: 'Case study — Ryan DeBoer' }
+      : { title: 'Case study — Ryan DeBoer' },
+    undefined,
+    !detailOnly
   );
 
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);

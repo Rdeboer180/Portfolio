@@ -18,6 +18,7 @@ import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import { usePageMeta } from './hooks/usePageMeta';
 import { SITE } from './data/site';
+import { SEARCH_META } from './data/seo';
 import { scrollBehavior } from './utils/motion';
 import { UnlockProvider, useUnlock } from './context/UnlockContext';
 import PasswordModal from './components/PasswordModal';
@@ -99,11 +100,8 @@ function HomeRoute() {
     return () => { observer.disconnect(); motion.removeEventListener('change', settle); };
   }, []);
   usePageMeta({
-    title: 'Ryan DeBoer | Product Designer · Design Systems · Design Engineering',
-    description:
-      'Product designer with a systems focus and deep roots in visual craft. Clear interfaces, shared components, and close collaboration with engineering. South Bend, Indiana · Remote US.',
+    ...SEARCH_META.home,
     canonical: `${SITE.portfolioUrl}/`,
-    ogDescription: 'Product designer with a systems focus. Enterprise interfaces, shared components, and PlayDraft, a personal product on the App Store.',
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   }, homeLocation.key);
