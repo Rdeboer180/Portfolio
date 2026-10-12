@@ -717,7 +717,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
               controls
               playsInline
               preload="metadata"
-            />
+            >
+              {project.featuredReel.captions && <track kind="captions" src={project.featuredReel.captions} srcLang="en" label="English" />}
+            </video>
             {project.featuredReel.caption && (
               <figcaption className="cs__caption">{project.featuredReel.caption}</figcaption>
             )}

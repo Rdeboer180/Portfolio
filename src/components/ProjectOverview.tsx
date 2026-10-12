@@ -76,7 +76,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
         <section id="project-walkthrough" aria-label={project.featuredVideo || reel || overview.opening?.isVideo ? 'Product walkthrough' : 'Project evidence'}>
           {!reel && <ProjectPreview project={project} />}
           {reel && <figure className="project-overview__reel">
-            <LoopVideo src={reel.src} poster={reel.poster} label={reel.alt} />
+            <LoopVideo src={reel.src} poster={reel.poster} label={reel.alt} captions={reel.captions} />
             <figcaption>{reel.caption}</figcaption>
           </figure>}
           {!project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}

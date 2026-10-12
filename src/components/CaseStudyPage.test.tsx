@@ -68,7 +68,9 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
   const video = container.querySelector('.project-overview__reel video');
   expect(video).not.toHaveAttribute('controls');
   expect(video).not.toHaveAttribute('autoplay');
-  expect(video).toHaveAttribute('poster', '/images/work/playdraft/playdraft-howtoplay-poster.jpg');
+  expect(video).toHaveAttribute('poster', '/images/work/playdraft/v2/playdraft-v2-walkthrough-poster.jpg');
+  expect(video).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4');
+  expect(video?.querySelector('track')).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-walkthrough.vtt');
   expect(screen.getByText('Simplify the mechanics, keep the game')).toBeInTheDocument();
   expect(container.querySelectorAll('img[src^="/images/work/playdraft/v2/"]')).toHaveLength(7);
   expect(screen.getByRole('img', { name: /Native v2 identity specimen showing initials/ })).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-identity-system.png');

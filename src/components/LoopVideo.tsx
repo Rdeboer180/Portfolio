@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 
 /** Silent, GIF-like media. The whole frame is the keyboard and touch toggle. */
-export default function LoopVideo({ src, poster, label }: { src: string; poster?: string; label: string }) {
+export default function LoopVideo({ src, poster, label, captions }: { src: string; poster?: string; label: string; captions?: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
   const [inView, setInView] = useState(false);
@@ -32,5 +32,7 @@ export default function LoopVideo({ src, poster, label }: { src: string; poster?
     aria-label={`${playing ? 'Pause' : 'Play'} ${label}`} aria-pressed={playing}
     onClick={() => setChoice(video.current?.paused ? 'play' : 'pause')}
     onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setChoice(video.current?.paused ? 'play' : 'pause'); } }}
-    onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />;
+    onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+    {captions && <track kind="captions" src={captions} srcLang="en" label="English" />}
+  </video>;
 }

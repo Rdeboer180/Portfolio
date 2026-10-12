@@ -150,7 +150,7 @@ export interface Project {
   /** Reviewed cover footage explicitly approved for display before unlock. */
   featuredVideoPublic?: boolean;
   /** Case-study hero reel, distinct from the short homepage card loop. */
-  featuredReel?: { src: string; poster: string; alt: string; caption?: string };
+  featuredReel?: { src: string; poster: string; alt: string; caption?: string; captions?: string };
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
   // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
@@ -1742,10 +1742,11 @@ Frame every output as:
     featured: '/images/work/playdraft/playdraft-cover-v2.png',
     featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
     featuredReel: {
-      src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
-      poster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
-      alt: 'PlayDraft product reel: picking a DraftPack, tuning the draft and inviting a group, live snake-draft picks on the clock, DraftLab solo games, the store economy, the winner scored on draft-day value, the competitive sliced board and season standings, and sharing the final board',
-      caption: "The original release, recorded in the app. Competitive modes, the store and scoring are being removed in v2. The new screens follow below.",
+      src: '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4',
+      poster: '/images/work/playdraft/v2/playdraft-v2-walkthrough-poster.jpg',
+      captions: '/images/work/playdraft/v2/playdraft-v2-walkthrough.vtt',
+      alt: 'PlayDraft v2 preview: browsing packs, saving a custom topic, choosing draft settings, reviewing an invite, picking a movie on the grid and sharing a sample lineup',
+      caption: "V2 in development. Native preview recordings show pack browsing, Custom saving, draft settings, picks and recap sharing. These clips use local sample data; live invitation and multiplayer checks remain.",
     },
     timeToLive: "About twelve weeks of nights and weekends took PlayDraft from the first logo sketch to TestFlight. The released app uses coins. Cash purchases remain disabled pending legal review.",
 

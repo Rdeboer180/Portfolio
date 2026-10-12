@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-12",
+  "status": "User-approved v2 preview for case-study publication",
+  "source": "PlayDraft/demo-reel/v2-review/playdraft-v2-tutorial-interactive.mp4",
+  "duration": 33,
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "frameRate": 60,
+  "scope": "Native local preview recordings; room uses fixture picks; recap opens native share with sample text; invite recipient hold; release-build acceptance pending. Existing narration and original ending retained.",
+  "assets": [
+    {
+      "file": "playdraft-v2-walkthrough.mp4",
+      "sha256": "655ea8da2ad5fcb78fb0d56469ade96984b96e5d8aeae4b325750f82d17f7406"
+    },
+    {
+      "file": "playdraft-v2-walkthrough-poster.jpg",
+      "sha256": "1f25d16e53e3c1518443270e1b0cc25dbf9fd29ee22a4ee2256e7f9d0fcfea27"
+    },
+    {
+      "file": "playdraft-v2-walkthrough.vtt",
+      "sha256": "618d84aa374b3cd20852c83a885f17b593ffd2c78ba4e32be73c592f1053a7fe"
+    }
+  ]
+}
