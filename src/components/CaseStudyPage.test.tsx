@@ -69,7 +69,10 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
   expect(video).not.toHaveAttribute('controls');
   expect(video).not.toHaveAttribute('autoplay');
   expect(video).toHaveAttribute('poster', '/images/work/playdraft/playdraft-howtoplay-poster.jpg');
-  expect(screen.getByText('Settle it in one session')).toBeInTheDocument();
+  expect(screen.getByText('Simplify the mechanics, keep the game')).toBeInTheDocument();
+  expect(container.querySelectorAll('img[src^="/images/work/playdraft/v2/"]')).toHaveLength(7);
+  expect(screen.getByRole('img', { name: /Native v2 identity specimen showing initials/ })).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-identity-system.png');
+  expect(screen.getByText('Original release on iOS · v2 in development')).toBeInTheDocument();
   expect(container.querySelector('.cs--detail-only')).toBeNull();
   const details = container.querySelector('details')!;
   details.open = true;

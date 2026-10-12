@@ -1682,43 +1682,57 @@ Frame every output as:
       category: 'Personal product',
       role: 'Product design · Design system · Agent-assisted build',
       relatedNote: { href: '/notes/a-system-to-maintain/', label: 'Read why I built a product to maintain' },
-      deck: "I wanted the anticipation of fantasy-football draft day without waiting for the next season. Friends can draft snacks, movies or their own topics, then debate the boards.",
-      ownership: 'I designed the brand, game, interface, and design system, then built the Expo and Supabase app with agents. This was a solo, nights-and-weekends product.',
-      status: 'Available on the App Store · iPhone',
+      deck: "I wanted fantasy-football draft day for snacks, movies and whatever else my friends wanted to argue about. I released PlayDraft, then started cutting the extra mechanics that got in the way of drafting.",
+      ownership: "I designed the brand, game and design system, then built the Expo and Supabase app with agents on nights and weekends.",
+      status: 'Original release on iOS · v2 in development',
       decisions: [
         {
-          title: 'Settle it in one session',
-          body: "I replaced next-day voting with instant scoring so the group gets a verdict in the same session. My bet was that an immediate result would make another round more appealing.",
-          image: { src: '/images/work/playdraft/playdraft-results-ceremony.png', alt: 'PlayDraft winner ceremony with the winning board and earned XP', layout: 'full', caption: 'The winner ceremony closes the draft.' },
+          title: "Simplify the mechanics, keep the game",
+          body: "My first simplification pass went too far. The app started to feel like a list. I brought back the textured shields and character avatars, and gave Home a clearer job. It leads with creation when you are idle and your next pick when it is your turn.",
+          images: [
+            { src: "/images/work/playdraft/v2/playdraft-v2-home-character-idle.png", alt: "Home welcomes a player with The Sleeper character avatar and cutout, a Create a draft action and textured pack tiles.", layout: 'full', caption: "Idle Home leads with creation. Native component preview on iPhone 17, using The Sleeper candidate cutout.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/v2/playdraft-v2-home-character-turn.png", alt: "Home during a live turn with a Recess Games card, The Sleeper avatar and cutout, a YOU badge and Make your pick.", layout: 'full', caption: "Your turn takes priority and the creation card gets smaller. Native component preview with sample players and a candidate cutout.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+          ],
         },
         {
-          title: 'Keep the live draft in one place',
-          body: 'Board, clock, queue, roster, and chat share the draft room. Search handles partial names, and custom drafts let the group write its own picks without duplicates.',
-          image: { src: '/images/work/playdraft/playdraft-draft-room-live.png', alt: 'Live PlayDraft room showing the draft board, pick clock, and browse sheet', layout: 'full', caption: 'A capture from the running app.' },
+          title: "Save an idea before hosting a draft",
+          body: "Making a custom pack used to lead straight into a draft room. I separated writing from hosting so you can save an unfinished idea and come back later. Custom now has its own tab beside the pre-built Packs catalog.",
+          images: [
+            { src: "/images/work/playdraft/v2/playdraft-v2-packs.png", alt: "Packs catalog with search, All packs, Recent and Favorites filters, and textured Candy and Fast Food shield tiles.", layout: 'full', caption: "Pack shields, search and favorites in the iPhone simulator. The development strip identifies the sample data.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/v2/playdraft-v2-custom-saved.png", alt: "Custom library confirms a Road trip snacks pack saved with zero choices and shows what is needed before hosting.", layout: 'full', caption: "Save a pack before adding its choices or starting a draft. This simulator view uses sample data; account saving was tested separately.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+          ],
         },
         {
-          title: 'Give every new screen a reference',
-          body: 'Shared tokens, component recipes, and a living reference screen constrain agent-assisted implementation. I kept the product decisions and reviewed the output against that system.',
-          image: { src: '/images/work/playdraft/playdraft-design-system-live-screen.png', alt: 'PlayDraft living design-system screen with named semantic tokens and typography specimens', layout: 'full', caption: 'The system rendered on-device.' },
+          title: "Show the choices before committing",
+          body: "Setup lets the host choose how many people play, how many picks they get and how long each turn lasts. Join shows open seats and the ticket cost before asking you to commit. If you already have a seat, you can return without spending another ticket.",
+          images: [
+            { src: "/images/work/playdraft/v2/playdraft-v2-setup.png", alt: "New draft setup for Recess Games with a name field, four players, five picks and two-minute or eight-hour clock choices.", layout: 'full', caption: "Players, picks and turn length in one setup. iPhone simulator at Large text size.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/v2/playdraft-v2-join.png", alt: "Join a draft screen showing Weekend picks, two open seats and a one Draft Ticket cost before the Join draft button.", layout: 'full', caption: "Open seats and the current ticket cost on iPhone SE. Simulator capture with sample data.", crop: { x: 0, y: 0, width: 750, height: 1334, sourceWidth: 750, sourceHeight: 1334 } },
+          ],
+        },
+        {
+          title: "Make the design repeatable",
+          body: "I turned the pitch into components I could reuse and compare on an iPhone. Big Shoulders gives the headings their character. Initials and character avatars share a size scale, and a YOU label identifies the current player in a group.",
+          image: { src: "/images/work/playdraft/v2/playdraft-v2-identity-system.png", alt: "Native v2 identity specimen showing initials, The Sleeper and Bracket avatars at 24, 32, 40, 56 and 96 points, plus player nameplates and a YOU badge.", layout: 'full', caption: "Initials and character avatars at five sizes, followed by player nameplates. Captured from the native component preview with sample players.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
         },
       ],
-      outcome: "PlayDraft is on the App Store after about twelve weeks to TestFlight. I think I shipped too much around the core game, so I am simplifying the path from joining a draft to getting a verdict. The live economy uses coins.",
+      outcome: "The original app is on iOS. The rebuilt screens run on iPhone, and saving packs to an account has passed its first checks. V2 is still in development. Multiplayer and signed-in testing remain, along with the shared draft and ticket systems. I have no usage results for this version yet.",
     },
-    thesis: 'Take the best mechanic in fantasy sports and set it loose on anything.',
+    thesis: "Let friends draft the things they already argue about.",
     annotations: {
-      problem: 'Drafting is the most fun part of fantasy sports, and it is stuck there.',
-      gaps: 'The mechanic is universal. A casual product to host it was not.',
-      constraints: 'Solo builder, real App Store rules, no lawyer on retainer.',
+      problem: "Draft day is my favorite part of fantasy football.",
+      gaps: "I wanted a draft my friends could finish in one sitting.",
+      constraints: "A solo build with store and content restrictions to work through.",
       approach: 'No screen without a reference, even for AI output.',
       outcome: 'Brand to TestFlight in twelve weeks, then launched on iOS.',
     },
     stream: 'passion',
     client: 'PlayDraft (personal product)',
-    context: 'PlayDraft is my independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics, build competing boards, and get a verdict in the same session.',
-    title: 'PlayDraft: A Social Drafting Game Built From Brand to App Store',
-    cardTitle: 'PlayDraft: A Social Drafting Game',
-    seoTitle: 'PlayDraft: a 0→1 Social Game Designed & Built With Agents in React Native',
-    summary: "I love fantasy-football draft day and wanted that experience for everyday topics. Friends choose or write a topic, draft on the clock and get an instant verdict. I designed the brand, interface and system, then built the Expo and Supabase app with agents. It reached TestFlight in twelve weeks and is now on the App Store. I am simplifying the product around that core loop.",
+    context: 'PlayDraft is my independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics and compare the boards. This case study covers the original release and the current simplification rebuild.',
+    title: "PlayDraft: a social drafting game, from brand to App Store",
+    cardTitle: "PlayDraft: a social drafting game",
+    seoTitle: "PlayDraft: designing and building a social game with agents",
+    summary: "I designed and released a social drafting game with agents. I am now removing XP and competitive modes so friends can get to the draft sooner, while keeping the board, avatars and custom topics.",
     cardHook: 'Draft snacks, movies, or anything your group writes in. I designed the brand, game, and system, then built and released the iPhone app with agents.',
     year: '2026',
     tags: ['0 → 1 Product Execution', 'Mobile (iOS)', 'Game Design', 'Design System', 'Agentic Workflow', 'Brand System'],
@@ -1731,57 +1745,57 @@ Frame every output as:
       src: '/images/work/playdraft/playdraft-howtoplay-reel.mp4',
       poster: '/images/work/playdraft/playdraft-howtoplay-poster.jpg',
       alt: 'PlayDraft product reel: picking a DraftPack, tuning the draft and inviting a group, live snake-draft picks on the clock, DraftLab solo games, the store economy, the winner scored on draft-day value, the competitive sliced board and season standings, and sharing the final board',
-      caption: 'PlayDraft in 89 seconds. Narrated and subtitled, captured in the real app against the live backend.',
+      caption: "The original release, recorded in the app. Competitive modes, the store and scoring are being removed in v2. The new screens follow below.",
     },
-    timeToLive: 'From first logo sketch to TestFlight builds: ~12 weeks of solo nights-and-weekends work. Now live on the App Store with a coins-only economy; cash purchases remain behind a feature flag pending legal review.',
+    timeToLive: "About twelve weeks of nights and weekends took PlayDraft from the first logo sketch to TestFlight. The released app uses coins. Cash purchases remain disabled pending legal review.",
 
     // ── 01 Problem ──
-    problemPunch: 'Drafting is one of the most fun social mechanics in fantasy sports, but it has stayed locked to sports.',
+    problemPunch: "I wanted draft day without waiting for football season.",
     problem: [
-  "In fantasy football, the draft is the part I look forward to most: competing for a pick, finding a sleeper and arguing about the board afterward.",
+  "In fantasy football, I look forward to the draft most. I love finding a sleeper, losing a pick to a friend and arguing about the board afterward.",
   "I also kept seeing podcasts draft everyday topics for the fun of the debate. I wanted to put that format in friends' hands, from a Halloween candy draft to movies or a topic they write themselves."
 ],
     // The narrated product reel lives in the hero. The Problem stays focused on
     // the mechanic and decision rather than repeating the video below.
 
     // ── 02 Gaps & Opportunity ──
-    gapsPunch: 'The mechanic is universal. The product to host it casually was not.',
+    gapsPunch: "A draft should fit into an evening with friends.",
     gaps: [
-      'Fantasy apps assume rosters, scoring, and weekly commitment. PlayDraft needed the opposite: quick drafts among friends that resolve in one session. No league dues, no season.',
-      'A casual draft still needs a verdict. The interaction model had to deliver a credible winner fast, keep the group debating after, and hand them something worth posting. The share card is part of the game loop, not marketing.',
-      'Topic content needs to grow without flattening personality. A Scary Movies draft, a Super Powers draft, and a GOAT Athletes draft should feel like the same product but read very differently.',
-      'AI-assisted prototyping can produce a lot of screens fast, and just as easily produce inconsistent ones. The project needed a design system strong enough to act as a constraint layer, not a style guide tacked on later.',
+      "I wanted people to finish a draft in one session, without managing a roster or committing to a season.",
+      "For the first release, I wanted the group to leave with a winner and a board worth sharing. That led to the scoring model described below. In v2, I am keeping the lineups and removing the score.",
+      "Each topic needed an identity people could recognize while browsing. Pack shields and accent colors give movies, snacks and sports their own place in the same catalog.",
+      "Agents could build screens faster than I could review them. I needed shared components and clear references to keep those screens consistent.",
     ],
     // ── 03 Constraints ──
-    constraintsPunch: 'Solo designer-builder. Real mobile stack. Real App Store rules. No lawyer on retainer.',
+    constraintsPunch: "I owned the design, build and release.",
     constraints: [
-      'Solo product design and build: no engineering team, no design partner, no research budget. Needed a workflow that compressed system design, screen design, and implementation into a single loop.',
-      'Real production stack from day one: Expo Router, React Native, TypeScript, Supabase (auth, DB, realtime, RLS, edge functions), RevenueCat rails. UI never touches provider SDKs directly. Everything routes through /src/services/*.service.ts.',
+      "I had no engineering team or research budget. I designed components, built screens with agents and reviewed the results in the simulator as part of the same workflow.",
+      "The app uses React Native and Expo, with Supabase for accounts and live draft data. Service modules separate the screens from the backend so game logic can be tested without a network connection.",
       'App Store guidelines shaped real product decisions: UGC moderation (block / report / eject) for guideline 1.2, a wager token renamed and made coin-only for 5.3, and non-functional cash UI stripped for 2.1.',
       'Packs that name real brands, shows, and athletes follow content rules I wrote myself, without counsel: names only, no likenesses, trademarked nicknames scrubbed, one pack renamed, and a remote kill switch that disables any pack without an app release. The riskiest content launches free-tier only until a lawyer has reviewed it.',
     ],
 
-    insightCallout: 'The design system doubled as the guardrail for AI output. Tokens, recipes, and a “no screen without a reference” rule meant every AI-assisted screen or new pack had somewhere to belong before it was built.',
+    insightCallout: "I gave agents a reference for each screen and required them to use the shared tokens and components. Then I checked the result in the app.",
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'The brief banned the patterns I didn’t want to copy',
-        description: 'The brief and core loop came before any UI: Create or Join → snake picks → a verdict → reward. It ruled out TCG card-collector framing, pay-to-win, and copyrighted rosters. The first mark broke the first rule within days. “DraftPack,” a wolf-and-card identity, pulled straight toward the collector framing, so I retired it. The PlayDraft shield replaced it, tested at 29 px and against the App Store grid it would sit in.',
+        label: "The first logo pulled the product in the wrong direction",
+        description: "I wrote the brief before designing screens. It ruled out trading-card framing and pay-to-win mechanics. Then my first logo, DraftPack, looked like a card-collecting game. I replaced the wolf-and-card mark with the PlayDraft shield and checked it at 29 pixels beside other App Store icons.",
         images: [
           {
             src: '/images/work/playdraft/playdraft-brand-evolution.jpg',
             alt: 'Brand evolution board. Top: five DraftPack app-icon variants built on a wolf mark and trading-card frames; bottom: five PlayDraft icon color variations tested at 60/40/29 px and beside PrizePicks, Sleeper, and FastDraft in an App Store grid',
             layout: 'full',
-            caption: 'DraftPack (top) was retired within days. The PlayDraft mark (bottom) was tested at 60, 40, and 29 px and beside PrizePicks, Sleeper, and FastDraft.',
+            caption: "I retired DraftPack within days. Below it, the PlayDraft mark appears at 60, 40 and 29 pixels and beside other App Store icons.",
           },
         ],
       },
       {
         key: 'structure',
-        label: 'Four screens, with the draft room at the center',
-        description: 'The draft room puts board, clock, queue, roster, and chat on one screen. Two bets defined it. In-draft search reads intent, so typing “lay” surfaces every Lay’s flavor. Custom Drafts make every pick a write-in, and duplicates bounce.',
+        label: 'The original release put the draft room at the center',
+        description: "The draft room keeps the board, clock, queue, roster and chat together. Search accepts partial names, so typing \"lay\" finds the Lay's flavors. In the original Custom Drafts, players write in their picks and the app rejects duplicates.",
         bullets: [
           'Home: wallet, live drafts, the week’s competitive rooms',
           'Packs: browse, favorites, write your own',
@@ -1793,14 +1807,14 @@ Frame every output as:
             src: '/images/work/playdraft/playdraft-shipped-screens.png',
             alt: 'Six screens from the shipped PlayDraft build, captured on an iPhone 17: Home with the week’s three competitive rooms and a join button, the full Packs grid with the write-your-own band above it, Collection with per-pack progress and the binder door, the coins-only Store of tickets and card packs, the live draft board with the “The pick is in” card revealing over it, and the winner podium with final standings',
             layout: 'full',
-            caption: 'The shipped app, not the Figma. The four tabs, then the two moments the product turns on: a pick landing on the live board, and the podium that settles it.',
+            caption: "Six screens from the original release, including a pick arriving on the board and the final podium.",
           },
         ],
       },
       {
         key: 'system',
-        label: 'The constraint layer came before the screens',
-        description: 'The foundation ships as tokens.json, tokens.css, and a 15-module TypeScript package. Governance is written down, not implied: no hex literals in components (ADR-003), nine status-pill states with required leading icons, and a live /design-system screen where any token without a rendering gets deleted. Pack accents grew from five pairs to ten by decision record. That is what let 133 components and 59 screens ship solo without drift.',
+        label: 'The original system made the first release possible',
+        description: "The first system gave screens shared tokens, component recipes and an in-app gallery to compare against. Components had to use named colors and states. V2 takes its values from the TypeScript tokens, with automated checks for overrides and native captures for visual review. The older JSON and CSS files document the first system.",
         systemMarker: 'Governance',
         images: [
           {
@@ -1813,20 +1827,20 @@ Frame every output as:
             src: '/images/work/playdraft/playdraft-design-system-governance.png',
             alt: 'PlayDraft design-system governance board: the rule that components must not inline hex codes, font sizes or spacing numbers; four locked micro-rules including white-on-gold forbidden and the variant owning casing; a primitive to semantic to recipe token flow; Figma provenance with three accepted sources of truth; the five-step path for adding a token; and the three mechanisms that catch drift',
             layout: 'full',
-            caption: 'The governance sheet: one rule at the top, the contribution path that enforces it, and the three places drift gets caught. Step 4 is the teeth.',
+            caption: "The rules for adding a token, using it in a component and checking its rendered result.",
           },
           {
             src: '/images/work/playdraft/playdraft-design-system-live-screen.png',
             alt: 'Three columns cropped from the in-app /design-system route running on device: semantic text and border tokens, then icon, state and podium tokens, then the typography ramp, with swatches labelled by token name and resolved value',
             layout: 'full',
-            caption: 'Three columns of the living reference, running on-device: tokens rendered with their names and resolved values. This screen is the audit surface: the podium tokens in the middle column were added the week the winner ceremony shipped',
+            caption: "The reference gallery renders tokens beside their names and values. I added the podium tokens in the middle column when the winner ceremony shipped.",
           },
         ],
       },
       {
         key: 'build',
-        label: 'AI scaffolds against the recipes; the audit catches drift',
-        description: 'The shipped app is a production build, not a prototype shell: 26 feature modules, 28 provider-agnostic services, 104 Supabase migrations, 8 edge functions. Game logic (snake order, pick clock, confidence-pool scoring) lives inside with providers at the edge, so the engine is testable without the network. AI scaffolds screens from the token recipes, authors packs through a curator agent that checks them against the content rules, and runs a weekly report-only audit that flags drift and touches no app code. Tokens, product decisions, and legal posture sit in the same annotated file:',
+        label: "I set the rules and reviewed what agents built",
+        description: "Agents built screens from the component recipes and helped write packs against my content rules. I kept game logic separate from backend services so tests could exercise draft order, timers and scoring without a network connection. A weekly audit reported inconsistencies for review. The prompts below show some of the corrections I made during the first release.",
         systemMarker: 'Agent workflows',
         promptRows: [
           {
@@ -1835,18 +1849,18 @@ Frame every output as:
           },
           {
             prompt: 'implement a extremely sharp countdown timer UI for the above need. dont stray from brand system but pull from the best of the apps animation and UI to build and reference my /ryan-design-taste',
-            outcome: 'The pre-draft countdown shipped on the existing motion, type, and colour tokens. No new visual language entered the system to get it.',
+            outcome: "The countdown reused the existing motion, type and color tokens.",
           },
           {
             prompt: 'the .05 holo bonus should only apply to the bonus XP rewarded not deterministic results',
-            outcome: 'The holo bonus is wired to the bonus-XP lane only. Collection luck pays progression and never moves a placement.',
+            outcome: "In the first release, the holo bonus affected XP only. It could not change a player's placement.",
           },
           {
             prompt: 'just provide me the mechanics for scoring as they stand right now please, hold off on visual enhancements',
-            outcome: 'The scoring model got written down before any UI was drawn for it. The visual work waited a turn.',
+            outcome: "I documented the scoring model before designing its UI.",
           },
         ],
-        promptRowsCaption: 'Verbatim from the build sessions, April to July 2026. Lowercase and typos left in. An edited prompt is not evidence.',
+        promptRowsCaption: "Prompts from the April to July 2026 build sessions, with the original spelling and casing.",
         codeBlock: {
           language: 'ts',
           filename: 'src/design-system/packs.ts (excerpt, real file)',
@@ -1871,30 +1885,30 @@ export const packs = {
   sitcoms: { name: 'Sitcoms', accent: 'cyan', glyph: 'sitcom', tier: 'free' },
   // …
 } as const;`,
-          caption: 'Real source. The pack registry carries its own decision history in the file the components actually read: why ink teal exists, why gold is off-limits, and the legal posture of every third-party topic.',
+          caption: "An excerpt from the original pack registry. Comments explain the color choices and content restrictions beside the values the app uses.",
         },
         images: [],
       },
       {
         key: 'iteration',
-        label: "Give the group a verdict while the session is still happening",
-        description: "The original loop ended in community voting, with the verdict delayed until the next day. I worried that wait would weaken engagement and replay, especially between strangers. In June, I replaced voting with the DraftLab confidence pool: solo mini-games rank pack items so a finished draft can return an instant winner. I am now simplifying the surrounding features because I think I launched too much around the core draft.",
+        label: "I changed how a draft ends",
+        description: "The original plan ended with community voting and a verdict the next day. I worried people would leave before seeing the result. In June, I replaced voting with the DraftLab confidence pool, which ranked items through solo mini-games and scored completed drafts immediately. By October, I thought I had added too much around the draft itself. V2 removes scoring and XP, leaving the group with their lineups to compare.",
       },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: "PlayDraft is live on the App Store for iPhone. Groups can choose or write a topic, draft on the clock and get an instant scored winner. There are no launch metrics to report yet. I think the first release carried too many features, and I am working on updates that bring the draft and verdict back into focus. Third-party packs stay free under the content rules; some promotional surfaces remain unwired.",
+    outcomeNote: "The original iPhone app shipped. The October rebuild has a smaller navigation, Home states for idle and active players, reusable setup and Custom packs saved to an account. The screenshots use local sample data; separate service tests cover saving, conflicting edits and retries. Multiplayer and signed-in checks are still open, and the shared draft and ticket systems are unfinished. I have no adoption or retention results for v2.",
     takeaways: [
       "I retired next-day voting in June because I wanted the group to finish in one sitting. I expected that shorter loop to make another round more appealing.",
-      'Any token with no rendering on the live /design-system screen gets deleted. That rule, not a style guide, is what held the AI-scaffolded screens to the system.',
-      'Scripting the demo reel in Maestro caught a pick clock that never auto-picked at zero, and the fix went in instead of a caption.',
+      "Requiring every token to appear in the in-app gallery gave me a concrete way to review additions from agents.",
+      "Recording the demo with Maestro caught a timer that failed to pick automatically at zero. I fixed it before recording again.",
       'App Store rules shaped the product: “Bet on Myself” became coin-only “Podium Boost” for guideline 5.3, and non-functional cash UI came out for 2.1.',
     ],
     metrics: [
       { value: 'Launched', label: 'on the iOS App Store · Solo design & build' },
-      { value: '133', label: 'Components on a token-governed design system' },
-      { value: '59', label: 'Screens & routes across the shipped Expo Router app' },
-      { value: '17', label: 'Draft packs in the launch catalog, every third-party topic checked against content rules written without counsel' },
+      { value: '4', label: 'Destinations in the v2 navigation: Home, Drafts, Packs and Custom' },
+      { value: '2', label: 'Clock choices in the new setup: 2 minutes or 8 hours per pick' },
+      { value: 'Save first', label: 'Custom packs can exist before a draft is hosted' },
     ],
   },
 
@@ -2259,6 +2273,8 @@ for (const project of projects) {
   const images = [project.overview?.opening, ...(project.overview?.decisions.map(decision => decision.image) ?? [])];
   for (const image of images) {
     if (!image?.src || !image.crop) continue;
+    // V2 native evidence uses untouched PNGs and CSS framing, with no generated crop derivative.
+    if (image.src.startsWith('/images/work/playdraft/v2/')) continue;
     const { x, y, width, height } = image.crop;
     const stem = image.src.split('/').pop()!.replace(/\.[^.]+$/, '');
     image.displaySrc = `/images/work/${project.slug}/overview-samples/${stem}-${x}-${y}-${width}-${height}.webp`;
