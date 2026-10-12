@@ -1740,7 +1740,7 @@ Frame every output as:
     tools: ['Figma', 'Figma MCP', 'Claude Code', 'Expo / React Native', 'TypeScript', 'Expo Router', 'Supabase', 'RevenueCat', 'Maestro', 'Xcode / TestFlight'],
     timeline: '2026 · App Store launch',
     featured: '/images/work/playdraft/playdraft-cover-v2.png',
-    featuredVideo: '/images/work/playdraft/playdraft-cover-montage.mp4',
+    featuredVideo: '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4',
     featuredReel: {
       src: '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4',
       poster: '/images/work/playdraft/v2/playdraft-v2-walkthrough-poster.jpg',
