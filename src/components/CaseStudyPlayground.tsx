@@ -147,7 +147,7 @@ const CARD_PREVIEWS: Record<string, { title: string; line: string }> = {
   'design-enablement': { title: 'Tools that scale design', line: 'I built a production-accurate crop simulator and reusable review components so teams can check imagery before it reaches AEM.' },
   playdraft: { title: 'PlayDraft: A social drafting game', line: 'I designed the brand, game, and system, then built and released the iPhone app with agents.' },
   loopstack: { title: 'LoopStack: Patterns worth reviewing', line: 'I designed and built a Type 1 diabetes app for reviewing meal and glucose patterns with a care team.' },
-  'aem-component-system': { title: 'AEM Component System', line: 'I wrote AEM component specifications and production Sass so designers could author pages with shared templates and variants.' },
+  'aem-component-system': { title: 'AEM Component System', line: 'I defined AEM component rules and edge cases in Figma, wrote the Sass fixes, and documented each style choice for the authors who make it.' },
   'tire-categories': { title: 'Tire Category Redesign: Path to the right tire', line: 'I rebuilt 30+ category pages into a guided system that helps shoppers choose without tire expertise.' },
   'seasonal-content-system': { title: 'Seasonal content, without rebuilds', line: 'Experience Fragments and Adobe Target deliver seasonal imagery to regional audiences while SEO copy stays consistent.' },
   'overscroll-tactics': { title: 'Overscroll Tactics: A studio identity', line: 'I built the identity behind PlayDraft, carrying one mark and motion system across web and native.' },

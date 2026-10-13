@@ -227,6 +227,26 @@ const liveComponent = (name: string, alt: string, caption: string): ProjectImage
   alt, caption, layout: 'full',
 });
 
+// Boards from the October 2026 Figma component guide, rendered from the file
+// with the project number and branch name removed. Shared by the full study
+// and its compact edition so captions stay attached to the same artifact.
+const componentGuide = (name: string, alt: string, caption: string): ProjectImage => ({
+  src: `/images/work/aem-component-system/component-guide/${name}.jpg`,
+  alt, caption, layout: 'full',
+});
+const GUIDE = {
+  readMe: componentGuide('guide-read-me', 'Component guide read-me page with usage notes, AEM style steps, breakpoints, a status legend, the page index, and open items', 'The read-me page: how to use the guide, how to apply a style in AEM, breakpoints and key sizes, the status legend, and the open items.'),
+  containers: componentGuide('containers-rules', 'Containers page with layout rules, the class each style option adds, and AEM style picker screengrabs', 'Containers: one layout style and an optional background. Nested containers drop their side padding, so gutters never stack.'),
+  copyWidth: componentGuide('copy-width-rules', 'Copy Width page with alignment rules, class names, and AEM style picker screengrabs', 'Copy Width: a 900px column with its own alignment group. The recommended setup nests it inside a Fixed Width section.'),
+  flex: componentGuide('flex-rules', 'Teaser and Flex page with column rules by screen width and number of children', 'Teaser + Flex: columns follow the screen width and the number of children, and Featured teasers line their links up across each row.'),
+  table: componentGuide('table-gap', 'Table page documenting the tire size table as rendered today, marked Not in branch', 'Table: documented as rendered today and marked Not in branch, with a recommendation to move its rules under Tr Table.'),
+  heroUpdates: componentGuide('hero-branch-updates', 'List of hero changes made in the branch, each with the behavior it replaced', 'Hero: each change in the branch, listed beside the behavior it replaced.'),
+  teaserBeforeAfter: componentGuide('teaser-before-after', 'Featured teaser at 1024px before and after the branch, and stacked at 375px', 'Featured teaser at 1024px: the image pinned to the top before the branch, centered beside the copy after it, and stacked at 375px.'),
+  buttons: componentGuide('buttons-states-arrow-link', 'Button states and the wrapping rules for the arrow text link', 'Button states, the narrow-column rule, and the orphaned arrow the no-break space prevents.'),
+  heroAuthor: componentGuide('hero-author-primary', 'AEM editor reference with the hero selected, Styles open, numbered author steps, and the resulting classes', 'Author reference: the AEM editor at 1440px with Styles open, numbered steps, and the classes that result.'),
+  heroPreview: componentGuide('hero-author-preview', 'Homepage hero preview at 1440px and 375px with the image crop held at 50 percent', 'What visitors see at 1440px and at 375px, with the crop held at 50%.'),
+};
+
 const projects: Project[] = [
   {
     slug: 'figma-template-governance',
@@ -1159,107 +1179,93 @@ const projects: Project[] = [
   },
 
   // =============================================
-  // 5. AEM Component System Rebuild  [image RIGHT]
+  // 5. AEM Component System  [image RIGHT]
   // =============================================
   {
     slug: 'aem-component-system',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
-    thesis: 'Stop authoring and engineering from solving the same problem twice.',
+    thesis: 'Every style option gets a rule, a class, and a picture of what to pick.',
     annotations: {
-      problem: 'A decade of AEM authoring with no core system underneath.',
-      gaps: 'No reusable patterns, no variables. The same work, done twice.',
-      constraints: 'A live enterprise CMS and a dev team still learning the codebase.',
-      approach: 'I wrote the specs and shipped the production Sass.',
-      outcome: 'One system design, dev, SEO, and accessibility all build against.',
+      problem: 'Style options the CSS could not keep.',
+      gaps: 'Option names are not results.',
+      constraints: 'Two release paths: CSS in the branch, settings in ui.content.',
+      approach: 'Measured in AEM, defined in Figma, fixed in Sass.',
+      outcome: 'In branch, with the open items written down.',
     },
     stream: 'professional',
     client: 'Tire Rack',
-    title: 'AEM Component System Rebuild',
-    seoTitle: 'Adobe Experience Manager Design System & Storefront Performance Rebuild',
-    summary: 'I built eight AEM core-component variants with production Sass, authoring defaults, and documented contracts, and partnered with engineering on three API-driven components. The shared library powers the homepage, tires hub, events, and packages, with WebPageTest showing 60% faster loads.',
-    cardHook: 'Eight core-component variants and three API-driven components replaced one-off builds. Shared authoring rules connect the library to production, with WebPageTest showing 60% faster loads.',
-    year: '2024\u20132025',
-    tags: ['Design Systems', 'AEM', 'Front-End Development', 'UX Engineering', 'CMS'],
+    title: 'AEM Component System',
+    seoTitle: 'AEM Component Governance: Figma Specs, Edge Cases, and Production Sass',
+    summary: 'I documented the shared layer of our AEM core components in a Figma guide with seven component pages: the rules, the class each style option adds, wireframes measured on local AEM builds, and the steps an author takes. The Sass fixes live in the same branch, and the guide lists what is still open.',
+    cardHook: 'Authors could pick style options whose results were not defined anywhere they worked. A Figma guide now defines each option and its edge cases, with the Sass fixes alongside it.',
+    year: '2024–2026',
+    tags: ['Design Systems', 'AEM', 'Component Governance', 'UX Engineering', 'Sass', 'Documentation'],
     role: 'Senior Web Designer / UX Engineer',
     tools: ['AEM', 'Figma', 'Sass', 'HTML/CSS', 'Git'],
-    timeline: '~12 months (ongoing)',
+    timeline: 'Rebuild ~12 months · CSS overhaul ongoing',
     featured: '/images/work/aem-component-system/CS_thumbnail_AEM_componentSystemRebuild_safe.jpg',
     featuredVideo: '/assets/portfolio-safe/aem-component-system/cover-loop.mp4',
-    timeToLive: '12 months from kickoff to live components. Core variants and templates now power the homepage and tires hub.',
+    timeToLive: 'The core components went live after a 12-month rebuild. The CSS overhaul that followed is in a working branch, with the remaining steps to release written down in the guide.',
 
-    // \u2500\u2500 01 Problem \u2500\u2500
-    problemPunch: 'A decade of AEM authoring with no investment in core components, modern patterns, or a shared system.',
+    // ── 01 Problem ──
+    problemPunch: 'Style options in the picker did not always have a defined result behind them, and nothing showed an author what each one would do at each width.',
     problem: [
-      'I had been authoring in AEM since 2013. In all that time, the team never adopted core components, editable templates, or a scalable pattern library.',
-      'Every page was stitched together from aging custom components, one-off overrides, and asset dumps that slowed authoring and hurt page performance.',
-      'In 2025 we hired a dedicated AEM engineering team, which made it possible to rebuild the foundation instead of adding another patch.',
+      'The core components from our 2024–2025 rebuild were live, but parts of the shared CSS still carried older behavior, and a few options did not hold up at phone widths.',
+      'The style picker offered choices with nothing behind them: some options had no CSS, and some could not be combined with others.',
+      'Tire size tables took their look from CSS pasted into each page.',
     ],
-    // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'No reusable patterns. No variable system. Authoring and engineering solving the same problems twice.',
+    // ── 02 Gaps & Opportunity ──
+    gapsPunch: 'The style picker lists option names, and the Sass holds the rules. Designers plan pages in Figma, where neither one shows up.',
     gaps: [
-      'Heroes, product grids, and teasers existed in five different flavors. None of them shared structure, tokens, or authoring behavior.',
-      'SEO and accessibility requirements were bolted on per page instead of baked into the component layer.',
-      'No shared Sass variables or authoring defaults. Every new page meant re-deciding spacing, type scale, and responsive behavior.',
-      'Design team had no documentation on when to use which component or how variants were meant to behave.',
+      'An author choosing Copy Width with Left alignment cannot see from the picker that, placed directly on the page, its copy starts at 109px at 1920 instead of lining up with Fixed Width at 312px.',
+      'Breakpoints, the 1296px content max, the 900px copy max, and the page gutter needed to be visible where pages are designed, not only in Sass.',
+      'Nothing in AEM shows whether a style option is committed to the branch, configured only on a local build, or still depends on CSS pasted into the page.',
+      'Each fix needed a record of the behavior it replaced, so the reason for the rule stays with the rule.',
     ],
-    // \u2500\u2500 03 Constraints \u2500\u2500
-    constraintsPunch: 'Live enterprise CMS. SEO-critical surfaces. A new dev team still learning the codebase.',
+    // ── 03 Constraints ──
+    constraintsPunch: 'Live pages, saved styles, and the rules of AEM’s own Style System.',
     constraints: [
-      'Work happened inside a live production AEM instance. Nothing could break authoring for merchandising or content teams mid-flight.',
-      'Every component had to carry SEO and accessibility rules from the start: a lazy-load toggle, H1 limits per surface, an eyebrow slot for keyword headroom without breaking hierarchy, and Akamai scoping so a page loads only its own JSP and CSS.',
-      'I completed AEM authoring certification, worked through Adobe\u2019s WKND tutorial, and deepened my Sass practice so I could contribute code beside the engineering team after the specs were written.',
-      'Fifteen years of DAM debt came with the rebuild: tagging, alt text, file naming, and governance across 100+ images. I led that cleanup. Findable assets and faster authoring mattered as much as the load time.',
+      'Saved styles had to keep rendering. Dozens of pages already use the Thin Hero variant, and the core page template renders saved hero styles only when it maps the Hero Teaser policy.',
+      'AEM’s Style System sets its own rules. Most style groups are single-select, and it drops a class that is a substring of one already applied.',
+      'Template and policy settings ship in the content package, separately from the CSS. A setting made on a local AEM build is not released until it is added to ui.content.',
+      'Containers had to match the gutter of pages built outside AEM, so the content edge holds when a visitor moves between them.',
+      'Most designers and authors work in Figma and the AEM editor, not in Sass. The rules had to read as measurements, pictures, and clicks.',
     ],
-    insightCallout: 'The value was the shared system: variables, variants, and documentation that design, engineering, SEO, and accessibility build against. I wrote the component specs and shipped production Sass beside them.',
+    insightCallout: 'A style option is a decision made for the author in advance. It needs CSS behind it, a defined result at every width, and a picture of what to select. The guide documents all three, the branch fixes what it can, and the open items name the rest.',
 
-    // \u2500\u2500 04 Approach (subsections) \u2500\u2500
+    // ── 04 Approach (subsections) ──
     approachSubsections: [
       {
         key: 'alignment',
-        label: "Extend core components with clear exceptions",
-        description: "I started with existing core components and exposed design choices through selectable style variants. The Hero needed its own heading-level options and an eyebrow integrated into the heading, unlike the full-width teaser. Keeping the other components under familiar core parents made onboarding and documentation clearer. Patrick Steins reviewed my branches, with SEO and accessibility requirements defined early.",
-        images: [],
+        label: 'Measure the branch before drawing the rule',
+        description: 'I measured the components on local AEM builds of the branch, at widths from 375 to 1920 pixels. Those measurements set the frame every page of the guide shares: four breakpoints, a 1296px content max, a 900px copy max, and a gutter of 5% minus the 14px column padding, matching pages outside AEM. A status legend marks every rule as in the branch, configured only on local AEM, or still pasted into the page.',
+        images: [GUIDE.readMe],
       },
       {
         key: 'structure',
-        label: 'A written contract before any component was built',
-        description: 'I wrote up each component: authoring fields, variants, responsive behavior, edge cases, and how it would plug into editable templates. Those write-ups became the contract that design and engineering built against.',
-        images: [
-          {
-            alt: 'Placeholder for omitted internal component write-up artifact',
-            layout: 'full',
-            caption: 'Write-up available on request.',
-            isOverlay: true,
-            overlayText: "This part of the work includes internal tooling and workflows I cannot share publicly. I am happy to walk through it in detail."
-          },
-        ],
+        label: 'Every component page reads in the same order',
+        description: 'Each page covers the rules, the class each style option adds, the steps in the AEM style picker with a screengrab, and wireframes at key widths. The wireframes stay low fidelity on purpose. Gray is content, a gray box with an X is an image, pink is the page gutter, and red is a measurement.',
+        images: [GUIDE.containers, GUIDE.copyWidth],
       },
       {
         key: 'system',
-        label: 'Eight variants, each shipping with its Sass and its docs',
-        description: 'Built 8 core component variants directly (heroes, teasers, lists, featured product blocks), each shipping with its Sass, authoring defaults, and documentation at the same time. For 3 additional API-driven foundation components, I wrote the utility and authoring behavior, defined the interaction pattern, provided SCSS, and oversaw implementation through replication with the dev team.',
-        gridColumns: 2,
-        images: [
-          {
-            src: '/images/work/aem-component-system/FinalComponentBuildout_Hero_safe.jpeg',
-            alt: 'Final hero component buildout showing variants and responsive behavior',
-            layout: 'half',
-            caption: 'Hero core: one component, multiple variants, consistent authoring',
-          },
-          {
-            src: '/images/work/aem-component-system/FinalComponentBuildout_Teasers_safe.jpeg',
-            alt: 'Final teaser component buildout with multiple layout variations',
-            layout: 'half',
-            caption: 'Teasers: built to handle editorial, promotional, and product surfaces from the same base',
-          },
-        ],
+        label: 'Reuse first, then a variant, then a named gap',
+        description: 'A full-bleed color band needed no new component: a Fixed Width container nested inside a Full Width one with a gray background keeps the copy aligned with every other section. Where reuse fell short, a style variant extended an existing component. Copy Width adds a 900px column to the layout container, and the Flex Container lays out existing teaser styles in columns set by the screen width and the number of children. The tire size table was a real gap. I documented it as rendered today and recommended moving its pasted CSS into the branch under the unused Tr Table style.',
+        images: [GUIDE.flex, GUIDE.table],
       },
       {
         key: 'build',
-        label: 'The Sass I wrote is the Sass that shipped',
+        label: 'Fix the edge case in Sass, and write down what it replaced',
         systemMarker: 'Codebase',
-        description: 'This was not a design-only handoff. I wrote the Sass, defined the global variable layer, and shipped component-level code alongside the dev team. That closed the gap between the design and what landed in production. File names in the excerpt below are redacted.',
+        description: 'I wrote the Sass alongside the guide. Each change in the branch is listed beside the behavior it replaced, so a reviewer can see why the rule exists.',
+        bullets: [
+          'Hero CTAs use min(250px, 100%). The old forced 350px minimum overflowed 375px phones once padding was added.',
+          'Phone hero content can shrink (min-width: 0), so long titles and buttons stay inside the screen instead of pushing the page sideways.',
+          'Featured teaser images center beside the copy. With object-position: top, a tall description left empty space under the image.',
+          'The red arrow on text links joins the last word with a no-break space, so it can never wrap onto a line by itself.',
+          'Copy Width alignment classes are named --align-left and --align-center. AEM’s Style System drops a class that is a substring of one already applied, and an earlier name silently removed Copy Width.',
+        ],
         codeBlock: {
           filename: 'components/heroTeaser/scss/styles/_default.scss (sanitized)',
           language: 'scss',
@@ -1306,27 +1312,27 @@ $mobile-max-width: 768px;
     }
   }
 }`,
-          caption: 'From a component-scoped Sass file I authored: variables for responsive ceilings, CSS custom properties as the token layer, and nested component states.',
+          caption: 'From the component-scoped Sass I wrote during the rebuild. Its fixed 250px CTA minimum is the behavior the overhaul changed to min(250px, 100%).',
         },
-        images: [],
+        images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter, GUIDE.buttons],
       },
       {
         key: 'iteration',
-        label: "Rebuild the pages, then make future variants easier",
+        label: 'Show authors the result, and keep the open items in writing',
         systemMarker: 'Documentation',
-        description: "The new components required new core templates, so each page needed a full rebuild. That migration took months. Once those templates were in place, new component variants could be introduced without repeating the page overhaul. Documentation gives designers the fields, usage rules and responsive behavior for each variant.",
-        images: [],
+        description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content.',
+        images: [GUIDE.heroAuthor, GUIDE.heroPreview],
       },
     ],
 
-    // \u2500\u2500 05 Outcome \u2500\u2500
-    outcomeNote: "Load-speed, screen-reader and SEO checks helped us decide to extend the rebuild across the site. The reported 60% load-speed improvement comes from WebPageTest on pages using the new components. Authors now work within shared core templates that can accept new variants, using the same fields and rules engineering supports.",
+    // ── 05 Outcome ──
+    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them.',
     takeaways: [
-  "Most components extend familiar core parents through selectable styles. The Hero's different heading and eyebrow controls remain explicit in its authoring rules.",
-  "Moving pages onto new templates took months. That investment made subsequent component variants easier to roll out.",
-  "I wrote the production Sass alongside engineering, with branch review and shared documentation.",
-  "The DAM cleanup covered tagging, alt text and file names across more than a hundred images."
-],
+      'Measurements come from local AEM builds of the branch, not from the design file.',
+      'Reuse came first: a full-bleed band is two existing containers nested together, not a new component.',
+      'Fixes are documented beside the behavior they replaced, including a class name AEM’s Style System silently dropped.',
+      'The tire size table is recorded as a component gap with a recommendation, rather than another pasted fix.',
+    ],
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
       { label: 'Tires Landing', url: 'https://www.tirerack.com/tires' },
@@ -1335,8 +1341,8 @@ $mobile-max-width: 768px;
     ],
     metrics: [
       { value: '60%', label: 'Faster page loads (WebPageTest)' },
+      { value: '7', label: 'Component pages in the Figma guide' },
       { value: '10+', label: 'Reusable components shipped to production' },
-      { value: '100+', label: 'Images covered by DAM cleanup' },
     ],
   },
 
@@ -2211,23 +2217,18 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     outcome: 'Two junior designers use the templates. Complex pages take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. The October 7 inventory shows the shared components in use across category and support pages. Migration and content QA continue.',
   }),
   'aem-component-system': p => ({
-    title: 'AEM Components', category: 'Professional work', status: 'Live · Shared authoring foundation',
-    deck: 'Eight core-component variants and three API-driven components form a shared library. The live examples below show how the same component supports different page needs.',
-    ownership: 'I wrote component specifications and production Sass alongside AEM engineering. Patrick Steins reviewed my branches; SEO and accessibility leads helped define the contracts.',
-    opening: evidence(p, 'system'),
+    title: 'AEM Components', category: 'Professional work', status: 'Live components · CSS overhaul in branch',
+    deck: 'A Figma guide with seven component pages documents how our AEM core components behave: the rules, the class each style option adds, wireframes measured on local AEM builds, and the steps an author takes in the style picker. The Sass fixes live in the same branch, and the guide marks what is not released yet.',
+    ownership: 'I measured the components, defined the rules and edge cases in Figma, wrote the Sass, and built the author references. The components came from an earlier rebuild, which I prepared for with AEM authoring certification. Patrick Steins reviewed my branches, and SEO and accessibility leads helped define the contracts.',
+    opening: evidence(p, 'alignment'),
     decisions: [
-      { title: 'Give the hero two distinct treatments', body: 'The thin Hero Teaser introduces category and support pages. The default, full-height treatment gives brand stories more room. Both use the Hero contract, with explicit heading-level and eyebrow controls.', images: [
-        liveComponent('hero-suspension', 'Thin Hero Teaser on the Suspension page', 'Thin variant · Suspension. A compact category introduction.'),
-        liveComponent('hero-about', 'Default full-height Hero Teaser on the About page', 'Default variant · About. More space for the brand story.'),
-      ] },
-      { title: 'Let teaser styles change the layout', body: 'Selectable styles turn the Teaser into product cards, icon-led steps, or a full-width story. The live comparisons show those variants in their page context.', images: [
-        liveComponent('teaser-lighting', 'Card and three-column Teaser variants on the Lighting page', 'Card + three-column · Lighting. Image, copy, and a call to action.'),
-        liveComponent('teaser-featured-decision-guide', 'Featured icon-led Teasers on the Tire Decision Guide', 'Featured · Tire Decision Guide. Icons explain the steps.'),
-        liveComponent('teaser-full-width-about', 'Full-width Teaser story band on the About page', 'Full-width · About. A story band with image and copy.'),
-      ] },
-      { title: 'Make the next variant easier to ship', body: 'The move to core templates required months of page rebuilding. Each variant now ships with Sass, authoring defaults, and documentation. I supplied behavior and styles for three additional API-driven components alongside engineering.' },
+      { title: 'Measure the build, then write the rule', body: 'Pixel values come from local AEM builds of the branch, measured at widths from 375 to 1920 pixels. The read-me page sets the frame every component shares, and a status legend marks each rule as in the branch, configured only on local AEM, or still pasted into the page.', image: GUIDE.readMe },
+      { title: 'Reuse first, then a variant, then a named gap', body: 'A full-bleed color band is two existing containers nested together, not a new component. Copy Width and the Flex Container extend the existing layout container. The tire size table was a real gap, so I documented it as rendered today and recommended moving its pasted CSS into the branch.', images: [GUIDE.flex, GUIDE.table] },
+      { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.teaserBeforeAfter] },
+      { title: 'Show authors exactly what to select', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. Neither the Homepage nor the Packages hero had a saved style, so each reference records the recommended one.', images: [GUIDE.heroAuthor] },
     ],
-    outcome: 'The library powers live pages. WebPageTest reported 60% faster loads on pages using the new components. These captures come from the October 7 live inventory; the full study includes the production Sass and component specifications.',
+    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them.',
+    relatedNote: { href: '/notes/aem-meeting-authors-where-they-work/', label: 'Read my note on AEM authoring' },
   }),
   loopstack: p => ({
     title: 'LoopStack', category: 'Personal product', status: 'TestFlight · Personal pattern-review tool',
