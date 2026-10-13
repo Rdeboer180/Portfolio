@@ -14,7 +14,7 @@ import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
 import ProjectOverview from './ProjectOverview';
-import ProjectBrand from './ProjectBrand';
+import { ProjectContext } from './ProjectBrand';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
 import '../styles/styles.scss';
 
@@ -678,10 +678,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
             </div>
           )}
           {project.context && (
-            <>
-              <ProjectBrand project={project} locked={locked} placement="context" />
-              <p className="cs__context">{locked && project.publicContext ? project.publicContext : redactClient(project.context, locked)}</p>
-            </>
+            <ProjectContext project={project} locked={locked} className="cs__context">
+              {locked && project.publicContext ? project.publicContext : redactClient(project.context, locked)}
+            </ProjectContext>
           )}
           {project.summary && (
             <p className="cs__summary">{redactClient(project.summary, locked)}</p>

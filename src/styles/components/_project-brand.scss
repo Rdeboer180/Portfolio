@@ -50,5 +50,38 @@
   }
 }
 
-.project-brand + .project-overview__context,
-.project-brand + .cs__context { margin-top: 0; }
+// Company introduction plate: the mark and its description on one paper
+// surface, so the wordmark sits beside the copy as a label rather than
+// above it as a heading. The paragraph keeps its own class for text rules.
+.project-context {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: $spacing-lg;
+  align-items: start;
+  max-width: 66ch;
+  margin: $spacing-2xl 0 $spacing-xl;
+  padding: $spacing-lg $spacing-xl;
+  background: $color-neutral-lightest;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+
+  .project-brand {
+    min-height: 0;
+    margin: 2px 0 0;
+    font-size: $font-size-body;
+    &::after { content: none; }
+    img { height: 20px; width: auto; }
+    &:not(.project-brand--wordmark) img { width: 24px; height: 24px; }
+  }
+
+  .project-overview__context,
+  .cs__context { margin: 0; font-size: $font-size-body-sm + 1px; line-height: 1.55; }
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-lg;
+  }
+}
+
+.project-context + .project-overview__deck { margin-top: 0; }

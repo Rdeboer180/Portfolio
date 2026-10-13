@@ -8,7 +8,7 @@ import { Project, ProjectImage, ProjectOverview as ProjectOverviewData } from '.
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import { PlayDraftStoreLink } from './PlayDraftRelease';
 import '../styles/components/_project-overview.scss';
-import ProjectBrand from './ProjectBrand';
+import { ProjectContext } from './ProjectBrand';
 
 /** Keep related work in the sentence, with the same route-backed drawer navigation. */
 const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
@@ -81,10 +81,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
             <figcaption>{reel.caption}</figcaption>
           </figure>}
           {!project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
-          {project.context && <>
-            <ProjectBrand project={project} placement="context" />
-            <p className="project-overview__context">{project.context}</p>
-          </>}
+          {project.context && <ProjectContext project={project} className="project-overview__context">{project.context}</ProjectContext>}
           <p className="project-overview__deck">{overview.deck}</p>
           <p className="project-overview__ownership">{overview.ownership}</p>
           {overview.evidence?.length ? (
