@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
+const { tmpdir } = require('node:os');
 
 const build = path.resolve('build');
 const tag = '<script src="https://inflight.co/widget.js" data-org="aius9qpt" data-path="/dive" async></script>';
@@ -74,13 +75,13 @@ const server = http.createServer((req, res) => {
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px horizontal overflow`);
       };
       await checkLinks();
-      await page.screenshot({ path: `/private/tmp/dive-home-${width}.png` });
+      await page.screenshot({ path: path.join(tmpdir(), `dive-home-${width}.png`) });
       await page.locator('a[href="/dive/work/playdraft"]').click();
       await page.locator('.project-overview h1').waitFor();
       assert.equal(new URL(page.url()).pathname, '/dive/work/playdraft');
       assert.equal(await page.locator('dialog[open]').count(), 0, 'Review reading uses the reusable full-page view');
       await checkLinks();
-      await page.screenshot({ path: `/private/tmp/dive-case-${width}.png` });
+      await page.screenshot({ path: path.join(tmpdir(), `dive-case-${width}.png`) });
       await page.goBack();
       await page.locator('.hero h1').waitFor();
       assert.equal(new URL(page.url()).pathname, '/dive/');
