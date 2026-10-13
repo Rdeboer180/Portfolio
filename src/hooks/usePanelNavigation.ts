@@ -5,11 +5,12 @@ import { useUnlock } from '../context/UnlockContext';
 import { isPanelRoute } from '../utils/panelRoutes';
 
 /** Preserve the source page for every internal reading link, including prose links. */
-export function usePanelNavigation() {
+export function usePanelNavigation(enabled = true) {
   const location = useLocation();
   const navigate = useNavigate();
   const { unlocked, skipAutomaticPrompt, openPrompt } = useUnlock();
   useEffect(() => {
+    if (!enabled) return;
     const open = (event: MouseEvent) => {
       const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
       if (!anchor || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || anchor.target || anchor.hasAttribute('download')) return;
@@ -47,5 +48,5 @@ export function usePanelNavigation() {
     };
     document.addEventListener('click', open, true);
     return () => document.removeEventListener('click', open, true);
-  }, [location, navigate, unlocked, skipAutomaticPrompt, openPrompt]);
+  }, [enabled, location, navigate, unlocked, skipAutomaticPrompt, openPrompt]);
 }

@@ -2,6 +2,7 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { useNavigate, NavigateOptions } from 'react-router-dom';
+import { isReviewPath } from '../utils/reviewRoutes';
 import { isUnlocked, persistUnlock, skipsPasswordPrompt, persistSkipPasswordPrompt } from '../utils/unlock';
 
 interface UnlockValue {
@@ -56,7 +57,7 @@ const NAVIGATE_AFTER_MS = 1150;
  * bar nor modal and hydration has nothing to correct.
  */
 export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [skipAutomaticPrompt, setSkipAutomaticPrompt] = useState(false);
+  const [skipAutomaticPrompt, setSkipAutomaticPrompt] = useState(isReviewPath);
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
@@ -67,7 +68,7 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     if (isUnlocked()) setUnlocked(true);
-    setSkipAutomaticPrompt(skipsPasswordPrompt());
+    setSkipAutomaticPrompt(isReviewPath() || skipsPasswordPrompt());
     setReady(true);
   }, []);
 

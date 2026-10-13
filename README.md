@@ -67,3 +67,21 @@ picks it up automatically — route, prerendered page, and sitemap entry. Set
 `npm run build` produces a fully static `build/`. Serve it from any static host;
 the only server requirement is an SPA fallback to `index.html` for routes that
 were not prerendered.
+
+The usual publish workflow is a push to `main`: `.github/workflows/deploy.yml`
+builds, checks the static route files, deploys with rsync, and purges the cache.
+The `npm run deploy` command is a legacy GitHub Pages shortcut, not this host's workflow.
+
+### Dive Club review
+
+`/dive/` reuses the portfolio through a React Router basename. Linked case studies,
+notes, and other pages stay under `/dive`; assets and external links are shared.
+Review case studies use the existing full-page view so the feedback widget remains
+accessible. Browsing needs no password; confidential media retains its existing locks.
+The build writes the exact scoped Inflight script into each review HTML head,
+adds `noindex`, and excludes review pages from the sitemap. There is no public link
+to the review and no widget script on ordinary pages.
+
+Run `node scripts/verify-dive.cjs` after `npm run build` to check source HTML,
+navigation, history, mobile overflow, and widget isolation. After publishing, open
+`https://www.rdeboerdesigns.com/dive/` to activate and verify the live widget.

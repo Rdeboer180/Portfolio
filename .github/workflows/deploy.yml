@@ -44,7 +44,7 @@ jobs:
       - name: Verify prerender produced route pages
         run: |
           missing=0
-          for route in work/wheelrack work/tire-categories about notes; do
+          for route in work/wheelrack work/tire-categories about notes dive dive/work/playdraft; do
             if [ ! -f "build/$route/index.html" ]; then
               echo "::error::prerender missing build/$route/index.html"
               missing=1
@@ -57,6 +57,9 @@ jobs:
             missing=1
           fi
           exit $missing
+
+      - name: Verify Dive Club review isolation and navigation
+        run: node scripts/verify-dive.cjs
 
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass

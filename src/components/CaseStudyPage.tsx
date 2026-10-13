@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -1032,7 +1033,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                   <span className="cs__live-links-label">{project.outcomeLiveLinksLabel ?? 'Select pages are live'}</span>
                   <div className="cs__live-links-list">
                     {project.outcomeLiveLinks.map((link, i) => (
-                      <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="cs__live-link">
+                      <a key={i} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer" className="cs__live-link">
                         {link.label} &rarr;
                         <span className="sr-only"> (opens in a new tab)</span>
                       </a>
@@ -1057,7 +1058,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                   <div className="cs__install-copy">
                     <span className="cs__install-label">{project.outcomeInstall.label}</span>
                     <a
-                      href={project.outcomeInstall.url}
+                      href={reviewHref(project.outcomeInstall.url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="cs__install-link"

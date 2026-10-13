@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useParams, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import PageShell from './components/PageShell';
 import { isPanelRoute } from './utils/panelRoutes';
+import { isReviewPath, REVIEW_BASE } from './utils/reviewRoutes';
 import { usePanelNavigation } from './hooks/usePanelNavigation';
 import ProjectPanel from './components/ProjectPanel';
 import NotFoundPage from './components/NotFoundPage';
@@ -58,7 +59,7 @@ function RouteEffects() {
   useEffect(() => {
     const returningTo = previousPanelBackground.current;
     const restoreScroll = previousPanelHasReturnScroll.current;
-    const panelBackground = isPanelRoute(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
+    const panelBackground = !isReviewPath() && isPanelRoute(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
     previousPanelBackground.current = panelBackground;
     previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
@@ -198,12 +199,12 @@ function UnlockChrome() {
 
 function AppRoutes() {
   const location = useLocation();
-  usePanelNavigation();
+  usePanelNavigation(!isReviewPath());
   const [readingReady, setReadingReady] = useState(false);
   useEffect(() => {
     if (!(window as Window & { __PORTFOLIO_PRERENDER__?: boolean }).__PORTFOLIO_PRERENDER__) setReadingReady(true);
   }, []);
-  const background = isPanelRoute(location.pathname) ? ((readingReady && location.state?.backgroundLocation) || { pathname: location.pathname.startsWith('/notes/') ? '/notes' : '/', search: '', hash: '', state: null, key: 'reading-background' }) : undefined;
+  const background = !isReviewPath() && isPanelRoute(location.pathname) ? ((readingReady && location.state?.backgroundLocation) || { pathname: location.pathname.startsWith('/notes/') ? '/notes' : '/', search: '', hash: '', state: null, key: 'reading-background' }) : undefined;
   return (
     <>
       <RouteEffects />
@@ -256,7 +257,7 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={isReviewPath() ? REVIEW_BASE : undefined}>
       <UnlockProvider>
         <AppRoutes />
       </UnlockProvider>

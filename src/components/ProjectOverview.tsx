@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
@@ -65,7 +66,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
         </nav>
         {project.slug === 'playdraft' && <PlayDraftStoreLink>Get PlayDraft for iPhone</PlayDraftStoreLink>}
         {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, 2).map(link =>
-          <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{link.label}<span className="sr-only"> (opens in a new tab)</span> ↗</a>
+          <a key={link.url} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer">{link.label}<span className="sr-only"> (opens in a new tab)</span> ↗</a>
         )}
         <div className="project-overview__tools">
           <p className="project-overview__eyebrow">Tools used</p>

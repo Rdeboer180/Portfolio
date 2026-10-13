@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 
 interface CaseStudyMetric {
@@ -72,12 +73,12 @@ const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
       {(ctaPrimaryLabel || ctaSecondaryLabel) && (
         <div className="case-study-card__cta">
           {ctaPrimaryLabel && (
-            <a href={ctaPrimaryHref ?? '#'} className="btn btn--primary">
+            <a href={reviewHref(ctaPrimaryHref ?? '#')} className="btn btn--primary">
               {ctaPrimaryLabel}
             </a>
           )}
           {ctaSecondaryLabel && (
-            <a href={ctaSecondaryHref ?? '#'} className="btn btn--secondary">
+            <a href={reviewHref(ctaSecondaryHref ?? '#')} className="btn btn--secondary">
               {ctaSecondaryLabel}
             </a>
           )}

@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
@@ -74,7 +75,7 @@ const ResumePage: React.FC = () => {
             <h1 id="resume-name" className="resume-page__name">Ryan DeBoer</h1>
             <p className="resume-page__role">{CONTACT.title}</p>
             <div className="resume-page__contact">
-              <span>Portfolio: <a href={CONTACT.portfolioUrl}>{CONTACT.portfolioUrl.replace(/^https?:\/\//, '')}</a> | Pass: #showWork</span>
+              <span>Portfolio: <a href={reviewHref(CONTACT.portfolioUrl)}>{CONTACT.portfolioUrl.replace(/^https?:\/\//, '')}</a> | Pass: #showWork</span>
               <span>{CONTACT.city} · US Remote · Eastern Time · <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></span>
               <a href={CONTACT.linkedinUrl}>{CONTACT.linkedinUrl.replace(/^https?:\/\//, '')}</a>
             </div>

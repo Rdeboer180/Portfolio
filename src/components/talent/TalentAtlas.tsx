@@ -1,3 +1,4 @@
+import { reviewHref } from '../../utils/reviewRoutes';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ATLAS_RANK_LABELS, ATLAS_SKILLS, ATLAS_SKILL_BY_ID, atlasPoints, evaluateAtlas } from '../../data/talent/atlas';
@@ -98,7 +99,7 @@ const TalentAtlas: React.FC<{ own?: boolean; baseRoute?: string }> = ({ own = fa
     inspectorRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
     inspectorRef.current?.focus({ preventScroll: true });
   };
-  const shareUrl = () => { const url = new URL(`${baseRoute}/build/`, window.location.origin); url.hash = new URLSearchParams({ s: encodeAtlas(build) }).toString(); return url.toString(); };
+  const shareUrl = () => { const url = new URL(reviewHref(`${baseRoute}/build/`), window.location.origin); url.hash = new URLSearchParams({ s: encodeAtlas(build) }).toString(); return url.toString(); };
   const copyLink = async () => { try { await navigator.clipboard.writeText(shareUrl()); setCopied(true); } catch { setAnnouncement('Copy was unavailable. Copy your build from the page address.'); } };
   const exportCard = async () => {
     try {

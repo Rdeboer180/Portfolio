@@ -12,6 +12,16 @@ import { join, extname, dirname } from 'node:path';
 const BUILD_DIR = join(process.cwd(), 'build');
 const PORT = 45678;
 const ORIGIN = `http://localhost:${PORT}`;
+const REVIEW_BASE = '/dive';
+const INFLIGHT_TAG = '<script src="https://inflight.co/widget.js" data-org="aius9qpt" data-path="/dive" async></script>';
+const isReviewRoute = route => route === REVIEW_BASE || route.startsWith(`${REVIEW_BASE}/`);
+
+function reviewHead(html) {
+  // Written into the published source after rendering, never mounted by React.
+  // Normalize robots so review pages have one noindex tag and one exact loader.
+  return html.replace(/<meta\b[^>]*name=["']robots["'][^>]*>/gi, '')
+    .replace('</head>', `<meta name="robots" content="noindex">${INFLIGHT_TAG}</head>`);
+}
 
 // Unlinked routes the crawler won't reach on its own but we still want covered.
 // (homepage_template is intentionally excluded — it stays out of the index.)
@@ -95,14 +105,26 @@ function isInternalRoute(href) {
   if (path.startsWith('/homepage_template')) return false;
   // Standalone static apps hosted under public/ — they ship their own
   // index.html; prerendering would overwrite it with the portfolio shell.
-  if (path.startsWith('/loopstack-demo')) return false;
+  if (path.startsWith('/loopstack-demo') || path.startsWith('/dive/loopstack-demo')) return false;
   return true;
 }
 
 async function main() {
   // Preserve the un-prerendered shell so the SPA fallback always serves a clean root.
   const fs = await import('node:fs');
+  // A newly generated review may never replace a separately maintained route.
+  if (existsSync(join(BUILD_DIR, 'dive'))) throw new Error('Refusing to overwrite an existing /dive route in build/');
   fs.copyFileSync(join(BUILD_DIR, 'index.html'), join(BUILD_DIR, '__shell.html'));
+
+  // The portfolio links to a real standalone demo and an HTML writing artifact.
+  // Reuse their original HTML and shared assets, under the review prefix too.
+  for (const file of ['loopstack-demo/index.html', 'artifacts/eight-wrong-first-drafts.html']) {
+    const source = join(BUILD_DIR, file);
+    if (!existsSync(source)) continue;
+    const target = join(BUILD_DIR, 'dive', file);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, reviewHead(readFileSync(source, 'utf8')));
+  }
 
   const server = await startServer();
   const browser = await chromium.launch();
@@ -111,6 +133,8 @@ async function main() {
   // data-intro-stage="sketch" — which is what a JS-disabled visitor, and every
   // crawler, was being served.
   const context = await browser.newContext({ reducedMotion: 'reduce' });
+  // Third-party feedback must not be recorded or serialized into a build.
+  await context.route(/^https:\/\/(?:[^/]+\.)?inflight\.co\//, request => request.abort());
   // Prerender protected case studies as "dismissed" so the static HTML shows the
   // clean content (protected images stay as locked overlays, never revealed) with
   // no password modal on top. Real first-time visitors still get the modal after
@@ -123,7 +147,7 @@ async function main() {
   const page = await context.newPage();
 
   const seen = new Set();
-  const queue = ['/', ...EXTRA_ROUTES, ...contentRoutes()];
+  const queue = ['/', ...EXTRA_ROUTES, ...contentRoutes(), REVIEW_BASE];
 
   while (queue.length) {
     const route = queue.shift();
@@ -244,6 +268,7 @@ async function main() {
     if (NOINDEX_ROUTES.has(route)) {
       html = html.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>');
     }
+    if (isReviewRoute(route)) html = reviewHead(html);
     const outPath = route === '/' ? join(BUILD_DIR, 'index.html') : join(BUILD_DIR, route, 'index.html');
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, html);
@@ -261,7 +286,7 @@ async function main() {
   const ORIGIN_URL = 'https://www.rdeboerdesigns.com';
   const today = new Date().toISOString().slice(0, 10);
   const urls = [...seen]
-    .filter((r) => !NOINDEX_ROUTES.has(r))
+    .filter((r) => !NOINDEX_ROUTES.has(r) && !isReviewRoute(r))
     .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)))
     .map((r) => {
       // Trailing slash = the URL nginx serves directly over https (slashless
@@ -273,7 +298,7 @@ async function main() {
     .join('\n');
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
   writeFileSync(join(BUILD_DIR, 'sitemap.xml'), sitemap);
-  console.log(`✓ wrote sitemap.xml (${[...seen].filter((r) => !NOINDEX_ROUTES.has(r)).length} urls)`);
+  console.log(`✓ wrote sitemap.xml (${[...seen].filter((r) => !NOINDEX_ROUTES.has(r) && !isReviewRoute(r)).length} urls)`);
 }
 
 main().catch((err) => {

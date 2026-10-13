@@ -67,3 +67,12 @@ test('closing nested case-study detail does not remove the parent page schema', 
   view.rerender(<Metadata meta={home} />);
   expect(schema().map(item => item['@type'])).toEqual(['Person', 'WebPage']);
 });
+
+test('review metadata scopes canonical and social URLs and noindexes the page', () => {
+  window.history.replaceState(null, '', '/dive/');
+  render(<Metadata meta={home} />);
+  expect(document.title).toBe(home.title);
+  expect(document.head.querySelector('link[rel="canonical"]')).toHaveAttribute('href', `${origin}/dive/`);
+  expect(document.head.querySelector('meta[property="og:url"]')).toHaveAttribute('content', `${origin}/dive/`);
+  expect(document.head.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+});

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { isReviewPath, reviewHref } from '../utils/reviewRoutes';
 import { PERSON_ID, PERSON_JSON_LD } from '../data/seo';
 
 // Per-route document metadata. Each route calls this with its own title,
@@ -45,6 +46,10 @@ function upsertLink(rel: string, href: string) {
 }
 
 export function usePageMeta(meta: PageMeta, refreshKey?: string, enabled = true): void {
+  const review = isReviewPath();
+  if (review && meta.canonical) {
+    meta = { ...meta, canonical: new URL(reviewHref(meta.canonical), meta.canonical).href };
+  }
   // Reading panels leave their background route mounted. Only the route in the
   // address bar may own metadata, including when a background re-renders.
   const canonicalPath = meta.canonical ? new URL(meta.canonical).pathname.replace(/\/+$/, '') : null;
@@ -61,6 +66,7 @@ export function usePageMeta(meta: PageMeta, refreshKey?: string, enabled = true)
   useEffect(() => {
     if (!active) return;
     if (meta.title) document.title = meta.title;
+    if (review) upsertMeta('name', 'robots', 'noindex');
 
     const ogTitle = meta.ogTitle ?? meta.title;
     upsertMeta('property', 'og:title', ogTitle);
@@ -134,5 +140,6 @@ export function usePageMeta(meta: PageMeta, refreshKey?: string, enabled = true)
     jsonLdStr,
     refreshKey,
     active,
+    review,
   ]);
 }

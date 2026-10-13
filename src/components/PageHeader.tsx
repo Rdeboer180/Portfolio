@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 
 interface PageHeaderProps {
@@ -10,7 +11,7 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, backLink, className }) => (
   <header className={`page-header ${className ?? ''}`}>
     {backLink && (
-      <a href={backLink.href} className="page-header__back">
+      <a href={reviewHref(backLink.href)} className="page-header__back">
         &larr; {backLink.label}
       </a>
     )}

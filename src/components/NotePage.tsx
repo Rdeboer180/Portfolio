@@ -1,3 +1,4 @@
+import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
@@ -72,7 +73,7 @@ const NotePage: React.FC = () => {
         <h1 className="notes__title">{note.title}</h1>
         <p className="notes__dek">{note.dek}</p>
         {note.artifact && (
-          <a href={note.artifact.href} className="notes__artifact" target="_blank" rel="noopener noreferrer">
+          <a href={reviewHref(note.artifact.href)} className="notes__artifact" target="_blank" rel="noopener noreferrer">
             {note.artifact.label}
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
