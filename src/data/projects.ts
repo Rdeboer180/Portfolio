@@ -1696,15 +1696,15 @@ Frame every output as:
           title: "Simplify the mechanics, keep the game",
           body: "My first simplification pass went too far. The app started to feel like a list. I brought back the textured shields and character avatars, and gave Home a clearer job. It leads with creation when you are idle and your next pick when it is your turn.",
           images: [
-            { src: "/images/work/playdraft/v2/playdraft-v2-home-character-idle.png", alt: "Home welcomes a player with The Sleeper character avatar and cutout, a Create a draft action and textured pack tiles.", layout: 'full', caption: "Idle Home leads with creation. Native component preview on iPhone 17, using The Sleeper candidate cutout.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
-            { src: "/images/work/playdraft/v2/playdraft-v2-home-character-turn.png", alt: "Home during a live turn with a Recess Games card, The Sleeper avatar and cutout, a YOU badge and Make your pick.", layout: 'full', caption: "Your turn takes priority and the creation card gets smaller. Native component preview with sample players and a candidate cutout.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/progression/screenshots/01-home.png", alt: "Home asks What are we drafting? beside a large initials avatar, with a Create a draft card and a recently finished Candy draft.", layout: 'full', caption: "Idle Home leads with creation. Staging build on an iPhone 17 simulator, signed in as a test account.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/progression/loops/room-fills-countdown.mp4", isVideo: true, videoPoster: "/images/work/playdraft/progression/loops/room-fills-countdown-poster.jpg", alt: "The host's waiting room fills with a third player, the PLAY, DRAFT, WIN intro plays, and the Everyone is here countdown starts with Start draft now.", layout: 'full', caption: "When the last seat fills, PLAY, DRAFT, WIN plays before the countdown. The host's view in a three-account staging test." },
           ],
         },
         {
           title: "Save an idea before hosting a draft",
           body: "Making a custom pack used to lead straight into a draft room. I separated writing from hosting so you can save an unfinished idea and come back later. Custom now has its own tab beside the pre-built Packs catalog.",
           images: [
-            { src: "/images/work/playdraft/v2/playdraft-v2-packs.png", alt: "Packs catalog with search, All packs, Recent and Favorites filters, and textured Candy and Fast Food shield tiles.", layout: 'full', caption: "Pack shields, search and favorites in the iPhone simulator. The development strip identifies the sample data.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/progression/screenshots/02-packs.png", alt: "Packs catalog with search, All packs, Recent and Favorites filters, and textured Candy, Fast Food, GOAT Athletes and Horror Movies shields.", layout: 'full', caption: "Pack shields, search and favorites. Staging build on an iPhone 17 simulator.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
             { src: "/images/work/playdraft/v2/playdraft-v2-custom-saved.png", alt: "Custom library confirms a Road trip snacks pack saved with zero choices and shows what is needed before hosting.", layout: 'full', caption: "Save a pack before adding its choices or starting a draft. This simulator view uses sample data; account saving was tested separately.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
           ],
         },
@@ -1712,8 +1712,8 @@ Frame every output as:
           title: "Show the choices before committing",
           body: "Setup lets the host choose how many people play, how many picks they get and how long each turn lasts. Join shows open seats and the ticket cost before asking you to commit. If you already have a seat, you can return without spending another ticket.",
           images: [
-            { src: "/images/work/playdraft/v2/playdraft-v2-setup.png", alt: "New draft setup for Recess Games with a name field, four players, five picks and two-minute or eight-hour clock choices.", layout: 'full', caption: "Players, picks and turn length in one setup. iPhone simulator at Large text size.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
-            { src: "/images/work/playdraft/v2/playdraft-v2-join.png", alt: "Join a draft screen showing Weekend picks, two open seats and a one Draft Ticket cost before the Join draft button.", layout: 'full', caption: "Open seats and the current ticket cost on iPhone SE. Simulator capture with sample data.", crop: { x: 0, y: 0, width: 750, height: 1334, sourceWidth: 750, sourceHeight: 1334 } },
+            { src: "/images/work/playdraft/progression/screenshots/04-new-draft-setup.png", alt: "New draft setup for Candy with an optional name, four players, five picks each and two-minute or eight-hour clock choices.", layout: 'full', caption: "Players, picks and turn length in one setup. Staging build on an iPhone 17 simulator.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+            { src: "/images/work/playdraft/progression/screenshots/06-join-invite.png", alt: "A friend's invite to The Candy Showdown shows two of three seats open, the one-ticket hold and the date it comes back, then Join draft · 1 ticket.", layout: 'full', caption: "The invite shows open seats and the ticket hold before you commit. A second test account on an iPhone 17e simulator.", crop: { x: 0, y: 0, width: 1170, height: 2532, sourceWidth: 1170, sourceHeight: 2532 } },
           ],
         },
         {
@@ -1722,7 +1722,7 @@ Frame every output as:
           image: { src: "/images/work/playdraft/v2/playdraft-v2-identity-system.png", alt: "Native v2 identity specimen showing initials, The Sleeper and Bracket avatars at 24, 32, 40, 56 and 96 points, plus player nameplates and a YOU badge.", layout: 'full', caption: "Initials and character avatars at five sizes, followed by player nameplates. Captured from the native component preview with sample players.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
         },
       ],
-      outcome: "The original app is on iOS. The rebuilt screens run on iPhone, and saving packs to an account has passed its first checks. V2 is still in development. Multiplayer and signed-in testing remain, along with the shared draft and ticket systems. I have no usage results for this version yet.",
+      outcome: "The original app is on iOS. The rebuilt screens run on iPhone, and saving packs to an account has passed its first checks. V2 is still in development. On a staging server, three test accounts on three iPhone simulators have created, joined and finished drafts through the shared draft and ticket system. Production release and real-device testing are next. I have no usage results for this version yet.",
     },
     thesis: "Let friends draft the things they already argue about.",
     annotations: {
@@ -1751,8 +1751,8 @@ Frame every output as:
       src: '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4',
       poster: '/images/work/playdraft/v2/playdraft-v2-walkthrough-poster.jpg',
       captions: '/images/work/playdraft/v2/playdraft-v2-walkthrough.vtt',
-      alt: 'PlayDraft v2 preview: browsing packs, saving a custom topic, choosing draft settings, reviewing an invite, picking a movie on the grid and sharing a sample lineup',
-      caption: "V2 in development. Native preview recordings show pack browsing, Custom saving, draft settings, picks and recap sharing. These clips use local sample data; live invitation and multiplayer checks remain.",
+      alt: 'PlayDraft v2 tutorial: picking a pack, writing a custom topic, setting the draft rules, inviting friends with one link, finding and making a pick on the clock, then sharing the recap as an image or as text',
+      caption: "The v2 tutorial, in development. Native recordings show packs, Custom, draft settings, an invite, a pick on the clock and sharing the recap as an image or text. The draft room is the earlier prototype and the lineups use sample data.",
     },
     timeToLive: "About twelve weeks of nights and weekends took PlayDraft from the first logo sketch to TestFlight. The released app uses coins. Cash purchases remain disabled pending legal review.",
 
@@ -1900,11 +1900,22 @@ export const packs = {
         key: 'iteration',
         label: "I changed how a draft ends",
         description: "The original plan ended with community voting and a verdict the next day. I worried people would leave before seeing the result. In June, I replaced voting with the DraftLab confidence pool, which ranked items through solo mini-games and scored completed drafts immediately. By October, I thought I had added too much around the draft itself. V2 removes scoring and XP, leaving the group with their lineups to compare.",
+        images: [
+          {
+            src: '/images/work/playdraft/progression/loops/recap-and-pick-order.mp4',
+            isVideo: true,
+            videoPoster: '/images/work/playdraft/progression/loops/recap-and-pick-order-poster.jpg',
+            alt: 'The last pick lands, then Draft complete shows each lineup and the actual pick order, with no winner or score.',
+            layout: 'full',
+            maxWidth: 360,
+            caption: "The last pick lands, then the recap: every lineup and the real pick order, with no score. The host's view in the staging test.",
+          },
+        ],
       },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: "The original iPhone app shipped. The October rebuild has a smaller navigation, Home states for idle and active players, reusable setup and Custom packs saved to an account. The screenshots use local sample data; separate service tests cover saving, conflicting edits and retries. Multiplayer and signed-in checks are still open, and the shared draft and ticket systems are unfinished. I have no adoption or retention results for v2.",
+    outcomeNote: "The original iPhone app shipped. The October rebuild has a smaller navigation, Home states for idle and active players, reusable setup and Custom packs saved to an account. The newest screenshots come from a three-account test on a staging server; the rest use local sample data, and separate service tests cover saving, conflicting edits and retries. The shared draft and ticket systems now run end to end on staging; production release and real-device checks are still open. I have no adoption or retention results for v2.",
     takeaways: [
       "I retired next-day voting in June because I wanted the group to finish in one sitting. I expected that shorter loop to make another round more appealing.",
       "Requiring every token to appear in the in-app gallery gave me a concrete way to review additions from agents.",

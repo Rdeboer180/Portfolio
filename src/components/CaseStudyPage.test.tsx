@@ -72,7 +72,14 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
   expect(video).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-walkthrough.mp4');
   expect(video?.querySelector('track')).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-walkthrough.vtt');
   expect(screen.getByText('Simplify the mechanics, keep the game')).toBeInTheDocument();
-  expect(container.querySelectorAll('img[src^="/images/work/playdraft/v2/"]')).toHaveLength(7);
+  // Decisions show the three-account staging captures; Custom and the identity
+  // specimen keep their native v2 captures.
+  expect(container.querySelectorAll('img[src^="/images/work/playdraft/v2/"]')).toHaveLength(2);
+  expect(container.querySelectorAll('img[src^="/images/work/playdraft/progression/screenshots/"]')).toHaveLength(4);
+  const loop = container.querySelector('#project-decisions video');
+  expect(loop).toHaveAttribute('src', '/images/work/playdraft/progression/loops/room-fills-countdown.mp4');
+  expect(loop).toHaveAttribute('poster', '/images/work/playdraft/progression/loops/room-fills-countdown-poster.jpg');
+  expect(loop).not.toHaveAttribute('autoplay');
   expect(screen.getByRole('img', { name: /Native v2 identity specimen showing initials/ })).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-identity-system.png');
   expect(screen.getByText('Original release on iOS · v2 in development')).toBeInTheDocument();
   expect(container.querySelector('.cs--detail-only')).toBeNull();

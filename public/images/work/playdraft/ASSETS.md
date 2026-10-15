@@ -1,15 +1,30 @@
 # PlayDraft case-study asset manifest
 
-Page: `/work/playdraft/` · Data: `src/data/projects.ts` (slug `playdraft`) · Updated 2026-09-17
+Page: `/work/playdraft/` · Data: `src/data/projects.ts` (slug `playdraft`) · Updated 2026-10-15
 
 All files here are **web-ready copies**. Source originals live untouched in the
 PlayDraft repo (`~/Ryan's Folder/Claude/PlayDraft`) at the paths noted below.
+
+## Current case-study media (2026-10-15)
+
+| File | Source original | Notes |
+|---|---|---|
+| `v2/playdraft-v2-walkthrough.mp4` | `demo-reel/v2-review/playdraft-v2-tutorial-act-v5.mp4` | **Case-study hero and homepage card loop.** The newest horizontal intro cut (v5, 1920×1080, 33 s), byte-identical to the review master. The room uses the earlier prototype and the lineups are sample data, as the caption says. |
+| `v2/playdraft-v2-walkthrough.vtt` | `demo-reel/v2-review/act-captions.vtt` | v5 captions, including the "Send the full image, or every pick as text" cue. |
+| `v2/playdraft-v2-walkthrough-poster.jpg` | v5 at 1.4 s | The "Pick a pack" chapter frame, the same moment as the earlier poster. |
+| `progression/screenshots/01-home.png`, `02-packs.png`, `04-new-draft-setup.png`, `06-join-invite.png` | Simulator screenshots, 2026-10-14 | Decisions 01–03. Three-account staging test (Tester accounts, staging server, iPhone 17 / 17e simulators). |
+| `progression/loops/room-fills-countdown.mp4` (+ `-poster.jpg`) | Same cut as `progression/gifs/06-room-fills-countdown.gif` | Decision 01 loop: last seat fills, PLAY · DRAFT · WIN, countdown. Silent H.264 via `LoopVideo`, so reduced motion shows the poster. |
+| `progression/loops/recap-and-pick-order.mp4` (+ `-poster.jpg`) | Same cut as `progression/gifs/10-recap-and-pick-order.gif` | Behind the work, "I changed how a draft ends": last pick, recap, pick order. |
+
+The rest of `progression/` (all ten screenshots, ten GIFs and its README) is the
+portfolio asset set from the same test; only the files above are on the page.
+Custom saving and the identity specimen keep their `v2/` native-preview captures.
 
 ## Video
 
 | File | Source original | Notes |
 |---|---|---|
-| `playdraft-howtoplay-reel.mp4` | PlayDraft demo reel | 89-second narrated product reel, now the case-study hero. Click to play with sound and captions; not repeated in The Problem. |
+| `playdraft-howtoplay-reel.mp4` | PlayDraft demo reel | 89-second narrated product reel from the original release. No longer the hero (superseded by the v2 walkthrough above); kept on disk. |
 | `playdraft-howtoplay-poster.jpg` | PlayDraft demo reel poster | Poster frame shown before the hero reel plays. |
 | `playdraft-draft-flow-demo.mp4` / `playdraft-voting-flow-demo.mp4` | earlier prototype clips | Legacy May-era clips. Retired from the page (superseded by the reel) but kept on disk. |
 
