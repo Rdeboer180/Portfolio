@@ -189,13 +189,30 @@ async function main() {
       clone.querySelectorAll('.ink-ground').forEach(el => el.removeAttribute('data-ink-settled'));
       // Reduced-motion prerendering settles these reveals immediately. Restore
       // their initial React state so hydration can trigger the in-view motion.
-      clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline')
+      //
+      // Every useReveal on the homepage has to be listed, because React 19
+      // does not patch attributes during hydration: a class the static file
+      // holds stays on the element, and a reveal serialized as settled never
+      // plays. The last three sections were missing. While the homepage threw
+      // #418 on every load, the client-side redraw started each reveal from
+      // scratch and hid that; once hydration held, the work-section arrows,
+      // Systems in Practice, and the capability rows arrived already
+      // revealed. They are scoped by section, not by class: DesignSystem
+      // renders `.sip__stage.is-visible` as a fixed demo, and /notes has
+      // ScrollReveals of its own whose static state it keeps.
+      clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline, #systems .sip__intro, #systems .sip__stage, #systems .sip__loop, #mastery .reveal-fade')
         .forEach((el) => el.classList.remove('is-visible'));
+      clone.querySelector('#projects.case-playground')?.classList.remove('case-playground--revealed');
       // `.case-playground__unlock` is the same thing wearing its current
       // clothes: the standing unlock offer moved out of the site chrome and
       // into the work section, but it is still gated on `lockedReady`, still
       // absent from the client's first render, and so still has to be absent
       // from the static file.
+      //
+      // The per-card lock line (`.case-playground__lock`) is the exception,
+      // and stays. It is content rather than an offer, so the static file
+      // keeps it and CaseStudyPlayground renders it until mount to match.
+      // Stripping it would hide "Password protected" until hydration.
       clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay, .case-playground__unlock')
         .forEach((el) => el.remove());
 

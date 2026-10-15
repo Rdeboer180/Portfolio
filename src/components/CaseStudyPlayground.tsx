@@ -336,6 +336,24 @@ const CaseStudyPlayground: React.FC = () => {
   useEffect(() => { setMounted(true); }, []);
   const posterOnly = !mounted || reduceMotion;
 
+  /**
+   * The lock line needs the same gate, facing the other way. It waits on
+   * `lockedReady` so a returning visitor whose stored unlock hasn't been read
+   * yet never sees "Password protected" appear and then vanish. The prerender
+   * has no stored unlock, though, so by the time it serializes, `lockedReady`
+   * is true and every static file carries the line on each protected card.
+   * The client's first render can't know that yet, so it left the line out,
+   * and React met a <p> it never rendered: error #418 on the homepage, /dive/
+   * and every /work/ drawer, on every load and in both motion modes, with the
+   * prerendered page thrown away.
+   *
+   * So until mount the line follows the static markup, and after mount it
+   * follows the unlock state. A locked visitor keeps it from first paint; an
+   * unlocked one loses it the moment storage is read, which is what the
+   * client-side re-render was already doing.
+   */
+  const lockLineReady = !mounted || lockedReady;
+
   return (
     <section
       id="projects"
@@ -431,7 +449,7 @@ const CaseStudyPlayground: React.FC = () => {
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
-                  {lockedReady && locked && (
+                  {lockLineReady && locked && (
                     <p
                       id={`lock-${card.slug}`}
                       className="case-playground__lock"
