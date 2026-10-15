@@ -54,6 +54,13 @@ const evidence = [
   { href: '/work/aem-component-system/', label: 'Enterprise component system', project: 'AEM' },
 ];
 
+/** Figma's instance diamond. Each capability is an instance, not a loose list row. */
+const InstanceGlyph = () => (
+  <svg className="sm__glyph" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false">
+    <path d="M6 1.3 10.7 6 6 10.7 1.3 6Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+  </svg>
+);
+
 const SkillMastery: React.FC = () => (
   // Preserve existing homepage anchors while making capabilities the primary content.
   <section id="mastery" className="sm" aria-labelledby="capabilities-title">
@@ -67,12 +74,22 @@ const SkillMastery: React.FC = () => (
       </ScrollReveal>
       <div className="sm__capabilities">
         {capabilities.map(row => <ScrollReveal key={row.name}><section className="sm__capability" aria-label={row.name}>
-          <h3>{row.name}</h3>
-          <div className="sm__stack"><p className="sm__label">Tools &amp; stack</p>{row.tools.map(tool => <p key={tool.text}>{'label' in tool && <span className="sm__method">{tool.label}: </span>}{tool.text}</p>)}</div>
+          <h3><InstanceGlyph />{row.name}</h3>
+          {/* The labelled entries were already variant properties in the data;
+              the panel just stops hiding them inside a sentence. */}
+          <div className="sm__stack"><p className="sm__label">Properties</p>
+            <dl className="sm__props">
+              {row.tools.map(tool => <div className="sm__prop" key={tool.text}>
+                <dt>{'label' in tool ? tool.label : 'stack'}</dt>
+                <dd>{tool.text}</dd>
+              </div>)}
+            </dl>
+          </div>
           <div className="sm__practice"><p className="sm__label">In practice</p><p>{row.practice}</p></div>
         </section></ScrollReveal>)}
       </div>
-      <ScrollReveal><nav className="sm__evidence" aria-label="Capabilities in practice"><span className="sm__label">See it in use</span><ul>{evidence.map(item => <li key={item.href}><Link to={item.href}>{item.label}<span>{item.project} <span aria-hidden="true">↗</span></span></Link></li>)}</ul></nav></ScrollReveal>
+      {/* Figma states an instance count before it lists the places. Four links, four places. */}
+      <ScrollReveal><nav className="sm__evidence" aria-label="Capabilities in practice"><span className="sm__label">Used in {evidence.length} places</span><ul>{evidence.map(item => <li key={item.href}><Link to={item.href}>{item.label}<span>{item.project} <span aria-hidden="true">↗</span></span></Link></li>)}</ul></nav></ScrollReveal>
       <ScrollReveal><aside className="sm__forge" aria-labelledby="forge-teaser-title">
         <ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1} />
         <div><p className="sm__label">A different way to explore</p><h3 id="forge-teaser-title">How these skills connect.</h3><p>I built the Forge to map the mix behind my work. Explore my talent tree, or build your own.</p></div>

@@ -23,10 +23,13 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "prestart": "node scripts/write-build-stamp.mjs",
     "start": "react-scripts start",
+    "prebuild": "node scripts/write-build-stamp.mjs",
     "build": "react-scripts build",
     "postbuild": "node scripts/prerender.mjs",
     "prerender": "node scripts/prerender.mjs",
+    "pretest": "node scripts/write-build-stamp.mjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

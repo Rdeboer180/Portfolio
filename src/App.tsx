@@ -23,6 +23,13 @@ import { SEARCH_META } from './data/seo';
 import { scrollBehavior } from './utils/motion';
 import { UnlockProvider, useUnlock } from './context/UnlockContext';
 import PasswordModal from './components/PasswordModal';
+import { AuthorModeProvider } from './context/AuthorModeContext';
+import AuthoredSection from './components/AuthoredSection';
+import AuthorBar from './components/AuthorBar';
+import AuthorSidePanel from './components/AuthorSidePanel';
+import PageProperties from './components/PageProperties';
+import LayoutGrid from './components/LayoutGrid';
+import { AUTHORED_COMPONENTS } from './data/authorChrome';
 
 // Targeted-homepage template. Duplicate homepage-template.tsx per deployment and
 // add a route below. See src/data/targetedHomepage.ts for the contract.
@@ -106,18 +113,48 @@ function HomeRoute() {
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   }, homeLocation.key);
+  // The Dive Club review build keeps every link under /dive and carries its own
+  // feedback widget, so the author chrome stays on the public homepage only.
+  const authorChrome = !isReviewPath();
   return (
-    <PageShell>
-      <Hero />
-      <CaseStudyPlayground />
-      <SelectedWriting />
-      <About compact />
-      <SystemsInPractice />
-      <Testimonials />
-      <SkillMastery />
-      <FAQ />
-      <Footer />
-    </PageShell>
+    <AuthorModeProvider enabled={authorChrome}>
+      <PageShell>
+        <Hero />
+        {/* Below the fold the page is addressable: every section is a component
+            the author chrome can name, select and annotate. The specs live in
+            src/data/authorChrome.ts so the Side Panel reads the same list. */}
+        <AuthoredSection {...AUTHORED_COMPONENTS.playground}>
+          <CaseStudyPlayground />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.writing}>
+          <SelectedWriting />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.bio}>
+          <About compact />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.process}>
+          <SystemsInPractice />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.recommendations}>
+          <Testimonials />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.capabilities}>
+          <SkillMastery />
+        </AuthoredSection>
+        <AuthoredSection {...AUTHORED_COMPONENTS.faq}>
+          <FAQ />
+        </AuthoredSection>
+        <Footer />
+      </PageShell>
+      {authorChrome && (
+        <>
+          <LayoutGrid />
+          <AuthorSidePanel />
+          <PageProperties />
+          <AuthorBar />
+        </>
+      )}
+    </AuthorModeProvider>
   );
 }
 

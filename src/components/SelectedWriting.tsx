@@ -5,7 +5,7 @@ import { NOTES_BY_DATE, KIND_LABEL } from '../data/notes';
 const latestNotes = NOTES_BY_DATE.slice(0, 3);
 
 const SelectedWriting: React.FC = () => (
-  <section className="selected-writing" aria-labelledby="selected-writing-title">
+  <section id="writing" className="selected-writing" aria-labelledby="selected-writing-title">
     <div className="selected-writing__container">
       <div className="selected-writing__header">
         <h2 id="selected-writing-title">Writing from the work</h2>

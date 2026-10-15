@@ -1,0 +1,782 @@
+@import '../variables';
+
+// ============================================
+// Author Mode — AEM authoring chrome over the homepage
+// AEM frames the same page twice: Preview, and Author with every component
+// outlined and addressed by resource type. The outline is Steel at rest and
+// tints Signal Orange on hover or selection, the same "selecting" grammar as
+// the selection-frame cards, so orange still only ever marks a state.
+// Everything here is an overlay: the page keeps its height and its reveals.
+// ============================================
+
+.authored {
+  position: relative;
+  // Clears the fixed site nav when the Components tab scrolls a section in.
+  scroll-margin-top: 80px;
+}
+
+// ── Author bar ──────────────────────────────────────────────────────────
+// AEM's editor bar, anchored bottom-right so it never fights the site nav.
+.author-bar {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: $z-index-fixed;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: calc(100vw - 24px);
+
+  &__group,
+  .author-switch {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+    background: $color-white;
+    box-shadow: 0 2px 10px rgba(27, 27, 27, 0.1);
+  }
+
+  &__tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: $radius-sm;
+    background: transparent;
+    font: 600 11px/1 $font-family-mono;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    cursor: pointer;
+    transition: background-color $transition-base, color $transition-base;
+
+    svg { width: 14px; height: 14px; flex: 0 0 14px; }
+
+    &:hover { color: $color-neutral-dark; }
+
+    // On is a state, so it earns primary.
+    &[aria-pressed='true'] {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+
+      .author-bar__count { background: $color-white; }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-dark;
+      outline-offset: 2px;
+    }
+  }
+
+  &__count {
+    min-width: 16px;
+    padding: 2px 5px;
+    border-radius: $radius-full;
+    background: $color-secondary-lightest;
+    font-size: 10px;
+    text-align: center;
+    color: $color-neutral-standard;
+  }
+}
+
+.author-switch {
+  &__option {
+    min-height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: $radius-sm;
+    background: transparent;
+    font: 600 11px/1 $font-family-mono;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    cursor: pointer;
+    transition: background-color $transition-base, color $transition-base;
+
+    &:hover { color: $color-neutral-dark; }
+
+    &[aria-pressed='true'] {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-dark;
+      outline-offset: 2px;
+    }
+  }
+
+  &__hint {
+    padding: 0 8px 0 4px;
+    font: 10px/1 $font-family-mono;
+    color: $color-neutral-muted;
+  }
+}
+
+// ── Author state: outlines, chips, toolbar ──────────────────────────────
+[data-author-mode='true'] {
+  .authored {
+    outline: 1px solid $color-secondary;
+    outline-offset: -1px;
+
+    &:hover {
+      outline-color: $color-primary;
+
+      > .authored__tag .authored__chip {
+        border-color: $color-primary;
+        background: $color-primary-light;
+        color: $color-primary-dark;
+      }
+    }
+
+    // Selected holds the hover tint and thickens the frame, like a selected
+    // component in the editor.
+    &--selected,
+    &--selected:hover {
+      outline: 2px solid $color-primary;
+      outline-offset: -2px;
+
+      > .authored__tag .authored__chip {
+        border-color: $color-primary;
+        background: $color-primary;
+        color: $color-white;
+      }
+    }
+  }
+
+  // Locked components can be inspected but not acted on, so they never take
+  // the orange: dashed Steel at rest, on hover, and when selected.
+  .authored--locked {
+    outline-style: dashed;
+
+    &:hover,
+    &.authored--selected,
+    &.authored--selected:hover {
+      outline-color: $color-secondary;
+
+      > .authored__tag .authored__chip {
+        border-color: $color-secondary;
+        background: $color-secondary-lightest;
+        color: $color-neutral-dark;
+      }
+    }
+
+    &.authored--selected,
+    &.authored--selected:hover {
+      outline-width: 2px;
+      outline-offset: -2px;
+    }
+  }
+
+  .authored--pin-open { z-index: 3; }
+}
+
+.authored__tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  // Wraps rather than overflows: on a phone the toolbar drops under the chip
+  // instead of pushing the page sideways.
+  flex-wrap: wrap;
+  align-items: stretch;
+  max-width: calc(100% - 48px);
+}
+
+.authored__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid $color-border-default;
+  border-top: 0;
+  border-left: 0;
+  border-bottom-right-radius: $radius-sm;
+  background: $color-secondary-lightest;
+  font: 10px/1.4 $font-family-mono;
+  letter-spacing: 0.02em;
+  color: $color-neutral-standard;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background-color $transition-base, border-color $transition-base, color $transition-base;
+
+  svg { width: 11px; height: 11px; flex: 0 0 11px; }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-dark;
+    outline-offset: 1px;
+  }
+}
+
+.authored__policy {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  padding: 4px 8px;
+  font: 10px/1.4 $font-family-mono;
+  color: $color-neutral-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+// The component toolbar: only the actions the page can honour.
+.authored__toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  border: 1px solid $color-border-default;
+  border-top: 0;
+  border-left: 0;
+  border-bottom-right-radius: $radius-sm;
+  background: $color-white;
+}
+
+.authored__action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: $radius-sm;
+  background: transparent;
+  font: 600 10px/1 $font-family-mono;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $color-neutral-standard;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: $color-primary-light;
+    color: $color-primary-dark;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-dark;
+    outline-offset: 1px;
+  }
+}
+
+// ── Annotations ─────────────────────────────────────────────────────────
+// AEM's numbered pins. Static at rest; primary only while a pin is open.
+.authored__annotation {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 2;
+}
+
+.authored__pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid $color-neutral-dark;
+  border-radius: 50%;
+  background: $color-white;
+  box-shadow: 0 1px 4px rgba(27, 27, 27, 0.12);
+  font: 700 11px/1 $font-family-mono;
+  color: $color-neutral-dark;
+  cursor: pointer;
+
+  &[aria-expanded='true'] {
+    border-color: $color-primary;
+    background: $color-primary;
+    color: $color-white;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary-dark;
+    outline-offset: 2px;
+  }
+}
+
+.authored__note {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: min(320px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  background: $color-white;
+  box-shadow: 0 6px 20px rgba(27, 27, 27, 0.12);
+  font-family: $font-family-primary;
+}
+
+.authored__note-text {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: $color-neutral-dark;
+}
+
+.authored__note-source {
+  margin: 0;
+  font: 10px/1.5 $font-family-mono;
+  color: $color-neutral-muted;
+}
+
+.authored__note-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $color-primary-dark;
+  text-underline-offset: 3px;
+}
+
+// ── Side panel ──────────────────────────────────────────────────────────
+// Overlay drawer, not a push: the page keeps its width and its observers.
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: $z-index-fixed;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  max-width: calc(100vw - 24px);
+  background: $color-white;
+  border-right: 1px solid $color-border-default;
+  box-shadow: 8px 0 24px rgba(27, 27, 27, 0.08);
+  font-family: $font-family-primary;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 12px 12px 16px;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__title {
+    font: 600 11px/1 $font-family-mono;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  &__close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: $radius-sm;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    color: $color-neutral-muted;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; color: $color-neutral-dark; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+  }
+
+  &__tabs {
+    display: flex;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__tab {
+    flex: 1;
+    min-height: 40px;
+    margin-bottom: -1px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    font: 600 12px/1 $font-family-primary;
+    color: $color-neutral-muted;
+    cursor: pointer;
+
+    // The open tab is a state.
+    &[aria-selected='true'] {
+      border-bottom-color: $color-primary;
+      color: $color-neutral-dark;
+    }
+
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px 24px;
+  }
+
+  &__components {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__component {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+    padding: 10px 10px 10px 12px;
+    border: 0;
+    border-left: 2px solid transparent;
+    border-bottom: 1px solid $color-neutral-light;
+    background: transparent;
+    text-align: left;
+    font-family: $font-family-primary;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; }
+
+    &[aria-pressed='true'] {
+      border-left-color: $color-primary;
+      background: $color-primary-light;
+    }
+
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+
+    &-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: $color-neutral-dark;
+
+      svg { width: 12px; height: 12px; color: $color-neutral-muted; }
+    }
+
+    &-type {
+      font: 10px/1.4 $font-family-mono;
+      color: $color-neutral-muted;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+// ── Assets finder (the DAM) ─────────────────────────────────────────────
+.dam {
+  &__search {
+    display: block;
+    margin-bottom: 10px;
+
+    input {
+      width: 100%;
+      min-height: 36px;
+      padding: 0 10px;
+      border: 1px solid $color-border-default;
+      border-radius: $radius-sm;
+      background: $color-white;
+      font: 13px/1 $font-family-primary;
+      color: $color-neutral-dark;
+
+      &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+    }
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  &__filter {
+    min-height: 26px;
+    padding: 0 8px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-full;
+    background: $color-white;
+    font: 600 10px/1 $font-family-mono;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    cursor: pointer;
+
+    &[aria-pressed='true'] {
+      border-color: $color-primary;
+      background: $color-primary-light;
+      color: $color-primary-dark;
+    }
+
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+  }
+
+  &__count {
+    margin: 0 0 8px;
+    font: 10px/1.5 $font-family-mono;
+    color: $color-neutral-muted;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      'thumb name'
+      'thumb meta'
+      'thumb perm';
+    column-gap: 10px;
+    row-gap: 2px;
+    align-items: start;
+    width: 100%;
+    padding: 8px 6px;
+    border: 0;
+    border-bottom: 1px solid $color-neutral-light;
+    background: transparent;
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+    font-family: $font-family-primary;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+
+    &--locked .dam__name { color: $color-neutral-standard; }
+  }
+
+  &__thumb {
+    grid-area: thumb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 40px;
+    overflow: hidden;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    background: $color-secondary-lightest;
+
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    &--glyph svg { width: 18px; height: 18px; color: $color-secondary-dark; }
+
+    // Hatching says "no media here" without a colour saying it.
+    &--locked {
+      background: repeating-linear-gradient(135deg, $color-secondary-lightest 0 6px, $color-white 6px 12px);
+    }
+
+    &--missing img { display: none; }
+  }
+
+  &__name {
+    grid-area: name;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $color-neutral-dark;
+  }
+
+  &__meta {
+    grid-area: meta;
+    font: 10px/1.4 $font-family-mono;
+    color: $color-neutral-muted;
+    overflow-wrap: anywhere;
+  }
+
+  &__permission {
+    grid-area: perm;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    font: 10px/1.4 $font-family-mono;
+    color: $color-neutral-standard;
+
+    svg { width: 10px; height: 10px; }
+  }
+
+  &__empty {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: $color-neutral-muted;
+  }
+}
+
+// ── Page properties ─────────────────────────────────────────────────────
+.page-props {
+  // The global reset zeroes every margin, which also strips the UA's
+  // `margin: auto` that centres a modal dialog. Put it back.
+  margin: auto;
+  width: min(560px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-xl;
+  background: $color-white;
+  color: $color-neutral-dark;
+  box-shadow: 0 20px 50px rgba(27, 27, 27, 0.2);
+  font-family: $font-family-primary;
+
+  // Solid ink scrim, same as the password modal: no frosted glass.
+  &::backdrop { background: rgba(27, 27, 27, 0.6); }
+
+  &__body { padding: 28px 32px 24px; }
+
+  &__eyebrow {
+    margin: 0 0 6px;
+    font: 600 10px/1.5 $font-family-mono;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  &__title {
+    margin: 0 0 18px;
+    font: 700 22px/1.25 $font-family-heading;
+    letter-spacing: -0.02em;
+  }
+
+  &__list {
+    margin: 0;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    dt {
+      font: 10px/1.6 $font-family-mono;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: $color-neutral-muted;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+
+      code {
+        padding: 2px 6px;
+        border-radius: $radius-sm;
+        background: $color-secondary-lightest;
+        font: 12px/1 $font-family-mono;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin: 16px 0 20px;
+
+    a {
+      font-size: 13px;
+      font-weight: 600;
+      color: $color-primary-dark;
+      text-underline-offset: 3px;
+    }
+  }
+
+  &__close {
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+    background: $color-white;
+    font: 600 13px/1 $font-family-primary;
+    color: $color-neutral-dark;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
+  }
+}
+
+// ── Layout grid ─────────────────────────────────────────────────────────
+// Above the site nav, below the author bar, and never in the way.
+.layout-grid {
+  position: fixed;
+  inset: 0;
+  z-index: $z-index-sticky + 1;
+  pointer-events: none;
+
+  &__container {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 24px;
+    height: 100%;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+    border-left: 1px dashed rgba($color-neutral-dark, 0.35);
+    border-right: 1px dashed rgba($color-neutral-dark, 0.35);
+  }
+
+  &__col {
+    background: rgba($color-secondary, 0.12);
+    border-left: 1px solid rgba($color-secondary, 0.35);
+    border-right: 1px solid rgba($color-secondary, 0.35);
+  }
+
+  &__copy {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: $container-padding-x;
+    border-right: 1px dashed rgba($color-neutral-dark, 0.4);
+  }
+
+  &__label {
+    position: absolute;
+    top: 84px;
+    left: $container-padding-x;
+    padding: 4px 8px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    background: $color-white;
+    font: 10px/1.4 $font-family-mono;
+    color: $color-neutral-standard;
+  }
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────
+// The editor AEM quotes is a desktop tool; the side panel and layout grid stay
+// there. Page properties, annotations and the switch work everywhere.
+@media (max-width: 999px) {
+  .author-bar__tool--desktop,
+  .side-panel { display: none; }
+}
+
+@media (max-width: 639px) {
+  .author-bar {
+    right: 12px;
+    bottom: 12px;
+    gap: 6px;
+  }
+
+  .author-switch__hint,
+  .authored__policy { display: none; }
+
+  .page-props__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
