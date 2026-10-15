@@ -65,7 +65,7 @@ export const AUTHORED_COMPONENTS = {
     anchor: 'systems',
     related: { label: 'Open the public study', href: '/work/playdraft/' },
     annotation: {
-      text: 'The process is stated once, here. Five competing accounts were cut in September 2026. The five outer nodes are deliberately identical paper cards; a pastel tint per category was considered and rejected.',
+      text: 'The process is stated once, here. In September 2026 five competing accounts were reconciled to this four-beat loop. Five of the board nodes are deliberately identical paper cards; a pastel tint per category was considered and rejected.',
       source: 'PRODUCT.md, The Process, Stated Once; DESIGN.md, the No-Categorical-Palette Rule',
     },
   },
@@ -76,7 +76,7 @@ export const AUTHORED_COMPONENTS = {
     locked: true,
     policy: 'Inherited from template: verbatim, no paraphrase',
     annotation: {
-      text: 'Every quote is verbatim from a LinkedIn recommendation. Excerpts are direct selections, never paraphrase, which is why this component is locked in the template.',
+      text: 'Every quote is a verbatim excerpt from a written recommendation. Excerpts are direct selections, never paraphrase, which is why this component is locked in the template.',
       source: 'Testimonials.tsx, line 38',
     },
   },
