@@ -104,17 +104,15 @@ const server = http.createServer((req, res) => {
       assert.equal(requests.length, beforePublic, 'Inflight remained active after leaving the review');
       assert.equal(await page.locator('script[src="https://inflight.co/widget.js"]').count(), 0);
       assert.equal(await page.locator('meta[name="robots"]').count(), 0);
-      // The current public homepage already recovers from React #418 on load
-      // (verified on www.rdeboerdesigns.com on 2026-10-13). Preserve the shared
-      // public implementation; reject every other error and any article error.
-      const inheritedHomepageRecovery = error => /Minified React error #418;/.test(error.message) && /^\/(?:dive\/?)?$/.test(new URL(error.url).pathname);
-      assert.deepEqual(errors.filter(error => !inheritedHomepageRecovery(error)), [], 'New runtime or hydration errors');
-      assert.equal(await page.locator('.hero').count(), 1, 'Homepage duplicated after hydration recovery');
+      // No exemptions. The homepage #418 this once tolerated as inherited from
+      // the public site was CaseStudyPlayground's lock line, fixed 2026-10-15;
+      // verify-hydration.cjs now holds every prerendered route to the same bar.
+      assert.deepEqual(errors, [], 'Runtime or hydration errors');
+      assert.equal(await page.locator('.hero').count(), 1, 'Homepage duplicated after hydration');
       await context.close();
       console.log(`PASS ${width}px: public homepage/case study, review links/metadata, back/forward/reload, mobile overflow, widget isolation`);
     }
     console.log(`PASS ${reviewCount} static review HTML files: exact initial-head script, noindex, sitemap and public-navigation exclusion`);
-    console.log('NOTE: the shared homepage retains its existing React #418 hydration recovery, also present on the current public site.');
   } finally {
     await browser.close();
     server.close();

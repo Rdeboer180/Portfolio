@@ -58,6 +58,15 @@ jobs:
           fi
           exit $missing
 
+      # A route whose static HTML disagrees with the client's first render
+      # still looks fine; React just throws the prerendered page away (#418)
+      # and redraws it. The homepage did that on every load for a week, for
+      # visitors with and without reduced motion, before anything noticed.
+      # Every route, as four kinds of visitor; see the script for the why.
+      - name: Verify every prerendered route hydrates
+        timeout-minutes: 20
+        run: node scripts/verify-hydration.cjs
+
       - name: Verify Dive Club review isolation and navigation
         run: node scripts/verify-dive.cjs
 
