@@ -21,10 +21,10 @@ import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
 import { cardTitleFor, clientLabelFor, orderedProjects, yearSpanFor } from '../data/projects';
-import { WORK_GROUPS, studiesFor } from '../data/workGroups';
+import { WORK_GROUPS, WorkFilter, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
-import { WORK_VIEWS, useWorkNavigator } from '../context/WorkNavigatorContext';
+import { WORK_VIEWS, WorkView, useWorkNavigator } from '../context/WorkNavigatorContext';
 import { useAuthorMode } from '../context/AuthorModeContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import ProjectBrand from './ProjectBrand';
@@ -486,6 +486,19 @@ const CaseStudyPlayground: React.FC = () => {
       </p>
     );
 
+  // Featured is three studies, a sample sized for the card row. As a list or
+  // a grid three reads as a short page, so the dense layouts always show at
+  // least All: choosing List or Grid from Featured moves the filter to All,
+  // and choosing Featured from List or Grid returns to Cards.
+  const chooseView = (next: WorkView) => {
+    nav.setView(next);
+    if (next !== 'cards' && !group) nav.selectGroup('all');
+  };
+  const chooseFilter = (next: WorkFilter | null) => {
+    nav.selectGroup(next);
+    if (!next && view !== 'cards') nav.setView('cards');
+  };
+
   // ── The List layout ────────────────────────────────────────────────────────
   // One row per study on the Asset Panel's .dam__item grid, so the page and
   // the finder read as one tool: thumbnail or lock glyph, title, outcome,
@@ -584,7 +597,7 @@ const CaseStudyPlayground: React.FC = () => {
                 type="button"
                 className="case-playground__discipline"
                 aria-pressed={group === filter.id}
-                onClick={() => nav.selectGroup(filter.id)}
+                onClick={() => chooseFilter(filter.id)}
               >
                 {filter.label}
               </button>
@@ -624,7 +637,7 @@ const CaseStudyPlayground: React.FC = () => {
                   type="button"
                   className="case-playground__view"
                   aria-pressed={view === option.id}
-                  onClick={() => nav.setView(option.id)}
+                  onClick={() => chooseView(option.id)}
                 >
                   {option.label}
                 </button>

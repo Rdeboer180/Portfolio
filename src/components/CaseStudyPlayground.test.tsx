@@ -132,6 +132,28 @@ test('Cards, List and Grid lay out the same filtered set; the pager belongs to C
   expect(window.localStorage.length).toBe(0);
 });
 
+test('List and Grid never show the three-study Featured sample: they move it to All, and Featured returns to Cards', () => {
+  const { container } = mount();
+  fireEvent.click(viewButton('List'));
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
+  expect(rowSlugs(container)).toEqual(ALL);
+  expect(window.location.hash).toBe('#projects/all');
+
+  fireEvent.click(chip('Featured'));
+  expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
+  expect(cardSlugs(container)).toEqual([...FEATURED]);
+
+  fireEvent.click(viewButton('Grid'));
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
+  expect(tileSlugs(container)).toEqual(ALL);
+
+  // A discipline the visitor picked is kept; only Featured is widened.
+  fireEvent.click(chip('AEM'));
+  fireEvent.click(viewButton('List'));
+  expect(chip('AEM')).toHaveAttribute('aria-pressed', 'true');
+  expect(rowSlugs(container)).toEqual(AEM);
+});
+
 test('locked studies carry the lock line in every layout, name no client, and each line has its own id', () => {
   const { container, unmount } = mount();
   // WheelRack and the AEM component system among the featured three.
