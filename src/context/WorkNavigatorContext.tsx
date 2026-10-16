@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ClientKey, NavigatorGroupId, isClientKey, isNavigatorGroup } from '../data/workGroups';
 
 /**
@@ -18,10 +18,11 @@ export const WORK_VIEWS: { id: WorkView; label: string }[] = [
  * What the work section shows and how. The visitor filters with the chips in
  * the section itself (no selection is All, opening on the featured studies)
  * and picks a layout beside them; an author can also file by client from the
- * Asset Panel's folders. The defaults are the static page: All, as cards. The layout is kept for
- * the visit only, never stored, so a returning visitor never gets a layout
- * swap after load. The deep link is applied after mount, so the first client
- * render always equals the prerender.
+ * Asset Panel's folders. The defaults are the static page: All, as cards;
+ * on a phone the work opens as the List (applied after mount, below). A
+ * layout the visitor picks is kept for the visit only, never stored, so a
+ * returning visitor never inherits one. The deep link is applied after
+ * mount too, so the first client render always equals the prerender.
  */
 export interface WorkNavigatorState {
   group: NavigatorGroupId | null;
@@ -41,6 +42,13 @@ interface WorkNavigatorValue extends WorkNavigatorState {
 }
 
 const DEFAULT_STATE: WorkNavigatorState = { group: null, clientKey: null, pointedSlug: null, view: 'cards' };
+
+/**
+ * Where the carousel shows one card at a time ($breakpoint-md, the same rule
+ * that sizes a card to 82vw). There, paging card by card through twelve
+ * studies is the slow way to scan, so the work opens as the List instead.
+ */
+const ONE_CARD_QUERY = '(max-width: 768px)';
 
 const WorkNavigatorContext = createContext<WorkNavigatorValue>({
   ...DEFAULT_STATE,
@@ -92,6 +100,27 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
     if (linked) setState((current) => ({ ...current, ...linked }));
   }, []);
 
+  // On a phone the work opens as the List. The static page is Cards (the
+  // prerender serializes at Playwright's 1280px default, so keep it at a
+  // desktop width), and the first render must match it, so the phone default
+  // is applied after mount, like the deep link. The section sits well below
+  // the fold on a phone, so the swap lands before anyone scrolls to it. The
+  // default follows the width (a rotation, a resized window) until the
+  // visitor picks a layout; from then on their choice holds for the visit.
+  const viewChosen = useRef(false);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return undefined;
+    const query = window.matchMedia(ONE_CARD_QUERY);
+    const follow = () => {
+      if (viewChosen.current) return;
+      const view: WorkView = query.matches ? 'list' : 'cards';
+      setState((current) => (current.view === view ? current : { ...current, view }));
+    };
+    follow();
+    query.addEventListener?.('change', follow);
+    return () => query.removeEventListener?.('change', follow);
+  }, []);
+
   const selectGroup = useCallback((group: NavigatorGroupId | null) => {
     setState((current) => ({ ...current, group, clientKey: null, pointedSlug: null }));
     writeHash(group, null);
@@ -103,7 +132,10 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const point = useCallback((slug: string | null) => setState((current) => (current.pointedSlug === slug ? current : { ...current, pointedSlug: slug })), []);
-  const setView = useCallback((view: WorkView) => setState((current) => (current.view === view ? current : { ...current, view })), []);
+  const setView = useCallback((view: WorkView) => {
+    viewChosen.current = true;
+    setState((current) => (current.view === view ? current : { ...current, view }));
+  }, []);
 
   const value = useMemo(
     () => ({ ...state, mounted, selectGroup, selectClient, point, setView }),
