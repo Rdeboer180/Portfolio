@@ -71,6 +71,7 @@ export const AUTHORED_COMPONENTS = {
         'The process is stated once, here. In September 2026 five competing accounts were reconciled to this four-beat loop. Five of the board nodes are deliberately identical paper cards; a pastel tint per category was considered and rejected.',
       ],
       source: 'Capabilities, AEM & content systems; PRODUCT.md, The Process, Stated Once; DESIGN.md, the No-Categorical-Palette Rule',
+      link: { label: 'Read the loop', href: '/notes/shared-language-better-product-decisions/' },
     },
   },
   recommendations: {

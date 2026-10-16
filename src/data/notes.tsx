@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LinkedInLink from '../components/LinkedInLink';
 import PaperArtboardGallery from '../components/PaperArtboardGallery';
+import { SystemsBoard } from '../components/SystemsInPractice';
 
 // ============================================
 // Notes — the writing stream. Craft is the through-line: field notes record a
@@ -153,6 +154,43 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  {
+    slug: 'shared-language-better-product-decisions',
+    relatedProject: 'playdraft',
+    read: '4 min',
+    kind: 'system',
+    date: 'October 2026',
+    dateISO: '2026-10-16',
+    title: 'Shared language. Better product decisions.',
+    dek: 'Shared context → design + code → validation → context for the next change. The board I work from, and the loop that runs through it.',
+    body: (
+      <>
+        <p>
+          For a new or changed system component, I start with a shared language: what it needs to do,
+          what already exists, and what design and code each need to express.
+          <strong> Shared Product Context is both the starting point and the return point.</strong>
+        </p>
+        <p>
+          My recent exploration brings Figma and custom MCP tools into that planning context.
+          They help me inspect and execute; I own the decisions. Figma and code build from the
+          same plan. After validation, Code Connect captures the implementation relationship back in Figma.
+          Each change should leave a clearer map between intent, design, and production.
+        </p>
+        {/* The board and the loop, drawn settled: a note is read, not scrolled
+            into, so nothing waits on a reveal. Hover or focus a beat to light
+            the nodes it claims. */}
+        <div className="sip sip--note">
+          <SystemsBoard revealed />
+        </div>
+        <p>
+          <Link to="/work/playdraft/">PlayDraft</Link> is the public study where the whole loop is
+          visible: Figma, a token-governed build, Maestro QA, and the{' '}
+          <Link to="/design-system">live system</Link>.
+        </p>
+      </>
+    ),
+  },
+  // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'simplifying-playdraft-without-losing-the-game',
     kind: 'exploration',

@@ -1,13 +1,14 @@
 import { observeLayout } from '../utils/observeLayout';
 // ============================================
 // SystemsInPractice — "Shared language. Better product decisions."
-// Homepage section 03, badged "How I work". An ecosystem board of eight nodes —
-// Shared Product Context at the centre, the Figma ⇄ Codebase working pair, and
-// five extended surfaces — built as real HTML/CSS, with the connective linework in one SVG overlay
-// whose geometry is measured from the live DOM. Beneath it, the loop: four
-// beats that say how the board gets used, each claiming the nodes it works
-// on, so the process and the ecosystem read as one argument rather than two
-// sections.
+// Homepage section 03, badged "How I work": the argument, one paragraph, the
+// loop in one line and four titles, and the links. SystemsBoard, exported from
+// here and drawn by the "Shared language" system note and the design-system
+// page, is the full thing: an ecosystem board of eight nodes — Shared Product
+// Context at the centre, the Figma ⇄ Codebase working pair, and five extended
+// surfaces — built as real HTML/CSS, with the connective linework in one SVG
+// overlay whose geometry is measured from the live DOM, and beneath it the
+// loop's four beats, each claiming the nodes it works on.
 //
 // Layout modes are owned by _systems-in-practice.scss and announced to this
 // file through custom properties:
@@ -479,24 +480,19 @@ function returnRail(from: Box, to: Box, railY: number): Wire {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-const SystemsInPractice: React.FC = () => {
-  // The one sentence in this section that carries the argument gets the site's
-  // selection-sweep: it highlights, then settles to bold. Same vocabulary as the
-  // About section, same hook — the classes and the reduced-motion fallback are
-  // global (see _about.scss), so nothing new is needed here but the ref.
-  // Threshold is lower than About's default because this section is ~1,470px
-  // tall; at 0.4 the sweep would not arm until the board had scrolled past.
-  const sweepRef = useHighlightSweep<HTMLElement>({
-    selector: '.animated-bold',
-    activeClass: 'animated-bold--active',
-    settledClass: 'animated-bold--settled',
-    settleOffset: 850,
-    cycleTime: 1900,
-    threshold: 0.2,
-  });
-  const [introRef, introVisible] = useReveal<HTMLDivElement>(0.3);
-  const [stageRef, stageVisible] = useReveal<HTMLDivElement>(0.2);
-  const [loopRef, loopVisible] = useReveal<HTMLDivElement>(0.2);
+/**
+ * The board and the loop: the ecosystem drawn as eight nodes with measured
+ * wires, and under it the four beats that say how the board gets used. One
+ * component, so the note that explains the process and the design-system
+ * page draw the same thing. `revealed` renders it settled from the first
+ * paint, for pages that are not scrolled into like the homepage is; the
+ * reveal classes still gate the wire draw-in where it is not set.
+ */
+export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = false }) => {
+  const [stageRef, stageSeen] = useReveal<HTMLDivElement>(0.2);
+  const [loopRef, loopSeen] = useReveal<HTMLDivElement>(0.2);
+  const stageVisible = revealed || stageSeen;
+  const loopVisible = revealed || loopSeen;
 
   const boardRef = useRef<HTMLOListElement>(null);
   const cellRefs = useRef<Partial<Record<NodeId, HTMLLIElement | null>>>({});
@@ -661,178 +657,281 @@ const SystemsInPractice: React.FC = () => {
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
 
   return (
-    <section id="systems" className={`sip${activeBeat ? ' sip--beat-active' : ''}`} ref={sweepRef}>
-      <div className="sip__container">
-        {/* "How I work", not "Systems": the section is the process, and the
-            board is how the process is drawn. Short enough to hold one line at
-            375 inside the shared badge's fixed chrome. */}
-        <SectionBadge icon={<NetworkIcon />} label="How I work" index="03" />
+    <>
+      <div className={`sip__stage${stageVisible ? ' is-visible' : ''}`} ref={stageRef}>
+        {/* The mark above the file: a craft note in the margin, pointing at it. */}
+        <p className="sip__note reveal-fade" style={delay(300)}>
+          <span className="sip__note-text">Start here. Return with more context.</span>
+          <svg className="sip__note-arrow" viewBox="0 0 32 40" aria-hidden="true" focusable="false">
+            <path d="M5 4 C 9 9, 16 16, 24 33" pathLength={1} className="reveal-draw" style={delay(700)} />
+            <path d="M17.5 30.5 L24 33 L26.5 26.5" pathLength={1} className="reveal-draw" style={delay(1000)} />
+          </svg>
+        </p>
 
-        <div className="sip__inner">
-          {/* ── Editorial column ── */}
-          <div className={`sip__intro${introVisible ? ' is-visible' : ''}`} ref={introRef}>
-            <h2 className="sip__title">
-              <span className="reveal-mask">
-                <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
-                  Shared language. Better product decisions.
-                </span>
-              </span>
-            </h2>
-            <p className="sip__body reveal-fade" style={delay(240)}>
-              For a new or changed system component, I start with a shared language: what it needs to do,
-              what already exists, and what design and code each need to express.
-              <span className="animated-bold"> Shared Product Context is both the starting point and the return point.
-              </span>
-            </p>
-            <p className="sip__body reveal-fade" style={delay(320)}>
-              My recent exploration brings Figma and custom MCP tools into that planning context.
-              They help me inspect and execute; I own the decisions. Figma and code build from the
-              same plan. After validation, Code Connect captures the implementation relationship back in Figma.
-              Each change should leave a clearer map between intent, design, and production.
-            </p>
-            <div className="sip__actions reveal-fade" style={delay(380)}>
-              {/* PlayDraft is the public study where the whole loop is visible:
-                  Figma, a token-governed build, Maestro QA, and the live
-                  /design-system screen. WheelRack is the deeper system study but
-                  sits behind the gate, and a first click should land. */}
-              <Link to="/work/playdraft/" className="btn btn--secondary btn--md sip__btn">
-                See this in the work &rarr;
-              </Link>
-              <Link to="/design-system" className="sip__link">
-                Explore the live system &rarr;
-              </Link>
-            </div>
-
-            {/* The section's second hand mark, at the foot of the column — the
-                approved reference carries two, one above the file and one under
-                the CTAs, and this is the one that answers the space under the
-                CTAs where the column is shorter than the board. Decorative, and
-                hidden from AT: it names the move the board is for. Drawn
-                only where the columns sit side by side (the SCSS hides it
-                below 1280) — stacked, it would just be a second handwritten
-                line above the board's own. */}
-            <p className="sip__mark reveal-fade" aria-hidden="true" style={delay(560)}>
-              <span className="sip__mark-line">One shared plan.</span>
-              <span className="sip__mark-line sip__mark-line--drawn">
-                Room to explore.
-                <svg
-                  className="sip__mark-underline"
-                  viewBox="0 0 240 14"
-                  preserveAspectRatio="none"
-                  focusable="false"
+        <ol className="sip__board" ref={boardRef}>
+          {SYSTEM_NODES.map((node, i) => (
+            <React.Fragment key={node.id}>
+              <li
+                className={`sip__cell sip__cell--${node.id} reveal-fade`}
+                style={delay(i * 50)}
+                ref={(el) => { cellRefs.current[node.id] = el; }}
+                onMouseEnter={() => setActive(node.id)}
+                onMouseLeave={() => setActive((cur) => (cur === node.id ? null : cur))}
+              >
+                <SystemNode node={node} lit={!!litNodes && litNodes.includes(node.id)} />
+              </li>
+              {node.id === 'figma' && (
+                // The pair's label. Sits on the pair's top edge over the gap the
+                // wires cross (the gap is 56px; the label is not), lights with the
+                // pair when beat 02 claims it, and recedes with everything else
+                // otherwise. In list mode it stands between the two cards, under
+                // the ⇄ glyph that stands in for the wires there.
+                <li
+                  role="presentation"
+                  className={`sip__cell sip__cell--connect reveal-fade${
+                    (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''
+                  }${active === 'figma' || active === 'code' ? ' is-active' : ''}`}
+                  style={delay(760)}
                 >
+                  <span className="sip__pair-link" aria-hidden="true">
+                    <svg viewBox="0 0 16 32" focusable="false">
+                      <path d="M8 4v24M4 8l4-4 4 4M4 24l4 4 4-4" />
+                    </svg>
+                  </span>
+                  <span className="sip__connect">
+                    <span className="sip__connect-name">{CODE_CONNECT.name}</span>
+                    <span className="sip__connect-dot" aria-hidden="true">·</span>
+                    <code className="sip__connect-map">{CODE_CONNECT.map}</code>
+                  </span>
+                </li>
+              )}
+            </React.Fragment>
+          ))}
+
+          {/* Connective linework — supplemental to the relation text inside each node. */}
+          <svg className="sip__wires" aria-hidden="true" focusable="false">
+            {LINKS.map((link) => (
+              <g
+                key={link.id}
+                className={`sip__link${link.pair ? ' sip__link--pair' : ''}${
+                  active && link.nodes.includes(active) ? ' is-active' : ''
+                }${link.pair && (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''}`}
+                style={delay(link.delay)}
+              >
+                <path
+                  className="sip__wire"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { wireRefs.current[`${link.id}:shaft`] = el; }}
+                />
+                <path
+                  className="sip__head"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { wireRefs.current[`${link.id}:a`] = el; }}
+                />
+                <path
+                  className="sip__head"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { wireRefs.current[`${link.id}:b`] = el; }}
+                />
+                {link.pair && (
+                  // Traces once along the shaft after it draws — the site's "comet", not a loop.
                   <path
-                    className="reveal-draw"
-                    d="M3 8 C 60 3, 180 3, 237 7"
+                    className="sip__comet"
                     pathLength={1}
-                    style={delay(980)}
+                    suppressHydrationWarning
+                    ref={(el) => { wireRefs.current[`${link.id}:comet`] = el; }}
                   />
-                </svg>
-              </span>
-            </p>
-          </div>
+                )}
+              </g>
+            ))}
+          </svg>
+        </ol>
+      </div>
 
-          {/* ── The board ── */}
-          <div className={`sip__stage${stageVisible ? ' is-visible' : ''}`} ref={stageRef}>
-            {/* The mark above the file: a craft note in the margin, pointing at it. Its
-                quieter sibling sits at the foot of the editorial column. */}
-            <p className="sip__note reveal-fade" style={delay(300)}>
-              <span className="sip__note-text">Start here. Return with more context.</span>
-              <svg className="sip__note-arrow" viewBox="0 0 32 40" aria-hidden="true" focusable="false">
-                <path d="M5 4 C 9 9, 16 16, 24 33" pathLength={1} className="reveal-draw" style={delay(700)} />
-                <path d="M17.5 30.5 L24 33 L26.5 26.5" pathLength={1} className="reveal-draw" style={delay(1000)} />
-              </svg>
-            </p>
-
-            <ol className="sip__board" ref={boardRef}>
-              {SYSTEM_NODES.map((node, i) => (
-                <React.Fragment key={node.id}>
-                  <li
-                    className={`sip__cell sip__cell--${node.id} reveal-fade`}
-                    style={delay(i * 50)}
-                    ref={(el) => { cellRefs.current[node.id] = el; }}
-                    onMouseEnter={() => setActive(node.id)}
-                    onMouseLeave={() => setActive((cur) => (cur === node.id ? null : cur))}
-                  >
-                    <SystemNode node={node} lit={!!litNodes && litNodes.includes(node.id)} />
-                  </li>
-                  {node.id === 'figma' && (
-                    // The pair's label. Sits on the pair's top edge over the gap the
-                    // wires cross (the gap is 56px; the label is not), lights with the
-                    // pair when beat 02 claims it, and recedes with everything else
-                    // otherwise. In list mode it stands between the two cards, under
-                    // the ⇄ glyph that stands in for the wires there.
-                    <li
-                      role="presentation"
-                      className={`sip__cell sip__cell--connect reveal-fade${
-                        (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''
-                      }${active === 'figma' || active === 'code' ? ' is-active' : ''}`}
-                      style={delay(760)}
-                    >
-                      <span className="sip__pair-link" aria-hidden="true">
-                        <svg viewBox="0 0 16 32" focusable="false">
-                          <path d="M8 4v24M4 8l4-4 4 4M4 24l4 4 4-4" />
-                        </svg>
-                      </span>
-                      <span className="sip__connect">
-                        <span className="sip__connect-name">{CODE_CONNECT.name}</span>
-                        <span className="sip__connect-dot" aria-hidden="true">·</span>
-                        <code className="sip__connect-map">{CODE_CONNECT.map}</code>
-                      </span>
-                    </li>
-                  )}
-                </React.Fragment>
-              ))}
-
-              {/* Connective linework — supplemental to the relation text inside each node. */}
-              <svg className="sip__wires" aria-hidden="true" focusable="false">
-                {LINKS.map((link) => (
-                  <g
-                    key={link.id}
-                    className={`sip__link${link.pair ? ' sip__link--pair' : ''}${
-                      active && link.nodes.includes(active) ? ' is-active' : ''
-                    }${link.pair && (activeBeat === 2 || activeBeat === 4) ? ' is-lit' : ''}`}
-                    style={delay(link.delay)}
-                  >
-                    <path
-                      className="sip__wire"
-                      pathLength={1}
-                      suppressHydrationWarning
-                      ref={(el) => { wireRefs.current[`${link.id}:shaft`] = el; }}
-                    />
-                    <path
-                      className="sip__head"
-                      pathLength={1}
-                      suppressHydrationWarning
-                      ref={(el) => { wireRefs.current[`${link.id}:a`] = el; }}
-                    />
-                    <path
-                      className="sip__head"
-                      pathLength={1}
-                      suppressHydrationWarning
-                      ref={(el) => { wireRefs.current[`${link.id}:b`] = el; }}
-                    />
-                    {link.pair && (
-                      // Traces once along the shaft after it draws — the site's "comet", not a loop.
-                      <path
-                        className="sip__comet"
-                        pathLength={1}
-                        suppressHydrationWarning
-                        ref={(el) => { wireRefs.current[`${link.id}:comet`] = el; }}
-                      />
-                    )}
-                  </g>
-                ))}
-              </svg>
-            </ol>
-          </div>
+      {/* ── The loop ── */}
+      <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
+        {/* The seam: a hairline with a mono label, the quieter cousin of the
+            section rule above. The note says the return in words before any
+            wire draws it. */}
+        <div className="sip__seam reveal-fade" style={delay(0)}>
+          <h3 className="sip__seam-label">The loop</h3>
+          <span className="sip__seam-line" aria-hidden="true" />
+          <p className="sip__seam-note">
+            Shared context → design + code → validation → context for the next change.
+          </p>
         </div>
 
-        {/* ── The loop ── */}
+        <div className="sip__track" ref={trackRef}>
+          <ol className="sip__beats" ref={beatsRef} aria-label="The loop, in four beats">
+            {BEATS.map((beat, i) => (
+              <li
+                key={beat.n}
+                className={`sip__beat sip__beat--${beat.n} reveal-fade${
+                  activeBeat === beat.n ? ' is-active' : ''
+                }`}
+                style={delay(80 + i * 80)}
+                ref={(el) => { beatRefs.current[beat.n] = el; }}
+                // Focusable so the keyboard can light the board the way a
+                // hover does. Nothing happens on activation — the highlight
+                // is a lens on the board, and the beat's text already says
+                // what it would show — so it carries no button role.
+                tabIndex={0}
+                onMouseEnter={() => { lastInput.current = 'hover'; setHoveredBeat(beat.n); }}
+                onMouseLeave={() => setHoveredBeat((cur) => (cur === beat.n ? null : cur))}
+                onFocus={() => { lastInput.current = 'focus'; setFocusedBeat(beat.n); }}
+                onBlur={() => setFocusedBeat((cur) => (cur === beat.n ? null : cur))}
+              >
+                {beat.n > 1 && (
+                  // List mode only: the connector from the beat above, where
+                  // no wires are drawn — ⇅ into 03, ↓ into the others.
+                  <span className="sip__beat-link" aria-hidden="true">
+                    <svg viewBox="0 0 16 32" focusable="false">
+                      {beat.n === 3 ? (
+                        <path d="M5 4v24M2.5 8l2.5-4 2.5 4M11 28V4M8.5 24l2.5 4 2.5-4" />
+                      ) : (
+                        <path d="M8 4v24M4 24l4 4 4-4" />
+                      )}
+                    </svg>
+                  </span>
+                )}
+                {/* One template string, not text around an expression: the
+                    prerender serialises adjacent text nodes as one, and
+                    hydration would then find "[ 01 ]" where React expects
+                    "[ 0" — the #418 the header describes. */}
+                <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
+                <h4 className="sip__beat-title">{beat.title}</h4>
+                <p className="sip__beat-body">{beat.body}</p>
+              </li>
+            ))}
+          </ol>
+
+          {/* The loop's linework — supplemental to the seam note and each
+              beat's own copy. */}
+          <svg className="sip__wires sip__wires--loop" aria-hidden="true" focusable="false">
+            {LOOP_LINKS.map((link) => (
+              <g
+                key={link.id}
+                className={`sip__link sip__link--loop${link.isReturn ? ' sip__link--return' : ''}${
+                  activeBeat && link.beats.includes(activeBeat) ? ' is-active' : ''
+                }`}
+                style={delay(link.delay)}
+              >
+                <path
+                  className="sip__wire"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { loopWireRefs.current[`${link.id}:shaft`] = el; }}
+                />
+                <path
+                  className="sip__head"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { loopWireRefs.current[`${link.id}:a`] = el; }}
+                />
+                <path
+                  className="sip__head"
+                  pathLength={1}
+                  suppressHydrationWarning
+                  ref={(el) => { loopWireRefs.current[`${link.id}:b`] = el; }}
+                />
+                {link.isReturn && (
+                  // The surge: a slow pulse of current that rides the rail back
+                  // to 01 every six seconds. Two dashes on one geometry, a faint
+                  // tail and a bright core at its front, so it reads as current
+                  // on a line rather than a dot. Off under reduced motion.
+                  <>
+                    <path
+                      className="sip__surge sip__surge--tail"
+                      pathLength={1}
+                      suppressHydrationWarning
+                      ref={(el) => { loopWireRefs.current[`${link.id}:tail`] = el; }}
+                    />
+                    <path
+                      className="sip__surge sip__surge--core"
+                      pathLength={1}
+                      suppressHydrationWarning
+                      ref={(el) => { loopWireRefs.current[`${link.id}:core`] = el; }}
+                    />
+                  </>
+                )}
+              </g>
+            ))}
+          </svg>
+
+          {/* The label that rides the return rail (row mode), and the
+              return itself where there is no rail (list mode). The slot is
+              what the rail is measured from; see the loop effect. */}
+          <div className="sip__return-slot" ref={returnSlotRef}>
+            <p className="sip__return reveal-fade" style={delay(1000)}>
+              <svg className="sip__return-glyph" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                <path d="M14.5 12.5 A 5.5 5.5 0 1 1 10 4.5" />
+                <path d="M10 4.5 L12.6 2.4 M10 4.5 L12.4 6.8" />
+              </svg>
+              <span>Back to 01</span>
+            </p>
+          </div>
+        </div>
+        <p className="sip__body reveal-fade" style={delay(1080)}>
+          As the system grows, so does the shared context.
+        </p>
+      </div>
+    </>
+  );
+};
+
+/**
+ * Homepage section 03, the light version: the argument, one paragraph, the
+ * loop in one line with its four beats as titles, and the way in. The board
+ * and the beats' full copy moved to the note the section links to (the
+ * "Shared language" system note), where there is room to read them; here
+ * the section is a statement a visitor can take in on one screen.
+ */
+const SystemsInPractice: React.FC = () => {
+  // The one sentence in this section that carries the argument gets the site's
+  // selection-sweep: it highlights, then settles to bold. Same vocabulary as the
+  // About section, same hook — the classes and the reduced-motion fallback are
+  // global (see _about.scss), so nothing new is needed here but the ref.
+  const sweepRef = useHighlightSweep<HTMLElement>({
+    selector: '.animated-bold',
+    activeClass: 'animated-bold--active',
+    settledClass: 'animated-bold--settled',
+    settleOffset: 850,
+    cycleTime: 1900,
+    threshold: 0.3,
+  });
+  const [introRef, introVisible] = useReveal<HTMLDivElement>(0.3);
+  const [loopRef, loopVisible] = useReveal<HTMLDivElement>(0.2);
+  const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
+
+  return (
+    <section id="systems" className="sip sip--strip" ref={sweepRef}>
+      <div className="sip__container">
+        {/* "How I work", not "Systems": the section is the process, and the
+            note is how the process is drawn. */}
+        <SectionBadge icon={<NetworkIcon />} label="How I work" index="03" />
+        <div className={`sip__intro${introVisible ? ' is-visible' : ''}`} ref={introRef}>
+          <h2 className="sip__title">
+            <span className="reveal-mask">
+              <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
+                Shared language. Better product decisions.
+              </span>
+            </span>
+          </h2>
+          <p className="sip__body reveal-fade" style={delay(240)}>
+            For a new or changed system component, I start with a shared language: what it needs to do,
+            what already exists, and what design and code each need to express.
+            <span className="animated-bold"> Shared Product Context is both the starting point and the return point.
+            </span>
+          </p>
+        </div>
+
+        {/* The loop, in one line and four titles. Each beat is the title the
+            note gives it, in the note's order; the note holds the bodies and
+            the board they light. */}
         <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
-          {/* The seam: a hairline with a mono label, the quieter cousin of the
-              section rule above — no handles, so the rule keeps its rank. The
-              note says the return in words before any wire draws it. */}
           <div className="sip__seam reveal-fade" style={delay(0)}>
             <h3 className="sip__seam-label">The loop</h3>
             <span className="sip__seam-line" aria-hidden="true" />
@@ -840,120 +939,28 @@ const SystemsInPractice: React.FC = () => {
               Shared context → design + code → validation → context for the next change.
             </p>
           </div>
-
-          <div className="sip__track" ref={trackRef}>
-            <ol className="sip__beats" ref={beatsRef} aria-label="The loop, in four beats">
-              {BEATS.map((beat, i) => (
-                <li
-                  key={beat.n}
-                  className={`sip__beat sip__beat--${beat.n} reveal-fade${
-                    activeBeat === beat.n ? ' is-active' : ''
-                  }`}
-                  style={delay(80 + i * 80)}
-                  ref={(el) => { beatRefs.current[beat.n] = el; }}
-                  // Focusable so the keyboard can light the board the way a
-                  // hover does. Nothing happens on activation — the highlight
-                  // is a lens on the board, and the beat's text already says
-                  // what it would show — so it carries no button role.
-                  tabIndex={0}
-                  onMouseEnter={() => { lastInput.current = 'hover'; setHoveredBeat(beat.n); }}
-                  onMouseLeave={() => setHoveredBeat((cur) => (cur === beat.n ? null : cur))}
-                  onFocus={() => { lastInput.current = 'focus'; setFocusedBeat(beat.n); }}
-                  onBlur={() => setFocusedBeat((cur) => (cur === beat.n ? null : cur))}
-                >
-                  {beat.n > 1 && (
-                    // List mode only: the connector from the beat above, where
-                    // no wires are drawn — ⇅ into 03, ↓ into the others.
-                    <span className="sip__beat-link" aria-hidden="true">
-                      <svg viewBox="0 0 16 32" focusable="false">
-                        {beat.n === 3 ? (
-                          <path d="M5 4v24M2.5 8l2.5-4 2.5 4M11 28V4M8.5 24l2.5 4 2.5-4" />
-                        ) : (
-                          <path d="M8 4v24M4 24l4 4 4-4" />
-                        )}
-                      </svg>
-                    </span>
-                  )}
-                  {/* One template string, not text around an expression: the
-                      prerender serialises adjacent text nodes as one, and
-                      hydration would then find "[ 01 ]" where React expects
-                      "[ 0" — the #418 the header describes. */}
-                  <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
-                  <h4 className="sip__beat-title">{beat.title}</h4>
-                  <p className="sip__beat-body">{beat.body}</p>
-                </li>
-              ))}
-            </ol>
-
-            {/* The loop's linework — supplemental to the seam note and each
-                beat's own copy. */}
-            <svg className="sip__wires sip__wires--loop" aria-hidden="true" focusable="false">
-              {LOOP_LINKS.map((link) => (
-                <g
-                  key={link.id}
-                  className={`sip__link sip__link--loop${link.isReturn ? ' sip__link--return' : ''}${
-                    activeBeat && link.beats.includes(activeBeat) ? ' is-active' : ''
-                  }`}
-                  style={delay(link.delay)}
-                >
-                  <path
-                    className="sip__wire"
-                    pathLength={1}
-                    suppressHydrationWarning
-                    ref={(el) => { loopWireRefs.current[`${link.id}:shaft`] = el; }}
-                  />
-                  <path
-                    className="sip__head"
-                    pathLength={1}
-                    suppressHydrationWarning
-                    ref={(el) => { loopWireRefs.current[`${link.id}:a`] = el; }}
-                  />
-                  <path
-                    className="sip__head"
-                    pathLength={1}
-                    suppressHydrationWarning
-                    ref={(el) => { loopWireRefs.current[`${link.id}:b`] = el; }}
-                  />
-                  {link.isReturn && (
-                    // The surge: a slow pulse of current that rides the rail back
-                    // to 01 every six seconds. Two dashes on one geometry, a faint
-                    // tail and a bright core at its front, so it reads as current
-                    // on a line rather than a dot. Off under reduced motion.
-                    <>
-                      <path
-                        className="sip__surge sip__surge--tail"
-                        pathLength={1}
-                        suppressHydrationWarning
-                        ref={(el) => { loopWireRefs.current[`${link.id}:tail`] = el; }}
-                      />
-                      <path
-                        className="sip__surge sip__surge--core"
-                        pathLength={1}
-                        suppressHydrationWarning
-                        ref={(el) => { loopWireRefs.current[`${link.id}:core`] = el; }}
-                      />
-                    </>
-                  )}
-                </g>
-              ))}
-            </svg>
-
-            {/* The label that rides the return rail (row mode), and the
-                return itself where there is no rail (list mode). The slot is
-                what the rail is measured from; see the loop effect. */}
-            <div className="sip__return-slot" ref={returnSlotRef}>
-              <p className="sip__return reveal-fade" style={delay(1000)}>
-                <svg className="sip__return-glyph" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                  <path d="M14.5 12.5 A 5.5 5.5 0 1 1 10 4.5" />
-                  <path d="M10 4.5 L12.6 2.4 M10 4.5 L12.4 6.8" />
-                </svg>
-                <span>Back to 01</span>
-              </p>
-            </div>
+          <ol className="sip__steps" aria-label="The loop, in four beats">
+            {BEATS.map((beat, i) => (
+              <li key={beat.n} className="sip__step reveal-fade" style={delay(80 + i * 80)}>
+                <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
+                <span className="sip__step-title">{beat.title}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="sip__actions reveal-fade" style={delay(420)}>
+            <Link to="/notes/shared-language-better-product-decisions/" className="btn btn--secondary btn--md sip__btn">
+              Read how the loop works &rarr;
+            </Link>
+            {/* PlayDraft is the public study where the whole loop is visible:
+                Figma, a token-governed build, Maestro QA, and the live
+                /design-system screen. */}
+            <Link to="/work/playdraft/" className="sip__link">
+              See this in the work &rarr;
+            </Link>
+            <Link to="/design-system" className="sip__link">
+              Explore the live system &rarr;
+            </Link>
           </div>
-          <p className="sip__body reveal-fade" style={delay(1080)}>
-            As the system grows, so does the shared context.
-          </p>
         </div>
       </div>
     </section>
