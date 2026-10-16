@@ -92,6 +92,28 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
 });
 
 
+test('PlayDraft phone captures carry the overview media cap, and capped rows spread across the body', () => {
+  const { container } = render(<MemoryRouter><CaseStudyPage slug="playdraft" /></MemoryRouter>);
+  const rows = container.querySelectorAll('.project-overview__comparison');
+  expect(rows).toHaveLength(3);
+  rows.forEach(row => {
+    expect(row).toHaveClass('project-overview__comparison--capped');
+    // 620px tall at a 1206 x 2622 or 1170 x 2532 capture is 285px or 286px wide.
+    Array.from(row.children).forEach(figure => expect(figure.getAttribute('style')).toMatch(/--overview-media-cap: ?28[56]px/));
+  });
+  // The loop has no crop of its own; it takes the width of the still beside it.
+  expect(container.querySelector('#project-decisions video')!.closest('figure')!.getAttribute('style')).toMatch(/--overview-media-cap: ?285px/);
+  expect(container.querySelector('.project-overview__decision > figure')!.getAttribute('style')).toMatch(/--overview-media-cap: ?285px/);
+});
+
+test('LoopStack decision figures carry no cap, because their captures declare no crop ratio', () => {
+  const { container } = render(<MemoryRouter><CaseStudyPage slug="loopstack" /></MemoryRouter>);
+  const figures = container.querySelectorAll('.project-overview__decision > figure');
+  expect(figures.length).toBeGreaterThan(0);
+  figures.forEach(figure => expect(figure.getAttribute('style') ?? '').not.toContain('--overview-media-cap'));
+  expect(container.querySelector('.project-overview__comparison--capped')).toBeNull();
+});
+
 test.each(projects.filter(project => project.overview).map(project => [project.slug]))(
   '%s renders its own compact overview and silent media when unlocked', slug => {
     const project = projects.find(item => item.slug === slug)!;

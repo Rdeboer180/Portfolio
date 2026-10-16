@@ -18,20 +18,50 @@ const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number
   return <>{decision.body.slice(0, index)}<Link to={link.to}>{link.text}</Link>{decision.body.slice(index + link.text.length)}</>;
 };
 
-/** Original project artifacts retain their captions and crops. */
-const OverviewMedia: React.FC<{ image: ProjectImage; opening?: boolean }> = ({ image, opening }) => {
+/** Overview media stops growing at this height. The stylesheet already holds
+ *  the opening image, the loops and the preview to 620px; a cropped artifact
+ *  reaches the same ceiling through its width (--overview-media-cap), so a
+ *  portrait phone capture cannot grow into a column-wide tower, while a
+ *  landscape board, whose capped width exceeds any column, never notices. */
+const MEDIA_MAX_HEIGHT = 620;
+
+/** Width at which a cropped artifact is MEDIA_MAX_HEIGHT tall, or undefined when its ratio is unknown. */
+const cappedWidth = (image?: ProjectImage) => image?.crop ? MEDIA_MAX_HEIGHT * image.crop.width / image.crop.height : undefined;
+
+/** A comparison row shares one cap. A loop carries no crop, so it takes the
+ *  width of the stills beside it: the row already gives a loop the same column
+ *  as a still, and the cap keeps that pairing once columns outgrow the still. */
+const rowCaps = (images: ProjectImage[]) => {
+  const own = images.map(cappedWidth);
+  const shared = Math.min(...own.filter((cap): cap is number => cap !== undefined));
+  return Number.isFinite(shared) ? own.map(cap => cap ?? shared) : own;
+};
+
+/** Original project artifacts retain their captions and crops. `cap` is the
+ *  figure's widest useful size in px; the stylesheet applies it only where a
+ *  column could exceed it. */
+const OverviewMedia: React.FC<{ image: ProjectImage; opening?: boolean; cap?: number }> = ({ image, opening, cap }) => {
   if (!image.src || image.isOverlay) return null;
   const crop = image.crop;
-  return <figure className={opening ? 'project-overview__opening' : undefined}>
+  return <figure className={opening ? 'project-overview__opening' : undefined} style={cap ? { ['--overview-media-cap' as string]: `${Math.round(cap)}px` } : undefined}>
     {image.isVideo ? <LoopVideo src={image.src} poster={image.videoPoster} label={image.alt} /> :
       <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`View full image: ${image.alt} (opens in a new tab)`}>
-        {image.displaySrc ? <img className="project-overview__cropped-evidence" src={image.displaySrc} alt={image.alt} loading={opening ? 'eager' : 'lazy'} /> : crop ? <span className="project-overview__crop" style={{ aspectRatio: `${crop.width} / ${crop.height}`, maxWidth: opening ? 620 * crop.width / crop.height : undefined, margin: '0 auto' }}>
+        {image.displaySrc ? <img className="project-overview__cropped-evidence" src={image.displaySrc} alt={image.alt} loading={opening ? 'eager' : 'lazy'} /> : crop ? <span className="project-overview__crop" style={{ aspectRatio: `${crop.width} / ${crop.height}`, maxWidth: opening ? cappedWidth(image) : undefined, margin: '0 auto' }}>
           <img src={image.src} alt={image.alt} width={crop.sourceWidth} height={crop.sourceHeight} loading={opening ? 'eager' : 'lazy'}
             style={{ width: `${crop.sourceWidth / crop.width * 100}%`, maxWidth: 'none', height: 'auto', left: `${-crop.x / crop.width * 100}%`, top: `${-crop.y / crop.height * 100}%` }} />
         </span> : <img src={image.src} alt={image.alt} loading={opening ? 'eager' : 'lazy'} />}
       </a>}
     {image.caption && <figcaption>{image.caption}</figcaption>}
   </figure>;
+};
+
+/** Live variants side by side. Capped rows spread across the body instead of
+ *  leaving each figure in half of it; see --overview-media-cap in the stylesheet. */
+const ComparisonRow: React.FC<{ title: string; images: ProjectImage[] }> = ({ title, images }) => {
+  const caps = rowCaps(images);
+  return <div className={`project-overview__comparison${caps.every(Boolean) ? ' project-overview__comparison--capped' : ''}`} aria-label={`${title}: live variants`}>
+    {images.map((image, index) => <OverviewMedia key={image.src} image={image} cap={caps[index]} />)}
+  </div>;
 };
 
 /** A route-backed article: the rail is navigation, never a modal or a second main. */
@@ -98,9 +128,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
               <h3>{decision.title}</h3>
               <p><DecisionCopy decision={decision} /></p>
             </div>
-            {decision.images?.length ? <div className="project-overview__comparison" aria-label={`${decision.title}: live variants`}>
-              {decision.images.map(image => <OverviewMedia key={image.src} image={image} />)}
-            </div> : decision.image && <OverviewMedia image={decision.image} />}
+            {decision.images?.length ? <ComparisonRow title={decision.title} images={decision.images} /> : decision.image && <OverviewMedia image={decision.image} cap={cappedWidth(decision.image)} />}
           </section>)}
         </section>
         <section id="project-outcome" className="project-overview__outcome">

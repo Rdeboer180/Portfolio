@@ -84,6 +84,35 @@
     figure:last-child:nth-child(odd) { grid-column: 1 / -1; }
     @media (max-width: 700px) { grid-template-columns: 1fr; }
   }
+  // Decision media stops at MEDIA_MAX_HEIGHT (ProjectOverview.tsx): the 620px
+  // the opening image and the loops already hold to. The component writes a
+  // figure's capped width into --overview-media-cap and this stylesheet
+  // decides where it applies. Only the two-column layout can run a column
+  // past the cap, so the rules live inside the breakpoint that splits the
+  // decision grid; phones and tablets keep filling the column exactly as
+  // before. The cap sits on the figure rather than the image, so the caption
+  // stays as wide as the artifact it describes.
+  @media (min-width: 1001px) {
+    &__decision > figure {
+      width: 100%;
+      max-width: var(--overview-media-cap, none);
+      justify-self: center;
+    }
+    // A row of capped figures leaves the grid. Two phones each centred in half
+    // the body would read as two holes; flex with space-evenly turns the
+    // leftover into equal bands beside and between them, and a third figure
+    // joins the row instead of taking a full-width line of its own. The grid
+    // gap stays as the floor between figures, so the middle band runs one gap
+    // wider than the outer two and nothing touches while the figures are
+    // still growing toward the cap. Rows with no cap keep the grid above.
+    &__comparison--capped {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      align-items: flex-start;
+      > figure { flex: 1 1 0; min-width: 0; max-width: var(--overview-media-cap, none); }
+    }
+  }
   &__number { font: $font-size-caption $font-family-mono; color: $color-text-secondary; }
   &__outcome { padding: $spacing-2xl 0; border-top: 1px solid $color-border-default; h2 { font-size: $font-size-h4; } }
   &__depth { border-block: 1px solid $color-border-default; summary { cursor: pointer; padding: $spacing-xl 0; font-weight: 600; } }
