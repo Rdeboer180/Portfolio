@@ -686,9 +686,6 @@ const CaseStudyPlayground: React.FC = () => {
             const { locked, mediaLocked, hasPlate, plated } = lockStateFor(card);
             // Hover and focus lift the card; on touch the in-view drop does.
             const active = activeSlug === card.slug || nav.pointedSlug === card.slug || (isTouch && phase === 'in');
-            // The caption names the client only once it may be named: the
-            // prerender is a locked visitor, and so is every first render.
-            const caption = locked ? card.year : `${card.year} · ${clientLabelFor(card, false)}`;
             return (
               <article
                 key={card.slug}
@@ -715,56 +712,66 @@ const CaseStudyPlayground: React.FC = () => {
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
-                  <span className="case-playground__caption" aria-hidden="true">[ {caption} ]</span>
                   {lockLineFor(card, locked, `lock-${card.slug}`, 'case-playground__lock', card.publicVideo)}
-                  {card.video && !posterOnly ? (
-                    <CardVideo
-                      src={card.video}
-                      poster={card.image}
-                      alt={card.alt}
-                      playing={active || phase === 'in'}
-                      primary={card.videoPrimary}
-                    />
-                  ) : (
-                    <img src={card.image} alt={card.alt} loading="lazy" />
-                  )}
+                  {/* The still or loop is a framed subject centred in the
+                      ground's clear area (above the tab's shoulder), and it
+                      rises out of the ground on hover. A plated card keeps its
+                      media full-bleed behind the plate, so nothing hidden
+                      moves, and the plate itself never rises. */}
+                  <span className={`case-playground__subject${hasPlate ? ' case-playground__subject--behind' : ''}`}>
+                    {card.video && !posterOnly ? (
+                      <CardVideo
+                        src={card.video}
+                        poster={card.image}
+                        alt={card.alt}
+                        playing={active || phase === 'in'}
+                        primary={card.videoPrimary}
+                      />
+                    ) : (
+                      <img src={card.image} alt={card.alt} loading="lazy" />
+                    )}
+                  </span>
                 </div>
 
-                {/* Middle — title and outcome */}
-                <div className="case-playground__body">
-                  <h3 className="case-playground__card-title">{card.title}</h3>
-                  <p className="case-playground__metric">{card.metric}</p>
-                  <div className="case-playground__footer">
-                    <span className="case-playground__cta" aria-hidden="true">
-                      View case study
-                      <span className="case-playground__cta-arrow">
-                        <CtaArrow />
+                {/* The tab: a paper plate cut into the ground, the way a folder
+                    tab folds over its contents. The raised part carries the
+                    card's index; the cutout beside it is the tool tray. */}
+                <div className="case-playground__tabwrap">
+                  <div className="case-playground__body">
+                    <span className="case-playground__index" aria-hidden="true">{`${String(i + 1).padStart(2, '0')} / ${String(visibleCards.length).padStart(2, '0')}`}</span>
+                    <h3 className="case-playground__card-title">{card.title}</h3>
+                    <p className="case-playground__metric">{card.metric}</p>
+                    <div className="case-playground__footer">
+                      <span className="case-playground__cta" aria-hidden="true">
+                        View case study
+                        <span className="case-playground__cta-arrow">
+                          <CtaArrow />
+                        </span>
                       </span>
-                    </span>
-                    <ProjectBrand project={card} locked={locked} />
+                      <ProjectBrand project={card} locked={locked} />
+                    </div>
+                  </div>
+
+                  {/* The tool coin tray, in the cutout (decorative). */}
+                  <div className="case-playground__tray" aria-hidden="true">
+                    {card.coins.map((coin) => (
+                      <motion.span
+                        key={coin.icon + coin.x}
+                        className="case-playground__coin"
+                        style={{ left: `${coin.x}%`, bottom: 6 + coin.lift / 2, zIndex: coin.z }}
+                        custom={coin}
+                        variants={variants}
+                        initial="idle"
+                        animate={phase}
+                        title={coin.name}
+                      >
+                        <img src={`/images/proficiencies/${coin.icon}`} alt="" />
+                      </motion.span>
+                    ))}
                   </div>
                 </div>
 
                 </ProjectLink>
-
-                {/* Bottom — tool coin tray (decorative) */}
-                <div className="case-playground__tray" aria-hidden="true">
-                  <span className="case-playground__tray-label">[ Made With ]</span>
-                  {card.coins.map((coin) => (
-                    <motion.span
-                      key={coin.icon + coin.x}
-                      className="case-playground__coin"
-                      style={{ left: `${coin.x}%`, bottom: 8 + coin.lift, zIndex: coin.z }}
-                      custom={coin}
-                      variants={variants}
-                      initial="idle"
-                      animate={phase}
-                      title={coin.name}
-                    >
-                      <img src={`/images/proficiencies/${coin.icon}`} alt="" />
-                    </motion.span>
-                  ))}
-                </div>
               </article>
             );
           })}

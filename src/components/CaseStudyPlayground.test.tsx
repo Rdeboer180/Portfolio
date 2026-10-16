@@ -162,6 +162,9 @@ test('locked studies carry the lock line in every layout, name no client, and ea
   mockUnlocked = true;
   const view = mount();
   expect(screen.queryByText('Password protected')).not.toBeInTheDocument();
+  // A card names the employer only through its brand mark; the index row says it in words.
+  expect(view.container.querySelector('.project-brand--tire-rack')).not.toBeNull();
+  fireEvent.click(viewButton('List'));
   expect(view.container.textContent).toContain('Tire Rack');
 });
 

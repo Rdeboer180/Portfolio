@@ -727,30 +727,12 @@
 }
 
 // ── The engagement plate ──────────────────────────────────────────────────
-// The preview carries a mono caption (year, and the client once it may be
-// named) and Figma-style corner handles that appear on the active card: the
+// Figma-style corner handles that appear on the active card: the
 // selection-frame vernacular the skills cards use, drawn inside the preview
-// because the card clips its edges.
+// because the card clips its edges. The year and client left the card; the
+// index row and the study carry them, and the card is the title and the
+// outcome.
 .case-playground {
-  &__caption {
-    position: absolute;
-    top: $spacing-sm;
-    left: $spacing-sm;
-    z-index: 2;
-    margin: 0;
-    padding: 3px 7px;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-sm;
-    background: rgba(255, 255, 255, 0.88);
-    font-family: $font-family-mono;
-    font-size: 9px;
-    line-height: 1.4;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: $color-neutral-dark;
-    pointer-events: none;
-  }
-
   &__preview::before {
     content: '';
     position: absolute;
@@ -770,13 +752,6 @@
   }
 
   &__card--active &__preview::before { opacity: 1; }
-
-  // A plated card already labels itself in that corner (the plate is drawn
-  // with its own title line), so the caption waits for the plate to lift and
-  // arrives on the same resolve delay as the media under it.
-  &__card--plated &__caption { opacity: 0; }
-  &__caption { transition: opacity 650ms var(--case-study-ease-out); }
-  &--resolving &__caption { transition-delay: var(--resolve-delay, 0ms); }
 
   @media (prefers-reduced-motion: reduce) {
     &__preview::before { transition: none; }
@@ -1043,3 +1018,90 @@
     outline-offset: -2px;
   }
 }
+
+// ── The folder card ───────────────────────────────────────────────────────
+// After pipturner.co.uk and a "Card — Folder" study: the preview is the card's
+// ground, the body is a paper tab cut into it with a notched shoulder, and the
+// still or loop is a framed subject that rises out of the ground on hover.
+// The notch beside the raised tab is where the tool tray lives now, so the
+// coins keep their home and their drop without a third band under the card.
+.case-playground {
+  --folder-notch: 46px;  // the shoulder's height; the tray's too
+  --folder-tab: 56%;     // the raised tab's share of the card
+
+  &__card { background: $color-secondary-lightest; }
+
+  // The ground is exactly a 16:10 frame plus the tab's overlap, so the still
+  // or loop bleeds to the card's edges and sits whole above the shoulder.
+  &__preview {
+    aspect-ratio: auto;
+    height: 0;
+    padding-bottom: calc(62.5% + var(--folder-notch));
+    background: $color-secondary-lightest;
+  }
+
+  &__subject {
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    img,
+    video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+  }
+
+  &__card--active &__preview img,
+  &__card--active &__preview video { transform: none; filter: saturate(1); }
+
+  // Behind a plate the media fills the whole ground, as the plate does.
+  &__subject--behind {
+    inset: 0;
+
+    img,
+    video { height: 100%; aspect-ratio: auto; }
+  }
+
+  // The tab overlaps the ground by the notch, and its clip leaves the ground
+  // showing through the cutout, where the tray sits.
+  &__tabwrap {
+    position: relative;
+    margin-top: calc(var(--folder-notch) * -1);
+    z-index: 2;
+  }
+
+  &__body {
+    position: relative;
+    background: var(--case-study-card-bg);
+    padding-top: calc(var(--folder-notch) + var(--space-sm));
+    clip-path: polygon(0 0, var(--folder-tab) 0, calc(var(--folder-tab) + 22px) var(--folder-notch), 100% var(--folder-notch), 100% 100%, 0 100%);
+  }
+
+  &__index {
+    position: absolute;
+    top: 14px;
+    left: var(--space-lg);
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: $color-neutral-muted;
+  }
+
+  // The tray, in the cutout: the ground shows through, so no box of its own.
+  &__tray {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100% - var(--folder-tab) - 22px);
+    height: var(--folder-notch);
+    background: transparent;
+    border-top: 0;
+    box-shadow: none;
+    --case-study-icon-size: 28px;
+  }
+
+  // No label: the coins say what the tray is.
+
+  &__coin { border-radius: $radius-sm; }
+
+}
+
+// The tile keeps its own full-bleed preview; the folder ground is the card's.
+.case-playground__tile .case-playground__preview { aspect-ratio: 16 / 10; height: auto; padding-bottom: 0; }
