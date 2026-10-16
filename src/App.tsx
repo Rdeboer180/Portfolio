@@ -72,7 +72,10 @@ function RouteEffects() {
     previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
     if (location.hash && location.hash !== '#main-content') {
-      const id = location.hash.slice(1);
+      // The work navigator's deep links carry a selection after the anchor
+      // (#projects/aem, #projects/client/personal); the element is still
+      // #projects, so the id is whatever comes before the first slash.
+      const id = location.hash.slice(1).split('/')[0];
       requestAnimationFrame(() => {
         document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
       });

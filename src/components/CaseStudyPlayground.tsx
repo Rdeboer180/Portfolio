@@ -377,10 +377,16 @@ const CaseStudyPlayground: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [measure, visibleCards.length]);
 
-  // jsdom has no element scrollTo; the browser always does.
+  // jsdom has no element scrollTo; the browser always does. A scroll the row
+  // does not need is skipped rather than issued: Chrome treats any programmatic
+  // scroll, even one to the row's current position, as a reason to stall a
+  // smooth window scroll already in flight, and a deep link such as
+  // #projects/aem applies its group (which resets this row) in the same beat
+  // RouteEffects is scrolling the page down to the section.
   const scrollGrid = (left: number, behavior: ScrollBehavior) => {
     const el = gridRef.current;
-    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left, behavior });
+    if (!el || typeof el.scrollTo !== 'function' || Math.round(el.scrollLeft) === left) return;
+    el.scrollTo({ left, behavior });
   };
 
   const goToPage = (next: number) => {
