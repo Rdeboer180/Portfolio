@@ -1,9 +1,9 @@
 // ============================================
-// Case Study Playground — shadowbox cards + tool coin tray
-// Scroll-snap carousel at every width (3-up on desktop, edge-peek below),
-// paged by hand-sketched arrows that draw in on scroll (hero-arrow language).
-// Coin motion lives in CaseStudyPlayground.tsx (framer-motion); this file owns
-// layout, the shadowbox look, the threshold rule, and reduced-motion overrides.
+// Case Study Playground — featured shadowbox cards + tool coin tray, then the index
+// Three featured cards (3-up on desktop, a scroll-snap row with edge-peek
+// below), then every study as an index row. Coin motion lives in
+// CaseStudyPlayground.tsx (framer-motion); this file owns layout, the
+// shadowbox look, the threshold rule, and reduced-motion overrides.
 // ============================================
 
 @import '../variables';
@@ -88,71 +88,15 @@
     transform: translateX(calc(1186px - 72px));
   }
 
-  // ── Sketch arrows (carousel paging) ────────────────────────────────────────
+  // ── Filter row ─────────────────────────────────────────────────────────────
 
   &__nav {
     display: flex;
-    justify-content: flex-end;
-    gap: $spacing-md;
-    margin-bottom: $spacing-md;
+    align-items: center;
+    margin-bottom: $spacing-lg;
   }
 
-  &__nav-btn {
-    width: 48px;
-    height: 48px;
-    padding: 2px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: $color-neutral-dark;
-    transition: color var(--case-study-motion-fast),
-                transform var(--case-study-motion-fast);
-
-    &:hover {
-      color: $color-primary;
-      transform: translateY(-2px);
-    }
-
-    &:focus-visible {
-      outline: 2px solid $color-primary;
-      outline-offset: 2px;
-      border-radius: var(--radius-md);
-    }
-  }
-
-  &__nav-svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-
-    path {
-      stroke: currentColor;
-      stroke-width: 1.8;
-      // Hidden until the section reveals — then the stroke draws in
-      stroke-dasharray: 1;
-      stroke-dashoffset: 1;
-      transition: stroke-dashoffset 650ms ease 250ms;
-    }
-  }
-
-  // Second arrow (and each arrowhead) draws slightly later — sketched, not stamped
-  &__nav-btn--next &__nav-svg path {
-    transition-delay: 480ms;
-  }
-
-  &__nav-svg path:nth-child(2) {
-    transition-delay: 620ms;
-  }
-
-  &__nav-btn--next &__nav-svg path:nth-child(2) {
-    transition-delay: 850ms;
-  }
-
-  &--revealed &__nav-svg path {
-    stroke-dashoffset: 0;
-  }
-
-  // ── Carousel (scroll-snap at every width) ──────────────────────────────────
+  // ── Featured row (scroll-snap below the desktop width) ─────────────────────
 
   &__grid {
     display: flex;
@@ -600,7 +544,6 @@
       transform: none;
     }
 
-    &__nav-svg path,
     &__cta-arrow-svg path {
       transition: none;
       stroke-dashoffset: 0; // arrows simply present, no draw-in
@@ -608,8 +551,7 @@
 
     &__card,
     &__preview img,
-    &__cta,
-    &__nav-btn {
+    &__cta {
       transition: none;
     }
 
@@ -683,112 +625,12 @@
   &__footer &__cta { margin-top: 0; flex-shrink: 0; }
 }
 
-// ── Navigator controls and the engagement plate ───────────────────────────
-// The nav row grows a left side: the browse control that opens the work
-// navigator and, once a group is chosen, the filter it applies. The arrows keep
-// the right with a page indicator between them, so the carousel can be paged
-// without the rail. On the card, the preview gains a mono caption (year, and
-// the client once it may be named) and Figma-style corner handles that appear
-// on the active card: the selection-frame vernacular the skills cards use,
-// drawn inside the preview because the card clips its edges.
+// ── The engagement plate ──────────────────────────────────────────────────
+// The preview carries a mono caption (year, and the client once it may be
+// named) and Figma-style corner handles that appear on the active card: the
+// selection-frame vernacular the skills cards use, drawn inside the preview
+// because the card clips its edges.
 .case-playground {
-  &__nav {
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  &__nav-start,
-  &__nav-end {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    flex-wrap: wrap;
-  }
-
-  &__nav-end { margin-left: auto; }
-
-  &__nav-btn[disabled] {
-    opacity: 0.35;
-    cursor: default;
-    transform: none;
-    color: $color-neutral-dark;
-  }
-
-  &__browse {
-    appearance: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 14px;
-    border: 1px solid $color-border-default;
-    border-radius: var(--radius-full);
-    background: $color-white;
-    font-family: $font-family-mono;
-    font-size: 11px;
-    font-weight: $font-weight-medium;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $color-neutral-dark;
-    cursor: pointer;
-    transition: border-color var(--case-study-motion-fast), color var(--case-study-motion-fast);
-
-    &:hover { border-color: rgba($color-primary, 0.45); color: $color-primary-dark; }
-    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
-
-    // Open is a state the reader chose.
-    &[aria-expanded='true'] {
-      border-color: $color-primary;
-      color: $color-primary-dark;
-      background: $color-primary-light;
-    }
-  }
-
-  &__browse-glyph {
-    display: inline-flex;
-    width: 14px;
-    height: 14px;
-
-    svg { width: 100%; height: 100%; }
-  }
-
-  &__filter {
-    font-family: $font-family-mono;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: $color-primary-dark;
-  }
-
-  &__filter-clear {
-    appearance: none;
-    border: 0;
-    padding: 4px 2px;
-    background: none;
-    font-family: $font-family-mono;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $color-neutral-muted;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-
-    &:hover { color: $color-neutral-dark; }
-    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; border-radius: 3px; }
-  }
-
-  &__pages {
-    min-width: 5ch;
-    text-align: center;
-    font-family: $font-family-mono;
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.08em;
-    color: $color-neutral-muted;
-  }
-
   &__caption {
     position: absolute;
     top: $spacing-sm;
@@ -836,34 +678,39 @@
   &--resolving &__caption { transition-delay: var(--resolve-delay, 0ms); }
 
   @media (prefers-reduced-motion: reduce) {
-    &__preview::before,
-    &__browse { transition: none; }
+    &__preview::before { transition: none; }
   }
 }
 
-// ── Density: Cards, List, Grid ────────────────────────────────────────────
-// The navigator chooses what the section shows; the switch beside the browse
-// control chooses how densely. Cards is the carousel above and the only view
-// in the static page. List borrows the navigator's own .dam__item row grid so
-// the rail and the page read as one tool, and Grid is the card's preview and
-// title with the body and tray left off. The lock treatments are the card's
-// in every view: the plate or blur, the lock line, the anonymous employer,
-// and the per-item resolve delay on unlock.
+// ── Discipline chips, the index, and the author's layout styles ─────────────
+// A visitor sees one layout: the featured cards, then the index. The chips
+// filter both. List (the index alone) and Grid (the card's preview and title
+// with the body and tray left off) are styles an author applies from the
+// component toolbar. The lock treatments are the card's in every layout: the
+// plate or blur, the lock line, the anonymous employer, and the per-item
+// resolve delay on unlock.
 .case-playground {
-  // The switch is one pill in the browse control's mono grammar. Primary
-  // tints only the pressed segment: the one the reader chose is the one state.
-  &__views {
+  // One pill in the site's mono control grammar. Primary tints only the
+  // pressed segment: the one the reader chose is the one state. On a phone the
+  // four chips stay one row and scroll sideways rather than wrapping into two.
+  &__disciplines {
     display: inline-flex;
     align-items: center;
+    max-width: 100%;
     min-height: 36px;
     padding: 2px;
     border: 1px solid $color-border-default;
     border-radius: var(--radius-full);
     background: $color-white;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
   }
 
-  &__view {
+  &__discipline {
     appearance: none;
+    flex: 0 0 auto;
     min-height: 30px;
     padding: 0 12px;
     border: 0;
@@ -889,9 +736,15 @@
     }
   }
 
-  // ── List ──
+  // ── Index ──
+  // Under the featured cards it needs its own beat of space; as the List
+  // style it follows the chips directly.
   &__list {
     margin-top: $spacing-md;
+  }
+
+  &__grid + &__list {
+    margin-top: $spacing-2xl;
   }
 
   // The rail's row at page width: a larger still, the outcome under the
@@ -1013,7 +866,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    &__view,
+    &__discipline,
     &__tile,
     &__tile-title { transition: none; }
 
@@ -1051,4 +904,11 @@
 
 @media (max-width: #{$breakpoint-md - 1}) {
   .case-playground__tiles { grid-template-columns: minmax(0, 1fr); }
+}
+
+// A phone fits all four chips at 8px of side padding (measured at 390: 12px
+// left "Product Design" clipped mid-word, which read as a bug, not a scroll).
+// The sideways scroll stays as the fallback below that width.
+@media (max-width: #{$breakpoint-sm - 1}) {
+  .case-playground__discipline { padding: 0 8px; }
 }

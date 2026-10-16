@@ -1,12 +1,12 @@
 // ============================================
 // Side Panel — the docked column AEM's editor quotes
-// Shared by the author's Asset Panel and the public work navigator: opening
-// either pushes the page right and the page re-centres in what is left, so
+// The author's Asset Panel, with the work navigator's folders inside it:
+// opening it pushes the page right and the page re-centres in what is left, so
 // nothing on the left is covered. Containers centre with margin: auto and the
 // process-board wires redraw on ResizeObserver, so padding <body> is the whole
 // mechanism. The site nav is the one fixed element on the page, so it moves
 // with the body. The Assets finder grid (.dam) lives here too, because the
-// navigator's study rows reuse it.
+// navigator's study rows and the work section's index reuse it.
 // ============================================
 
 @import '../variables';

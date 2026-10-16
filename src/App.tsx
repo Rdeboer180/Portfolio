@@ -12,7 +12,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import SelectedWriting from './components/SelectedWriting';
 import SkillMastery from './components/SkillMastery';
-import CaseStudyPlayground from './components/CaseStudyPlayground';
+import CaseStudyPlayground, { WorkLayoutStyle } from './components/CaseStudyPlayground';
 import SystemsInPractice from './components/SystemsInPractice';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
@@ -125,7 +125,7 @@ function HomeRoute() {
         {/* Below the fold the page is addressable: every section is a component
             the author chrome can name, select and annotate. The specs live in
             src/data/authorChrome.ts so the Asset Panel reads the same list. */}
-        <AuthoredSection {...AUTHORED_COMPONENTS.playground}>
+        <AuthoredSection {...AUTHORED_COMPONENTS.playground} toolbar={<WorkLayoutStyle />}>
           <CaseStudyPlayground />
         </AuthoredSection>
         <AuthoredSection {...AUTHORED_COMPONENTS.writing}>

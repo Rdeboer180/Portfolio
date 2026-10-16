@@ -5,6 +5,7 @@ import { KIND_LABEL, NOTES_BY_DATE } from '../data/notes';
 import { useAuthorMode } from '../context/AuthorModeContext';
 import { useUnlock } from '../context/UnlockContext';
 import { AUTHORED_COMPONENTS, AUTHORED_LIST } from '../data/authorChrome';
+import WorkNavigator from './WorkNavigator';
 
 type AssetKind = 'study' | 'note' | 'fragment';
 
@@ -90,9 +91,9 @@ const FragmentGlyph = () => (
 );
 
 /**
- * AEM's Side Panel in Author mode: the Assets finder (the DAM) and the
- * Components browser, in the docked column SidePanelShell provides (the public
- * work navigator uses the same dock). Desktop only, like the editor it quotes.
+ * AEM's Side Panel in Author mode: the Assets finder (the DAM), with the work
+ * navigator's folders under Case studies, and the Components browser, in the
+ * docked column SidePanelShell provides. Desktop only, like the editor it quotes.
  */
 const AuthorSidePanel: React.FC = () => {
   const { authoring, ui, update, selectComponent } = useAuthorMode();
@@ -161,6 +162,11 @@ const AuthorSidePanel: React.FC = () => {
           <p className="dam__count" aria-live="polite">
             {visible.length} of {assets.length} · {counts.study} case studies · {counts.note} notes · {counts.fragment} fragment
           </p>
+          {/* The Case studies filter opens the work navigator's folders, the
+              way AEM Assets files a collection: by discipline and by client,
+              each folder filtering the work section on the page. A search
+              falls back to the flat results. */}
+          {filter === 'study' && !needle ? <WorkNavigator /> : (
           <ul className="dam__list">
             {visible.map((asset) => {
               const locked = Boolean(asset.protectedStream) && !unlocked;
@@ -196,6 +202,7 @@ const AuthorSidePanel: React.FC = () => {
               );
             })}
           </ul>
+          )}
           {visible.length === 0 && <p className="dam__empty">No assets match.</p>}
         </div>
       ) : (

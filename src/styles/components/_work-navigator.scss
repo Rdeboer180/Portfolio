@@ -1,10 +1,9 @@
 // ============================================
-// Work navigator — the public use of the Side Panel dock
+// Work navigator — the case-study folders inside the Asset Panel
 // Groups are folder rows in the Layers-panel grammar; the selected group is a
 // state (tinted field, primary rule on the left), never decoration. Study rows
-// reuse the Assets finder's `.dam__item` grid so both panels read as one tool.
-// Below 1000px the dock cannot exist, so the same markup folds inline under
-// the work section's header as an accordion.
+// reuse the Assets finder's `.dam__item` grid so the folders and the flat
+// results read as one tool.
 // ============================================
 
 @import '../variables';
@@ -103,23 +102,6 @@
 
     &:hover { background: $color-secondary-lightest; }
     &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
-  }
-}
-
-// The dock only exists where the page has a column to give. Below that the
-// rail becomes an in-flow accordion under the section header: full width,
-// bounded height, its own scroll, and no body padding.
-@media (max-width: 999px) {
-  .side-panel--work {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    max-width: none;
-    max-height: 70vh;
-    margin: $spacing-lg 0;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-lg;
-    box-shadow: var(--shadow-md);
   }
 }
 

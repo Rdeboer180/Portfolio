@@ -1,14 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import SidePanelShell from './SidePanelShell';
 import { useWorkNavigator } from '../context/WorkNavigatorContext';
-import { useAuthorMode } from '../context/AuthorModeContext';
 import { useUnlock } from '../context/UnlockContext';
 import { Project, clientLabelFor } from '../data/projects';
 import { WORK_GROUPS, NavigatorGroupId, clientGroups, studiesInGroup } from '../data/workGroups';
 import { coinVariants, coinVariantsReduced } from '../data/toolCoins';
-
-export const WORK_NAVIGATOR_ID = 'work-navigator';
 
 const LockGlyph = () => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
@@ -69,97 +65,82 @@ const StudyRow: React.FC<{ project: Project; index: number; locked: boolean }> =
 };
 
 /**
- * The public work navigator: the Asset Panel's dock, listing the studies by
- * discipline and by client, in the one WORK_ORDER. Picking a group changes
+ * The work navigator's folders: the case studies filed by discipline and by
+ * client, in the one WORK_ORDER, the way AEM Assets files them. It lives in
+ * the Asset Panel under the Case studies filter, because filing by client and
+ * pointing a row at its card are authoring affordances; a visitor filters by
+ * discipline with the chips in the section itself. Picking a folder changes
  * which studies the work section shows; the rows themselves open a study.
- * It mounts only after hydration and never beside the author's own panel.
  */
 const WorkNavigator: React.FC = () => {
   const nav = useWorkNavigator();
-  const { authoring } = useAuthorMode();
   const { unlocked } = useUnlock();
-  const firstGroupRef = useRef<HTMLButtonElement | null>(null);
-  const shown = nav.mounted && nav.open && !authoring;
 
-  // Opening the rail moves focus into it; Escape and the close button hand it back.
-  useEffect(() => {
-    if (shown) firstGroupRef.current?.focus();
-  }, [shown]);
-
-  if (!shown) return null;
-
-  const close = () => {
-    nav.setOpen(false);
-    nav.triggerRef.current?.focus();
-  };
   const isLocked = (project: Project) => !unlocked && project.stream === 'professional';
   const countFor = (id: NavigatorGroupId) => (id === 'client' ? clientGroups(!unlocked).length : studiesInGroup(id).length);
 
   return (
-    <SidePanelShell title="Browse work" label="Browse work by discipline or client" closeLabel="Close work navigator" onClose={close} variant="work" id={WORK_NAVIGATOR_ID}>
-      <div className="side-panel__body work-nav">
-        <ul className="work-nav__groups">
-          {WORK_GROUPS.map((group, groupIndex) => {
-            const selected = nav.group === group.id;
-            return (
-              <li key={group.id}>
-                <button
-                  type="button"
-                  className="work-nav__group"
-                  aria-pressed={selected}
-                  aria-expanded={selected}
-                  ref={groupIndex === 0 ? firstGroupRef : undefined}
-                  onClick={() => nav.selectGroup(selected ? null : group.id)}
-                >
-                  <span className="work-nav__folder"><FolderGlyph /></span>
-                  <span className="work-nav__group-label">{group.label}</span>
-                  <span className="work-nav__count">{countFor(group.id)}</span>
-                </button>
-                {selected && group.id !== 'client' && (
-                  <ul className="dam__list work-nav__studies" key={group.id}>
-                    {studiesInGroup(group.id).map((project, index) => (
-                      <StudyRow key={project.slug} project={project} index={index} locked={isLocked(project)} />
-                    ))}
-                  </ul>
-                )}
-                {selected && group.id === 'client' && (
-                  <ul className="work-nav__clients">
-                    {clientGroups(!unlocked).map((client) => {
-                      const current = nav.clientKey === client.key;
-                      return (
-                        <li key={client.key}>
-                          <button
-                            type="button"
-                            className="work-nav__client"
-                            aria-pressed={current}
-                            onClick={() => nav.selectClient(current ? null : client.key)}
-                          >
-                            <span className="work-nav__group-label">{client.label}</span>
-                            <span className="work-nav__count">{client.studies.length}</span>
-                          </button>
-                          {(current || !nav.clientKey) && (
-                            <ul className="dam__list work-nav__studies" key={`${client.key}-${nav.clientKey ?? 'all'}`}>
-                              {client.studies.map((project, index) => (
-                                <StudyRow key={project.slug} project={project} index={index} locked={isLocked(project)} />
-                              ))}
-                            </ul>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-        {nav.group && (
-          <button type="button" className="work-nav__clear" onClick={() => nav.selectGroup(null)}>
-            Show all work
-          </button>
-        )}
-      </div>
-    </SidePanelShell>
+    <div className="work-nav">
+      <ul className="work-nav__groups" aria-label="Case study folders">
+        {WORK_GROUPS.map((group) => {
+          const selected = nav.group === group.id;
+          return (
+            <li key={group.id}>
+              <button
+                type="button"
+                className="work-nav__group"
+                aria-pressed={selected}
+                aria-expanded={selected}
+                onClick={() => nav.selectGroup(selected ? null : group.id)}
+              >
+                <span className="work-nav__folder"><FolderGlyph /></span>
+                <span className="work-nav__group-label">{group.label}</span>
+                <span className="work-nav__count">{countFor(group.id)}</span>
+              </button>
+              {selected && group.id !== 'client' && (
+                <ul className="dam__list work-nav__studies" key={group.id}>
+                  {studiesInGroup(group.id).map((project, index) => (
+                    <StudyRow key={project.slug} project={project} index={index} locked={isLocked(project)} />
+                  ))}
+                </ul>
+              )}
+              {selected && group.id === 'client' && (
+                <ul className="work-nav__clients">
+                  {clientGroups(!unlocked).map((client) => {
+                    const current = nav.clientKey === client.key;
+                    return (
+                      <li key={client.key}>
+                        <button
+                          type="button"
+                          className="work-nav__client"
+                          aria-pressed={current}
+                          onClick={() => nav.selectClient(current ? null : client.key)}
+                        >
+                          <span className="work-nav__group-label">{client.label}</span>
+                          <span className="work-nav__count">{client.studies.length}</span>
+                        </button>
+                        {(current || !nav.clientKey) && (
+                          <ul className="dam__list work-nav__studies" key={`${client.key}-${nav.clientKey ?? 'all'}`}>
+                            {client.studies.map((project, index) => (
+                              <StudyRow key={project.slug} project={project} index={index} locked={isLocked(project)} />
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {nav.group && (
+        <button type="button" className="work-nav__clear" onClick={() => nav.selectGroup(null)}>
+          Show all work
+        </button>
+      )}
+    </div>
   );
 };
 

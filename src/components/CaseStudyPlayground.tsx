@@ -1,15 +1,14 @@
 import { CARDS, Coin, CoinPhase, coinVariants, coinVariantsReduced } from '../data/toolCoins';
 import { FeaturedEndorsement } from './Testimonials';
 // ============================================
-// CaseStudyPlayground — "shadowbox + tool coin tray" case studies carousel
-// All public case studies as shadowbox cards (preview / title and outcome /
-// coin tray) in a scroll-snap carousel paged by hand-sketched arrows that draw
-// in on scroll (same artistic language as the hero arrows). The work navigator
-// (WorkNavigator.tsx) filters the row by discipline or client; without it the
-// arrows page three at a time through the one WORK_ORDER. A density switch
-// beside the browse control lays the same selection out as Cards (this
-// carousel), List (one navigator-style row per study) or Grid (compact tiles):
-// the navigator chooses what to show, the switch chooses how densely.
+// CaseStudyPlayground — featured shadowbox cards, then the full index
+// A visitor gets one designed layout: the first three studies of the one
+// WORK_ORDER as shadowbox cards (preview / title and outcome / coin tray), then
+// every study as an index row, with no paging and no layout to choose. The
+// only control is a row of discipline chips that filters both. Everything
+// more configurable is authoring: the layout is a Style System choice on the
+// selected component (WorkLayoutStyle below, Cards / List / Grid), and filing
+// by client lives in the Asset Panel's folders (WorkNavigator.tsx).
 // Coins: first hover/focus drops the card's real tool icons into its tray;
 // un-hover lets them fall out the bottom and vanish — replayable every hover.
 // A page turn and a pointed navigator row drop them too.
@@ -21,25 +20,19 @@ import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
 import { clientLabelFor, orderedProjects } from '../data/projects';
-import { WORK_GROUPS, clientGroupLabel, studiesFor } from '../data/workGroups';
+import { WORK_GROUPS, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
-import { WORK_VIEWS, useWorkNavigator } from '../context/WorkNavigatorContext';
+import { useWorkNavigator } from '../context/WorkNavigatorContext';
+import { WORK_VIEWS, useAuthorMode } from '../context/AuthorModeContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import ProjectBrand from './ProjectBrand';
-import WorkNavigator, { WORK_NAVIGATOR_ID } from './WorkNavigator';
 
 const PreviewLockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="4" y="10.5" width="16" height="10.5" rx="2" />
     <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
-  </svg>
-);
-
-const BrowseIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M4 6h16M4 12h10M4 18h7" />
   </svg>
 );
 
@@ -116,30 +109,7 @@ const BriefcaseIcon = () => (
   </svg>
 );
 
-// Hand-sketched carousel arrows — same vocabulary as the hero intro arrows
-// (wobbly cubic strokes, pathLength=1, drawn in via stroke-dashoffset on reveal)
-const SketchArrow = ({ direction }: { direction: 'left' | 'right' }) => (
-  <svg
-    className="case-playground__nav-svg"
-    viewBox="0 0 44 44"
-    aria-hidden="true"
-    focusable="false"
-  >
-    {direction === 'right' ? (
-      <>
-        <path d="M6 23 C 14 19, 26 19, 37 22" fill="none" strokeLinecap="round" pathLength={1} />
-        <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
-      </>
-    ) : (
-      <>
-        <path d="M38 23 C 30 19, 18 19, 7 22" fill="none" strokeLinecap="round" pathLength={1} />
-        <path d="M7 22 L14.5 15.5 M7 22 L13.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
-      </>
-    )}
-  </svg>
-);
-
-// CTA arrow — same hand-sketched vocabulary as SketchArrow, drawn in on card
+// CTA arrow — hand-sketched, the hero arrows' vocabulary, drawn in on card
 // hover/focus (not on scroll reveal) via the `--active` class on the card.
 const CtaArrow = () => (
   <svg
@@ -198,8 +168,36 @@ function useTouchDevice(): boolean {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 const EXIT_RESET_MS = 750; // out-animation length before coins re-park above
-const CARD_GAP = 24;       // $spacing-xl, the carousel's gap
-const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
+// The featured row: the first three of the selection, so WORK_ORDER decides
+// what leads. Three fit the desktop row exactly, which is why paging could go.
+const FEATURED_COUNT = 3;
+
+const DISCIPLINES = [{ id: null, label: 'All' }, ...WORK_GROUPS.filter((group) => group.id !== 'client')];
+
+/**
+ * The work section's layout styles, in the selected component's toolbar the
+ * way AEM's Style System offers a component's variants. It changes the page
+ * only while authoring; Publisher is always the default style.
+ */
+export const WorkLayoutStyle: React.FC = () => {
+  const { ui, update } = useAuthorMode();
+  return (
+    <span className="authored__style" role="group" aria-label="Layout">
+      <span className="authored__style-label" aria-hidden="true">Layout</span>
+      {WORK_VIEWS.map((view) => (
+        <button
+          key={view.id}
+          type="button"
+          className="authored__action"
+          aria-pressed={ui.workView === view.id}
+          onClick={() => update({ workView: view.id })}
+        >
+          {view.label}
+        </button>
+      ))}
+    </span>
+  );
+};
 
 const CaseStudyPlayground: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -210,6 +208,10 @@ const CaseStudyPlayground: React.FC = () => {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const resetTimers = useRef<Record<string, number>>({});
   const nav = useWorkNavigator();
+  const { authoring, ui } = useAuthorMode();
+  // Publisher always gets the default style; a layout an author picks lasts
+  // only as long as Author does.
+  const view = authoring ? ui.workView : 'cards';
 
   useEffect(() => {
     const timers = resetTimers.current;
@@ -289,11 +291,16 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
-  // The navigator's selection narrows the row; no selection is the whole order.
+  // The selection narrows the section; no selection is the whole order. Filing
+  // by client is an authoring view (the Asset Panel's folders), so a client
+  // selection, from a folder or an old deep link, only applies while authoring.
+  const group = nav.group === 'client' && !authoring ? null : nav.group;
+  const clientKey = group === 'client' ? nav.clientKey : null;
   const visibleCards = useMemo(() => {
-    const shown = new Set(studiesFor(nav.group, nav.clientKey).map((project) => project.slug));
+    const shown = new Set(studiesFor(group, clientKey).map((project) => project.slug));
     return cards.filter((card) => shown.has(card.slug));
-  }, [cards, nav.group, nav.clientKey]);
+  }, [cards, group, clientKey]);
+  const featuredCards = visibleCards.slice(0, FEATURED_COUNT);
 
   const { unlocked, resolving, openPrompt, lockedReady } = useUnlock();
 
@@ -342,87 +349,18 @@ const CaseStudyPlayground: React.FC = () => {
    */
   const lockLineReady = !mounted || lockedReady;
 
-  // ── Paging ────────────────────────────────────────────────────────────────
-  // The row is still a scroll-snap carousel (touch swipes, keyboard scrolls),
-  // so a "page" is measured from it rather than imposed on it: how many cards
-  // fit the viewport of the grid, and which group of that many is in view. The
-  // static file and the first render assume the desktop three; the measured
-  // count arrives after mount, a post-mount update and never a mismatch.
-  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
-  const pageCount = Math.max(1, Math.ceil(visibleCards.length / perPage));
-  const page = Math.min(nav.page, pageCount - 1);
-
-  const measure = useCallback(() => {
-    const el = gridRef.current;
-    const card = el?.querySelector<HTMLElement>('.case-playground__card');
-    if (!el || !card) return { fit: DEFAULT_PER_PAGE, step: 0 };
-    const fit = Math.max(1, Math.round((el.clientWidth + CARD_GAP) / (card.offsetWidth + CARD_GAP)));
-    return { fit, step: fit * (card.offsetWidth + CARD_GAP) };
-  }, []);
-
+  // ── The featured row ──────────────────────────────────────────────────────
+  // Three cards fill the desktop row; below 1024px the same three sit in a
+  // scroll-snap row with the next card peeking, so a phone swipes through
+  // three instead of paging through twelve. A new selection starts at the
+  // first card. jsdom has no element scrollTo; the browser always does.
   useEffect(() => {
     const el = gridRef.current;
-    if (!el) return undefined;
-    let frame = 0;
-    const sync = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const { fit, step } = measure();
-        setPerPage(fit);
-        if (step > 0) nav.setPage(Math.round(el.scrollLeft / step));
-      });
-    };
-    sync();
-    el.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      el.removeEventListener('scroll', sync);
-      window.removeEventListener('resize', sync);
-    };
-    // nav.setPage is stable; measure reads the DOM. The view is a dependency
-    // because List and Grid unmount the carousel, and coming back to Cards
-    // mounts a new one that has to be measured again.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [measure, visibleCards.length, nav.view]);
+    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left: 0, behavior: 'auto' });
+  }, [group, clientKey]);
 
-  // jsdom has no element scrollTo; the browser always does.
-  const scrollGrid = (left: number, behavior: ScrollBehavior) => {
-    const el = gridRef.current;
-    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left, behavior });
-  };
-
-  const goToPage = (next: number) => {
-    const { step } = measure();
-    const target = Math.max(0, Math.min(pageCount - 1, next));
-    scrollGrid(target * step, reduceMotion ? 'auto' : 'smooth');
-  };
-
-  // A new selection starts at its first page.
-  useEffect(() => {
-    scrollGrid(0, 'auto');
-    // scrollGrid only reads the ref.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nav.group, nav.clientKey]);
-
-  // A page turn drops the incoming cards' coins (desktop only: touch drives
-  // its own drop from visibility). The first page on arrival stays parked, so
-  // the load has no flurry; the first hover still owns that moment.
-  const lastDropPage = useRef<number | null>(null);
-  useEffect(() => {
-    // List and Grid have no tray. Tracking the page through them means a
-    // return to Cards is an arrival, parked, not a page turn.
-    if (isTouch || nav.view !== 'cards') { lastDropPage.current = page; return; }
-    if (lastDropPage.current === null) { lastDropPage.current = page; return; }
-    if (lastDropPage.current === page) return;
-    lastDropPage.current = page;
-    visibleCards.slice(page * perPage, page * perPage + perPage).forEach((card) => dropCoins(card.slug));
-    // visibleCards and perPage are read at the moment of the turn.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, isTouch, dropCoins, nav.view]);
-
-  // Pointing at a study in the navigator answers on its card: the coins drop
-  // while the row is pointed and fall away when the pointer moves on.
+  // Pointing at a study in the Asset Panel's folders answers on its card: the
+  // coins drop while the row is pointed and fall away when the pointer moves on.
   const lastPointed = useRef<string | null>(null);
   useEffect(() => {
     const previous = lastPointed.current;
@@ -467,9 +405,9 @@ const CaseStudyPlayground: React.FC = () => {
     cardEls.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
     // handleEnter/handleLeave are stable in behavior (setState + refs only);
-    // the observed set changes with the selection and with the view.
+    // the observed set changes with the selection and with the layout style.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTouch, visibleCards, nav.view]);
+  }, [isTouch, visibleCards, view]);
 
   // The one lock reading every view shares. Only the employer and client
   // stream is protected; a public cover loop is shown even while the study
@@ -482,23 +420,72 @@ const CaseStudyPlayground: React.FC = () => {
     return { locked, mediaLocked: locked && !card.publicVideo, hasPlate, plated: locked && hasPlate };
   };
 
-  // The same lock line in every view: same copy, same id, so the study link
-  // can point at it with aria-describedby. In Cards and Grid it sits over the
-  // preview (CSS shows it; a public loop has no veil, so it is pinned on); in
-  // List it is the navigator row's permission line.
-  const lockLineFor = (card: Card, locked: boolean, className: string, pinned = false) =>
+  // The same lock line in every layout and the same copy, with an id the study
+  // link names in aria-describedby. Over a card or tile preview it is the
+  // preview's caption (CSS shows it; a public loop has no veil, so it is pinned
+  // on); on an index row it is the row's permission line. The default style
+  // shows a featured card and its index row together, so each takes its own id.
+  const lockLineFor = (card: Card, locked: boolean, id: string, className: string, pinned = false) =>
     lockLineReady && locked && (
-      <p id={`lock-${card.slug}`} className={className} style={pinned ? { opacity: 1 } : undefined} aria-hidden={!locked}>
+      <p id={id} className={className} style={pinned ? { opacity: 1 } : undefined} aria-hidden={!locked}>
         <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
         Password protected
       </p>
     );
 
-  const activeFilter = nav.group
-    ? nav.group === 'client' && nav.clientKey
-      ? clientGroupLabel(nav.clientKey, !unlocked)
-      : WORK_GROUPS.find((group) => group.id === nav.group)?.label ?? ''
-    : '';
+  // ── The index ──────────────────────────────────────────────────────────────
+  // One row per study on the Asset Panel's .dam__item grid, so the page and
+  // the finder read as one tool: thumbnail or lock glyph, title, outcome,
+  // year and client, and the lock line in the row's permission slot. Under
+  // the featured cards it is the whole selection; as the List style it is
+  // the section on its own.
+  const index = (
+    <ul className="dam__list case-playground__list" aria-label="Case studies">
+      {visibleCards.map((card, i) => {
+        const { locked, mediaLocked } = lockStateFor(card);
+        // Hover and focus play the row's cover loop the way they play the
+        // card's; a pointed folder row counts as hover here too.
+        const active = activeSlug === card.slug || nav.pointedSlug === card.slug;
+        const lockId = `index-lock-${card.slug}`;
+        return (
+          <li key={card.slug} data-slug={card.slug}>
+            <ProjectLink
+              to={`/work/${card.slug}`}
+              className={`dam__item case-playground__row${locked ? ' dam__item--locked' : ''}${
+                active ? ' case-playground__row--pointed' : ''
+              }${isProtected(card.stream) && !card.publicVideo ? ' case-playground__row--protected' : ''}`}
+              aria-describedby={locked ? lockId : undefined}
+              onMouseEnter={() => setActiveSlug(card.slug)}
+              onMouseLeave={() => setActiveSlug((current) => (current === card.slug ? null : current))}
+              onFocus={() => setActiveSlug(card.slug)}
+              onBlur={() => setActiveSlug((current) => (current === card.slug ? null : current))}
+            >
+              {/* Locked media is not blurred here, it is absent: at 72px a
+                  blur is a smudge, and the finder already says "no media"
+                  with the hatched glyph. The still returns on unlock on the
+                  same per-row delay the cards resolve on. */}
+              <span
+                className={`dam__thumb${mediaLocked || !card.image ? ' dam__thumb--glyph dam__thumb--locked' : ''}`}
+                style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
+              >
+                {mediaLocked || !card.image ? (
+                  <PreviewLockIcon />
+                ) : card.video && !posterOnly ? (
+                  <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
+                ) : (
+                  <img src={card.image} alt="" loading="lazy" />
+                )}
+              </span>
+              <span className="dam__name">{card.title}</span>
+              <span className="case-playground__row-metric">{card.metric}</span>
+              <span className="dam__meta">{card.year} · {clientLabelFor(card, locked)}</span>
+              {lockLineFor(card, locked, lockId, 'dam__permission case-playground__row-lock')}
+            </ProjectLink>
+          </li>
+        );
+      })}
+    </ul>
+  );
 
   return (
     <section
@@ -532,79 +519,30 @@ const CaseStudyPlayground: React.FC = () => {
 
         {/* The threshold — stage line into the playground */}
 
-        {/* Browse control, active filter, sketch arrows and the page count */}
+        {/* The one public control: filter by discipline. The pressed chip is
+            the state and All clears it, so nothing echoes the filter back.
+            Each choice writes the section's deep link (#projects/aem). */}
         <div className="case-playground__nav">
-          <div className="case-playground__nav-start">
-            <button
-              type="button"
-              className="case-playground__browse"
-              aria-expanded={nav.open}
-              aria-controls={WORK_NAVIGATOR_ID}
-              ref={nav.triggerRef}
-              onClick={() => nav.setOpen(!nav.open)}
-            >
-              <span className="case-playground__browse-glyph"><BrowseIcon /></span>
-              Browse by discipline or client
-            </button>
-            {/* Density. Cards is the static page; the stored choice arrives
-                after mount through the navigator context. Text labels, not
-                icons, because three glyphs for the same studies at three
-                sizes read as decoration; the words say what changes. */}
-            <div className="case-playground__views" role="group" aria-label="View">
-              {WORK_VIEWS.map((view) => (
-                <button
-                  key={view.id}
-                  type="button"
-                  className="case-playground__view"
-                  aria-pressed={nav.view === view.id}
-                  onClick={() => nav.setView(view.id)}
-                >
-                  {view.label}
-                </button>
-              ))}
-            </div>
-            {activeFilter && (
-              <>
-                <span className="case-playground__filter" aria-live="polite">[ {activeFilter} ]</span>
-                <button type="button" className="case-playground__filter-clear" onClick={() => nav.selectGroup(null)}>
-                  Show all
-                </button>
-              </>
-            )}
+          <div className="case-playground__disciplines" role="group" aria-label="Browse by discipline">
+            {DISCIPLINES.map((discipline) => (
+              <button
+                key={discipline.id ?? 'all'}
+                type="button"
+                className="case-playground__discipline"
+                aria-pressed={group === discipline.id}
+                onClick={() => nav.selectGroup(discipline.id)}
+              >
+                {discipline.label}
+              </button>
+            ))}
           </div>
-          {/* Pages are a carousel idea; List and Grid show every study at once. */}
-          {nav.view === 'cards' && (
-          <div className="case-playground__nav-end">
-            <button
-              type="button"
-              className="case-playground__nav-btn"
-              onClick={() => goToPage(page - 1)}
-              aria-label="Previous case studies"
-              disabled={page === 0}
-            >
-              <SketchArrow direction="left" />
-            </button>
-            <span className="case-playground__pages" aria-live="polite">{page + 1} / {pageCount}</span>
-            <button
-              type="button"
-              className="case-playground__nav-btn case-playground__nav-btn--next"
-              onClick={() => goToPage(page + 1)}
-              aria-label="Next case studies"
-              disabled={page >= pageCount - 1}
-            >
-              <SketchArrow direction="right" />
-            </button>
-          </div>
-          )}
         </div>
 
-        {/* Docked beside the page from 1000px; folded in here below it. */}
-        <WorkNavigator />
-
-        {/* ── Cards: the carousel ── */}
-        {nav.view === 'cards' && (
+        {/* ── Cards, the default style: three featured cards, then the index ── */}
+        {view === 'cards' && (
+        <>
         <div className="case-playground__grid" ref={gridRef}>
-          {visibleCards.map((card, i) => {
+          {featuredCards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
             // Drawn cover in place of the blur. The plate stays mounted for any
             // protected card that has one (like the scrim, so unlocking can
@@ -642,7 +580,7 @@ const CaseStudyPlayground: React.FC = () => {
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
                   <span className="case-playground__caption" aria-hidden="true">[ {caption} ]</span>
-                  {lockLineFor(card, locked, 'case-playground__lock', card.publicVideo)}
+                  {lockLineFor(card, locked, `lock-${card.slug}`, 'case-playground__lock', card.publicVideo)}
                   {card.video && !posterOnly ? (
                     <CardVideo
                       src={card.video}
@@ -695,64 +633,18 @@ const CaseStudyPlayground: React.FC = () => {
             );
           })}
         </div>
+        {index}
+        </>
         )}
 
-        {/* ── List: one navigator row per study ──
-            The same .dam__item grid the rail uses, so the two read as one
-            tool: thumbnail or lock glyph, title, outcome, year and client,
-            and the lock line in the row's permission slot. No tray, no loop. */}
-        {nav.view === 'list' && (
-        <ul className="dam__list case-playground__list">
-          {visibleCards.map((card, i) => {
-            const { locked, mediaLocked } = lockStateFor(card);
-            // Hover and focus play the row's cover loop the way they play the
-            // card's; a pointed rail row counts as hover here too.
-            const active = activeSlug === card.slug || nav.pointedSlug === card.slug;
-            return (
-              <li key={card.slug} data-slug={card.slug}>
-                <ProjectLink
-                  to={`/work/${card.slug}`}
-                  className={`dam__item case-playground__row${locked ? ' dam__item--locked' : ''}${
-                    active ? ' case-playground__row--pointed' : ''
-                  }${isProtected(card.stream) && !card.publicVideo ? ' case-playground__row--protected' : ''}`}
-                  aria-describedby={locked ? `lock-${card.slug}` : undefined}
-                  onMouseEnter={() => setActiveSlug(card.slug)}
-                  onMouseLeave={() => setActiveSlug((current) => (current === card.slug ? null : current))}
-                  onFocus={() => setActiveSlug(card.slug)}
-                  onBlur={() => setActiveSlug((current) => (current === card.slug ? null : current))}
-                >
-                  {/* Locked media is not blurred here, it is absent: at 56px
-                      a blur is a smudge, and the rail already says "no media"
-                      with the hatched glyph. The still returns on unlock on
-                      the same per-row delay the cards resolve on. */}
-                  <span
-                    className={`dam__thumb${mediaLocked || !card.image ? ' dam__thumb--glyph dam__thumb--locked' : ''}`}
-                    style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
-                  >
-                    {mediaLocked || !card.image ? (
-                      <PreviewLockIcon />
-                    ) : card.video && !posterOnly ? (
-                      <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
-                    ) : (
-                      <img src={card.image} alt="" loading="lazy" />
-                    )}
-                  </span>
-                  <span className="dam__name">{card.title}</span>
-                  <span className="case-playground__row-metric">{card.metric}</span>
-                  <span className="dam__meta">{card.year} · {clientLabelFor(card, locked)}</span>
-                  {lockLineFor(card, locked, 'dam__permission case-playground__row-lock')}
-                </ProjectLink>
-              </li>
-            );
-          })}
-        </ul>
-        )}
+        {/* ── List style: the index on its own ── */}
+        {view === 'list' && index}
 
-        {/* ── Grid: compact tiles ──
+        {/* ── Grid style: compact tiles ──
             Preview, title and the lock line only, four across on desktop.
             The preview is the card's preview, so the plate, the blur, the
             scrim and the resolve stagger come with it unchanged. */}
-        {nav.view === 'grid' && (
+        {view === 'grid' && (
         <div className="case-playground__tiles">
           {visibleCards.map((card, i) => {
             const { locked, mediaLocked, hasPlate, plated } = lockStateFor(card);
@@ -783,7 +675,7 @@ const CaseStudyPlayground: React.FC = () => {
                     style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                   >
                     {hasPlate && <CoverSchematic slug={card.slug} />}
-                    {lockLineFor(card, locked, 'case-playground__lock', card.publicVideo)}
+                    {lockLineFor(card, locked, `lock-${card.slug}`, 'case-playground__lock', card.publicVideo)}
                     {card.video && !posterOnly ? (
                       <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
                     ) : (

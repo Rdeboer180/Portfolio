@@ -2,7 +2,11 @@ import React, { useEffect, useId, useState } from 'react';
 import { useAuthorMode } from '../context/AuthorModeContext';
 import { annotationNumber, AuthoredComponentSpec } from '../data/authorChrome';
 
-type AuthoredSectionProps = AuthoredComponentSpec & { children: React.ReactNode };
+type AuthoredSectionProps = AuthoredComponentSpec & {
+  /** Component-specific toolbar controls, such as a Style System choice. */
+  toolbar?: React.ReactNode;
+  children: React.ReactNode;
+};
 
 const LockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
@@ -18,7 +22,7 @@ const LockIcon = () => (
  * the section's annotation pin. Preview renders the children and nothing else.
  */
 const AuthoredSection: React.FC<AuthoredSectionProps> = ({
-  component, label, anchor, locked = false, policy, related, annotation, children,
+  component, label, anchor, locked = false, policy, related, annotation, toolbar, children,
 }) => {
   const { authoring, ui, update } = useAuthorMode();
   const selected = ui.selected === component;
@@ -67,6 +71,7 @@ const AuthoredSection: React.FC<AuthoredSectionProps> = ({
           {locked && policy && <span className="authored__policy">{policy}</span>}
           {selected && (
             <span className="authored__toolbar" role="group" aria-label={`${label} actions`}>
+              {toolbar}
               <button type="button" className="authored__action" onClick={copyLink}>
                 {copied ? 'Copied' : 'Copy link'}
               </button>
