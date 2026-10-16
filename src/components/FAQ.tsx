@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SITE, EMAIL_HREF } from '../data/site';
+import { EMAIL_HREF } from '../data/site';
 
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   {
@@ -40,16 +40,6 @@ const faqItems: { question: string; answer: string | React.ReactNode }[] = [
         <p>People first. I married my high school sweetheart Stephanie — we've now spent more than half our lives together — and our two kids are the center of everything. Weekends usually mean the park, the zoo, or wherever the next national park road trip takes us.</p>
         <p>Outside of family, a lot of what I do for fun still involves building things. I manage my Type 1 diabetes using a custom-coded branch of the Loop app — a closed-loop insulin delivery system I've configured and maintained myself. It's equal parts health management and engineering hobby, and it eventually became a product: <Link to="/work/loopstack/">LoopStack</Link>, a pattern-review app built on my own data.</p>
         <p>Football Sundays are sacred. I've run a dynasty fantasy football league — the Grandville Gremlins — for about a decade, and every team has a custom mascot and logo I designed. It keeps a tight group of high school and college friends connected year-round. And like most people, I unwind with good TV and film. Always watching something.</p>
-      </>
-    ),
-  },
-  {
-    question: 'How was this portfolio built?',
-    answer: (
-      <>
-        <p>I built the site in React and SCSS from a Figma token and component foundation. The live <Link to="/design-system">design system</Link> shows the color, type, spacing, and component rules the pages actually use.</p>
-        <p>Claude helped scaffold components, inspect token drift, and work through implementation problems. I chose the references, set the direction, reviewed the responsive behavior, and made the final calls. The workflow moved back and forth between Figma and the browser until the built page held up on its own.</p>
-        <p>The full breakdown is a note of its own: <Link to="/notes/how-this-site-works">How this site works</Link>. The workflow keeps evolving, and that thinking lands first on <a href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" data-li-surface="faq_build">LinkedIn<span className="sr-only"> (opens in a new tab)</span></a>.</p>
       </>
     ),
   },

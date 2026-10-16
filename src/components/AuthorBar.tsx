@@ -45,7 +45,7 @@ const AuthorBar: React.FC = () => {
               aria-pressed={ui.panelOpen}
               onClick={() => update({ panelOpen: !ui.panelOpen })}
             >
-              <RailIcon /><span>Side panel</span>
+              <RailIcon /><span>Asset panel</span>
             </button>
             <button
               type="button"

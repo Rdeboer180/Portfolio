@@ -6,8 +6,9 @@
  */
 
 export interface AuthorAnnotation {
-  /** The decision, in the register of the site. Never a claim the docs do not make. */
-  text: string;
+  /** The decision, in the register of the site. Never a claim the docs do not make.
+   *  Several entries render as separate paragraphs. */
+  text: string | readonly string[];
   /** Where the decision is written down, so a reader can check it. */
   source: string;
   link?: { label: string; href: string };
@@ -65,8 +66,11 @@ export const AUTHORED_COMPONENTS = {
     anchor: 'systems',
     related: { label: 'Open the public study', href: '/work/playdraft/' },
     annotation: {
-      text: 'The process is stated once, here. In September 2026 five competing accounts were reconciled to this four-beat loop. Five of the board nodes are deliberately identical paper cards; a pastel tint per category was considered and rejected.',
-      source: 'PRODUCT.md, The Process, Stated Once; DESIGN.md, the No-Categorical-Palette Rule',
+      text: [
+        'In AEM, this loop means core-component variants, template permissions, and Experience Fragments for A/B testing and geographic targeting with Adobe Target. I design the authoring and review workflows too, so the team knows what it can change and how to extend the system.',
+        'The process is stated once, here. In September 2026 five competing accounts were reconciled to this four-beat loop. Five of the board nodes are deliberately identical paper cards; a pastel tint per category was considered and rejected.',
+      ],
+      source: 'Capabilities, AEM & content systems; PRODUCT.md, The Process, Stated Once; DESIGN.md, the No-Categorical-Palette Rule',
     },
   },
   recommendations: {
@@ -94,10 +98,9 @@ export const AUTHORED_COMPONENTS = {
     component: 'core/wcm/components/accordion/v1',
     label: 'FAQ',
     anchor: 'faq',
-    related: { label: 'Open note', href: '/notes/how-this-site-works/' },
     annotation: {
-      text: 'The last question answers how this page was built. The full version is a note of its own, and the live design system shows the rules the page actually uses.',
-      source: 'FAQ.tsx, the final entry',
+      text: 'These are the questions that usually come up before the work starts. How this page was built moved to Page properties, because it describes the page rather than the person.',
+      source: 'FAQ.tsx; Page properties, Built with and Authorship',
       link: { label: 'How this site works', href: '/notes/how-this-site-works/' },
     },
   },

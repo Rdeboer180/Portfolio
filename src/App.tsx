@@ -122,7 +122,7 @@ function HomeRoute() {
         <Hero />
         {/* Below the fold the page is addressable: every section is a component
             the author chrome can name, select and annotate. The specs live in
-            src/data/authorChrome.ts so the Side Panel reads the same list. */}
+            src/data/authorChrome.ts so the Asset Panel reads the same list. */}
         <AuthoredSection {...AUTHORED_COMPONENTS.playground}>
           <CaseStudyPlayground />
         </AuthoredSection>
