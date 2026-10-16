@@ -24,6 +24,7 @@ import { scrollBehavior } from './utils/motion';
 import { UnlockProvider, useUnlock } from './context/UnlockContext';
 import PasswordModal from './components/PasswordModal';
 import { AuthorModeProvider } from './context/AuthorModeContext';
+import { WorkNavigatorProvider } from './context/WorkNavigatorContext';
 import AuthoredSection from './components/AuthoredSection';
 import AuthorBar from './components/AuthorBar';
 import AuthorSidePanel from './components/AuthorSidePanel';
@@ -71,7 +72,10 @@ function RouteEffects() {
     previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
     if (location.hash && location.hash !== '#main-content') {
-      const id = location.hash.slice(1);
+      // The work section's deep links carry a selection after the anchor
+      // (#projects/aem, #projects/client/personal); the element is still
+      // #projects, so the id is whatever comes before the first slash.
+      const id = location.hash.slice(1).split('/')[0];
       requestAnimationFrame(() => {
         document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
       });
@@ -118,6 +122,7 @@ function HomeRoute() {
   const authorChrome = !isReviewPath();
   return (
     <AuthorModeProvider enabled={authorChrome}>
+      <WorkNavigatorProvider>
       <PageShell>
         <Hero />
         {/* Below the fold the page is addressable: every section is a component
@@ -154,6 +159,7 @@ function HomeRoute() {
           <AuthorBar />
         </>
       )}
+      </WorkNavigatorProvider>
     </AuthorModeProvider>
   );
 }

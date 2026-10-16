@@ -1,0 +1,110 @@
+// ============================================
+// Work navigator — the case-study folders inside the Asset Panel
+// Groups are folder rows in the Layers-panel grammar; the selected group is a
+// state (tinted field, primary rule on the left), never decoration. Study rows
+// reuse the Assets finder's `.dam__item` grid so the folders and the flat
+// results read as one tool.
+// ============================================
+
+@import '../variables';
+
+.work-nav {
+  padding-top: 8px;
+
+  &__groups,
+  &__clients {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__group,
+  &__client {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    padding: 0 10px 0 12px;
+    border: 0;
+    border-left: 2px solid transparent;
+    border-bottom: 1px solid $color-neutral-light;
+    background: transparent;
+    text-align: left;
+    font-family: $font-family-primary;
+    color: $color-neutral-dark;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+
+    // The open group is a chosen state, so it earns the primary rule.
+    &[aria-pressed='true'] {
+      border-left-color: $color-primary;
+      background: $color-primary-light;
+    }
+  }
+
+  &__client {
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 34px;
+    padding-left: 40px;
+    font-size: 12px;
+  }
+
+  &__folder {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    color: $color-secondary-dark;
+
+    svg { width: 100%; height: 100%; }
+  }
+
+  &__group-label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &__count {
+    font: 10px/1 $font-family-mono;
+    letter-spacing: 0.04em;
+    color: $color-neutral-muted;
+  }
+
+  // Studies sit one indent in from their folder, like child layers.
+  &__studies {
+    padding: 4px 0 8px 12px;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  &__study {
+    // A pointed row lights its card's coins; the row itself only lifts.
+    &--pointed { box-shadow: var(--shadow-md); }
+
+    // The thumbnail is positioned by framer-motion, so it needs a stacking
+    // context of its own or a dropping image paints over the row above.
+    .dam__thumb { position: relative; will-change: transform; }
+  }
+
+  &__clear {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    min-height: 36px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+    background: $color-white;
+    font: 600 12px/1 $font-family-primary;
+    color: $color-neutral-dark;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-nav__study .dam__thumb { will-change: auto; }
+}

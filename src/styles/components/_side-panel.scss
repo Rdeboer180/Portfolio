@@ -1,0 +1,229 @@
+// ============================================
+// Side Panel — the docked column AEM's editor quotes
+// The author's Asset Panel, with the work navigator's folders inside it:
+// opening it pushes the page right and the page re-centres in what is left, so
+// nothing on the left is covered. Containers centre with margin: auto and the
+// process-board wires redraw on ResizeObserver, so padding <body> is the whole
+// mechanism. The site nav is the one fixed element on the page, so it moves
+// with the body. The Assets finder grid (.dam) lives here too, because the
+// navigator's study rows and the work section's index reuse it.
+// ============================================
+
+@import '../variables';
+
+$side-panel-width: 320px;
+
+@media (min-width: 1000px) {
+  html[data-side-panel='open'] {
+    body { padding-left: $side-panel-width; }
+
+    .hero__nav,
+    .layout-grid { left: $side-panel-width; }
+  }
+}
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: $z-index-fixed;
+  display: flex;
+  flex-direction: column;
+  width: $side-panel-width;
+  max-width: calc(100vw - 24px);
+  background: $color-white;
+  border-right: 1px solid $color-border-default;
+  font-family: $font-family-primary;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 12px 12px 16px;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__title {
+    font: 600 11px/1 $font-family-mono;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+
+  &__close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: $radius-sm;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    color: $color-neutral-muted;
+    cursor: pointer;
+
+    &:hover { background: $color-secondary-lightest; color: $color-neutral-dark; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px 24px;
+  }
+
+}
+
+// ── Assets finder (the DAM) ─────────────────────────────────────────────
+.dam {
+  &__search {
+    display: block;
+    margin-bottom: 10px;
+
+    input {
+      width: 100%;
+      min-height: 36px;
+      padding: 0 10px;
+      border: 1px solid $color-border-default;
+      border-radius: $radius-sm;
+      background: $color-white;
+      font: 13px/1 $font-family-primary;
+      color: $color-neutral-dark;
+
+      &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+    }
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  &__filter {
+    min-height: 26px;
+    padding: 0 8px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-full;
+    background: $color-white;
+    font: 600 10px/1 $font-family-mono;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    cursor: pointer;
+
+    &[aria-pressed='true'] {
+      border-color: $color-primary;
+      background: $color-primary-light;
+      color: $color-primary-dark;
+    }
+
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 1px; }
+  }
+
+  &__count {
+    margin: 0 0 8px;
+    font: 10px/1.5 $font-family-mono;
+    color: $color-neutral-muted;
+  }
+
+  &__list {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Each asset is its own plate on the secondary ground, lifted a step off
+  // the panel, so a row reads as an object you can pick up rather than a
+  // line in a table. Hover lifts it one more step; the ground does not change.
+  &__item {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      'thumb name'
+      'thumb meta'
+      'thumb perm';
+    column-gap: 10px;
+    row-gap: 2px;
+    align-items: start;
+    width: 100%;
+    padding: 8px;
+    border: 0;
+    border-radius: $radius-md;
+    background: var(--color-bg-secondary);
+    box-shadow: var(--shadow-sm);
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+    font-family: $font-family-primary;
+    cursor: pointer;
+    transition: box-shadow $transition-fast;
+
+    &:hover { box-shadow: var(--shadow-md); }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
+
+    &--locked .dam__name { color: $color-neutral-standard; }
+  }
+
+  &__thumb {
+    grid-area: thumb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 40px;
+    overflow: hidden;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    background: $color-white;
+
+    img,
+    video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    &--glyph svg { width: 18px; height: 18px; color: $color-secondary-dark; }
+
+    // Hatching says "no media here" without a colour saying it.
+    &--locked {
+      background: repeating-linear-gradient(135deg, $color-secondary-lightest 0 6px, $color-white 6px 12px);
+    }
+
+    &--missing img { display: none; }
+  }
+
+  &__name {
+    grid-area: name;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $color-neutral-dark;
+  }
+
+  &__meta {
+    grid-area: meta;
+    font: 10px/1.4 $font-family-mono;
+    color: $color-neutral-muted;
+    overflow-wrap: anywhere;
+  }
+
+  &__permission {
+    grid-area: perm;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    font: 10px/1.4 $font-family-mono;
+    color: $color-neutral-standard;
+
+    svg { width: 10px; height: 10px; }
+  }
+
+  &__empty {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: $color-neutral-muted;
+  }
+}
+

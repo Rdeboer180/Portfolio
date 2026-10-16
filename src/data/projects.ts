@@ -26,6 +26,9 @@ export interface ProjectBeat {
   caption?: string;
 }
 
+/** Discipline groups a study can belong to; the navigator adds "client" itself. */
+export type WorkGroupId = 'aem' | 'systems' | 'product';
+
 export interface ProjectImage {
   /** Pixel coordinates into the original board; presentation only, original remains in the lightbox. */
   crop?: { x: number; y: number; width: number; height: number; sourceWidth: number; sourceHeight: number };
@@ -165,6 +168,19 @@ export interface Project {
    */
   openerSchematic?: boolean;
   hidden?: boolean;
+  /**
+   * The disciplines the homepage navigator files this study under. Authored
+   * rather than inferred from tags, because the tags were written as search
+   * terms ("0 → 1 Product Design", "Design System" and "Design Systems" all
+   * appear) and a grouping that drifts with copy edits is not a grouping.
+   * "Client" is not listed here: it is derived from `clientLabelFor`.
+   */
+  groups?: WorkGroupId[];
+  /**
+   * The short client name the navigator shows, where `client` carries the
+   * full attribution line. Tire Rack studies still anonymise while locked.
+   */
+  clientLabel?: string;
   timeToLive?: string;
 
   // New 7-section structure
@@ -254,6 +270,8 @@ const projects: Project[] = [
     context: 'Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.',
     publicContext: 'A national US online tire and wheel retailer, with project tracking and approvals in Workfront.',
     stream: 'professional',
+    groups: ['systems'],
+    clientLabel: 'Tire Rack',
     title: 'Figma Design & UX: Starter Template Governance and Plugin Development',
     cardTitle: 'Figma starter template & governance',
     seoTitle: 'Figma Design & UX Governance: Starter Templates and Four Internal Plugins',
@@ -351,6 +369,8 @@ const projects: Project[] = [
   {
     slug: 'wheelrack',
     stream: 'professional',
+    groups: ['systems'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack · WheelRack',
     context: 'Tire Rack is a national online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
     publicContext: 'The client is a national US online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
@@ -510,8 +530,11 @@ const projects: Project[] = [
       outcome: 'Category entry jumped, and the icon system went sitewide.',
     },
     stream: 'professional',
+    groups: ['aem', 'product'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack',
     title: 'Tire Category Page Redesign & Optimizations',
+    cardTitle: 'Tire Category Redesign: Path to the right tire',
     seoTitle: 'Automotive Ecommerce Category UX Redesign: +400% Category Entry',
     summary: 'I rebuilt 30+ tire category pages around one icon, comparison, and content system. In the first month, top-performing pages saw up to a 50% conversion lift.',
     cardHook: 'Choosing tires takes expertise most shoppers do not have. 30+ category pages were rebuilt into one guided system. Top pages lifted conversion up to +50% in the first month.',
@@ -663,6 +686,8 @@ const projects: Project[] = [
     tools: ['Figma', 'React Native', 'Expo', 'Claude', 'VS Code'],
     timeline: 'April → August 2026 · TestFlight',
     stream: 'passion',
+    groups: ['product'],
+    clientLabel: 'Personal product',
     featured: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
     featuredVideo: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
     featuredReel: {
@@ -775,8 +800,11 @@ const projects: Project[] = [
       outcome: 'A decade in, two junior designers author it under my governance.',
     },
     stream: 'professional',
+    groups: ['aem'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack',
     title: 'Seasonal Content Swap: AEM Experience Fragments & Adobe Target',
+    cardTitle: 'Seasonal content, without rebuilds',
     seoTitle: 'Seasonal Ecommerce Content System: AEM Experience Fragments & Adobe Target',
     summary: 'I built and still govern reusable AEM Experience Fragments for A/B testing and geographic targeting with Adobe Target. More than 20 seasonal fragments serve six landing pages, supported by documented authoring rules, junior-designer onboarding, and final review.',
     cardHook: 'Reusable AEM Experience Fragments support A/B testing and geographic targeting with Adobe Target. Authors update 20+ seasonal fragments across six pages within a shared review workflow.',
@@ -908,9 +936,12 @@ const projects: Project[] = [
       outcome: 'Inquiries went from a few a month to a few a day.',
     },
     stream: 'passion',
+    groups: [],
+    clientLabel: 'Heatherwood Equestrian Academy',
     client: 'Heatherwood Equestrian Academy',
     context: 'Heatherwood Equestrian Academy is a riding academy serving the South Bend, Indiana area. It offers horseback riding lessons, camps, boarding, and activities for families.',
     title: 'Heatherwood: A Brand and Site the Owner Can Run Herself',
+    cardTitle: 'Heatherwood: Built for its owner',
     seoTitle: 'Brand Identity & WordPress Site for a Local Equestrian Academy',
     summary: 'I rebuilt Heatherwood’s identity and WordPress site around the services families actually search for. In the weeks after launch, website inquiries moved from roughly three or four a month to four or five a day.',
     cardHook: 'A new identity and WordPress site for a riding academy, built around the services families search for and simple enough for the owner to update herself.',
@@ -1049,8 +1080,11 @@ const projects: Project[] = [
       outcome: 'Complex pages take one to two weeks instead of about a month.',
     },
     stream: 'professional',
+    groups: ['aem', 'systems'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack',
     title: 'AEM Landing Page System & SEO Template Framework',
+    cardTitle: 'AEM: A governed landing-page system',
     seoTitle: 'AEM Landing-Page & SEO Template System for Ecommerce',
     summary: 'I designed 50+ landing pages, then built reusable AEM templates with authoring rules and template permissions. Two junior designers now use the system under my review, with complex pages moving from about a month to 1\u20132 weeks.',
     cardHook: 'Reusable AEM templates, authoring rules, and template permissions help junior designers ship. Complex pages moved from about a month to 1\u20132 weeks.',
@@ -1194,8 +1228,11 @@ const projects: Project[] = [
       outcome: 'In branch, with the open items written down.',
     },
     stream: 'professional',
+    groups: ['aem', 'systems'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack',
     title: 'AEM Component System',
+    cardTitle: 'AEM Component System',
     seoTitle: 'AEM Component Governance: Figma Specs, Edge Cases, and Production Sass',
     summary: 'I documented the shared layer of our AEM core components in a Figma guide with seven component pages: the rules, the class each style option adds, wireframes measured on local AEM builds, and the steps an author takes. The Sass fixes live in the same branch, and the guide lists what is still open.',
     cardHook: 'Authors could pick style options whose results were not defined anywhere they worked. A Figma guide now defines each option and its edge cases, with the Sass fixes alongside it.',
@@ -1360,10 +1397,13 @@ $mobile-max-width: 768px;
       outcome: 'The photography task went from three steps to one.',
     },
     stream: 'professional',
+    groups: ['systems'],
+    clientLabel: 'Tire Rack',
     client: 'Tire Rack · Internal Tooling',
     context: 'Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
     publicContext: 'The client is a national US online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
     title: 'Scaling Design Through Internal Tooling',
+    cardTitle: 'Tools that scale design',
     seoTitle: 'Design Enablement: Responsive Crop Validation & Review Tools',
     summary:
       'I built a browser-based crop simulator so Design and Photography could check responsive imagery before placing it in AEM. Reusable Figma presentation components support the stakeholder review that follows.',
@@ -1481,9 +1521,12 @@ $mobile-max-width: 768px;
       outcome: 'Patterns ready to review stay separate from patterns still forming.',
     },
     stream: 'passion',
+    groups: ['product'],
+    clientLabel: 'Personal product',
     client: 'LoopStack (personal project)',
     context: 'LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.',
     title: 'LoopStack: Pattern Review for Meals and Glucose',
+    cardTitle: 'LoopStack: Patterns worth reviewing',
     seoTitle: 'LoopStack: Trends-First Health-Data UX for Type 1 Diabetes (React/TypeScript)',
     summary: 'A Type 1 diabetes app that compares what Loop predicted with what happened after a meal, then groups repeated glucose curves into patterns worth reviewing with a care team. It runs on TestFlight with 90 days of my HealthKit CGM data and never gives dosing advice.',
     year: '2026',
@@ -1733,10 +1776,12 @@ Frame every output as:
       outcome: 'Brand to TestFlight in twelve weeks, then launched on iOS.',
     },
     stream: 'passion',
+    groups: ['product'],
+    clientLabel: 'Personal product',
     client: 'PlayDraft (personal product)',
     context: 'PlayDraft is my independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics and compare the boards. This case study covers the original release and the current simplification rebuild.',
     title: "PlayDraft: a social drafting game, from brand to App Store",
-    cardTitle: "PlayDraft: a social drafting game",
+    cardTitle: 'PlayDraft: A social drafting game',
     seoTitle: "PlayDraft: designing and building a social game with agents",
     summary: "I designed and released a social drafting game with agents. I am now removing XP and competitive modes so friends can get to the draft sooner, while keeping the board, avatars and custom topics.",
     cardHook: 'Draft snacks, movies, or anything your group writes in. I designed the brand, game, and system, then built and released the iPhone app with agents.',
@@ -1941,7 +1986,7 @@ export const packs = {
     client: 'Overscroll Tactics (self-initiated)',
     context: 'Overscroll Tactics is my independent studio identity for the games and digital products I build. Its OTC Games identity appears in PlayDraft.',
     title: 'Overscroll Tactics: A Studio Mark Die-Cut From a Game That Just Finished',
-    cardTitle: 'Overscroll Tactics: A Studio Identity',
+    cardTitle: 'Overscroll Tactics: A studio identity',
     seoTitle: 'Overscroll Tactics studio identity: brand mark, motion ident, and two runtimes from one geometry',
     summary:
       "Overscroll Tactics names my practice, with OTC Games for its game releases. Overscroll connects to my front-end work; Tactics reflects the strategy behind the products. I kept the parent name open enough for work beyond games, then built a shared mark and motion ident for the web and PlayDraft.",
@@ -1954,6 +1999,8 @@ export const packs = {
     tools: ['Illustrator', 'Figma', 'Claude Code', 'VS Code', 'React Native', 'Reanimated', 'CSS'],
     timeline: 'August 2026 · shipped',
     stream: 'passion',
+    groups: ['systems'],
+    clientLabel: 'Personal product',
     featured: '/images/work/overscroll-tactics/lockup-resolved.png',
     // Deliberately not `featuredVideoPrimary`. A primary loop autoplays forever,
     // which would leave the card resting on a half-resolved frame and put the
@@ -2293,5 +2340,85 @@ for (const project of projects) {
     image.displaySrc = `/images/work/${project.slug}/overview-samples/${stem}-${x}-${y}-${width}-${height}.webp`;
   }
 }
+
+/**
+ * The one order every surface follows: the homepage cards, the navigator, the
+ * prev/next links on a study and the site index. It used to live in
+ * toolCoins.ts as the card list, so the index and the study pager disagreed
+ * with the home. Page 1 of the home is the first three: WheelRack, PlayDraft,
+ * AEM. A visible study missing from this list is appended, never dropped.
+ */
+export const WORK_ORDER = [
+  'wheelrack',
+  'playdraft',
+  'aem-component-system',
+  'tire-categories',
+  'loopstack',
+  'design-enablement',
+  'figma-template-governance',
+  'landing-pages',
+  'seasonal-content-system',
+  'bolus-binder',
+  'overscroll-tactics',
+  'heatherwood',
+];
+
+/**
+ * Ryan's best work: the first cards the work section opens on, at the head of
+ * All, before the arrows page on through WORK_ORDER. Kept apart from
+ * WORK_ORDER so the pick can change without reordering anything else; every
+ * slug here must also be in WORK_ORDER.
+ */
+export const FEATURED: readonly string[] = ['wheelrack', 'playdraft', 'aem-component-system'];
+
+/** Visible studies in WORK_ORDER, with any unlisted study after them in file order. */
+export const orderedProjects = (): Project[] => {
+  const visible = projects.filter((project) => !project.hidden);
+  const rank = new Map(WORK_ORDER.map((slug, index) => [slug, index]));
+  return [...visible].sort((a, b) => (rank.get(a.slug) ?? WORK_ORDER.length) - (rank.get(b.slug) ?? WORK_ORDER.length));
+};
+
+/**
+ * What stands in for the employer on a locked surface.
+ *
+ * A descriptor rather than a blackout bar or a bare "Confidential client". A bar
+ * removes information without substituting any; a descriptor withholds the name
+ * while still telling a reader what kind of company and what scale of problem
+ * this was, which is what makes an anonymised case study credible instead of
+ * evasive. Deliberately claims no ranking: nothing here needs substantiating.
+ */
+export const ANON_CLIENT = 'A national US online tire & wheel retailer';
+
+/**
+ * The client name a card or navigator row may show. Same disclosure rule as
+ * ProjectBrand and the study page: the employer stays anonymous until unlock,
+ * and WheelRack keeps its own public name while its client line still hides.
+ */
+export const clientLabelFor = (project: Pick<Project, 'client' | 'clientLabel'>, locked: boolean): string => {
+  if (locked && project.client.startsWith('Tire Rack')) return ANON_CLIENT;
+  return project.clientLabel ?? project.client;
+};
+
+/**
+ * The one short name a study goes by wherever it is listed: the homepage card
+ * and index row, the Asset Panel and its folders. The study page keeps its
+ * full `title` as its heading. Short names used to live in a second map inside
+ * the work section, so most studies carried two names on one screen.
+ */
+export const cardTitleFor = (project: Pick<Project, 'cardTitle' | 'title'>): string => project.cardTitle ?? project.title;
+
+/**
+ * The span a listing shows, from the first year the study names to the last:
+ * "2023 to 2024 design · 2026 launch" is 2023–2026, "2013–Present" stays as it
+ * is. `year` itself stays a sentence for the study page, which has room for it.
+ */
+export const yearSpanFor = (project: Pick<Project, 'year'>): string => {
+  const years = (project.year.match(/\d{4}/g) ?? []).map(Number);
+  if (years.length === 0) return project.year;
+  const first = Math.min(...years);
+  if (/present/i.test(project.year)) return `${first}–Present`;
+  const last = Math.max(...years);
+  return first === last ? `${first}` : `${first}–${last}`;
+};
 
 export default projects;

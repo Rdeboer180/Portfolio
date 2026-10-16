@@ -1,9 +1,11 @@
 // ============================================
-// Case Study Playground — shadowbox cards + tool coin tray
-// Scroll-snap carousel at every width (3-up on desktop, edge-peek below),
-// paged by hand-sketched arrows that draw in on scroll (hero-arrow language).
-// Coin motion lives in CaseStudyPlayground.tsx (framer-motion); this file owns
-// layout, the shadowbox look, the threshold rule, and reduced-motion overrides.
+// Case Study Playground — shadowbox cards + tool coin tray, List and Grid
+// One control row (filter chips left; arrows, page count and the view toggle
+// right), then the selection as a scroll-snap card carousel (3-up on desktop,
+// edge-peek below) paged by hand-sketched arrows that draw in on scroll, as
+// finder rows, or as tiles. Coin motion lives in CaseStudyPlayground.tsx
+// (framer-motion); this file owns layout, the shadowbox look, the threshold
+// rule, and reduced-motion overrides.
 // ============================================
 
 @import '../variables';
@@ -88,14 +90,55 @@
     transform: translateX(calc(1186px - 72px));
   }
 
-  // ── Sketch arrows (carousel paging) ────────────────────────────────────────
+  // ── Control row ────────────────────────────────────────────────────────────
+  // Chips on the left, the carousel's pager and the view toggle on the right.
+  // Where both do not fit, the right group wraps under the chips and stays
+  // right-aligned.
 
   &__nav {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: $spacing-md;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-lg;
   }
+
+  &__nav-end {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-left: auto;
+  }
+
+  &__pager {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  // One page: the pager keeps its place but is not there to see or to tab
+  // to, so a phone that measures more pages after mount never shifts the row.
+  &__pager--single { visibility: hidden; }
+
+  &__pages {
+    min-width: 5ch;
+    text-align: center;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+  }
+
+  &__nav-btn[disabled] {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+    color: $color-neutral-dark;
+  }
+
+  // ── Sketch arrows (carousel paging) ────────────────────────────────────────
 
   &__nav-btn {
     width: 48px;
@@ -414,14 +457,6 @@
     color: $color-primary;
   }
 
-  &__card-line {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    line-height: 1.6;
-    color: $color-neutral-standard;
-    margin: 0;
-  }
-
   &__tags {
     display: flex;
     flex-wrap: wrap;
@@ -675,7 +710,8 @@
     svg { width: 100%; height: 100%; }
   }
 
-// Quieter card hierarchy: preview, concise story, outcome, then the tool tray.
+// Quieter card hierarchy: preview, title, outcome, then the tool tray. The
+// one-line hook left with the navigator: the groupings carry that context now.
 .case-playground {
   &__body { gap: var(--space-sm); padding: var(--space-lg); }
   &__footer {
@@ -685,8 +721,387 @@
     gap: var(--space-sm);
     margin-top: 1em;
   }
-  &__card-line { line-height: 1.5; }
   &__metric { font-family: var(--font-body); letter-spacing: 0; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: auto; }
   &__cta { padding-top: 0; }
   &__footer &__cta { margin-top: 0; flex-shrink: 0; }
 }
+
+// ── The engagement plate ──────────────────────────────────────────────────
+// Figma-style corner handles that appear on the active card: the
+// selection-frame vernacular the skills cards use, drawn inside the preview
+// because the card clips its edges. The year and client left the card; the
+// index row and the study carry them, and the card is the title and the
+// outcome.
+.case-playground {
+  &__preview::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    z-index: 2;
+    pointer-events: none;
+    background-image:
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    background-position: top left, top right, bottom left, bottom right;
+    opacity: 0;
+    transition: opacity 240ms var(--case-study-ease-out);
+  }
+
+  &__card--active &__preview::before { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__preview::before { transition: none; }
+  }
+}
+
+// ── Discipline chips, the index, and the author's layout styles ─────────────
+// A visitor sees one layout: the featured cards, then the index. The chips
+// filter both. List (the index alone) and Grid (the card's preview and title
+// with the body and tray left off) are styles an author applies from the
+// component toolbar. The lock treatments are the card's in every layout: the
+// plate or blur, the lock line, the anonymous employer, and the per-item
+// resolve delay on unlock.
+.case-playground {
+  // One pill in the site's mono control grammar. Primary tints only the
+  // pressed segment: the one the reader chose is the one state. On a phone the
+  // four chips stay one row and scroll sideways rather than wrapping into two.
+  &__disciplines,
+  &__views {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    min-height: 36px;
+    padding: 2px;
+    border: 1px solid $color-border-default;
+    border-radius: var(--radius-full);
+    background: $color-white;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__discipline,
+  &__view {
+    appearance: none;
+    flex: 0 0 auto;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: none;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+    cursor: pointer;
+    transition: color var(--case-study-motion-fast), background-color var(--case-study-motion-fast);
+
+    &:hover { color: $color-primary-dark; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+
+    &[aria-pressed='true'] {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+      box-shadow: inset 0 0 0 1px $color-primary;
+      cursor: default;
+    }
+  }
+
+  // The view toggle carries icons, so its segments are square-ish targets:
+  // 36 by 30, above the 24px minimum, with the glyph at the 16px the site's
+  // control icons use. The pressed state is the chips' tint and ring.
+  &__view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    padding: 0 10px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+  }
+
+  // ── List ──
+  &__list {
+    margin-top: $spacing-md;
+  }
+
+  // The rail's row at page width: a larger still, the outcome under the
+  // title, and the lock line in the row's permission slot.
+  &__list &__row {
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-areas:
+      'thumb name'
+      'thumb metric'
+      'thumb meta'
+      'thumb perm';
+    column-gap: $spacing-lg;
+    padding: $spacing-md;
+
+    .dam__thumb { width: 72px; height: 48px; }
+    .dam__name { font-size: $font-size-body-sm; }
+
+    // A row pointed at in the rail lifts the way the rail's own row does.
+    &--pointed { box-shadow: var(--shadow-md); }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -2px; }
+  }
+
+  &__row-metric {
+    grid-area: metric;
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    line-height: 1.4;
+    color: $color-neutral-muted;
+  }
+
+  // Two classes, because _side-panel.scss is imported later and its
+  // .dam__permission would otherwise win the colour back.
+  &__list &__row-lock {
+    margin: 2px 0 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+
+    .case-playground__lock-icon { width: 10px; height: 10px; }
+  }
+
+  // Unlocking swaps a protected row's glyph for its still. The still is a
+  // new element, so it fades in with an animation (a transition has nothing
+  // to start from) on the same row-by-row delay the cards resolve on. Rows
+  // that were never locked are not matched, so nothing already visible blinks.
+  &--resolving &__row--protected .dam__thumb img {
+    animation: case-playground-row-resolve 650ms var(--case-study-ease-out) var(--resolve-delay, 0ms) both;
+  }
+
+  // ── Grid ──
+  // A tile is a preview and a title, so it reads at a far narrower width than
+  // a card. The columns are sized by the tile rather than by breakpoints: as
+  // many 200px tiles as fit, never more than four. That is four across on
+  // desktop, three on a tablet, two down to a 480px viewport (416px of
+  // container), and one only on the narrowest phones.
+  &__tiles {
+    --tile-min: 200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max(var(--tile-min), (100% - 3 * #{$spacing-lg}) / 4), 1fr));
+    gap: $spacing-lg;
+  }
+
+  &__tile {
+    background: var(--case-study-card-bg);
+    border: var(--case-study-card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--case-study-card-shadow-rest);
+    overflow: hidden;
+    transition: box-shadow var(--case-study-motion-medium), border-color var(--case-study-motion-medium);
+
+    &:hover,
+    &:focus-within,
+    &--active {
+      box-shadow: var(--case-study-card-shadow-hover);
+      border-color: rgba($color-primary, 0.35);
+    }
+
+    &:focus-within {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
+  &__tile-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -3px; }
+  }
+
+  &__tile-title {
+    margin: 0;
+    padding: $spacing-md $spacing-md $spacing-lg;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+    transition: color var(--case-study-motion-fast);
+  }
+
+  // Selecting a tile is selecting a card: the title warms and the preview's
+  // corner handles tick in. The plate's own hover grammar (handles and
+  // callouts) is keyed to --card--plated in _cover-schematic.scss, so the
+  // tile repeats the three rules it needs rather than borrowing a card class.
+  &__tile:hover &__tile-title,
+  &__tile:focus-within &__tile-title,
+  &__tile--active &__tile-title { color: $color-primary; }
+
+  &__tile:hover &__preview::before,
+  &__tile:focus-within &__preview::before,
+  &__tile--active &__preview::before { opacity: 1; }
+
+  &__tile--plated:hover,
+  &__tile--plated:focus-within {
+    .cover-schematic__handle { opacity: 1; }
+
+    .cover-schematic__callout {
+      line,
+      path { stroke-dashoffset: 0; }
+      text { opacity: 1; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__discipline,
+    &__view,
+    &__tile,
+    &__tile-title { transition: none; }
+
+    &--resolving &__row--protected .dam__thumb img { animation: none; }
+  }
+}
+
+@keyframes case-playground-row-resolve {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// From the desktop breakpoint a list row is one line: still, title over
+// outcome, year and client, permission. Below it the row stacks the way it
+// does in the rail. At 768 the one-line form squeezed titles to a word a
+// line, and from 1024 the docked rail can still take 320px of the page, so
+// the title keeps two shares to the client's one and the client line wraps.
+@media (min-width: $breakpoint-lg) {
+  .case-playground__list .case-playground__row {
+    grid-template-columns: 72px minmax(0, 2fr) minmax(0, 1fr) auto;
+    grid-template-areas:
+      'thumb name meta perm'
+      'thumb metric meta perm';
+    align-items: center;
+
+    .dam__meta { margin-top: 0; text-align: right; }
+    .dam__permission { margin-top: 0; white-space: nowrap; }
+  }
+}
+
+
+
+// A phone fits all four chips in the one pill at 8px of side padding
+// (measured at 390: 12px left "Product Design" clipped mid-word, which read
+// as a bug, not a scroll). The sideways scroll stays as the fallback below.
+@media (max-width: #{$breakpoint-sm - 1}) {
+  .case-playground__discipline { padding: 0 8px; }
+
+  // The arrows and the toggle share one line under the chips; at 390 they ran
+  // 7px past the edge at full spacing, so both tighten here.
+  .case-playground__nav-end { gap: $spacing-sm; }
+  .case-playground__view { padding: 0 8px; }
+}
+
+// Forced colors (Windows High Contrast) drops backgrounds and box-shadows,
+// which is all the pressed state is. An outline in the system's text colour
+// keeps the chosen filter and layout visible there; aria-pressed already
+// carries the state to assistive technology.
+@media (forced-colors: active) {
+  .case-playground__discipline[aria-pressed='true'],
+  .case-playground__view[aria-pressed='true'] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+}
+
+// ── The folder card ───────────────────────────────────────────────────────
+// After pipturner.co.uk and a "Card — Folder" study: the preview is the card's
+// ground, the body is a paper tab cut into it with a notched shoulder, and the
+// still or loop is a framed subject that rises out of the ground on hover.
+// The notch beside the raised tab is where the tool tray lives now, so the
+// coins keep their home and their drop without a third band under the card.
+.case-playground {
+  --folder-notch: 46px;  // the shoulder's height; the tray's too
+  --folder-tab: 56%;     // the raised tab's share of the card
+
+  &__card { background: $color-secondary-lightest; }
+
+  // The ground is exactly a 16:10 frame plus the tab's overlap, so the still
+  // or loop bleeds to the card's edges and sits whole above the shoulder.
+  &__preview {
+    aspect-ratio: auto;
+    height: 0;
+    padding-bottom: calc(62.5% + var(--folder-notch));
+    background: $color-secondary-lightest;
+  }
+
+  &__subject {
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    img,
+    video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+  }
+
+  &__card--active &__preview img,
+  &__card--active &__preview video { transform: none; filter: saturate(1); }
+
+  // Behind a plate the media fills the whole ground, as the plate does.
+  &__subject--behind {
+    inset: 0;
+
+    img,
+    video { height: 100%; aspect-ratio: auto; }
+  }
+
+  // The tab overlaps the ground by the notch, and its clip leaves the ground
+  // showing through the cutout, where the tray sits.
+  &__tabwrap {
+    position: relative;
+    margin-top: calc(var(--folder-notch) * -1);
+    z-index: 2;
+  }
+
+  &__body {
+    position: relative;
+    background: var(--case-study-card-bg);
+    padding-top: calc(var(--folder-notch) + var(--space-sm));
+    clip-path: polygon(0 0, var(--folder-tab) 0, calc(var(--folder-tab) + 22px) var(--folder-notch), 100% var(--folder-notch), 100% 100%, 0 100%);
+  }
+
+  &__index {
+    position: absolute;
+    top: 14px;
+    left: var(--space-lg);
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: $color-neutral-muted;
+  }
+
+  // The tray, in the cutout: the ground shows through, so no box of its own.
+  &__tray {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100% - var(--folder-tab) - 22px);
+    height: var(--folder-notch);
+    background: transparent;
+    border-top: 0;
+    box-shadow: none;
+    --case-study-icon-size: 28px;
+  }
+
+  // No label: the coins say what the tray is.
+
+  &__coin { border-radius: $radius-sm; }
+
+}
+
+// The tile keeps its own full-bleed preview; the folder ground is the card's.
+.case-playground__tile .case-playground__preview { aspect-ratio: 16 / 10; height: auto; padding-bottom: 0; }
