@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
-import projects from '../data/projects';
+import { orderedProjects } from '../data/projects';
 import ProjectBrand from './ProjectBrand';
 import { useUnlock } from '../context/UnlockContext';
 
@@ -27,7 +27,7 @@ const SelectedWork: React.FC = () => {
         </div>
 
         <div className="selected-work__list">
-          {projects.filter(p => !p.hidden).map((project, index) => (
+          {orderedProjects().map((project, index) => (
             <Link
               key={project.slug}
               to={`/work/${project.slug}`}

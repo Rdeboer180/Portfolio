@@ -414,14 +414,6 @@
     color: $color-primary;
   }
 
-  &__card-line {
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    line-height: 1.6;
-    color: $color-neutral-standard;
-    margin: 0;
-  }
-
   &__tags {
     display: flex;
     flex-wrap: wrap;
@@ -675,7 +667,8 @@
     svg { width: 100%; height: 100%; }
   }
 
-// Quieter card hierarchy: preview, concise story, outcome, then the tool tray.
+// Quieter card hierarchy: preview, title, outcome, then the tool tray. The
+// one-line hook left with the navigator: the groupings carry that context now.
 .case-playground {
   &__body { gap: var(--space-sm); padding: var(--space-lg); }
   &__footer {
@@ -685,8 +678,165 @@
     gap: var(--space-sm);
     margin-top: 1em;
   }
-  &__card-line { line-height: 1.5; }
   &__metric { font-family: var(--font-body); letter-spacing: 0; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: auto; }
   &__cta { padding-top: 0; }
   &__footer &__cta { margin-top: 0; flex-shrink: 0; }
+}
+
+// ── Navigator controls and the engagement plate ───────────────────────────
+// The nav row grows a left side: the browse control that opens the work
+// navigator and, once a group is chosen, the filter it applies. The arrows keep
+// the right with a page indicator between them, so the carousel can be paged
+// without the rail. On the card, the preview gains a mono caption (year, and
+// the client once it may be named) and Figma-style corner handles that appear
+// on the active card: the selection-frame vernacular the skills cards use,
+// drawn inside the preview because the card clips its edges.
+.case-playground {
+  &__nav {
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__nav-start,
+  &__nav-end {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+  }
+
+  &__nav-end { margin-left: auto; }
+
+  &__nav-btn[disabled] {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+    color: $color-neutral-dark;
+  }
+
+  &__browse {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid $color-border-default;
+    border-radius: var(--radius-full);
+    background: $color-white;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+    cursor: pointer;
+    transition: border-color var(--case-study-motion-fast), color var(--case-study-motion-fast);
+
+    &:hover { border-color: rgba($color-primary, 0.45); color: $color-primary-dark; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+
+    // Open is a state the reader chose.
+    &[aria-expanded='true'] {
+      border-color: $color-primary;
+      color: $color-primary-dark;
+      background: $color-primary-light;
+    }
+  }
+
+  &__browse-glyph {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+
+    svg { width: 100%; height: 100%; }
+  }
+
+  &__filter {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-primary-dark;
+  }
+
+  &__filter-clear {
+    appearance: none;
+    border: 0;
+    padding: 4px 2px;
+    background: none;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+
+    &:hover { color: $color-neutral-dark; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; border-radius: 3px; }
+  }
+
+  &__pages {
+    min-width: 5ch;
+    text-align: center;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+  }
+
+  &__caption {
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+    z-index: 2;
+    margin: 0;
+    padding: 3px 7px;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    background: rgba(255, 255, 255, 0.88);
+    font-family: $font-family-mono;
+    font-size: 9px;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+    pointer-events: none;
+  }
+
+  &__preview::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    z-index: 2;
+    pointer-events: none;
+    background-image:
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0),
+      linear-gradient($color-primary 0 0);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    background-position: top left, top right, bottom left, bottom right;
+    opacity: 0;
+    transition: opacity 240ms var(--case-study-ease-out);
+  }
+
+  &__card--active &__preview::before { opacity: 1; }
+
+  // A plated card already labels itself in that corner (the plate is drawn
+  // with its own title line), so the caption waits for the plate to lift and
+  // arrives on the same resolve delay as the media under it.
+  &__card--plated &__caption { opacity: 0; }
+  &__caption { transition: opacity 650ms var(--case-study-ease-out); }
+  &--resolving &__caption { transition-delay: var(--resolve-delay, 0ms); }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__preview::before,
+    &__browse { transition: none; }
+  }
 }

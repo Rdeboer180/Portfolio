@@ -6,7 +6,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
-import projects from '../data/projects';
+import { orderedProjects } from '../data/projects';
 import { getHomeHref } from '../utils/homeSession';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -20,7 +20,7 @@ const PAGES = [
   { to: '/design-system/', title: 'Design System', sub: 'The tokens and components this site is built on.' },
 ];
 
-const visible = projects.filter((p) => !p.hidden);
+const visible = orderedProjects();
 const clientWork = visible.filter((p) => p.stream === 'professional');
 const selfWork = visible.filter((p) => p.stream !== 'professional');
 

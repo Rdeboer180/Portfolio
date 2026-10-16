@@ -213,7 +213,10 @@ async function main() {
       // and stays. It is content rather than an offer, so the static file
       // keeps it and CaseStudyPlayground renders it until mount to match.
       // Stripping it would hide "Password protected" until hydration.
-      clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay, .case-playground__unlock')
+      //
+      // The work navigator (`.side-panel--work`) renders only after mount, so
+      // it is never here; stripping it anyway keeps that true if a gate moves.
+      clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay, .case-playground__unlock, .side-panel--work')
         .forEach((el) => el.remove());
 
       // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its

@@ -1,30 +1,42 @@
-import { CARDS, CoinPhase, coinVariants, coinVariantsReduced } from '../data/toolCoins';
+import { CARDS, Coin, CoinPhase, coinVariants, coinVariantsReduced } from '../data/toolCoins';
 import { FeaturedEndorsement } from './Testimonials';
 // ============================================
 // CaseStudyPlayground — "shadowbox + tool coin tray" case studies carousel
-// All public case studies as shadowbox cards (preview / minimal copy / coin
-// tray) in a scroll-snap carousel paged by hand-sketched arrows that draw in
-// on scroll (same artistic language as the hero arrows).
+// All public case studies as shadowbox cards (preview / title and outcome /
+// coin tray) in a scroll-snap carousel paged by hand-sketched arrows that draw
+// in on scroll (same artistic language as the hero arrows). The work navigator
+// (WorkNavigator.tsx) filters the row by discipline or client; without it the
+// arrows page three at a time through the one WORK_ORDER.
 // Coins: first hover/focus drops the card's real tool icons into its tray;
 // un-hover lets them fall out the bottom and vanish — replayable every hover.
+// A page turn and a pointed navigator row drop them too.
 // framer-motion only. Reduced-motion → fade in/out, no physics.
 // ============================================
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
-import projects from '../data/projects';
+import { clientLabelFor, orderedProjects } from '../data/projects';
+import { WORK_GROUPS, clientGroupLabel, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
+import { useWorkNavigator } from '../context/WorkNavigatorContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import ProjectBrand from './ProjectBrand';
+import WorkNavigator, { WORK_NAVIGATOR_ID } from './WorkNavigator';
 
 const PreviewLockIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="4" y="10.5" width="16" height="10.5" rx="2" />
     <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+  </svg>
+);
+
+const BrowseIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M4 6h16M4 12h10M4 18h7" />
   </svg>
 );
 
@@ -95,8 +107,8 @@ const CardVideo: React.FC<{
 
 const BriefcaseIcon = () => (
   <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
-    <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a5.275,5.275,0,0,0,5.26,5.27H54.41A5.601,5.601,0,0,0,60,54.02V32.52A5.595,5.595,0,0,0,55.44,27.02ZM12.53,54.35A3.265,3.265,0,0,1,6,54.35V31.92a1.739,1.739,0,0,1,1.73-1.74H12.53Z" />
-    <path d="M27.32,17.06a7.613,7.613,0,0,1,5.43,2.29l4.97,5.09a1.639,1.639,0,0,0,1.14.48c1.215.049,15.812-.107,16.58.08-.044-.577.109-9.054-.11-9.32-1.228-.002-9.544.001-10.98,0a4.432,4.432,0,0,1-4.43-4.43V3.45a2.171,2.171,0,0,0-.36-.02H21.05A3.98,3.98,0,0,0,17.08,7.4V17.14C17.631,17.031,27.32,17.06,27.32,17.06ZM23.71,6.89H35.29a1,1,0,0,1,0,2H23.71A1,1,0,0,1,23.71,6.89Zm0,4.71H35.29a1,1,0,0,1,0,2H23.71A1,1,0,0,1,23.71,11.6Z" />
+    <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a3.739,3.739,0,0,0,3.73,3.74H56.27A3.739,3.739,0,0,0,60,54.35V31.92A3.739,3.739,0,0,0,56.27,28.18H55.44Z" />
+    <path d="M27.32,17.06a7.613,7.613,0,0,1,5.43,2.29l4.97,5.09a1.639,1.639,0,0,0,1.14.48c1.215.049,15.812-.107,16.58.08-.044-.577.109-9.054-.11-9.32-1.228-.002-9.544.001-10.98,0a4.432,4.432,0,0,1-4.43-4.43V4H15.4a3.73,3.73,0,0,0-3.73,3.73V17.06Z" />
     <path d="M44.35,13.68H54.42a4.425,4.425,0,0,0-.98-1L42.6,4.46a4.339,4.339,0,0,0-.68-.43v7.22A2.433,2.433,0,0,0,44.35,13.68Z" />
   </svg>
 );
@@ -138,21 +150,21 @@ const CtaArrow = () => (
   </svg>
 );
 
-// ── Coin + card data ─────────────────────────────────────────────────────────
-// Deterministic resting poses (no randomness at render): left position in %,
-// resting rotation in deg, small y lift so neighbors overlap like a loose pile.
-
-// Card copy previews the story; the case study holds the full context.
-const CARD_PREVIEWS: Record<string, { title: string; line: string }> = {
-  'design-enablement': { title: 'Tools that scale design', line: 'I built a production-accurate crop simulator and reusable review components so teams can check imagery before it reaches AEM.' },
-  playdraft: { title: 'PlayDraft: A social drafting game', line: 'I designed the brand, game, and system, then built and released the iPhone app with agents.' },
-  loopstack: { title: 'LoopStack: Patterns worth reviewing', line: 'I designed and built a Type 1 diabetes app for reviewing meal and glucose patterns with a care team.' },
-  'aem-component-system': { title: 'AEM Component System', line: 'I defined AEM component rules and edge cases in Figma, wrote the Sass fixes, and documented each style choice for the authors who make it.' },
-  'tire-categories': { title: 'Tire Category Redesign: Path to the right tire', line: 'I rebuilt 30+ category pages into a guided system that helps shoppers choose without tire expertise.' },
-  'seasonal-content-system': { title: 'Seasonal content, without rebuilds', line: 'Experience Fragments and Adobe Target deliver seasonal imagery to regional audiences while SEO copy stays consistent.' },
-  'overscroll-tactics': { title: 'Overscroll Tactics: A studio identity', line: 'I built the identity behind PlayDraft, carrying one mark and motion system across web and native.' },
-  heatherwood: { title: 'Heatherwood: Built for its owner', line: 'A new identity and WordPress site built around family needs and straightforward updates for the riding academy’s owner.' },
-  'landing-pages': { title: 'AEM: A governed landing-page system', line: 'Reusable templates and clear guidance help junior designers ship complex landing pages in weeks instead of a month.' },
+// ── Card copy ────────────────────────────────────────────────────────────────
+// A card is a title, an outcome and the tool tray. The one-line hooks that used
+// to sit under these titles left with the work navigator, which now carries
+// the discipline and client context a card was trying to compress into a
+// sentence. The titles themselves are unchanged.
+const CARD_TITLES: Record<string, string> = {
+  'design-enablement': 'Tools that scale design',
+  playdraft: 'PlayDraft: A social drafting game',
+  loopstack: 'LoopStack: Patterns worth reviewing',
+  'aem-component-system': 'AEM Component System',
+  'tire-categories': 'Tire Category Redesign: Path to the right tire',
+  'seasonal-content-system': 'Seasonal content, without rebuilds',
+  'overscroll-tactics': 'Overscroll Tactics: A studio identity',
+  heatherwood: 'Heatherwood: Built for its owner',
+  'landing-pages': 'AEM: A governed landing-page system',
 };
 
 // ── Coin motion variants ──────────────────────────────────────────────────────
@@ -183,6 +195,8 @@ function useTouchDevice(): boolean {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 const EXIT_RESET_MS = 750; // out-animation length before coins re-park above
+const CARD_GAP = 24;       // $spacing-xl, the carousel's gap
+const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
 
 const CaseStudyPlayground: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -190,22 +204,26 @@ const CaseStudyPlayground: React.FC = () => {
   const [sectionRef, revealed] = useReveal<HTMLElement>(0.15);
   const gridRef = useRef<HTMLDivElement>(null);
   const [phases, setPhases] = useState<Record<string, CoinPhase>>({});
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const resetTimers = useRef<Record<string, number>>({});
+  const nav = useWorkNavigator();
 
   useEffect(() => {
     const timers = resetTimers.current;
     return () => Object.values(timers).forEach((t) => window.clearTimeout(t));
   }, []);
 
-  const setPhase = (slug: string, phase: CoinPhase) =>
-    setPhases((p) => (p[slug] === phase ? p : { ...p, [slug]: phase }));
+  const setPhase = useCallback((slug: string, phase: CoinPhase) =>
+    setPhases((p) => (p[slug] === phase ? p : { ...p, [slug]: phase })), []);
 
-  const handleEnter = (slug: string) => {
+  // Drop the coins without lifting the card: a page turn and a pointed
+  // navigator row use this; hover and focus add the active state on top.
+  const dropCoins = useCallback((slug: string) => {
     window.clearTimeout(resetTimers.current[slug]);
     setPhase(slug, 'in');
-  };
+  }, [setPhase]);
 
-  const handleLeave = (slug: string) => {
+  const releaseCoins = useCallback((slug: string) => {
     setPhase(slug, 'out');
     window.clearTimeout(resetTimers.current[slug]);
     // After the fall-out finishes, re-park the coins above for the next hover
@@ -213,65 +231,25 @@ const CaseStudyPlayground: React.FC = () => {
       () => setPhase(slug, 'idle'),
       EXIT_RESET_MS
     );
+  }, [setPhase]);
+
+  const handleEnter = (slug: string) => {
+    setActiveSlug(slug);
+    dropCoins(slug);
   };
 
-  // Touch devices: drive the coin drop from visibility instead of hover.
-  // A card ≥60% in view drops its coins in; scrolling/swiping it out lets them
-  // fall away — so the animation replays as you move through the carousel.
-  useEffect(() => {
-    if (!isTouch) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-
-    const cardEls = Array.from(
-      grid.querySelectorAll<HTMLElement>('[data-slug]')
-    );
-    if (cardEls.length === 0) return;
-
-    const seen = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const slug = (entry.target as HTMLElement).dataset.slug;
-          if (!slug) return;
-          if (entry.isIntersecting) {
-            seen.add(slug);
-            handleEnter(slug);
-          } else if (seen.has(slug)) {
-            // Only fall out after having been seen (avoids a mount-time flurry)
-            handleLeave(slug);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    cardEls.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-    // handleEnter/handleLeave are stable in behavior (setState + refs only)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTouch]);
-
-  const scrollByCard = (dir: 1 | -1) => {
-    const el = gridRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>('.case-playground__card');
-    const step = card ? card.offsetWidth + 24 : el.clientWidth * 0.8;
-    el.scrollBy({ left: dir * step, behavior: reduceMotion ? 'auto' : 'smooth' });
+  const handleLeave = (slug: string) => {
+    setActiveSlug((current) => (current === slug ? null : current));
+    // A row still pointed at in the navigator keeps its coins.
+    if (nav.pointedSlug !== slug) releaseCoins(slug);
   };
 
-  // Join playground config to the canonical projects data (image + route +
-  // stream + optional cover-loop video). CARDS and projects are module
-  // constants, so this only needs to run once — not on every hover re-render.
+  // Join the one WORK_ORDER to each card's coins (toolCoins.ts keeps only the
+  // coins now; the order left it for projects.ts). Module constants, so this
+  // runs once — not on every hover re-render.
   const cards = useMemo(() => {
-    const bySlug = new Map(projects.map((p) => [p.slug, p]));
-    return CARDS.flatMap((card) => {
-      const project = bySlug.get(card.slug);
-      // A slug with no project, or one marked hidden, renders nothing. Every
-      // other surface already honours `hidden`; this one used to be the
-      // exception, which is how a "direct-link only" project ended up as
-      // homepage card #1.
-      if (!project || project.hidden) return [];
+    const coinsBySlug = new Map(CARDS.map((card) => [card.slug, card.coins]));
+    return orderedProjects().map((project) => {
       const video = project.featuredVideo;
       // For video cards the still IS the video's first frame (poster), so the
       // resting card matches what the loop shows; non-video cards keep `featured`.
@@ -284,17 +262,15 @@ const CaseStudyPlayground: React.FC = () => {
       // prior. Deriving it means the hedge the case study was careful to
       // write survives onto the homepage.
       const headline = project.metrics?.[0];
-      return [{
-        ...card,
-        title: project.cardTitle ?? project.title,
+      return {
+        slug: project.slug,
+        coins: coinsBySlug.get(project.slug) ?? ([] as Coin[]),
+        title: CARD_TITLES[project.slug] ?? project.cardTitle ?? project.title,
         client: project.client,
-        // The proof formula (problem, then the shipped thing and what it did)
-        // when a project defines one; the study summary otherwise.
-        line: project.cardHook ?? project.summary ?? '',
-        // Four tags is the card's budget — the full list belongs to the study.
-        // Order in projects.ts is curation order, so the first four are the
-        // four that matter.
-        tags: (project.tags ?? []).slice(0, 4),
+        clientLabel: project.clientLabel,
+        // "2023 to 2024 design · 2026 launch" is a sentence; the chip takes the
+        // leading year or range and leaves the rest to the study.
+        year: project.year.match(/^\d{4}(?:\s?[–-]\s?(?:\d{2,4}|Present))?/)?.[0] ?? project.year,
         metric: headline ? `${headline.value} ${headline.label}` : '',
         image: still,
         alt: project.title,
@@ -302,10 +278,15 @@ const CaseStudyPlayground: React.FC = () => {
         video,
         videoPrimary: Boolean(video && project.featuredVideoPrimary),
         publicVideo: Boolean(video && project.featuredVideoPublic),
-        status: project.cardStatus,
-      }];
+      };
     });
   }, []);
+
+  // The navigator's selection narrows the row; no selection is the whole order.
+  const visibleCards = useMemo(() => {
+    const shown = new Set(studiesFor(nav.group, nav.clientKey).map((project) => project.slug));
+    return cards.filter((card) => shown.has(card.slug));
+  }, [cards, nav.group, nav.clientKey]);
 
   const { unlocked, resolving, openPrompt, lockedReady } = useUnlock();
 
@@ -354,6 +335,137 @@ const CaseStudyPlayground: React.FC = () => {
    */
   const lockLineReady = !mounted || lockedReady;
 
+  // ── Paging ────────────────────────────────────────────────────────────────
+  // The row is still a scroll-snap carousel (touch swipes, keyboard scrolls),
+  // so a "page" is measured from it rather than imposed on it: how many cards
+  // fit the viewport of the grid, and which group of that many is in view. The
+  // static file and the first render assume the desktop three; the measured
+  // count arrives after mount, a post-mount update and never a mismatch.
+  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
+  const pageCount = Math.max(1, Math.ceil(visibleCards.length / perPage));
+  const page = Math.min(nav.page, pageCount - 1);
+
+  const measure = useCallback(() => {
+    const el = gridRef.current;
+    const card = el?.querySelector<HTMLElement>('.case-playground__card');
+    if (!el || !card) return { fit: DEFAULT_PER_PAGE, step: 0 };
+    const fit = Math.max(1, Math.round((el.clientWidth + CARD_GAP) / (card.offsetWidth + CARD_GAP)));
+    return { fit, step: fit * (card.offsetWidth + CARD_GAP) };
+  }, []);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return undefined;
+    let frame = 0;
+    const sync = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const { fit, step } = measure();
+        setPerPage(fit);
+        if (step > 0) nav.setPage(Math.round(el.scrollLeft / step));
+      });
+    };
+    sync();
+    el.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      el.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
+    };
+    // nav.setPage is stable; measure reads the DOM.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [measure, visibleCards.length]);
+
+  // jsdom has no element scrollTo; the browser always does.
+  const scrollGrid = (left: number, behavior: ScrollBehavior) => {
+    const el = gridRef.current;
+    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left, behavior });
+  };
+
+  const goToPage = (next: number) => {
+    const { step } = measure();
+    const target = Math.max(0, Math.min(pageCount - 1, next));
+    scrollGrid(target * step, reduceMotion ? 'auto' : 'smooth');
+  };
+
+  // A new selection starts at its first page.
+  useEffect(() => {
+    scrollGrid(0, 'auto');
+    // scrollGrid only reads the ref.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nav.group, nav.clientKey]);
+
+  // A page turn drops the incoming cards' coins (desktop only: touch drives
+  // its own drop from visibility). The first page on arrival stays parked, so
+  // the load has no flurry; the first hover still owns that moment.
+  const lastDropPage = useRef<number | null>(null);
+  useEffect(() => {
+    if (isTouch) return;
+    if (lastDropPage.current === null) { lastDropPage.current = page; return; }
+    if (lastDropPage.current === page) return;
+    lastDropPage.current = page;
+    visibleCards.slice(page * perPage, page * perPage + perPage).forEach((card) => dropCoins(card.slug));
+    // visibleCards and perPage are read at the moment of the turn.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isTouch, dropCoins]);
+
+  // Pointing at a study in the navigator answers on its card: the coins drop
+  // while the row is pointed and fall away when the pointer moves on.
+  const lastPointed = useRef<string | null>(null);
+  useEffect(() => {
+    const previous = lastPointed.current;
+    lastPointed.current = nav.pointedSlug;
+    if (previous && previous !== nav.pointedSlug && previous !== activeSlug) releaseCoins(previous);
+    if (nav.pointedSlug) dropCoins(nav.pointedSlug);
+    // activeSlug is only consulted to avoid releasing a hovered card.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nav.pointedSlug, dropCoins, releaseCoins]);
+
+  // Touch devices: drive the coin drop from visibility instead of hover.
+  // A card ≥60% in view drops its coins in; scrolling/swiping it out lets them
+  // fall away — so the animation replays as you move through the carousel.
+  useEffect(() => {
+    if (!isTouch) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const cardEls = Array.from(
+      grid.querySelectorAll<HTMLElement>('[data-slug]')
+    );
+    if (cardEls.length === 0) return;
+
+    const seen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const slug = (entry.target as HTMLElement).dataset.slug;
+          if (!slug) return;
+          if (entry.isIntersecting) {
+            seen.add(slug);
+            handleEnter(slug);
+          } else if (seen.has(slug)) {
+            // Only fall out after having been seen (avoids a mount-time flurry)
+            handleLeave(slug);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    cardEls.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+    // handleEnter/handleLeave are stable in behavior (setState + refs only);
+    // the observed set changes with the selection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTouch, visibleCards]);
+
+  const activeFilter = nav.group
+    ? nav.group === 'client' && nav.clientKey
+      ? clientGroupLabel(nav.clientKey, !unlocked)
+      : WORK_GROUPS.find((group) => group.id === nav.group)?.label ?? ''
+    : '';
+
   return (
     <section
       id="projects"
@@ -386,29 +498,58 @@ const CaseStudyPlayground: React.FC = () => {
 
         {/* The threshold — stage line into the playground */}
 
-        {/* Sketch arrows — draw in on scroll, page the carousel */}
+        {/* Browse control, active filter, sketch arrows and the page count */}
         <div className="case-playground__nav">
-          <button
-            type="button"
-            className="case-playground__nav-btn"
-            onClick={() => scrollByCard(-1)}
-            aria-label="Previous case studies"
-          >
-            <SketchArrow direction="left" />
-          </button>
-          <button
-            type="button"
-            className="case-playground__nav-btn case-playground__nav-btn--next"
-            onClick={() => scrollByCard(1)}
-            aria-label="Next case studies"
-          >
-            <SketchArrow direction="right" />
-          </button>
+          <div className="case-playground__nav-start">
+            <button
+              type="button"
+              className="case-playground__browse"
+              aria-expanded={nav.open}
+              aria-controls={WORK_NAVIGATOR_ID}
+              ref={nav.triggerRef}
+              onClick={() => nav.setOpen(!nav.open)}
+            >
+              <span className="case-playground__browse-glyph"><BrowseIcon /></span>
+              Browse by discipline or client
+            </button>
+            {activeFilter && (
+              <>
+                <span className="case-playground__filter" aria-live="polite">[ {activeFilter} ]</span>
+                <button type="button" className="case-playground__filter-clear" onClick={() => nav.selectGroup(null)}>
+                  Show all
+                </button>
+              </>
+            )}
+          </div>
+          <div className="case-playground__nav-end">
+            <button
+              type="button"
+              className="case-playground__nav-btn"
+              onClick={() => goToPage(page - 1)}
+              aria-label="Previous case studies"
+              disabled={page === 0}
+            >
+              <SketchArrow direction="left" />
+            </button>
+            <span className="case-playground__pages" aria-live="polite">{page + 1} / {pageCount}</span>
+            <button
+              type="button"
+              className="case-playground__nav-btn case-playground__nav-btn--next"
+              onClick={() => goToPage(page + 1)}
+              aria-label="Next case studies"
+              disabled={page >= pageCount - 1}
+            >
+              <SketchArrow direction="right" />
+            </button>
+          </div>
         </div>
+
+        {/* Docked beside the page from 1000px; folded in here below it. */}
+        <WorkNavigator />
 
         {/* ── Carousel ── */}
         <div className="case-playground__grid" ref={gridRef}>
-          {cards.map((card, i) => {
+          {visibleCards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
             const locked = isLocked(card.stream);
             // Drawn cover in place of the blur. The plate stays mounted for any
@@ -418,11 +559,15 @@ const CaseStudyPlayground: React.FC = () => {
             const mediaLocked = locked && !card.publicVideo;
             const hasPlate = isProtected(card.stream) && !card.publicVideo && hasSchematic(card.slug);
             const plated = locked && hasPlate;
-            const previewCopy = CARD_PREVIEWS[card.slug] ?? card;
+            // Hover and focus lift the card; on touch the in-view drop does.
+            const active = activeSlug === card.slug || nav.pointedSlug === card.slug || (isTouch && phase === 'in');
+            // The caption names the client only once it may be named: the
+            // prerender is a locked visitor, and so is every first render.
+            const caption = locked ? card.year : `${card.year} · ${clientLabelFor(card, false)}`;
             return (
               <article
                 key={card.slug}
-                className={`case-playground__card${phase === 'in' ? ' case-playground__card--active' : ''}${
+                className={`case-playground__card${active ? ' case-playground__card--active' : ''}${
                   plated ? ' case-playground__card--plated' : ''
                 }`}
                 data-slug={card.slug}
@@ -445,6 +590,7 @@ const CaseStudyPlayground: React.FC = () => {
                   style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
+                  <span className="case-playground__caption" aria-hidden="true">[ {caption} ]</span>
                   {lockLineReady && locked && (
                     <p
                       id={`lock-${card.slug}`}
@@ -461,7 +607,7 @@ const CaseStudyPlayground: React.FC = () => {
                       src={card.video}
                       poster={card.image}
                       alt={card.alt}
-                      playing={phase === 'in'}
+                      playing={active || phase === 'in'}
                       primary={card.videoPrimary}
                     />
                   ) : (
@@ -469,10 +615,9 @@ const CaseStudyPlayground: React.FC = () => {
                   )}
                 </div>
 
-                {/* Middle — minimal content */}
+                {/* Middle — title and outcome */}
                 <div className="case-playground__body">
-                  <h3 className="case-playground__card-title">{previewCopy.title}</h3>
-                  <p className="case-playground__card-line">{previewCopy.line}</p>
+                  <h3 className="case-playground__card-title">{card.title}</h3>
                   <p className="case-playground__metric">{card.metric}</p>
                   <div className="case-playground__footer">
                     <span className="case-playground__cta" aria-hidden="true">

@@ -1,5 +1,6 @@
 import React, { useId, useMemo, useState } from 'react';
-import projects from '../data/projects';
+import SidePanelShell from './SidePanelShell';
+import { orderedProjects } from '../data/projects';
 import { KIND_LABEL, NOTES_BY_DATE } from '../data/notes';
 import { useAuthorMode } from '../context/AuthorModeContext';
 import { useUnlock } from '../context/UnlockContext';
@@ -37,7 +38,7 @@ const FILTERS: { id: AssetKind | 'all'; label: string }[] = [
  * never discloses new information.
  */
 const buildAssets = (): Asset[] => {
-  const studies: Asset[] = projects.filter((project) => !project.hidden).map((project) => {
+  const studies: Asset[] = orderedProjects().map((project) => {
     const video = project.featuredVideo;
     const poster = video ? video.split('?')[0].replace(/\.mp4$/, '-poster.jpg') : project.featured;
     const ext = video ? 'mp4' : (poster?.split('.').pop() ?? 'page');
@@ -89,9 +90,9 @@ const FragmentGlyph = () => (
 );
 
 /**
- * AEM's Side Panel: the Assets finder (the DAM) and the Components browser.
- * An overlay drawer rather than a push, so the page keeps its height and its
- * reveal observers. Desktop only, like the editor it quotes.
+ * AEM's Side Panel in Author mode: the Assets finder (the DAM) and the
+ * Components browser, in the docked column SidePanelShell provides (the public
+ * work navigator uses the same dock). Desktop only, like the editor it quotes.
  */
 const AuthorSidePanel: React.FC = () => {
   const { authoring, ui, update, selectComponent } = useAuthorMode();
@@ -125,11 +126,7 @@ const AuthorSidePanel: React.FC = () => {
   };
 
   return (
-    <aside className="side-panel" aria-label="Asset panel">
-      <div className="side-panel__header">
-        <span className="side-panel__title">Asset Panel</span>
-        <button type="button" className="side-panel__close" aria-label="Close asset panel" onClick={() => update({ panelOpen: false })}>&times;</button>
-      </div>
+    <SidePanelShell title="Asset Panel" label="Asset panel" closeLabel="Close asset panel" onClose={() => update({ panelOpen: false })} variant="author">
 
       <div className="side-panel__tabs" role="tablist" aria-label="Asset panel tabs">
         {(['assets', 'components'] as const).map((tab) => (
@@ -223,7 +220,7 @@ const AuthorSidePanel: React.FC = () => {
           </ul>
         </div>
       )}
-    </aside>
+    </SidePanelShell>
   );
 };
 

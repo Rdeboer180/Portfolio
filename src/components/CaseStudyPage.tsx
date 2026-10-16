@@ -2,7 +2,7 @@ import { reviewHref } from '../utils/reviewRoutes';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import projects, { Project, ProjectBeat, ProjectImage } from '../data/projects';
+import projects, { ANON_CLIENT, Project, ProjectBeat, ProjectImage, orderedProjects } from '../data/projects';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
@@ -141,16 +141,8 @@ const SECTION_LABELS = ['Problem', 'Gaps & Opportunity', 'Constraints', 'Approac
 // titles and page identity to hide something that isn't hidden.
 const CLIENT_PATTERN = /\bTire\s?Rack(?:’s|'s)?/g;
 
-/**
- * What stands in for the client on a locked page.
- *
- * A descriptor rather than a blackout bar or a bare "Confidential client". A bar
- * removes information without substituting any; a descriptor withholds the name
- * while still telling a reader what kind of company and what scale of problem
- * this was, which is what makes an anonymised case study credible instead of
- * evasive. Deliberately claims no ranking — nothing here needs substantiating.
- */
-const ANON_CLIENT = 'A national US online tire & wheel retailer';
+// ANON_CLIENT, the descriptor that stands in for the client on a locked page,
+// now lives in data/projects.ts so the homepage navigator can use the same one.
 
 const redactClient = (text: string, locked: boolean): string => {
   if (!locked) return text;
@@ -602,10 +594,11 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
     );
   }
 
-  // "Next project" should cycle through visible projects only so a hidden,
-  // direct-link-only case study (e.g. PlayDraft) is never surfaced via the
-  // bottom nav of a public project.
-  const visibleProjects = projects.filter((p) => !p.hidden);
+  // "Next project" cycles through visible projects only, so a hidden,
+  // direct-link-only case study is never surfaced via the bottom nav of a
+  // public project, and in WORK_ORDER, so the pager walks the same sequence
+  // the homepage and the navigator show.
+  const visibleProjects = orderedProjects();
   const visibleIndex = visibleProjects.findIndex((p) => p.slug === project.slug);
   const nextProject: Project | undefined =
     visibleIndex >= 0
