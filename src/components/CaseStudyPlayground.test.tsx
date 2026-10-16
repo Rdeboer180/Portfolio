@@ -10,7 +10,7 @@ import WorkNavigator from './WorkNavigator';
 import { WorkNavigatorProvider } from '../context/WorkNavigatorContext';
 import { AuthorModeProvider } from '../context/AuthorModeContext';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
-import { ANON_CLIENT, WORK_ORDER } from '../data/projects';
+import projects, { ANON_CLIENT, WORK_ORDER, cardTitleFor } from '../data/projects';
 
 let mockUnlocked = false;
 jest.mock('../context/UnlockContext', () => ({
@@ -83,7 +83,7 @@ test('locked studies carry the lock line on card and row, name no client, and ea
   expect(screen.getAllByText('Password protected')).toHaveLength(9);
   expect(container.textContent).not.toContain('Tire Rack');
   const rows = container.querySelectorAll<HTMLElement>('.case-playground__list .dam__item');
-  expect(within(rows[0]).getByText(`2023 · ${ANON_CLIENT}`)).toBeInTheDocument();
+  expect(within(rows[0]).getByText(`2023–2026 · ${ANON_CLIENT}`)).toBeInTheDocument();
   expect(rows[0].tagName).toBe('A');
   expect(rows[0]).toHaveAttribute('aria-describedby', 'index-lock-wheelrack');
   expect(container.querySelector('#index-lock-wheelrack')).toHaveTextContent('Password protected');
@@ -186,4 +186,22 @@ test('the Asset Panel opens the case-study folders under the Case studies filter
   expect(indexSlugs(container)).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
   // No discipline chip claims a client selection.
   expect(within(chips()).getAllByRole('button').every((button) => button.getAttribute('aria-pressed') === 'false')).toBe(true);
+});
+
+test('a study goes by one name on its card, its index row and its folder row, and plates carry no number', () => {
+  const { container } = render(
+    <MemoryRouter><WorkNavigatorProvider><WorkNavigator /><CaseStudyPlayground /></WorkNavigatorProvider></MemoryRouter>,
+  );
+  const names = (selector: string) => Array.from(container.querySelectorAll(selector)).map((el) => el.textContent);
+  const expected = (slugs: string[]) => slugs.map((slug) => cardTitleFor(projects.find((project) => project.slug === slug)!));
+  expect(names('.case-playground__card-title')).toEqual(expected(WORK_ORDER.slice(0, 3)));
+  expect(names('.case-playground__list .dam__name')).toEqual(expected(WORK_ORDER));
+
+  fireEvent.click(within(screen.getByRole('list', { name: 'Case study folders' })).getByRole('button', { name: /^AEM/ }));
+  expect(names('.work-nav__studies .dam__name')).toEqual(expected(AEM));
+  expect(names('.case-playground__list .dam__name')).toEqual(expected(AEM));
+
+  // The drawn plates on locked cards say what the system is, not which plate it is.
+  expect(container.querySelectorAll('.cover-schematic').length).toBeGreaterThan(0);
+  expect(container.textContent).not.toMatch(/Plate \d/);
 });

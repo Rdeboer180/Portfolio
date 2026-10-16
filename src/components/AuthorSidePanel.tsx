@@ -1,6 +1,6 @@
 import React, { useId, useMemo, useState } from 'react';
 import SidePanelShell from './SidePanelShell';
-import { orderedProjects } from '../data/projects';
+import { cardTitleFor, orderedProjects } from '../data/projects';
 import { KIND_LABEL, NOTES_BY_DATE } from '../data/notes';
 import { useAuthorMode } from '../context/AuthorModeContext';
 import { useUnlock } from '../context/UnlockContext';
@@ -46,7 +46,7 @@ const buildAssets = (): Asset[] => {
     return {
       kind: 'study',
       key: project.slug,
-      title: project.cardTitle ?? project.title,
+      title: cardTitleFor(project),
       meta: `${project.slug} · ${project.year} · ${project.stream ?? 'public'} · ${ext}`,
       href: `/work/${project.slug}/`,
       poster,

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useWorkNavigator } from '../context/WorkNavigatorContext';
 import { useUnlock } from '../context/UnlockContext';
-import { Project, clientLabelFor } from '../data/projects';
+import { Project, cardTitleFor, clientLabelFor, yearSpanFor } from '../data/projects';
 import { WORK_GROUPS, NavigatorGroupId, clientGroups, studiesInGroup } from '../data/workGroups';
 import { coinVariants, coinVariantsReduced } from '../data/toolCoins';
 
@@ -57,8 +57,8 @@ const StudyRow: React.FC<{ project: Project; index: number; locked: boolean }> =
         >
           {mediaLocked || !poster ? <LockGlyph /> : <img src={poster} alt="" loading="lazy" />}
         </motion.span>
-        <span className="dam__name">{project.cardTitle ?? project.title}</span>
-        <span className="dam__meta">{project.year} · {clientLabelFor(project, locked)}</span>
+        <span className="dam__name">{cardTitleFor(project)}</span>
+        <span className="dam__meta">{yearSpanFor(project)} · {clientLabelFor(project, locked)}</span>
       </a>
     </li>
   );

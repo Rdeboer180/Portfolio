@@ -24,6 +24,11 @@ import React from 'react';
  *
  * Plates are aria-hidden: the card's real text (title, hook, metric, and the
  * playground's "Password protected" line) carries the accessible story.
+ *
+ * Plates carry no plate number. The numbers followed no order a visitor could
+ * see (02, 03, 05, 06, 07, 09, 10 down a row running 1 to 12), and the card's
+ * lock pill sat over them. The one title kept is the Figma plate's "4 plugins",
+ * which is what tells it apart from the design-enablement plate it reuses.
  */
 
 const Handles: React.FC = () => (
@@ -38,7 +43,6 @@ const Handles: React.FC = () => (
 /** Wheel fitment geometry — the one source of truth the system carries. */
 const WheelrackPlate: React.FC = () => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 02</text>
     <circle cx="160" cy="104" r="58" className="cs-ink" />
     <circle cx="160" cy="104" r="42" className="cs-steel" />
     <circle cx="160" cy="104" r="20" className="cs-dash" />
@@ -70,7 +74,6 @@ const WheelrackPlate: React.FC = () => (
 /** The category decision tree — three decisions instead of three hundred tires. */
 const TireCategoriesPlate: React.FC = () => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 06</text>
     <rect x="120" y="30" width="80" height="22" className="cs-ink" />
     <text x="160" y="44" textAnchor="middle" className="cs-mono">every tire</text>
     <line x1="160" y1="52" x2="65" y2="82" className="cs-steel" />
@@ -102,7 +105,6 @@ const TireCategoriesPlate: React.FC = () => (
 /** One storefront layout, seasonal variants by authoring. Client anonymized. */
 const SeasonalPlate: React.FC = () => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 07</text>
     <rect x="46" y="34" width="228" height="126" className="cs-ink" />
     <rect x="46" y="34" width="228" height="16" className="cs-mist" />
     <rect x="60" y="60" width="130" height="42" className="cs-tint" />
@@ -128,7 +130,6 @@ const SeasonalPlate: React.FC = () => (
 /** Three page skeletons, one core component — reused, not rebuilt. */
 const AemPlate: React.FC = () => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 03</text>
     <rect x="58" y="64" width="76" height="96" className="cs-dash" />
     <rect x="44" y="50" width="76" height="96" className="cs-steel" />
     <rect x="30" y="36" width="76" height="96" className="cs-ink" />
@@ -156,9 +157,9 @@ const AemPlate: React.FC = () => (
 );
 
 /** A plugin panel automating the repetitive part of production. */
-const DesignEnablementPlate: React.FC<{ title?: string }> = ({ title = 'Plate 05' }) => (
+const DesignEnablementPlate: React.FC<{ title?: string }> = ({ title }) => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">{title}</text>
+    {title && <text x="160" y="22" textAnchor="middle" className="cs-mono">{title}</text>}
     <rect x="36" y="38" width="176" height="128" className="cs-ink" />
     <rect x="36" y="38" width="176" height="16" className="cs-mist" />
     <circle cx="46" cy="46" r="2.5" className="cs-steel-fill" />
@@ -190,7 +191,6 @@ const DesignEnablementPlate: React.FC<{ title?: string }> = ({ title = 'Plate 05
 /** One governed template, many launches. */
 const LandingPagesPlate: React.FC = () => (
   <>
-    <text x="160" y="22" textAnchor="middle" className="cs-mono">Plate 09</text>
     <rect x="40" y="38" width="88" height="122" className="cs-ink" />
     <rect x="48" y="46" width="72" height="12" className="cs-steel" />
     <rect x="48" y="64" width="72" height="30" className="cs-steel" />
@@ -221,7 +221,7 @@ const LandingPagesPlate: React.FC = () => (
   </>
 );
 
-const FigmaGovernancePlate: React.FC = () => <DesignEnablementPlate title="Plate 10 · 4 plugins" />;
+const FigmaGovernancePlate: React.FC = () => <DesignEnablementPlate title="4 plugins" />;
 
 const PLATES: Record<string, React.FC> = {
   wheelrack: WheelrackPlate,

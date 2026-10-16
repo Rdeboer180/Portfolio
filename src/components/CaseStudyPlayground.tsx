@@ -19,7 +19,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
-import { clientLabelFor, orderedProjects } from '../data/projects';
+import { cardTitleFor, clientLabelFor, orderedProjects, yearSpanFor } from '../data/projects';
 import { WORK_GROUPS, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
@@ -122,23 +122,6 @@ const CtaArrow = () => (
     <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
   </svg>
 );
-
-// ── Card copy ────────────────────────────────────────────────────────────────
-// A card is a title, an outcome and the tool tray. The one-line hooks that used
-// to sit under these titles left with the work navigator, which now carries
-// the discipline and client context a card was trying to compress into a
-// sentence. The titles themselves are unchanged.
-const CARD_TITLES: Record<string, string> = {
-  'design-enablement': 'Tools that scale design',
-  playdraft: 'PlayDraft: A social drafting game',
-  loopstack: 'LoopStack: Patterns worth reviewing',
-  'aem-component-system': 'AEM Component System',
-  'tire-categories': 'Tire Category Redesign: Path to the right tire',
-  'seasonal-content-system': 'Seasonal content, without rebuilds',
-  'overscroll-tactics': 'Overscroll Tactics: A studio identity',
-  heatherwood: 'Heatherwood: Built for its owner',
-  'landing-pages': 'AEM: A governed landing-page system',
-};
 
 // ── Coin motion variants ──────────────────────────────────────────────────────
 // idle: parked above the tray, invisible (teleport — no animation).
@@ -274,12 +257,12 @@ const CaseStudyPlayground: React.FC = () => {
       return {
         slug: project.slug,
         coins: coinsBySlug.get(project.slug) ?? ([] as Coin[]),
-        title: CARD_TITLES[project.slug] ?? project.cardTitle ?? project.title,
+        title: cardTitleFor(project),
         client: project.client,
         clientLabel: project.clientLabel,
-        // "2023 to 2024 design · 2026 launch" is a sentence; the chip takes the
-        // leading year or range and leaves the rest to the study.
-        year: project.year.match(/^\d{4}(?:\s?[–-]\s?(?:\d{2,4}|Present))?/)?.[0] ?? project.year,
+        // "2023 to 2024 design · 2026 launch" is a sentence; the caption and
+        // the index take its span and leave the rest to the study.
+        year: yearSpanFor(project),
         metric: headline ? `${headline.value} ${headline.label}` : '',
         image: still,
         alt: project.title,

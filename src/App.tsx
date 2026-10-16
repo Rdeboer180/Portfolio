@@ -73,8 +73,12 @@ function RouteEffects() {
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
     if (location.hash && location.hash !== '#main-content') {
       const id = location.hash.slice(1);
+      // A section's own deep links carry a path after its id (#projects/aem
+      // filters the work section), and no element has that id. Fall back to
+      // the section the path belongs to, so the link lands where it points.
       requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
+        (document.getElementById(id) ?? document.getElementById(id.split('/')[0]))
+          ?.scrollIntoView({ behavior: scrollBehavior() });
       });
     } else {
       window.scrollTo(0, 0);
