@@ -2364,9 +2364,10 @@ export const WORK_ORDER = [
 ];
 
 /**
- * Ryan's best work, the work section's opening filter and the first cards
- * under All. Kept apart from WORK_ORDER so the pick can change without
- * reordering anything else; every slug here must also be in WORK_ORDER.
+ * Ryan's best work: the first cards the work section opens on, at the head of
+ * All, before the arrows page on through WORK_ORDER. Kept apart from
+ * WORK_ORDER so the pick can change without reordering anything else; every
+ * slug here must also be in WORK_ORDER.
  */
 export const FEATURED: readonly string[] = ['wheelrack', 'playdraft', 'aem-component-system'];
 

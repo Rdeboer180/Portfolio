@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ClientKey, WorkFilter, isClientKey, isWorkFilter } from '../data/workGroups';
+import { ClientKey, NavigatorGroupId, isClientKey, isNavigatorGroup } from '../data/workGroups';
 
 /**
  * How the work section lays out whatever is selected: Cards (the paged
@@ -16,15 +16,15 @@ export const WORK_VIEWS: { id: WorkView; label: string }[] = [
 
 /**
  * What the work section shows and how. The visitor filters with the chips in
- * the section itself (no selection is Featured) and picks a layout beside
- * them; an author can also file by client from the Asset Panel's folders. The
- * defaults are the static page: Featured, as cards. The layout is kept for
+ * the section itself (no selection is All, opening on the featured studies)
+ * and picks a layout beside them; an author can also file by client from the
+ * Asset Panel's folders. The defaults are the static page: All, as cards. The layout is kept for
  * the visit only, never stored, so a returning visitor never gets a layout
  * swap after load. The deep link is applied after mount, so the first client
  * render always equals the prerender.
  */
 export interface WorkNavigatorState {
-  group: WorkFilter | null;
+  group: NavigatorGroupId | null;
   clientKey: ClientKey | null;
   /** Study the author is pointing at in the Asset Panel; its card answers with its coins. */
   pointedSlug: string | null;
@@ -34,7 +34,7 @@ export interface WorkNavigatorState {
 interface WorkNavigatorValue extends WorkNavigatorState {
   /** True once the client has mounted. */
   mounted: boolean;
-  selectGroup: (group: WorkFilter | null) => void;
+  selectGroup: (group: NavigatorGroupId | null) => void;
   selectClient: (key: ClientKey | null) => void;
   point: (slug: string | null) => void;
   setView: (view: WorkView) => void;
@@ -54,8 +54,8 @@ const WorkNavigatorContext = createContext<WorkNavigatorValue>({
 export const useWorkNavigator = () => useContext(WorkNavigatorContext);
 
 /**
- * Deep links use the section's own anchor: `#projects/all`, `#projects/aem`,
- * `#projects/client/personal`; plain `#projects` is Featured.
+ * Deep links use the section's own anchor: `#projects/aem`,
+ * `#projects/client/personal`; plain `#projects` is All.
  * They are read once after mount and written back with replaceState rather
  * than through the router, because RouteEffects treats every hash as an
  * element id to scroll to and the reading panel keeps its own history.
@@ -66,11 +66,11 @@ const readHash = (): Pick<WorkNavigatorState, 'group' | 'clientKey'> | null => {
   const hash = window.location.hash;
   if (!hash.startsWith(HASH_PREFIX)) return null;
   const [group, client] = hash.slice(HASH_PREFIX.length).split('/');
-  if (!isWorkFilter(group)) return null;
+  if (!isNavigatorGroup(group)) return null;
   return { group, clientKey: group === 'client' && isClientKey(client) ? client : null };
 };
 
-const writeHash = (group: WorkFilter | null, clientKey: ClientKey | null) => {
+const writeHash = (group: NavigatorGroupId | null, clientKey: ClientKey | null) => {
   const next = group ? `${HASH_PREFIX}${group}${group === 'client' && clientKey ? `/${clientKey}` : ''}` : '#projects';
   const current = window.location.hash;
   // Only touch the address once a filter has been used; a plain arrival keeps
@@ -92,7 +92,7 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
     if (linked) setState((current) => ({ ...current, ...linked }));
   }, []);
 
-  const selectGroup = useCallback((group: WorkFilter | null) => {
+  const selectGroup = useCallback((group: NavigatorGroupId | null) => {
     setState((current) => ({ ...current, group, clientKey: null, pointedSlug: null }));
     writeHash(group, null);
   }, []);

@@ -65,20 +65,21 @@ const chip = (label: string) => within(chips()).getByRole('button', { name: labe
 const viewButton = (label: string) => within(screen.getByRole('group', { name: 'View' })).getByRole('button', { name: label });
 const pager = (container: HTMLElement) => container.querySelector('.case-playground__pager');
 
-test('the section opens on Featured, as cards, with no side panel and no pager to read', () => {
+test('the section opens on All as cards, led by the featured studies, with the arrows and no side panel', () => {
   const { container } = mount();
-  expect(within(chips()).getAllByRole('button').map((button) => button.textContent)).toEqual(['Featured', 'All', 'AEM', 'System Design', 'Product Design']);
-  expect(chip('Featured')).toHaveAttribute('aria-pressed', 'true');
-  expect(cardSlugs(container)).toEqual([...FEATURED]);
+  expect(within(chips()).getAllByRole('button').map((button) => button.textContent)).toEqual(['All', 'AEM', 'System Design', 'Product Design']);
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
+  expect(cardSlugs(container)).toEqual(ALL);
+  expect(cardSlugs(container).slice(0, FEATURED.length)).toEqual([...FEATURED]);
   expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
-  // One page: the pager holds its place but is hidden from sight and from assistive tech.
-  expect(pager(container)).toHaveClass('case-playground__pager--single');
-  expect(pager(container)).toHaveAttribute('aria-hidden', 'true');
+  expect(pager(container)).not.toHaveClass('case-playground__pager--single');
+  expect(screen.getByText('1 / 4')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Previous case studies' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Next case studies' })).toBeEnabled();
   expect(container.querySelector('.side-panel')).toBeNull();
-  expect(screen.queryByRole('button', { name: 'Browse by discipline or client' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Featured' })).not.toBeInTheDocument();
   expect(screen.getByRole('heading', { level: 3, name: 'PlayDraft: A social drafting game' })).toBeInTheDocument();
 });
-
 test('the view toggle is three icon buttons that still say what they do', () => {
   mount();
   const toggle = screen.getByRole('group', { name: 'View' });
@@ -92,18 +93,14 @@ test('the view toggle is three icon buttons that still say what they do', () => 
   expect(within(toggle).getByRole('button', { name: 'Cards' })).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('All opens on the featured cards and pages through the rest with the arrows', () => {
+test('a discipline narrows the row and All brings the whole order back', () => {
   const { container } = mount();
+  fireEvent.click(chip('AEM'));
+  expect(cardSlugs(container)).toEqual(AEM);
+  expect(screen.getByText('1 / 2')).toBeInTheDocument();
+  expect(window.location.hash).toBe('#projects/aem');
   fireEvent.click(chip('All'));
   expect(cardSlugs(container)).toEqual(ALL);
-  expect(window.location.hash).toBe('#projects/all');
-  expect(pager(container)).not.toHaveClass('case-playground__pager--single');
-  expect(screen.getByText('1 / 4')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: 'Previous case studies' })).toBeDisabled();
-  expect(screen.getByRole('button', { name: 'Next case studies' })).toBeEnabled();
-
-  fireEvent.click(chip('Featured'));
-  expect(cardSlugs(container)).toEqual([...FEATURED]);
   expect(window.location.hash).toBe('#projects');
 });
 
@@ -138,6 +135,7 @@ test('Cards, List and Grid lay out the same filtered set; the pager belongs to C
 
   fireEvent.click(chip('All'));
   expect(tileSlugs(container)).toEqual(ALL);
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
 
   fireEvent.click(viewButton('Cards'));
   expect(cardSlugs(container)).toEqual(ALL);
@@ -145,33 +143,9 @@ test('Cards, List and Grid lay out the same filtered set; the pager belongs to C
   expect(window.localStorage.length).toBe(0);
 });
 
-test('List and Grid never show the three-study Featured sample: they move it to All, and Featured returns to Cards', () => {
-  const { container } = mount();
-  fireEvent.click(viewButton('List'));
-  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
-  expect(rowSlugs(container)).toEqual(ALL);
-  expect(window.location.hash).toBe('#projects/all');
-
-  fireEvent.click(chip('Featured'));
-  expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
-  expect(cardSlugs(container)).toEqual([...FEATURED]);
-
-  fireEvent.click(viewButton('Grid'));
-  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
-  expect(tileSlugs(container)).toEqual(ALL);
-
-  // A discipline the visitor picked is kept; only Featured is widened.
-  fireEvent.click(chip('AEM'));
-  fireEvent.click(viewButton('List'));
-  expect(chip('AEM')).toHaveAttribute('aria-pressed', 'true');
-  expect(rowSlugs(container)).toEqual(AEM);
-});
-
 test('locked studies carry the lock line in every layout, name no client, and each line has its own id', () => {
   const { container, unmount } = mount();
-  // WheelRack and the AEM component system among the featured three.
-  expect(screen.getAllByText('Password protected')).toHaveLength(2);
-  fireEvent.click(chip('All'));
+  expect(screen.getAllByText('Password protected')).toHaveLength(7);
   fireEvent.click(viewButton('List'));
   expect(screen.getAllByText('Password protected')).toHaveLength(7);
   expect(container.textContent).not.toContain('Tire Rack');
@@ -187,26 +161,21 @@ test('locked studies carry the lock line in every layout, name no client, and ea
 
   mockUnlocked = true;
   const view = mount();
-  fireEvent.click(chip('All'));
   expect(screen.queryByText('Password protected')).not.toBeInTheDocument();
   expect(view.container.textContent).toContain('Tire Rack');
 });
 
-test('a deep link applies its filter after mount; a client link is an authoring view and leaves Publisher on Featured', () => {
+test('a deep link applies its filter after mount; a client link is an authoring view and leaves Publisher on All', () => {
   window.history.replaceState(null, '', '/#projects/aem');
   const aem = mount();
   expect(cardSlugs(aem.container)).toEqual(AEM);
   expect(chip('AEM')).toHaveAttribute('aria-pressed', 'true');
   aem.unmount();
 
-  window.history.replaceState(null, '', '/#projects/all');
-  const all = mount();
-  expect(cardSlugs(all.container)).toEqual(ALL);
-  all.unmount();
-
   window.history.replaceState(null, '', '/#projects/client/personal');
   const client = mount();
-  expect(cardSlugs(client.container)).toEqual([...FEATURED]);
+  expect(cardSlugs(client.container)).toEqual(ALL);
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('a study goes by one name on its card, its row and its folder row, and plates carry no number', () => {
@@ -215,7 +184,7 @@ test('a study goes by one name on its card, its row and its folder row, and plat
   );
   const names = (selector: string) => Array.from(container.querySelectorAll(selector)).map((el) => el.textContent);
   const expected = (slugs: readonly string[]) => slugs.map((slug) => cardTitleFor(projects.find((project) => project.slug === slug)!));
-  expect(names('.case-playground__card-title')).toEqual(expected(FEATURED));
+  expect(names('.case-playground__card-title')).toEqual(expected(ALL));
 
   fireEvent.click(within(screen.getByRole('list', { name: 'Case study folders' })).getByRole('button', { name: /^AEM/ }));
   expect(names('.work-nav__studies .dam__name')).toEqual(expected(AEM));
@@ -241,7 +210,6 @@ test('the case-study folders file by discipline and client, keep the employer an
   fireEvent.click(within(folders).getByRole('button', { name: /^Client/ }));
   expect(within(folders).getByText(ANON_CLIENT)).toBeInTheDocument();
   expect(folders.textContent).not.toContain('Tire Rack');
-  // Clearing a finder means every study, not the Featured opening.
   fireEvent.click(screen.getByRole('button', { name: 'Show all work' }));
   expect(cardSlugs(container)).toEqual(ALL);
   expect(chip('All')).toHaveAttribute('aria-pressed', 'true');

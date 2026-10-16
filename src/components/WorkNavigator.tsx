@@ -91,7 +91,7 @@ const WorkNavigator: React.FC = () => {
                 className="work-nav__group"
                 aria-pressed={selected}
                 aria-expanded={selected}
-                onClick={() => nav.selectGroup(selected ? 'all' : group.id)}
+                onClick={() => nav.selectGroup(selected ? null : group.id)}
               >
                 <span className="work-nav__folder"><FolderGlyph /></span>
                 <span className="work-nav__group-label">{group.label}</span>
@@ -135,8 +135,8 @@ const WorkNavigator: React.FC = () => {
           );
         })}
       </ul>
-      {nav.group && nav.group !== 'all' && (
-        <button type="button" className="work-nav__clear" onClick={() => nav.selectGroup('all')}>
+      {nav.group && (
+        <button type="button" className="work-nav__clear" onClick={() => nav.selectGroup(null)}>
           Show all work
         </button>
       )}

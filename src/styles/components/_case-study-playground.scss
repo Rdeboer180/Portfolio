@@ -1021,30 +1021,11 @@
   .case-playground__tiles { grid-template-columns: minmax(0, 1fr); }
 }
 
-// Five chips do not fit a phone in one pill (they clipped mid-word at 390), so
-// below 640px each chip becomes its own pill and the row wraps: every filter
-// stays visible and none scrolls out of reach. The view toggle keeps its pill.
+// A phone fits all four chips in the one pill at 8px of side padding
+// (measured at 390: 12px left "Product Design" clipped mid-word, which read
+// as a bug, not a scroll). The sideways scroll stays as the fallback below.
 @media (max-width: #{$breakpoint-sm - 1}) {
-  .case-playground__disciplines {
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: none;
-    overflow: visible;
-  }
-
-  .case-playground__discipline {
-    border: 1px solid $color-border-default;
-    background: $color-white;
-
-    // The pill's own border takes the primary instead of a second ring inside it.
-    &[aria-pressed='true'] {
-      border-color: $color-primary;
-      box-shadow: none;
-    }
-  }
+  .case-playground__discipline { padding: 0 8px; }
 
   // The arrows and the toggle share one line under the chips; at 390 they ran
   // 7px past the edge at full spacing, so both tighten here.

@@ -52,13 +52,12 @@ describe('groups', () => {
 
   it('features studies that are listed, and opens All on them', () => {
     expect(FEATURED.every((slug) => WORK_ORDER.includes(slug))).toBe(true);
-    const all = slugsOf(studiesFor('all', null));
+    const all = slugsOf(studiesFor(null, null));
     expect(all.slice(0, FEATURED.length)).toEqual([...FEATURED]);
     expect([...all].sort()).toEqual(slugsOf(orderedProjects()).sort());
   });
 
-  it('resolves no selection to Featured, All to every study, and a group to its studies', () => {
-    expect(slugsOf(studiesFor(null, null))).toEqual([...FEATURED]);
+  it('resolves a group to its studies, and a client to the studies it names', () => {
     expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
     expect(slugsOf(studiesFor('client', 'heatherwood'))).toEqual(['heatherwood']);
     expect(slugsOf(studiesFor('client', 'employer'))).toHaveLength(7);

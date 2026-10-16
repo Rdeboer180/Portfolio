@@ -2,9 +2,9 @@ import { CARDS, Coin, CoinPhase, coinVariants, coinVariantsReduced } from '../da
 import { FeaturedEndorsement } from './Testimonials';
 // ============================================
 // CaseStudyPlayground — the work section: one filter row, three layouts
-// The section opens on Featured, Ryan's best three (FEATURED in projects.ts),
-// as shadowbox cards (preview / title and outcome / coin tray). Chips switch
-// to All (featured first, then the rest of WORK_ORDER), AEM, System Design or
+// The section opens on All as shadowbox cards (preview / title and outcome /
+// coin tray), led by Ryan's best three (FEATURED in projects.ts) and paged on
+// through the rest of WORK_ORDER. Chips narrow it to AEM, System Design or
 // Product Design. A toggle on the right of the same row lays the selection out
 // as Cards (a scroll-snap carousel paged by hand-sketched arrows that draw in
 // on scroll, the hero arrows' language), List (one Asset Panel row per study)
@@ -21,7 +21,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
 import { cardTitleFor, clientLabelFor, orderedProjects, yearSpanFor } from '../data/projects';
-import { WORK_GROUPS, WorkFilter, studiesFor } from '../data/workGroups';
+import { WORK_GROUPS, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
 import { WORK_VIEWS, WorkView, useWorkNavigator } from '../context/WorkNavigatorContext';
@@ -208,11 +208,11 @@ const EXIT_RESET_MS = 750; // out-animation length before coins re-park above
 const CARD_GAP = 24;       // $spacing-xl, the carousel's gap
 const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
 
-// Featured is the opening view (no selection); All follows it, then the
-// disciplines. Client filing stays in the Asset Panel.
+// All is the opening view (no selection), then the disciplines. The featured
+// studies are where All starts rather than a chip of their own: the arrows
+// carry a visitor past them. Client filing stays in the Asset Panel.
 const FILTERS = [
-  { id: null, label: 'Featured' },
-  { id: 'all' as const, label: 'All' },
+  { id: null, label: 'All' },
   ...WORK_GROUPS.filter((group) => group.id !== 'client'),
 ];
 
@@ -306,7 +306,7 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
-  // The selection narrows the section; no selection is Featured. Filing by
+  // The selection narrows the section; no selection is All. Filing by
   // client is an authoring view (the Asset Panel's folders), so a client
   // selection, from a folder or an old deep link, only applies while authoring.
   const group = nav.group === 'client' && !authoring ? null : nav.group;
@@ -516,19 +516,6 @@ const CaseStudyPlayground: React.FC = () => {
       </p>
     );
 
-  // Featured is three studies, a sample sized for the card row. As a list or
-  // a grid three reads as a short page, so the dense layouts always show at
-  // least All: choosing List or Grid from Featured moves the filter to All,
-  // and choosing Featured from List or Grid returns to Cards.
-  const chooseView = (next: WorkView) => {
-    nav.setView(next);
-    if (next !== 'cards' && !group) nav.selectGroup('all');
-  };
-  const chooseFilter = (next: WorkFilter | null) => {
-    nav.selectGroup(next);
-    if (!next && view !== 'cards') nav.setView('cards');
-  };
-
   // ── The List layout ────────────────────────────────────────────────────────
   // One row per study on the Asset Panel's .dam__item grid, so the page and
   // the finder read as one tool: thumbnail or lock glyph, title, outcome,
@@ -623,11 +610,11 @@ const CaseStudyPlayground: React.FC = () => {
           <div className="case-playground__disciplines" role="group" aria-label="Browse by discipline">
             {FILTERS.map((filter) => (
               <button
-                key={filter.id ?? 'featured'}
+                key={filter.id ?? 'all'}
                 type="button"
                 className="case-playground__discipline"
                 aria-pressed={group === filter.id}
-                onClick={() => chooseFilter(filter.id)}
+                onClick={() => nav.selectGroup(filter.id)}
               >
                 {filter.label}
               </button>
@@ -668,7 +655,7 @@ const CaseStudyPlayground: React.FC = () => {
                   className="case-playground__view"
                   aria-pressed={view === option.id}
                   title={option.label}
-                  onClick={() => chooseView(option.id)}
+                  onClick={() => nav.setView(option.id)}
                 >
                   {VIEW_ICONS[option.id]}
                   <span className="sr-only">{option.label}</span>

@@ -18,16 +18,6 @@ export const WORK_GROUPS: { id: NavigatorGroupId; label: string }[] = [
 export const isNavigatorGroup = (value: string | null | undefined): value is NavigatorGroupId =>
   WORK_GROUPS.some((group) => group.id === value);
 
-/**
- * What the work section can be filtered to. No selection is Featured, the
- * opening view; `all` is every study, featured first; the rest are the
- * navigator's groups.
- */
-export type WorkFilter = NavigatorGroupId | 'all';
-
-export const isWorkFilter = (value: string | null | undefined): value is WorkFilter =>
-  value === 'all' || isNavigatorGroup(value);
-
 /** The featured studies, in the order FEATURED lists them. */
 export const featuredProjects = (): Project[] => {
   const listed = orderedProjects();
@@ -73,12 +63,11 @@ export const clientGroups = (locked: boolean): { key: ClientKey; label: string; 
 };
 
 /**
- * The studies a selection resolves to. No selection is Featured; All opens on
- * the featured studies and continues in WORK_ORDER.
+ * The studies a selection resolves to. No selection is All, which opens on the
+ * featured studies and continues in WORK_ORDER.
  */
-export const studiesFor = (group: WorkFilter | null, clientKey: ClientKey | null): Project[] => {
-  if (!group) return featuredProjects();
-  if (group === 'all') {
+export const studiesFor = (group: NavigatorGroupId | null, clientKey: ClientKey | null): Project[] => {
+  if (!group) {
     const featured = featuredProjects();
     return [...featured, ...orderedProjects().filter((project) => !featured.includes(project))];
   }
