@@ -522,6 +522,10 @@ const CaseStudyPlayground: React.FC = () => {
       </p>
     );
 
+  // A primary loop (featuredVideoPrimary) autoplays on its card, where the
+  // loop is the card's media. In List and Grid every loop waits for hover:
+  // twelve tiles with one running on its own reads as a glitch, not a cover.
+
   // ── The List layout ────────────────────────────────────────────────────────
   // One row per study on the Asset Panel's .dam__item grid, so the page and
   // the finder read as one tool: thumbnail or lock glyph, title, outcome,
@@ -558,7 +562,7 @@ const CaseStudyPlayground: React.FC = () => {
                 {mediaLocked || !card.image ? (
                   <PreviewLockIcon />
                 ) : card.video && !posterOnly ? (
-                  <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
+                  <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} />
                 ) : (
                   <img src={card.image} alt="" loading="lazy" />
                 )}
@@ -807,7 +811,7 @@ const CaseStudyPlayground: React.FC = () => {
                     {hasPlate && <CoverSchematic slug={card.slug} />}
                     {lockLineFor(card, locked, `lock-${card.slug}`, 'case-playground__lock', card.publicVideo)}
                     {card.video && !posterOnly ? (
-                      <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
+                      <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} />
                     ) : (
                       <img src={card.image} alt={card.alt} loading="lazy" />
                     )}
