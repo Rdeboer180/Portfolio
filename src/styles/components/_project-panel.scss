@@ -5,7 +5,9 @@
   margin: 0;
   border: 0;
   padding: 0;
-  width: 95vw;
+  // Shared with the dismiss strip, which covers exactly what this leaves.
+  --panel-width: 95vw;
+  width: var(--panel-width);
   max-width: none;
   height: 100dvh;
   max-height: none;
@@ -18,10 +20,14 @@
   color: $color-text-primary;
   box-shadow: -8px 0 40px rgba(0, 0, 0, .12);
   transform: translateX(100%);
-  transition: transform 250ms cubic-bezier(.32, .72, 0, 1);
+  // `right` carries the dismiss-strip nudge. It cannot ride on transform: any
+  // transform on the dialog makes it the containing block for its fixed
+  // children, so the strip button and the custom cursor would be pulled into
+  // the dialog's box and clipped by its `overflow: clip`.
+  transition: transform 250ms cubic-bezier(.32, .72, 0, 1), right 250ms cubic-bezier(.32, .72, 0, 1);
   &[data-phase='open'] { transform: none; }
   &[data-phase='closing'] { transition-duration: 200ms; }
-  &::backdrop { opacity: 0; transition: opacity 250ms cubic-bezier(.32, .72, 0, 1); }
+  &::backdrop { opacity: 0; transition: opacity 250ms cubic-bezier(.32, .72, 0, 1), background-color 250ms cubic-bezier(.32, .72, 0, 1); }
   &[data-phase='open']::backdrop { opacity: 1; }
   &[data-phase='closing']::backdrop { transition-duration: 200ms; }
   &__article { min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); }
@@ -66,6 +72,92 @@
   &__loading { padding: $spacing-3xl; }
 }
 @media (prefers-reduced-motion: reduce) { .project-panel { transform: none; transition: none; &::backdrop { transition: none; } } }
+
+// ── Dismiss strip ────────────────────────────────────────────────────────────
+// The homepage strip left of the drawer, as a real exit (DismissStrip in
+// ProjectPanel.tsx). Hidden at 850px and below: the strip there is under 43px
+// of a phone or a narrow window, the existing backdrop tap still closes, and
+// the narrow layout stays exactly as it was.
+.project-panel__dismiss { display: none; }
+
+@media (min-width: 851px) {
+  .project-panel__dismiss {
+    // Fixed against the viewport, which the dialog is not a containing block
+    // for while open (no transform; see the transition note above). `right`
+    // is the panel width, so the button ends where the dialog begins.
+    position: fixed;
+    inset: 0 var(--panel-width) 0 0;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $color-text-primary;
+    cursor: pointer;
+    // The native cursor goes only once the custom one is actually drawn, so a
+    // visitor without JS, or before hydration, still sees a pointer.
+    &[data-cursor] { cursor: none; }
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: -6px; }
+  }
+  // Mid-slide the strip moves with the dialog; it is not a target then.
+  .project-panel:not([data-phase='open']) > .project-panel__dismiss { pointer-events: none; }
+}
+
+// One disc for both states: following the pointer, and parked in the strip
+// on keyboard focus. Ink, not orange: it marks an exit, not a state.
+.project-panel__cursor,
+.project-panel__dismiss-mark {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-text-primary;
+  color: $color-white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+  pointer-events: none;
+  svg { width: 16px; height: 16px; overflow: visible; }
+  // 3.6 user units in a 44-unit box drawn at 16px, about 1.3px: the weight
+  // the carousel arrows read at, at their own size.
+  path { stroke: currentColor; stroke-width: 3.6; stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+.project-panel__cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  margin: -16px 0 0 -16px;
+  will-change: transform;
+  // Sketched, not stamped: the shaft draws in on each entry, then the head,
+  // the same order the carousel arrows draw in.
+  path { animation: project-panel-cursor-draw 260ms ease-out both; }
+  path:nth-child(2) { animation-delay: 120ms; }
+}
+@keyframes project-panel-cursor-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+.project-panel__dismiss-mark { opacity: 0; }
+.project-panel__dismiss:focus-visible .project-panel__dismiss-mark { opacity: 1; }
+
+// Hover-capable pointers only. The cursor is also never rendered for touch
+// (DismissStrip checks the pointer type), so this is belt and braces.
+@media (hover: none) { .project-panel__cursor { display: none; } }
+
+@media (hover: hover) and (min-width: 851px) {
+  // Lighten the backdrop so the homepage behind reads as the destination.
+  // Not motion, so it holds under reduced motion (it just changes instantly).
+  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover)::backdrop { background-color: rgba(0, 0, 0, .14); }
+}
+@media (hover: hover) and (min-width: 851px) and (prefers-reduced-motion: no-preference) {
+  // Nudge the drawer aside, away from the pointer, on the dialog's own
+  // easing. The 8px it uncovers is backdrop, so moving onto it ends the hover
+  // and the drawer settles back under the pointer without flicker.
+  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover) { right: -8px; }
+}
+@media (prefers-reduced-motion: reduce) { .project-panel__cursor path { animation: none; } }
 
 // Every project shares the panel header, including locked and legacy views.
 .project-panel {

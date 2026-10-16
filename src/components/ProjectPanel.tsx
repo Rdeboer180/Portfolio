@@ -7,6 +7,81 @@ import ReadingErrorBoundary from './ReadingErrorBoundary';
 
 const readingPositions = new Map<string, number>();
 
+// Return arrow in the hand-sketched vocabulary of SketchArrow
+// (CaseStudyPlayground.tsx) and the hero intro arrows: one wobbly cubic shaft
+// plus a two-stroke head, pathLength=1 so the stroke can draw in. The shaft
+// drops from the top right and runs left, the sketched cousin of ↩, because
+// this exit returns to the page behind rather than stepping to a sibling.
+const ReturnArrow = () => (
+  <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+    <path d="M33 10 C 36 18, 32 25.5, 21 25.5 C 16 25.6, 12 25.4, 8 25" fill="none" strokeLinecap="round" pathLength={1} />
+    <path d="M8 25 L14.5 18.5 M8 25 L14 31.5" fill="none" strokeLinecap="round" pathLength={1} />
+  </svg>
+);
+
+// The exposed homepage strip left of the open drawer, made an explicit exit.
+//
+// The dialog already closed on a click left of its bounds, but nothing said
+// so, and keyboard and screen-reader users had no equivalent. This is a real
+// button covering the strip (CSS shows it only above 850px, where the strip
+// is wide enough to aim at), plus a 32px custom cursor that follows the
+// pointer while it is over the strip, after claire.io's case-study layer.
+//
+// It is its own component on purpose. Hover state changes on every strip
+// entry; held in ProjectPanel, each change would re-render the reading
+// Suspense boundary beside it, and an update that reaches a still-dehydrated
+// boundary makes React 19 throw the prerendered article away. Here the
+// re-renders stop at this subtree.
+function DismissStrip({ label, open, onDismiss }: { label: string; open: boolean; onDismiss: () => void }) {
+  // Pointer-driven UI must not exist in the first client render, which has
+  // to equal the prerendered HTML (see the mounted gates in
+  // CaseStudyPlayground.tsx). Hover can only begin after mount anyway; the
+  // gate makes that a guarantee instead of a timing accident.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const [hovering, setHovering] = useState(false);
+  const point = useRef({ x: 0, y: 0 });
+  const cursor = useRef<HTMLSpanElement | null>(null);
+  // Position is written straight to the element: a pointermove per frame is
+  // no reason to re-render React.
+  const place = (x: number, y: number) => {
+    point.current = { x, y };
+    if (cursor.current) cursor.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  };
+  // Touch and hoverless devices never get the custom cursor. A finger has no
+  // pointer to replace, and a tap on the strip simply closes.
+  const canHover = (event: React.PointerEvent) => event.pointerType !== 'touch' && window.matchMedia('(hover: hover)').matches;
+  const track = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!mounted || !canHover(event)) return;
+    place(event.clientX, event.clientY);
+    if (!hovering) setHovering(true);
+  };
+  // Only while the drawer is settled open: during the slide in or out the
+  // strip is moving with the dialog and the native cursor should come back.
+  const showCursor = mounted && hovering && open;
+  return <>
+    <button
+      type="button"
+      className="project-panel__dismiss"
+      aria-label={label}
+      data-cursor={showCursor ? 'return' : undefined}
+      onClick={onDismiss}
+      onPointerEnter={track}
+      onPointerMove={track}
+      onPointerLeave={() => setHovering(false)}
+    >
+      {/* Keyboard focus parks the same mark in the strip, so a focused exit
+          looks like the hovered one. */}
+      <span className="project-panel__dismiss-mark" aria-hidden="true"><ReturnArrow /></span>
+    </button>
+    {showCursor && <span
+      className="project-panel__cursor"
+      aria-hidden="true"
+      ref={el => { cursor.current = el; if (el) el.style.transform = `translate3d(${point.current.x}px, ${point.current.y}px, 0)`; }}
+    ><ReturnArrow /></span>}
+  </>;
+}
+
 export default function ProjectPanel({ children, overlay, fromNavigation = false }: { children: React.ReactNode; overlay?: React.ReactNode; fromNavigation?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -139,13 +214,19 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   };
+  // Same rule the header button uses to decide between "All notes" and "All work".
+  const notesExit = panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article);
   return <dialog open={initialDirect.current} onKeyDown={trapFocus} ref={dialog} className="project-panel" data-phase={phase} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'transform' && closing.current) finishExit.current?.(); }} aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
+    {/* First in DOM order because it sits first visually, left of everything. The
+        backdrop click above stays as the fallback below 850px, where the strip
+        button is not shown, and during the slide in or out. */}
+    <DismissStrip label={notesExit ? 'All notes' : 'Back to all work'} open={phase === 'open'} onDismiss={close} />
     <header className="project-panel__header">
       <div className="project-panel__identity">
         <Link to={getHomeHref()} className="project-panel__name">Ryan DeBoer</Link>
         {panelState?.previousReading && <button className="project-panel__back" onClick={() => navigate(-1)}>← Previous {panelState.previousReading}</button>}
       </div>
-      <button type="button" className="project-panel__close" onClick={close} aria-label={panelState?.backgroundLocation ? (article ? 'Close article' : 'Close case study') : (panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article) ? 'All notes' : 'All work')}>{panelState?.backgroundLocation ? 'Close' : (panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article) ? 'All notes' : 'All work')} <span aria-hidden="true">×</span></button>
+      <button type="button" className="project-panel__close" onClick={close} aria-label={panelState?.backgroundLocation ? (article ? 'Close article' : 'Close case study') : (notesExit ? 'All notes' : 'All work')}>{panelState?.backgroundLocation ? 'Close' : (notesExit ? 'All notes' : 'All work')} <span aria-hidden="true">×</span></button>
     </header>
     <span className="sr-only" role="status" aria-live="polite">{announcement}</span>
     <div ref={scroller} className="project-panel__article"><ReadingErrorBoundary key={location.pathname}><Suspense fallback={<p className="project-panel__loading" role="status">Loading {article ? 'article' : 'case study'}…</p>}><div key={location.pathname} className="project-panel__content">{children}</div></Suspense></ReadingErrorBoundary></div>

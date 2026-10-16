@@ -301,6 +301,7 @@ const CaseStudyPlayground: React.FC = () => {
         stream: project.stream,
         video,
         videoPrimary: Boolean(video && project.featuredVideoPrimary),
+        ground: project.coverGround,
         publicVideo: Boolean(video && project.featuredVideoPublic),
       };
     });
@@ -709,7 +710,7 @@ const CaseStudyPlayground: React.FC = () => {
                   className={`case-playground__preview${
                     mediaLocked ? ' case-playground__preview--locked' : ''
                   }${hasPlate ? ' case-playground__preview--plate' : ''}`}
-                  style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
+                  style={{ ['--resolve-delay' as string]: `${i * 80}ms`, ...(card.ground ? { ['--ground' as string]: card.ground } : {}) }}
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
                   {lockLineFor(card, locked, `lock-${card.slug}`, 'case-playground__lock', card.publicVideo)}
