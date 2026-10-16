@@ -892,7 +892,6 @@
   // ── List ──
   &__list {
     margin-top: $spacing-md;
-    border-top: 1px solid $color-neutral-light;
   }
 
   // The rail's row at page width: a larger still, the outcome under the
@@ -905,14 +904,13 @@
       'thumb meta'
       'thumb perm';
     column-gap: $spacing-lg;
-    padding: $spacing-md $spacing-sm;
-    border-radius: 0;
+    padding: $spacing-md;
 
     .dam__thumb { width: 72px; height: 48px; }
     .dam__name { font-size: $font-size-body-sm; }
 
-    // A row pointed at in the rail tints the way the rail's own row does.
-    &--pointed { background: $color-secondary-lightest; }
+    // A row pointed at in the rail lifts the way the rail's own row does.
+    &--pointed { box-shadow: var(--shadow-md); }
     &:focus-visible { outline: 2px solid $color-primary; outline-offset: -2px; }
   }
 

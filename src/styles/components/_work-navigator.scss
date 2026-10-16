@@ -81,11 +81,8 @@
   }
 
   &__study {
-    border-bottom: 0;
-    border-radius: $radius-sm;
-
-    // A pointed row lights its card's coins; the row itself only tints.
-    &--pointed { background: $color-secondary-lightest; }
+    // A pointed row lights its card's coins; the row itself only lifts.
+    &--pointed { box-shadow: var(--shadow-md); }
 
     // The thumbnail is positioned by framer-motion, so it needs a stacking
     // context of its own or a dropping image paints over the row above.

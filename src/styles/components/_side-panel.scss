@@ -129,11 +129,16 @@ $side-panel-width: 320px;
   }
 
   &__list {
+    display: grid;
+    gap: 6px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
+  // Each asset is its own plate on the secondary ground, lifted a step off
+  // the panel, so a row reads as an object you can pick up rather than a
+  // line in a table. Hover lifts it one more step; the ground does not change.
   &__item {
     display: grid;
     grid-template-columns: 56px minmax(0, 1fr);
@@ -145,18 +150,20 @@ $side-panel-width: 320px;
     row-gap: 2px;
     align-items: start;
     width: 100%;
-    padding: 8px 6px;
+    padding: 8px;
     border: 0;
-    border-bottom: 1px solid $color-neutral-light;
-    background: transparent;
+    border-radius: $radius-md;
+    background: var(--color-bg-secondary);
+    box-shadow: var(--shadow-sm);
     text-align: left;
     text-decoration: none;
     color: inherit;
     font-family: $font-family-primary;
     cursor: pointer;
+    transition: box-shadow $transition-fast;
 
-    &:hover { background: $color-secondary-lightest; }
-    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+    &:hover { box-shadow: var(--shadow-md); }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
 
     &--locked .dam__name { color: $color-neutral-standard; }
   }
@@ -171,7 +178,7 @@ $side-panel-width: 320px;
     overflow: hidden;
     border: 1px solid $color-border-default;
     border-radius: $radius-sm;
-    background: $color-secondary-lightest;
+    background: $color-white;
 
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
