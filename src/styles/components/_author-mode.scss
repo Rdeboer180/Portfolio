@@ -343,7 +343,22 @@
 }
 
 // ── Side panel ──────────────────────────────────────────────────────────
-// Overlay drawer, not a push: the page keeps its width and its observers.
+// A docked column, like AEM's editor: opening it pushes the page right and
+// the page re-centres in what is left, so nothing on the left is covered.
+// Containers centre with margin: auto and the process-board wires redraw on
+// ResizeObserver, so padding <body> is the whole mechanism. The site nav is
+// the one fixed element on the page, so it moves with the body.
+$side-panel-width: 320px;
+
+@media (min-width: 1000px) {
+  html[data-side-panel='open'] {
+    body { padding-left: $side-panel-width; }
+
+    .hero__nav,
+    .layout-grid { left: $side-panel-width; }
+  }
+}
+
 .side-panel {
   position: fixed;
   top: 0;
@@ -352,11 +367,10 @@
   z-index: $z-index-fixed;
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: $side-panel-width;
   max-width: calc(100vw - 24px);
   background: $color-white;
   border-right: 1px solid $color-border-default;
-  box-shadow: 8px 0 24px rgba(27, 27, 27, 0.08);
   font-family: $font-family-primary;
 
   &__header {

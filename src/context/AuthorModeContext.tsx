@@ -126,6 +126,17 @@ export const AuthorModeProvider: React.FC<{ enabled?: boolean; children: React.R
     return () => { delete root.dataset.authorMode; };
   }, [authoring]);
 
+  // The open side panel takes its own column instead of covering the page:
+  // the stylesheet pads <body> by the panel width, so every centred container
+  // re-centres in the space that is left, with equal margins either side.
+  const panelOpen = authoring && ui.panelOpen;
+  useEffect(() => {
+    const root = document.documentElement;
+    if (panelOpen) root.dataset.sidePanel = 'open';
+    else delete root.dataset.sidePanel;
+    return () => { delete root.dataset.sidePanel; };
+  }, [panelOpen]);
+
   // Ctrl/Cmd + Shift + M, the shortcut AEM uses for the same switch. Escape
   // closes the open pin first, then the side panel; the dialog handles itself.
   useEffect(() => {
