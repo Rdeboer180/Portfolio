@@ -909,9 +909,15 @@
   }
 
   // ── Grid ──
+  // A tile is a preview and a title, so it reads at a far narrower width than
+  // a card. The columns are sized by the tile rather than by breakpoints: as
+  // many 200px tiles as fit, never more than four. That is four across on
+  // desktop, three on a tablet, two down to a 480px viewport (416px of
+  // container), and one only on the narrowest phones.
   &__tiles {
+    --tile-min: 200px;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(max(var(--tile-min), (100% - 3 * #{$spacing-lg}) / 4), 1fr));
     gap: $spacing-lg;
   }
 
@@ -1012,14 +1018,7 @@
   }
 }
 
-// Two tiles across on a tablet, one on a phone.
-@media (max-width: #{$breakpoint-lg - 1}) {
-  .case-playground__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 
-@media (max-width: #{$breakpoint-md - 1}) {
-  .case-playground__tiles { grid-template-columns: minmax(0, 1fr); }
-}
 
 // A phone fits all four chips in the one pill at 8px of side padding
 // (measured at 390: 12px left "Product Design" clipped mid-word, which read
