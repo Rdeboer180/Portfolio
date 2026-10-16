@@ -1033,12 +1033,21 @@
 
   // The ground is exactly a 16:10 frame plus the tab's overlap, so the still
   // or loop bleeds to the card's edges and sits whole above the shoulder.
+  // The ground takes the colour the media ends in along its bottom edge
+  // (`coverGround`, sampled per study), so the strip the cutout exposes is
+  // the media's own colour rather than paper. The subject's last fifth
+  // fades into it on an opacity ramp, so the edge is a gradient, never a
+  // line. A plate is white paper, so under a plate the ground is white.
   &__preview {
     aspect-ratio: auto;
     height: 0;
     padding-bottom: calc(62.5% + var(--folder-notch));
-    background: $color-secondary-lightest;
+    background: var(--ground, #{$color-secondary-lightest});
   }
+
+  // The inline --ground sits on the same element, so this sets the colour
+  // itself rather than the variable.
+  &__preview--locked.case-playground__preview--plate { background: $color-white; }
 
   &__subject {
     position: absolute;
@@ -1046,7 +1055,21 @@
 
     img,
     video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 22%;
+      background: linear-gradient(to bottom, transparent, var(--ground, #{$color-secondary-lightest}));
+      pointer-events: none;
+    }
   }
+
+  // Under a plate the media is already covered; no fade over it.
+  &__subject--behind::after { content: none; }
 
   &__card--active &__preview img,
   &__card--active &__preview video { transform: none; filter: saturate(1); }

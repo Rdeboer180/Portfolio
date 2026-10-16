@@ -150,6 +150,14 @@ export interface Project {
   // primary media — autoplay/loop/muted from mount, not hover-to-play.
   // Reduced motion still renders the poster still.
   featuredVideoPrimary?: boolean;
+  /**
+   * The colour the card's still or loop ends in along its bottom edge (the
+   * mean of its bottom tenth, sampled from the poster), so the card's ground
+   * can match it and the media fade into the ground instead of cutting to
+   * paper where the folder tab's cutout exposes it. Re-sample when a poster
+   * changes.
+   */
+  coverGround?: string;
   /** Reviewed cover footage explicitly approved for display before unlock. */
   featuredVideoPublic?: boolean;
   /** Case-study hero reel, distinct from the short homepage card loop. */
@@ -266,6 +274,7 @@ const GUIDE = {
 const projects: Project[] = [
   {
     slug: 'figma-template-governance',
+    coverGround: '#f2efe8',
     client: 'Tire Rack · Design & UX',
     context: 'Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.',
     publicContext: 'A national US online tire and wheel retailer, with project tracking and approvals in Workfront.',
@@ -368,6 +377,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'wheelrack',
+    coverGround: '#f6f7f7',
     stream: 'professional',
     groups: ['systems'],
     clientLabel: 'Tire Rack',
@@ -519,6 +529,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'tire-categories',
+    coverGround: '#f5f5f5',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Turn 40 confusing categories into choices people can actually make.',
@@ -670,6 +681,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'bolus-binder',
+    coverGround: '#ecf1f6',
     client: 'Bolus Binder (personal product) · T1D Hub (local clinic)',
     context: 'Bolus Binder is my independent recipe app for people living with Type 1 diabetes. Its visual system draws on T1D Hub, a separate identity engagement for a local Type 1 diabetes clinic.',
     title: 'Bolus Binder: A diabetes-aware recipe keeper',
@@ -789,6 +801,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'seasonal-content-system',
+    coverGround: '#f4f4f5',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Documented well enough that someone else can run the season.',
@@ -927,6 +940,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'heatherwood',
+    coverGround: '#f5f5f5',
     thesis: 'A brand and a site the owner could actually run herself.',
     annotations: {
       problem: 'Interest was there. The path to inquiry was not.',
@@ -1069,6 +1083,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'landing-pages',
+    coverGround: '#f2f2f2',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Make landing pages a system, not a fire drill.',
@@ -1217,6 +1232,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'aem-component-system',
+    coverGround: '#c7c7c7',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Every style option gets a rule, a class, and a picture of what to pick.',
@@ -1388,6 +1404,7 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'design-enablement',
+    coverGround: '#f3f3f3',
     thesis: 'Check the image before it reaches the page.',
     annotations: {
       problem: 'Crop problems surfaced after the asset reached AEM.',
@@ -1512,6 +1529,7 @@ $mobile-max-width: 768px;
   // =============================================
   {
     slug: 'loopstack',
+    coverGround: '#fafafa',
     thesis: 'Meals behave like curves, so the app should too.',
     annotations: {
       problem: 'Most diabetes tools treat a meal as one entry. Real meals are curves.',
@@ -1726,6 +1744,7 @@ Frame every output as:
   // =============================================
   {
     slug: 'playdraft',
+    coverGround: '#0e1720',
     overview: {
       title: 'PlayDraft',
       category: 'Personal product',
@@ -1983,6 +2002,7 @@ export const packs = {
   // =============================================
   {
     slug: 'overscroll-tactics',
+    coverGround: '#f9faf5',
     client: 'Overscroll Tactics (self-initiated)',
     context: 'Overscroll Tactics is my independent studio identity for the games and digital products I build. Its OTC Games identity appears in PlayDraft.',
     title: 'Overscroll Tactics: A Studio Mark Die-Cut From a Game That Just Finished',
