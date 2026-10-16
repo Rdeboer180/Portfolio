@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuthorMode } from '../context/AuthorModeContext';
-import { AUTHORED_LIST } from '../data/authorChrome';
 import { BUILD } from '../data/build';
+import { SEARCH_META } from '../data/seo';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const formatDate = (iso: string) => {
@@ -33,7 +33,6 @@ const PageProperties: React.FC = () => {
   if (!authoring) return null;
 
   const close = () => update({ pageInfoOpen: false });
-  const lockedCount = AUTHORED_LIST.filter((spec) => spec.locked).length;
 
   return (
     <dialog
@@ -48,10 +47,15 @@ const PageProperties: React.FC = () => {
           <p className="page-props__eyebrow">Page properties</p>
           <h2 id="page-props-title" className="page-props__title">{title}</h2>
           <dl className="page-props__list">
+            {/* Description is the search description the page already ships,
+                so it cannot drift from what Google shows. */}
+            <div className="page-props__row"><dt>Description</dt><dd>{SEARCH_META.home.description}</dd></div>
             <div className="page-props__row"><dt>Template</dt><dd>rdeboer/templates/homepage</dd></div>
             <div className="page-props__row"><dt>Resource type</dt><dd>rdeboer/components/page</dd></div>
             <div className="page-props__row"><dt>Tags</dt><dd>Product design · Design systems · Design engineering</dd></div>
-            <div className="page-props__row"><dt>Components</dt><dd>{AUTHORED_LIST.length} authored · {lockedCount} locked by template</dd></div>
+            {/* Moved from the FAQ: how the page was made belongs to the page. */}
+            <div className="page-props__row"><dt>Built with</dt><dd>React and SCSS, from a Figma token and component foundation</dd></div>
+            <div className="page-props__row"><dt>Authorship</dt><dd>Claude helped scaffold components, inspect token drift, and work through implementation problems. I chose the references, set the direction, reviewed the responsive behavior, and made the final calls.</dd></div>
             <div className="page-props__row">
               <dt>Last modified</dt>
               <dd><time dateTime={BUILD.date}>{formatDate(BUILD.date)}</time> · {BUILD.author}</dd>

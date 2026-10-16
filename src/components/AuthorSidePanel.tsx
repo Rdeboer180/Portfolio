@@ -125,13 +125,13 @@ const AuthorSidePanel: React.FC = () => {
   };
 
   return (
-    <aside className="side-panel" aria-label="Side panel">
+    <aside className="side-panel" aria-label="Asset panel">
       <div className="side-panel__header">
-        <span className="side-panel__title">Side Panel</span>
-        <button type="button" className="side-panel__close" aria-label="Close side panel" onClick={() => update({ panelOpen: false })}>&times;</button>
+        <span className="side-panel__title">Asset Panel</span>
+        <button type="button" className="side-panel__close" aria-label="Close asset panel" onClick={() => update({ panelOpen: false })}>&times;</button>
       </div>
 
-      <div className="side-panel__tabs" role="tablist" aria-label="Side panel tabs">
+      <div className="side-panel__tabs" role="tablist" aria-label="Asset panel tabs">
         {(['assets', 'components'] as const).map((tab) => (
           <button
             key={tab}

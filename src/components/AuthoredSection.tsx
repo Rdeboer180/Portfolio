@@ -89,7 +89,9 @@ const AuthoredSection: React.FC<AuthoredSectionProps> = ({
           </button>
           {pinOpen && (
             <div id={noteId} className="authored__note" role="note">
-              <p className="authored__note-text">{annotation.text}</p>
+              {(typeof annotation.text === 'string' ? [annotation.text] : annotation.text).map((paragraph) => (
+                <p key={paragraph} className="authored__note-text">{paragraph}</p>
+              ))}
               <p className="authored__note-source">{annotation.source}</p>
               {annotation.link && <a className="authored__note-link" href={annotation.link.href}>{annotation.link.label}</a>}
             </div>

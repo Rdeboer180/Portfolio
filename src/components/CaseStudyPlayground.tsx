@@ -367,10 +367,6 @@ const CaseStudyPlayground: React.FC = () => {
         <div className="case-playground__intro">
           <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" index="01" tone="accent" />
           <h2 className="case-playground__title">Systems, products, and tools I&rsquo;ve shipped</h2>
-          <p className="case-playground__lede">
-            A closer look at the systems, interfaces, internal tools, and products I&rsquo;ve carried
-            from concept through implementation.
-          </p>
           {/* The unlock affordance lives here now — beside the locked objects —
               instead of as a site-wide bar above every page's nav. Same prompt,
               same password; only the address changed. */}

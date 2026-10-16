@@ -690,13 +690,7 @@ const SystemsInPractice: React.FC = () => {
               same plan. After validation, Code Connect captures the implementation relationship back in Figma.
               Each change should leave a clearer map between intent, design, and production.
             </p>
-            <p className="sip__body reveal-fade" style={delay(380)}>
-              In AEM, that means core-component variants, template permissions, and Experience
-              Fragments for A/B testing and geographic targeting with Adobe Target. I design the
-              authoring and review workflows too, so the team knows what it can change and how
-              to extend the system.
-            </p>
-            <div className="sip__actions reveal-fade" style={delay(420)}>
+            <div className="sip__actions reveal-fade" style={delay(380)}>
               {/* PlayDraft is the public study where the whole loop is visible:
                   Figma, a token-governed build, Maestro QA, and the live
                   /design-system screen. WheelRack is the deeper system study but
