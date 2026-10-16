@@ -839,6 +839,23 @@
     }
   }
 
+  // The view toggle carries icons, so its segments are square-ish targets:
+  // 36 by 30, above the 24px minimum, with the glyph at the 16px the site's
+  // control icons use. The pressed state is the chips' tint and ring.
+  &__view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    padding: 0 10px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+  }
+
   // ── List ──
   &__list {
     margin-top: $spacing-md;
@@ -1032,5 +1049,17 @@
   // The arrows and the toggle share one line under the chips; at 390 they ran
   // 7px past the edge at full spacing, so both tighten here.
   .case-playground__nav-end { gap: $spacing-sm; }
-  .case-playground__view { padding: 0 9px; }
+  .case-playground__view { padding: 0 8px; }
+}
+
+// Forced colors (Windows High Contrast) drops backgrounds and box-shadows,
+// which is all the pressed state is. An outline in the system's text colour
+// keeps the chosen filter and layout visible there; aria-pressed already
+// carries the state to assistive technology.
+@media (forced-colors: active) {
+  .case-playground__discipline[aria-pressed='true'],
+  .case-playground__view[aria-pressed='true'] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
 }

@@ -79,6 +79,19 @@ test('the section opens on Featured, as cards, with no side panel and no pager t
   expect(screen.getByRole('heading', { level: 3, name: 'PlayDraft: A social drafting game' })).toBeInTheDocument();
 });
 
+test('the view toggle is three icon buttons that still say what they do', () => {
+  mount();
+  const toggle = screen.getByRole('group', { name: 'View' });
+  const buttons = within(toggle).getAllByRole('button');
+  expect(buttons.map((button) => button.getAttribute('title'))).toEqual(['Cards', 'List', 'Grid']);
+  for (const button of buttons) {
+    // The glyph is decoration; the word is the accessible name.
+    expect(button.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    expect(button.querySelector('.sr-only')?.textContent).toBe(button.getAttribute('title'));
+  }
+  expect(within(toggle).getByRole('button', { name: 'Cards' })).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('All opens on the featured cards and pages through the rest with the arrows', () => {
   const { container } = mount();
   fireEvent.click(chip('All'));

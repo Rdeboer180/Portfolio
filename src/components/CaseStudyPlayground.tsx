@@ -133,6 +133,36 @@ const SketchArrow = ({ direction }: { direction: 'left' | 'right' }) => (
   </svg>
 );
 
+// View toggle glyphs. Each draws the layout it switches to, in the site's
+// 24px stroke icon grammar: a card with its preview split from its body, the
+// finder's thumbnail rows, and four tiles. They are decoration for the word
+// each button still carries as visually hidden text, which is the button's
+// accessible name; the same word is the native tooltip for a pointer.
+const VIEW_ICONS: Record<WorkView, React.ReactNode> = {
+  cards: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <rect x="4" y="3.5" width="16" height="17" rx="2" />
+      <path d="M4 12h16M7.5 16h6" />
+    </svg>
+  ),
+  list: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <rect x="3.5" y="4.5" width="4" height="4" rx="1" />
+      <rect x="3.5" y="10" width="4" height="4" rx="1" />
+      <rect x="3.5" y="15.5" width="4" height="4" rx="1" />
+      <path d="M11 6.5h9.5M11 12h9.5M11 17.5h9.5" />
+    </svg>
+  ),
+  grid: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <rect x="4" y="4" width="7" height="7" rx="1.5" />
+      <rect x="13" y="4" width="7" height="7" rx="1.5" />
+      <rect x="4" y="13" width="7" height="7" rx="1.5" />
+      <rect x="13" y="13" width="7" height="7" rx="1.5" />
+    </svg>
+  ),
+};
+
 // CTA arrow — hand-sketched, the hero arrows' vocabulary, drawn in on card
 // hover/focus (not on scroll reveal) via the `--active` class on the card.
 const CtaArrow = () => (
@@ -637,9 +667,11 @@ const CaseStudyPlayground: React.FC = () => {
                   type="button"
                   className="case-playground__view"
                   aria-pressed={view === option.id}
+                  title={option.label}
                   onClick={() => chooseView(option.id)}
                 >
-                  {option.label}
+                  {VIEW_ICONS[option.id]}
+                  <span className="sr-only">{option.label}</span>
                 </button>
               ))}
             </div>
