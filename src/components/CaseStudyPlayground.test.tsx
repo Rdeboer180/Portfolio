@@ -24,6 +24,7 @@ beforeEach(() => {
   mockUnlocked = false;
   window.matchMedia = jest.fn().mockReturnValue({ matches: false, addEventListener: jest.fn(), removeEventListener: jest.fn() });
   window.history.replaceState(null, '', '/');
+  window.localStorage.clear();
   (window as any).IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
 });
 
@@ -90,4 +91,84 @@ test('Escape closes the rail and returns focus to the control that opened it', (
   fireEvent.keyDown(window, { key: 'Escape' });
   expect(screen.queryByRole('complementary', { name: 'Browse work by discipline or client' })).not.toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Browse by discipline or client' })).toHaveFocus();
+});
+
+// ── Density switch ──────────────────────────────────────────────────────────
+const itemSlugs = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLElement>('.case-playground__card, .case-playground__list [data-slug], .case-playground__tile'))
+    .map((item) => item.dataset.slug);
+const chooseView = (label: string) => fireEvent.click(screen.getByRole('button', { name: label }));
+
+test('Cards, List and Grid lay out the same filtered set; pages and arrows belong to Cards', () => {
+  const { container } = mount();
+  const views = screen.getByRole('group', { name: 'View' });
+  expect(within(views).getByRole('button', { name: 'Cards' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(views).getByRole('button', { name: 'List' })).toHaveAttribute('aria-pressed', 'false');
+
+  const rail = openRail();
+  fireEvent.click(within(rail).getByRole('button', { name: /^AEM/ }));
+  const aem = ['aem-component-system', 'tire-categories', 'landing-pages', 'seasonal-content-system'];
+  expect(itemSlugs(container)).toEqual(aem);
+
+  chooseView('List');
+  expect(screen.getByRole('button', { name: 'List' })).toHaveAttribute('aria-pressed', 'true');
+  expect(container.querySelector('.case-playground__grid')).toBeNull();
+  expect(container.querySelectorAll('.case-playground__list .dam__item')).toHaveLength(4);
+  expect(itemSlugs(container)).toEqual(aem);
+  expect(screen.queryByText('1 / 2')).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Next case studies' })).not.toBeInTheDocument();
+  // The rail's filter still reads on the row.
+  expect(screen.getByText('[ AEM ]')).toBeInTheDocument();
+
+  chooseView('Grid');
+  expect(container.querySelectorAll('.case-playground__tile')).toHaveLength(4);
+  expect(itemSlugs(container)).toEqual(aem);
+  // A tile is the card's preview: the plate's lock line rides along.
+  expect(container.querySelectorAll('.case-playground__tile .case-playground__preview--plate')).toHaveLength(4);
+  expect(screen.queryByText(/\d \/ \d/)).not.toBeInTheDocument();
+
+  chooseView('Cards');
+  expect(cardSlugs(container)).toEqual(aem);
+  expect(screen.getByText('1 / 2')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Next case studies' })).toBeInTheDocument();
+});
+
+test('List rows keep the lock line and the anonymous employer while locked, and name it once unlocked', () => {
+  const { container, unmount } = mount();
+  chooseView('List');
+  const rows = container.querySelectorAll<HTMLElement>('.case-playground__list .dam__item');
+  expect(rows).toHaveLength(WORK_ORDER.length);
+  expect(screen.getAllByText('Password protected')).toHaveLength(7);
+  expect(container.querySelectorAll('.case-playground__list .dam__item--locked')).toHaveLength(7);
+  expect(container.querySelectorAll('.case-playground__list .dam__thumb--locked')).toHaveLength(6);
+  expect(container.textContent).not.toContain('Tire Rack');
+  expect(within(rows[0]).getByText(`2023 · ${ANON_CLIENT}`)).toBeInTheDocument();
+  // The row is the link, and it reads its lock line as its description.
+  expect(rows[0].tagName).toBe('A');
+  expect(rows[0]).toHaveAttribute('aria-describedby', 'lock-wheelrack');
+  expect(container.querySelector('#lock-wheelrack')).toHaveTextContent('Password protected');
+  // Title and outcome come from the one source the cards use.
+  expect(within(rows[1]).getByText('PlayDraft: A social drafting game')).toBeInTheDocument();
+  unmount();
+
+  mockUnlocked = true;
+  const view = mount();
+  chooseView('List');
+  expect(screen.queryByText('Password protected')).not.toBeInTheDocument();
+  expect(view.container.querySelectorAll('.case-playground__list .dam__thumb--locked')).toHaveLength(0);
+  expect(view.container.textContent).toContain('Tire Rack');
+});
+
+test('the chosen view is remembered per device and read only after mount', () => {
+  const { unmount } = mount();
+  chooseView('Grid');
+  expect(window.localStorage.getItem('rdeboer:work-view')).toBe('grid');
+  unmount();
+
+  const again = mount();
+  expect(screen.getByRole('button', { name: 'Grid' })).toHaveAttribute('aria-pressed', 'true');
+  expect(again.container.querySelector('.case-playground__tiles')).not.toBeNull();
+  // Cards is the default, so choosing it clears the memory rather than storing it.
+  chooseView('Cards');
+  expect(window.localStorage.getItem('rdeboer:work-view')).toBeNull();
 });

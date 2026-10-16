@@ -3,9 +3,25 @@ import { ClientKey, NavigatorGroupId, isClientKey, isNavigatorGroup } from '../d
 import { useAuthorMode } from './AuthorModeContext';
 
 /**
+ * How densely the work section lays out whatever the navigator selects. The
+ * navigator decides what is shown; this decides how. Cards is the carousel
+ * the static page ships; List and Grid exist only after mount.
+ */
+export type WorkView = 'cards' | 'list' | 'grid';
+
+export const WORK_VIEWS: { id: WorkView; label: string }[] = [
+  { id: 'cards', label: 'Cards' },
+  { id: 'list', label: 'List' },
+  { id: 'grid', label: 'Grid' },
+];
+
+export const isWorkView = (value: string | null | undefined): value is WorkView =>
+  WORK_VIEWS.some((view) => view.id === value);
+
+/**
  * What the work navigator has open and selected. The defaults are the static
- * page: rail closed, nothing selected, page one. Every value here is applied
- * after mount, so the first client render always equals the prerender.
+ * page: rail closed, nothing selected, page one, cards. Every value here is
+ * applied after mount, so the first client render always equals the prerender.
  */
 export interface WorkNavigatorState {
   open: boolean;
@@ -15,6 +31,8 @@ export interface WorkNavigatorState {
   page: number;
   /** Study the visitor is pointing at in the rail; the card answers with its coins. */
   pointedSlug: string | null;
+  /** The density the visitor chose; the rail's selection applies to every view. */
+  view: WorkView;
 }
 
 interface WorkNavigatorValue extends WorkNavigatorState {
@@ -25,11 +43,12 @@ interface WorkNavigatorValue extends WorkNavigatorState {
   selectClient: (key: ClientKey | null) => void;
   setPage: (page: number) => void;
   point: (slug: string | null) => void;
+  setView: (view: WorkView) => void;
   /** The control that opened the rail, so closing it returns focus there. */
   triggerRef: React.MutableRefObject<HTMLButtonElement | null>;
 }
 
-const DEFAULT_STATE: WorkNavigatorState = { open: false, group: null, clientKey: null, page: 0, pointedSlug: null };
+const DEFAULT_STATE: WorkNavigatorState = { open: false, group: null, clientKey: null, page: 0, pointedSlug: null, view: 'cards' };
 
 const WorkNavigatorContext = createContext<WorkNavigatorValue>({
   ...DEFAULT_STATE,
@@ -39,6 +58,7 @@ const WorkNavigatorContext = createContext<WorkNavigatorValue>({
   selectClient: () => {},
   setPage: () => {},
   point: () => {},
+  setView: () => {},
   triggerRef: { current: null },
 });
 
@@ -69,6 +89,34 @@ const writeHash = (group: NavigatorGroupId | null, clientKey: ClientKey | null) 
   window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.search}${next}`);
 };
 
+/**
+ * The chosen density is a device preference rather than a link, so it lives
+ * in localStorage (per device, like the unlock) and never in the hash. It is
+ * read after mount for the same reason the deep link is: the prerender is
+ * always Cards, and a stored List on the first render would be a hydration
+ * mismatch. Storage can be absent or refused (private windows, blocked site
+ * data), and the page must not care either way.
+ */
+const VIEW_KEY = 'rdeboer:work-view';
+
+const readView = (): WorkView | null => {
+  try {
+    const stored = window.localStorage.getItem(VIEW_KEY);
+    return isWorkView(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeView = (view: WorkView) => {
+  try {
+    if (view === DEFAULT_STATE.view) window.localStorage.removeItem(VIEW_KEY);
+    else window.localStorage.setItem(VIEW_KEY, view);
+  } catch {
+    // Nothing to remember with; the choice still holds for this visit.
+  }
+};
+
 export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { authoring } = useAuthorMode();
   const [state, setState] = useState<WorkNavigatorState>(DEFAULT_STATE);
@@ -81,7 +129,8 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     setMounted(true);
     const linked = readHash();
-    if (linked) setState((current) => ({ ...current, ...linked, page: 0 }));
+    const view = readView();
+    if (linked || view) setState((current) => ({ ...current, ...(linked ?? {}), ...(view ? { view } : {}), page: 0 }));
   }, []);
 
   const setOpen = useCallback((open: boolean) => setState((current) => (current.open === open ? current : { ...current, open, pointedSlug: open ? current.pointedSlug : null })), []);
@@ -98,6 +147,13 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setPage = useCallback((page: number) => setState((current) => (current.page === page ? current : { ...current, page })), []);
   const point = useCallback((slug: string | null) => setState((current) => (current.pointedSlug === slug ? current : { ...current, pointedSlug: slug })), []);
+
+  // Leaving Cards drops its page: the carousel is unmounted, and coming back
+  // starts it at the first page the way a new selection does.
+  const setView = useCallback((view: WorkView) => {
+    setState((current) => (current.view === view ? current : { ...current, view, page: 0 }));
+    writeView(view);
+  }, []);
 
   // Author mode docks its own panel in the same column, so entering it closes
   // this one; the selection survives, because it is the page's state, not the rail's.
@@ -133,8 +189,8 @@ export const WorkNavigatorProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [docked, setOpen]);
 
   const value = useMemo(
-    () => ({ ...state, mounted, setOpen, selectGroup, selectClient, setPage, point, triggerRef }),
-    [state, mounted, setOpen, selectGroup, selectClient, setPage, point],
+    () => ({ ...state, mounted, setOpen, selectGroup, selectClient, setPage, point, setView, triggerRef }),
+    [state, mounted, setOpen, selectGroup, selectClient, setPage, point, setView],
   );
   return <WorkNavigatorContext.Provider value={value}>{children}</WorkNavigatorContext.Provider>;
 };

@@ -840,3 +840,217 @@
     &__browse { transition: none; }
   }
 }
+
+// ── Density: Cards, List, Grid ────────────────────────────────────────────
+// The navigator chooses what the section shows; the switch beside the browse
+// control chooses how densely. Cards is the carousel above and the only view
+// in the static page. List borrows the navigator's own .dam__item row grid so
+// the rail and the page read as one tool, and Grid is the card's preview and
+// title with the body and tray left off. The lock treatments are the card's
+// in every view: the plate or blur, the lock line, the anonymous employer,
+// and the per-item resolve delay on unlock.
+.case-playground {
+  // The switch is one pill in the browse control's mono grammar. Primary
+  // tints only the pressed segment: the one the reader chose is the one state.
+  &__views {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 2px;
+    border: 1px solid $color-border-default;
+    border-radius: var(--radius-full);
+    background: $color-white;
+  }
+
+  &__view {
+    appearance: none;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: none;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+    cursor: pointer;
+    transition: color var(--case-study-motion-fast), background-color var(--case-study-motion-fast);
+
+    &:hover { color: $color-primary-dark; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+
+    &[aria-pressed='true'] {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+      box-shadow: inset 0 0 0 1px $color-primary;
+      cursor: default;
+    }
+  }
+
+  // ── List ──
+  &__list {
+    margin-top: $spacing-md;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  // The rail's row at page width: a larger still, the outcome under the
+  // title, and the lock line in the row's permission slot.
+  &__list &__row {
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-areas:
+      'thumb name'
+      'thumb metric'
+      'thumb meta'
+      'thumb perm';
+    column-gap: $spacing-lg;
+    padding: $spacing-md $spacing-sm;
+    border-radius: 0;
+
+    .dam__thumb { width: 72px; height: 48px; }
+    .dam__name { font-size: $font-size-body-sm; }
+
+    // A row pointed at in the rail tints the way the rail's own row does.
+    &--pointed { background: $color-secondary-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -2px; }
+  }
+
+  &__row-metric {
+    grid-area: metric;
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    line-height: 1.4;
+    color: $color-neutral-muted;
+  }
+
+  // Two classes, because _side-panel.scss is imported later and its
+  // .dam__permission would otherwise win the colour back.
+  &__list &__row-lock {
+    margin: 2px 0 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+
+    .case-playground__lock-icon { width: 10px; height: 10px; }
+  }
+
+  // Unlocking swaps a protected row's glyph for its still. The still is a
+  // new element, so it fades in with an animation (a transition has nothing
+  // to start from) on the same row-by-row delay the cards resolve on. Rows
+  // that were never locked are not matched, so nothing already visible blinks.
+  &--resolving &__row--protected .dam__thumb img {
+    animation: case-playground-row-resolve 650ms var(--case-study-ease-out) var(--resolve-delay, 0ms) both;
+  }
+
+  // ── Grid ──
+  &__tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $spacing-lg;
+  }
+
+  &__tile {
+    background: var(--case-study-card-bg);
+    border: var(--case-study-card-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--case-study-card-shadow-rest);
+    overflow: hidden;
+    transition: box-shadow var(--case-study-motion-medium), border-color var(--case-study-motion-medium);
+
+    &:hover,
+    &:focus-within,
+    &--active {
+      box-shadow: var(--case-study-card-shadow-hover);
+      border-color: rgba($color-primary, 0.35);
+    }
+
+    &:focus-within {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
+  &__tile-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -3px; }
+  }
+
+  &__tile-title {
+    margin: 0;
+    padding: $spacing-md $spacing-md $spacing-lg;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+    transition: color var(--case-study-motion-fast);
+  }
+
+  // Selecting a tile is selecting a card: the title warms and the preview's
+  // corner handles tick in. The plate's own hover grammar (handles and
+  // callouts) is keyed to --card--plated in _cover-schematic.scss, so the
+  // tile repeats the three rules it needs rather than borrowing a card class.
+  &__tile:hover &__tile-title,
+  &__tile:focus-within &__tile-title,
+  &__tile--active &__tile-title { color: $color-primary; }
+
+  &__tile:hover &__preview::before,
+  &__tile:focus-within &__preview::before,
+  &__tile--active &__preview::before { opacity: 1; }
+
+  &__tile--plated:hover,
+  &__tile--plated:focus-within {
+    .cover-schematic__handle { opacity: 1; }
+
+    .cover-schematic__callout {
+      line,
+      path { stroke-dashoffset: 0; }
+      text { opacity: 1; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__view,
+    &__tile,
+    &__tile-title { transition: none; }
+
+    &--resolving &__row--protected .dam__thumb img { animation: none; }
+  }
+}
+
+@keyframes case-playground-row-resolve {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// From the desktop breakpoint a list row is one line: still, title over
+// outcome, year and client, permission. Below it the row stacks the way it
+// does in the rail. At 768 the one-line form squeezed titles to a word a
+// line, and from 1024 the docked rail can still take 320px of the page, so
+// the title keeps two shares to the client's one and the client line wraps.
+@media (min-width: $breakpoint-lg) {
+  .case-playground__list .case-playground__row {
+    grid-template-columns: 72px minmax(0, 2fr) minmax(0, 1fr) auto;
+    grid-template-areas:
+      'thumb name meta perm'
+      'thumb metric meta perm';
+    align-items: center;
+
+    .dam__meta { margin-top: 0; text-align: right; }
+    .dam__permission { margin-top: 0; white-space: nowrap; }
+  }
+}
+
+// Two tiles across on a tablet, one on a phone.
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .case-playground__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: #{$breakpoint-md - 1}) {
+  .case-playground__tiles { grid-template-columns: minmax(0, 1fr); }
+}

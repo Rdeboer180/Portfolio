@@ -6,7 +6,10 @@ import { FeaturedEndorsement } from './Testimonials';
 // coin tray) in a scroll-snap carousel paged by hand-sketched arrows that draw
 // in on scroll (same artistic language as the hero arrows). The work navigator
 // (WorkNavigator.tsx) filters the row by discipline or client; without it the
-// arrows page three at a time through the one WORK_ORDER.
+// arrows page three at a time through the one WORK_ORDER. A density switch
+// beside the browse control lays the same selection out as Cards (this
+// carousel), List (one navigator-style row per study) or Grid (compact tiles):
+// the navigator chooses what to show, the switch chooses how densely.
 // Coins: first hover/focus drops the card's real tool icons into its tray;
 // un-hover lets them fall out the bottom and vanish — replayable every hover.
 // A page turn and a pointed navigator row drop them too.
@@ -21,7 +24,7 @@ import { clientLabelFor, orderedProjects } from '../data/projects';
 import { WORK_GROUPS, clientGroupLabel, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
-import { useWorkNavigator } from '../context/WorkNavigatorContext';
+import { WORK_VIEWS, useWorkNavigator } from '../context/WorkNavigatorContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import ProjectBrand from './ProjectBrand';
 import WorkNavigator, { WORK_NAVIGATOR_ID } from './WorkNavigator';
@@ -253,8 +256,12 @@ const CaseStudyPlayground: React.FC = () => {
       const video = project.featuredVideo;
       // For video cards the still IS the video's first frame (poster), so the
       // resting card matches what the loop shows; non-video cards keep `featured`.
+      // The cache-busting query some loops carry (`?v=2`) is not part of the
+      // file name, and left on it the poster path never matched: the Bolus
+      // Binder still was its .mp4 URL, a broken image wherever the poster
+      // shows (reduced motion, the static file, and now List and Grid).
       const still = video
-        ? video.replace(/\.mp4$/, '-poster.jpg')
+        ? video.split('?')[0].replace(/\.mp4$/, '-poster.jpg')
         : project.featured ?? '';
       // Copy comes from projects.ts, never from a local duplicate. The card
       // used to restate the metric by hand and had drifted: it showed
@@ -373,9 +380,11 @@ const CaseStudyPlayground: React.FC = () => {
       el.removeEventListener('scroll', sync);
       window.removeEventListener('resize', sync);
     };
-    // nav.setPage is stable; measure reads the DOM.
+    // nav.setPage is stable; measure reads the DOM. The view is a dependency
+    // because List and Grid unmount the carousel, and coming back to Cards
+    // mounts a new one that has to be measured again.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [measure, visibleCards.length]);
+  }, [measure, visibleCards.length, nav.view]);
 
   // jsdom has no element scrollTo; the browser always does.
   const scrollGrid = (left: number, behavior: ScrollBehavior) => {
@@ -401,14 +410,16 @@ const CaseStudyPlayground: React.FC = () => {
   // the load has no flurry; the first hover still owns that moment.
   const lastDropPage = useRef<number | null>(null);
   useEffect(() => {
-    if (isTouch) return;
+    // List and Grid have no tray. Tracking the page through them means a
+    // return to Cards is an arrival, parked, not a page turn.
+    if (isTouch || nav.view !== 'cards') { lastDropPage.current = page; return; }
     if (lastDropPage.current === null) { lastDropPage.current = page; return; }
     if (lastDropPage.current === page) return;
     lastDropPage.current = page;
     visibleCards.slice(page * perPage, page * perPage + perPage).forEach((card) => dropCoins(card.slug));
     // visibleCards and perPage are read at the moment of the turn.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, isTouch, dropCoins]);
+  }, [page, isTouch, dropCoins, nav.view]);
 
   // Pointing at a study in the navigator answers on its card: the coins drop
   // while the row is pointed and fall away when the pointer moves on.
@@ -456,9 +467,32 @@ const CaseStudyPlayground: React.FC = () => {
     cardEls.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
     // handleEnter/handleLeave are stable in behavior (setState + refs only);
-    // the observed set changes with the selection.
+    // the observed set changes with the selection and with the view.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTouch, visibleCards]);
+  }, [isTouch, visibleCards, nav.view]);
+
+  // The one lock reading every view shares. Only the employer and client
+  // stream is protected; a public cover loop is shown even while the study
+  // is locked; a drawn plate stands in for the media wherever one exists.
+  // `plated` gates the plate's hover grammar and only holds while locked.
+  type Card = (typeof cards)[number];
+  const lockStateFor = (card: Card) => {
+    const locked = isLocked(card.stream);
+    const hasPlate = isProtected(card.stream) && !card.publicVideo && hasSchematic(card.slug);
+    return { locked, mediaLocked: locked && !card.publicVideo, hasPlate, plated: locked && hasPlate };
+  };
+
+  // The same lock line in every view: same copy, same id, so the study link
+  // can point at it with aria-describedby. In Cards and Grid it sits over the
+  // preview (CSS shows it; a public loop has no veil, so it is pinned on); in
+  // List it is the navigator row's permission line.
+  const lockLineFor = (card: Card, locked: boolean, className: string, pinned = false) =>
+    lockLineReady && locked && (
+      <p id={`lock-${card.slug}`} className={className} style={pinned ? { opacity: 1 } : undefined} aria-hidden={!locked}>
+        <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
+        Password protected
+      </p>
+    );
 
   const activeFilter = nav.group
     ? nav.group === 'client' && nav.clientKey
@@ -512,6 +546,23 @@ const CaseStudyPlayground: React.FC = () => {
               <span className="case-playground__browse-glyph"><BrowseIcon /></span>
               Browse by discipline or client
             </button>
+            {/* Density. Cards is the static page; the stored choice arrives
+                after mount through the navigator context. Text labels, not
+                icons, because three glyphs for the same studies at three
+                sizes read as decoration; the words say what changes. */}
+            <div className="case-playground__views" role="group" aria-label="View">
+              {WORK_VIEWS.map((view) => (
+                <button
+                  key={view.id}
+                  type="button"
+                  className="case-playground__view"
+                  aria-pressed={nav.view === view.id}
+                  onClick={() => nav.setView(view.id)}
+                >
+                  {view.label}
+                </button>
+              ))}
+            </div>
             {activeFilter && (
               <>
                 <span className="case-playground__filter" aria-live="polite">[ {activeFilter} ]</span>
@@ -521,6 +572,8 @@ const CaseStudyPlayground: React.FC = () => {
               </>
             )}
           </div>
+          {/* Pages are a carousel idea; List and Grid show every study at once. */}
+          {nav.view === 'cards' && (
           <div className="case-playground__nav-end">
             <button
               type="button"
@@ -542,23 +595,21 @@ const CaseStudyPlayground: React.FC = () => {
               <SketchArrow direction="right" />
             </button>
           </div>
+          )}
         </div>
 
         {/* Docked beside the page from 1000px; folded in here below it. */}
         <WorkNavigator />
 
-        {/* ── Carousel ── */}
+        {/* ── Cards: the carousel ── */}
+        {nav.view === 'cards' && (
         <div className="case-playground__grid" ref={gridRef}>
           {visibleCards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
-            const locked = isLocked(card.stream);
             // Drawn cover in place of the blur. The plate stays mounted for any
             // protected card that has one (like the scrim, so unlocking can
-            // fade it rather than cut); --plated gates the hover grammar and
-            // only applies while actually locked.
-            const mediaLocked = locked && !card.publicVideo;
-            const hasPlate = isProtected(card.stream) && !card.publicVideo && hasSchematic(card.slug);
-            const plated = locked && hasPlate;
+            // fade it rather than cut).
+            const { locked, mediaLocked, hasPlate, plated } = lockStateFor(card);
             // Hover and focus lift the card; on touch the in-view drop does.
             const active = activeSlug === card.slug || nav.pointedSlug === card.slug || (isTouch && phase === 'in');
             // The caption names the client only once it may be named: the
@@ -591,17 +642,7 @@ const CaseStudyPlayground: React.FC = () => {
                 >
                   {hasPlate && <CoverSchematic slug={card.slug} />}
                   <span className="case-playground__caption" aria-hidden="true">[ {caption} ]</span>
-                  {lockLineReady && locked && (
-                    <p
-                      id={`lock-${card.slug}`}
-                      className="case-playground__lock"
-                      style={card.publicVideo && locked ? { opacity: 1 } : undefined}
-                      aria-hidden={!locked}
-                    >
-                      <span className="case-playground__lock-icon"><PreviewLockIcon /></span>
-                      Password protected
-                    </p>
-                  )}
+                  {lockLineFor(card, locked, 'case-playground__lock', card.publicVideo)}
                   {card.video && !posterOnly ? (
                     <CardVideo
                       src={card.video}
@@ -654,6 +695,87 @@ const CaseStudyPlayground: React.FC = () => {
             );
           })}
         </div>
+        )}
+
+        {/* ── List: one navigator row per study ──
+            The same .dam__item grid the rail uses, so the two read as one
+            tool: thumbnail or lock glyph, title, outcome, year and client,
+            and the lock line in the row's permission slot. No tray, no loop. */}
+        {nav.view === 'list' && (
+        <ul className="dam__list case-playground__list">
+          {visibleCards.map((card, i) => {
+            const { locked, mediaLocked } = lockStateFor(card);
+            const pointed = nav.pointedSlug === card.slug;
+            return (
+              <li key={card.slug} data-slug={card.slug}>
+                <ProjectLink
+                  to={`/work/${card.slug}`}
+                  className={`dam__item case-playground__row${locked ? ' dam__item--locked' : ''}${
+                    pointed ? ' case-playground__row--pointed' : ''
+                  }${isProtected(card.stream) && !card.publicVideo ? ' case-playground__row--protected' : ''}`}
+                  aria-describedby={locked ? `lock-${card.slug}` : undefined}
+                >
+                  {/* Locked media is not blurred here, it is absent: at 56px
+                      a blur is a smudge, and the rail already says "no media"
+                      with the hatched glyph. The still returns on unlock on
+                      the same per-row delay the cards resolve on. */}
+                  <span
+                    className={`dam__thumb${mediaLocked || !card.image ? ' dam__thumb--glyph dam__thumb--locked' : ''}`}
+                    style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
+                  >
+                    {mediaLocked || !card.image ? <PreviewLockIcon /> : <img src={card.image} alt="" loading="lazy" />}
+                  </span>
+                  <span className="dam__name">{card.title}</span>
+                  <span className="case-playground__row-metric">{card.metric}</span>
+                  <span className="dam__meta">{card.year} · {clientLabelFor(card, locked)}</span>
+                  {lockLineFor(card, locked, 'dam__permission case-playground__row-lock')}
+                </ProjectLink>
+              </li>
+            );
+          })}
+        </ul>
+        )}
+
+        {/* ── Grid: compact tiles ──
+            Preview, title and the lock line only, four across on desktop.
+            The preview is the card's preview, so the plate, the blur, the
+            scrim and the resolve stagger come with it unchanged. */}
+        {nav.view === 'grid' && (
+        <div className="case-playground__tiles">
+          {visibleCards.map((card, i) => {
+            const { locked, mediaLocked, hasPlate, plated } = lockStateFor(card);
+            const pointed = nav.pointedSlug === card.slug;
+            return (
+              <article
+                key={card.slug}
+                className={`case-playground__tile${pointed ? ' case-playground__tile--active' : ''}${
+                  plated ? ' case-playground__tile--plated' : ''
+                }`}
+                data-slug={card.slug}
+              >
+                <ProjectLink
+                  to={`/work/${card.slug}`}
+                  className="case-playground__tile-link"
+                  aria-label={`View case study: ${card.title}`}
+                  aria-describedby={locked ? `lock-${card.slug}` : undefined}
+                >
+                  <div
+                    className={`case-playground__preview${mediaLocked ? ' case-playground__preview--locked' : ''}${
+                      hasPlate ? ' case-playground__preview--plate' : ''
+                    }`}
+                    style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
+                  >
+                    {hasPlate && <CoverSchematic slug={card.slug} />}
+                    {lockLineFor(card, locked, 'case-playground__lock', card.publicVideo)}
+                    <img src={card.image} alt={card.alt} loading="lazy" />
+                  </div>
+                  <h3 className="case-playground__tile-title">{card.title}</h3>
+                </ProjectLink>
+              </article>
+            );
+          })}
+        </div>
+        )}
       </div>
     </section>
   );
