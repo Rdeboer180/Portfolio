@@ -3,23 +3,6 @@ import { scrollBehavior } from '../utils/motion';
 
 export type PanelTab = 'assets' | 'components';
 
-/**
- * The work section's layout styles, AEM's Style System on one component. The
- * Publisher view is always the default (`cards`: three featured cards, then
- * the full index); List and Grid are styles an author applies to the selected
- * component. Like the rest of the author chrome they last for the tab and are
- * forgotten when Author ends, so a visitor never inherits one.
- */
-export type WorkView = 'cards' | 'list' | 'grid';
-
-export const WORK_VIEWS: { id: WorkView; label: string }[] = [
-  { id: 'cards', label: 'Cards' },
-  { id: 'list', label: 'List' },
-  { id: 'grid', label: 'Grid' },
-];
-
-const isWorkView = (value: unknown): value is WorkView => WORK_VIEWS.some((view) => view.id === value);
-
 /** Everything the author chrome keeps open. Resets whenever Author mode ends. */
 export interface AuthorUI {
   panelOpen: boolean;
@@ -31,8 +14,6 @@ export interface AuthorUI {
   openPin: string | null;
   layoutOn: boolean;
   pageInfoOpen: boolean;
-  /** The layout style applied to the work section while authoring. */
-  workView: WorkView;
 }
 
 interface AuthorModeValue {
@@ -52,7 +33,6 @@ const DEFAULT_UI: AuthorUI = {
   openPin: null,
   layoutOn: false,
   pageInfoOpen: false,
-  workView: 'cards',
 };
 
 /** Per tab, so Back from a full page lands on the author view the reader left. */
@@ -64,8 +44,7 @@ const readSaved = (): AuthorUI | null => {
     if (!raw) return null;
     const saved = JSON.parse(raw) as Partial<AuthorUI>;
     // A dialog is never restored open; it was closed by leaving the page.
-    // A layout style from an older or edited entry falls back to the default.
-    return { ...DEFAULT_UI, ...saved, pageInfoOpen: false, workView: isWorkView(saved.workView) ? saved.workView : 'cards' };
+    return { ...DEFAULT_UI, ...saved, pageInfoOpen: false };
   } catch {
     return null;
   }

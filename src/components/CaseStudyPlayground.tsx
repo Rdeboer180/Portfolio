@@ -1,14 +1,15 @@
 import { CARDS, Coin, CoinPhase, coinVariants, coinVariantsReduced } from '../data/toolCoins';
 import { FeaturedEndorsement } from './Testimonials';
 // ============================================
-// CaseStudyPlayground — featured shadowbox cards, then the full index
-// A visitor gets one designed layout: the first three studies of the one
-// WORK_ORDER as shadowbox cards (preview / title and outcome / coin tray), then
-// every study as an index row, with no paging and no layout to choose. The
-// only control is a row of discipline chips that filters both. Everything
-// more configurable is authoring: the layout is a Style System choice on the
-// selected component (WorkLayoutStyle below, Cards / List / Grid), and filing
-// by client lives in the Asset Panel's folders (WorkNavigator.tsx).
+// CaseStudyPlayground — the work section: one filter row, three layouts
+// The section opens on Featured, Ryan's best three (FEATURED in projects.ts),
+// as shadowbox cards (preview / title and outcome / coin tray). Chips switch
+// to All (featured first, then the rest of WORK_ORDER), AEM, System Design or
+// Product Design. A toggle on the right of the same row lays the selection out
+// as Cards (a scroll-snap carousel paged by hand-sketched arrows that draw in
+// on scroll, the hero arrows' language), List (one Asset Panel row per study)
+// or Grid (compact tiles). There is no side panel for visitors; filing by
+// client lives in the Asset Panel's folders (WorkNavigator.tsx) in Author.
 // Coins: first hover/focus drops the card's real tool icons into its tray;
 // un-hover lets them fall out the bottom and vanish — replayable every hover.
 // A page turn and a pointed navigator row drop them too.
@@ -23,8 +24,8 @@ import { cardTitleFor, clientLabelFor, orderedProjects, yearSpanFor } from '../d
 import { WORK_GROUPS, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
 import { useUnlock } from '../context/UnlockContext';
-import { useWorkNavigator } from '../context/WorkNavigatorContext';
-import { WORK_VIEWS, useAuthorMode } from '../context/AuthorModeContext';
+import { WORK_VIEWS, useWorkNavigator } from '../context/WorkNavigatorContext';
+import { useAuthorMode } from '../context/AuthorModeContext';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import ProjectBrand from './ProjectBrand';
 
@@ -109,6 +110,29 @@ const BriefcaseIcon = () => (
   </svg>
 );
 
+// Hand-sketched carousel arrows — same vocabulary as the hero intro arrows
+// (wobbly cubic strokes, pathLength=1, drawn in via stroke-dashoffset on reveal)
+const SketchArrow = ({ direction }: { direction: 'left' | 'right' }) => (
+  <svg
+    className="case-playground__nav-svg"
+    viewBox="0 0 44 44"
+    aria-hidden="true"
+    focusable="false"
+  >
+    {direction === 'right' ? (
+      <>
+        <path d="M6 23 C 14 19, 26 19, 37 22" fill="none" strokeLinecap="round" pathLength={1} />
+        <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
+      </>
+    ) : (
+      <>
+        <path d="M38 23 C 30 19, 18 19, 7 22" fill="none" strokeLinecap="round" pathLength={1} />
+        <path d="M7 22 L14.5 15.5 M7 22 L13.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
+      </>
+    )}
+  </svg>
+);
+
 // CTA arrow — hand-sketched, the hero arrows' vocabulary, drawn in on card
 // hover/focus (not on scroll reveal) via the `--active` class on the card.
 const CtaArrow = () => (
@@ -151,36 +175,16 @@ function useTouchDevice(): boolean {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 const EXIT_RESET_MS = 750; // out-animation length before coins re-park above
-// The featured row: the first three of the selection, so WORK_ORDER decides
-// what leads. Three fit the desktop row exactly, which is why paging could go.
-const FEATURED_COUNT = 3;
+const CARD_GAP = 24;       // $spacing-xl, the carousel's gap
+const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
 
-const DISCIPLINES = [{ id: null, label: 'All' }, ...WORK_GROUPS.filter((group) => group.id !== 'client')];
-
-/**
- * The work section's layout styles, in the selected component's toolbar the
- * way AEM's Style System offers a component's variants. It changes the page
- * only while authoring; Publisher is always the default style.
- */
-export const WorkLayoutStyle: React.FC = () => {
-  const { ui, update } = useAuthorMode();
-  return (
-    <span className="authored__style" role="group" aria-label="Layout">
-      <span className="authored__style-label" aria-hidden="true">Layout</span>
-      {WORK_VIEWS.map((view) => (
-        <button
-          key={view.id}
-          type="button"
-          className="authored__action"
-          aria-pressed={ui.workView === view.id}
-          onClick={() => update({ workView: view.id })}
-        >
-          {view.label}
-        </button>
-      ))}
-    </span>
-  );
-};
+// Featured is the opening view (no selection); All follows it, then the
+// disciplines. Client filing stays in the Asset Panel.
+const FILTERS = [
+  { id: null, label: 'Featured' },
+  { id: 'all' as const, label: 'All' },
+  ...WORK_GROUPS.filter((group) => group.id !== 'client'),
+];
 
 const CaseStudyPlayground: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -191,10 +195,8 @@ const CaseStudyPlayground: React.FC = () => {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const resetTimers = useRef<Record<string, number>>({});
   const nav = useWorkNavigator();
-  const { authoring, ui } = useAuthorMode();
-  // Publisher always gets the default style; a layout an author picks lasts
-  // only as long as Author does.
-  const view = authoring ? ui.workView : 'cards';
+  const { authoring } = useAuthorMode();
+  const view = nav.view;
 
   useEffect(() => {
     const timers = resetTimers.current;
@@ -274,8 +276,8 @@ const CaseStudyPlayground: React.FC = () => {
     });
   }, []);
 
-  // The selection narrows the section; no selection is the whole order. Filing
-  // by client is an authoring view (the Asset Panel's folders), so a client
+  // The selection narrows the section; no selection is Featured. Filing by
+  // client is an authoring view (the Asset Panel's folders), so a client
   // selection, from a folder or an old deep link, only applies while authoring.
   const group = nav.group === 'client' && !authoring ? null : nav.group;
   const clientKey = group === 'client' ? nav.clientKey : null;
@@ -283,7 +285,6 @@ const CaseStudyPlayground: React.FC = () => {
     const shown = new Set(studiesFor(group, clientKey).map((project) => project.slug));
     return cards.filter((card) => shown.has(card.slug));
   }, [cards, group, clientKey]);
-  const featuredCards = visibleCards.slice(0, FEATURED_COUNT);
 
   const { unlocked, resolving, openPrompt, lockedReady } = useUnlock();
 
@@ -332,15 +333,84 @@ const CaseStudyPlayground: React.FC = () => {
    */
   const lockLineReady = !mounted || lockedReady;
 
-  // ── The featured row ──────────────────────────────────────────────────────
-  // Three cards fill the desktop row; below 1024px the same three sit in a
-  // scroll-snap row with the next card peeking, so a phone swipes through
-  // three instead of paging through twelve. A new selection starts at the
-  // first card. jsdom has no element scrollTo; the browser always does.
+  // ── Paging (Cards only) ─────────────────────────────────────────────────────
+  // The row is a scroll-snap carousel (touch swipes, keyboard scrolls), so a
+  // "page" is measured from it rather than imposed on it: how many cards fit
+  // the viewport of the grid, and which group of that many is in view. The
+  // static file and the first render assume the desktop three; the measured
+  // count arrives after mount, a post-mount update and never a mismatch.
+  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageCount = Math.max(1, Math.ceil(visibleCards.length / perPage));
+  const page = Math.min(pageIndex, pageCount - 1);
+
+  const measure = useCallback(() => {
+    const el = gridRef.current;
+    const card = el?.querySelector<HTMLElement>('.case-playground__card');
+    if (!el || !card) return { fit: DEFAULT_PER_PAGE, step: 0 };
+    const fit = Math.max(1, Math.round((el.clientWidth + CARD_GAP) / (card.offsetWidth + CARD_GAP)));
+    return { fit, step: fit * (card.offsetWidth + CARD_GAP) };
+  }, []);
+
   useEffect(() => {
     const el = gridRef.current;
-    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left: 0, behavior: 'auto' });
+    if (!el) return undefined;
+    let frame = 0;
+    const sync = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const { fit, step } = measure();
+        setPerPage(fit);
+        if (step > 0) setPageIndex(Math.round(el.scrollLeft / step));
+      });
+    };
+    sync();
+    el.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      el.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
+    };
+    // The view is a dependency because List and Grid unmount the carousel,
+    // and coming back to Cards mounts a new one that has to be measured again.
+  }, [measure, visibleCards.length, view]);
+
+  // jsdom has no element scrollTo; the browser always does.
+  const scrollGrid = (left: number, behavior: ScrollBehavior) => {
+    const el = gridRef.current;
+    if (el && typeof el.scrollTo === 'function') el.scrollTo({ left, behavior });
+  };
+
+  const goToPage = (next: number) => {
+    const { step } = measure();
+    const target = Math.max(0, Math.min(pageCount - 1, next));
+    scrollGrid(target * step, reduceMotion ? 'auto' : 'smooth');
+  };
+
+  // A new selection starts at its first page.
+  useEffect(() => {
+    scrollGrid(0, 'auto');
+    setPageIndex(0);
+    // scrollGrid only reads the ref.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [group, clientKey]);
+
+  // A page turn drops the incoming cards' coins (desktop only: touch drives
+  // its own drop from visibility). The first page on arrival stays parked, so
+  // the load has no flurry; the first hover still owns that moment.
+  const lastDropPage = useRef<number | null>(null);
+  useEffect(() => {
+    // List and Grid have no tray. Tracking the page through them means a
+    // return to Cards is an arrival, parked, not a page turn.
+    if (isTouch || view !== 'cards') { lastDropPage.current = page; return; }
+    if (lastDropPage.current === null) { lastDropPage.current = page; return; }
+    if (lastDropPage.current === page) return;
+    lastDropPage.current = page;
+    visibleCards.slice(page * perPage, page * perPage + perPage).forEach((card) => dropCoins(card.slug));
+    // visibleCards and perPage are read at the moment of the turn.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isTouch, dropCoins, view]);
 
   // Pointing at a study in the Asset Panel's folders answers on its card: the
   // coins drop while the row is pointed and fall away when the pointer moves on.
@@ -416,12 +486,10 @@ const CaseStudyPlayground: React.FC = () => {
       </p>
     );
 
-  // ── The index ──────────────────────────────────────────────────────────────
+  // ── The List layout ────────────────────────────────────────────────────────
   // One row per study on the Asset Panel's .dam__item grid, so the page and
   // the finder read as one tool: thumbnail or lock glyph, title, outcome,
-  // year and client, and the lock line in the row's permission slot. Under
-  // the featured cards it is the whole selection; as the List style it is
-  // the section on its own.
+  // year and client, and the lock line in the row's permission slot.
   const index = (
     <ul className="dam__list case-playground__list" aria-label="Case studies">
       {visibleCards.map((card, i) => {
@@ -502,30 +570,73 @@ const CaseStudyPlayground: React.FC = () => {
 
         {/* The threshold — stage line into the playground */}
 
-        {/* The one public control: filter by discipline. The pressed chip is
-            the state and All clears it, so nothing echoes the filter back.
-            Each choice writes the section's deep link (#projects/aem). */}
+        {/* One row of controls. The chips choose what to show: the pressed
+            chip is the state, so nothing echoes the filter back, and each
+            choice writes the section's deep link (#projects/aem). The toggle
+            on the right chooses how densely; the arrows and page count belong
+            to Cards. They hold their place while there is one page, so the
+            row never shifts when a phone measures more pages after mount. */}
         <div className="case-playground__nav">
           <div className="case-playground__disciplines" role="group" aria-label="Browse by discipline">
-            {DISCIPLINES.map((discipline) => (
+            {FILTERS.map((filter) => (
               <button
-                key={discipline.id ?? 'all'}
+                key={filter.id ?? 'featured'}
                 type="button"
                 className="case-playground__discipline"
-                aria-pressed={group === discipline.id}
-                onClick={() => nav.selectGroup(discipline.id)}
+                aria-pressed={group === filter.id}
+                onClick={() => nav.selectGroup(filter.id)}
               >
-                {discipline.label}
+                {filter.label}
               </button>
             ))}
           </div>
+          <div className="case-playground__nav-end">
+            {view === 'cards' && (
+              <div
+                className={`case-playground__pager${pageCount > 1 ? '' : ' case-playground__pager--single'}`}
+                aria-hidden={pageCount > 1 ? undefined : true}
+              >
+                <button
+                  type="button"
+                  className="case-playground__nav-btn"
+                  onClick={() => goToPage(page - 1)}
+                  aria-label="Previous case studies"
+                  disabled={page === 0}
+                >
+                  <SketchArrow direction="left" />
+                </button>
+                <span className="case-playground__pages" aria-live="polite">{page + 1} / {pageCount}</span>
+                <button
+                  type="button"
+                  className="case-playground__nav-btn case-playground__nav-btn--next"
+                  onClick={() => goToPage(page + 1)}
+                  aria-label="Next case studies"
+                  disabled={page >= pageCount - 1}
+                >
+                  <SketchArrow direction="right" />
+                </button>
+              </div>
+            )}
+            <div className="case-playground__views" role="group" aria-label="View">
+              {WORK_VIEWS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  className="case-playground__view"
+                  aria-pressed={view === option.id}
+                  onClick={() => nav.setView(option.id)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* ── Cards, the default style: three featured cards, then the index ── */}
+        {/* ── Cards: the carousel ── */}
         {view === 'cards' && (
-        <>
         <div className="case-playground__grid" ref={gridRef}>
-          {featuredCards.map((card, i) => {
+          {visibleCards.map((card, i) => {
             const phase: CoinPhase = phases[card.slug] ?? 'idle';
             // Drawn cover in place of the blur. The plate stays mounted for any
             // protected card that has one (like the scrim, so unlocking can
@@ -616,14 +727,12 @@ const CaseStudyPlayground: React.FC = () => {
             );
           })}
         </div>
-        {index}
-        </>
         )}
 
-        {/* ── List style: the index on its own ── */}
+        {/* ── List: one finder row per study ── */}
         {view === 'list' && index}
 
-        {/* ── Grid style: compact tiles ──
+        {/* ── Grid: compact tiles ──
             Preview, title and the lock line only, four across on desktop.
             The preview is the card's preview, so the plate, the blur, the
             scrim and the resolve stagger come with it unchanged. */}

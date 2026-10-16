@@ -1,9 +1,11 @@
 // ============================================
-// Case Study Playground — featured shadowbox cards + tool coin tray, then the index
-// Three featured cards (3-up on desktop, a scroll-snap row with edge-peek
-// below), then every study as an index row. Coin motion lives in
-// CaseStudyPlayground.tsx (framer-motion); this file owns layout, the
-// shadowbox look, the threshold rule, and reduced-motion overrides.
+// Case Study Playground — shadowbox cards + tool coin tray, List and Grid
+// One control row (filter chips left; arrows, page count and the view toggle
+// right), then the selection as a scroll-snap card carousel (3-up on desktop,
+// edge-peek below) paged by hand-sketched arrows that draw in on scroll, as
+// finder rows, or as tiles. Coin motion lives in CaseStudyPlayground.tsx
+// (framer-motion); this file owns layout, the shadowbox look, the threshold
+// rule, and reduced-motion overrides.
 // ============================================
 
 @import '../variables';
@@ -88,15 +90,112 @@
     transform: translateX(calc(1186px - 72px));
   }
 
-  // ── Filter row ─────────────────────────────────────────────────────────────
+  // ── Control row ────────────────────────────────────────────────────────────
+  // Chips on the left, the carousel's pager and the view toggle on the right.
+  // Where both do not fit, the right group wraps under the chips and stays
+  // right-aligned.
 
   &__nav {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $spacing-md;
     margin-bottom: $spacing-lg;
   }
 
-  // ── Featured row (scroll-snap below the desktop width) ─────────────────────
+  &__nav-end {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-left: auto;
+  }
+
+  &__pager {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  // One page: the pager keeps its place but is not there to see or to tab
+  // to, so a phone that measures more pages after mount never shifts the row.
+  &__pager--single { visibility: hidden; }
+
+  &__pages {
+    min-width: 5ch;
+    text-align: center;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+  }
+
+  &__nav-btn[disabled] {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+    color: $color-neutral-dark;
+  }
+
+  // ── Sketch arrows (carousel paging) ────────────────────────────────────────
+
+  &__nav-btn {
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-neutral-dark;
+    transition: color var(--case-study-motion-fast),
+                transform var(--case-study-motion-fast);
+
+    &:hover {
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: var(--radius-md);
+    }
+  }
+
+  &__nav-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 1.8;
+      // Hidden until the section reveals — then the stroke draws in
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 650ms ease 250ms;
+    }
+  }
+
+  // Second arrow (and each arrowhead) draws slightly later — sketched, not stamped
+  &__nav-btn--next &__nav-svg path {
+    transition-delay: 480ms;
+  }
+
+  &__nav-svg path:nth-child(2) {
+    transition-delay: 620ms;
+  }
+
+  &__nav-btn--next &__nav-svg path:nth-child(2) {
+    transition-delay: 850ms;
+  }
+
+  &--revealed &__nav-svg path {
+    stroke-dashoffset: 0;
+  }
+
+  // ── Carousel (scroll-snap at every width) ──────────────────────────────────
 
   &__grid {
     display: flex;
@@ -544,6 +643,7 @@
       transform: none;
     }
 
+    &__nav-svg path,
     &__cta-arrow-svg path {
       transition: none;
       stroke-dashoffset: 0; // arrows simply present, no draw-in
@@ -551,7 +651,8 @@
 
     &__card,
     &__preview img,
-    &__cta {
+    &__cta,
+    &__nav-btn {
       transition: none;
     }
 
@@ -693,7 +794,8 @@
   // One pill in the site's mono control grammar. Primary tints only the
   // pressed segment: the one the reader chose is the one state. On a phone the
   // four chips stay one row and scroll sideways rather than wrapping into two.
-  &__disciplines {
+  &__disciplines,
+  &__views {
     display: inline-flex;
     align-items: center;
     max-width: 100%;
@@ -708,7 +810,8 @@
     &::-webkit-scrollbar { display: none; }
   }
 
-  &__discipline {
+  &__discipline,
+  &__view {
     appearance: none;
     flex: 0 0 auto;
     min-height: 30px;
@@ -736,15 +839,9 @@
     }
   }
 
-  // ── Index ──
-  // Under the featured cards it needs its own beat of space; as the List
-  // style it follows the chips directly.
+  // ── List ──
   &__list {
     margin-top: $spacing-md;
-  }
-
-  &__grid + &__list {
-    margin-top: $spacing-2xl;
   }
 
   // The rail's row at page width: a larger still, the outcome under the
@@ -867,6 +964,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     &__discipline,
+    &__view,
     &__tile,
     &__tile-title { transition: none; }
 
@@ -906,9 +1004,33 @@
   .case-playground__tiles { grid-template-columns: minmax(0, 1fr); }
 }
 
-// A phone fits all four chips at 8px of side padding (measured at 390: 12px
-// left "Product Design" clipped mid-word, which read as a bug, not a scroll).
-// The sideways scroll stays as the fallback below that width.
+// Five chips do not fit a phone in one pill (they clipped mid-word at 390), so
+// below 640px each chip becomes its own pill and the row wraps: every filter
+// stays visible and none scrolls out of reach. The view toggle keeps its pill.
 @media (max-width: #{$breakpoint-sm - 1}) {
-  .case-playground__discipline { padding: 0 8px; }
+  .case-playground__disciplines {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  .case-playground__discipline {
+    border: 1px solid $color-border-default;
+    background: $color-white;
+
+    // The pill's own border takes the primary instead of a second ring inside it.
+    &[aria-pressed='true'] {
+      border-color: $color-primary;
+      box-shadow: none;
+    }
+  }
+
+  // The arrows and the toggle share one line under the chips; at 390 they ran
+  // 7px past the edge at full spacing, so both tighten here.
+  .case-playground__nav-end { gap: $spacing-sm; }
+  .case-playground__view { padding: 0 9px; }
 }

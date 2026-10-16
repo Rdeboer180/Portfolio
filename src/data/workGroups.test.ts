@@ -1,4 +1,4 @@
-import projects, { ANON_CLIENT, WORK_ORDER, clientLabelFor, orderedProjects } from './projects';
+import projects, { ANON_CLIENT, FEATURED, WORK_ORDER, clientLabelFor, orderedProjects } from './projects';
 import { WORK_GROUPS, clientGroups, clientKeyFor, studiesFor, studiesInGroup } from './workGroups';
 
 /**
@@ -45,8 +45,20 @@ describe('groups', () => {
     expect(slugsOf(studiesInGroup('aem'))).toEqual(['aem-component-system', 'tire-categories', 'landing-pages', 'seasonal-content-system']);
   });
 
-  it('resolves a selection to its studies and no selection to the whole order', () => {
-    expect(slugsOf(studiesFor(null, null))).toEqual(slugsOf(orderedProjects()));
+  it('never files a study under both System Design and Product Design', () => {
+    const systems = new Set(slugsOf(studiesInGroup('systems')));
+    expect(slugsOf(studiesInGroup('product')).filter((slug) => systems.has(slug))).toEqual([]);
+  });
+
+  it('features studies that are listed, and opens All on them', () => {
+    expect(FEATURED.every((slug) => WORK_ORDER.includes(slug))).toBe(true);
+    const all = slugsOf(studiesFor('all', null));
+    expect(all.slice(0, FEATURED.length)).toEqual([...FEATURED]);
+    expect([...all].sort()).toEqual(slugsOf(orderedProjects()).sort());
+  });
+
+  it('resolves no selection to Featured, All to every study, and a group to its studies', () => {
+    expect(slugsOf(studiesFor(null, null))).toEqual([...FEATURED]);
     expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
     expect(slugsOf(studiesFor('client', 'heatherwood'))).toEqual(['heatherwood']);
     expect(slugsOf(studiesFor('client', 'employer'))).toHaveLength(7);

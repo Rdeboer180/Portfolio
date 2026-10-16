@@ -369,7 +369,7 @@ const projects: Project[] = [
   {
     slug: 'wheelrack',
     stream: 'professional',
-    groups: ['systems', 'product'],
+    groups: ['systems'],
     clientLabel: 'Tire Rack',
     client: 'Tire Rack · WheelRack',
     context: 'Tire Rack is a national online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
@@ -686,7 +686,7 @@ const projects: Project[] = [
     tools: ['Figma', 'React Native', 'Expo', 'Claude', 'VS Code'],
     timeline: 'April → August 2026 · TestFlight',
     stream: 'passion',
-    groups: ['systems', 'product'],
+    groups: ['product'],
     clientLabel: 'Personal product',
     featured: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
     featuredVideo: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
@@ -1397,7 +1397,7 @@ $mobile-max-width: 768px;
       outcome: 'The photography task went from three steps to one.',
     },
     stream: 'professional',
-    groups: ['systems', 'product'],
+    groups: ['systems'],
     clientLabel: 'Tire Rack',
     client: 'Tire Rack · Internal Tooling',
     context: 'Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.',
@@ -1776,7 +1776,7 @@ Frame every output as:
       outcome: 'Brand to TestFlight in twelve weeks, then launched on iOS.',
     },
     stream: 'passion',
-    groups: ['systems', 'product'],
+    groups: ['product'],
     clientLabel: 'Personal product',
     client: 'PlayDraft (personal product)',
     context: 'PlayDraft is my independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics and compare the boards. This case study covers the original release and the current simplification rebuild.',
@@ -2362,6 +2362,13 @@ export const WORK_ORDER = [
   'overscroll-tactics',
   'heatherwood',
 ];
+
+/**
+ * Ryan's best work, the work section's opening filter and the first cards
+ * under All. Kept apart from WORK_ORDER so the pick can change without
+ * reordering anything else; every slug here must also be in WORK_ORDER.
+ */
+export const FEATURED: readonly string[] = ['wheelrack', 'playdraft', 'aem-component-system'];
 
 /** Visible studies in WORK_ORDER, with any unlisted study after them in file order. */
 export const orderedProjects = (): Project[] => {

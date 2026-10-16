@@ -1,16 +1,17 @@
-/* The featured cards, the index, the discipline chips and the author's layout styles meet in the DOM. */
+/* The filter chips, the view toggle, the pager and the lock state meet in the DOM. */
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import React from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import CaseStudyPlayground, { WorkLayoutStyle } from './CaseStudyPlayground';
+import CaseStudyPlayground from './CaseStudyPlayground';
 import AuthoredSection from './AuthoredSection';
 import AuthorSidePanel from './AuthorSidePanel';
 import WorkNavigator from './WorkNavigator';
 import { WorkNavigatorProvider } from '../context/WorkNavigatorContext';
 import { AuthorModeProvider } from '../context/AuthorModeContext';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
-import projects, { ANON_CLIENT, WORK_ORDER, cardTitleFor } from '../data/projects';
+import projects, { ANON_CLIENT, FEATURED, WORK_ORDER, cardTitleFor } from '../data/projects';
+import { studiesInGroup } from '../data/workGroups';
 
 let mockUnlocked = false;
 jest.mock('../context/UnlockContext', () => ({
@@ -26,8 +27,9 @@ jest.mock('framer-motion', () => {
 });
 
 const AUTHOR_KEY = 'rdeboer:author-mode';
-const PLAYGROUND = AUTHORED_COMPONENTS.playground.component;
 const AEM = ['aem-component-system', 'tire-categories', 'landing-pages', 'seasonal-content-system'];
+// All opens on the featured studies, then continues in WORK_ORDER.
+const ALL = [...FEATURED, ...WORK_ORDER.filter((slug) => !FEATURED.includes(slug))];
 
 beforeEach(() => {
   mockUnlocked = false;
@@ -47,7 +49,7 @@ const mountWithAuthor = () => render(
     <AuthorModeProvider>
       <WorkNavigatorProvider>
         <AuthorSidePanel />
-        <AuthoredSection {...AUTHORED_COMPONENTS.playground} toolbar={<WorkLayoutStyle />}>
+        <AuthoredSection {...AUTHORED_COMPONENTS.playground}>
           <CaseStudyPlayground />
         </AuthoredSection>
       </WorkNavigatorProvider>
@@ -56,38 +58,93 @@ const mountWithAuthor = () => render(
 );
 
 const cardSlugs = (container: HTMLElement) => Array.from(container.querySelectorAll<HTMLElement>('.case-playground__card')).map((card) => card.dataset.slug);
-const indexSlugs = (container: HTMLElement) => Array.from(container.querySelectorAll<HTMLElement>('.case-playground__list > li')).map((row) => row.dataset.slug);
+const rowSlugs = (container: HTMLElement) => Array.from(container.querySelectorAll<HTMLElement>('.case-playground__list > li')).map((row) => row.dataset.slug);
+const tileSlugs = (container: HTMLElement) => Array.from(container.querySelectorAll<HTMLElement>('.case-playground__tile')).map((tile) => tile.dataset.slug);
 const chips = () => screen.getByRole('group', { name: 'Browse by discipline' });
 const chip = (label: string) => within(chips()).getByRole('button', { name: label });
+const viewButton = (label: string) => within(screen.getByRole('group', { name: 'View' })).getByRole('button', { name: label });
+const pager = (container: HTMLElement) => container.querySelector('.case-playground__pager');
 
-test('a visitor gets three featured cards, then every study in the index, with no paging and no layout to choose', () => {
+test('the section opens on Featured, as cards, with no side panel and no pager to read', () => {
   const { container } = mount();
-  expect(cardSlugs(container)).toEqual(['wheelrack', 'playdraft', 'aem-component-system']);
-  expect(indexSlugs(container)).toEqual(WORK_ORDER);
-  // The index is the finder's row: title, outcome, year and client.
-  const rows = container.querySelectorAll<HTMLElement>('.case-playground__list .dam__item');
-  expect(within(rows[1]).getByText('PlayDraft: A social drafting game')).toBeInTheDocument();
-  expect(container.querySelector('.case-playground__card-line')).toBeNull();
-  expect(screen.getByRole('heading', { level: 3, name: 'PlayDraft: A social drafting game' })).toBeInTheDocument();
-  // Paging, the browse rail and the layout switch are gone from Publisher.
-  expect(screen.queryByRole('button', { name: /case studies$/i })).not.toBeInTheDocument();
-  expect(screen.queryByText(/^\d+ \/ \d+$/)).not.toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: 'Browse by discipline or client' })).not.toBeInTheDocument();
-  expect(screen.queryByRole('group', { name: 'Layout' })).not.toBeInTheDocument();
+  expect(within(chips()).getAllByRole('button').map((button) => button.textContent)).toEqual(['Featured', 'All', 'AEM', 'System Design', 'Product Design']);
+  expect(chip('Featured')).toHaveAttribute('aria-pressed', 'true');
+  expect(cardSlugs(container)).toEqual([...FEATURED]);
+  expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
+  // One page: the pager holds its place but is hidden from sight and from assistive tech.
+  expect(pager(container)).toHaveClass('case-playground__pager--single');
+  expect(pager(container)).toHaveAttribute('aria-hidden', 'true');
   expect(container.querySelector('.side-panel')).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Browse by discipline or client' })).not.toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 3, name: 'PlayDraft: A social drafting game' })).toBeInTheDocument();
 });
 
-test('locked studies carry the lock line on card and row, name no client, and each line has its own id', () => {
+test('All opens on the featured cards and pages through the rest with the arrows', () => {
+  const { container } = mount();
+  fireEvent.click(chip('All'));
+  expect(cardSlugs(container)).toEqual(ALL);
+  expect(window.location.hash).toBe('#projects/all');
+  expect(pager(container)).not.toHaveClass('case-playground__pager--single');
+  expect(screen.getByText('1 / 4')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Previous case studies' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Next case studies' })).toBeEnabled();
+
+  fireEvent.click(chip('Featured'));
+  expect(cardSlugs(container)).toEqual([...FEATURED]);
+  expect(window.location.hash).toBe('#projects');
+});
+
+test('System Design and Product Design swap in different work', () => {
+  const { container } = mount();
+  fireEvent.click(chip('System Design'));
+  const systems = cardSlugs(container);
+  expect(systems).toEqual(studiesInGroup('systems').map((project) => project.slug));
+  fireEvent.click(chip('Product Design'));
+  const product = cardSlugs(container);
+  expect(product).toEqual(studiesInGroup('product').map((project) => project.slug));
+  expect(product.filter((slug) => systems.includes(slug))).toEqual([]);
+  expect(chip('Product Design')).toHaveAttribute('aria-pressed', 'true');
+  expect(window.location.hash).toBe('#projects/product');
+});
+
+test('Cards, List and Grid lay out the same filtered set; the pager belongs to Cards; nothing is stored', () => {
+  const { container } = mount();
+  fireEvent.click(chip('AEM'));
+  expect(cardSlugs(container)).toEqual(AEM);
+
+  fireEvent.click(viewButton('List'));
+  expect(viewButton('List')).toHaveAttribute('aria-pressed', 'true');
+  expect(cardSlugs(container)).toEqual([]);
+  expect(rowSlugs(container)).toEqual(AEM);
+  expect(pager(container)).toBeNull();
+
+  fireEvent.click(viewButton('Grid'));
+  expect(tileSlugs(container)).toEqual(AEM);
+  expect(container.querySelectorAll('.case-playground__tile .case-playground__preview--plate')).toHaveLength(4);
+  expect(pager(container)).toBeNull();
+
+  fireEvent.click(chip('All'));
+  expect(tileSlugs(container)).toEqual(ALL);
+
+  fireEvent.click(viewButton('Cards'));
+  expect(cardSlugs(container)).toEqual(ALL);
+  expect(screen.getByText('1 / 4')).toBeInTheDocument();
+  expect(window.localStorage.length).toBe(0);
+});
+
+test('locked studies carry the lock line in every layout, name no client, and each line has its own id', () => {
   const { container, unmount } = mount();
-  // WheelRack and AEM among the featured three, all seven in the index.
-  expect(screen.getAllByText('Password protected')).toHaveLength(9);
+  // WheelRack and the AEM component system among the featured three.
+  expect(screen.getAllByText('Password protected')).toHaveLength(2);
+  fireEvent.click(chip('All'));
+  fireEvent.click(viewButton('List'));
+  expect(screen.getAllByText('Password protected')).toHaveLength(7);
   expect(container.textContent).not.toContain('Tire Rack');
   const rows = container.querySelectorAll<HTMLElement>('.case-playground__list .dam__item');
   expect(within(rows[0]).getByText(`2023–2026 · ${ANON_CLIENT}`)).toBeInTheDocument();
   expect(rows[0].tagName).toBe('A');
   expect(rows[0]).toHaveAttribute('aria-describedby', 'index-lock-wheelrack');
   expect(container.querySelector('#index-lock-wheelrack')).toHaveTextContent('Password protected');
-  expect(container.querySelector('#lock-wheelrack')).toHaveTextContent('Password protected');
   const ids = Array.from(container.querySelectorAll('[id]')).map((el) => el.id);
   expect(new Set(ids).size).toBe(ids.length);
   expect(container.querySelectorAll('.case-playground__list .dam__thumb--locked')).toHaveLength(6);
@@ -95,87 +152,70 @@ test('locked studies carry the lock line on card and row, name no client, and ea
 
   mockUnlocked = true;
   const view = mount();
+  fireEvent.click(chip('All'));
   expect(screen.queryByText('Password protected')).not.toBeInTheDocument();
-  expect(view.container.querySelectorAll('.case-playground__list .dam__thumb--locked')).toHaveLength(0);
   expect(view.container.textContent).toContain('Tire Rack');
 });
 
-test('the discipline chips filter the featured cards and the index together, and write the deep link', () => {
-  const { container } = mount();
-  expect(within(chips()).getAllByRole('button').map((button) => button.textContent)).toEqual(['All', 'AEM', 'System Design', 'Product Design']);
-  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
-
-  fireEvent.click(chip('AEM'));
-  expect(chip('AEM')).toHaveAttribute('aria-pressed', 'true');
-  expect(chip('All')).toHaveAttribute('aria-pressed', 'false');
-  expect(cardSlugs(container)).toEqual(AEM.slice(0, 3));
-  expect(indexSlugs(container)).toEqual(AEM);
-  expect(window.location.hash).toBe('#projects/aem');
-
-  fireEvent.click(chip('All'));
-  expect(cardSlugs(container)).toEqual(WORK_ORDER.slice(0, 3));
-  expect(indexSlugs(container)).toEqual(WORK_ORDER);
-  expect(window.location.hash).toBe('#projects');
-});
-
-test('a deep link applies its discipline after mount; a client link is an authoring view and leaves Publisher whole', () => {
+test('a deep link applies its filter after mount; a client link is an authoring view and leaves Publisher on Featured', () => {
   window.history.replaceState(null, '', '/#projects/aem');
   const aem = mount();
-  expect(indexSlugs(aem.container)).toEqual(AEM);
+  expect(cardSlugs(aem.container)).toEqual(AEM);
   expect(chip('AEM')).toHaveAttribute('aria-pressed', 'true');
   aem.unmount();
 
+  window.history.replaceState(null, '', '/#projects/all');
+  const all = mount();
+  expect(cardSlugs(all.container)).toEqual(ALL);
+  all.unmount();
+
   window.history.replaceState(null, '', '/#projects/client/personal');
   const client = mount();
-  expect(indexSlugs(client.container)).toEqual(WORK_ORDER);
+  expect(cardSlugs(client.container)).toEqual([...FEATURED]);
 });
 
-test('the case-study folders file by discipline and client, keep the employer anonymous while locked, and filter the page', () => {
+test('a study goes by one name on its card, its row and its folder row, and plates carry no number', () => {
+  const { container } = render(
+    <MemoryRouter><WorkNavigatorProvider><WorkNavigator /><CaseStudyPlayground /></WorkNavigatorProvider></MemoryRouter>,
+  );
+  const names = (selector: string) => Array.from(container.querySelectorAll(selector)).map((el) => el.textContent);
+  const expected = (slugs: readonly string[]) => slugs.map((slug) => cardTitleFor(projects.find((project) => project.slug === slug)!));
+  expect(names('.case-playground__card-title')).toEqual(expected(FEATURED));
+
+  fireEvent.click(within(screen.getByRole('list', { name: 'Case study folders' })).getByRole('button', { name: /^AEM/ }));
+  expect(names('.work-nav__studies .dam__name')).toEqual(expected(AEM));
+  expect(names('.case-playground__card-title')).toEqual(expected(AEM));
+  fireEvent.click(viewButton('List'));
+  expect(names('.case-playground__list .dam__name')).toEqual(expected(AEM));
+
+  // The drawn plates on locked cards say what the system is, not which plate it is.
+  fireEvent.click(viewButton('Cards'));
+  expect(container.querySelectorAll('.cover-schematic').length).toBeGreaterThan(0);
+  expect(container.textContent).not.toMatch(/Plate \d/);
+});
+
+test('the case-study folders file by discipline and client, keep the employer anonymous while locked, and clear to All', () => {
   const { container } = render(
     <MemoryRouter><WorkNavigatorProvider><WorkNavigator /><CaseStudyPlayground /></WorkNavigatorProvider></MemoryRouter>,
   );
   const folders = screen.getByRole('list', { name: 'Case study folders' });
   fireEvent.click(within(folders).getByRole('button', { name: /^AEM/ }));
-  expect(indexSlugs(container)).toEqual(AEM);
-  // The folder lists the same four, in the same order, under the same links.
+  expect(cardSlugs(container)).toEqual(AEM);
   expect(within(folders).getAllByRole('link').map((link) => link.getAttribute('href'))).toEqual(AEM.map((slug) => `/work/${slug}/`));
 
   fireEvent.click(within(folders).getByRole('button', { name: /^Client/ }));
   expect(within(folders).getByText(ANON_CLIENT)).toBeInTheDocument();
   expect(folders.textContent).not.toContain('Tire Rack');
+  // Clearing a finder means every study, not the Featured opening.
   fireEvent.click(screen.getByRole('button', { name: 'Show all work' }));
-  expect(indexSlugs(container)).toEqual(WORK_ORDER);
+  expect(cardSlugs(container)).toEqual(ALL);
+  expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('in Author the selected component offers Cards, List and Grid; Publisher always returns to the default', () => {
-  window.sessionStorage.setItem(AUTHOR_KEY, JSON.stringify({ selected: PLAYGROUND, panelOpen: true, panelTab: 'assets' }));
+test('the Asset Panel opens the folders under Case studies, a client folder filters the page while authoring, and the toolbar has no layout of its own', () => {
+  window.sessionStorage.setItem(AUTHOR_KEY, JSON.stringify({ panelOpen: true, panelTab: 'assets', selected: AUTHORED_COMPONENTS.playground.component }));
   const { container } = mountWithAuthor();
-
-  const layout = screen.getByRole('group', { name: 'Layout' });
-  expect(within(layout).getByRole('button', { name: 'Cards' })).toHaveAttribute('aria-pressed', 'true');
-
-  fireEvent.click(within(layout).getByRole('button', { name: 'List' }));
-  expect(cardSlugs(container)).toEqual([]);
-  expect(indexSlugs(container)).toEqual(WORK_ORDER);
-
-  fireEvent.click(within(layout).getByRole('button', { name: 'Grid' }));
-  expect(container.querySelectorAll('.case-playground__tile')).toHaveLength(WORK_ORDER.length);
-  expect(container.querySelectorAll('.case-playground__tile .case-playground__preview--plate').length).toBeGreaterThan(0);
-  expect(indexSlugs(container)).toEqual([]);
-  // The style lasts the tab, in Author's own state, never in localStorage.
-  expect(JSON.parse(window.sessionStorage.getItem(AUTHOR_KEY) ?? '{}').workView).toBe('grid');
-  expect(window.localStorage.length).toBe(0);
-
-  // Leaving Author is Publisher again: the default layout, no toolbar.
-  act(() => { fireEvent.keyDown(window, { key: 'm', metaKey: true, shiftKey: true }); });
   expect(screen.queryByRole('group', { name: 'Layout' })).not.toBeInTheDocument();
-  expect(cardSlugs(container)).toEqual(WORK_ORDER.slice(0, 3));
-  expect(indexSlugs(container)).toEqual(WORK_ORDER);
-});
-
-test('the Asset Panel opens the case-study folders under the Case studies filter, and a client folder filters the page while authoring', () => {
-  window.sessionStorage.setItem(AUTHOR_KEY, JSON.stringify({ panelOpen: true, panelTab: 'assets' }));
-  const { container } = mountWithAuthor();
   const panel = screen.getByRole('complementary', { name: 'Asset panel' });
   expect(within(panel).queryByRole('list', { name: 'Case study folders' })).not.toBeInTheDocument();
 
@@ -183,25 +223,7 @@ test('the Asset Panel opens the case-study folders under the Case studies filter
   const folders = within(panel).getByRole('list', { name: 'Case study folders' });
   fireEvent.click(within(folders).getByRole('button', { name: /^Client/ }));
   fireEvent.click(within(folders).getByRole('button', { name: /^Personal products/ }));
-  expect(indexSlugs(container)).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
-  // No discipline chip claims a client selection.
+  expect(cardSlugs(container)).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
+  // No chip claims a client selection.
   expect(within(chips()).getAllByRole('button').every((button) => button.getAttribute('aria-pressed') === 'false')).toBe(true);
-});
-
-test('a study goes by one name on its card, its index row and its folder row, and plates carry no number', () => {
-  const { container } = render(
-    <MemoryRouter><WorkNavigatorProvider><WorkNavigator /><CaseStudyPlayground /></WorkNavigatorProvider></MemoryRouter>,
-  );
-  const names = (selector: string) => Array.from(container.querySelectorAll(selector)).map((el) => el.textContent);
-  const expected = (slugs: string[]) => slugs.map((slug) => cardTitleFor(projects.find((project) => project.slug === slug)!));
-  expect(names('.case-playground__card-title')).toEqual(expected(WORK_ORDER.slice(0, 3)));
-  expect(names('.case-playground__list .dam__name')).toEqual(expected(WORK_ORDER));
-
-  fireEvent.click(within(screen.getByRole('list', { name: 'Case study folders' })).getByRole('button', { name: /^AEM/ }));
-  expect(names('.work-nav__studies .dam__name')).toEqual(expected(AEM));
-  expect(names('.case-playground__list .dam__name')).toEqual(expected(AEM));
-
-  // The drawn plates on locked cards say what the system is, not which plate it is.
-  expect(container.querySelectorAll('.cover-schematic').length).toBeGreaterThan(0);
-  expect(container.textContent).not.toMatch(/Plate \d/);
 });

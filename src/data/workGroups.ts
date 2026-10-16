@@ -1,4 +1,4 @@
-import projects, { ANON_CLIENT, Project, WorkGroupId, clientLabelFor, orderedProjects } from './projects';
+import projects, { ANON_CLIENT, FEATURED, Project, WorkGroupId, clientLabelFor, orderedProjects } from './projects';
 
 /**
  * The groupings the homepage navigator offers, in the order they are listed.
@@ -17,6 +17,22 @@ export const WORK_GROUPS: { id: NavigatorGroupId; label: string }[] = [
 
 export const isNavigatorGroup = (value: string | null | undefined): value is NavigatorGroupId =>
   WORK_GROUPS.some((group) => group.id === value);
+
+/**
+ * What the work section can be filtered to. No selection is Featured, the
+ * opening view; `all` is every study, featured first; the rest are the
+ * navigator's groups.
+ */
+export type WorkFilter = NavigatorGroupId | 'all';
+
+export const isWorkFilter = (value: string | null | undefined): value is WorkFilter =>
+  value === 'all' || isNavigatorGroup(value);
+
+/** The featured studies, in the order FEATURED lists them. */
+export const featuredProjects = (): Project[] => {
+  const listed = orderedProjects();
+  return FEATURED.map((slug) => listed.find((project) => project.slug === slug)).filter((project): project is Project => Boolean(project));
+};
 
 /** Studies in a discipline, in WORK_ORDER. */
 export const studiesInGroup = (id: WorkGroupId): Project[] =>
@@ -56,9 +72,16 @@ export const clientGroups = (locked: boolean): { key: ClientKey; label: string; 
   return Array.from(groups.entries()).map(([key, studies]) => ({ key, label: clientGroupLabel(key, locked), studies }));
 };
 
-/** The studies a selection resolves to; no selection is the whole order. */
-export const studiesFor = (group: NavigatorGroupId | null, clientKey: ClientKey | null): Project[] => {
-  if (!group) return orderedProjects();
+/**
+ * The studies a selection resolves to. No selection is Featured; All opens on
+ * the featured studies and continues in WORK_ORDER.
+ */
+export const studiesFor = (group: WorkFilter | null, clientKey: ClientKey | null): Project[] => {
+  if (!group) return featuredProjects();
+  if (group === 'all') {
+    const featured = featuredProjects();
+    return [...featured, ...orderedProjects().filter((project) => !featured.includes(project))];
+  }
   if (group !== 'client') return studiesInGroup(group);
   const all = orderedProjects();
   return clientKey ? all.filter((project) => clientKeyFor(project) === clientKey) : all;
