@@ -180,7 +180,8 @@ $side-panel-width: 320px;
     border-radius: $radius-sm;
     background: $color-white;
 
-    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    img,
+    video { display: block; width: 100%; height: 100%; object-fit: cover; }
 
     &--glyph svg { width: 18px; height: 18px; color: $color-secondary-dark; }
 

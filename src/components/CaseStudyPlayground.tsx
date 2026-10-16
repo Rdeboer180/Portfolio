@@ -705,15 +705,21 @@ const CaseStudyPlayground: React.FC = () => {
         <ul className="dam__list case-playground__list">
           {visibleCards.map((card, i) => {
             const { locked, mediaLocked } = lockStateFor(card);
-            const pointed = nav.pointedSlug === card.slug;
+            // Hover and focus play the row's cover loop the way they play the
+            // card's; a pointed rail row counts as hover here too.
+            const active = activeSlug === card.slug || nav.pointedSlug === card.slug;
             return (
               <li key={card.slug} data-slug={card.slug}>
                 <ProjectLink
                   to={`/work/${card.slug}`}
                   className={`dam__item case-playground__row${locked ? ' dam__item--locked' : ''}${
-                    pointed ? ' case-playground__row--pointed' : ''
+                    active ? ' case-playground__row--pointed' : ''
                   }${isProtected(card.stream) && !card.publicVideo ? ' case-playground__row--protected' : ''}`}
                   aria-describedby={locked ? `lock-${card.slug}` : undefined}
+                  onMouseEnter={() => setActiveSlug(card.slug)}
+                  onMouseLeave={() => setActiveSlug((current) => (current === card.slug ? null : current))}
+                  onFocus={() => setActiveSlug(card.slug)}
+                  onBlur={() => setActiveSlug((current) => (current === card.slug ? null : current))}
                 >
                   {/* Locked media is not blurred here, it is absent: at 56px
                       a blur is a smudge, and the rail already says "no media"
@@ -723,7 +729,13 @@ const CaseStudyPlayground: React.FC = () => {
                     className={`dam__thumb${mediaLocked || !card.image ? ' dam__thumb--glyph dam__thumb--locked' : ''}`}
                     style={{ ['--resolve-delay' as string]: `${i * 80}ms` }}
                   >
-                    {mediaLocked || !card.image ? <PreviewLockIcon /> : <img src={card.image} alt="" loading="lazy" />}
+                    {mediaLocked || !card.image ? (
+                      <PreviewLockIcon />
+                    ) : card.video && !posterOnly ? (
+                      <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
+                    ) : (
+                      <img src={card.image} alt="" loading="lazy" />
+                    )}
                   </span>
                   <span className="dam__name">{card.title}</span>
                   <span className="case-playground__row-metric">{card.metric}</span>
@@ -744,14 +756,19 @@ const CaseStudyPlayground: React.FC = () => {
         <div className="case-playground__tiles">
           {visibleCards.map((card, i) => {
             const { locked, mediaLocked, hasPlate, plated } = lockStateFor(card);
-            const pointed = nav.pointedSlug === card.slug;
+            // Same hover contract as a card: the loop plays while pointed.
+            const active = activeSlug === card.slug || nav.pointedSlug === card.slug;
             return (
               <article
                 key={card.slug}
-                className={`case-playground__tile${pointed ? ' case-playground__tile--active' : ''}${
+                className={`case-playground__tile${active ? ' case-playground__tile--active' : ''}${
                   plated ? ' case-playground__tile--plated' : ''
                 }`}
                 data-slug={card.slug}
+                onMouseEnter={() => setActiveSlug(card.slug)}
+                onMouseLeave={() => setActiveSlug((current) => (current === card.slug ? null : current))}
+                onFocus={() => setActiveSlug(card.slug)}
+                onBlur={() => setActiveSlug((current) => (current === card.slug ? null : current))}
               >
                 <ProjectLink
                   to={`/work/${card.slug}`}
@@ -767,7 +784,11 @@ const CaseStudyPlayground: React.FC = () => {
                   >
                     {hasPlate && <CoverSchematic slug={card.slug} />}
                     {lockLineFor(card, locked, 'case-playground__lock', card.publicVideo)}
-                    <img src={card.image} alt={card.alt} loading="lazy" />
+                    {card.video && !posterOnly ? (
+                      <CardVideo src={card.video} poster={card.image} alt={card.alt} playing={active} primary={card.videoPrimary} />
+                    ) : (
+                      <img src={card.image} alt={card.alt} loading="lazy" />
+                    )}
                   </div>
                   <h3 className="case-playground__tile-title">{card.title}</h3>
                 </ProjectLink>
