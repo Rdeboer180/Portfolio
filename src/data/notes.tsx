@@ -155,6 +155,66 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'steering-into-aem',
+    kind: 'practice',
+    origin: 'portfolio',
+    status: 'draft',
+    date: 'October 17, 2026',
+    dateISO: '2026-10-17',
+    title: 'Steering into AEM instead of away from it',
+    dek: 'My strongest case studies sit behind a password, so the page has to show how I think. I gave it an AEM Author view the curious can open.',
+    read: '5 min',
+    body: (
+      <>
+        <p>Since I started this portfolio, I have wanted it to show how I think, what I can do, and what I am good at. The constraint has never changed. My strongest case studies are employer work, so they sit behind a password, and the work cannot do the heavy lifting on its own. The page around it has to.</p>
+        <p>So I keep adding and refining, and I keep watching that no single section gets too loud. One thing the page had never shown was AEM. It mentioned twelve years of it in prose on page after page and showed none of it. Everything a visitor could see spoke Figma: selection frames, a layers panel, spec annotations around the portrait.</p>
+        <p>The push came from <a href="https://jessa.art" target="_blank" rel="noopener noreferrer">Jessa Wolfe&rsquo;s portfolio</a>, which she built as a living design canvas. Her post about it made a point I agree with: AI can get a build started, and taste decides whether anyone loves it. I did not want her canvas. I wanted my own vernacular, and the one I know best is the authoring environment.</p>
+        <p><strong>So I stopped explaining AEM and let the homepage show it, in a layer the curious can open and everyone else can skip.</strong></p>
+
+        <h2>The rules came before the features</h2>
+        <p>Before anything was built, I set the rules it had to follow. Most came from decisions I had already made about this site, and they ruled out more ideas than they let in.</p>
+        <ul>
+          <li>Motion only answers something the reader does. At rest everything is still, and orange marks a state rather than decoration.</li>
+          <li>Every control does something the page can honor. There is no drag and drop, no Publish button, and no device emulator that cannot resize anything.</li>
+          <li>Every annotation is a decision already written down somewhere, and it says where.</li>
+          <li>Employer and client studies stay behind the same password. The new surfaces only repeat what is already public.</li>
+          <li>No new sections. I cut the homepage from about 10,700px to about 9,000px in September, and the new layer adds no height.</li>
+        </ul>
+
+        <h2>Every section now has an address</h2>
+        <p>The switch in the bottom corner offers the two tiers every AEM author works between. Publisher is the page as visitors see it. Author is the same page with its construction showing. In Author, each section below the fold is outlined and named by its resource type, the way AEM addresses a component. The FAQ is <code>core/wcm/components/accordion/v1</code>, because it is an accordion.</p>
+        <p>The peer recommendations render locked, with the policy inherited from the template: verbatim, no paraphrase. That is a real rule of mine, and AEM gave me a way to state it without another sentence of copy.</p>
+        <figure className="notes__figure">
+          <a href="/images/notes/author-publisher/author-locked-component.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open the locked recommendations component at full size">
+            <img src="/images/notes/author-publisher/author-locked-component.jpg" width={2880} height={1800} loading="lazy" alt="The homepage in Author mode. The peer recommendations section has a dashed outline, a lock, the resource type rdeboer/components/recommendation-list, and the policy Inherited from template: verbatim, no paraphrase." />
+          </a>
+          <figcaption>A locked component in Author. The policy carries the rule; the outline shows where it applies.</figcaption>
+        </figure>
+        <p>The Asset Panel docks on the left like AEM&rsquo;s asset finder, with every case study, every note, and the one Experience Fragment on the page. Employer studies show <em>Permission required</em>, and opening one raises the same unlock prompt the cards use. Page properties holds the page&rsquo;s search description, its template, how it was built, and the git commit it was built from, stamped at build time. Seven numbered annotations sit on the sections themselves and explain decisions the page cannot show.</p>
+        <figure className="notes__figure">
+          <a href="/images/notes/author-publisher/author-asset-panel.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open the Asset Panel view at full size">
+            <img src="/images/notes/author-publisher/author-asset-panel.jpg" width={2880} height={1800} loading="lazy" alt="The Asset Panel docked on the left of the homepage, listing case studies with thumbnails and metadata. Employer studies show a lock and Permission required. The author bar sits in the bottom corner." />
+          </a>
+          <figcaption>The Asset Panel docked beside the work. Locked studies read as DAM permissions instead of missing files.</figcaption>
+        </figure>
+
+        <h2>Most of the three days were corrections</h2>
+        <p>Two of the seven annotations overstated their sources. One said five accounts of my process had been cut, when they had been reconciled into one. Another named LinkedIn as the source of every recommendation, which nothing on the page established. Both turned up when each pin was checked against the document it cites, and both were corrected the same day.</p>
+        <p>Opening a case study from the Asset Panel dropped readers out of Author. I wanted Back, or closing the study, to return them exactly where they were, panel and pins included, and now it does. The panel also covered the left side of the page at first. It now docks, and the page re-centers in the remaining space with equal margins on both sides.</p>
+        <p>Testing without reduced motion turned up a bug the live site had been carrying for a while: React was discarding the prerendered homepage on every load and drawing it again. It predated this work. The fix shipped with a deploy check that loads every prerendered route as four kinds of visitor, so a regression fails the build.</p>
+        <p>The work section went through the same cycle. It had grown a row of controls a visitor had to read before reaching the work, so most of them moved into Author. Then I missed choosing the layout, and the Cards, List, and Grid toggle came back to Publisher.</p>
+
+        <h2>Page details moved out of the reading path</h2>
+        <p>Once the page had properties and annotations, some homepage copy fit better there. The FAQ answer about how the site was built became the Built with and Authorship rows in Page properties. A paragraph in How I work that repeated the AEM row in Capabilities moved into that section&rsquo;s annotation. The Case Studies intro line restated its own heading, so I cut it. The How I work board moved into a note of its own, <Link to="/notes/shared-language-better-product-decisions/">Shared language. Better product decisions.</Link></p>
+        <p>Most visitors will never open Author, and that is deliberate. Publisher stays quiet enough to scan in a minute. Author is for the reader who wants to know how something was built, and it gives them the process the locked studies cannot. I only moved what describes the page. Evidence of the work stayed where everyone reads it.</p>
+
+        <h2>What Claude did, and what I decided</h2>
+        <p>Claude researched the reference, proposed most of the AEM mapping, built the components, tested them at desktop and phone widths, and ran the deploys. I set the rules, chose AEM over another canvas, and made the calls that shaped how it feels: Publisher instead of Preview, Asset Panel instead of Side Panel, a docked panel instead of an overlay, cards that run white to their bottom edge, and WheelRack filed under Product Design, where it belongs as a full design system and a 0 to 1 product.</p>
+        <p>I do not know yet how many people will find the switch. The ones I hope find it have authored in AEM themselves, and I suspect they will recognize the locked component before they read a word of it. If that is you, switch to Author in the bottom corner of the <Link to="/">homepage</Link> and tell me what I got wrong.</p>
+      </>
+    ),
+  },
+  {
     slug: 'shared-language-better-product-decisions',
     relatedProject: 'playdraft',
     read: '4 min',
