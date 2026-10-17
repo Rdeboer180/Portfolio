@@ -379,7 +379,11 @@ const projects: Project[] = [
     slug: 'wheelrack',
     coverGround: '#f6f7f7',
     stream: 'professional',
-    groups: ['systems'],
+    // Product Design, not System Design: the design system is the means and
+    // the 0-to-1 dealer product is the outcome, and it is the strongest
+    // product study after PlayDraft. A study sits in one of the two, never
+    // both, so the chips swap in different work.
+    groups: ['product'],
     clientLabel: 'Tire Rack',
     client: 'Tire Rack · WheelRack',
     context: 'Tire Rack is a national online tire and wheel retailer serving drivers and retail partners. WheelRack is its dealer-facing platform for finding wheels, checking vehicle fitment, and placing orders.',
@@ -399,7 +403,7 @@ const projects: Project[] = [
     },
     openerSchematic: true,
     year: '2023 to 2024 design · 2026 launch',
-    tags: ['Design Systems', 'Product Design', 'Responsive', 'Storybook'],
+    tags: ['Product Design', 'Design Systems', 'Responsive', 'Storybook'],
     role: 'Senior Web Designer / UX Engineer',
     tools: ['Figma', 'Tokens Studio', 'Storybook', 'HTML/CSS'],
     timeline: '~4 months dedicated across 12+ months, including API delays',
