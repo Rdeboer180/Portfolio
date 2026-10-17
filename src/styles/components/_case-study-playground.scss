@@ -1029,7 +1029,10 @@
   --folder-notch: 46px;  // the shoulder's height; the tray's too
   --folder-tab: 56%;     // the raised tab's share of the card
 
-  &__card { background: $color-secondary-lightest; }
+  // White, like the tab: the preview carries its own ground, so the card's
+  // fill only shows in the strip under the body, and there it should read
+  // as the tab running to the card's bottom edge.
+  &__card { background: var(--case-study-card-bg); }
 
   // The ground is exactly a 16:10 frame plus the tab's overlap, so the still
   // or loop bleeds to the card's edges and sits whole above the shoulder.
