@@ -92,7 +92,7 @@
     margin-bottom: $spacing-lg;
   }
 
-  // Thesis — the case study's argument in one line, with a hand-drawn underline
+  // Thesis — the case study's argument in one line
   &__thesis {
     display: block;
     margin-bottom: $spacing-lg;
@@ -107,14 +107,6 @@
     color: $color-neutral-dark;
     margin: 0;
     max-width: 34ch;
-  }
-
-  &__thesis-underline {
-    display: block;
-    margin-top: 4px;
-    width: min(240px, 70%);
-    height: 14px;
-    overflow: visible;
   }
 
   &__context {

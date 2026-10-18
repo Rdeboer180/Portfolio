@@ -54,25 +54,6 @@ const AboutHero: React.FC = () => {
                   through-line.
                 </span>
               </span>
-              {/* Hand-drawn underline draws L→R after the headline */}
-              <svg
-                className="about-hero__underline"
-                width="320"
-                height="16"
-                viewBox="0 0 320 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  className="reveal-draw"
-                  style={d(840)}
-                  d="M4 10 C 80 3, 220 3, 316 9"
-                  stroke="var(--color-primary, #f03d01)"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  pathLength={1}
-                />
-              </svg>
             </span>
           </h1>
 

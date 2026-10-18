@@ -567,27 +567,6 @@ const AboutStudio: React.FC = () => {
             The room behind{' '}
             <span className="studio-mock__heading-mark">
               the work.
-              {/* Same hand-drawn underline as the approach tab's h1, same path,
-                  same draw. The two tabs are one page; their headline should
-                  behave like one headline. */}
-              <svg
-                className="studio-mock__underline"
-                width="320"
-                height="16"
-                viewBox="0 0 320 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  className="reveal-draw"
-                  style={d(360)}
-                  d="M4 10 C 80 3, 220 3, 316 9"
-                  stroke="var(--color-primary, #f03d01)"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  pathLength={1}
-                />
-              </svg>
             </span>
           </h1>
         </div>

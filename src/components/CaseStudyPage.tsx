@@ -649,25 +649,6 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
           {project.thesis && (
             <div ref={thesisRef} className={`cs__thesis${thesisVisible ? ' is-visible' : ''}`}>
               <p className="cs__thesis-text">{redactClient(project.thesis, locked)}</p>
-              <svg
-                className="cs__thesis-underline"
-                width="240"
-                height="14"
-                viewBox="0 0 240 14"
-                fill="none"
-                aria-hidden="true"
-                preserveAspectRatio="none"
-              >
-                <path
-                  className="reveal-draw"
-                  style={{ ['--reveal-delay' as string]: '160ms' }}
-                  d="M3 8 C 60 3, 180 3, 237 7"
-                  stroke="var(--color-primary, #f03d01)"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  pathLength={1}
-                />
-              </svg>
             </div>
           )}
           {project.context && (
