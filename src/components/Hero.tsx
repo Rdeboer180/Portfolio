@@ -20,6 +20,7 @@ const roleDescriptions: React.ReactNode[] = [
 
 const Hero: React.FC = () => {
   const [headlineRef, headlineVisible] = useReveal<HTMLHeadingElement>(0.3);
+  const [signatureRef, signatureVisible] = useReveal<HTMLParagraphElement>(0.6);
   const portraitRef = useRef<HTMLDivElement>(null);
   const [introStage, setIntroStage] = useState('done');
   const [inkStarted, setInkStarted] = useState(false);
@@ -113,7 +114,7 @@ const Hero: React.FC = () => {
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. At Tire Rack and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
+            <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
             <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
@@ -125,8 +126,13 @@ const Hero: React.FC = () => {
             </div>
             {/* Signed, not labelled: name, place and availability close the intro the way a note
                 is signed, instead of an eyebrow above the headline. */}
-            <p className="hero-intro__signature">
-              <span className="hero-intro__signature-name">Ryan DeBoer</span>
+            <p ref={signatureRef} className={`hero-intro__signature${signatureVisible ? ' is-signed' : ''}`}>
+              {/* Interim write-on: the hand face's outline draws once, then the ink fills.
+                  Swap the <text> for Ryan's traced signature path when it exists; the CSS
+                  draws any stroke the same way. */}
+              <svg className="hero-intro__signature-mark" viewBox="0 0 190 46" role="img" aria-label="Ryan DeBoer">
+                <text x="2" y="34">Ryan DeBoer</text>
+              </svg>
               <span className="hero-intro__signature-place">South Bend, IN / Remote US</span>
             </p>
             <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--stacked">
@@ -139,7 +145,7 @@ const Hero: React.FC = () => {
                 The stacked layout keeps it under the signature instead; only one is ever displayed. */}
             <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--portrait">
               Open to new work opportunities
-              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <svg className="hero-intro__markup-arrow" viewBox="0 0 120 92" fill="none" aria-hidden="true"><path d="M112 4 C108 46 70 72 16 84" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M30 74 L16 84 L32 89" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </a>
             <div className="hero-intro__token-map" aria-label="Portrait border radius token">
               <code>borderRadius: tokens.radius.full</code>

@@ -3,7 +3,8 @@
   .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2) var(--container-px) var(--space-4xl); }
   // The sign-off: a hand-set name over a plain caption, then the availability link.
   .hero-intro__copy .hero-intro__signature { display: flex; flex-direction: column; gap: var(--space-xs); margin: var(--space-2xl) 0 0; font: var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--color-text-tertiary); }
-  .hero-intro__signature-name { font: var(--weight-medium) var(--text-h3)/var(--leading-h3) $font-family-hand; color: var(--color-text-primary); }
+  .hero-intro__signature-mark { display: block; width: 190px; height: 46px; overflow: visible; }
+  .hero-intro__signature-mark text { font: var(--weight-medium) 34px $font-family-hand; fill: var(--color-text-primary); stroke: var(--color-text-primary); stroke-width: 0.6; }
   .hero-intro__copy .hero-intro__availability { margin-top: var(--space-lg); }
   .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
   .hero-intro__copy { min-width: 0; }
@@ -23,7 +24,8 @@
   .hero-intro__availability svg { display: block; width: 220px; max-width: 100%; height: 24px; margin-top: var(--space-xs); }
   .hero-intro__availability:hover { color: var(--color-text-primary); }
   .hero-intro__portrait .hero-intro__availability--portrait { position: absolute; top: 0; right: 0; z-index: 6; margin: 0; text-align: right; }
-  .hero-intro__portrait .hero-intro__availability--portrait svg { margin-left: auto; }
+  // Markup note: the arrow curves down onto the portrait ring like a note on a printout.
+  .hero-intro__portrait .hero-intro__availability--portrait .hero-intro__markup-arrow { width: 120px; height: 92px; margin: var(--space-xs) 0 0 auto; }
   .hero-intro__availability--stacked { display: none; }
   .layers-panel--roles { width: 100%; }
   .layers-panel--roles .layers-panel__top, .layers-panel--roles .layers-panel__toolbar, .layers-panel--roles .layers-panel__lockbar, .layers-panel--roles .layers-panel__footer { display: none; }
@@ -429,3 +431,21 @@
 @media (prefers-reduced-motion: reduce) {
   .hero--contract ~ .about--integrated .ink-ground::after { opacity: 1; transition: none; }
 }
+
+// Signature write-on: plays once, after the headline's type guides, when the sign-off is in view.
+@media (prefers-reduced-motion: no-preference) {
+  .hero--contract .hero-intro__signature {
+    .hero-intro__signature-mark text { fill-opacity: 0; stroke-dasharray: 420; stroke-dashoffset: 420; }
+    .hero-intro__signature-place { opacity: 0; }
+    &.is-signed {
+      .hero-intro__signature-mark text { animation: heroSignInk 1200ms cubic-bezier(0.45, 0, 0.2, 1) 900ms forwards; }
+      .hero-intro__signature-place { animation: heroSignPlace 360ms ease 1900ms forwards; }
+    }
+  }
+}
+@keyframes heroSignInk {
+  0% { stroke-dashoffset: 420; fill-opacity: 0; }
+  70% { stroke-dashoffset: 0; fill-opacity: 0; }
+  100% { stroke-dashoffset: 0; fill-opacity: 1; }
+}
+@keyframes heroSignPlace { to { opacity: 1; } }
