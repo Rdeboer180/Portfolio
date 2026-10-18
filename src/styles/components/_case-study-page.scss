@@ -321,11 +321,7 @@
 
   // Margin annotation — the point-of-view aside per section (About-story voice)
   &__section-aside {
-    font-family: $font-family-hand;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.15;
-    color: $color-primary-dark;
+    @include system-note(20px);
     margin: $spacing-sm 0 0;
     padding-left: $spacing-md;
     border-left: 3px solid $color-primary;

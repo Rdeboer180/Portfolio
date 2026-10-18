@@ -326,10 +326,11 @@ $select-b: blue($color-primary-light);
   }
   .about__signature {
     margin: 0;
-    font-family: $font-family-hand;
+    font-family: $font-family-heading;
     font-size: $font-size-h1;
     line-height: $line-height-h1;
-    font-weight: $font-weight-semibold;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     color: var(--color-primary-dark);
     span { display: block; }
   }

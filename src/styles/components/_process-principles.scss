@@ -12,7 +12,7 @@
 //
 // Ground: the About page's own paper and construction grid, not a mist band;
 // wires read cleaner on the grid. Flat at rest; a card lifts only on hover
-// or focus-within. Caveat is spent on one mark, Menlo on the system markers.
+// or focus-within. Hubot Sans sets the one mark, Menlo the system markers.
 //
 // Layouts — 2×2 circuit at 120/96 gaps with the hand mark in the cross of the
 // gaps (≥1024) · 2×2 at 72/72, mark dropped (768–1023) · stacked, with one
@@ -426,10 +426,7 @@
     left: calc(100% + var(--gx) / 2);
     top: calc(100% + var(--gy) / 2);
     transform: translate(-50%, -50%);
-    rotate: -3deg;
-    font-family: $font-family-hand;
-    font-weight: 600;
-    font-size: 21px;
+    @include system-note(14px);
     line-height: 1;
     white-space: nowrap;
     color: $color-primary-dark;

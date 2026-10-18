@@ -62,7 +62,6 @@ $font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'R
   sans-serif;
 $font-family-mono: 'Menlo', source-code-pro, Monaco, Consolas, 'Courier New', monospace;
 // Handwriting face — used ONLY for craft-mark annotations on the About page
-$font-family-hand: 'Caveat', 'Segoe Script', cursive;
 
 // Font Sizes
 $font-size-h1: 38px;
@@ -226,3 +225,16 @@ $shadow-xl: 0 8px 10px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0
 
 $hero-blend-mode: multiply;
 $hero-backdrop-blur: 2px;
+
+// Notes, asides and margin comments: set in the system's own type. Hand lettering,
+// drawn arrows and rotation read as stock AI design and are retired (October 2026);
+// commentary that is about the page, not part of it, belongs in Author mode.
+@mixin system-note($size: 20px, $color: var(--color-primary-dark)) {
+  font-family: $font-family-heading;
+  font-weight: 700;
+  font-size: $size;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: $color;
+  rotate: none;
+}

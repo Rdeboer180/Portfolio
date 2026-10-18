@@ -116,17 +116,6 @@ const AboutHero: React.FC = () => {
           </div>
 
           <div className="about-hero__comment reveal-fade" style={d(1370)}>
-            <svg
-              className="about-hero__comment-arrow"
-              width="46"
-              height="30"
-              viewBox="0 0 46 30"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path d="M4 4 C 18 2, 38 8, 42 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M42 26 L36 18 M42 26 L33 25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
             <span>not everything fits in a job title</span>
           </div>
         </aside>

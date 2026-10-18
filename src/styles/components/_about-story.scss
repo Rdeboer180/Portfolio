@@ -1,6 +1,6 @@
 // ============================================
 // About Story — text-first story flow (six beats, NOT tabs/cards)
-// Index · headline · paragraph · one orange handwritten annotation.
+// Index · headline · paragraph · one set annotation.
 // ============================================
 
 @import '../variables';
@@ -67,11 +67,7 @@
 
   &__annotation {
     display: block;
-    font-family: $font-family-hand;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.15;
-    color: $color-primary-dark;
+    @include system-note(19px);
   }
 }
 

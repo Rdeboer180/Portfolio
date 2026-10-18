@@ -290,19 +290,14 @@
     max-width: 12ch;
   }
 
-  // The aside is the one handwritten mark on the page. Caveat is reserved for
-  // exactly this in the system, so it stays scarce: one per stream, never a
-  // second per entry.
+  // The aside is the one set note per stream, never a second per entry.
   &__stream-aside {
     display: block;
     margin-top: $spacing-lg;
     padding-top: $spacing-lg;
     border-top: 1px solid $color-neutral-light;
-    font-family: $font-family-hand;
-    font-size: 20px;
-    line-height: 1.25;
-    color: $color-primary;
-    max-width: 16ch;
+    @include system-note(17px);
+    max-width: 18ch;
   }
 
   &__stream-arrow {

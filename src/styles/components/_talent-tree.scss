@@ -200,14 +200,14 @@ $tt-overlap-phone: 24px;
   color: $tt-paper;
   @include tt-handles;
 
-  // The Caveat note along the right edge, above the sheet's corner.
+  // The side note along the right edge, above the sheet's corner, in system type.
   &__tray {
     position: absolute;
     left: calc(100% - 26px);
     bottom: 52px;
-    font-family: Caveat, 'Segoe Script', cursive;
-    font-size: 21px;
-    font-weight: 600;
+    font-family: $font-family-heading;
+    font-size: 14px;
+    font-weight: 700;
     line-height: 24px;
     color: $color-neutral-muted;
     white-space: nowrap;
@@ -1897,16 +1897,14 @@ $tt-paper-text: #4a4a4a;
   min-width: 0;
   padding-top: 6px;
 
-  // The one Caveat line on the front door.
+  // The one note on the front door, set in the system's type.
   &__note {
     margin: 0;
-    font-family: Caveat, 'Segoe Script', cursive;
-    font-size: 21px;
-    font-weight: 600;
+    font-family: $font-family-heading;
+    font-size: 17px;
+    font-weight: 700;
     line-height: 24px;
     color: $tt-orange-deep;
-    transform: rotate(-2deg);
-    transform-origin: left center;
   }
 }
 

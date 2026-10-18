@@ -53,7 +53,6 @@ const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
               {['Curiosity.', 'Care.', 'Collaboration.'].map((word, index) => (
                 <React.Fragment key={word}><span className="reveal-mask"><span className="reveal-mask__inner" style={{ '--reveal-delay': `${120 + index * 100}ms` } as React.CSSProperties}>{word}</span></span>{' '}</React.Fragment>
               ))}
-              <svg className="about__signature-underline" viewBox="0 0 320 16" fill="none" aria-hidden="true"><path className="reveal-draw" pathLength={1} style={{ '--reveal-delay': '960ms' } as React.CSSProperties} d="M4 10 C 80 3, 220 3, 316 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg>
             </h2>
             <div className="about__differentiator-copy">
               {compact ? (

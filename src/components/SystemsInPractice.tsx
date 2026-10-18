@@ -654,19 +654,14 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
     return observeLayout([track, list, ...Object.values(beatRefs.current).filter((el): el is HTMLLIElement => Boolean(el))], draw);
   }, []);
 
+
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
 
   return (
     <>
       <div className={`sip__stage${stageVisible ? ' is-visible' : ''}`} ref={stageRef}>
-        {/* The mark above the file: a craft note in the margin, pointing at it. */}
-        <p className="sip__note reveal-fade" style={delay(300)}>
-          <span className="sip__note-text">Start here. Return with more context.</span>
-          <svg className="sip__note-arrow" viewBox="0 0 32 40" aria-hidden="true" focusable="false">
-            <path d="M5 4 C 9 9, 16 16, 24 33" pathLength={1} className="reveal-draw" style={delay(700)} />
-            <path d="M17.5 30.5 L24 33 L26.5 26.5" pathLength={1} className="reveal-draw" style={delay(1000)} />
-          </svg>
-        </p>
+        {/* The margin note above the board, set in the system's type: no hand lettering, no drawn arrow. */}
+        <p className="sip__note reveal-fade" style={delay(300)}>Start here. Return with more context.</p>
 
         <ol className="sip__board" ref={boardRef}>
           {SYSTEM_NODES.map((node, i) => (

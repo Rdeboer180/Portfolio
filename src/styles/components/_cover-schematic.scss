@@ -49,9 +49,10 @@
 }
 .cs-mono--accent { fill: $color-primary-dark; }
 .cs-caveat {
-  font-family: $font-family-hand;
-  font-size: 16px;
-  fill: $color-primary;
+  font-family: $font-family-heading;
+  font-weight: 700;
+  font-size: 13px;
+  fill: $color-primary-dark;
 }
 
 // ── Corner handles — the selection vernacular, on hover/focus ───────────────

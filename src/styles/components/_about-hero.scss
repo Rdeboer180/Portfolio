@@ -173,21 +173,17 @@
     border-radius: $radius-lg;
     padding: 14px 18px;
     box-shadow: 0 10px 22px -16px rgba($color-primary, 0.6);
-    font-family: $font-family-hand;
-    font-weight: 600;
-    font-size: 25px;
-    line-height: 1.05;
-    color: $color-primary-dark;
+    @include system-note(18px);
   }
 
   &__comment {
     text-align: right;
     max-width: 210px;
     align-self: flex-end;
-    font-family: $font-family-hand;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.1;
+    font-family: $font-family-primary;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.35;
     color: $color-neutral-muted;
   }
 
