@@ -22,6 +22,9 @@
   .hero-intro__availability { display: block; width: fit-content; max-width: 100%; margin-top: var(--space-xl); color: var(--color-primary-dark); font: var(--weight-medium) var(--text-h4)/var(--leading-h4) $font-family-hand; text-decoration: none; }
   .hero-intro__availability svg { display: block; width: 220px; max-width: 100%; height: 24px; margin-top: var(--space-xs); }
   .hero-intro__availability:hover { color: var(--color-text-primary); }
+  .hero-intro__portrait .hero-intro__availability--portrait { position: absolute; top: 0; right: 0; z-index: 6; margin: 0; text-align: right; }
+  .hero-intro__portrait .hero-intro__availability--portrait svg { margin-left: auto; }
+  .hero-intro__availability--stacked { display: none; }
   .layers-panel--roles { width: 100%; }
   .layers-panel--roles .layers-panel__top, .layers-panel--roles .layers-panel__toolbar, .layers-panel--roles .layers-panel__lockbar, .layers-panel--roles .layers-panel__footer { display: none; }
   .layers-panel--roles .layers-panel__layer { cursor: pointer; min-height: var(--space-2xl); }
@@ -33,6 +36,8 @@
   .hero--contract .hero-intro__portrait { height: 530px; }
 }
 @media (max-width: 850px) {
+  .hero--contract .hero-intro__availability--stacked { display: block; }
+  .hero--contract .hero-intro__portrait .hero-intro__availability--portrait { display: none; }
   .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr); }
   .hero--contract .hero-intro__portrait { width: min(100%, 480px); margin: 0 auto; height: 520px; }
   .hero--contract .hero-intro__copy { max-width: var(--copy-max-width); }

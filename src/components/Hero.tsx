@@ -129,12 +129,18 @@ const Hero: React.FC = () => {
               <span className="hero-intro__signature-name">Ryan DeBoer</span>
               <span className="hero-intro__signature-place">South Bend, IN / Remote US</span>
             </p>
-            <a href={EMAIL_HREF} className="hero-intro__availability">
+            <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--stacked">
               Open to new work opportunities
               <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </a>
           </div>
           <div className="hero-intro__portrait" ref={portraitRef}>
+            {/* Desktop: availability rides above the portrait so the copy column stays short.
+                The stacked layout keeps it under the signature instead; only one is ever displayed. */}
+            <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--portrait">
+              Open to new work opportunities
+              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </a>
             <div className="hero-intro__token-map" aria-label="Portrait border radius token">
               <code>borderRadius: tokens.radius.full</code>
             </div>
