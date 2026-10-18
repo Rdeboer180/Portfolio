@@ -113,7 +113,7 @@ const Hero: React.FC = () => {
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>At Tire Rack I do a little of everything, and in my own projects I do even more: AEM component builds, design system builds and governance, agentic skills and applications. I do my best work close to the strategy, the why, and I fight for consistency and simplicity. <strong className="animated-bold">The tools can change. Giving a damn does not.</strong></p>
+            <p>At Tire Rack I do a little of everything, and in my own projects I do even more: AEM component builds, design system builds and governance, agentic skills and applications. I do my best work close to the strategy, the why, and I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
             <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
