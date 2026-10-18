@@ -261,7 +261,7 @@ export const NOTES: Note[] = [
     date: 'October 18, 2026',
     dateISO: '2026-10-18',
     title: 'I simplified PlayDraft until it stopped feeling like a game',
-    dek: 'A simpler drafting flow went too far. Working through the correction with multiple LLMs, then making the decisions visible across nine Paper artboards.',
+    dek: 'I overbuilt PlayDraft, then stripped it until it stopped feeling like a game. Working through the correction with multiple LLMs, then making the decisions visible across nine Paper artboards.',
     read: '6 min',
     body: (
       <>
