@@ -1,10 +1,6 @@
 // Homepage refinement: existing portrait, panel, badges, buttons, and token scale.
 .hero--contract {
   .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2) var(--container-px) var(--space-4xl); }
-  // The sign-off: a hand-set name over a plain caption, then the availability link.
-  .hero-intro__copy .hero-intro__signature { display: flex; flex-direction: column; gap: var(--space-xs); margin: var(--space-2xl) 0 0; font: var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--color-text-tertiary); }
-  .hero-intro__signature .signature-mark { display: block; overflow: visible; color: var(--color-text-primary); }
-  .hero-intro__copy .hero-intro__availability { margin-top: var(--space-lg); }
   .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
   .hero-intro__copy { min-width: 0; }
   .hero-intro__copy h1 { margin: 0 0 var(--space-xl); font-size: 44px; }
@@ -19,13 +15,16 @@
   .hero-intro__roles { position: absolute; right: 0; top: auto; bottom: 0; z-index: 10; width: 224px; }
   .hero-intro__token-map { position: absolute; top: var(--space-4xl); left: 0; z-index: 5; padding: var(--space-xs) var(--space-sm); background: var(--color-bg-primary); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); }
   .hero-intro__token-map code { font: inherit; padding: 0; background: transparent; }
-  .hero-intro__availability { display: block; width: fit-content; max-width: 100%; margin-top: var(--space-xl); color: var(--color-primary-dark); font: var(--weight-medium) var(--text-h4)/var(--leading-h4) $font-family-hand; text-decoration: none; }
-  .hero-intro__availability svg { display: block; width: 220px; max-width: 100%; height: 24px; margin-top: var(--space-xs); }
-  .hero-intro__availability:hover { color: var(--color-text-primary); }
-  .hero-intro__portrait .hero-intro__availability--portrait { position: absolute; top: 0; right: 0; z-index: 6; margin: 0; text-align: right; }
-  // Markup note: the arrow curves down onto the portrait ring like a note on a printout.
-  .hero-intro__portrait .hero-intro__availability--portrait .hero-intro__markup-arrow { width: 120px; height: 92px; margin: var(--space-xs) 0 0 auto; }
-  .hero-intro__availability--stacked { display: none; }
+  // Byline and status: the system's own type, no hand lettering.
+  .hero-intro__byline-slot { margin-top: var(--space-2xl); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+  .hero-intro__copy .hero-intro__byline { display: flex; flex-direction: column; gap: var(--space-xs); margin: 0; font: var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--color-text-tertiary); }
+  .hero-intro__byline-name { font: 700 17px/1.3 var(--font-heading); color: var(--color-text-primary); }
+  .hero-intro__status { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 36px; box-sizing: border-box; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-full); background: var(--color-bg-primary); font: var(--weight-medium) var(--text-body-sm)/1 var(--font-body); color: var(--color-text-primary); text-decoration: none; transition: border-color $transition-base, color $transition-base; }
+  .hero-intro__status:hover, .hero-intro__status:focus-visible { border-color: var(--color-primary); color: var(--color-primary-dark); }
+  .hero-intro__status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); flex: 0 0 8px; }
+  .hero-intro__portrait .hero-intro__status--portrait { position: absolute; top: 0; right: 0; z-index: 6; }
+  .hero-intro__status--stacked { display: none; }
+  .hero-intro__portrait-slot { min-width: 0; }
   .layers-panel--roles { width: 100%; }
   .layers-panel--roles .layers-panel__top, .layers-panel--roles .layers-panel__toolbar, .layers-panel--roles .layers-panel__lockbar, .layers-panel--roles .layers-panel__footer { display: none; }
   .layers-panel--roles .layers-panel__layer { cursor: pointer; min-height: var(--space-2xl); }
@@ -37,8 +36,8 @@
   .hero--contract .hero-intro__portrait { height: 530px; }
 }
 @media (max-width: 850px) {
-  .hero--contract .hero-intro__availability--stacked { display: block; }
-  .hero--contract .hero-intro__portrait .hero-intro__availability--portrait { display: none; }
+  .hero--contract .hero-intro__status--stacked { display: inline-flex; }
+  .hero--contract .hero-intro__portrait .hero-intro__status--portrait { display: none; }
   .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr); }
   .hero--contract .hero-intro__portrait { width: min(100%, 480px); margin: 0 auto; height: 520px; }
   .hero--contract .hero-intro__copy { max-width: var(--copy-max-width); }
@@ -70,7 +69,7 @@
   .layers-panel__thumb { color: inherit; border: 0; background: transparent; font-size: var(--text-caption); }
 }
 @media (max-width: 850px) {
-  .hero--contract .hero-intro__portrait { grid-row: 1; }
+  .hero--contract .hero-intro__portrait-slot { grid-row: 1; }
   .hero--contract .hero-intro__copy { grid-row: 2; }
 }
 
@@ -431,23 +430,14 @@
   .hero--contract ~ .about--integrated .ink-ground::after { opacity: 1; transition: none; }
 }
 
-// Signature pen-tool write-on (SignatureMark). At rest the ink is filled and the chrome hidden;
-// before the one-shot plays, motion-allowed visitors see nothing so it can draw on.
-.signature-mark__ink { fill: currentColor; stroke: currentColor; stroke-width: 0.55; stroke-linejoin: round; stroke-dashoffset: 0; }
-.signature-mark__chrome { pointer-events: none; }
-.signature-mark__anchor { fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 0.6; opacity: 0; }
-.signature-mark__anchor--selected { fill: var(--color-primary); opacity: 1; }
-.signature-mark__handle { stroke: var(--color-primary); stroke-width: 0.45; opacity: 0; }
-.signature-mark__handle-end { fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 0.5; opacity: 0; }
-@media (prefers-reduced-motion: no-preference) {
-  .hero--contract .hero-intro__signature:not(.is-signed) {
-    .signature-mark__ink { fill-opacity: 0; stroke-dashoffset: 9999; }
-    .signature-mark__anchor--selected { opacity: 0; }
-    .hero-intro__signature-place { opacity: 0; }
-  }
-  .hero--contract .hero-intro__signature.is-signed {
-    .signature-mark__ink { fill-opacity: 0; }
-    .hero-intro__signature-place { opacity: 0; animation: heroSignPlace 360ms ease 1250ms forwards; }
-  }
+// Hero parts in Author mode: the chip sits above the element so it never covers the copy,
+// and the outline stands off the text the way the editor frames an inline component.
+[data-author-mode='true'] .hero--contract .authored--above {
+  outline-offset: 8px;
+  &.authored--selected, &.authored--selected:hover { outline-offset: 8px; }
+  > .authored__tag { top: auto; bottom: calc(100% + 8px); left: -8px; }
+  > .authored__tag .authored__chip { border: 1px solid $color-border-default; border-radius: $radius-sm $radius-sm 0 0; }
+  // Room for each chip: the editor spaces inline components apart while authoring.
+  > h1 { margin-bottom: 0; }
+  & + .authored--above { margin-top: 44px; }
 }
-@keyframes heroSignPlace { to { opacity: 1; } }

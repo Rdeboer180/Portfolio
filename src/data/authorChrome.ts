@@ -31,6 +31,39 @@ export interface AuthoredComponentSpec {
 }
 
 export const AUTHORED_COMPONENTS = {
+  heroTitle: {
+    component: 'core/wcm/components/title/v3',
+    label: 'Hero headline',
+    anchor: 'intro',
+  },
+  heroText: {
+    component: 'core/wcm/components/text/v2',
+    label: 'Hero intro',
+    anchor: 'intro',
+    annotation: {
+      text: 'The intro states the belief and the role layers carry the proof, so the paragraph never lists what the layers already list.',
+      source: 'Commit 92e0253, October 18, 2026',
+    },
+  },
+  heroByline: {
+    component: 'rdeboer/components/byline',
+    label: 'Byline and status',
+    anchor: 'intro',
+    annotation: {
+      text: [
+        'Name, place and status are set in the system’s own type. Hand lettering and drawn arrows left the hero in October 2026.',
+        'Notes like this one live in Author mode instead, where each can name its source.',
+      ],
+      source: 'October 2026 hero pass',
+    },
+  },
+  heroPortrait: {
+    component: 'rdeboer/components/portrait',
+    label: 'Portrait',
+    anchor: 'intro',
+    locked: true,
+    policy: 'Template: hero image',
+  },
   playground: {
     component: 'rdeboer/components/work-playground',
     label: 'Case studies',

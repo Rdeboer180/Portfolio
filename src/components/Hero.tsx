@@ -3,7 +3,8 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'reac
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
-import SignatureMark from './SignatureMark';
+import AuthoredSection from './AuthoredSection';
+import { AUTHORED_COMPONENTS } from '../data/authorChrome';
 import { useUnlock } from '../context/UnlockContext';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
 import { useReveal } from '../hooks/useReveal';
@@ -21,7 +22,6 @@ const roleDescriptions: React.ReactNode[] = [
 
 const Hero: React.FC = () => {
   const [headlineRef, headlineVisible] = useReveal<HTMLHeadingElement>(0.3);
-  const [signatureRef, signatureVisible] = useReveal<HTMLParagraphElement>(0.6);
   const portraitRef = useRef<HTMLDivElement>(null);
   const [introStage, setIntroStage] = useState('done');
   const [inkStarted, setInkStarted] = useState(false);
@@ -32,10 +32,10 @@ const Hero: React.FC = () => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     const play = () => {
       setInkStarted(true);
-      setIntroStage(mobile ? 'sketch' : 'scrawl');
+      setIntroStage('sketch');
       const steps: [number, string][] = mobile
         ? [[650, 'lowfi'], [1250, 'final'], [1850, 'done']]
-        : [[700, 'sketch'], [1500, 'lowfi'], [2150, 'cursor'], [2900, 'final'], [3500, 'panel'], [4200, 'done']];
+        : [[800, 'lowfi'], [1450, 'cursor'], [2200, 'final'], [2800, 'panel'], [3500, 'done']];
       steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
     };
     // Start the portrait construction when it enters view.
@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
     }, { threshold: 0.2 });
     if (portraitRef.current) observer.observe(portraitRef.current);
     // Direct links below the hero still receive the settled section background.
-    timers.push(setTimeout(() => setInkStarted(true), 4200));
+    timers.push(setTimeout(() => setInkStarted(true), 3500));
     const settle = () => {
       if (motion.matches) { observer.disconnect(); timers.forEach(clearTimeout); setIntroStage('done'); setInkStarted(true); }
     };
@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen]);
   return (
-    <section className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage} data-ink-started={inkStarted}>
+    <section id="intro" className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage} data-ink-started={inkStarted}>
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
@@ -111,37 +111,38 @@ const Hero: React.FC = () => {
       <div className="hero-intro">
         <div className="hero-intro__grid">
           <div className="hero-intro__copy">
+            <AuthoredSection {...AUTHORED_COMPONENTS.heroTitle} className="authored--above">
             <h1 ref={headlineRef} className={`hero__typed-wrap hero-intro__headline${headlineVisible ? ' is-visible' : ''}`}>
-              <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
-              <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
-            </h1>
-            <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
-            <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
-            <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
-              {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
-              {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true" inert>{description}</p>)}
-              <div id={roleStoryId} className="hero-intro__role-live" aria-live="polite" aria-atomic="true" aria-busy={switching}>
-                <p className="hero-intro__role-paragraph">{roleDescriptions[displayedRole]}</p>
+                <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
+                <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
+              </h1>
+            </AuthoredSection>
+            <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
+              <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
+              <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
+              <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
+                {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
+                {roleDescriptions.map((description, index) => <p key={index} className="hero-intro__role-sizer" aria-hidden="true" inert>{description}</p>)}
+                <div id={roleStoryId} className="hero-intro__role-live" aria-live="polite" aria-atomic="true" aria-busy={switching}>
+                  <p className="hero-intro__role-paragraph">{roleDescriptions[displayedRole]}</p>
+                </div>
+                {switching && <span key={selectedRole} className="hero-intro__role-orb" aria-hidden="true"><span /></span>}
               </div>
-              {switching && <span key={selectedRole} className="hero-intro__role-orb" aria-hidden="true"><span /></span>}
-            </div>
-            {/* Signed, not labelled: name, place and availability close the intro the way a note
-                is signed, instead of an eyebrow above the headline. */}
-            <p ref={signatureRef} className={`hero-intro__signature${signatureVisible ? ' is-signed' : ''}`}>
-              <SignatureMark play={signatureVisible} />
-              <span className="hero-intro__signature-place">South Bend, IN / Remote US, Eastern Time</span>
-            </p>
-            <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--stacked">
-              Open to new work opportunities
-              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
+            </AuthoredSection>
+            <AuthoredSection {...AUTHORED_COMPONENTS.heroByline} className="authored--above hero-intro__byline-slot">
+              <p className="hero-intro__byline">
+                <span className="hero-intro__byline-name">Ryan DeBoer</span>
+                <span className="hero-intro__byline-place">South Bend, IN / Remote US, Eastern Time</span>
+              </p>
+              <a href={EMAIL_HREF} className="hero-intro__status hero-intro__status--stacked">
+                <span className="hero-intro__status-dot" aria-hidden="true" />Open to new work
+              </a>
+            </AuthoredSection>
           </div>
+          <AuthoredSection {...AUTHORED_COMPONENTS.heroPortrait} className="authored--above hero-intro__portrait-slot">
           <div className="hero-intro__portrait" ref={portraitRef}>
-            {/* Desktop: availability rides above the portrait so the copy column stays short.
-                The stacked layout keeps it under the signature instead; only one is ever displayed. */}
-            <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--portrait">
-              Open to new work opportunities
-              <svg className="hero-intro__markup-arrow" viewBox="0 0 120 92" fill="none" aria-hidden="true"><path d="M112 4 C108 46 70 72 16 84" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M30 74 L16 84 L32 89" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <a href={EMAIL_HREF} className="hero-intro__status hero-intro__status--portrait">
+              <span className="hero-intro__status-dot" aria-hidden="true" />Open to new work
             </a>
             <div className="hero-intro__token-map" aria-label="Portrait border radius token">
               <code>borderRadius: tokens.radius.full</code>
@@ -149,60 +150,6 @@ const Hero: React.FC = () => {
             {/* ── Intro-only overlay elements — aria-hidden + pointer-events:none ── */}
             {/* Construction-line grid background */}
             <div className="hero__intro-grid" aria-hidden="true" />
-
-            {/* Mono annotation notes — on .hero__visual, with per-note rotations */}
-            <div className="hero__intro-note hero__intro-note--shell" aria-hidden="true">.hero__profile-shell</div>
-            <div className="hero__intro-note hero__intro-note--radius" aria-hidden="true">--radius-full</div>
-            <div className="hero__intro-note hero__intro-note--mask" aria-hidden="true">image-mask: circle</div>
-            <div className="hero__intro-note hero__intro-note--motion" aria-hidden="true">motion: draw-in</div>
-
-            {/* Hand-drawn curved arrows — from notes toward the circle/ring */}
-            <svg
-              className="hero__intro-arrow hero__intro-arrow--1"
-              viewBox="0 0 40 40"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M4 8 C10 10, 20 12, 30 28"
-                fill="none"
-                stroke="rgba(0,0,0,0.30)"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                pathLength={1}
-              />
-              <path
-                d="M28 24 L30 28 L26 26"
-                fill="none"
-                stroke="rgba(0,0,0,0.30)"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <svg
-              className="hero__intro-arrow hero__intro-arrow--2"
-              viewBox="0 0 40 40"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M36 8 C28 12, 18 16, 8 28"
-                fill="none"
-                stroke="rgba(0,0,0,0.30)"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                pathLength={1}
-              />
-              <path
-                d="M10 24 L8 28 L12 26"
-                fill="none"
-                stroke="rgba(0,0,0,0.30)"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
 
             {/* Fake pointer cursor arc */}
             <svg
@@ -230,92 +177,6 @@ const Hero: React.FC = () => {
             </div>
 
             <div className="hero__image-container">
-              {/* Scrawl SVG — napkin-rough marker strokes, drawn during scrawl stage */}
-              <svg
-                className="hero__intro-scrawl"
-                viewBox="0 0 420 420"
-                aria-hidden="true"
-                focusable="false"
-              >
-                {/* Wobbly lumpy blob — one fast marker loop that overshoots */}
-                <path
-                  className="hero__intro-scrawl__blob"
-                  d="M120,180 C95,155 95,120 120,100 C148,78 185,72 210,75 C248,78 285,90 305,118 C330,150 338,185 325,215 C312,245 288,268 258,278 C228,288 192,285 165,268 C135,250 118,225 115,198 C112,185 115,182 120,180 Z"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.32)"
-                  strokeWidth="2.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  pathLength={1}
-                />
-                {/* Squiggle 1 — horizontal scribble below-left */}
-                <path
-                  className="hero__intro-scrawl__squiggle-1"
-                  d="M88,318 C93,314 98,322 103,315 C108,308 113,320 118,313 C123,306 128,318 133,312 C138,306 143,317 148,312 C153,307 158,318 163,315 C168,312 173,316 178,314"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.32)"
-                  strokeWidth="2.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  pathLength={1}
-                />
-                {/* Squiggle 2 — shorter scribble below squiggle 1 */}
-                <path
-                  className="hero__intro-scrawl__squiggle-2"
-                  d="M100,338 C105,333 110,342 116,336 C122,330 127,340 133,334 C139,328 144,338 150,334 C156,330 160,337 164,334"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.32)"
-                  strokeWidth="2.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  pathLength={1}
-                />
-                {/* Arrow — curved line from top-right toward blob edge, with arrowhead */}
-                <path
-                  className="hero__intro-scrawl__arrow"
-                  d="M395,60 C375,72 355,90 338,108 C328,118 324,130 330,140 M322,134 L330,140 L335,130"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.32)"
-                  strokeWidth="2.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  pathLength={1}
-                />
-              </svg>
-
-              {/* Scrawl tick remnant — isolated SVG so mask never touches it */}
-              <svg
-                className="hero__intro-scrawl-remnant"
-                viewBox="0 0 420 420"
-                aria-hidden="true"
-                focusable="false"
-              >
-                {/* Tick — short stray stroke near blob's top-left */}
-                <path
-                  className="hero__intro-scrawl__tick"
-                  d="M108,92 C112,88 117,94 122,90"
-                  fill="none"
-                  stroke="rgba(0,0,0,0.32)"
-                  strokeWidth="2.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="1"
-                  strokeDashoffset="1"
-                  pathLength={1}
-                />
-              </svg>
-
-              {/* Eraser block — sweeps across scrawl area at scrawl→sketch boundary */}
-              <div className="hero__intro-eraser" aria-hidden="true" />
-
               {/* Sketch SVG INSIDE image-container — concentric with profile circle */}
               <svg
                 className="hero__intro-sketch"
@@ -400,11 +261,10 @@ const Hero: React.FC = () => {
                   <span>layer</span> / 01 Portfolio image
                 </div>
               </div>
-
-
             </div>
             <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={selectRole} controlsId={roleStoryId} compact /></div>
           </div>
+          </AuthoredSection>
         </div>
       </div>
     </section>
