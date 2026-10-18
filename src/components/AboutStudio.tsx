@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
 
-/** Reveal stagger, matching AboutHero's `d()`. */
-const d = (ms: number) => ({ ['--reveal-delay' as string]: `${ms}ms` });
-
 type StudioPointId = 'monitor' | 'system-wall' | 'walking-pad' | 'game-shelf' | 'library';
 
 interface StudioPoint {
