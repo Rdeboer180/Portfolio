@@ -107,19 +107,13 @@ const Hero: React.FC = () => {
       </nav>
 
       <div className="hero-intro">
-        <div className="hero-intro__meta"><span>Product design · Design systems · Design engineering</span><div className="hero-intro__location"><span>South Bend, IN / Remote US</span>
-            <a href={EMAIL_HREF} className="hero-intro__availability">
-              Open to new work opportunities
-              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
-</div></div>
         <div className="hero-intro__grid">
           <div className="hero-intro__copy">
             <h1 ref={headlineRef} className={`hero__typed-wrap hero-intro__headline${headlineVisible ? ' is-visible' : ''}`}>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text hero__typed-final-gradient">Passionate Designer</span></span>
               <span className="hero-intro__headline-line"><span className="hero-intro__headline-text">Curious Builder</span></span>
             </h1>
-            <p>I am a multidisciplinary product designer working across UX and UI. I keep learning as design changes, testing new workflows that help me make better decisions and turn ideas into working products. <strong className="animated-bold">The tools can change. Giving a damn does not.</strong></p>
+            <p>At Tire Rack I do a little of everything, and in my own projects I do even more: AEM component builds, design system builds and governance, agentic skills and applications. I do my best work close to the strategy, the why, and I fight for consistency and simplicity. <strong className="animated-bold">The tools can change. Giving a damn does not.</strong></p>
             <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
             <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
               {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
@@ -129,6 +123,16 @@ const Hero: React.FC = () => {
               </div>
               {switching && <span key={selectedRole} className="hero-intro__role-orb" aria-hidden="true"><span /></span>}
             </div>
+            {/* Signed, not labelled: name, place and availability close the intro the way a note
+                is signed, instead of an eyebrow above the headline. */}
+            <p className="hero-intro__signature">
+              <span className="hero-intro__signature-name">Ryan DeBoer</span>
+              <span className="hero-intro__signature-place">South Bend, IN / Remote US</span>
+            </p>
+            <a href={EMAIL_HREF} className="hero-intro__availability">
+              Open to new work opportunities
+              <svg viewBox="0 0 240 24" fill="none" aria-hidden="true"><path d="M3 18 C70 18 155 8 230 7 M216 1 L233 7 L218 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </a>
           </div>
           <div className="hero-intro__portrait" ref={portraitRef}>
             <div className="hero-intro__token-map" aria-label="Portrait border radius token">
