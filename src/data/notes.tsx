@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LinkedInLink from '../components/LinkedInLink';
 import PaperArtboardGallery from '../components/PaperArtboardGallery';
+import playdraft from './playdraft.json';
 import { SystemsBoard } from '../components/SystemsInPractice';
 
 // ============================================
@@ -257,19 +258,29 @@ export const NOTES: Note[] = [
     origin: 'portfolio',
     inProgress: true,
     relatedProject: 'playdraft',
-    date: 'October 9, 2026',
-    dateISO: '2026-10-09',
+    date: 'October 18, 2026',
+    dateISO: '2026-10-18',
     title: 'I simplified PlayDraft until it stopped feeling like a game',
     dek: 'A simpler drafting flow went too far. Working through the correction with multiple LLMs, then making the decisions visible across nine Paper artboards.',
-    read: '5 min',
+    read: '6 min',
     body: (
       <>
+        <p>I wrote my design taste into <Link to="/notes/ryan-design-taste-skill/">a skill an agent can follow</Link>. One of its committed rules is that simplicity means fewer unresolved decisions, not fewer elements. Then I spent months building a mobile app that broke the rule in both directions.</p>
+        <p>When I started building PlayDraft with Claude, I was having an absolute blast. Ideas I would normally explore in Figma turned into working interactions. Animations, progression, rewards, custom transitions, scoring. Every time I found something new I could build, I went looking for a place to put it.</p>
+        <p>Some of that was also a way to avoid launching a v1.</p>
+        <p>The app started to feel like something that had been on the market for ten years, layering on features to keep an established audience engaged. I didn't have an established audience. I had one idea: take what makes a fantasy football draft fun and point it at anything. Somewhere in there, I'd made that idea harder to find.</p>
         <p>I wanted PlayDraft to get back to its simplest idea: draft anything draftable. Pick a pack, bring people together, take turns, and see what everyone chose. The app had accumulated a lot around that loop. Competitive modes, a Binder, a Store, and progression each gave me another system to maintain and another thing to explain.</p>
-        <p>Today's work started with taking those extras out of the next version. Custom packs and ready-made packs could share a drafting flow. A short clock and an eight-hour clock could use the same rules. Drafts needed a clearer home, and the recap deserved more attention.</p>
+        <p>That pass started with taking those extras out of the next version. Custom packs and ready-made packs could share a drafting flow. A short clock and an eight-hour clock could use the same rules. Drafts needed a clearer home, and the recap deserved more attention.</p>
         <p>Then I looked at the simplified screens. They felt like a list app. I'd asked for less complexity and ended up with less PlayDraft.</p>
 
         <h2>Where I pulled it back</h2>
         <p>The avatars, pack shields, condensed type, and a little visual depth were doing useful work. They helped people recognize themselves, find a pack, and feel like they were about to play something. I wanted to keep that character while reducing the mechanics around it.</p>
+
+        <Callout marker="The correction">
+          My own rule says simplicity is fewer unresolved decisions. I had been reading
+          it as fewer things on screen.
+        </Callout>
+
         <p>I pushed for a middle ground. Home could still have a strong opening moment, but only one. When a draft needs your turn, that card takes the lead. Pack artwork stays recognizable. Characters represent people, rather than becoming another set of illustrations to generate for every draft choice.</p>
         <p>Some of the corrections were small and very specific. I asked to try the actual Big Shoulders Display font. We reduced the pack shields to 80% of their previous size without shrinking the whole card. Saving a custom pack also needed to work independently of hosting a game. People should be able to put an idea down and come back to it.</p>
 
@@ -303,6 +314,12 @@ export const NOTES: Note[] = [
         <h2>Bring it back into the app</h2>
         <p>Home is the first integration. The rest of the app still needs to move over in steps. I'm checking large text, player stacks, empty states, and what happens when a draft needs attention. VoiceOver and smaller devices need their own pass. A system that works in a review board can still fall apart when someone's name is long or the keyboard opens.</p>
         <p>I'm glad we caught the over-simplification before treating it as the new direction. I can explain PlayDraft more easily now, and the revised system gives me a way to keep its personality as I build the next screens.</p>
+
+        <h2>I needed the overbuilt version</h2>
+        <p>I'm proud of where PlayDraft landed. It shows more of my technical curiosity and my design judgment than anything else I have made, and not because I built every feature I imagined. I learned which ones didn't belong.</p>
+        <p>The App Store is crowded, and PlayDraft may never find much of an audience. I am fine with that. Taking it from nothing to a released app, with a design system underneath it, has already taught me things a static prototype could not: how a decision holds up in a real build, and which of my own ideas to throw away.</p>
+        <p>I had to make the thing before I could see what it did not need.</p>
+        <p>If you have a few friends willing to draft horror movies, favorite snacks, or anything else worth arguing about, <a href={playdraft.appStoreUrl} target="_blank" rel="noopener noreferrer">play it on iPhone</a> and tell me what still feels unnecessarily complicated. That is the part I am least able to judge on my own.</p>
         <p><Link to="/work/playdraft/">See the PlayDraft case study</Link>.</p>
       </>
     ),

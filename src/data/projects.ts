@@ -1760,6 +1760,7 @@ Frame every output as:
       decisions: [
         {
           title: "Simplify the mechanics, keep the game",
+          bodyLink: { text: 'first simplification pass', to: '/notes/simplifying-playdraft-without-losing-the-game/' },
           body: "My first simplification pass went too far. The app started to feel like a list. I brought back the textured shields and character avatars, and gave Home a clearer job. It leads with creation when you are idle and your next pick when it is your turn.",
           images: [
             { src: "/images/work/playdraft/progression/screenshots/01-home.png", alt: "Home asks What are we drafting? beside a large initials avatar, with a Create a draft card and a recently finished Candy draft.", layout: 'full', caption: "Idle Home leads with creation. Staging build on an iPhone 17 simulator, signed in as a test account.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
