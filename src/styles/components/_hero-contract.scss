@@ -3,8 +3,7 @@
   .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2) var(--container-px) var(--space-4xl); }
   // The sign-off: a hand-set name over a plain caption, then the availability link.
   .hero-intro__copy .hero-intro__signature { display: flex; flex-direction: column; gap: var(--space-xs); margin: var(--space-2xl) 0 0; font: var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--color-text-tertiary); }
-  .hero-intro__signature-mark { display: block; width: 190px; height: 46px; overflow: visible; }
-  .hero-intro__signature-mark text { font: var(--weight-medium) 34px $font-family-hand; fill: var(--color-text-primary); stroke: var(--color-text-primary); stroke-width: 0.6; }
+  .hero-intro__signature .signature-mark { display: block; overflow: visible; color: var(--color-text-primary); }
   .hero-intro__copy .hero-intro__availability { margin-top: var(--space-lg); }
   .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
   .hero-intro__copy { min-width: 0; }
@@ -432,30 +431,23 @@
   .hero--contract ~ .about--integrated .ink-ground::after { opacity: 1; transition: none; }
 }
 
-// Pen-tool chrome: hidden at rest; only the one-shot write-on shows it.
-.hero-intro__pen-point { opacity: 0; fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 1; }
-.hero-intro__pen-point line { stroke-width: 0.75; }
-
-// Signature write-on: plays once, after the headline's type guides, when the sign-off is in view.
+// Signature pen-tool write-on (SignatureMark). At rest the ink is filled and the chrome hidden;
+// before the one-shot plays, motion-allowed visitors see nothing so it can draw on.
+.signature-mark__ink { fill: currentColor; stroke: currentColor; stroke-width: 0.55; stroke-linejoin: round; stroke-dashoffset: 0; }
+.signature-mark__chrome { pointer-events: none; }
+.signature-mark__anchor { fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 0.6; opacity: 0; }
+.signature-mark__anchor--selected { fill: var(--color-primary); opacity: 1; }
+.signature-mark__handle { stroke: var(--color-primary); stroke-width: 0.45; opacity: 0; }
+.signature-mark__handle-end { fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 0.5; opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
-  .hero--contract .hero-intro__signature {
-    .hero-intro__signature-mark text { fill-opacity: 0; stroke-dasharray: 420; stroke-dashoffset: 420; }
+  .hero--contract .hero-intro__signature:not(.is-signed) {
+    .signature-mark__ink { fill-opacity: 0; stroke-dashoffset: 9999; }
+    .signature-mark__anchor--selected { opacity: 0; }
     .hero-intro__signature-place { opacity: 0; }
-    &.is-signed {
-      .hero-intro__signature-mark text { animation: heroSignInk 900ms cubic-bezier(0.45, 0, 0.2, 1) 700ms forwards; }
-      .hero-intro__signature-place { animation: heroSignPlace 360ms ease 1800ms forwards; }
-      .hero-intro__pen-point { animation: heroPenPoint 1500ms ease calc(700ms + var(--i) * 140ms) forwards; }
-    }
+  }
+  .hero--contract .hero-intro__signature.is-signed {
+    .signature-mark__ink { fill-opacity: 0; }
+    .hero-intro__signature-place { opacity: 0; animation: heroSignPlace 360ms ease 1250ms forwards; }
   }
 }
-@keyframes heroSignInk {
-  0% { stroke-dashoffset: 420; fill-opacity: 0; }
-  70% { stroke-dashoffset: 0; fill-opacity: 0; }
-  100% { stroke-dashoffset: 0; fill-opacity: 1; }
-}
 @keyframes heroSignPlace { to { opacity: 1; } }
-@keyframes heroPenPoint {
-  0% { opacity: 0; }
-  8%, 60% { opacity: 1; }
-  100% { opacity: 0; }
-}
