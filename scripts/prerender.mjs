@@ -13,7 +13,7 @@ const BUILD_DIR = join(process.cwd(), 'build');
 const PORT = 45678;
 const ORIGIN = `http://localhost:${PORT}`;
 const REVIEW_BASE = '/dive';
-const INFLIGHT_TAG = '<script src="https://inflight.co/widget.js" data-org="aius9qpt" data-path="/dive" async></script>';
+const INFLIGHT_TAG = '<script src="https://inflight.co/widget.js" data-org="igtg4b1c" data-path="/dive" async></script>';
 const isReviewRoute = route => route === REVIEW_BASE || route.startsWith(`${REVIEW_BASE}/`);
 
 function reviewHead(html) {

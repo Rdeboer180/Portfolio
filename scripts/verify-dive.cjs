@@ -7,7 +7,7 @@ const path = require('node:path');
 const { tmpdir } = require('node:os');
 
 const build = path.resolve('build');
-const tag = '<script src="https://inflight.co/widget.js" data-org="aius9qpt" data-path="/dive" async></script>';
+const tag = '<script src="https://inflight.co/widget.js" data-org="igtg4b1c" data-path="/dive" async></script>';
 const htmlFiles = fs.readdirSync(build, { recursive: true }).filter(file => file.endsWith('.html'));
 let reviewCount = 0;
 for (const file of htmlFiles) {
