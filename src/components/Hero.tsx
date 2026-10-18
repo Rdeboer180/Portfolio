@@ -127,13 +127,20 @@ const Hero: React.FC = () => {
             {/* Signed, not labelled: name, place and availability close the intro the way a note
                 is signed, instead of an eyebrow above the headline. */}
             <p ref={signatureRef} className={`hero-intro__signature${signatureVisible ? ' is-signed' : ''}`}>
-              {/* Interim write-on: the hand face's outline draws once, then the ink fills.
+              {/* Pen-tool write-on: anchors and handles drop along the stroke as it draws, then the ink fills and the path deselects.
                   Swap the <text> for Ryan's traced signature path when it exists; the CSS
                   draws any stroke the same way. */}
               <svg className="hero-intro__signature-mark" viewBox="0 0 190 46" role="img" aria-label="Ryan DeBoer">
                 <text x="2" y="34">Ryan DeBoer</text>
+                <g className="hero-intro__pen" aria-hidden="true">
+                  <g className="hero-intro__pen-point" style={{ '--i': 0 } as React.CSSProperties}><rect x="1.5" y="31.5" width="5" height="5" /></g>
+                  <g className="hero-intro__pen-point" style={{ '--i': 1 } as React.CSSProperties}><line x1="28" y1="15" x2="52" y2="9" /><circle cx="28" cy="15" r="1.6" /><circle cx="52" cy="9" r="1.6" /><rect x="37.5" y="9.5" width="5" height="5" /></g>
+                  <g className="hero-intro__pen-point" style={{ '--i': 2 } as React.CSSProperties}><line x1="68" y1="36" x2="92" y2="30" /><circle cx="68" cy="36" r="1.6" /><circle cx="92" cy="30" r="1.6" /><rect x="77.5" y="30.5" width="5" height="5" /></g>
+                  <g className="hero-intro__pen-point" style={{ '--i': 3 } as React.CSSProperties}><line x1="106" y1="13" x2="130" y2="7" /><circle cx="106" cy="13" r="1.6" /><circle cx="130" cy="7" r="1.6" /><rect x="115.5" y="7.5" width="5" height="5" /></g>
+                  <g className="hero-intro__pen-point" style={{ '--i': 4 } as React.CSSProperties}><rect x="153.5" y="27.5" width="5" height="5" /></g>
+                </g>
               </svg>
-              <span className="hero-intro__signature-place">South Bend, IN / Remote US</span>
+              <span className="hero-intro__signature-place">South Bend, IN / Remote US, Eastern Time</span>
             </p>
             <a href={EMAIL_HREF} className="hero-intro__availability hero-intro__availability--stacked">
               Open to new work opportunities

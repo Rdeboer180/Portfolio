@@ -432,14 +432,19 @@
   .hero--contract ~ .about--integrated .ink-ground::after { opacity: 1; transition: none; }
 }
 
+// Pen-tool chrome: hidden at rest; only the one-shot write-on shows it.
+.hero-intro__pen-point { opacity: 0; fill: var(--color-bg-primary); stroke: var(--color-primary); stroke-width: 1; }
+.hero-intro__pen-point line { stroke-width: 0.75; }
+
 // Signature write-on: plays once, after the headline's type guides, when the sign-off is in view.
 @media (prefers-reduced-motion: no-preference) {
   .hero--contract .hero-intro__signature {
     .hero-intro__signature-mark text { fill-opacity: 0; stroke-dasharray: 420; stroke-dashoffset: 420; }
     .hero-intro__signature-place { opacity: 0; }
     &.is-signed {
-      .hero-intro__signature-mark text { animation: heroSignInk 1200ms cubic-bezier(0.45, 0, 0.2, 1) 900ms forwards; }
-      .hero-intro__signature-place { animation: heroSignPlace 360ms ease 1900ms forwards; }
+      .hero-intro__signature-mark text { animation: heroSignInk 900ms cubic-bezier(0.45, 0, 0.2, 1) 700ms forwards; }
+      .hero-intro__signature-place { animation: heroSignPlace 360ms ease 1800ms forwards; }
+      .hero-intro__pen-point { animation: heroPenPoint 1500ms ease calc(700ms + var(--i) * 140ms) forwards; }
     }
   }
 }
@@ -449,3 +454,8 @@
   100% { stroke-dashoffset: 0; fill-opacity: 1; }
 }
 @keyframes heroSignPlace { to { opacity: 1; } }
+@keyframes heroPenPoint {
+  0% { opacity: 0; }
+  8%, 60% { opacity: 1; }
+  100% { opacity: 0; }
+}
