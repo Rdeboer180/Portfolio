@@ -16,7 +16,7 @@ const PAGES = [
   { to: '/', title: 'Home', sub: 'Hero, selected work, and how the work gets made.' },
   { to: '/about/', title: 'About', sub: 'Career arc, point of view, and process principles.' },
   { to: '/resume/', title: 'Résumé', sub: 'Experience and skills, with a printable PDF and vCard.' },
-  { to: '/notes/', title: 'Notes', sub: 'Writing from the work — field notes, published agent skills, and how this site is built.' },
+  { to: '/notes/', title: 'Notes', sub: 'Writing from the work: field notes, published agent skills, and how this site is built.' },
   { to: '/design-system/', title: 'Design System', sub: 'The tokens and components this site is built on.' },
 ];
 
@@ -71,9 +71,9 @@ const Section: React.FC<{ title: string; count: number; children: React.ReactNod
 
 const SitemapPage: React.FC = () => {
   usePageMeta({
-    title: 'Site Index — Ryan DeBoer',
+    title: 'Site Index | Ryan DeBoer',
     description:
-      'Every page on rdeboerdesigns.com — main pages, client and employer case studies, and self-initiated products, in one place.',
+      'Every page on rdeboerdesigns.com: main pages, client and employer case studies, and self-initiated products, in one place.',
     canonical: `${SITE.portfolioUrl}/sitemap/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',

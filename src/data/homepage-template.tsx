@@ -23,7 +23,7 @@ const templateContent: TargetedHomepageContent = {
     headline: '',
     body: (
       <>
-        [Opening pitch — one or two sentences on who you are and the work you do,
+        [Opening pitch: one or two sentences on who you are and the work you do,
         then a targeted closer that ties your experience to{' '}
         <span className="about__highlight">[Company] and why this role is the right fit.]</span>
       </>
@@ -34,9 +34,9 @@ const templateContent: TargetedHomepageContent = {
     title: '[About headline]',
     // titleImage: '/images/[company]/logo.png', // optional
     paragraphs: [
-      '[Paragraph 1 — your background and what sets you apart.]',
-      '[Paragraph 2 — a story that connects you to this company or product.]',
-      '[Paragraph 3 — why this role, why now.]',
+      '[Paragraph 1: your background and what sets you apart.]',
+      '[Paragraph 2: a story that connects you to this company or product.]',
+      '[Paragraph 3: why this role, why now.]',
     ],
     stats: [
       { value: '16+', label: 'Years designing professionally' },

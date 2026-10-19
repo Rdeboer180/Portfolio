@@ -325,7 +325,7 @@ const TargetedAbout: React.FC<{ content: TargetedHomepageContent }> = ({ content
               </React.Fragment>
             ))}
             <p className="about__body">
-              There's more to how I think&mdash;and how I help teams do better work&mdash;than what fits here.
+              There's more to how I think (and how I help teams do better work) than what fits here.
             </p>
             <div className="about__cta-links">
               <Link to="/about" className="about__read-more">Go deeper on my approach &rarr;</Link>
@@ -482,7 +482,7 @@ const HomepageTargeted: React.FC<HomepageTargetedProps> = ({ content }) => {
   // are not prerendered and never reach the sitemap, so the canonical is the
   // only head tag that has to be right — it points at the variant's own URL.
   usePageMeta({
-    title: `Ryan DeBoer — Product Design Engineer for ${content.meta.company}`,
+    title: `Ryan DeBoer | Product Design Engineer for ${content.meta.company}`,
     description: `A portfolio tailored for ${content.meta.company}: selected work, how I work, and what I'd bring to the team.`,
     canonical: `${SITE.portfolioUrl}/${content.meta.slug}`,
     ogType: 'profile',

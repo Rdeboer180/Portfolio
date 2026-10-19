@@ -15,7 +15,7 @@ import type { Answered, IntakeQuestion } from './TalentIntakeStrip';
 
 const PRODUCT_PATH = [
   { name: 'Frame the problem', skill: 'research', question: 'Who is struggling, and what do we need to understand before choosing a solution?' },
-  { name: 'Weigh the evidence', skill: 'qa-and-analytics', question: 'What do research, feedback, and product signals support—and what is still an assumption?' },
+  { name: 'Weigh the evidence', skill: 'qa-and-analytics', question: 'What do research, feedback, and product signals support, and what is still an assumption?' },
   { name: 'Choose the scope', skill: 'systems-mapping', question: 'Which part of the workflow matters most, and what dependencies or tradeoffs shape the first release?' },
   { name: 'Make it testable', skill: 'prototyping', question: 'What is the smallest prototype that can help us decide whether to pursue the idea?' },
   { name: 'Evaluate the outcome', skill: 'validation', question: 'Did the experience help people complete the task? What should change based on what we learned?' },

@@ -22,7 +22,7 @@ const NotePage: React.FC = () => {
   usePageMeta(
     note
       ? {
-          title: `${note.title} — Notes — Ryan DeBoer`,
+          title: `${note.title} | Notes | Ryan DeBoer`,
           description: note.dek,
           canonical: `${SITE.portfolioUrl}/notes/${note.slug}/`,
           ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
@@ -42,7 +42,7 @@ const NotePage: React.FC = () => {
             inLanguage: 'en-US',
           },
         }
-      : { title: 'Notes — Ryan DeBoer' }
+      : { title: 'Notes | Ryan DeBoer' }
   );
 
   if (!note) return <Navigate to="/notes" replace />;

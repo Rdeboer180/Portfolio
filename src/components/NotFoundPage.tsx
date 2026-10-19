@@ -17,7 +17,7 @@ import { EMAIL_HREF } from '../data/site';
  */
 const NotFoundPage: React.FC = () => {
   usePageMeta({
-    title: 'Page not found — Ryan DeBoer',
+    title: 'Page not found | Ryan DeBoer',
     description: 'That page does not exist. Links to the work, the notes, and a way to get in touch.',
   });
 

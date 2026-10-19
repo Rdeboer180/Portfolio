@@ -26,7 +26,7 @@ const NotesPage: React.FC = () => {
   // that gets the tint and the selection frame.
   const newestSlug = NOTES_BY_DATE[0]?.slug;
   usePageMeta({
-    title: 'Notes — Ryan DeBoer on craft, systems, and care',
+    title: 'Notes | Ryan DeBoer on craft, systems, and care',
     description:
       'Writing from the work: design systems that outlive their designer, AI with human judgment, published agent skills, naming an LLC, and how this site is built.',
     canonical: `${SITE.portfolioUrl}/notes/`,

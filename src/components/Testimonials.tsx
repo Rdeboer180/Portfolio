@@ -54,8 +54,8 @@ const testimonials: Testimonial[] = [
     title: 'Design–Engineering Partnership',
     quote: (
       <>
-        <p>He owned the design side; I owned the build, and it was <H>one of the best collaborations I&rsquo;ve had</H>. Ryan doesn&rsquo;t just design screens&mdash;he <H>designs the whole experience</H>.</p>
-        <p>WheelRack had no shared foundation when we started, so Ryan built one from scratch&mdash;a full token set for color, spacing, and typography that grew into a documented component library. That gave us <H>one vocabulary to work from instead of two</H>, and it made my half of the work a lot easier to do well.</p>
+        <p>He owned the design side; I owned the build, and it was <H>one of the best collaborations I&rsquo;ve had</H>. Ryan doesn&rsquo;t just design screens. He <H>designs the whole experience</H>.</p>
+        <p>WheelRack had no shared foundation when we started, so Ryan built one from scratch, a full token set for color, spacing, and typography that grew into a documented component library. That gave us <H>one vocabulary to work from instead of two</H>, and it made my half of the work a lot easier to do well.</p>
         <p><H>Any product team would be better with him on it.</H></p>
       </>
     ),
@@ -93,7 +93,7 @@ const testimonials: Testimonial[] = [
     quote: (
       <>
         <p>Ryan has a lot of <H>institutional knowledge</H>. He understands what we&rsquo;ve done in the past, <H>what&rsquo;s worked, what hasn&rsquo;t, and why</H>. Combined with his technical skills, he has been very effective in project work.</p>
-        <p>He consistently takes the initiative to engage relevant teams&mdash;including UX, UXR, Analytics, Imaging, and SEO&mdash;whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. It&rsquo;s also evident that he genuinely <H>values and cares for his colleagues</H>.</p>
+        <p>He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. It&rsquo;s also evident that he genuinely <H>values and cares for his colleagues</H>.</p>
       </>
     ),
     name: 'Ryan Kokesh',
@@ -118,8 +118,8 @@ const testimonials: Testimonial[] = [
 
 const excerpts = [
   { index: 0, text: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.' },
-  { index: 1, text: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens—he designs the whole experience.' },
-  { index: 4, text: 'He consistently takes the initiative to engage relevant teams—including UX, UXR, Analytics, Imaging, and SEO—whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.' },
+  { index: 1, text: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens. He designs the whole experience.' },
+  { index: 4, text: 'He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.' },
 ];
 
 export const FeaturedEndorsement: React.FC = () => (

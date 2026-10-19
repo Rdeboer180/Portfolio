@@ -31,13 +31,13 @@ export interface TalentTreePageProps {
 
 const META = {
   ryan: {
-    title: 'Talent tree — Ryan DeBoer',
+    title: 'Talent tree | Ryan DeBoer',
     description:
       'I could never pick one title, so I built a talent tree and put sixteen years of points where they went. Guardrail Architect / Prototype Alchemist, Lv 16.',
     canonical: `${SITE.portfolioUrl}${FRONT_ROUTE}`,
   },
   build: {
-    title: 'Build your talent tree — Ryan DeBoer',
+    title: 'Build your talent tree | Ryan DeBoer',
     description:
       'Three questions, then the fun. Points are earned by time, not self-rated: spend them across three trees and see the design class you have become.',
     canonical: `${SITE.portfolioUrl}${BUILD_ROUTE}`,
