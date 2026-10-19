@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Binder specimen · PlayDraft</title>
-<meta name="description" content="Fidelity specimen for the collectible binder: one real PlayDraft card in one clear sleeve, with pointer light, pull, turn and return. Exploration, not integration.">
+<title>Binder specimen · Twelve cards</title>
+<meta name="description" content="Fidelity specimen for the collectible binder: all twelve case studies as cards in clear sleeves, each carrying its chosen hero, with pointer light, pull, turn, return and a locked-card stand-in. Exploration, not integration.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Hubot+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Hubot+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ------------------------------------------------------------------
-   Binder specimen. One pocket, one card, three materials.
+   Binder specimen. Twelve pockets, twelve cards, three materials.
 
    The page outside the binder keeps the portfolio's bench: paper, ink,
    hairlines, Signal Orange for the one accent. The binder itself is the
@@ -25,9 +25,13 @@
      .card           the rigid object; 2D travel here, 3D turn on .card__body
      .sleeve         the plastic; never moves unless the layers are exploded
 
-   Light is two numbers on the stage, --lx and --ly (0..1). The sleeve's
-   specular, the foil's hue and the face's light path all read them, so
-   one pointer move answers on every material at once.
+   Light is two numbers on the stage, --lx and --ly (0..1). Every sleeve's
+   specular, every foil ring and every face's light path read them, so one
+   pointer move answers on all the materials at once. The hero art is a
+   plain image under those layers; nothing optical is baked into it.
+
+   Card copy is generated: cards.js comes from build-cards.mjs, which reads
+   src/data/projects.ts and the hero manifest.
    ------------------------------------------------------------------ */
 :root {
   --signal: #f03d01;
@@ -59,7 +63,7 @@
   --silver-4: #c4c8cf;
   --card-ink: #14161a;
   --card-ink-2: #3c4046;
-  --card-ink-3: #6a6f77;
+  --card-ink-3: #62676f;
   --navy: #0e1720;
 
   /* motion */
@@ -71,7 +75,8 @@
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
+html.is-inspecting { overflow: hidden; }
 body {
   margin: 0;
   background: var(--paper);
@@ -79,7 +84,7 @@ body {
   font: 400 16px/1.6 var(--font-body);
 }
 img { display: block; }
-button { font: inherit; }
+button, select { font: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .wrap { max-width: 1186px; margin: 0 auto; padding: 0 16px; }
@@ -98,7 +103,7 @@ button { font: inherit; }
 .top h1 {
   font: 800 clamp(26px, 4vw, 38px)/1.2 var(--font-heading); letter-spacing: -.02em; margin: 14px 0 8px;
 }
-.top p { max-width: 760px; margin: 0; color: var(--slate); }
+.top p { max-width: 780px; margin: 0; color: var(--slate); }
 .top p + p { margin-top: 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .chip {
@@ -107,19 +112,11 @@ button { font: inherit; }
 }
 .chip b { color: var(--ink); font-weight: 700; }
 
-/* ---------- stage + panel layout ---------- */
-.lab {
-  display: grid; gap: 24px; padding: 24px 0 40px;
-  grid-template-columns: 1fr;
-}
-@media (min-width: 980px) {
-  .lab { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
-}
-
+/* ---------- stage ---------- */
+.lab { padding: 24px 0 40px; }
 .stage {
   position: relative;
   --lx: .32; --ly: .22;      /* light, 0..1 across the stage */
-  --tx: 0deg; --ty: 0deg;    /* tilt while the card is free */
 }
 
 /* ---------- the binder page ---------- */
@@ -153,20 +150,20 @@ button { font: inherit; }
 .ring { position: relative; height: 34px; width: 60px; }
 .ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
-/* pockets */
+/* pockets: three across on desktop, two on a tablet, one on a phone */
 .pockets {
-  display: grid; gap: 18px;
+  display: grid; gap: 20px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-@media (max-width: 719px) {
+@media (max-width: 1023px) {
+  .pockets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 599px) {
   .binder { padding: 18px 16px 18px 58px; }
   .rings { left: 10px; width: 44px; }
   .ring { width: 44px; height: 28px; }
   .binder::after { left: 42px; }
   .pockets { grid-template-columns: 1fr; gap: 16px; }
-  .pocket--filled { order: 0; }
-  .pocket--empty-a { order: 1; }
-  .pocket--empty-b { display: none; }
 }
 .pocket {
   position: relative;
@@ -176,7 +173,9 @@ button { font: inherit; }
   --lift: 0%;
   --fx: 0px; --fy: 0px; --fs: 1;
   --ry: 0deg;
+  --tx: 0deg; --ty: 0deg;    /* tilt while the card is free */
 }
+.pocket[hidden] { display: none !important; }
 .pocket--active { z-index: 48; }
 .pocket__well {
   position: absolute; inset: 0; border-radius: 7px;
@@ -228,7 +227,7 @@ button { font: inherit; }
 }
 .stage--no-sleeve .sleeve { opacity: 0; }
 .stage--exploded .sleeve { transform: translate(26px, -24px) rotate(-1.5deg); }
-.stage--exploded .pocket--filled .card { transform: translate(-6px, 10px) !important; }
+.stage--exploded .card:not(.card--free):not(.card--lifting) { transform: translate(-6px, 10px) !important; }
 
 /* ---------- the card ---------- */
 .card__shadow {
@@ -265,15 +264,16 @@ button { font: inherit; }
   transition: transform var(--d-travel) var(--e-out);
   cursor: default;
 }
-.card--free + .card__shadow,
-.card--lifting + .card__shadow { }
-.pocket--filled .card__shadow--lifting { transform: translate(2px, calc(var(--lift) + 6px)); filter: blur(6px); opacity: .45; }
-.pocket--filled .card__shadow--free {
+.card__shadow--lifting { transform: translate(2px, calc(var(--lift) + 6px)); filter: blur(6px); opacity: .45; }
+.card__shadow--free {
   z-index: 49;
   transform: translate(calc(var(--fx) + 8px), calc(var(--fy) + 22px)) scale(calc(var(--fs) * .96)) scaleX(max(.06, abs(cos(var(--ry)))));
   filter: blur(14px); opacity: .42;
   transition-duration: var(--d-flip);
 }
+/* a locked card acknowledges the touch without leaving its sleeve */
+@keyframes nudge { 0%, 100% { transform: translate(0, 0); } 35% { transform: translate(0, -7%); } 70% { transform: translate(0, -2%); } }
+.card--nudge { animation: nudge 520ms var(--e-out); }
 
 /* faces */
 .face {
@@ -338,76 +338,107 @@ button { font: inherit; }
 .face--back .face__sheen { opacity: .34; }
 
 /* front content */
+/* Every header is the same height, so art windows sit level across a row:
+   a one-line title over its subtitle, or a title alone on up to two lines. */
 .cf-head {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
-  gap: calc(var(--cw) * .03);
-  padding: calc(var(--cw) * .018) calc(var(--cw) * .018) calc(var(--cw) * .022);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: calc(var(--cw) * .028);
+  height: calc(var(--cw) * .165); flex: none;
+  padding: calc(var(--cw) * .012) calc(var(--cw) * .016) calc(var(--cw) * .016);
 }
 .cf-index {
-  font: 600 calc(var(--cw) * .036)/1 var(--font-mono); color: var(--card-ink-3); letter-spacing: .02em;
+  font: 600 calc(var(--cw) * .034)/1 var(--font-mono); color: var(--card-ink-3); letter-spacing: .02em;
+  align-self: start; margin-top: calc(var(--cw) * .016);
 }
 .cf-title h3 {
-  margin: 0; font: 800 calc(var(--cw) * .078)/1 var(--font-heading); letter-spacing: -.02em; color: var(--card-ink);
+  margin: 0; font: 800 calc(var(--cw) * .076)/1.02 var(--font-heading); letter-spacing: -.02em; color: var(--card-ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cf-title--m h3 { font-size: calc(var(--cw) * .06); }
+.cf-title--n h3 { font-size: calc(var(--cw) * .046); }
+.cf-title--w h3 {
+  font-size: calc(var(--cw) * .052); line-height: 1.08; white-space: normal;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
 }
 .cf-title p {
-  margin: calc(var(--cw) * .008) 0 0; font: 500 calc(var(--cw) * .034)/1.1 var(--font-body); color: var(--card-ink-2);
+  margin: calc(var(--cw) * .008) 0 0; font: 500 calc(var(--cw) * .033)/1.15 var(--font-body); color: var(--card-ink-2);
 }
-.cf-badge {
-  width: calc(var(--cw) * .11); height: calc(var(--cw) * .11); border-radius: 26%;
-  overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.5) inset;
+.cf-type {
+  width: calc(var(--cw) * .1); height: calc(var(--cw) * .1); border-radius: 50%;
+  display: grid; place-items: center; align-self: start;
+  background: radial-gradient(circle at 32% 28%, #ffffff, #dfe2e7 46%, #b9bec6 100%);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.7), inset 0 -2px 3px rgba(0,0,0,.12);
 }
-.cf-badge img { width: 100%; height: 100%; }
+.cf-type svg {
+  width: calc(var(--cw) * .056); height: calc(var(--cw) * .056);
+  stroke: var(--card-ink); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
 
 .cf-art {
   position: relative; aspect-ratio: 1.6; border-radius: 4px; overflow: hidden;
-  background: var(--navy);
-  display: grid; grid-template-columns: 60fr 40fr; gap: 2px;
+  background: var(--navy); margin: 0; flex: none;
   box-shadow: 0 0 0 1px rgba(20,22,26,.45), inset 0 1px 0 rgba(255,255,255,.12);
-  padding: 0; margin: 0;
 }
-.cf-art__pane { position: relative; overflow: hidden; background: var(--navy); }
-.cf-art__pane img { position: absolute; width: auto; }
-/* turn-state crop: x 60..850 (the whole pick button), centred on y 760, of a 1206x2622 capture */
-.cf-art__pane--turn img { height: 318.6%; top: -42.4%; left: -7.6%; }
-/* candy shield crop: x 60..580, y 1220..1820 of a 1206x2622 capture */
-.cf-art__pane--pack img { height: 437%; top: -203.4%; left: -33.6%; }
+.cf-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .cf-art::after {             /* the window's own glass edge, inside the foil */
   content: ''; position: absolute; inset: 0; border-radius: 4px; pointer-events: none;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
 }
+/* the lock is card UI, laid over the window, never part of the art */
+.cf-lock {
+  position: absolute; left: calc(var(--cw) * .02); bottom: calc(var(--cw) * .02); z-index: 1;
+  display: inline-flex; align-items: center; gap: calc(var(--cw) * .012);
+  padding: calc(var(--cw) * .011) calc(var(--cw) * .022) calc(var(--cw) * .011) calc(var(--cw) * .016);
+  border-radius: 999px; background: rgba(14, 18, 24, .82); color: #fff;
+  font: 600 calc(var(--cw) * .026)/1 var(--font-body); letter-spacing: .01em;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 2px 6px rgba(0,0,0,.35);
+}
+.cf-lock svg { width: calc(var(--cw) * .032); height: calc(var(--cw) * .032); stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .cf-stats {
-  list-style: none; margin: calc(var(--cw) * .028) 0 0; padding: 0;
-  display: grid; gap: calc(var(--cw) * .012);
-  flex: 1;
+  list-style: none; margin: calc(var(--cw) * .024) 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: calc(var(--cw) * .012);
+  flex: 1; min-height: 0;
 }
+/* rows share out the space down to the footer, the way the reference's do */
 .cf-stats li {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
-  column-gap: calc(var(--cw) * .028);
-  padding: calc(var(--cw) * .018) calc(var(--cw) * .026);
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; align-content: center;
+  flex: 1 1 auto; max-height: calc(var(--cw) * .2);
+  column-gap: calc(var(--cw) * .026);
+  padding: calc(var(--cw) * .015) calc(var(--cw) * .024);
   border-radius: 4px;
   background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25));
   box-shadow: 0 0 0 1px rgba(20,22,26,.14), 0 1px 0 rgba(255,255,255,.6) inset;
 }
 .cf-stats svg {
-  width: calc(var(--cw) * .052); height: calc(var(--cw) * .052); grid-column: 1; grid-row: 1 / span 2;
+  width: calc(var(--cw) * .048); height: calc(var(--cw) * .048); grid-column: 1; grid-row: 1 / span 2;
   stroke: var(--card-ink); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
-.cf-stats .l { grid-column: 2; grid-row: 1; font: 700 calc(var(--cw) * .037)/1.15 var(--font-body); color: var(--card-ink); }
-.cf-stats .s { grid-column: 2; grid-row: 2; font: 500 calc(var(--cw) * .030)/1.2 var(--font-body); color: var(--card-ink-3); margin-top: calc(var(--cw) * .004); }
-.cf-stats .v {
-  grid-column: 3; grid-row: 1 / span 2; font: 800 calc(var(--cw) * .044)/1 var(--font-heading); letter-spacing: -.01em; color: var(--card-ink);
-  text-align: right;
+.cf-stats .l, .cb-outcomes .l {
+  grid-column: 2; grid-row: 1;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
+.cf-stats .s, .cb-outcomes .s {
+  grid-column: 2; grid-row: 2;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.cf-stats .l { font: 700 calc(var(--cw) * .034)/1.18 var(--font-body); color: var(--card-ink); }
+.cf-stats .s { font: 500 calc(var(--cw) * .028)/1.22 var(--font-body); color: var(--card-ink-3); margin-top: calc(var(--cw) * .003); }
+.v {
+  grid-column: 3; grid-row: 1 / span 2; text-align: right;
+  font: 800 calc(var(--cw) * .046)/1 var(--font-heading); letter-spacing: -.01em; color: var(--card-ink);
+}
+.v--m { font-size: calc(var(--cw) * .034); }
+.v--s { font-size: calc(var(--cw) * .03); line-height: 1.12; max-width: calc(var(--cw) * .3); }
 .cf-foot {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: calc(var(--cw) * .024);
-  padding: calc(var(--cw) * .014) calc(var(--cw) * .02) calc(var(--cw) * .006);
-  font: 700 calc(var(--cw) * .029)/1 var(--font-heading); letter-spacing: .1em; text-transform: uppercase; color: var(--card-ink-2);
+  display: flex; justify-content: space-between; align-items: center; gap: calc(var(--cw) * .03);
+  margin-top: calc(var(--cw) * .02);
+  padding: calc(var(--cw) * .014) calc(var(--cw) * .02) calc(var(--cw) * .004);
+  font: 700 calc(var(--cw) * .027)/1 var(--font-heading); letter-spacing: .1em; text-transform: uppercase; color: var(--card-ink-2);
   border-top: 1px solid rgba(20,22,26,.18);
 }
 
-/* back face: the navy ground the study opens on, silver type */
+/* back face: a deep ground, silver type */
 .face--back {
   color: #e9ecf1;
   background:
@@ -416,61 +447,71 @@ button { font: inherit; }
 }
 .face--back .face__foil { opacity: .8; }
 .cb-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: calc(var(--cw) * .018) calc(var(--cw) * .018) 0;
+  display: flex; justify-content: space-between; align-items: baseline; gap: calc(var(--cw) * .03);
+  padding: calc(var(--cw) * .016) calc(var(--cw) * .018) 0;
 }
-.cb-head h3 { margin: 0; font: 800 calc(var(--cw) * .07)/1 var(--font-heading); letter-spacing: -.02em; color: #fff; }
-.cb-head span { font: 600 calc(var(--cw) * .034)/1 var(--font-mono); color: #9aa6b5; }
+.cb-head h3 { margin: 0; font: 800 calc(var(--cw) * .062)/1.05 var(--font-heading); letter-spacing: -.02em; color: #fff; }
+.cb-head span { font: 600 calc(var(--cw) * .032)/1 var(--font-mono); color: #9aa6b5; }
+.cb-thesis {
+  margin: calc(var(--cw) * .01) calc(var(--cw) * .018) 0;
+  font: italic 400 calc(var(--cw) * .029)/1.35 var(--font-body); color: #c3ccd8;
+}
 .cb-label {
-  margin: calc(var(--cw) * .022) 0 calc(var(--cw) * .008);
-  font: 700 calc(var(--cw) * .027)/1 var(--font-heading); letter-spacing: .12em; text-transform: uppercase; color: #fec232;
+  margin: calc(var(--cw) * .02) 0 calc(var(--cw) * .008);
+  font: 700 calc(var(--cw) * .025)/1 var(--font-heading); letter-spacing: .12em; text-transform: uppercase; color: #fec232;
 }
 .cb-body { display: grid; grid-template-columns: 1fr calc(var(--cw) * .27); gap: calc(var(--cw) * .03); align-items: start; padding: 0 calc(var(--cw) * .018); }
-.cb-overview { margin: 0; font: 400 calc(var(--cw) * .030)/1.35 var(--font-body); color: #d6dbe3; }
+.cb-body--landscape { grid-template-columns: 1fr; gap: calc(var(--cw) * .016); }
+.cb-text .cb-label { margin-top: calc(var(--cw) * .014); }
+.cb-overview { margin: 0; font: 400 calc(var(--cw) * .028)/1.36 var(--font-body); color: #d6dbe3; }
 .cb-shot {
-  position: relative; aspect-ratio: .62; border-radius: 4px; overflow: hidden; background: var(--navy);
+  position: relative; border-radius: 4px; overflow: hidden; background: var(--navy);
   box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 8px 18px -10px rgba(0,0,0,.8);
-  margin-top: calc(var(--cw) * .012);
 }
-/* recap crop: x 60..1145, y 440..1420 of a 1206x2622 capture */
-.cb-shot img { position: absolute; width: 111%; left: -5.5%; top: -27%; }
+.cb-shot--portrait { aspect-ratio: .62; margin-top: calc(var(--cw) * .014); }
+.cb-shot--portrait img { position: absolute; width: 100%; left: 0; top: 0; }
+.cb-shot--portrait img.is-cover { inset: 0; height: 100%; object-fit: cover; }
+.cb-shot--landscape { aspect-ratio: 2.7; }
+.cb-shot--landscape img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .cb-meta {
-  margin: 0; padding: 0 calc(var(--cw) * .018);
-  display: grid; grid-template-columns: auto 1fr; column-gap: calc(var(--cw) * .03); row-gap: calc(var(--cw) * .008);
-  font: 500 calc(var(--cw) * .027)/1.3 var(--font-body);
+  margin: calc(var(--cw) * .018) 0 0; padding: 0;
+  display: grid; grid-template-columns: auto 1fr; column-gap: calc(var(--cw) * .026); row-gap: calc(var(--cw) * .007);
+  font: 500 calc(var(--cw) * .026)/1.3 var(--font-body);
 }
-.cb-meta dt { color: #8f9daf; text-transform: uppercase; letter-spacing: .08em; font: 700 calc(var(--cw) * .025)/1.6 var(--font-heading); }
+.cb-meta dt { color: #8f9daf; text-transform: uppercase; letter-spacing: .08em; font: 700 calc(var(--cw) * .023)/1.55 var(--font-heading); }
 .cb-meta dd { margin: 0; color: #e9ecf1; }
-.cb-outcomes { list-style: none; margin: 0; padding: 0 calc(var(--cw) * .018); display: grid; gap: calc(var(--cw) * .012); flex: 1; }
+.cb-outcomes { list-style: none; margin: 0; padding: 0 calc(var(--cw) * .018); display: flex; flex-direction: column; gap: calc(var(--cw) * .01); flex: 1; min-height: 0; }
 .cb-outcomes li {
-  display: grid; grid-template-columns: auto 1fr; column-gap: calc(var(--cw) * .025); align-items: start;
+  display: grid; grid-template-columns: auto 1fr auto; column-gap: calc(var(--cw) * .024); align-items: center;
   padding: calc(var(--cw) * .012) calc(var(--cw) * .02);
   border-radius: 4px; background: rgba(255,255,255,.05); box-shadow: 0 0 0 1px rgba(255,255,255,.10);
 }
-.cb-outcomes svg { width: calc(var(--cw) * .044); height: calc(var(--cw) * .044); stroke: #fec232; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; grid-column: 1; grid-row: 1 / span 2; margin-top: 2px; }
-.cb-outcomes .l { grid-column: 2; grid-row: 1; font: 700 calc(var(--cw) * .031)/1.2 var(--font-body); color: #fff; }
-.cb-outcomes .s { grid-column: 2; grid-row: 2; font: 400 calc(var(--cw) * .027)/1.3 var(--font-body); color: #aeb8c6; margin-top: 2px; }
+.cb-outcomes svg { width: calc(var(--cw) * .04); height: calc(var(--cw) * .04); stroke: #fec232; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; grid-column: 1; grid-row: 1 / span 2; }
+.cb-outcomes .l { font: 600 calc(var(--cw) * .028)/1.28 var(--font-body); color: #fff; -webkit-line-clamp: 4; }
+.cb-outcomes .s { font: 400 calc(var(--cw) * .025)/1.28 var(--font-body); color: #aeb8c6; margin-top: 1px; }
+.cb-outcomes .v { color: #fec232; }
 .cb-foot {
   display: flex; justify-content: space-between; align-items: center;
-  margin-top: calc(var(--cw) * .018); padding: calc(var(--cw) * .014) calc(var(--cw) * .02) calc(var(--cw) * .006);
+  margin-top: calc(var(--cw) * .016); padding: calc(var(--cw) * .014) calc(var(--cw) * .02) calc(var(--cw) * .004);
   border-top: 1px solid rgba(255,255,255,.16);
 }
 .cb-foot a {
-  color: #fff; text-decoration: none; font: 700 calc(var(--cw) * .032)/1 var(--font-body);
+  color: #fff; text-decoration: none; font: 700 calc(var(--cw) * .03)/1 var(--font-body);
   border-bottom: 1px solid #fec232; padding-bottom: 2px;
 }
 .cb-foot a:hover, .cb-foot a:focus-visible { color: #fec232; outline: none; }
-.cb-foot .rdb { font: 800 calc(var(--cw) * .04)/1 var(--font-heading); letter-spacing: .04em; color: #9aa6b5; }
+.cb-foot .rdb { font: 800 calc(var(--cw) * .038)/1 var(--font-heading); letter-spacing: .04em; color: #9aa6b5; }
 
-/* ---------- pose mode: no transitions, for matched stills ---------- */
-.stage--posed .card, .stage--posed .card__body, .stage--posed .card__shadow, .stage--posed .sleeve { transition: none !important; }
-/* ---------- reduced motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .card, .card__body, .card__shadow, .sleeve { transition: none !important; }
-}
+/* ---------- pose mode and reduced motion: no transitions ---------- */
+.stage--posed .card, .stage--posed .card__body, .stage--posed .card__shadow, .stage--posed .sleeve,
 .stage--rm .card, .stage--rm .card__body, .stage--rm .card__shadow, .stage--rm .sleeve { transition: none !important; }
+.stage--rm .card--nudge, .stage--posed .card--nudge { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .card, .card__body, .card__shadow, .sleeve, .scrim { transition: none !important; }
+  .card--nudge { animation: none; }
+}
 
-/* ---------- scrim: the page recedes while the card is out ---------- */
+/* ---------- scrim: the page recedes while a card is out ---------- */
 .scrim {
   position: fixed; inset: 0; z-index: 44; background: rgba(27, 27, 27, .42);
   opacity: 0; pointer-events: none; transition: opacity var(--d-travel) ease;
@@ -479,23 +520,26 @@ button { font: inherit; }
 .scrim--on { opacity: 1; pointer-events: auto; }
 .scrim:focus-visible { outline: none; }
 .stage--rm .scrim, .stage--posed .scrim { transition: none; }
- (prefers-reduced-motion: reduce) { .scrim { transition: none; } }
 
-/* ---------- the panel (bench controls) ---------- */
-.panel {
-  border: 1px solid var(--hairline); border-radius: 12px; background: var(--paper);
-  padding: 20px; position: sticky; top: 16px; z-index: 46;
+/* ---------- inspect bar: the two things you can do with a card in hand ---------- */
+.inspect-bar {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 60;
+  display: flex; gap: 8px; padding: 8px;
+  background: rgba(255,255,255,.97); border: 1px solid var(--hairline); border-radius: 14px;
+  box-shadow: 0 12px 30px -12px rgba(0,0,0,.5);
 }
-.panel h2 { margin: 0 0 4px; font: 700 14px/1.4 var(--font-heading); letter-spacing: .08em; text-transform: uppercase; color: var(--steel-dark); }
-.panel p { margin: 0 0 14px; font-size: 14px; color: var(--slate); }
-.readout {
-  display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0 0 16px;
-  font: 500 13px/1.5 var(--font-mono); color: var(--slate);
-  padding: 10px 12px; background: var(--cool-paper); border-radius: 8px;
+.inspect-bar[hidden] { display: none; }
+.inspect-bar .btn { white-space: nowrap; }
+@media (max-width: 599px) {
+  .inspect-bar { left: 16px; right: 16px; transform: none; }
+  .inspect-bar .btn { flex: 1 1 0; padding: 0 10px; font-size: 13px; }
 }
-.readout dt { color: var(--graphite); }
-.readout dd { margin: 0; color: var(--ink); }
-.btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+/* ---------- pager ---------- */
+.pager { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
+.pager__count { font: 600 13px/1 var(--font-mono); color: var(--slate); min-width: 96px; text-align: center; }
+
+/* ---------- buttons ---------- */
 .btn {
   height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--steel-dark);
   background: var(--paper); color: var(--steel-dark); font: 800 14px/1 var(--font-heading); letter-spacing: .02em;
@@ -508,12 +552,46 @@ button { font: inherit; }
 .btn--primary:hover:not(:disabled) { background: #c23001; border-color: #c23001; color: #fdede9; }
 .btn--sm { height: 32px; padding: 0 12px; font-size: 12px; border-radius: 8px; }
 .btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.toggles { display: grid; gap: 8px; margin-bottom: 16px; }
+
+/* ---------- the panel (bench controls) ---------- */
+.panel {
+  position: relative; z-index: 46; margin-top: 28px;
+  border: 1px solid var(--hairline); border-radius: 12px; background: var(--paper);
+  padding: 20px; display: grid; gap: 20px 32px; grid-template-columns: 1fr;
+}
+@media (min-width: 900px) { .panel { grid-template-columns: 1.15fr 1fr 1.25fr 1fr; } }
+.panel h2 { margin: 0 0 8px; font: 700 12px/1.4 var(--font-heading); letter-spacing: .08em; text-transform: uppercase; color: var(--steel-dark); }
+.panel p { margin: 0 0 10px; font-size: 14px; color: var(--slate); }
+.select {
+  width: 100%; height: 40px; border: 1px solid var(--steel-dark); border-radius: 10px; padding: 0 12px;
+  font: 600 14px/1 var(--font-body); color: var(--ink); background: var(--paper); margin-bottom: 10px;
+}
+.select:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.readout {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0;
+  font: 500 13px/1.5 var(--font-mono); color: var(--slate);
+  padding: 10px 12px; background: var(--cool-paper); border-radius: 8px;
+}
+.readout dt { color: var(--graphite); }
+.readout dd { margin: 0; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.toggles { display: grid; gap: 8px; margin-bottom: 10px; }
 .toggle { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); cursor: pointer; }
 .toggle input { width: 18px; height: 18px; accent-color: var(--signal); margin: 0; }
-.panel h3 { margin: 16px 0 8px; font: 700 12px/1.4 var(--font-heading); letter-spacing: .08em; text-transform: uppercase; color: var(--graphite); }
-.hint { font-size: 12px; color: var(--graphite); margin: 0; }
+.hint { font-size: 12px; color: var(--graphite); margin: 8px 0 0; }
 kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var(--hairline); border-bottom-width: 2px; border-radius: 4px; background: var(--mist); color: var(--slate); }
+
+/* ---------- the locked-card stand-in ---------- */
+.lock-dialog {
+  border: 1px solid var(--hairline); border-radius: 16px; padding: 28px;
+  width: min(440px, calc(100% - 32px)); color: var(--ink); background: var(--paper);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.45);
+}
+.lock-dialog::backdrop { background: rgba(27, 27, 27, .42); }
+.lock-dialog__icon { width: 44px; height: 44px; border-radius: 50%; background: #fdede9; color: var(--signal); display: grid; place-items: center; }
+.lock-dialog__icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.lock-dialog h2 { font: 800 22px/1.25 var(--font-heading); letter-spacing: -.01em; margin: 14px 0 8px; }
+.lock-dialog p { margin: 0 0 20px; color: var(--slate); font-size: 15px; }
 
 /* ---------- notes below ---------- */
 .notes { padding: 0 0 72px; display: grid; gap: 24px; grid-template-columns: 1fr; }
@@ -523,7 +601,6 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
 .note ul, .note ol { margin: 0; padding-left: 20px; color: var(--slate); font-size: 15px; }
 .note li { margin-bottom: 8px; }
 .note li b { color: var(--ink); }
-.note p { color: var(--slate); font-size: 15px; margin: 0 0 10px; }
 </style>
 </head>
 <body>
@@ -531,13 +608,13 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
 <header class="top">
   <div class="wrap">
     <span class="top__eyebrow">Exploration · Fable pass</span>
-    <h1>One pocket, one card, three materials</h1>
-    <p>A fidelity specimen for the collectible binder. The sleeve is plastic in front of the card, the card is a rigid object that leaves it, and the page behind both stays put. Everything on the card is real PlayDraft work and verified copy from the study.</p>
-    <p>This is not integration. Order, facts and artwork come from <code>src/data/projects.ts</code>; the techniques here are the proposal, and the discrepancy list at the bottom is where the reference and this page still disagree.</p>
+    <h1>Twelve studies, one binder</h1>
+    <p>The binder specimen again, now carrying every case study in work order, each with its chosen hero. The sleeve is plastic in front of the card, the card leaves its own slot, and the page behind both stays put.</p>
+    <p>Card copy comes from <code>src/data/projects.ts</code> through <code>build-cards.mjs</code>. The heroes are AI-generated previews that their package marks as private review drafts, so this page is for review, not publication. Locked studies show their front and stop at a password stand-in.</p>
     <div class="chips">
-      <span class="chip">Card <b>02 · PlayDraft</b></span>
-      <span class="chip">Artwork <b>public UI, v2 staging captures</b></span>
-      <span class="chip">Lock <b>none (personal product)</b></span>
+      <span class="chip">Cards <b>12, in work order</b></span>
+      <span class="chip">Heroes <b>generated previews, private drafts</b></span>
+      <span class="chip">Locked <b>7 professional studies</b></span>
       <span class="chip">Light <b>pointer, or idle drift</b></span>
       <span class="chip">Reduced motion <b>honoured</b></span>
     </div>
@@ -545,214 +622,219 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
 </header>
 
 <main class="wrap lab">
-  <section class="stage" id="stage" aria-label="Binder specimen">
+  <section class="stage" id="stage" aria-label="Binder">
     <div class="binder">
       <div class="rings" aria-hidden="true">
         <div class="ring"></div><div class="ring"></div><div class="ring"></div>
       </div>
-
-      <div class="pockets">
-        <!-- empty sleeve: the plastic alone, over the backing -->
-        <div class="pocket pocket--empty pocket--empty-a" aria-hidden="true">
-          <div class="pocket__well"></div>
-          <div class="sleeve"></div>
-        </div>
-
-        <!-- the specimen -->
-        <div class="pocket pocket--filled" id="pocket">
-          <div class="pocket__well"></div>
-
-          <article class="card" id="card" tabindex="0" role="button" aria-pressed="false"
-                   aria-label="PlayDraft: A social drafting game. Collectible card. Press Enter to take it out of its sleeve."
-                   aria-describedby="card-help">
-            <div class="card__body" id="cardBody">
-
-              <!-- FRONT -->
-              <div class="face face--front">
-                <div class="face__foil"></div>
-                <header class="cf-head">
-                  <span class="cf-index">02</span>
-                  <div class="cf-title">
-                    <h3>PlayDraft</h3>
-                    <p>A social drafting game</p>
-                  </div>
-                  <span class="cf-badge"><img src="../../../public/images/work/playdraft/playdraft-app-icon-mark.png" alt="" width="180" height="180"></span>
-                </header>
-
-                <div class="cf-art" role="img" aria-label="PlayDraft shows whose turn it is to pick from a social draft pack, beside the Candy pack shield.">
-                  <div class="cf-art__pane cf-art__pane--turn"><img src="../../../public/images/work/playdraft/v2/playdraft-v2-home-turn.png" alt=""></div>
-                  <div class="cf-art__pane cf-art__pane--pack"><img src="../../../public/images/work/playdraft/v2/playdraft-v2-packs.png" alt=""></div>
-                </div>
-
-                <ul class="cf-stats" aria-label="Verified highlights">
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg>
-                    <span class="l">On the iOS App Store</span>
-                    <span class="s">Solo design and build</span>
-                    <span class="v">Launched</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18M8 15v5M16 15v5"/></svg>
-                    <span class="l">Destinations in the v2 navigation</span>
-                    <span class="s">Home, Drafts, Packs and Custom</span>
-                    <span class="v">4</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>
-                    <span class="l">Clock choices per pick</span>
-                    <span class="s">2 minutes or 8 hours</span>
-                    <span class="v">2</span>
-                  </li>
-                </ul>
-
-                <footer class="cf-foot">
-                  <span>2026</span>
-                  <span>iOS · Personal product</span>
-                </footer>
-                <div class="face__sheen"></div>
-              </div>
-
-              <!-- BACK -->
-              <div class="face face--back">
-                <div class="face__foil"></div>
-                <header class="cb-head">
-                  <h3>PlayDraft</h3>
-                  <span>02</span>
-                </header>
-                <p class="cb-label">Overview</p>
-                <div class="cb-body">
-                  <div>
-                    <p class="cb-overview">My independently built social drafting game for iPhone. Friends take turns picking favorites from everyday topics and compare the boards. The study covers the original release and the current simplification rebuild.</p>
-                    <dl class="cb-meta" style="padding:0; margin-top: calc(var(--cw) * .03)">
-                      <dt>Role</dt><dd>Product design · Design system · Agent-assisted build</dd>
-                      <dt>Stack</dt><dd>Expo / React Native · Supabase</dd>
-                      <dt>Status</dt><dd>Original release on iOS · v2 in development</dd>
-                    </dl>
-                  </div>
-                  <div class="cb-shot" role="img" aria-label="Draft complete screen for The Candy Showdown, three lineups and nine picks recorded.">
-                    <img src="../../../public/images/work/playdraft/progression/screenshots/10-draft-recap.png" alt="">
-                  </div>
-                </div>
-                <p class="cb-label">What held</p>
-                <ul class="cb-outcomes">
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
-                    <span class="l">Brand to TestFlight in twelve weeks</span>
-                    <span class="s">Then launched on the iOS App Store.</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-                    <span class="l">Next-day voting retired in June</span>
-                    <span class="s">So a group finishes a draft in one sitting.</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg>
-                    <span class="l">Every token appears in the in-app gallery</span>
-                    <span class="s">A concrete way to review additions from agents.</span>
-                  </li>
-                </ul>
-                <footer class="cb-foot">
-                  <a href="https://www.rdeboerdesigns.com/work/playdraft/" target="_blank" rel="noopener">Read the full study</a>
-                  <span class="rdb">RDB</span>
-                </footer>
-                <div class="face__sheen"></div>
-              </div>
-
-              <div class="card__edge card__edge--l" aria-hidden="true"></div>
-              <div class="card__edge card__edge--r" aria-hidden="true"></div>
-            </div>
-          </article>
-          <div class="card__shadow" id="cardShadow" aria-hidden="true"></div>
-
-          <div class="sleeve"></div>
-        </div>
-
-        <div class="pocket pocket--empty pocket--empty-b" aria-hidden="true">
-          <div class="pocket__well"></div>
-          <div class="sleeve"></div>
-        </div>
-      </div>
+      <div class="pockets" id="pockets"></div>
     </div>
-    <p id="card-help" class="sr-only">Enter or Space takes the card out of its sleeve. Once it is out, Space or T turns it over and Escape returns it.</p>
+
+    <nav class="pager" id="pager" aria-label="Binder pages">
+      <button type="button" class="btn btn--sm" id="pgPrev">Previous page</button>
+      <span class="pager__count" id="pgCount" aria-live="polite">Page 1 of 2</span>
+      <button type="button" class="btn btn--sm" id="pgNext">Next page</button>
+    </nav>
+
+    <p id="card-help" class="sr-only">Enter or Space takes a card out of its sleeve. Once it is out, Space or T turns it over and Escape puts it back. Locked cards ask for the site password first.</p>
     <p class="sr-only" id="live" aria-live="polite"></p>
-    <button type="button" class="scrim" id="scrim" tabindex="-1" aria-label="Return the card to its sleeve"></button>
+    <button type="button" class="scrim" id="scrim" tabindex="-1" aria-label="Put the card back in its sleeve"></button>
+    <div class="inspect-bar" id="inspectBar" hidden>
+      <button type="button" class="btn btn--primary" id="ibTurn">Turn over</button>
+      <button type="button" class="btn" id="ibReturn">Back in the sleeve</button>
+    </div>
   </section>
 
-  <aside class="panel" aria-label="Specimen controls">
-    <h2>Sequence</h2>
-    <p>Click the card, or drive it from here. Keyboard: <kbd>Enter</kbd> out, <kbd>Space</kbd> turn, <kbd>Esc</kbd> back.</p>
-    <dl class="readout">
-      <dt>state</dt><dd id="roState">seated</dd>
-      <dt>face</dt><dd id="roFace">front</dd>
-      <dt>light</dt><dd id="roLight">0.32, 0.22</dd>
-    </dl>
-    <div class="btns">
-      <button class="btn btn--primary" id="bInspect">Take it out</button>
-      <button class="btn" id="bTurn" disabled>Turn over</button>
-      <button class="btn" id="bReturn" disabled>Return to sleeve</button>
+  <section class="panel" id="panel" aria-label="Specimen controls">
+    <div>
+      <h2>Selected card</h2>
+      <label class="sr-only" for="pick">Selected card</label>
+      <select class="select" id="pick"></select>
+      <dl class="readout">
+        <dt>state</dt><dd id="roState">seated</dd>
+        <dt>face</dt><dd id="roFace">front</dd>
+        <dt>light</dt><dd id="roLight">0.32, 0.22</dd>
+      </dl>
     </div>
-
-    <h3>Paused frames</h3>
-    <div class="btns" id="poses">
-      <button class="btn btn--sm" data-pose="live" aria-pressed="true">Live</button>
-      <button class="btn btn--sm" data-pose="seated">Seated</button>
-      <button class="btn btn--sm" data-pose="partly">Partly out</button>
-      <button class="btn btn--sm" data-pose="clear">Clear</button>
-      <button class="btn btn--sm" data-pose="edge">Edge-on</button>
-      <button class="btn btn--sm" data-pose="back">Back</button>
-      <button class="btn btn--sm" data-pose="returning">Returning</button>
+    <div>
+      <h2>Sequence</h2>
+      <p>Click a card, or drive the selected one from here. <kbd>Enter</kbd> out, <kbd>Space</kbd> turn, <kbd>Esc</kbd> back.</p>
+      <div class="btns">
+        <button class="btn btn--primary" id="bInspect">Take it out</button>
+        <button class="btn" id="bTurn" disabled>Turn over</button>
+        <button class="btn" id="bReturn" disabled>Return</button>
+      </div>
     </div>
-
-    <h3>Proof toggles</h3>
-    <div class="toggles">
-      <label class="toggle"><input type="checkbox" id="tSleeve"> Hide the sleeve</label>
-      <label class="toggle"><input type="checkbox" id="tExplode"> Explode the layers</label>
-      <label class="toggle"><input type="checkbox" id="tLight"> Fix the light (no drift, no pointer)</label>
-      <label class="toggle"><input type="checkbox" id="tRM"> Force reduced motion</label>
+    <div>
+      <h2>Paused frames</h2>
+      <div class="btns" id="poses">
+        <button class="btn btn--sm" data-pose="live" aria-pressed="true">Live</button>
+        <button class="btn btn--sm" data-pose="seated">Seated</button>
+        <button class="btn btn--sm" data-pose="partly">Partly out</button>
+        <button class="btn btn--sm" data-pose="clear">Clear</button>
+        <button class="btn btn--sm" data-pose="edge">Edge-on</button>
+        <button class="btn btn--sm" data-pose="back">Back</button>
+        <button class="btn btn--sm" data-pose="returning">Returning</button>
+      </div>
+      <p class="hint">Frames hold the selected card still for matched captures. Locked cards have no back to show.</p>
     </div>
-    <p class="hint">Hide the sleeve and nothing on the card changes except that it stops being glossed. Explode the layers and the backing, card and plastic separate. Both are the point.</p>
-  </aside>
+    <div>
+      <h2>Proof toggles</h2>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="tSleeve"> Hide the sleeves</label>
+        <label class="toggle"><input type="checkbox" id="tExplode"> Explode the layers</label>
+        <label class="toggle"><input type="checkbox" id="tLight"> Fix the light</label>
+        <label class="toggle"><input type="checkbox" id="tRM"> Force reduced motion</label>
+      </div>
+    </div>
+  </section>
 </main>
+
+<dialog class="lock-dialog" id="lockDialog" aria-labelledby="lockTitle" aria-describedby="lockBody">
+  <form method="dialog">
+    <span class="lock-dialog__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+    <h2 id="lockTitle">Password protected</h2>
+    <p id="lockBody">In the binder, the site's password prompt opens here, before a locked card can leave its sleeve. This specimen has no password check and carries nothing a locked card would hide, so the card stays put.</p>
+    <button class="btn btn--primary" value="close" autofocus>Keep it in the sleeve</button>
+  </form>
+</dialog>
 
 <section class="wrap notes">
   <div class="note">
     <h2>What this page claims</h2>
     <ul>
-      <li><b>Three materials, one light.</b> The sleeve's specular, the foil ring and the face's light path all answer the same pointer. Nothing is baked into the artwork; the two screenshots are untouched files from the study.</li>
-      <li><b>The card leaves its own slot.</b> It slides up behind the plastic first, so the part still in the mouth stays glossed and the part above it goes crisp. Only once it is clear does it come forward, scale and turn.</li>
-      <li><b>Foil lives at the edges.</b> A pale prismatic ring and one moving light path. The face stays silver and the type stays dark, which is what makes the reference read as a card and not a hologram.</li>
-      <li><b>The back is worth the turn.</b> Overview, role, stack, status, three outcomes from the study's takeaways, a real recap capture and the only link. No thumbnail repeated.</li>
-      <li><b>Every word is from the study.</b> Title, subtitle, the three rows, the year and the stream label are the card data and the metrics array for <code>playdraft</code>. No HP, no scores, no month.</li>
+      <li><b>Every card is real copy.</b> Titles, rows, years and categories come from the project data through a build script. Nothing on a card is typed by hand.</li>
+      <li><b>The heroes sit under the materials.</b> Each one is a plain static image in the art window. Sleeve gloss, foil and the light path stay separate layers and answer the pointer.</li>
+      <li><b>Locked cards stop at the gate.</b> The seven professional studies carry a lock and have no back in this page at all. Selecting one opens a password stand-in, and the card stays in its sleeve.</li>
+      <li><b>Public cards keep the whole sequence.</b> Pull, turn to a back built from the study's own copy and a real capture, then return to the same slot.</li>
+      <li><b>Pages follow the device.</b> Six cards on desktop, four on a tablet and three on a phone, in the published work order.</li>
     </ul>
   </div>
   <div class="note">
-    <h2>Where it still differs from the reference</h2>
+    <h2>What still needs a decision</h2>
     <ol>
-      <li><b>Pastel foil, not saturated rainbow.</b> The reference's border is brighter. I kept it pale so the artwork holds at slot size. Owner call.</li>
-      <li><b>No HP or attack numbers.</b> The reference's right-hand values are invented. The rows carry the study's real values instead, so the right column is uneven (Launched, 4, 2). Astra to judge whether that rhythm is acceptable or the rows need a different shape.</li>
-      <li><b>Date footer is the year only.</b> The study records 2026, not a month.</li>
-      <li><b>Artwork is two panes.</b> The turn state and the Candy shield, rather than the reference's football montage. This is the hero track's recommendation, not an approved composition.</li>
-      <li><b>Mobile keeps the desktop proportions.</b> At phone width the card is wider than it is on the desktop page, so nothing is cut. The reference's shorter mobile crop was not needed; Opus should confirm in the real stack.</li>
-      <li><b>Lock, filters, routing and the password challenge are absent.</b> Those are Opus's half of the sequence, on top of this proof.</li>
-      <li><b>Edge-on is a 3px painted edge.</b> Convincing at speed, thin in a paused still. A thicker edge needs a real side face per edge; worth it only if Astra wants the still.</li>
+      <li><b>The heroes are private drafts.</b> They are AI-generated, and small text, charts and logos can differ from the real screens. Publishing them is Ryan's call.</li>
+      <li><b>Five locked heroes show Tire Rack branding,</b> and the AEM hero shows its headquarters. The site anonymizes the client while a study is locked. Approve the branding on the public front, or give those cards neutral covers.</li>
+      <li><b>Values are uneven.</b> Real metrics replace the reference's invented numbers, so long values wrap smaller.</li>
+      <li><b>Locked backs wait for real access control.</b> That is the Opus pass, running separately.</li>
+      <li><b>Paging is a plain pager.</b> How a visitor moves through the collection is still open.</li>
+      <li><b>Foil is pastel and edge-on is a painted edge.</b> Both are unchanged from the first pass.</li>
     </ol>
   </div>
 </section>
 
+<script src="cards.js"></script>
 <script>
 (() => {
   'use strict';
 
-  const stage   = document.getElementById('stage');
-  const pocket  = document.getElementById('pocket');
-  const card    = document.getElementById('card');
-  const body    = document.getElementById('cardBody');
-  const shadow  = document.getElementById('cardShadow');
-  const live    = document.getElementById('live');
-  const scrim   = document.getElementById('scrim');
-  const ro = { state: document.getElementById('roState'), face: document.getElementById('roFace'), light: document.getElementById('roLight') };
-  const b  = { inspect: document.getElementById('bInspect'), turn: document.getElementById('bTurn'), ret: document.getElementById('bReturn') };
-  const t  = { sleeve: document.getElementById('tSleeve'), explode: document.getElementById('tExplode'), light: document.getElementById('tLight'), rm: document.getElementById('tRM') };
+  const CARDS = window.BINDER_CARDS || [];
+  const $ = (id) => document.getElementById(id);
+  const stage = $('stage'), grid = $('pockets'), live = $('live'), scrim = $('scrim');
+  const bar = $('inspectBar'), ib = { turn: $('ibTurn'), ret: $('ibReturn') };
+  const dlg = $('lockDialog'), dlgTitle = $('lockTitle');
+  const pager = { prev: $('pgPrev'), next: $('pgNext'), count: $('pgCount') };
+  const ro = { state: $('roState'), face: $('roFace'), light: $('roLight') };
+  const b = { inspect: $('bInspect'), turn: $('bTurn'), ret: $('bReturn') };
+  const t = { sleeve: $('tSleeve'), explode: $('tExplode'), light: $('tLight'), rm: $('tRM') };
+  const pick = $('pick'), poses = $('poses');
+  const outside = [document.querySelector('.top'), $('pager'), $('panel'), document.querySelector('.notes')];
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const svg = (paths) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths}</svg>`;
+  const ICON = {
+    product: '<path d="M6 3.5 18.5 10.7 12.9 12.3 10.5 17.8z"/><path d="M12.9 12.3 17.6 17"/>',
+    systems: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+    aem: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9h17M9 9v11"/>',
+    client: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.5 3.5 5.3 3.5 8.5s-1.1 6-3.5 8.5c-2.4-2.5-3.5-5.3-3.5-8.5s1.1-6 3.5-8.5z"/>',
+    lock: '<rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>',
+  };
+  const ROW_ICONS = [
+    '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M6.3 17.7l2.8-2.8M14.9 9.1l2.8-2.8"/>',
+    '<path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
+  ];
+
+  // ---- cards, from cards.js ----
+  const statRow = (s, k) => `
+    <li>${svg(ROW_ICONS[k % 3])}
+      <span class="l">${esc(s.primary)}</span>
+      ${s.secondary ? `<span class="s">${esc(s.secondary)}</span>` : ''}
+      <span class="v v--${s.size}">${esc(s.value)}</span>
+    </li>`;
+
+  const frontHTML = (c, i) => `
+    <div class="face face--front">
+      <div class="face__foil"></div>
+      <header class="cf-head">
+        <span class="cf-index">${c.index}</span>
+        <div class="cf-title cf-title--${c.titleSize}">
+          <h3>${esc(c.title)}</h3>${c.subtitle ? `<p>${esc(c.subtitle)}</p>` : ''}
+        </div>
+        <span class="cf-type" title="${esc(c.groupLabel)}">${svg(ICON[c.group] || ICON.client)}<span class="sr-only">${esc(c.groupLabel)}</span></span>
+      </header>
+      <figure class="cf-art">
+        <img src="${c.hero}" alt="${esc(c.heroAlt)}" width="1280" height="800" decoding="async"${i >= 6 ? ' loading="lazy"' : ''}>
+        ${c.locked ? `<figcaption class="cf-lock">${svg(ICON.lock)}Password protected</figcaption>` : ''}
+      </figure>
+      <ul class="cf-stats" aria-label="Highlights from the study">${c.stats.map(statRow).join('')}</ul>
+      <footer class="cf-foot"><span>${esc(c.year)}</span><span>${esc(c.category)}</span></footer>
+      <div class="face__sheen"></div>
+    </div>`;
+
+  const backHTML = (c) => {
+    const k = c.back;
+    const shot = k.shot ? `
+      <div class="cb-shot cb-shot--${k.shot.shape}" role="img" aria-label="${esc(k.shot.alt)}">
+        <img src="${k.shot.src}" alt="" loading="lazy" decoding="async"${k.shot.crop
+          ? ` style="width:${k.shot.crop[0]}%;left:${k.shot.crop[1]}%;top:${k.shot.crop[2]}%"`
+          : ` class="is-cover" style="object-position:${k.shot.position}"`}>
+      </div>` : '';
+    const rows = k.rows.map((r, n) => (r.kind === 'stat' ? statRow(r, n) : `<li>${svg(ROW_ICONS[n % 3])}<span class="l">${esc(r.text)}</span></li>`)).join('');
+    const meta = k.meta.map(([dt, dd]) => `<dt>${esc(dt)}</dt><dd>${esc(dd)}</dd>`).join('');
+    return `
+    <div class="face face--back" inert>
+      <div class="face__foil"></div>
+      <header class="cb-head"><h3>${esc(c.title)}</h3><span>${c.index}</span></header>
+      ${k.thesis ? `<p class="cb-thesis">${esc(k.thesis)}</p>` : ''}
+      <div class="cb-body${k.shot && k.shot.shape === 'landscape' ? ' cb-body--landscape' : ''}">
+        <div class="cb-text">
+          <p class="cb-label">Overview</p>
+          <p class="cb-overview">${esc(k.overview)}</p>
+          <dl class="cb-meta">${meta}</dl>
+        </div>
+        ${shot}
+      </div>
+      ${rows ? `<p class="cb-label" style="padding:0 calc(var(--cw) * .018)">What held</p><ul class="cb-outcomes">${rows}</ul>` : ''}
+      <footer class="cb-foot"><a href="${k.href}" target="_blank" rel="noopener">Read the full study</a><span class="rdb">RDB</span></footer>
+      <div class="face__sheen"></div>
+    </div>`;
+  };
+
+  const total = String(CARDS.length).padStart(2, '0');
+  const cardLabel = (c) => `${c.title}${c.subtitle ? `: ${c.subtitle}` : ''}. Card ${c.index} of ${total}.${c.locked ? ' Password protected.' : ''}`;
+
+  grid.innerHTML = CARDS.map((c, i) => `
+    <div class="pocket${c.locked ? ' pocket--locked' : ''}" data-i="${i}" data-slug="${c.slug}">
+      <div class="pocket__well"></div>
+      <article class="card" tabindex="0" role="button" aria-label="${esc(cardLabel(c))}" aria-describedby="card-help">
+        <div class="card__body">
+          ${frontHTML(c, i)}
+          ${c.back ? backHTML(c) : ''}
+          <div class="card__edge card__edge--l" aria-hidden="true"></div>
+          <div class="card__edge card__edge--r" aria-hidden="true"></div>
+        </div>
+      </article>
+      <div class="card__shadow" aria-hidden="true"></div>
+      <div class="sleeve" aria-hidden="true"></div>
+    </div>`).join('');
+
+  const pockets = [...grid.querySelectorAll('.pocket')];
+  const parts = pockets.map((p) => ({
+    pocket: p, card: p.querySelector('.card'), body: p.querySelector('.card__body'),
+    shadow: p.querySelector('.card__shadow'), front: p.querySelector('.face--front'), back: p.querySelector('.face--back'),
+  }));
+  pick.innerHTML = CARDS.map((c, i) => `<option value="${i}">${c.index} · ${esc(c.title)}${c.locked ? ' · locked' : ''}</option>`).join('');
 
   // ---- rings: three pieces of hardware, drawn once ----
   document.querySelectorAll('.ring').forEach((el, i) => {
@@ -771,13 +853,12 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
       </svg>`;
   });
 
-  // ---- measure: type scales from the pocket's width, so phone and desktop share one card ----
+  // ---- measure: type scales from the pocket's width, so every size shares one card ----
   const setCW = () => {
-    const w = pocket.getBoundingClientRect().width;
-    card.style.setProperty('--cw', `${w}px`);
+    const p = pockets.find((x) => !x.hidden);
+    if (p) grid.style.setProperty('--cw', `${p.getBoundingClientRect().width}px`);
   };
-  new ResizeObserver(setCW).observe(pocket);
-  setCW();
+  new ResizeObserver(setCW).observe(grid);
 
   // ---- motion preference ----
   const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -786,26 +867,44 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   const D = { lift: 560, travel: 640, flip: 760 };
   const wait = (v) => new Promise((r) => setTimeout(r, ms(v) + (reduced() ? 20 : 30)));
 
+  // ---- state: one card moves at a time ----
+  let state = 'seated';      // seated | lifting | free | turned
+  let act = null;            // the parts of the card that is moving or posed
+  let busy = false, turning = false;
+  let sel = Math.max(0, CARDS.findIndex((c) => c.slug === 'playdraft'));
+  let page = 0;
+  const posed = () => stage.classList.contains('stage--posed');
+  const setVar = (p, k, v) => p.pocket.style.setProperty(k, v);
+
   // ---- light ----
-  let lx = .32, ly = .22, lastPointer = 0, raf = 0;
+  let lx = .32, ly = .22, lastPointer = 0;
   const applyLight = () => {
     stage.style.setProperty('--lx', lx.toFixed(3));
     stage.style.setProperty('--ly', ly.toFixed(3));
     ro.light.textContent = `${lx.toFixed(2)}, ${ly.toFixed(2)}`;
   };
-  const pointerLight = (e) => {
-    if (t.light.checked) return;
-    const r = stage.getBoundingClientRect();
-    lx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    ly = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-    lastPointer = performance.now();
-    applyLight();
-    tilt(e);
+  const tilt = (e) => {
+    if (!act || !(state === 'free' || state === 'turned') || turning || reduced() || posed()) return;
+    const r = act.card.getBoundingClientRect();
+    const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+    const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+    setVar(act, '--ty', `${(Math.max(-1, Math.min(1, dx)) * 7).toFixed(2)}deg`);
+    setVar(act, '--tx', `${(Math.max(-1, Math.min(1, -dy)) * 6).toFixed(2)}deg`);
   };
-  stage.addEventListener('pointermove', pointerLight);
+  const clearTilt = (p) => { if (p) { setVar(p, '--tx', '0deg'); setVar(p, '--ty', '0deg'); } };
+  window.addEventListener('pointermove', (e) => {
+    if (!t.light.checked) {
+      const r = stage.getBoundingClientRect();
+      lx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      ly = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+      lastPointer = performance.now();
+      applyLight();
+    }
+    tilt(e);
+  });
   // idle drift: a slow orbit when nobody is pointing, never under reduced motion
   const drift = (now) => {
-    raf = requestAnimationFrame(drift);
+    requestAnimationFrame(drift);
     if (t.light.checked || reduced()) return;
     if (now - lastPointer < 2600) return;
     const s = now / 1000;
@@ -813,154 +912,223 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
     ly = .38 + .26 * Math.sin(s * .49);
     applyLight();
   };
-  raf = requestAnimationFrame(drift);
+  requestAnimationFrame(drift);
   applyLight();
 
-  // ---- tilt while free: a few degrees toward the pointer, never during the turn ----
-  let state = 'seated'; // seated | lifting | free | turned
-  let turning = false;
-  const tilt = (e) => {
-    if (state !== 'free' && state !== 'turned') return;
-    if (turning || reduced()) return;
-    const r = card.getBoundingClientRect();
-    const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
-    const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
-    stage.style.setProperty('--ty', `${(dx * 7).toFixed(2)}deg`);
-    stage.style.setProperty('--tx', `${(-dy * 6).toFixed(2)}deg`);
+  // ---- pages: six on desktop, four on a tablet, three on a phone ----
+  const mqPhone = window.matchMedia('(max-width: 599px)');
+  const mqTablet = window.matchMedia('(min-width: 600px) and (max-width: 1023px)');
+  const perPage = () => (mqPhone.matches ? 3 : mqTablet.matches ? 4 : 6);
+  const pageCount = () => Math.ceil(CARDS.length / perPage());
+  const pageOf = (i) => Math.floor(i / perPage());
+  const syncPager = () => {
+    const still = state === 'seated' && !busy;
+    pager.count.textContent = `Page ${page + 1} of ${pageCount()}`;
+    pager.prev.disabled = !still || page === 0;
+    pager.next.disabled = !still || page >= pageCount() - 1;
   };
-  const clearTilt = () => { stage.style.setProperty('--tx', '0deg'); stage.style.setProperty('--ty', '0deg'); };
-  stage.addEventListener('pointerleave', clearTilt);
+  const showPage = (n) => {
+    page = Math.max(0, Math.min(pageCount() - 1, n));
+    const per = perPage();
+    pockets.forEach((p, i) => { p.hidden = Math.floor(i / per) !== page; });
+    if (pageOf(sel) !== page) select(page * per, false);
+    syncPager();
+    setCW();
+  };
+
+  // ---- selection: the bench controls act on one card ----
+  const updatePoseButtons = () => {
+    const locked = CARDS[sel].locked;
+    poses.querySelectorAll('[data-pose="edge"], [data-pose="back"]').forEach((x) => { x.disabled = locked; });
+  };
+  function select(i, follow = true) {
+    if (i === sel && !follow) return true;
+    if (state !== 'seated' || busy) return i === sel;
+    sel = i;
+    pick.value = String(i);
+    updatePoseButtons();
+    if (follow && pageOf(i) !== page) showPage(pageOf(i));
+    return true;
+  }
 
   // ---- the sequence ----
   const setState = (next) => {
+    const p = act || parts[sel];
     state = next;
-    card.classList.toggle('card--lifting', next === 'lifting');
-    card.classList.toggle('card--free', next === 'free' || next === 'turned');
-    shadow.classList.toggle('card__shadow--lifting', next === 'lifting');
-    shadow.classList.toggle('card__shadow--free', next === 'free' || next === 'turned');
-    pocket.classList.toggle('pocket--active', next !== 'seated');
-    scrim.classList.toggle('scrim--on', next === 'free' || next === 'turned');
-    card.setAttribute('aria-pressed', String(next !== 'seated'));
+    const out = next === 'free' || next === 'turned';
+    const modal = out && !posed();
+    p.card.classList.toggle('card--lifting', next === 'lifting');
+    p.card.classList.toggle('card--free', out);
+    p.shadow.classList.toggle('card__shadow--lifting', next === 'lifting');
+    p.shadow.classList.toggle('card__shadow--free', out);
+    p.pocket.classList.toggle('pocket--active', next !== 'seated');
+    p.card.setAttribute('role', out ? 'group' : 'button');
+    scrim.classList.toggle('scrim--on', out);
+    bar.hidden = !out;
+    ib.turn.disabled = !p.back;
+    // while a card is in hand, everything else steps back
+    document.documentElement.classList.toggle('is-inspecting', modal);
+    outside.forEach((el) => { el.inert = modal; });
+    pockets.forEach((x) => { x.inert = modal && x !== p.pocket; });
     ro.state.textContent = next;
     b.inspect.disabled = next !== 'seated';
-    b.turn.disabled = !(next === 'free' || next === 'turned');
+    b.turn.disabled = !out || !p.back;
     b.ret.disabled = next === 'seated';
+    pick.disabled = next !== 'seated';
+    syncPager();
+    if (next === 'seated') act = null;
   };
-  const setFace = (back) => {
-    pocket.style.setProperty('--ry', back ? '180deg' : '0deg');
-    ro.face.textContent = back ? 'back' : 'front';
+  const setFace = (p, face) => {
+    setVar(p, '--ry', face === 'back' ? '180deg' : face === 'edge' ? '90deg' : '0deg');
+    if (p.back) { p.back.inert = face !== 'back'; p.front.inert = face === 'back'; }
+    ro.face.textContent = face;
+    ib.turn.textContent = face === 'back' ? 'Turn to the front' : 'Turn over';
   };
 
-  // Where the free card goes: centred in the visible stage, as large as the
-  // viewport allows, never more than 1.9x its seated size.
-  const freeTarget = () => {
-    const r = card.getBoundingClientRect(); // seated or lifted; we need the seated box
-    const seatedTop = r.top - (state === 'lifting' ? parseFloat(getComputedStyle(card).transform.split(',')[5] || 0) : 0);
+  // Where the free card goes: centred above the inspect bar, as large as the
+  // viewport allows, never more than 1.9x its seated size. Measured from the
+  // pocket, which never moves, so a lifted card measures the same as a seated one.
+  const freeTarget = (p) => {
+    const pr = p.pocket.getBoundingClientRect();
+    const w = pr.width - 20, h = pr.height - 20;
     const vw = window.innerWidth, vh = window.innerHeight;
-    const s = Math.min((vw - 40) / r.width, (vh - 96) / r.height, 1.9);
-    const cx = vw / 2, cy = Math.max(vh / 2, r.height * s / 2 + 56);
-    const sx = r.left + r.width / 2, sy = seatedTop + r.height / 2;
-    return { fx: cx - sx, fy: cy - sy, fs: s };
+    const s = Math.min((vw - 32) / w, (vh - 150) / h, 1.9);
+    return { fx: vw / 2 - (pr.left + pr.width / 2), fy: (vh - 72) / 2 + 4 - (pr.top + pr.height / 2), fs: s };
   };
+  const placeFree = (p) => {
+    const { fx, fy, fs } = freeTarget(p);
+    setVar(p, '--fx', `${fx.toFixed(1)}px`);
+    setVar(p, '--fy', `${fy.toFixed(1)}px`);
+    setVar(p, '--fs', fs.toFixed(3));
+  };
+  const seatVars = (p) => { setVar(p, '--lift', '0%'); setVar(p, '--fx', '0px'); setVar(p, '--fy', '0px'); setVar(p, '--fs', '1'); clearTilt(p); };
 
-  let busy = false;
+  const challenge = () => {
+    const p = parts[sel], c = CARDS[sel];
+    dlgTitle.textContent = `${c.title} is password protected`;
+    p.card.classList.remove('card--nudge');
+    void p.card.offsetWidth;
+    if (!reduced()) p.card.classList.add('card--nudge');
+    live.textContent = `${c.title} is password protected.`;
+    dlg.showModal();
+  };
+  dlg.addEventListener('close', () => {
+    const p = parts[sel];
+    p.card.classList.remove('card--nudge');
+    live.textContent = `${CARDS[sel].title} stays in its sleeve.`;
+    p.card.focus({ preventScroll: true });
+  });
+
   const inspect = async () => {
     if (busy || state !== 'seated') return;
+    const c = CARDS[sel];
+    if (c.locked) { challenge(); return; }
+    if (posed()) applyPose('live');
     busy = true;
-    live.textContent = 'Taking the PlayDraft card out of its sleeve.';
-    pocket.style.setProperty('--lift', '-112%');
+    act = parts[sel];
+    live.textContent = `Taking ${c.title} out of its sleeve.`;
+    setVar(act, '--lift', '-112%');
     setState('lifting');
     await wait(D.lift);
-    const { fx, fy, fs } = freeTarget();
-    pocket.style.setProperty('--fx', `${fx.toFixed(1)}px`);
-    pocket.style.setProperty('--fy', `${fy.toFixed(1)}px`);
-    pocket.style.setProperty('--fs', fs.toFixed(3));
+    placeFree(act);
     setState('free');
     await wait(D.travel);
-    live.textContent = 'The card is out, showing its front. Space or T turns it over. Escape returns it.';
-    b.turn.focus({ preventScroll: true });
+    live.textContent = `${c.title} is out, showing its front. Space or T turns it over. Escape puts it back.`;
     busy = false;
+    ib.turn.focus({ preventScroll: true });
   };
   const turn = async () => {
-    if (busy || !(state === 'free' || state === 'turned')) return;
-    busy = true; turning = true; clearTilt();
+    if (busy || !act || !(state === 'free' || state === 'turned') || !act.back) return;
+    busy = true; turning = true; clearTilt(act);
     const toBack = state === 'free';
-    setFace(toBack);
+    setFace(act, toBack ? 'back' : 'front');
     setState(toBack ? 'turned' : 'free');
     live.textContent = toBack ? 'Showing the back of the card.' : 'Showing the front of the card.';
     await wait(D.flip);
     turning = false; busy = false;
   };
   const ret = async () => {
-    if (busy || state === 'seated') return;
-    busy = true; turning = true; clearTilt();
-    if (state === 'turned') { setFace(false); setState('free'); await wait(D.flip); }
-    live.textContent = 'Returning the card to its sleeve.';
+    if (busy || !act || state === 'seated') return;
+    busy = true; turning = true;
+    const p = act, c = CARDS[sel];
+    clearTilt(p);
+    if (state === 'turned') { setFace(p, 'front'); setState('free'); await wait(D.flip); }
+    live.textContent = `Putting ${c.title} back in its sleeve.`;
     // back above the mouth first, then down behind the plastic
-    pocket.style.setProperty('--fx', '0px');
-    pocket.style.setProperty('--fy', '-112%');
-    pocket.style.setProperty('--fs', '1');
+    setVar(p, '--fx', '0px'); setVar(p, '--fy', '-112%'); setVar(p, '--fs', '1');
     await wait(D.travel);
-    pocket.style.setProperty('--lift', '-112%');
+    setVar(p, '--lift', '-112%');
     setState('lifting');
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    pocket.style.setProperty('--lift', '0%');
+    setVar(p, '--lift', '0%');
     setState('seated');
     await wait(D.lift);
-    pocket.style.setProperty('--fy', '0px');
-    live.textContent = 'The card is back in its sleeve.';
+    setVar(p, '--fy', '0px');
+    live.textContent = `${c.title} is back in its sleeve.`;
     turning = false; busy = false;
-    card.focus({ preventScroll: true });
+    syncPager();
+    p.card.focus({ preventScroll: true });
   };
 
-  // free travel is expressed in px from the seated spot; --fy as a % only
-  // works for the return leg because translate() percentages are of the card
-  // itself, the same box --lift measures against.
-
-  card.addEventListener('click', () => { if (state === 'seated') inspect(); else if (!busy) turn(); });
-  card.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && state === 'seated') { e.preventDefault(); inspect(); }
-    else if ((e.key === ' ' || e.key.toLowerCase() === 't') && state !== 'seated') { e.preventDefault(); turn(); }
-    else if (e.key === ' ' && state === 'seated') { e.preventDefault(); inspect(); }
+  // ---- input ----
+  const indexOf = (el) => Number(el.closest('.pocket').dataset.i);
+  grid.addEventListener('click', (e) => {
+    const cardEl = e.target.closest('.card');
+    if (!cardEl || e.target.closest('a')) return;
+    if (state === 'seated') { if (!busy && select(indexOf(cardEl))) inspect(); }
+    else if (act && act.card === cardEl && !busy) turn();
+  });
+  grid.addEventListener('keydown', (e) => {
+    const cardEl = e.target.closest && e.target.closest('.card');
+    if (!cardEl || e.target !== cardEl) return;
+    if ((e.key === 'Enter' || e.key === ' ') && state === 'seated') { e.preventDefault(); if (!busy && select(indexOf(cardEl))) inspect(); }
+    else if ((e.key === ' ' || e.key.toLowerCase() === 't') && act && act.card === cardEl) { e.preventDefault(); turn(); }
   });
   document.addEventListener('keydown', (e) => {
+    if (dlg.open) return;
     if (e.key === 'Escape' && state !== 'seated') { e.preventDefault(); ret(); }
-    if (e.key.toLowerCase() === 't' && (state === 'free' || state === 'turned') && document.activeElement !== card) { turn(); }
+    else if (e.key.toLowerCase() === 't' && (state === 'free' || state === 'turned') && !(e.target.closest && e.target.closest('.card, input, select'))) turn();
   });
   b.inspect.addEventListener('click', inspect);
   b.turn.addEventListener('click', turn);
   b.ret.addEventListener('click', ret);
+  ib.turn.addEventListener('click', turn);
+  ib.ret.addEventListener('click', ret);
   scrim.addEventListener('click', ret);
+  pager.prev.addEventListener('click', () => showPage(page - 1));
+  pager.next.addEventListener('click', () => showPage(page + 1));
+  pick.addEventListener('change', () => select(Number(pick.value)));
 
-  // Keep the free card centred if the viewport changes under it.
-  window.addEventListener('resize', () => {
-    if (state !== 'free' && state !== 'turned') return;
-    const { fx, fy, fs } = freeTarget();
-    pocket.style.setProperty('--fx', `${fx.toFixed(1)}px`);
-    pocket.style.setProperty('--fy', `${fy.toFixed(1)}px`);
-    pocket.style.setProperty('--fs', fs.toFixed(3));
-  });
+  // Keep the free card centred if the viewport changes under it; re-page when the layout changes.
+  window.addEventListener('resize', () => { if (act && (state === 'free' || state === 'turned')) placeFree(act); });
+  const relayout = () => { if (state === 'seated' && !busy) showPage(pageOf(sel)); };
+  mqPhone.addEventListener('change', relayout);
+  mqTablet.addEventListener('change', relayout);
 
-  // ---- poses: static frames for matched stills ----
-  const poses = document.getElementById('poses');
-  const applyPose = (pose) => {
+  // ---- poses: static frames of the selected card for matched stills ----
+  function applyPose(pose) {
     poses.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.pose === pose)));
-    if (pose === 'live') { stage.classList.remove('stage--posed'); return; }
+    if (pose === 'live') { stage.classList.remove('stage--posed'); setState(state); return; }
+    if (busy) return;
     stage.classList.add('stage--posed');
-    busy = false; turning = false; clearTilt();
-    const seated = () => { pocket.style.setProperty('--lift', '0%'); pocket.style.setProperty('--fx', '0px'); pocket.style.setProperty('--fy', '0px'); pocket.style.setProperty('--fs', '1'); };
+    // whatever card is out goes back to its slot first, instantly
+    if (act && act !== parts[sel]) { seatVars(act); setFace(act, 'front'); setState('seated'); }
+    if (pageOf(sel) !== page) showPage(pageOf(sel));
+    act = parts[sel];
+    const p = act;
+    seatVars(p);
     switch (pose) {
-      case 'seated': seated(); setFace(false); setState('seated'); break;
-      case 'partly': seated(); pocket.style.setProperty('--lift', '-46%'); setFace(false); setState('lifting'); break;
-      case 'clear': seated(); pocket.style.setProperty('--lift', '-112%'); setFace(false); setState('lifting'); break;
-      case 'edge': { seated(); setState('seated'); const f = freeTarget(); pocket.style.setProperty('--fx', `${f.fx}px`); pocket.style.setProperty('--fy', `${f.fy}px`); pocket.style.setProperty('--fs', f.fs.toFixed(3)); pocket.style.setProperty('--ry', '90deg'); ro.face.textContent = 'edge'; setState('free'); break; }
-      case 'back': { seated(); setState('seated'); const f = freeTarget(); pocket.style.setProperty('--fx', `${f.fx}px`); pocket.style.setProperty('--fy', `${f.fy}px`); pocket.style.setProperty('--fs', f.fs.toFixed(3)); setFace(true); setState('turned'); break; }
-      case 'returning': seated(); pocket.style.setProperty('--lift', '-70%'); setFace(false); setState('lifting'); break;
+      case 'seated': setFace(p, 'front'); setState('seated'); break;
+      case 'partly': setVar(p, '--lift', '-46%'); setFace(p, 'front'); setState('lifting'); break;
+      case 'clear': setVar(p, '--lift', '-112%'); setFace(p, 'front'); setState('lifting'); break;
+      case 'returning': setVar(p, '--lift', '-70%'); setFace(p, 'front'); setState('lifting'); break;
+      case 'edge': placeFree(p); setFace(p, 'edge'); setState('free'); break;
+      case 'back': placeFree(p); setFace(p, 'back'); setState('turned'); break;
     }
-  };
+  }
   poses.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-pose]');
-    if (btn) applyPose(btn.dataset.pose);
+    if (btn && !btn.disabled) applyPose(btn.dataset.pose);
   });
 
   // ---- proof toggles ----
@@ -970,6 +1138,11 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   t.light.addEventListener('change', () => { if (t.light.checked) { lx = .32; ly = .22; applyLight(); } });
   mq.addEventListener('change', () => { if (mq.matches) { lx = .32; ly = .22; applyLight(); } });
   if (mq.matches) { lx = .32; ly = .22; applyLight(); }
+
+  // ---- start on the page that holds the selected card ----
+  pick.value = String(sel);
+  updatePoseButtons();
+  showPage(pageOf(sel));
 })();
 </script>
 </body>

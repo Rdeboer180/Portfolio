@@ -1,0 +1,6 @@
+# Private review material stays on this machine. The repository is public,
+# and the hero package marks its art as unpublished drafts. build-cards.mjs
+# copies the heroes back in and capture.mjs renders the stills.
+heroes/
+captures/
+reference.jpg
