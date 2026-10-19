@@ -7,6 +7,12 @@
       "runtimeArgs": ["start"],
       "port": 3000,
       "env": { "BROWSER": "none" }
+    },
+    {
+      "name": "binder-specimen",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3100", "--bind", "127.0.0.1"],
+      "port": 3100
     }
   ]
 }
