@@ -293,7 +293,7 @@ const AtomsContent: React.FC = () => (
     <section className="ds__section">
       <h2 className="ds__section-title">Shadows</h2>
       <div className="ds__shadow-grid">
-        {['sm', 'md', 'lg', 'xl'].map((size) => (
+        {['sm', 'md', 'lg', 'xl', 'room'].map((size) => (
           <div key={size} className="ds__shadow-card" style={{ boxShadow: `var(--shadow-${size})` }}>
             <span className="ds__shadow-name">--shadow-{size}</span>
           </div>
@@ -816,7 +816,7 @@ const DesignSystem: React.FC = () => {
   // The only page component that never set its own meta, so the built file
   // shipped the homepage's <title> and a canonical pointing at "/".
   usePageMeta({
-    title: 'Design system — Ryan DeBoer',
+    title: 'Design system | Ryan DeBoer',
     description:
       'The tokens, type scale, colour roles, and components this site is actually built on.',
     canonical: 'https://www.rdeboerdesigns.com/design-system/',

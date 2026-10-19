@@ -1,0 +1,104 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* WheelRack cover reel (plans/005). Sixteen library cards flip into one slot in
+   four layers, the stack tilts to show its depth, the live product lands on
+   top, and orange outlines trace three components back to their cards.
+   Driven by seek(t) for frame-exact recording. */
+:root{--canvas:#2c2c2c;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;--steel:#8f9daf;--steel-light:#d6dce4;--paper:#fff;--orange:#f03d01;--head:'Hubot Sans',Inter,sans-serif;--body:Inter,-apple-system,sans-serif;--mono:Menlo,Consolas,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--canvas)}
+/* 4:3 stage (1280x960) so locked cards, whose ground is ~4:3, never crop the sides.
+   Everything that matters sits in the middle 16:10 band (y 80-880) for 16:10 tiles. */
+#stage{position:relative;width:1280px;height:960px;overflow:hidden;background:var(--canvas);perspective:1700px;perspective-origin:740px 460px;-webkit-font-smoothing:antialiased}
+#stack{position:absolute;left:330px;top:230px;width:820px;height:512px;transform-style:preserve-3d;transform-origin:50% 55%}
+.card{position:absolute;inset:0;background:var(--paper);border:1px solid var(--steel-light);border-radius:8px;overflow:hidden;transform-origin:50% 0;backface-visibility:hidden;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.card header{height:38px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #eceff3;font:500 13px/1 var(--mono);color:var(--slate)}
+.card .art{position:absolute;left:0;right:0;top:38px;bottom:0;display:flex;align-items:center;justify-content:center;padding:18px 26px}
+.card .art img{max-width:100%;max-height:100%;object-fit:contain}
+.card.product header{display:none}.card.product .art{top:0;padding:0;display:block;overflow:hidden}.card.product .art img{display:block;width:100%;height:auto;max-height:none;max-width:none;will-change:transform}
+.shade{position:absolute;inset:0;background:#000;pointer-events:none}
+#rail{position:absolute;left:64px;top:286px;width:220px}
+.row{display:flex;align-items:baseline;justify-content:space-between;padding:11px 0;border-top:1px solid #3d3d3d;font:600 15px/1 var(--head);color:#7b7b7b}
+.row:last-child{border-bottom:1px solid #3d3d3d}
+.row .n{font:600 13px/1 var(--body);font-variant-numeric:tabular-nums}
+.row.on{color:#f5f5f5}.row.on .n{color:var(--orange)}
+.row .tick{display:inline-block;width:6px;height:6px;border-radius:50%;background:#555;margin-right:10px;transform:translateY(-1px)}
+.row.on .tick{background:var(--orange)}
+#title{position:absolute;left:64px;top:230px;font:700 13px/1.4 var(--head);color:#9a9a9a;letter-spacing:.02em}
+#title b{color:#f5f5f5;font-weight:700}
+.trace{position:absolute;border:1.5px solid var(--orange);border-radius:3px;pointer-events:none;transform-origin:50% 50%}
+.trace span{position:absolute;left:-1.5px;bottom:100%;margin-bottom:4px;background:var(--orange);color:#fff;font:600 11px/1 var(--head);padding:4px 7px;border-radius:2px;white-space:nowrap;letter-spacing:.01em}
+</style></head><body><div id="stage">
+<div id="title"><b>WheelRack</b><br>tokens → product</div>
+<div id="rail"></div>
+<div id="stack"></div>
+</div>
+<script>
+const LAYERS=[
+ ['Tokens',[['13','Color / shared palette'],['14','Typography / partner exception'],['15','Spacing / shared values'],['16','Radius + icon scale']]],
+ ['Controls',[['01','Inputs / every state'],['02','Checkboxes + radios'],['03','Dropdowns / open + closed'],['04','Buttons / size + icon']]],
+ ['Patterns',[['05','Filters / hover + focus'],['06','Pricing / expanded'],['07','Front + rear / add to cart'],['08','Partner variant / get quote']]],
+ ['Product states',[['09','Availability / recovery'],['10','Dealer view / desktop'],['11','Dealer view / mobile'],['12','Empty results / next step']]],
+];
+const SRC='../../public/images/work/wheelrack/tour-samples/';
+const stack=document.getElementById('stack'), rail=document.getElementById('rail');
+const cards=[]; LAYERS.forEach(([layer,items],li)=>items.forEach(([n,label])=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<header>${label}</header><div class="art"><img src="${SRC}${n}.webp"></div><div class="shade"></div>`;c.dataset.layer=li;stack.appendChild(c);cards.push(c);}));
+const prod=document.createElement('div');prod.className='card product';prod.innerHTML='<div class="art"><img src="product-tall.png"></div><div class="shade"></div>';stack.appendChild(prod);cards.push(prod);
+const S=820/1280; // product frame → slot
+const TR=[[88,160+124,266,480,'Filters / hover + focus'],[408,188+124,782,92,'Visualizer / selected state'],[634,626+124,556,138,'Front + rear / add to cart']].map(([x,y,w,h,l])=>{const d=document.createElement('div');d.className='trace';d.dataset.y=y;d.style.cssText=`left:${x*S}px;top:${y*S}px;width:${w*S}px;height:${h*S}px`;d.innerHTML=`<span>${l}</span>`;prod.appendChild(d);return d;});
+const rows=[...LAYERS.map(l=>l[0]),'Live product'].map((name,i)=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<span><i class="tick"></i>${name}</span><span class="n"></span>`;rail.appendChild(r);return r;});
+// arrival times: holds shorten from 520ms to 120ms
+const ARR=[];{let t=0.12;for(let k=0;k<16;k++){ARR.push(t);t+=0.52-0.40*Math.pow(k/15,0.7);} }
+const scaleT=3.86/ARR[15]; for(let k=0;k<16;k++) ARR[k]=0.12+(ARR[k]-0.12)*scaleT;
+const PROD_IN=5.10;
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>clamp((t-a)/(b-a));
+const bez=(p1x,p1y,p2x,p2y)=>x=>{let lo=0,hi=1,u=.5;for(let i=0;i<22;i++){u=(lo+hi)/2;const bx=3*(1-u)**2*u*p1x+3*(1-u)*u*u*p2x+u**3;bx<x?lo=u:hi=u;}return 3*(1-u)**2*u*p1y+3*(1-u)*u*u*p2y+u**3;};
+const out=bez(.23,1,.32,1), inout=bez(.77,0,.175,1);
+function seek(t){
+  t=Math.max(0,Math.min(7.999,t));
+  const arrivals=[...ARR,PROD_IN];
+  const landed=arrivals.filter(a=>t>=a).length; // cards on the stack
+  // tilt: 4.10→4.80 into the isometric view; 5.30→5.90 back to face-on
+  const tilt=out(0)*0+inout(seg(t,4.10,4.80))*(1-inout(seg(t,5.30,5.90)));
+  stack.style.transform=`translateY(${-150*tilt}px) rotateX(${58*tilt}deg) rotateZ(${-32*tilt}deg) scale(${1-0.2*tilt})`;
+  cards.forEach((c,i)=>{
+    const a=arrivals[i];
+    if(t<a){c.style.opacity=0;return;}
+    const f=out(seg(t,a,a+0.16)); // flip-in
+    const depth=landed-1-i; // 0 = top of the stack
+    // face-on, show only a few edges; tilted, every sheet reads
+    const z=-depth*(8+14*tilt), y=depth*4*(1-tilt), sc=1-depth*0.012*(1-tilt);
+    const isProd=i===16;
+    const drop=isProd? (1-out(seg(t,PROD_IN,PROD_IN+0.45)))*140 : 0;
+    const rx=isProd?0:(1-f)*75;
+    const faceOnHide = depth>5 ? (1-tilt) : 0; // keep the face-on deck to ~6 visible edges
+    // once the product is down and the stack is flat again, older sheets recede
+    const settle = isProd?0: seg(t,5.6,6.0)*(depth>0?1:0);
+    c.style.zIndex=100+i;
+    c.style.transform=`translate3d(0,${y}px,${z+drop}px) rotateX(${rx}deg) scale(${sc})`;
+    c.style.opacity=(isProd? out(seg(t,PROD_IN,PROD_IN+0.3)) : f) * (1-faceOnHide) * (1-settle);
+    c.querySelector('.shade').style.opacity=Math.min(.45,depth*0.05)*(1-tilt*0.4);
+  });
+  // after the traces: zoom the product to fill the frame, then scroll the page
+  const zoom=inout(seg(t,6.55,7.05)), scroll=inout(seg(t,6.95,7.75));
+  const S2=820/1280, pageY=(124+ (1610-800-124)*scroll)*S2;
+  prod.querySelector('.art img').style.transform=`translateY(${-pageY}px)`;
+  TR.forEach(d=>{d.style.top=(parseFloat(d.dataset.y)*S2-pageY)+'px';});
+  if(t>=6.5){ stack.style.transform=`translate(${-100*zoom}px,${-32*zoom}px) scale(${1+0.56*zoom})`; }
+  document.getElementById('rail').style.opacity=1-zoom; document.getElementById('title').style.opacity=1-zoom;
+  // traces on the product
+  TR.forEach((d,i)=>{const a=out(seg(t,5.80+i*0.14,6.10+i*0.14))*(1-out(seg(t,6.55,6.85))); d.style.opacity=a; d.style.transform=`scale(${1.04-0.04*a})`;});
+  // reset: the product dims away into the first token card
+  const reset=out(seg(t,7.78,7.99));
+  prod.style.opacity=parseFloat(prod.style.opacity||0)*(1-reset);
+  // rail
+  rows.forEach((r,li)=>{
+    let n=0,on=false;
+    if(li<4){const ks=[0,1,2,3].map(j=>li*4+j); n=ks.filter(k=>t>=ARR[k]).length; const cur=landed<=16&&Math.floor((landed-1)/4)===li; on=(cur&&t<4.10)||(t>=4.10&&n>0);}
+    else {n=t>=PROD_IN?1:0; on=t>=PROD_IN;}
+    r.classList.toggle('on',on); r.querySelector('.n').textContent=li<4?(n?String(n).padStart(2,'0'):''):(n?'PitStop':'');
+  });
+}
+window.seek=seek; seek(0);
+if(!window.__record){let s0=performance.now();(function f(){seek(((performance.now()-s0)/1000)%8);requestAnimationFrame(f)})();}
+</script></body></html>

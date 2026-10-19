@@ -251,7 +251,8 @@
   .hero--contract .hero-intro__roles {
     // Follow the portrait size, keeping the panel beside the face as it narrows.
     width: clamp(176px, calc(var(--profile-size) * 0.54), 216px);
-    bottom: calc(25px - var(--space-lg));
+    // Sits higher than the portrait's edge now that it no longer overlaps it, to ease the tension at the corner.
+    bottom: calc(50px - var(--space-lg));
     right: calc(-1 * var(--space-xl));
   }
 }
@@ -441,3 +442,8 @@
   > h1 { margin-bottom: 0; }
   & + .authored--above { margin-top: 44px; }
 }
+
+// The roles panel under the room light (room-light-cast in _variables.scss).
+// The cast lives on a wrapper because the panel clips its own children.
+.hero--contract .hero-intro__roles-cast { @include room-light-cast; }
+.hero--contract .layers-panel--roles { box-shadow: var(--shadow-room); }

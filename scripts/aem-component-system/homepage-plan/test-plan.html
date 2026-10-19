@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_board.css"><style>
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.hyp p{margin:0 0 10px;color:var(--slate);font-size:13.5px}
+.hyp .q{font-family:var(--head);font-weight:600;color:var(--ink);font-size:14px;margin-bottom:8px}
+.ask{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--graphite)}
+.topics{columns:2;column-gap:28px;padding:0;margin:0;list-style:none;font-size:13px;color:var(--slate)}
+.topics li{padding:5px 0;border-bottom:1px solid var(--hair);break-inside:avoid;display:flex;gap:10px}
+.topics li b{font-family:var(--head);font-weight:600;color:var(--graphite);width:22px;font-size:12px}
+.topics li.on{color:var(--ink)}.topics li.on:after{content:"first";margin-left:auto;font-family:var(--head);font-size:11px;font-weight:600;color:var(--orange)}
+.tl{margin-top:28px}
+.track{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:stretch}
+.step{padding:14px 16px;min-height:88px}
+.step .lab{display:block;margin-bottom:4px}
+.step .note{font-size:12px}
+.step.wait{border-color:var(--ink)}
+.track .gap{display:flex;align-items:center;justify-content:center;color:var(--steel-dark);font-family:var(--head);font-weight:700;font-size:18px}
+.blocks{display:grid;grid-template-columns:repeat(3,1fr) 36px 1fr;gap:10px;align-items:stretch}
+</style></head><body><div class="board">
+<h1>The test behind each concept</h1>
+<p class="sub">A concept enters the file with a hypothesis, the data it needs, and the tests it has to wait for. Nothing is built from an assumption alone.</p>
+<div class="grid">
+<div class="card hyp"><h2>Hypothesis: the How It Works order</h2>
+<p class="q">Shoppers scrolling for shipping, delivery, and testing answers will read a section that leads with them.</p>
+<p>The last redesign led with Find, Deliver, Install. Find is now an expectation rather than a question, so delivery and installation become the first tab, then shipping, returns, and testing, which are the brand’s distinct advantages.</p>
+<p>Before building on that assumption, the section ships without an order and the order comes from customers.</p>
+<div class="ask">Data to request: engagement with How It Works against the promotion banners.</div></div>
+<div class="card hyp"><h2>Hypothesis: the promotions carousel</h2>
+<p class="q">Deal-centric shoppers will find a smaller carousel placed above the fold.</p>
+<p>The carousel moves up the page and shrinks from 550 × 470 banners to 490 × 180, so it reads as a lane rather than a billboard. The two best-selling days of last year were deal days, so the lane earns its place near the top.</p>
+<p>Competitor homepages were read for placement, not copied.</p>
+<div class="ask">Data to request: carousel engagement by position.</div></div>
+</div>
+<div class="card" style="margin-top:28px"><h2>Customer survey, fifteen topics</h2>
+<p class="note" style="margin:0 0 12px">Which of these would you want explained before buying from us? Then: three questions you would want a How It Works section to answer.</p>
+<ul class="topics">
+<li class="on"><b>01</b>Shipping and delivery</li><li><b>02</b>Return and exchange policy</li><li><b>03</b>Product information</li><li><b>04</b>Ordering and payment</li><li><b>05</b>Customer support</li><li><b>06</b>Company information</li><li><b>07</b>Installation and maintenance</li><li><b>08</b>Promotions and discounts</li><li><b>09</b>Road hazard protection</li><li><b>10</b>Research and advice</li><li><b>11</b>EV tires</li><li><b>12</b>Customer service</li><li><b>13</b>Order pick-up</li><li><b>14</b>In-house tire testing</li><li><b>15</b>Special offers</li>
+</ul></div>
+<div class="tl"><h2>What the test has to wait for</h2>
+<div class="blocks">
+<div class="wire step"><span class="lab">Hero button test</span><span class="note">Already running on the live hero.</span></div>
+<div class="wire step"><span class="lab">Decision guide A/B test</span><span class="note">Scheduled; shares the page.</span></div>
+<div class="wire step"><span class="lab">Winter season content</span><span class="note">Seasonal fragments take the page over.</span></div>
+<div class="gap" style="display:flex;align-items:center;justify-content:center;color:var(--steel-dark);font-family:var(--head);font-weight:700;font-size:18px">→</div>
+<div class="wire step wait"><span class="lab">Component order test <span class="tag tag--state">waiting</span></span><span class="note">Current page against the concept, keeping the hero and decision guide already tested. Success is defined before it starts: lift, or incremental engagement, with a failure case written down.</span></div>
+</div></div>
+<p class="foot">Owners for each conversation (analytics, promotions, componentization) are named in the file and left out of this drawing.</p>
+</div></body></html>

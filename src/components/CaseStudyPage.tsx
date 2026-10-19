@@ -14,6 +14,7 @@ import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useReveal } from '../hooks/useReveal';
 import ProjectOverview from './ProjectOverview';
+import FramedViewport from './FramedViewport';
 import { ProjectContext } from './ProjectBrand';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
 import '../styles/styles.scss';
@@ -107,6 +108,7 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
     if (sectionImages) sectionImages.forEach((img) => {
       // Skip videos — lightbox only handles images
       if (img.src && !img.isVideo) imgs.push({ src: img.src, alt: img.alt });
+      if (img.publicSrc && !img.isVideo) imgs.push({ src: img.publicSrc, alt: img.publicAlt ?? img.alt });
     });
   };
   addSection(project.problemImages);
@@ -121,6 +123,7 @@ const allLightboxImages = (project: Project): { src: string; alt: string }[] => 
     });
   }
   addSection(project.approachImages);
+  addSection(project.publicPlan?.images);
   addSection(project.outcomeImages);
   addSection(project.outcomeGridImages);
   return imgs.filter((img, index) => imgs.findIndex((other) => other.src === img.src) === index);
@@ -289,8 +292,17 @@ const SectionImages: React.FC<{
   onOverlayClick?: () => void;
   /** Whole study is gated — render no imagery at all, not even the safe frames. */
   locked?: boolean;
-}> = ({ images, allImages, onOpen, isUnlocked, onOverlayClick, locked }) => {
+}> = ({ images: rawImages, allImages, onOpen, isUnlocked, onOverlayClick, locked }) => {
   const reduceMotion = useReducedMotion();
+  // A figure with a `publicSrc` shows that portfolio-owned drawing until the
+  // study is unlocked, then the employer artifact it stands for. The drawing
+  // keeps the section readable for a locked visitor without putting the
+  // artifact at a public URL ahead of the gate.
+  const images = (rawImages || []).map((img) =>
+    !isUnlocked && img.publicSrc
+      ? { ...img, src: img.publicSrc, alt: img.publicAlt ?? img.alt, caption: img.publicCaption ?? img.caption }
+      : img
+  );
   if (locked) return null;
   if (!images || images.length === 0) return null;
 
@@ -333,6 +345,10 @@ const SectionImages: React.FC<{
       ) : (
         <div className="cs__img-wrap cs__img-wrap--video">{videoEl}</div>
       );
+    }
+    // A full-page board inside a scrolling viewport; the image inside opens full.
+    if (img.frame) {
+      return <FramedViewport kind={img.frame} src={img.src!} alt={img.alt} />;
     }
     // Render actual images — wrapped in a button for keyboard accessibility
     if (img.mobile) {
@@ -417,11 +433,12 @@ const ArtifactSequence: React.FC<{
   variants: NonNullable<NonNullable<Project['approachSubsections']>[number]['variants']>;
   allImages: { src: string; alt: string }[];
   onOpen: React.ComponentProps<typeof SectionImages>['onOpen'];
-}> = ({ variants, allImages, onOpen }) => {
+  caption?: string;
+}> = ({ variants, allImages, onOpen, caption }) => {
   const [selected, setSelected] = useState(0);
   return (
     <div className="cs__artifact-sequence">
-      <p className="cs__caption">Explore the designed component states</p>
+      <p className="cs__caption">{caption ?? 'Explore the designed component states'}</p>
       <div className="cs__artifact-controls" role="group" aria-label="Product component states">
         {variants.map((variant, index) => (
           <button key={variant.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>
@@ -498,7 +515,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
   usePageMeta(
     project
       ? {
-          title: `${project.seoTitle ?? project.title} — Ryan DeBoer`,
+          title: `${project.seoTitle ?? project.title} | Ryan DeBoer`,
           description: project.summary,
           canonical: pageUrl,
           ogImage: socialImage,
@@ -518,7 +535,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
             author: AUTHOR,
           },
         }
-      : { title: 'Case study — Ryan DeBoer' },
+      : { title: 'Case study | Ryan DeBoer' },
     undefined,
     !detailOnly
   );
@@ -610,7 +627,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
       : undefined;
 
   if (project.overview && !locked && !detailOnly) {
-    return <ProjectOverview project={project} depth={<CaseStudyPage slug={slug} detailOnly />} />;
+    return <ProjectOverview project={project} />;
   }
 
   return (
@@ -792,6 +809,24 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                     public — so it locks with the rest. --- */}
             {locked ? (
               <>
+                {/* The approach, drawn: a locked visitor still sees the shape
+                    of the process under its own heading. Each figure resolves
+                    to its public drawing (ProjectImage.publicSrc); the boards
+                    stay behind the lock panel that follows. */}
+                {project.publicPlan && (
+                  <section className="cs__section cs__section--alt cs__section--plan">
+                    <div className="cs__section-header">
+                      <span className="cs__section-number">04</span>
+                      <span className="cs__micro-label">How It Came Together</span>
+                      <h2 className="cs__section-heading">{SECTION_LABELS[3]}</h2>
+                      {project.annotations?.approach && (
+                        <p className="cs__section-aside">{project.annotations.approach}</p>
+                      )}
+                    </div>
+                    <p className="cs__punch">{redactClient(project.publicPlan.lead, locked)}</p>
+                    <SectionImages images={project.publicPlan.images} allImages={lbImages} onOpen={openLightbox} isUnlocked={false} onOverlayClick={handleOverlayClick} />
+                  </section>
+                )}
                 <CaseStudyLocked onUnlock={() => openPrompt()} />
                 {/* Metric beats restate numbers already public in
                     OutcomeMetrics, so they survive the gate. Image beats are
@@ -885,7 +920,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                       <h3 className="cs__approach-sub-label">{sub.label}</h3>
                       <p className="cs__approach-sub-desc">{sub.description}</p>
                       {sub.libraryTour && <WheelRackLibraryTour />}
-                      {sub.variants && <ArtifactSequence variants={sub.variants} allImages={lbImages} onOpen={openLightbox} />}
+                      {sub.variants && <ArtifactSequence variants={sub.variants} allImages={lbImages} onOpen={openLightbox} caption={sub.variantsCaption} />}
                       {sub.bullets && sub.bullets.length > 0 && (
                         <ul className="cs__approach-sub-list">
                           {sub.bullets.map((item, i) => (
@@ -1012,6 +1047,15 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                       </a>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Where the work goes next: one note, read on the site, not a
+                  live link off it. */}
+              {project.relatedNote && (
+                <div className="cs__related-note">
+                  <span className="cs__live-links-label">{project.relatedNote.lead ?? 'Where this is going'}</span>
+                  <Link to={project.relatedNote.href} className="cs__live-link">{project.relatedNote.label} &rarr;</Link>
                 </div>
               )}
 

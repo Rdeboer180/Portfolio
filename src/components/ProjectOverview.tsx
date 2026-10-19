@@ -1,14 +1,15 @@
 import { reviewHref } from '../utils/reviewRoutes';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
 import ProjectPreview from './ProjectPreview';
 import LoopVideo from './LoopVideo';
 import { Project, ProjectImage, ProjectOverview as ProjectOverviewData } from '../data/projects';
-import { getHomeHref, getProjectsHref } from '../utils/homeSession';
+import { getHomeHref, getProjectsHref, HOME_TOP_STATE } from '../utils/homeSession';
 import { PlayDraftStoreLink } from './PlayDraftRelease';
 import '../styles/components/_project-overview.scss';
 import { ProjectContext } from './ProjectBrand';
+import FramedViewport from './FramedViewport';
 
 /** Keep related work in the sentence, with the same route-backed drawer navigation. */
 const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
@@ -43,6 +44,10 @@ const rowCaps = (images: ProjectImage[]) => {
 const OverviewMedia: React.FC<{ image: ProjectImage; opening?: boolean; cap?: number }> = ({ image, opening, cap }) => {
   if (!image.src || image.isOverlay) return null;
   const crop = image.crop;
+  if (image.frame) return <figure className={`project-overview__framed project-overview__framed--${image.frame}`}>
+    <FramedViewport kind={image.frame} src={image.src} alt={image.alt} />
+    {image.caption && <figcaption>{image.caption}</figcaption>}
+  </figure>;
   return <figure className={opening ? 'project-overview__opening' : undefined} style={cap ? { ['--overview-media-cap' as string]: `${Math.round(cap)}px` } : undefined}>
     {image.isVideo ? <LoopVideo src={image.src} poster={image.videoPoster} label={image.alt} /> :
       <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`View full image: ${image.alt} (opens in a new tab)`}>
@@ -65,8 +70,7 @@ const ComparisonRow: React.FC<{ title: string; images: ProjectImage[] }> = ({ ti
 };
 
 /** A route-backed article: the rail is navigation, never a modal or a second main. */
-const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = ({ project, depth }) => {
-  const [depthOpen, setDepthOpen] = useState(false);
+const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const goToSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -80,7 +84,7 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
   return (
     <article className="project-overview">
       <aside className="project-overview__rail">
-        <Link to={getHomeHref()} className="project-overview__home">Ryan DeBoer</Link>
+        <Link to={getHomeHref()} state={HOME_TOP_STATE} className="project-overview__home">Ryan DeBoer</Link>
         <Link to={getProjectsHref()}>← All work</Link>
         <header>
           <p className="project-overview__eyebrow">{overview.category ?? (project.stream === 'professional' ? 'Professional work' : 'Independent work')} · {project.year}</p>
@@ -92,7 +96,6 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
           <a href="#project-walkthrough" onClick={event => goToSection(event, 'project-walkthrough')}>{project.featuredVideo || reel || overview.opening?.isVideo ? 'Walkthrough' : 'Project evidence'}</a>
           <a href="#project-decisions" onClick={event => goToSection(event, 'project-decisions')}>Decisions</a>
           <a href="#project-outcome" onClick={event => goToSection(event, 'project-outcome')}>Outcome</a>
-          <a href="#project-depth" onClick={event => goToSection(event, 'project-depth')}>Behind the work</a>
         </nav>
         {project.slug === 'playdraft' && <PlayDraftStoreLink>Get PlayDraft for iPhone</PlayDraftStoreLink>}
         {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, 2).map(link =>
@@ -129,16 +132,33 @@ const ProjectOverview: React.FC<{ project: Project; depth: React.ReactNode }> = 
               <p><DecisionCopy decision={decision} /></p>
             </div>
             {decision.images?.length ? <ComparisonRow title={decision.title} images={decision.images} /> : decision.image && <OverviewMedia image={decision.image} cap={cappedWidth(decision.image)} />}
+            {(decision.wide || decision.points?.length || decision.code || decision.quote) && <div className="project-overview__proof">
+              {decision.wide && <OverviewMedia image={decision.wide} />}
+              {decision.points?.length ? <ul className="project-overview__points">{decision.points.map(point => <li key={point}>{point}</li>)}</ul> : null}
+              {decision.code && <figure className="project-overview__code">
+                {decision.code.filename && <div className="project-overview__code-file">{decision.code.filename}</div>}
+                <pre><code>{decision.code.code}</code></pre>
+                {decision.code.caption && <figcaption>{decision.code.caption}</figcaption>}
+              </figure>}
+              {decision.quote && <figure className="project-overview__quote">
+                <blockquote><p>{decision.quote.text}</p></blockquote>
+                <figcaption>{decision.quote.name}<span>{decision.quote.role}</span></figcaption>
+              </figure>}
+            </div>}
           </section>)}
         </section>
         <section id="project-outcome" className="project-overview__outcome">
           <h2>Outcome and current scope</h2>
+          {overview.outcomeMetric && <p className="project-overview__metric">
+            <span className="project-overview__metric-value">{overview.outcomeMetric.value}</span>
+            {overview.outcomeMetric.label && <span className="project-overview__metric-label">{overview.outcomeMetric.label}</span>}
+            {overview.outcomeMetric.context && <span className="project-overview__metric-context">{overview.outcomeMetric.context}</span>}
+          </p>}
           <p>{overview.outcome}</p>
+          {overview.outcomeImages?.filter(Boolean).length ? (overview.outcomeImages.length > 1
+            ? <ComparisonRow title="Outcome" images={overview.outcomeImages} />
+            : <OverviewMedia image={overview.outcomeImages[0]} />) : null}
         </section>
-        <details id="project-depth" className="project-overview__depth" onToggle={event => setDepthOpen(event.currentTarget.open)}>
-          <summary>Behind the work: full project details</summary>
-          {depthOpen && depth}
-        </details>
         <nav className="project-overview__close" aria-label="Continue exploring">
           {overview.relatedNote && <Link to={overview.relatedNote.href}>{overview.relatedNote.label} →</Link>}
           <Link to={getProjectsHref()}>Back to all work</Link>

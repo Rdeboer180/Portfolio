@@ -262,7 +262,7 @@ const Hero: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={selectRole} controlsId={roleStoryId} compact /></div>
+            <div className="hero-intro__roles hero__ui-element hero__ui-element--layers"><div className="hero-intro__roles-cast"><LayersPanel roles={roles} activeIndex={selectedRole} onLayerClick={selectRole} controlsId={roleStoryId} compact /></div></div>
           </div>
           </AuthoredSection>
         </div>

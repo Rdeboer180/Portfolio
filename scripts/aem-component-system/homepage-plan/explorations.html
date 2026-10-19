@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_board.css"><style>
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;align-items:start}
+.pg{border:1.5px solid var(--steel);background:#fff;border-radius:3px;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:360px}
+.pg.final{border-color:var(--ink)}
+.b{height:14px;border:1px solid var(--steel-light);border-radius:2px;background:#fff}
+.b.hero{height:54px}.b.dark{background:var(--slate);border-color:var(--slate)}.b.img{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--steel-light) 5px 6px)}
+.b.new{border:1.5px solid var(--ink)}
+.b.tabs{display:flex;gap:4px;padding:3px 4px;height:16px}.b.tabs i{flex:1;height:8px;border-bottom:2px solid var(--steel-light)}.b.tabs i.on{border-color:var(--orange)}
+.cap{margin-top:12px}.cap .lab{display:block;margin-bottom:4px}.cap .note{font-size:12px}
+.ladder{margin-top:30px;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:center}
+.ladder .st{padding:14px 16px}.ladder .ar{font-family:var(--head);font-weight:700;color:var(--steel-dark);font-size:18px}
+</style></head><body><div class="board">
+<h1>Explorations, section by section</h1>
+<p class="sub">Three concept pages, then one section in focus at a time, so a reviewer compares one change instead of guessing what moved. The refined page keeps what survived.</p>
+<div class="row">
+<div><div class="pg"><div class="b hero img"></div><div class="b"></div><div class="b"></div><div class="b img" style="height:28px"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b dark" style="height:10px"></div></div><div class="cap"><span class="lab">Concept A</span><span class="note">A category carousel under the hero, the deals lane, and the tabbed How It Works.</span></div></div>
+<div><div class="pg"><div class="b hero img"></div><div class="b"></div><div class="b new" style="height:24px"></div><div class="b"></div><div class="b img" style="height:28px"></div><div class="b new"></div><div class="b"></div><div class="b dark" style="height:10px"></div></div><div class="cap"><span class="lab">Concept B</span><span class="note">A three-step How It Works, the video center, and the ratings link.</span></div></div>
+<div><div class="pg"><div class="b img" style="height:36px"></div><div class="b new" style="height:34px"></div><div class="b"></div><div class="b"></div><div class="b img" style="height:28px"></div><div class="b"></div><div class="b"></div><div class="b dark" style="height:10px"></div></div><div class="cap"><span class="lab">Concept C</span><span class="note">The pledge in place of the 40-years section; low-engagement content leaves.</span></div></div>
+<div><div class="pg"><div class="b img" style="height:36px"></div><div class="b new" style="height:34px"></div><div class="b"></div><div class="b new" style="height:20px"></div><div class="b img" style="height:28px"></div><div class="b"></div><div class="b new" style="height:20px"></div><div class="b dark" style="height:10px"></div></div><div class="cap"><span class="lab">One section in focus</span><span class="note">Six boards dim the page and light one section: new tires, brands, test track, reviews, pledge, articles.</span></div></div>
+<div><div class="pg final"><div class="b img" style="height:36px"></div><div class="b new" style="height:34px"></div><div class="b tabs"><i class="on"></i><i></i><i></i><i></i></div><div class="b img" style="height:20px"></div><div class="b"></div><div class="b tabs"><i class="on"></i><i></i><i></i></div><div class="b img" style="height:28px"></div><div class="b"></div><div class="b dark" style="height:10px"></div></div><div class="cap"><span class="lab">Refined page</span><span class="note">What survived the passes and the test plan, at desktop and phone widths, with the vehicle selector in the hero.</span></div></div>
+</div>
+<div class="ladder">
+<div class="card st"><span class="lab">Quick wireframe</span><div class="note">Gray boxes, measured against the live page.</div></div><span class="ar">→</span>
+<div class="card st"><span class="lab">Section concept</span><div class="note">One change at a time, with its hypothesis.</div></div><span class="ar">→</span>
+<div class="card st" style="border-color:var(--ink)"><span class="lab">Refined artboard</span><div class="note">Full fidelity, ready to map to AEM components.</div></div>
+</div>
+<div class="legend"><span><i class="sw"></i>kept</span><span><i class="sw sw--ink"></i>changed in this pass</span><span><i class="sw sw--state"></i>selected state</span></div>
+</div></body></html>

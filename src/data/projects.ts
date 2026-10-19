@@ -30,6 +30,19 @@ export interface ProjectBeat {
 export type WorkGroupId = 'aem' | 'systems' | 'product';
 
 export interface ProjectImage {
+  /**
+   * A portfolio-owned drawing of this artifact, shown while the study is
+   * locked. `src` (the artifact itself) renders only after unlock. Use it
+   * where the artifact is employer work that cannot sit at a public URL.
+   */
+  publicSrc?: string;
+  publicAlt?: string;
+  publicCaption?: string;
+  /**
+   * Hold a full-page board inside a viewport the reader scrolls: a 3:2 browser
+   * window or a phone bezel. Keeps a tall artboard at the column's width.
+   */
+  frame?: 'browser' | 'phone';
   /** Pixel coordinates into the original board; presentation only, original remains in the lightbox. */
   crop?: { x: number; y: number; width: number; height: number; sourceWidth: number; sourceHeight: number };
   src?: string;
@@ -75,6 +88,8 @@ export interface ApproachSubsection {
    *  inventory rather than an argument. */
   bullets?: string[];
   variants?: { label: string; image: ProjectImage }[];
+  /** Caption over the variant controls; defaults to the component-states line. */
+  variantsCaption?: string;
   quote?: { text: string; name: string; role: string };
   libraryTour?: boolean;
 }
@@ -90,8 +105,22 @@ export interface ProjectOverview {
   /** Project artifacts grouped beneath the overview introduction; available after unlock. */
   evidence?: ProjectImage[];
   relatedNote?: { href: string; label: string };
-  decisions: { title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage; images?: ProjectImage[] }[];
+  decisions: {
+    title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage; images?: ProjectImage[];
+    /** A wide board shown full width after the media, outside the capped phone rows. */
+    wide?: ProjectImage;
+    /** Short evidence list under the body, e.g. each fix beside what it replaced. */
+    points?: string[];
+    /** Code that proves the decision shipped, rendered after the media. */
+    code?: CodeBlock;
+    /** An attributed quote from the person on the other side of the decision. */
+    quote?: { text: string; name: string; role: string };
+  }[];
   outcome: string;
+  /** The headline figure, shown with the outcome. Must already be public in metrics. */
+  outcomeMetric?: { value: string; label?: string; context?: string };
+  /** The shipped result, shown after the outcome paragraph. */
+  outcomeImages?: ProjectImage[];
 }
 
 export interface Project {
@@ -190,6 +219,15 @@ export interface Project {
    */
   clientLabel?: string;
   timeToLive?: string;
+  /** One note that carries the study forward, linked from the Outcome section. */
+  relatedNote?: { href: string; label: string; lead?: string };
+  /**
+   * The approach as a locked visitor meets it: portfolio-owned drawings of the
+   * gated boards (each image's `publicSrc`), under the Approach heading, ahead
+   * of the lock panel. Every drawing must pass the cover-schematic rule: the
+   * shape of the work, drawable from the public page alone.
+   */
+  publicPlan?: { lead: string; images: ProjectImage[] };
 
   // New 7-section structure
   problemPunch?: string;
@@ -269,6 +307,68 @@ const GUIDE = {
   buttons: componentGuide('buttons-states-arrow-link', 'Button states and the wrapping rules for the arrow text link', 'Button states, the narrow-column rule, and the orphaned arrow the no-break space prevents.'),
   heroAuthor: componentGuide('hero-author-primary', 'AEM editor reference with the hero selected, Styles open, numbered author steps, and the resulting classes', 'Author reference: the AEM editor at 1440px with Styles open, numbered steps, and the classes that result.'),
   heroPreview: componentGuide('hero-author-preview', 'Homepage hero preview at 1440px and 375px with the image crop held at 50 percent', 'What visitors see at 1440px and at 375px, with the crop held at 50%.'),
+};
+
+
+// Boards from the homepage exploration file (component concepts and the test
+// plan behind each one). `src` is the board itself, rendered with stakeholder
+// names, project numbers, and meeting notes removed, and shows only after
+// unlock. `publicSrc` is a drawing of the same board in the site's own hand,
+// shown while the study is locked; see ProjectImage.publicSrc.
+const homepageBoard = (name: string, alt: string, caption: string, publicAlt: string, publicCaption: string, layout: 'full' | 'half' = 'full'): ProjectImage => ({
+  src: `/images/work/aem-component-system/homepage-boards/${name}.jpg`,
+  publicSrc: `/images/work/aem-component-system/homepage-plan/${name}.jpg`,
+  alt, caption, publicAlt, publicCaption, layout,
+});
+const PLAN = {
+  order: homepageBoard('component-order',
+    'Three homepage concept pages side by side, each with a different treatment of the sections below the hero',
+    'Three concept pages side by side: a category carousel under the hero, a three-step How It Works with the video center, and a version with the pledge. From the exploration file.',
+    'Drawing of the homepage section order, the current page beside the proposed one, with moved and removed sections marked',
+    'Section order, current beside proposed. Promotions move up and shrink, How It Works becomes tabs, and low-engagement sections leave. Drawn from the exploration file.'),
+  tests: homepageBoard('test-plan',
+    'Test plan board with the talking points for each change, the design changes, the removals, and the plan forward',
+    'The test plan: talking points for each change, the design changes, the removals with their reasons, and the plan forward. Names removed.',
+    'Drawing of the test plan: two hypotheses, a fifteen-topic survey, and the sequence of tests on one timeline',
+    'The test plan, drawn: a hypothesis for the How It Works order and one for the promotions carousel, a fifteen-topic customer survey, and the tests each has to wait for.'),
+  explorations: homepageBoard('concept-b',
+    'Homepage concept page with a three-step How It Works and the video center',
+    'One of the concept pages: a three-step How It Works, the video center, and the ratings link.',
+    'Drawing of the exploration passes side by side, each with the sections it changed marked',
+    'The explorations, drawn: three concept pages, then one section in focus at a time, then the refined page. Each pass changed one or two sections and kept the rest.'),
+  endState: homepageBoard('end-state',
+    'Refined homepage at desktop width, with the vehicle selector open, and at phone width',
+    'The refined homepage at desktop, with the vehicle selector open, and at phone width. Every section is an existing component or a style option the guide defines or names as open. From the reDesign file.',
+    'Drawing of the refined homepage at desktop and phone widths with each section labelled by its component',
+    'The refined homepage, drawn at desktop and phone widths with each section labelled by the component or style option it uses.'),
+};
+PLAN.explorations.publicSrc = '/images/work/aem-component-system/homepage-plan/explorations.jpg';
+
+// Gated only: the testing notes, the concept pages, the section-focus boards, and the refined UI.
+const board = (name: string, alt: string, caption: string, layout: 'full' | 'half' = 'full', frame?: ProjectImage['frame']): ProjectImage => ({
+  src: `/images/work/aem-component-system/homepage-boards/${name}.jpg`, alt, caption, layout, frame,
+});
+const NOTES = {
+  howItWorks: board('test-notes-how-it-works', 'Test card for the How It Works section: the goal and the hypothesis', 'How It Works: gauge which questions customers want answered before shopping. The hypothesis, with names removed.', 'half'),
+  promo: board('test-notes-promo', 'Test card for the promotions carousel: the hypothesis, the sales-day evidence, and the data to request', 'Promotions carousel: test its size and location. The hypothesis, the sales-day evidence, and the data to request. Names and competitor references removed.', 'half'),
+  survey: board('test-notes-survey', 'Survey card with the fifteen topics and the two questions', 'The survey: fifteen topics customers choose from, then three questions a How It Works section should answer.', 'half'),
+  topics: board('test-notes-topics', 'Talking-points card listing the six trust topics to test', 'Which topics and components build trust before a purchase: the six candidates put to the team. Names removed.', 'half'),
+};
+const EXPLORE = {
+  conceptA: board('concept-a', 'Concept page with a category carousel under the hero and the deals tabs', 'Concept A: a category carousel under the hero, the deals lane, and the tabbed How It Works.', 'full', 'browser'),
+  conceptB: board('concept-b', 'Concept page with a three-step How It Works and the video center', 'Concept B: a three-step How It Works, the video center, and the ratings link.', 'full', 'browser'),
+  conceptC: board('concept-c', 'Concept page with the pledge section', 'Concept C: the pledge in place of the 40-years section.', 'full', 'browser'),
+  focusNewTires: board('focus-new-tires', 'Homepage board with the When is it time for new tires section in focus', 'In focus: when is it time for new tires, with links into the tire categories.', 'full', 'browser'),
+  focusBrands: board('focus-brands', 'Homepage board with the Shop by brands section in focus', 'In focus: shop by brands you can trust.', 'full', 'browser'),
+  focusTestTrack: board('focus-test-track', 'Homepage board with the test track section in focus', 'In focus: our test track.', 'full', 'browser'),
+  focusReviews: board('focus-reviews', 'Homepage board with the customer reviews section in focus', 'In focus: why customers love us, with verified reviews.', 'full', 'browser'),
+  focusPledge: board('focus-pledge', 'Homepage board with the pledge section in focus', 'In focus: the pledge, reusing the deals structure.', 'full', 'browser'),
+  focusArticles: board('focus-articles', 'Homepage board with the most-read articles section in focus', 'In focus: drive smarter, the most-read articles.', 'full', 'browser'),
+};
+const REFINED = {
+  desktop: board('refined-desktop', 'Refined homepage at desktop width', 'The refined homepage at desktop width. From the reDesign file.', 'full', 'browser'),
+  selectorOpen: board('refined-selector-open', 'Refined homepage with the vehicle selector open to the make list', 'With the vehicle selector open to the make list.', 'half', 'browser'),
+  phone: board('refined-phone', 'Refined homepage at phone width', 'At phone width: the selector collapses to its input, tabs keep their labels, and rows stack.', 'half', 'phone'),
 };
 
 const projects: Project[] = [
@@ -377,7 +477,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'wheelrack',
-    coverGround: '#f6f7f7',
+    coverGround: '#2c2c2c',
     stream: 'professional',
     // Product Design, not System Design: the design system is the means and
     // the 0-to-1 dealer product is the outcome, and it is the strongest
@@ -394,7 +494,7 @@ const projects: Project[] = [
     thesis: 'Shared rules for the details that make wheel fitment complicated.',
     summary: 'I built WheelRack’s complete design system and designed the full dealer product, from vehicle search through checkout. I defined tokens, components, responsive behavior, and edge cases, partnering with engineering on the React and Storybook implementation across six retail partners.',
     ownership: 'I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.',
-    cardHook: 'I built the full design system, partnered with engineering on React and Storybook, and designed the complete dealer product—edge cases included.',
+    cardHook: 'I built the full design system, partnered with engineering on React and Storybook, and designed the complete dealer product, edge cases included.',
     compactStory: true,
     annotations: {
       problem: 'Dealers were already on tablets. The interface had to catch up.',
@@ -1236,16 +1336,16 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'aem-component-system',
-    coverGround: '#c7c7c7',
+    coverGround: '#fbfbfb',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
-    thesis: 'Every style option gets a rule, a class, and a picture of what to pick.',
+    thesis: 'One component crosses Figma, the AEM editor, and the Sass branch, and the rule holds on all three.',
     annotations: {
-      problem: 'Style options the CSS could not keep.',
+      problem: 'Three surfaces, three descriptions of one component.',
       gaps: 'Option names are not results.',
-      constraints: 'Two release paths: CSS in the branch, settings in ui.content.',
-      approach: 'Measured in AEM, defined in Figma, fixed in Sass.',
-      outcome: 'In branch, with the open items written down.',
+      constraints: 'Two release paths, and AEM’s own Style System.',
+      approach: 'Drawn in Figma, measured in AEM, fixed in Sass, tested on the page.',
+      outcome: 'In branch, with the next options drawn and their tests written.',
     },
     stream: 'professional',
     groups: ['aem', 'systems'],
@@ -1253,20 +1353,31 @@ const projects: Project[] = [
     client: 'Tire Rack',
     title: 'AEM Component System',
     cardTitle: 'AEM Component System',
-    seoTitle: 'AEM Component Governance: Figma Specs, Edge Cases, and Production Sass',
-    summary: 'I documented the shared layer of our AEM core components in a Figma guide with seven component pages: the rules, the class each style option adds, wireframes measured on local AEM builds, and the steps an author takes. The Sass fixes live in the same branch, and the guide lists what is still open.',
-    cardHook: 'Authors could pick style options whose results were not defined anywhere they worked. A Figma guide now defines each option and its edge cases, with the Sass fixes alongside it.',
+    seoTitle: 'AEM Component System: Figma Exploration, Author Rules, and Production Sass',
+    summary: 'I carry one component across three surfaces: the Figma file where an idea is drawn and given a test, the AEM editor where an author selects it, and the Sass branch where its rule ships. A seven-page Figma guide keeps the rules, the classes, and the edge cases together, and a homepage exploration file holds the next options with a test plan behind each one.',
+    cardHook: 'Authors could pick style options with no defined result. One component now moves from Figma through the AEM editor to the Sass branch, with its rule, its class, and a picture of what to select kept together.',
     year: '2024–2026',
-    tags: ['Design Systems', 'AEM', 'Component Governance', 'UX Engineering', 'Sass', 'Documentation'],
+    tags: ['Design Systems', 'AEM', 'Component Governance', 'UX Engineering', 'Sass', 'Figma'],
     role: 'Senior Web Designer / UX Engineer',
-    tools: ['AEM', 'Figma', 'Sass', 'HTML/CSS', 'Git'],
-    timeline: 'Rebuild ~12 months · CSS overhaul ongoing',
+    tools: ['AEM', 'Figma', 'Figma MCP', 'Sass', 'HTML/CSS', 'Git'],
+    timeline: 'Rebuild ~12 months · CSS overhaul ongoing · Homepage exploration ongoing',
     featured: '/images/work/aem-component-system/CS_thumbnail_AEM_componentSystemRebuild_safe.jpg',
     featuredVideo: '/assets/portfolio-safe/aem-component-system/cover-loop.mp4',
-    timeToLive: 'The core components went live after a 12-month rebuild. The CSS overhaul that followed is in a working branch, with the remaining steps to release written down in the guide.',
+    relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'The line between Figma and the AEM codebase is getting thinner', lead: 'Where this is going' },
+    beat: {
+      kind: 'image',
+      src: '/images/work/aem-component-system/homepage-boards/end-state.jpg',
+      alt: 'The refined homepage at desktop width, with the vehicle selector open, and at phone width',
+      caption: 'The refined homepage, where the research came back to the components: desktop, the vehicle selector open, and phone. From the reDesign file, with internal notes removed.',
+    },
+    publicPlan: {
+      lead: 'The process, drawn in the portfolio’s own hand: how the homepage concepts were ordered, tested, explored section by section, and refined into one page. The boards themselves, from the exploration file, the reDesign file, and the component guide, open with the password.',
+      images: [PLAN.order, PLAN.tests, PLAN.explorations, PLAN.endState],
+    },
+    timeToLive: 'The core components went live after a 12-month rebuild. The CSS overhaul that followed is in a working branch, with the remaining steps to release written down in the guide. The homepage exploration continues in Figma, each concept with its test written before it is built.',
 
     // ── 01 Problem ──
-    problemPunch: 'Style options in the picker did not always have a defined result behind them, and nothing showed an author what each one would do at each width.',
+    problemPunch: 'A style option in the AEM picker, a frame in Figma, and a rule in Sass described the same component three ways, and none of them showed an author the result at each width.',
     problem: [
       'The core components from our 2024–2025 rebuild were live, but parts of the shared CSS still carried older behavior, and a few options did not hold up at phone widths.',
       'The style picker offered choices with nothing behind them: some options had no CSS, and some could not be combined with others.',
@@ -1279,6 +1390,7 @@ const projects: Project[] = [
       'Breakpoints, the 1296px content max, the 900px copy max, and the page gutter needed to be visible where pages are designed, not only in Sass.',
       'Nothing in AEM shows whether a style option is committed to the branch, configured only on a local build, or still depends on CSS pasted into the page.',
       'Each fix needed a record of the behavior it replaced, so the reason for the rule stays with the rule.',
+      'Homepage concepts live in a separate exploration file with their own test plan. For a concept to ship, it has to become a style option, a class, and a rule in the guide.',
     ],
     // ── 03 Constraints ──
     constraintsPunch: 'Live pages, saved styles, and the rules of AEM’s own Style System.',
@@ -1289,27 +1401,50 @@ const projects: Project[] = [
       'Containers had to match the gutter of pages built outside AEM, so the content edge holds when a visitor moves between them.',
       'Most designers and authors work in Figma and the AEM editor, not in Sass. The rules had to read as measurements, pictures, and clicks.',
     ],
-    insightCallout: 'A style option is a decision made for the author in advance. It needs CSS behind it, a defined result at every width, and a picture of what to select. The guide documents all three, the branch fixes what it can, and the open items name the rest.',
+    insightCallout: 'A style option is a decision made for the author in advance. It needs CSS behind it, a defined result at every width, and a picture of what to select. The guide documents all three, the branch fixes what it can, and the exploration file shows what the next option should be, with its test, before anyone builds it.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
       {
         key: 'alignment',
-        label: 'Measure the branch before drawing the rule',
-        description: 'I measured the components on local AEM builds of the branch, at widths from 375 to 1920 pixels. Those measurements set the frame every page of the guide shares: four breakpoints, a 1296px content max, a 900px copy max, and a gutter of 5% minus the 14px column padding, matching pages outside AEM. A status legend marks every rule as in the branch, configured only on local AEM, or still pasted into the page.',
+        label: 'Define the rules: measure the branch before drawing',
+        description: 'I measured the components on local AEM builds of the branch, at widths from 375 to 1920 pixels. Those measurements set the frame every page of the guide shares: four breakpoints, a 1296px content max, a 900px copy max, and a gutter of 5% minus the 14px column padding, matching pages outside AEM. A status legend marks every rule as in the branch, configured only on local AEM, or still pasted into the page. Each component page then reads in the same order: the rules, the class each style option adds, the steps in the AEM style picker with a screengrab, and wireframes at key widths.',
         images: [GUIDE.readMe],
       },
       {
-        key: 'structure',
-        label: 'Every component page reads in the same order',
-        description: 'Each page covers the rules, the class each style option adds, the steps in the AEM style picker with a screengrab, and wireframes at key widths. The wireframes stay low fidelity on purpose. Gray is content, a gray box with an X is an image, pink is the page gutter, and red is a measurement.',
-        images: [GUIDE.containers, GUIDE.copyWidth],
+        key: 'explore',
+        label: 'Explore in Figma, one section at a time, with a test behind each idea',
+        systemMarker: 'Figma',
+        description: 'The homepage exploration file holds a concept for each section rather than one redesign: three concept pages with different treatments below the hero, then six boards that put one section in focus at a time, from when it is time for new tires to the most-read articles. Each concept carries its test: a written hypothesis, the data to request, a customer survey on the fifteen topics shoppers might want explained before buying, and the order in which tests can run without colliding with the ones already scheduled. The notes below are from the file, with names removed.',
+        bullets: [
+          'Direction from the quarterly review: tires and wheels come first, and the page should lead with product-first messaging and component order.',
+          'Hypothesis for How It Works: the last redesign led with Find, Deliver, Install. Find is now an expectation rather than a question, so delivery and installation lead, then shipping, returns, and testing, which are the brand’s distinct advantages. The section ships without an order first, and customers set it.',
+          'Hypothesis for promotions: a smaller carousel, 490 by 180 banners instead of 550 by 470, placed above the fold keeps deal-driven shoppers. The two best-selling days of last year were deal days.',
+          'Survey: which of fifteen topics, from shipping and delivery to in-house tire testing, would you want explained before buying, and three questions a How It Works section should answer.',
+          'Sequencing: the component-order test waits for the hero button test, the decision guide A/B test, and winter content, and its success is defined before it starts, with a failure case written down.',
+          'Removals, each with a reason: the video center and three more videos for engagement and space, ratings charts to a link under Testing, the order pick-up discount for its small audience, the 40-years section in favor of the pledge, and the package mention in the hero.',
+          'Rules the concept adds: the red block button stays on one intended path, black pill buttons lead into shopping, white pill buttons lead to information, and the How It Works teasers get a new icon style.',
+          'A focus-group question to ask: which How It Works section, ours or a competitor’s, leaves a customer understanding the process best, and why.',
+        ],
+        variantsCaption: 'Three concept pages, then one section in focus at a time. From the exploration file.',
+        variants: [
+          { label: 'Concept A', image: EXPLORE.conceptA },
+          { label: 'Concept B', image: EXPLORE.conceptB },
+          { label: 'Concept C', image: EXPLORE.conceptC },
+          { label: 'New tires', image: EXPLORE.focusNewTires },
+          { label: 'Brands', image: EXPLORE.focusBrands },
+          { label: 'Test track', image: EXPLORE.focusTestTrack },
+          { label: 'Reviews', image: EXPLORE.focusReviews },
+          { label: 'Pledge', image: EXPLORE.focusPledge },
+          { label: 'Articles', image: EXPLORE.focusArticles },
+        ],
+        images: [PLAN.order, PLAN.tests, NOTES.howItWorks, NOTES.promo, NOTES.survey, NOTES.topics],
       },
       {
         key: 'system',
         label: 'Reuse first, then a variant, then a named gap',
         description: 'A full-bleed color band needed no new component: a Fixed Width container nested inside a Full Width one with a gray background keeps the copy aligned with every other section. Where reuse fell short, a style variant extended an existing component. Copy Width adds a 900px column to the layout container, and the Flex Container lays out existing teaser styles in columns set by the screen width and the number of children. The tire size table was a real gap. I documented it as rendered today and recommended moving its pasted CSS into the branch under the unused Tr Table style.',
-        images: [GUIDE.flex, GUIDE.table],
+        images: [{ ...GUIDE.flex, layout: 'half' }, { ...GUIDE.table, layout: 'half' }],
       },
       {
         key: 'build',
@@ -1371,24 +1506,25 @@ $mobile-max-width: 768px;
 }`,
           caption: 'From the component-scoped Sass I wrote during the rebuild. Its fixed 250px CTA minimum is the behavior the overhaul changed to min(250px, 100%).',
         },
-        images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter, GUIDE.buttons],
+        images: [{ ...GUIDE.heroUpdates, layout: 'half' }, { ...GUIDE.teaserBeforeAfter, layout: 'half' }],
       },
       {
         key: 'iteration',
-        label: 'Show authors the result, and keep the open items in writing',
+        label: 'Show authors the result, keep the open items in writing, and draw where the options go next',
         systemMarker: 'Documentation',
-        description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content.',
-        images: [GUIDE.heroAuthor, GUIDE.heroPreview],
+        description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content. The research then came back to the components: the refined homepage is one page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component. It is the direction the style options move toward, and the guide is where each option lands once it has a rule, a class, and a picture.',
+        images: [GUIDE.heroAuthor, GUIDE.heroPreview, REFINED.desktop, REFINED.selectorOpen, REFINED.phone],
       },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them.',
+    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The homepage exploration holds the next options, each with a hypothesis and a test behind it. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. The distance between the Figma file and the branch is the part still closing: with the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     takeaways: [
       'Measurements come from local AEM builds of the branch, not from the design file.',
       'Reuse came first: a full-bleed band is two existing containers nested together, not a new component.',
       'Fixes are documented beside the behavior they replaced, including a class name AEM’s Style System silently dropped.',
       'The tire size table is recorded as a component gap with a recommendation, rather than another pasted fix.',
+      'A homepage concept carries its hypothesis and its test before it carries engineering time.',
     ],
     outcomeLiveLinks: [
       { label: 'Tire Rack Homepage', url: 'https://www.tirerack.com/' },
@@ -1766,6 +1902,7 @@ Frame every output as:
             { src: "/images/work/playdraft/progression/screenshots/01-home.png", alt: "Home asks What are we drafting? beside a large initials avatar, with a Create a draft card and a recently finished Candy draft.", layout: 'full', caption: "Idle Home leads with creation. Staging build on an iPhone 17 simulator, signed in as a test account.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
             { src: "/images/work/playdraft/progression/loops/room-fills-countdown.mp4", isVideo: true, videoPoster: "/images/work/playdraft/progression/loops/room-fills-countdown-poster.jpg", alt: "The host's waiting room fills with a third player, the PLAY, DRAFT, WIN intro plays, and the Everyone is here countdown starts with Start draft now.", layout: 'full', caption: "When the last seat fills, PLAY, DRAFT, WIN plays before the countdown. The host's view in a three-account staging test." },
           ],
+          wide: { src: '/images/work/playdraft/playdraft-shipped-screens.png', alt: 'Six screens from the shipped PlayDraft build, captured on an iPhone 17: Home with the week’s three competitive rooms and a join button, the full Packs grid with the write-your-own band above it, Collection with per-pack progress and the binder door, the coins-only Store of tickets and card packs, the live draft board with the “The pick is in” card revealing over it, and the winner podium with final standings', layout: 'full', caption: "Six screens from the original release, including a pick arriving on the board and the final podium.", },
         },
         {
           title: "Save an idea before hosting a draft",
@@ -1787,6 +1924,7 @@ Frame every output as:
           title: "Make the design repeatable",
           body: "I turned the pitch into components I could reuse and compare on an iPhone. Big Shoulders gives the headings their character. Initials and character avatars share a size scale, and a YOU label identifies the current player in a group.",
           image: { src: "/images/work/playdraft/v2/playdraft-v2-identity-system.png", alt: "Native v2 identity specimen showing initials, The Sleeper and Bracket avatars at 24, 32, 40, 56 and 96 points, plus player nameplates and a YOU badge.", layout: 'full', caption: "Initials and character avatars at five sizes, followed by player nameplates. Captured from the native component preview with sample players.", crop: { x: 0, y: 0, width: 1206, height: 2622, sourceWidth: 1206, sourceHeight: 2622 } },
+          wide: { src: '/images/work/playdraft/playdraft-design-system-governance.png', alt: 'PlayDraft design-system governance board: the rule that components must not inline hex codes, font sizes or spacing numbers; four locked micro-rules including white-on-gold forbidden and the variant owning casing; a primitive to semantic to recipe token flow; Figma provenance with three accepted sources of truth; the five-step path for adding a token; and the three mechanisms that catch drift', layout: 'full', caption: "The rules for adding a token, using it in a component and checking its rendered result.", },
         },
       ],
       outcome: "The original app is on iOS. The rebuilt screens run on iPhone, and saving packs to an account has passed its first checks. V2 is still in development. On a staging server, three test accounts on three iPhone simulators have created, joined and finished drafts through the shared draft and ticket system. Production release and real-device testing are next. I have no usage results for this version yet.",
@@ -2223,6 +2361,13 @@ export const packs = {
 
 // Compact editions reference the original artifacts so captions, crops, and
 // provenance stay attached. The full narrative remains available on demand.
+/** Any image the full study defines, found by a fragment of its path. */
+const findImage = (project: Project, needle: string): ProjectImage | undefined =>
+  [project.studyHero, ...(project.problemImages ?? []), ...(project.gapsImages ?? []), ...(project.constraintsImages ?? []),
+    ...(project.approachSubsections ?? []).flatMap(s => [...(s.images ?? []), ...(s.variants ?? []).map(v => v.image)]),
+    ...(project.outcomeImages ?? []), ...(project.outcomeGridImages ?? [])].find(i => i?.src?.includes(needle));
+const subsection = (project: Project, key: string) => project.approachSubsections?.find(s => s.key === key);
+
 const evidence = (project: Project, key: string, index = 0): ProjectImage | undefined =>
   project.approachSubsections?.find(section => section.key === key)?.images?.filter(image => image.src && !image.isOverlay)[index];
 
@@ -2235,9 +2380,10 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     decisions: [
       { title: 'Make repeated controls predictable', body: 'I defined shared tokens and the resting, hover, and focus states of repeated controls. Those specifications gave the Figma library, Storybook, and React build a common vocabulary.', image: evidence(p, 'foundation') },
       { title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability, and partner-specific purchasing actions needed explicit variants. I resolved those combinations before the component was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
-      { title: 'Specify behavior, then check the build', body: 'I specified behavior and responsive rules while Cheryl Carpenter owned the React web build. Reviewing it together sharpened my understanding of props, states, and reusable components—a foundation I later carried into building PlayDraft in React Native with agents.', bodyLink: { text: 'building PlayDraft in React Native', to: '/work/playdraft/' }, image: evidence(p, 'documentation') },
+      { title: 'Specify behavior, then check the build', body: 'I specified behavior and responsive rules while Cheryl Carpenter owned the React web build. Reviewing it together sharpened my understanding of props, states, and reusable components: a foundation I later carried into building PlayDraft in React Native with agents.', bodyLink: { text: 'building PlayDraft in React Native', to: '/work/playdraft/' }, image: evidence(p, 'documentation'), quote: subsection(p, 'documentation')?.quote },
     ],
     outcome: 'The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.',
+    outcomeImages: [findImage(p, 'wheelrack-final-desktop-01')!],
   }),
   'design-enablement': p => ({
     title: 'Tools that scale design', category: 'Internal tools', role: 'Product design · AI-assisted build',
@@ -2262,12 +2408,13 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
       { title: 'Let authors change the data', body: 'Reusable AEM components give content teams control of category copy and performance data without waiting for engineering.' },
     ],
     outcome: p.outcomeNote!,
+    outcomeMetric: p.beat?.kind === 'metric' ? { value: p.beat.value!, label: p.beat.label, context: p.beat.context } : undefined,
   }),
   'seasonal-content-system': p => ({
     title: 'AEM Targeting & Seasonal Content', category: 'Professional work', status: 'Live · Ongoing seasonal ownership',
     deck: "More than twenty AEM Experience Fragments serve six pages through Adobe Target. The current program uses a geo-based audience split, with seasonal imagery and content order adapted for winter and southern-state customers.",
     ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
-    opening: { src: p.featured, alt: 'AEM winter seasonal content — homepage project card', layout: 'full' },
+    opening: { src: p.featured, alt: 'AEM winter seasonal content, homepage project card', layout: 'full' },
     decisions: [
       { title: 'Map the content to its audience', body: 'Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics so each page receives the intended experience.', image: p.outcomeImages?.[0] },
       { title: 'Trace each swap through Figma, AEM, and Target', body: 'I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I retain approval and responsibility for exceptions.' },
@@ -2281,11 +2428,12 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     ownership: 'I designed the identity and website, built it in WordPress, configured forms and search basics, and trained founder Deborah Clements to manage the content.',
     opening: evidence(p, 'system'),
     decisions: [
-      { title: 'Give every service its own entrance', body: 'Dedicated service pages answer parent questions and offer a relevant contact form. Families can arrive directly at the activity they searched for.', image: evidence(p, 'system', 1) },
-      { title: 'Carry one identity across the site', body: 'Logo, color, and typography rules extend into reusable service cards, FAQ accordions, and contact sidebars.', image: evidence(p, 'system') },
+      { title: 'Give every service its own entrance', body: 'Dedicated service pages answer parent questions and offer a relevant contact form. Families can arrive directly at the activity they searched for.', images: [evidence(p, 'system', 1)!, { ...findImage(p, 'heatherwood-final-mobile-01')!, mobile: false, frame: 'phone' }] },
+      { title: 'Carry one identity across the site', body: 'Logo, color, and typography rules extend into reusable service cards, FAQ accordions, and contact sidebars, and off the screen onto the roadside sign.', images: [evidence(p, 'system')!, findImage(p, 'heatherwood-notes-01')!] },
       { title: 'Design the handover, too', body: 'WordPress, Elementor, and clear training let Deborah update content independently. The site did not require an ongoing developer relationship to stay useful.' },
     ],
     outcome: 'Deborah still manages the content herself. Rough inbox counts rose from three or four inquiries a month to four or five a day in the weeks after launch. These are unfiltered form counts; the change reflects brand, content, search, and the inquiry path together.',
+    outcomeImages: [findImage(p, 'heatherwood-final-desktop-01')!],
   }),
   'landing-pages': p => ({
     title: 'Landing Page System', category: 'Professional work', status: 'Live · Governed AEM templates',
@@ -2298,20 +2446,23 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
       { title: 'Match the review to the risk', body: 'Template permissions define what authors can edit. High-impact pages go through senior, SEO, analytics, and QA review; lower-risk pages receive senior review and live validation. Requests beyond the template become scoped changes to the AEM component foundation.', image: liveComponent('hero-suspension', 'Thin Hero Teaser on the live Tire Rack suspension page', 'The thin Hero Teaser gives category pages a shared starting point. Live capture, October 7, 2026.'), bodyLink: { text: 'AEM component foundation', to: '/work/aem-component-system/' } },
     ],
     outcome: 'Two junior designers use the templates. Complex pages take one or two weeks instead of about a month; standard pages about a week, and simple launches a day or two. The October 7 inventory shows the shared components in use across category and support pages. Migration and content QA continue.',
+    outcomeImages: [findImage(p, 'landing-pages-full-page-layouts')!, findImage(p, 'landing-pages-product-mobile')!],
   }),
   'aem-component-system': p => ({
-    title: 'AEM Components', category: 'Professional work', status: 'Live components · CSS overhaul in branch',
-    deck: 'A Figma guide with seven component pages documents how our AEM core components behave: the rules, the class each style option adds, wireframes measured on local AEM builds, and the steps an author takes in the style picker. The Sass fixes live in the same branch, and the guide marks what is not released yet.',
-    ownership: 'I measured the components, defined the rules and edge cases in Figma, wrote the Sass, and built the author references. The components came from an earlier rebuild, which I prepared for with AEM authoring certification. Patrick Steins reviewed my branches, and SEO and accessibility leads helped define the contracts.',
-    opening: evidence(p, 'alignment'),
+    title: 'AEM Components', category: 'Professional work', status: 'Live components · CSS overhaul in branch · Homepage concepts in Figma',
+    deck: 'One component crosses three surfaces: drawn and given a test in Figma, selected by an author in the AEM editor, shipped as a rule in the Sass branch. A seven-page guide keeps the rules, classes, and edge cases together, and a homepage exploration file holds the next options with a test plan behind each one.',
+    ownership: 'I measured the components, defined the rules and edge cases in Figma, wrote the Sass, and built the author references. I also own the homepage exploration and its test plan. The components came from the 2024–2025 rebuild I led.',
+    opening: evidence(p, 'explore'),
     decisions: [
+      { title: 'Draw the concept and its test together', body: 'The homepage exploration holds a concept for each section rather than one redesign. Each concept carries a written hypothesis, the data to request, a fifteen-topic customer survey, and the order in which tests can run without colliding with the ones already scheduled. Removals carry their reasons.', images: [PLAN.order, PLAN.tests, NOTES.howItWorks, NOTES.promo] },
+      { title: 'Explore section by section, then refine the components from the research', body: 'Three concept pages tried different treatments below the hero, and six boards put one section in focus at a time: new tires, brands, the test track, reviews, the pledge, and articles. What survived became one refined page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component.', images: [EXPLORE.conceptA, EXPLORE.focusNewTires, REFINED.desktop] },
       { title: 'Measure the build, then write the rule', body: 'Pixel values come from local AEM builds of the branch, measured at widths from 375 to 1920 pixels. The read-me page sets the frame every component shares, and a status legend marks each rule as in the branch, configured only on local AEM, or still pasted into the page.', image: GUIDE.readMe },
       { title: 'Reuse first, then a variant, then a named gap', body: 'A full-bleed color band is two existing containers nested together, not a new component. Copy Width and the Flex Container extend the existing layout container. The tire size table was a real gap, so I documented it as rendered today and recommended moving its pasted CSS into the branch.', images: [GUIDE.flex, GUIDE.table] },
-      { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.teaserBeforeAfter] },
-      { title: 'Show authors exactly what to select', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. Neither the Homepage nor the Packages hero had a saved style, so each reference records the recommended one.', images: [GUIDE.heroAuthor] },
+      { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter], points: subsection(p, 'build')?.bullets, code: subsection(p, 'build')?.codeBlock },
+      { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components. The guide is where each option lands once it has a rule, a class, and a picture.', images: [GUIDE.heroAuthor, REFINED.selectorOpen, REFINED.phone] },
     ],
-    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them.',
-    relatedNote: { href: '/notes/aem-meeting-authors-where-they-work/', label: 'Read my note on AEM authoring' },
+    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
+    relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'Read why the line between Figma and the codebase is getting thinner' },
   }),
   loopstack: p => ({
     title: 'LoopStack', category: 'Personal product', status: 'TestFlight · Personal pattern-review tool',
@@ -2321,7 +2472,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     decisions: [
       { title: "Follow the response beyond the meal", body: "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.", image: evidence(p, 'structure') },
       { title: 'Say where each number comes from', body: 'Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.', image: evidence(p, 'system', 1) },
-      { title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.", image: evidence(p, 'iteration') },
+      { title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.", images: [evidence(p, 'iteration')!, findImage(p, '04_fix_log')!] },
     ],
     outcome: p.outcomeNote!,
   }),
@@ -2347,6 +2498,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
       { title: 'Separate estimates from observations', body: 'The nutrition view labels the absorption pattern as estimated. It is not measured CGM data or a dosing recommendation. Reviewing observed glucose patterns belongs to the separate LoopStack exploration.', bodyLink: { text: 'LoopStack exploration', to: '/work/loopstack/' }, image: { src: '/images/work/bolus-binder/app/07-nutrition-expected-response.png', alt: 'Nutrition view marks its absorption pattern as Estimated', layout: 'half', crop: { x: 0, y: 1220, width: 1206, height: 1350, sourceWidth: 1206, sourceHeight: 2622 }, caption: 'Estimated pattern, not an observed glucose response.' } },
     ],
     outcome: 'The React Native app is in TestFlight. These captures document implemented product flows, not validated health outcomes. Observed glucose integration remains future work.',
+    outcomeImages: [{ ...findImage(p, 't1dhub-color-system')!, layout: 'full' }],
   }),
 };
 

@@ -156,6 +156,25 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'the-line-between-figma-and-the-codebase',
+    kind: 'practice',
+    origin: 'portfolio',
+    status: 'draft',
+    date: 'October 19, 2026',
+    dateISO: '2026-10-19',
+    title: 'The line between Figma and the AEM codebase is getting thinner',
+    dek: 'With the MCP connection I now push between code and Figma in both directions, and the governance skill I built rides along.',
+    read: '2 min',
+    body: (
+      <>
+        <p>The through line between our AEM codebase and Figma is getting thinner and thinner. With the MCP connection, I can now push from code to Figma and from Figma to code, and bring an idea in and out of production with general ease.</p>
+        <p>Every push in either direction adheres to the governance skill I built. The rules travel with the component, so what comes back from Figma still follows what the system already holds, and what goes out to Figma arrives as the option an author can select in AEM.</p>
+        <p>The <Link to="/work/aem-component-system/">AEM component system study</Link> shows the line a component crosses: drawn and given a test in Figma, selected in the AEM editor, shipped as a rule in the Sass branch. The MCP connection is what shortens each crossing.</p>
+        <p>I wrote earlier about the direction I most wanted to prove, working backward from production AEM components into Figma, in <Link to="/notes/aem-meeting-authors-where-they-work/">AEM is starting to meet authors where they work</Link>. This note is where that experiment stands.</p>
+      </>
+    ),
+  },
+  {
     slug: 'steering-into-aem',
     kind: 'practice',
     origin: 'portfolio',
@@ -483,7 +502,7 @@ export const NOTES: Note[] = [
         <p>
           What changed it was not an article. It was hundreds of hours of{' '}
           <Link to="/notes/studying-the-tape/">watching people I learn from at a distance</Link>{' '}
-          &mdash; Tommy Geoco and Michael Riddering especially &mdash; change their own workflows in
+          (Tommy Geoco and Michael Riddering especially) change their own workflows in
           public, over months. Eventually watching stopped being enough. I wanted into the weeds
           myself.
         </p>
@@ -499,7 +518,7 @@ export const NOTES: Note[] = [
         <p>
           It may still make exactly zero dollars in the App Store. As a place to learn it has
           already been worth more than that, because it forced decisions no tutorial or tool
-          comparison could have manufactured &mdash; including{' '}
+          comparison could have manufactured, including{' '}
           <Link to="/notes/eight-wrong-first-drafts/">eight where my first idea lost to a number</Link>.
           A tutorial hands you a finished decision. A product you are stuck with hands you the
           argument.
@@ -516,7 +535,7 @@ export const NOTES: Note[] = [
           earlier, and it is the part that mattered most. Personal practice stays a hobby until
           somebody lets you point it at the real thing. Now those tools run daily against{' '}
           <Link to="/work/design-enablement/">internal applications and workflow tools</Link>, and
-          against reusable agent skills &mdash; some that remove repeat setup, others that carry
+          against reusable agent skills: some that remove repeat setup, others that carry
           team standards and context into work that used to start from scratch, like{' '}
           <Link to="/notes/ryan-design-taste-skill/">the one that encodes my own taste</Link>.
         </p>
@@ -801,7 +820,7 @@ export const NOTES: Note[] = [
     body: (
       <>
         <p>
-          Michael W. &mdash; Mizko &mdash; is one of the people who taught me how to think in
+          Michael W. (Mizko) is one of the people who taught me how to think in
           Figma. Not shortcuts: how to structure a file, how to build a system, how to turn a
           visual decision into a rule other people could follow. Then he went quiet on YouTube for
           more than a year. When he came back, most of his attention had moved toward AI and
@@ -809,7 +828,7 @@ export const NOTES: Note[] = [
         </p>
         <p>
           That caught me because my own week had drifted the same way at roughly the same time,
-          without either of us telling the other. Figma is still in my process &mdash; I still care
+          without either of us telling the other. Figma is still in my process. I still care
           about the artboards, the component logic, the small decisions that make a product feel
           considered. It just isn&rsquo;t where all of the work lives anymore. More of my week now
           happens in Claude, in code, in Markdown files, in plugins and tests and products that
@@ -837,7 +856,7 @@ export const NOTES: Note[] = [
             settled it was about tokens, not layouts.
           </Term>
           <Term word="The visual details" gloss="down to favicon size">
-            Construction, really &mdash;{' '}
+            Construction, really:{' '}
             <Link to="/work/overscroll-tactics/">making a mark hold up at 4000% and at 16px</Link>.
             The rules that keep a mark intact are the same discipline as the rules that keep an
             interface intact.
@@ -860,7 +879,7 @@ export const NOTES: Note[] = [
           Not the judgment. The distance between deciding something and finding out whether the
           decision was any good. That gap used to be weeks and a handoff; now it is often an
           afternoon. Which sounds purely good, and mostly is, except that a shorter loop punishes
-          a confident guess faster than it rewards one &mdash; something I&rsquo;ve now{' '}
+          a confident guess faster than it rewards one, something I&rsquo;ve now{' '}
           <Link to="/notes/eight-wrong-first-drafts/">written down eight times over</Link>.
         </p>
         <p>
@@ -872,7 +891,7 @@ export const NOTES: Note[] = [
 
         <h2>The cost nobody warns you about</h2>
         <p>
-          This work is harder to show. A Figma file is a portfolio piece &mdash; you open it and
+          This work is harder to show. A Figma file is a portfolio piece: you open it and
           the craft is right there. A Markdown file that keeps a brand from drifting, an{' '}
           <Link to="/work/figma-template-governance/">internal plugin that removes a repetitive step</Link>,
           a test that catches a bug before a user does: all real, all close to invisible. Half of
@@ -899,7 +918,7 @@ export const NOTES: Note[] = [
           changed completely?
         </p>
         <p className="notes__source">
-          <LinkedInLink label="This started as a post — the conversation is there" surface="note_source" />
+          <LinkedInLink label="This started as a post: the conversation is there" surface="note_source" />
         </p>
       </>
     ),
@@ -916,19 +935,19 @@ export const NOTES: Note[] = [
     title: 'Eight times my first idea was wrong. What changed was the cost of finding out.',
     dek: 'Eight PlayDraft decisions where the obvious answer lost to a number, from a five-minute simulation to a comment that had been lying for six days.',
     artifact: {
-      label: 'Source notes — all eight, with the numbers',
+      label: 'Source notes: all eight, with the numbers',
       href: '/artifacts/eight-wrong-first-drafts.html',
     },
     body: (
       <>
         <p>
-          I keep a running file of decisions that went the wrong way first. Not bugs exactly &mdash;
-          decisions: the moment where I had a clear, confident answer and something measurable
+          I keep a running file of decisions that went the wrong way first. Not bugs exactly. Decisions:
+          the moment where I had a clear, confident answer and something measurable
           disagreed with it. Eight of them came out of <Link to="/work/playdraft">PlayDraft</Link> in
           one stretch of build work. Six were caught before a player ever saw them. Two were not.
         </p>
         <p>
-          What interests me now isn&rsquo;t that the first idea was wrong &mdash; that&rsquo;s
+          What interests me now isn&rsquo;t that the first idea was wrong. That&rsquo;s
           ordinary. It&rsquo;s that the eight sort cleanly by <em>how</em> I found out, and that
           ordering turns out to be a cost ladder. The cheapest catches took minutes. The most
           expensive one had been sitting in the codebase for six days wearing a comment that said
@@ -942,13 +961,13 @@ export const NOTES: Note[] = [
         </p>
         <Turn>
           <TurnSide label="First idea" question="Reward the gem-finder">
-            Pay drafters for reaching &mdash; taking something later than the world takes it &mdash;
+            Pay drafters for reaching (taking something later than the world takes it)
             so that chalk never settles into the solved meta. Coherent, popular, and the kind of
             rule you can explain in one sentence.
           </TurnSide>
           <TurnSide label="What 400 drafts said" question="It rewarded chalk 99–100% of the time" kept>
-            The precise inverse of its purpose. The obvious repair &mdash; normalising across the
-            whole pack &mdash; just moved the win to the last seat instead, at roughly 90&ndash;100%.
+            The precise inverse of its purpose. The obvious repair, normalising across the
+            whole pack, just moved the win to the last seat instead, at roughly 90&ndash;100%.
             A seat lottery wearing a skill mechanic.
           </TurnSide>
         </Turn>
@@ -956,7 +975,7 @@ export const NOTES: Note[] = [
           What shipped was honest chalk scoring with a comment saying so out loud. The real finding
           wasn&rsquo;t that the formula was miscalibrated; it was that the thing I wanted to reward
           isn&rsquo;t measurable yet. With a static popularity list and no outcome data,
-          &ldquo;did you find a gem&rdquo; has no evidence behind it &mdash; you cannot detect a gem
+          &ldquo;did you find a gem&rdquo; has no evidence behind it. You cannot detect a gem
           without proof that it was one. That&rsquo;s not a rejection. It&rsquo;s a feature waiting
           on population data that&rsquo;s already being collected.
         </p>
@@ -969,7 +988,7 @@ export const NOTES: Note[] = [
         <Split sum="the later the catch, the more it costs">
           <Term word="A simulation" gloss="minutes · nobody saw it">
             Two scoring ideas died here. The reach bonus above, and a rule locking each round to one
-            category &mdash; which turned out to be safe in the deep packs where categories are
+            category, which turned out to be safe in the deep packs where categories are
             nearly free, and broken in the shallow ones where it would actually have mattered. The
             smallest fast-food category is 14 items, about seven on a live board; at eight seats it
             is exhausted before the round completes.
@@ -979,7 +998,7 @@ export const NOTES: Note[] = [
             instead of reasoning about it: the ignore file was excluding all of that correctly, and
             624 MB of the 650 was <code>.git</code>, re-added by the build tool after the patterns
             were applied. 650 MB to 25 MB, verified by diffing both archives file by file. A
-            diversity bonus died the same way &mdash; every major category in movies and music tops
+            diversity bonus died the same way: every major category in movies and music tops
             out at 98&ndash;100, so a five-pick roster spanning five categories costs about two
             points against pure chalk. Players were already drafting diverse rosters by accident.
             The lever was never variety. It was scarcity.
@@ -987,7 +1006,7 @@ export const NOTES: Note[] = [
           <Term word="A real session" gloss="after it shipped">
             Two bugs survived mockups, fixtures, review and a full test suite, then died within
             minutes of a real board. One race bar announced &ldquo;kev is close behind &middot; 0
-            picks&rdquo; on the opening pick &mdash; true by subtraction, nonsense as a sentence, and
+            picks&rdquo; on the opening pick: true by subtraction, nonsense as a sentence, and
             shown at the one moment nobody is chasing anyone. A fixture never contains a drafter
             with zero picks, and never contains someone losing.
           </Term>
@@ -1011,8 +1030,8 @@ export const NOTES: Note[] = [
         </p>
         <p>
           A push notification told competitive players they had two minutes to pick. The competitive
-          clock is 30 seconds. The number almost certainly came from a nearby constant &mdash; clock
-          plus sweeper lag &mdash; but that lag is what an <em>abandoned</em> pick costs everyone
+          clock is 30 seconds. The number almost certainly came from a nearby constant (clock
+          plus sweeper lag), but that lag is what an <em>abandoned</em> pick costs everyone
           else, not time the player ever had. On the one mode whose own code comment calls the alert
           &ldquo;the product,&rdquo; the notification was walking people into missed turns while
           telling them they had four times the time they did. It surfaced only because someone
@@ -1020,8 +1039,8 @@ export const NOTES: Note[] = [
           the number didn&rsquo;t match.
         </p>
         <p>
-          The other was quieter and worse. Turn alerts were sent by the client that had just picked
-          &mdash; simple, no server work, and correct right up until nobody picked. The timeout
+          The other was quieter and worse. Turn alerts were sent by the client that had just picked:
+          simple, no server work, and correct right up until nobody picked. The timeout
           sweeper has no client, so a missed clock meant the next player was never told they were
           on it, and that cascades: one player times out, the next is never alerted, the next times
           out. A room can auto-draft itself to completion in total silence. The competitive mode had
@@ -1031,7 +1050,7 @@ export const NOTES: Note[] = [
 
         <h2>What I actually changed</h2>
         <p>
-          Not the ideas &mdash; the order of operations. Simulate before shipping, measure before
+          Not the ideas. The order of operations. Simulate before shipping, measure before
           diagnosing, and treat a confident explanation as the thing most in need of a number. Four
           of these eight were killed by a query or a loop that took minutes to write, and in every
           one of those four the confident explanation and the true one were different.
@@ -1052,7 +1071,7 @@ export const NOTES: Note[] = [
         </p>
         <p>
           The part I&rsquo;m least sure about: one bonus mechanic was finished, verified, and proven
-          to do exactly what it was designed to do &mdash; on its verification run it flipped second
+          to do exactly what it was designed to do. On its verification run it flipped second
           and third, which was the intent. I shelved it anyway, because I couldn&rsquo;t explain the
           result to the player who lost. A surprise you can&rsquo;t explain afterwards is
           indistinguishable from a bug. I still don&rsquo;t know whether that was good judgment or
@@ -1071,7 +1090,7 @@ export const NOTES: Note[] = [
     date: 'August 2026',
     dateISO: '2026-08-12',
     title: 'I needed an LLC. I ended up naming my design practice.',
-    dek: 'Six weeks naming an umbrella for PlayDraft: Playgrove, then Imaginefield, then Overscroll Tactics — including the branch I threw away and went back for.',
+    dek: 'Six weeks naming an umbrella for PlayDraft: Playgrove, then Imaginefield, then Overscroll Tactics, including the branch I threw away and went back for.',
     artifact: { label: 'overscrolltactics.com', href: 'https://overscrolltactics.com/' },
     body: (
       <>
@@ -1227,7 +1246,7 @@ excluded    Angle brackets, pixel grids, terminal type,
         </pre>
         <p>
           The marks were one-color tests on a black artboard when I wrote this. They have since
-          resolved and shipped &mdash; the emblem is now{' '}
+          resolved and shipped: the emblem is now{' '}
           <Link to="/work/overscroll-tactics/">die-cut out of a played board in the studio ident</Link>,
           on the site and on every cold launch of PlayDraft. The deliverable was still never a
           logo. A parent with too much character turns every product underneath it into a variant
@@ -1364,7 +1383,7 @@ excluded    Angle brackets, pixel grids, terminal type,
           copy gets selected the way a cursor drags across text before it bolds. The comet did not
           earn its way back: what ships is the frame itself, with four corner handles that fade in
           once as the grid reveals and then stay put. The border never animates. That was the
-          right call &mdash; a perimeter tracing itself is exactly the kind of motion that competes
+          right call. A perimeter tracing itself is exactly the kind of motion that competes
           with the work. The interface speaks the language of the tools it was made in, and orange
           means one thing: selected.
         </p>

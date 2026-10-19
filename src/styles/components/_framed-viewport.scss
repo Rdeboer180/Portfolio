@@ -1,0 +1,72 @@
+// A full-page board inside a viewport the reader scrolls (FramedViewport.tsx).
+// Browser: a 3:2 window with the lightest chrome. Phone: a bezel at phone width.
+.framed {
+  position: relative;
+  margin: 0 auto;
+
+  &__screen {
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background: $color-white;
+
+    a { display: block; }
+    img { display: block; width: 100%; height: auto; max-height: none; object-fit: unset; }
+
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 2px; }
+  }
+}
+
+.framed--browser {
+  width: 100%;
+  border: 1px solid $color-border-default;
+  border-radius: 8px;
+  overflow: hidden;
+  background: $color-white;
+  box-shadow: 0 1px 2px rgba($color-neutral-dark, 0.04);
+
+  .framed__chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    background: $color-neutral-lightest;
+    border-bottom: 1px solid $color-border-default;
+
+    i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid $color-secondary; background: $color-white; }
+    .framed__url { flex: 1; height: 14px; margin-left: 10px; max-width: 46%; border-radius: 7px; background: $color-neutral-light; }
+  }
+
+  .framed__screen { aspect-ratio: 3 / 2; }
+}
+
+.framed--phone {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 44px;
+  background: #0a0a0a;
+  box-shadow:
+    inset 0 0 0 1.5px #2a2a2a,
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 12px 48px rgba(0, 0, 0, 0.22);
+
+  .framed__notch {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 96px;
+    height: 24px;
+    transform: translateX(-50%);
+    border-radius: 12px;
+    background: #0a0a0a;
+    z-index: 1;
+  }
+
+  .framed__screen {
+    aspect-ratio: 9 / 19.5;
+    border-radius: 34px;
+  }
+}

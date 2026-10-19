@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_board.css"><style>
+.wrap{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start}
+.page{border:1.5px solid var(--steel);background:#fff;border-radius:4px;overflow:hidden}
+.sec{position:relative;border-bottom:1px solid var(--hair);padding:14px 16px}
+.sec:last-child{border-bottom:0}
+.sec.alt{background:var(--mist)}
+.sec .lab{position:absolute;right:12px;top:10px;font-size:11px;color:var(--steel-dark);font-weight:600}
+.sec .t{font-family:var(--head);font-weight:700;font-size:13px;margin-bottom:6px}
+.sec .lines{display:flex;flex-direction:column;gap:5px}
+.hero{min-height:150px}
+.sel{margin-top:12px;border:1.5px solid var(--steel);border-radius:3px;background:#fff;padding:10px}
+.sel .inp{height:18px;border:1.5px solid var(--steel);border-radius:2px;margin-bottom:8px}
+.sel .cats{display:flex;gap:6px;margin-bottom:8px}.sel .cats i{flex:1;height:22px;border:1px solid var(--steel-light);border-radius:2px}
+.sel .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px 10px;border-top:1px solid var(--hair);padding-top:8px}.sel .grid i{height:5px;background:var(--steel-light);border-radius:2px}
+.tabs{display:flex;gap:14px;margin:6px 0 10px}.tabs i{font-style:normal;font-family:var(--head);font-weight:600;font-size:11.5px;color:var(--graphite);padding-bottom:3px;border-bottom:2px solid transparent}.tabs i.on{color:var(--orange);border-color:var(--orange)}
+.rows3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rows3 .img{height:60px}
+.two{display:grid;grid-template-columns:1fr 1.2fr;gap:14px}
+.rev{display:flex;flex-direction:column;gap:6px}.rev i{height:26px;border:1px solid var(--steel-light);border-radius:2px;background:#fff}
+.ph .sec{padding:10px 12px}.ph .sec .lab{display:none}.ph .t{font-size:11.5px}.ph .hero{min-height:120px}
+.ph .rows3{grid-template-columns:1fr}.ph .rows3 .img{height:44px}.ph .two{grid-template-columns:1fr}
+.key{margin-top:22px;font-size:12px;color:var(--slate)}
+</style></head><body><div class="board">
+<h1>The target homepage, by component</h1>
+<p class="sub">Every section is a component the guide already defines, a style option it names, or an open item it records. The page is the direction the options move toward.</p>
+<div class="wrap">
+<div class="page">
+<div class="sec hero"><span class="lab">Hero Teaser · Thin Hero</span><div class="t">Hero with vehicle selector</div><div class="lines"><div class="line line--ink" style="width:46%"></div><div class="line" style="width:62%"></div></div>
+<div class="sel"><div class="inp"></div><div class="cats"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+<div class="sec"><span class="lab">Flex Container · tabs</span><div class="t">Deals, rebates, and more</div><div class="tabs"><i class="on">All</i><i>Tires</i><i>Wheels</i><i>Suspension</i></div><div class="rows3"><div class="img"></div><div class="img"></div><div class="img"></div></div></div>
+<div class="sec alt"><span class="lab">Full Width + Fixed Width · gray background</span><div class="t">Tire decision guide</div><div class="lines"><div class="line" style="width:50%"></div><div class="line" style="width:34%"></div></div></div>
+<div class="sec"><span class="lab">Tabs · new component</span><div class="t">How it works</div><div class="tabs"><i class="on">Installation</i><i>Shipping</i><i>Testing</i></div><div class="two"><div class="img" style="height:90px"></div><div class="lines"><div class="line line--ink" style="width:40%"></div><div class="line" style="width:90%"></div><div class="line line--ink" style="width:46%"></div><div class="line" style="width:84%"></div><div class="line line--ink" style="width:36%"></div><div class="line" style="width:78%"></div></div></div></div>
+<div class="sec alt"><span class="lab">Copy Width · Left</span><div class="t">When is it time for new tires?</div><div class="lines"><div class="line" style="width:58%"></div><div class="line" style="width:44%"></div><div class="line" style="width:50%"></div></div></div>
+<div class="sec"><span class="lab">Flex Container · 2 children</span><div class="t">Why customers love us</div><div class="two"><div class="lines"><div class="line" style="width:90%"></div><div class="line" style="width:70%"></div></div><div class="rev"><i></i><i></i><i></i></div></div></div>
+<div class="sec alt"><span class="lab">Teaser · Featured</span><div class="t">Testing</div><div class="lines"><div class="line" style="width:40%"></div><div class="line" style="width:30%"></div></div></div>
+<div class="sec"><span class="lab">Cards 3</span><div class="t">Most-read articles</div><div class="rows3"><div class="img"></div><div class="img"></div><div class="img"></div></div></div>
+<div class="sec alt"><span class="lab">Copy Width · Center</span><div class="t">Service with a smile</div><div class="lines" style="align-items:center"><div class="line" style="width:40%"></div><div class="line" style="width:22%"></div></div></div>
+<div class="sec" style="background:#4a4a4a;min-height:52px"><span class="lab" style="color:#d6dce4">Experience Fragment</span><div class="t" style="color:#fff">Footer</div></div>
+</div>
+<div><div class="page ph">
+<div class="sec hero"><div class="t">Hero with vehicle selector</div><div class="lines"><div class="line line--ink" style="width:70%"></div><div class="line" style="width:90%"></div></div><div class="sel"><div class="inp"></div><div class="cats"><i></i><i></i><i></i><i></i></div></div></div>
+<div class="sec"><div class="t">Deals, rebates, and more</div><div class="tabs"><i class="on">All</i><i>Tires</i><i>Wheels</i></div><div class="rows3"><div class="img"></div></div></div>
+<div class="sec alt"><div class="t">Tire decision guide</div><div class="lines"><div class="line" style="width:80%"></div></div></div>
+<div class="sec"><div class="t">How it works</div><div class="tabs"><i class="on">Installation</i><i>Shipping</i><i>Testing</i></div><div class="lines"><div class="line line--ink" style="width:50%"></div><div class="line" style="width:95%"></div><div class="line line--ink" style="width:56%"></div><div class="line" style="width:88%"></div></div></div>
+<div class="sec alt"><div class="t">When is it time for new tires?</div><div class="lines"><div class="line" style="width:84%"></div><div class="line" style="width:60%"></div></div></div>
+<div class="sec"><div class="t">Why customers love us</div><div class="rev"><i></i><i></i></div></div>
+<div class="sec alt"><div class="t">Testing</div><div class="lines"><div class="line" style="width:70%"></div></div></div>
+<div class="sec"><div class="t">Most-read articles</div><div class="rows3"><div class="img"></div><div class="img"></div></div></div>
+<div class="sec" style="background:#4a4a4a;min-height:40px"><div class="t" style="color:#fff">Footer</div></div>
+</div><p class="key">375px: the selector collapses to its input, tabs keep their labels, and three-up rows stack.</p></div>
+</div>
+</div></body></html>

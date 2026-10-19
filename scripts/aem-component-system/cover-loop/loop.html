@@ -1,0 +1,105 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* AEM cover loop, v3: the refined homepage first, then peeled back to its UX
+   foundation. One frame, five aligned layers (refined UI, imagery off, color
+   off, type to bars, grid and measurements), each revealed by a scan line that
+   travels top to bottom. No camera move. Orange is the scan line and the
+   measurements only. Driven by seek(t). */
+:root{--canvas:#2c2c2c;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;--steel:#8f9daf;--steel-dark:#5e6c7c;--steel-light:#d6dce4;--hair:#e5e5e5;--paper:#fff;--orange:#f03d01;--head:'Hubot Sans',Inter,sans-serif;--body:Inter,-apple-system,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;background:var(--canvas)}
+/* 4:3 stage (1280x960): locked cards draw the loop on a ~4:3 ground, so a
+   16:10 loop lost its sides under object-fit: cover. */
+#stage{position:relative;width:1280px;height:960px;overflow:hidden;background:var(--canvas);-webkit-font-smoothing:antialiased}
+.layer{position:absolute;left:0;top:0;width:1401px;height:1051px;transform:scale(0.91363);transform-origin:0 0;overflow:hidden}
+.plate{background:url('plate-selector.jpg') 0 0/1401px 1051px no-repeat}
+#l2{filter:grayscale(1) contrast(.92) brightness(1.04)}
+.x{position:absolute;background:#f4f5f7;border:1.5px solid var(--steel)}
+.x:before,.x:after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - .8px),var(--steel) 50%,transparent calc(50% + .8px))}
+.x:after{transform:scaleX(-1)}
+.wire{background:var(--paper)}
+.w{position:absolute;border:1.5px solid var(--steel);border-radius:2px;background:var(--paper)}
+.w.dark{background:var(--slate);border-color:var(--slate)}
+.w.card{border-radius:10px;box-shadow:0 8px 22px rgba(27,27,27,.06)}
+.b{position:absolute;height:9px;border-radius:4px;background:var(--steel-light)}
+.b.t{background:var(--slate)}
+.b.h{height:20px;background:var(--slate)}
+.col{position:absolute;top:0;bottom:0;background:rgba(240,61,1,.04);border-left:1px solid rgba(240,61,1,.2);border-right:1px solid rgba(240,61,1,.2)}
+.gut{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,transparent 0 7px,rgba(240,61,1,.28) 7px 8px)}
+.m{position:absolute;height:2px;background:var(--orange);transform-origin:0 50%}
+.m:before,.m:after{content:"";position:absolute;top:-6px;width:2px;height:14px;background:var(--orange)}
+.m:before{left:0}.m:after{right:0}
+.ml{position:absolute;font:700 15px/1 var(--head);color:var(--orange);background:var(--paper);padding:3px 7px;border-radius:2px;white-space:nowrap;font-feature-settings:'zero' 0}
+.ml .n{font-family:var(--body);font-weight:600}
+#scan{position:absolute;left:0;width:1280px;height:2px;background:var(--orange);box-shadow:0 0 0 1px rgba(240,61,1,.15)}
+#chip{position:absolute;right:20px;transform:translateY(-100%);margin-top:-6px;background:var(--orange);color:#fff;font:600 13px/1 var(--head);padding:6px 10px;border-radius:3px 3px 0 3px;white-space:nowrap;letter-spacing:.01em}
+</style></head><body><div id="stage">
+<div id="l0" class="layer plate"></div>
+<div id="l1" class="layer plate"></div>
+<div id="l2" class="layer plate"></div>
+<div id="l3" class="layer wire"></div>
+<div id="l4" class="layer wire"></div>
+<div id="scan"><div id="chip"></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const add=(parent,cls,[x,y,w,h],html='')=>{const d=document.createElement('div');d.className=cls;d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;d.innerHTML=html;parent.appendChild(d);return d;};
+// Imagery regions on the refined crop (plate units, 1401 x 875)
+const IMAGES=[[0,120,1401,400],...[0,1,2,3,4,5,6,7].map(i=>[250+i*116,532,52,50])];
+for(const id of ['l1','l2']) IMAGES.forEach(r=>add($(id),'x',r));
+// The same page as boxes and bars
+function wire(L){
+  add(L,'w dark',[0,0,1401,36]);
+  add(L,'w',[30,52,192,48]);
+  [[541,90],[672,112],[827,130],[1000,84]].forEach(([x,w])=>add(L,'b',[x,72,w,10]));
+  add(L,'w',[1115,62,82,30]);add(L,'w',[1228,62,90,30]);add(L,'w',[1340,60,34,32]);
+  add(L,'x',[0,120,1401,400]);
+  add(L,'b h',[326,280,734,20]);add(L,'b',[330,320,740,9]);add(L,'b',[416,344,568,9]);
+  add(L,'w card',[177,440,1047,640]);
+  add(L,'b t',[212,476,116,12]);add(L,'b',[349,476,88,12]);add(L,'b',[208,497,960,2]);add(L,'w',[1182,474,18,18]);
+  for(let i=0;i<8;i++){add(L,'x',[250+i*116,532,52,50]);add(L,'b',[242+i*116,592,68,9]);}
+  add(L,'b t',[222,618,108,3]);
+  add(L,'b t',[220,658,74,11]);add(L,'b',[318,658,32,11]);add(L,'b',[374,658,46,11]);
+  add(L,'w',[208,694,991,36]);
+  [237,482,732,982].forEach((x,c)=>[750,786,822,858,894,930,966,1002,1038].forEach((y,r)=>add(L,'b',[x,y,60+((c*7+r*13)%5)*12,9])));
+}
+wire($('l3'));wire($('l4'));
+// Grid and measurements on the last layer: 12 columns in the 1296 content max
+const L4=$('l4'); const CX=52.5, CW=1296, COL=(CW-11*24)/12;
+add(L4,'gut',[0,0,52.5,1051]);add(L4,'gut',[1348.5,0,52.5,1051]);
+const cols=[...Array(12)].map((_,i)=>add(L4,'col',[CX+i*(COL+24),0,COL,1051]));
+const M1=add(L4,'m',[CX,770,CW,2]), M1L=add(L4,'ml',[CX+8,780,0,0],'content max <span class="n">1296</span>');
+const M2=add(L4,'m',[250.5,410,900,2]), M2L=add(L4,'ml',[258,420,0,0],'copy max <span class="n">900</span>');
+const M3L=add(L4,'ml',[60,140,0,0],'gutter <span class="n">5% − 14px</span>');
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>clamp((t-a)/(b-a));
+const ease=f=>x=>x<=0?0:x>=1?1:f(x);
+const bez=(p1x,p1y,p2x,p2y)=>x=>{let lo=0,hi=1,u=.5;for(let i=0;i<22;i++){u=(lo+hi)/2;const bx=3*(1-u)**2*u*p1x+3*(1-u)*u*u*p2x+u**3;bx<x?lo=u:hi=u;}return 3*(1-u)**2*u*p1y+3*(1-u)*u*u*p2y+u**3;};
+const out=ease(bez(.23,1,.32,1)), inout=ease(bez(.77,0,.175,1));
+// Scans: [start, end, layer revealed, label]
+const SCANS=[[1.6,2.2,'l1','Imagery off'],[2.55,3.15,'l2','Color off'],[3.5,4.1,'l3','Type to bars'],[4.45,5.05,'l4','Grid and measurements']];
+const BACK=[7.35,7.95]; // one scan upward, back to the refined page
+function seek(t){
+  t=Math.max(0,Math.min(7.999,t));
+  let scanY=null,label='';
+  SCANS.forEach(([a,b,id,l],i)=>{
+    const p=inout(seg(t,a,b)); const el=$(id);
+    el.style.clipPath=`inset(0 0 ${(1-p)*100}% 0)`;
+    if(t>=a&&t<=b){scanY=p*960;label=l;}
+  });
+  // back to the refined page: every peeled layer retracts upward together
+  const back=inout(seg(t,BACK[0],BACK[1]));
+  if(t>=BACK[0]){
+    ['l1','l2','l3','l4'].forEach(id=>{$(id).style.clipPath=`inset(0 0 ${back*100}% 0)`;});
+    if(back<1){scanY=(1-back)*960;label='Refined UI';}
+  }
+  const s=$('scan'); s.style.opacity=scanY===null?0:1; s.style.top=((scanY??0)-1)+'px';
+  const chip=$('chip'); chip.textContent=label; chip.style.opacity=scanY!==null&&scanY>36?1:0;
+  // the foundation settles: columns rise, then the measurements draw
+  cols.forEach((c,i)=>{const a=out(seg(t,5.05+i*0.03,5.4+i*0.03)); c.style.opacity=a;});
+  const m1=out(seg(t,5.5,6.0)), m2=out(seg(t,5.7,6.2));
+  M1.style.transform=`scaleX(${m1})`; M2.style.transform=`scaleX(${m2})`;
+  M1L.style.opacity=out(seg(t,5.9,6.2)); M2L.style.opacity=out(seg(t,6.1,6.4)); M3L.style.opacity=out(seg(t,6.3,6.6));
+}
+window.seek=seek; seek(0);
+if(!window.__record){let s0=performance.now();(function f(){seek(((performance.now()-s0)/1000)%8);requestAnimationFrame(f)})();}
+</script></body></html>

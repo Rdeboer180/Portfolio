@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import '../styles/components/_project-panel.scss';
 import { useUnlock } from '../context/UnlockContext';
-import { getHomeHref } from '../utils/homeSession';
+import { getHomeHref, HOME_TOP_STATE } from '../utils/homeSession';
 import ReadingErrorBoundary from './ReadingErrorBoundary';
 
 const readingPositions = new Map<string, number>();
@@ -182,7 +182,8 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
       document.dispatchEvent(new CustomEvent('portfolio:reading-panel', { detail: false }));
       document.body.style.overflow = overflow;
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (window.location.pathname === backgroundPath) {
+        // A home link (HOME_TOP_STATE) asked for the top, not the reader's old position.
+        if (window.location.pathname === backgroundPath && !(window.history.state?.usr?.toTop)) {
           if (returnMeta) {
             document.title = returnMeta.title;
             document.querySelectorAll('meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]').forEach(meta => meta.remove());
@@ -223,7 +224,7 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
     <DismissStrip label={notesExit ? 'All notes' : 'Back to all work'} open={phase === 'open'} onDismiss={close} />
     <header className="project-panel__header">
       <div className="project-panel__identity">
-        <Link to={getHomeHref()} className="project-panel__name">Ryan DeBoer</Link>
+        <Link to={getHomeHref()} state={HOME_TOP_STATE} className="project-panel__name">Ryan DeBoer</Link>
         {panelState?.previousReading && <button className="project-panel__back" onClick={() => navigate(-1)}>← Previous {panelState.previousReading}</button>}
       </div>
       <button type="button" className="project-panel__close" onClick={close} aria-label={panelState?.backgroundLocation ? (article ? 'Close article' : 'Close case study') : (notesExit ? 'All notes' : 'All work')}>{panelState?.backgroundLocation ? 'Close' : (notesExit ? 'All notes' : 'All work')} <span aria-hidden="true">×</span></button>

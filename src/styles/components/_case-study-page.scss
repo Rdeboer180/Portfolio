@@ -771,6 +771,10 @@
     gap: $spacing-md;
   }
 
+  &__related-note {
+    margin-top: $spacing-xl;
+  }
+
   // ==========================================
   // Scan to install — QR beside its own link
   // ==========================================
@@ -1829,4 +1833,23 @@
 @media (max-width: $breakpoint-md) {
   .cs__beat { margin: $spacing-3xl 0; }
   .cs__beat--metric { padding: $spacing-3xl $spacing-xl; }
+}
+
+// Inside the reading panel the study sits in a column narrower than the
+// viewport, so a 100vw breakout (the alt sections, the beat) runs past the
+// panel and gives the article a horizontal scrollbar. There the breakout is
+// the panel's own width instead.
+.project-panel__article {
+  .cs__section--alt {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: $spacing-2xl;
+    padding-right: $spacing-2xl;
+  }
+
+  .cs__beat {
+    left: auto;
+    width: 100%;
+    transform: none;
+  }
 }

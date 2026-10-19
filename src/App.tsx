@@ -70,6 +70,7 @@ function RouteEffects() {
     const panelBackground = !isReviewPath() && isPanelRoute(location.pathname) ? (location.state?.backgroundLocation?.pathname || '/') : undefined;
     previousPanelBackground.current = panelBackground;
     previousPanelHasReturnScroll.current = location.state?.returnScroll !== undefined;
+    if (location.state?.toTop) { window.scrollTo(0, 0); return; }
     if (panelBackground || (restoreScroll && returningTo === location.pathname)) return;
     if (location.hash && location.hash !== '#main-content') {
       // The work section's deep links carry a selection after the anchor
@@ -82,7 +83,7 @@ function RouteEffects() {
     } else {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname, location.hash, location.state?.backgroundLocation?.pathname, location.state?.returnScroll]);
+  }, [location.pathname, location.hash, location.state?.backgroundLocation?.pathname, location.state?.returnScroll, location.state?.toTop]);
 
   return null;
 }

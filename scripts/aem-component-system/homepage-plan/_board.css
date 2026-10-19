@@ -1,0 +1,37 @@
+/* Portfolio-owned drawings of the homepage exploration. Site tokens only:
+   ink, slate, steel linework on paper; Signal Orange marks a state. */
+@import url('https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+:root{--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;--steel:#8f9daf;--steel-dark:#5e6c7c;--steel-light:#d6dce4;--hair:#e5e5e5;--mist:#f5f5f5;--paper:#fff;--orange:#f03d01;--orange-tint:#fdede9;--head:'Hubot Sans',Inter,sans-serif;--body:Inter,-apple-system,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-feature-settings:'zero' 0,'ss01' 0;background:var(--mist);font-family:var(--body);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.board{width:1400px;padding:52px 56px 56px}
+.board--half{width:1000px}
+h1{font-family:var(--head);font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0 0 6px;line-height:1.15}
+.sub{color:var(--slate);font-size:15px;margin:0 0 36px}
+h2{font-family:var(--head);font-weight:700;font-size:16px;margin:0 0 14px;letter-spacing:-.01em}
+.card{background:var(--paper);border:1px solid var(--hair);border-radius:6px;padding:22px 24px}
+.wire{border:1.5px solid var(--steel);border-radius:3px;background:var(--paper);position:relative}
+.wire--dash{border-style:dashed}
+.wire--ink{border-color:var(--ink)}
+.lab{font-family:var(--head);font-weight:600;font-size:12px;color:var(--ink);letter-spacing:.01em}
+.lab--muted{color:var(--graphite);font-weight:500}
+.note{color:var(--slate);font-size:12.5px}
+.tag{display:inline-block;border:1px solid var(--steel);border-radius:3px;padding:1px 7px;font-family:var(--head);font-size:11px;font-weight:600;color:var(--steel-dark);vertical-align:middle;margin-left:8px}
+.tag--state{border-color:var(--orange);color:var(--orange);background:var(--orange-tint)}
+.ph{background:repeating-linear-gradient(135deg,transparent 0 6px,var(--steel-light) 6px 7px);border:1px solid var(--steel-light);border-radius:2px}
+.img{background:var(--paper);border:1.5px solid var(--steel);position:relative;overflow:hidden}
+.img:before,.img:after{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(to top right,transparent calc(50% - .75px),var(--steel) 50%,transparent calc(50% + .75px))}
+.img:after{transform:scaleX(-1)}
+.line{height:5px;border-radius:3px;background:var(--steel-light)}
+.line--ink{background:var(--slate)}
+.legend{display:flex;gap:22px;margin-top:26px;align-items:center;font-size:12.5px;color:var(--slate)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:26px;height:14px;border:1.5px solid var(--steel);border-radius:2px;background:#fff}
+.sw--dash{border-style:dashed}.sw--ink{border-color:var(--ink);border-width:2px}
+.sw--state{border-color:var(--orange);background:var(--orange-tint)}
+.arrow{font-family:var(--head);font-weight:700;color:var(--ink)}
+.foot{margin-top:28px;color:var(--graphite);font-size:12px}
+
+/* Hubot Sans ships a slashed zero; numerals in labels read better plain. */
+.lab,.meta,.spec b,.topics b,.lb,.step,.tag,.sec .lab,h2{font-variant-numeric:lining-nums;font-feature-settings:'zero' 0}
+.num,.meta,.spec b,.topics b,.lb,.step{font-family:var(--body)!important;font-weight:600}

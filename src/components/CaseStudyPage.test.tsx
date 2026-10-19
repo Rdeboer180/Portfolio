@@ -61,7 +61,7 @@ test('locked case study keeps new artifacts, ownership detail, and comparison be
   expect(mockOpenPrompt).toHaveBeenCalledWith();
 });
 
-test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available on demand', () => {
+test('PlayDraft keeps a silent walkthrough and carries its evidence in the overview', () => {
   const { container } = render(<MemoryRouter><CaseStudyPage slug="playdraft" /></MemoryRouter>);
   expect(screen.getByRole('heading', { level: 1, name: 'PlayDraft' })).toBeInTheDocument();
   expect(container.querySelectorAll('#project-walkthrough video')).toHaveLength(1);
@@ -82,11 +82,10 @@ test('PlayDraft keeps a silent walkthrough and keeps detailed evidence available
   expect(loop).not.toHaveAttribute('autoplay');
   expect(screen.getByRole('img', { name: /Native v2 identity specimen showing initials/ })).toHaveAttribute('src', '/images/work/playdraft/v2/playdraft-v2-identity-system.png');
   expect(screen.getByText('Original release on iOS · v2 in development')).toBeInTheDocument();
+  // The overview is the whole story: no Behind the work section, no nested full study.
   expect(container.querySelector('.cs--detail-only')).toBeNull();
-  const details = container.querySelector('details')!;
-  details.open = true;
-  fireEvent(details, new Event('toggle'));
-  expect(container.querySelector('.cs--detail-only')).toBeInTheDocument();
+  expect(container.querySelector('#project-depth')).toBeNull();
+  expect(screen.queryByText(/Behind the work/)).toBeNull();
   expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
   expect(screen.getAllByText(projects.find(project => project.slug === 'playdraft')!.context!)).toHaveLength(1);
 });

@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="_board.css"><style>
+.cols{display:grid;grid-template-columns:1fr 1fr 360px;gap:36px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:8px}
+.sec{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.sec.tall{min-height:92px;align-items:flex-start;padding-top:12px}
+.sec .meta{color:var(--graphite);font-size:11.5px;font-family:var(--head);font-weight:500}
+.tabs{display:flex;gap:14px;margin-top:8px}.tabs i{font-style:normal;font-size:11px;color:var(--graphite);padding-bottom:3px;border-bottom:2px solid transparent}.tabs i.on{color:var(--orange);border-color:var(--orange)}
+.rm li{list-style:none;margin:0 0 10px;padding:9px 12px;border:1.5px dashed var(--steel);border-radius:3px;color:var(--graphite);font-size:12.5px;display:flex;justify-content:space-between;gap:12px}
+.rm ul{padding:0;margin:0}.rm li s{color:var(--slate)}.rm li em{font-style:normal;font-size:11px;color:var(--graphite);white-space:nowrap}
+</style></head><body><div class="board">
+<h1>Homepage section order, concept against current</h1>
+<p class="sub">Each section is an existing AEM component or a style option. The concept changes the order and the weight of a section before it changes the section.</p>
+<div class="cols">
+<div><h2>Current page</h2><div class="stack">
+<div class="wire sec tall"><div><span class="lab">Hero</span><div class="note" style="margin-top:4px">Photo, title, one primary action</div></div><span class="meta">Hero Teaser</span></div>
+<div class="wire sec"><span class="lab">Shop by category</span><span class="meta">Icon row</span></div>
+<div class="wire sec"><span class="lab">Tire decision guide</span><span class="meta">Teaser</span></div>
+<div class="wire sec"><span class="lab">How installation works</span><span class="meta">Teaser rows</span></div>
+<div class="wire sec"><span class="lab">Video center</span><span class="meta">4 videos</span></div>
+<div class="wire sec"><span class="lab">Why customers love us</span><span class="meta">Reviews</span></div>
+<div class="wire sec"><span class="lab">Promotions and deals</span><span class="meta">550 × 470 banners</span></div>
+<div class="wire sec"><span class="lab">Testing</span><span class="meta">Teaser + video</span></div>
+<div class="wire sec"><span class="lab">Most-read articles</span><span class="meta">Cards 3</span></div>
+<div class="wire sec"><span class="lab">Service with a smile</span><span class="meta">Contact band</span></div>
+<div class="wire sec"><span class="lab">Footer</span><span class="meta">Experience Fragment</span></div>
+</div></div>
+<div><h2>Concept</h2><div class="stack">
+<div class="wire sec tall"><div><span class="lab">Shorter hero with vehicle selector</span><div class="note" style="margin-top:4px">Shop by vehicle or by size, in the hero</div></div><span class="meta">Hero Teaser · Thin Hero</span></div>
+<div class="wire sec"><span class="lab">Shop by category</span><span class="meta">kept</span></div>
+<div class="wire sec wire--ink"><span class="lab">Promotions, smaller, with tabs <span class="arrow">↑</span></span><span class="meta">490 × 180 banners</span></div>
+<div class="wire sec"><span class="lab">Tire decision guide</span><span class="meta">kept</span></div>
+<div class="wire sec tall wire--ink"><div><span class="lab">How it works, tabbed</span><div class="tabs"><i class="on">Installation</i><i>Shipping</i><i>Testing</i></div></div><span class="meta">new tab component</span></div>
+<div class="wire sec wire--ink"><span class="lab">When is it time for new tires?</span><span class="meta">new teaser, links to categories</span></div>
+<div class="wire sec"><span class="lab">Why customers love us</span><span class="meta">reviews, no new quotes needed</span></div>
+<div class="wire sec wire--ink"><span class="lab">Our pledge</span><span class="meta">reuses the deals structure</span></div>
+<div class="wire sec"><span class="lab">Most-read articles</span><span class="meta">kept</span></div>
+<div class="wire sec"><span class="lab">Service with a smile</span><span class="meta">kept</span></div>
+<div class="wire sec"><span class="lab">Footer</span><span class="meta">kept</span></div>
+</div></div>
+<div class="rm"><h2>Leaves the page</h2><ul>
+<li><s>Video center</s><em>low engagement</em></li>
+<li><s>Three additional videos</s><em>space</em></li>
+<li><s>Ratings charts and reviews</s><em>moves to a link under Testing</em></li>
+<li><s>Order pick-up discount</s><em>small audience</em></li>
+<li><s>Best of the best</s><em></em></li>
+<li><s>About us, 40 years</s><em>replaced by the pledge</em></li>
+<li><s>Package mention in hero</s><em></em></li>
+</ul>
+<h2 style="margin-top:28px">Button rules in the concept</h2>
+<p class="note">The red block button stays on the one intended path. Black pill buttons lead into shopping; white pill buttons lead to information.</p></div>
+</div>
+<div class="legend"><span><i class="sw"></i>kept</span><span><i class="sw sw--ink"></i>new or reworked</span><span><i class="sw sw--dash"></i>removed</span><span><span class="arrow">↑</span>moved up</span><span><i class="sw sw--state"></i>selected state</span></div>
+</div></body></html>
