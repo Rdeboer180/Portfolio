@@ -719,9 +719,10 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-sm);
-    margin-top: 1em;
+    margin-top: auto;
+    padding-top: 1em;
   }
-  &__metric { font-family: var(--font-body); letter-spacing: 0; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: auto; }
+  &__metric { font-family: var(--font-body); letter-spacing: 0; line-height: 1.4; color: var(--color-text-secondary); }
   &__cta { padding-top: 0; }
   &__footer &__cta { margin-top: 0; flex-shrink: 0; }
 }
@@ -1087,10 +1088,15 @@
 
   // The tab overlaps the ground by the notch, and its clip leaves the ground
   // showing through the cutout, where the tray sits.
+  // The tab grows to the card's height so the body, and the footer pinned to
+  // its bottom, end at the same line on every card in the row.
   &__tabwrap {
     position: relative;
     margin-top: calc(var(--folder-notch) * -1);
     z-index: 2;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
   }
 
   &__body {
