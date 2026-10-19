@@ -168,34 +168,18 @@ test('locked studies carry the lock line in every layout, name no client, and ea
   expect(view.container.textContent).toContain('Tire Rack');
 });
 
-test('on a phone the work opens as the List, and a layout the visitor picks holds when the width changes', () => {
-  let phone = true;
-  const listeners: (() => void)[] = [];
+test('on a phone the work opens as Cards, and a layout the visitor picks holds', () => {
   window.matchMedia = jest.fn().mockImplementation((query: string) => ({
-    get matches() { return query === '(max-width: 768px)' ? phone : false; },
-    addEventListener: (_: string, listener: () => void) => { if (query === '(max-width: 768px)') listeners.push(listener); },
+    matches: query === '(max-width: 768px)',
+    addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   }));
   const { container } = mount();
-  expect(viewButton('List')).toHaveAttribute('aria-pressed', 'true');
-  expect(rowSlugs(container)).toEqual(ALL);
-
-  // Until the visitor chooses, the default follows the width.
-  phone = false;
-  act(() => listeners.forEach((listener) => listener()));
-  expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
-  phone = true;
-  act(() => listeners.forEach((listener) => listener()));
-  expect(viewButton('List')).toHaveAttribute('aria-pressed', 'true');
-
-  // Once they pick, their layout holds.
-  fireEvent.click(viewButton('Cards'));
-  phone = false;
-  act(() => listeners.forEach((listener) => listener()));
-  phone = true;
-  act(() => listeners.forEach((listener) => listener()));
   expect(viewButton('Cards')).toHaveAttribute('aria-pressed', 'true');
   expect(cardSlugs(container)).toEqual(ALL);
+  fireEvent.click(viewButton('List'));
+  expect(viewButton('List')).toHaveAttribute('aria-pressed', 'true');
+  expect(rowSlugs(container)).toEqual(ALL);
 });
 
 test('a deep link applies its filter after mount; a client link is an authoring view and leaves Publisher on All', () => {

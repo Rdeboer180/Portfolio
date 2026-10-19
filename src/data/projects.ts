@@ -109,6 +109,8 @@ export interface ProjectOverview {
     title: string; body: string; bodyLink?: { text: string; to: string }; image?: ProjectImage; images?: ProjectImage[];
     /** A wide board shown full width after the media, outside the capped phone rows. */
     wide?: ProjectImage;
+    /** Scrollable artboards (framed desktop and phone) shown side by side after the media. */
+    artboards?: ProjectImage[];
     /** Short evidence list under the body, e.g. each fix beside what it replaced. */
     points?: string[];
     /** Code that proves the decision shipped, rendered after the media. */
@@ -365,6 +367,10 @@ const EXPLORE = {
   focusPledge: board('focus-pledge', 'Homepage board with the pledge section in focus', 'In focus: the pledge, reusing the deals structure.', 'full', 'browser'),
   focusArticles: board('focus-articles', 'Homepage board with the most-read articles section in focus', 'In focus: drive smarter, the most-read articles.', 'full', 'browser'),
 };
+const FOCUS = {
+  conceptA: board('concept-a-focus', 'The new-tires section as Concept A drew it, with a two-line headline and three link groups', 'Concept A: the new-tires section as first drawn.', 'half'),
+  newTires: board('focus-new-tires-crop', 'The same section refined: one headline and three short link groups, with the rest of the page dimmed', 'In focus: the same section, refined, with links into the tire categories.', 'half'),
+};
 const REFINED = {
   desktop: board('refined-desktop', 'Refined homepage at desktop width', 'The refined homepage at desktop width. From the reDesign file.', 'full', 'browser'),
   selectorOpen: board('refined-selector-open', 'Refined homepage with the vehicle selector open to the make list', 'With the vehicle selector open to the make list.', 'half', 'browser'),
@@ -477,7 +483,7 @@ const projects: Project[] = [
   // =============================================
   {
     slug: 'wheelrack',
-    coverGround: '#2c2c2c',
+    coverGround: '#f2f2f2',
     stream: 'professional',
     // Product Design, not System Design: the design system is the means and
     // the 0-to-1 dealer product is the outcome, and it is the strongest
@@ -1513,7 +1519,7 @@ $mobile-max-width: 768px;
         label: 'Show authors the result, keep the open items in writing, and draw where the options go next',
         systemMarker: 'Documentation',
         description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content. The research then came back to the components: the refined homepage is one page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component. It is the direction the style options move toward, and the guide is where each option lands once it has a rule, a class, and a picture.',
-        images: [GUIDE.heroAuthor, GUIDE.heroPreview, REFINED.desktop, REFINED.selectorOpen, REFINED.phone],
+        images: [GUIDE.heroAuthor, GUIDE.heroPreview, REFINED.desktop, REFINED.phone],
       },
     ],
 
@@ -2455,11 +2461,11 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     opening: evidence(p, 'explore'),
     decisions: [
       { title: 'Draw the concept and its test together', body: 'The homepage exploration holds a concept for each section rather than one redesign. Each concept carries a written hypothesis, the data to request, a fifteen-topic customer survey, and the order in which tests can run without colliding with the ones already scheduled. Removals carry their reasons.', images: [PLAN.order, PLAN.tests, NOTES.howItWorks, NOTES.promo] },
-      { title: 'Explore section by section, then refine the components from the research', body: 'Three concept pages tried different treatments below the hero, and six boards put one section in focus at a time: new tires, brands, the test track, reviews, the pledge, and articles. What survived became one refined page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component.', images: [EXPLORE.conceptA, EXPLORE.focusNewTires, REFINED.desktop] },
+      { title: 'Explore section by section, then refine the components from the research', body: 'Three concept pages tried different treatments below the hero, and six boards put one section in focus at a time: new tires, brands, the test track, reviews, the pledge, and articles. What survived became one refined page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component.', images: [FOCUS.conceptA, FOCUS.newTires] },
       { title: 'Measure the build, then write the rule', body: 'Pixel values come from local AEM builds of the branch, measured at widths from 375 to 1920 pixels. The read-me page sets the frame every component shares, and a status legend marks each rule as in the branch, configured only on local AEM, or still pasted into the page.', image: GUIDE.readMe },
       { title: 'Reuse first, then a variant, then a named gap', body: 'A full-bleed color band is two existing containers nested together, not a new component. Copy Width and the Flex Container extend the existing layout container. The tire size table was a real gap, so I documented it as rendered today and recommended moving its pasted CSS into the branch.', images: [GUIDE.flex, GUIDE.table] },
       { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter], points: subsection(p, 'build')?.bullets, code: subsection(p, 'build')?.codeBlock },
-      { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components. The guide is where each option lands once it has a rule, a class, and a picture.', images: [GUIDE.heroAuthor, REFINED.selectorOpen, REFINED.phone] },
+      { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components. The guide is where each option lands once it has a rule, a class, and a picture.', images: [GUIDE.heroAuthor, GUIDE.heroPreview], artboards: [REFINED.desktop, REFINED.phone] },
     ],
     outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'Read why the line between Figma and the codebase is getting thinner' },

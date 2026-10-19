@@ -181,3 +181,22 @@
 // A framed board scrolls at its natural height; the decision's fixed image height must not reach it.
 .project-overview .framed__screen img { height: auto; max-height: none; object-fit: unset; background: none; }
 .project-overview .project-overview__proof img { height: auto; max-height: 560px; }
+.project-overview .project-overview__proof .framed__screen img { max-height: none; }
+
+// Desktop and phone artboards side by side: the browser takes the room, the
+// phone keeps its bezel width; stacked under 900px.
+.project-overview__artboards {
+  display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: $spacing-xl; align-items: start;
+  > figure { margin: 0; min-width: 0; }
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+// Beside the phone, the browser runs the phone's full height: the phone is
+// 300px wide with a 10px bezel, so its screen is 280 x (280 x 19.5 / 9) and
+// the device 20px taller; the browser gives back its 30px chrome and 2px border.
+@media (min-width: 901px) {
+  .project-overview__artboards .framed--browser .framed__screen {
+    aspect-ratio: auto;
+    height: calc(280px * 19.5 / 9 + 20px - 32px);
+  }
+}

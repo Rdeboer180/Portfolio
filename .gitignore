@@ -38,3 +38,7 @@ src/data/build.ts
 # Colleague names and competitor terms the board scripts redact. Local only:
 # the repo is public, so the list itself must never be committed.
 scripts/aem-component-system/redact.local.json
+
+# Frame captures of the live WheelRack session; regenerate with
+# scripts/wheelrack-reel/capture-session.cjs (18MB, not worth versioning).
+scripts/wheelrack-reel/session/

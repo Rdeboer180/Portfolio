@@ -38,11 +38,10 @@ const PreviewLockIcon = () => (
 );
 
 // ── Card cover video ─────────────────────────────────────────────────────────
-// Default: plays only while its card is active — poster (the featured image)
-// everywhere else, playback driven by the same phase machine as the coin tray
-// (hover/focus on desktop, in-view on touch).
-// Primary (`featuredVideoPrimary`): the loop IS the card's media — plays
-// whenever the card is on screen, pauses off-screen (WCAG 2.2.2 / battery).
+// Plays once per engagement: hovering (or focusing, or scrolling into view on
+// touch) starts it from the beginning, and it holds its last frame when it
+// ends. Leaving resets it to the poster, so the next hover plays it again.
+// Primary (`featuredVideoPrimary`) cards engage on visibility instead of hover.
 // Reduced-motion renders the plain poster image for both (handled by caller).
 
 const CardVideo: React.FC<{
@@ -80,10 +79,14 @@ const CardVideo: React.FC<{
     const el = ref.current;
     if (!el) return;
     if (shouldPlay) {
+      // A new engagement starts from the top and plays through once.
+      if (el.ended || el.currentTime > 0) el.currentTime = 0;
       const p = el.play();
       if (p) p.catch(() => {}); // autoplay guard — poster remains
     } else {
       el.pause();
+      // Back to the poster, so the next engagement plays from the start.
+      if (el.currentTime > 0) { el.currentTime = 0; el.load(); }
     }
   }, [shouldPlay]);
 
@@ -94,7 +97,6 @@ const CardVideo: React.FC<{
       src={src}
       poster={poster}
       muted
-      loop
       playsInline
       preload={primary ? 'auto' : 'metadata'}
       aria-label={alt}
