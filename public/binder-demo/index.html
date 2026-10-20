@@ -1003,7 +1003,6 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 .fo-fold__panel--2 { left: calc(100% / 3); transform: translateZ(1px) rotateY(-180deg); }
 .fo-fold__panel--3 { left: 100%; width: 100%; transform: translateZ(1px) rotateY(-180deg); }
 /* the gatefold's left flap (phones): hinged on the middle panel's left edge, over the right flap */
-.fo-fold__panel--l { display: none; transform-origin: 100% 50%; transform: translateZ(2px) rotateY(180deg); }
 /* No backface-visibility: the creases show and hide each face themselves, by
    opacity, at the moment it turns edge-on (crease()), and real Safari, given
    both, culled the second and third panels for good once the third began to turn. */
@@ -1012,7 +1011,6 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 .fo-fold__panel--1 > .fo-fold__front { background-position: 0% 0; border-radius: var(--r) 0 0 var(--r); }
 .fo-fold__panel--2 > .fo-fold__front { background-position: 50% 0; }
 .fo-fold__panel--3 > .fo-fold__front { background-position: 100% 0; border-radius: 0 var(--r) var(--r) 0; }
-.fo-fold__panel--l > .fo-fold__front { background-position: 0% 0; border-radius: var(--r) 0 0 var(--r); }
 .fo-fold__back, .fo-fold__shade--back { transform: rotateY(180deg); }
 .fo-fold__back {
   /* the insert's card stock: the card's own pale metal */
@@ -1040,33 +1038,15 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 /* phones: the video leads, so the card has somewhere visible to land */
 @media (max-width: 700px) {
   .fo-overview { grid-template-columns: 1fr; grid-template-areas: "hero" "rail" "body"; padding: 24px; }
-  .fo-hero--beside .fo-top, .fo-hero--intro .fo-top { grid-template-columns: 1fr; gap: 20px; }
-  /* The card lies bare on the video's bottom left corner, no case (Ryan, 20
-     October): 45% of the video's width, flush left and 5% past the edge, its
-     top at the video's middle, so it covers a fifth of the video (.40 × .5)
-     and hangs below it. The pocket's 10px margin is taken off its box, so the
-     card itself sits there; the well becomes the card's shadow, and the
-     plastic is gone. The reel is a gatefold whose middle panel slides out
-     from behind the card to the video's middle; a flap opens to each side,
-     behind the card, and the video takes over. */
-  .fo-hero--beside .fo-insert {
-    grid-column: 1; grid-row: 1; width: calc(45% + 20px); justify-self: start;
-    margin: calc(100% * var(--ar) / 2 - 10px) 0 0 calc(-5% - 10px);
+  .fo-hero--intro .fo-top { grid-template-columns: 1fr; gap: 20px; }
+  /* the card, filed: a chip beside All work once it has become the video */
+  .fo-rail__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .fo-chip {
+    display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 4px 14px 4px 4px;
+    border: 1px solid var(--hairline); border-radius: 999px; background: var(--paper); cursor: pointer;
+    font: 700 13px/1 var(--font-heading); color: var(--ink);
   }
-  .fo-hero--beside .fo-insert__well {
-    inset: 10px; border-radius: 6px; background: none;
-    box-shadow: 0 14px 26px -12px rgba(0,0,0,.55), 0 3px 8px rgba(0,0,0,.22);
-  }
-  .fo-hero--beside .fo-insert__sleeve { display: none; }
-  .fo-hero--beside .fo-frame, .fo-fold { grid-column: 1; grid-row: 1; }
-  .fo-fold { perspective: 900px; }
-  .fo-fold__panel--1 { left: calc(100% / 3); }
-  .fo-fold__panel--1 > .fo-fold__front { background-position: 50% 0; border-radius: 0; }
-  .fo-fold__panel--2 { left: calc(200% / 3); }
-  .fo-fold__panel--2 > .fo-fold__front { background-position: 100% 0; border-radius: 0 var(--r) var(--r) 0; }
-  .fo-fold__panel--3 { display: none; }
-  .fo-fold__panel--l { display: block; }
-  .fo-fold__shadow { left: calc(100% / 3); }
+  .fo-chip img { width: 26px; height: 36px; object-fit: cover; border-radius: 3px; box-shadow: 0 2px 5px -2px rgba(0,0,0,.45); }
   .fo-insert { width: min(56%, 220px); justify-self: center; }
   .fo-intro__context { font-size: 17px; }
   .fo-video { margin-top: 24px; }
@@ -2102,12 +2082,21 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     video: [[.12, 'Lifting'], [.4, 'Flipping'], [.62, 'Landing'], [.74, 'Unfolding'], [1, 'Open']],
   };
   let layoutMode = layoutSel.value;
+  // On a phone the beside layout opens as the card becoming the video (Ryan,
+  // 20 October): the card's back is the video's first frame, so it turns over
+  // in the video's own place and widens into it, and nothing has to sit beside,
+  // over or under the video; the card is then filed as a chip by All work.
+  // Desktop and tablet keep the sleeve and the reel beside the video.
+  const mqNarrow = window.matchMedia('(max-width: 700px)');
+  const panelMode = () => (layoutMode === 'beside' && mqNarrow.matches ? 'video' : layoutMode);
+  const filedAsChip = () => layoutMode === 'beside' && panelMode() === 'video';
   const timedPoses = [...poses.querySelectorAll('button[data-pose]')].slice(3);
-  const renderPoseButtons = () => LAYOUT_POSES[layoutMode].forEach(([at, label], k) => {
+  const renderPoseButtons = () => LAYOUT_POSES[panelMode()].forEach(([at, label], k) => {
     timedPoses[k].dataset.pose = String(at);
     timedPoses[k].textContent = label;
   });
   renderPoseButtons();
+  mqNarrow.addEventListener('change', renderPoseButtons);
 
   const foFrame = () => foArticle.querySelector('.fo-frame');
   const foVideo = () => foArticle.querySelector('.fo-frame video');
@@ -2181,7 +2170,8 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
 
   let filled = null;
   const fillFlyout = (c) => {
-    const key = `${c.slug}:${layoutMode}`;
+    const mode = panelMode();
+    const key = `${c.slug}:${mode}`;
     if (filled === key) { foArticle.scrollTop = 0; return; }
     filled = key;
     const pnl = c.panel, intro = c.back.intro;
@@ -2208,7 +2198,6 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
           <div class="fo-fold" aria-hidden="true" style="aspect-ratio:${intro.width} / ${intro.height};--poster:url('${intro.poster}');--r:${intro.frame === 'reel' ? 0 : 10}px;--h:${c.theme.h};--s:${c.theme.s}">
             <div class="fo-fold__shadow"></div>
             <div class="fo-fold__panel fo-fold__panel--1">${face(false)}</div>
-            <div class="fo-fold__panel fo-fold__panel--l">${face(true)}</div>
             <div class="fo-fold__panel fo-fold__panel--2">${face(true)}
               <div class="fo-fold__panel fo-fold__panel--3">${face(true)}</div>
             </div>
@@ -2234,11 +2223,14 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
           </div>
           <figure class="fo-video" id="${ids[0]}">${frame}${caption(false)}</figure>
         </div>`,
-    }[layoutMode];
+    }[mode];
     foArticle.innerHTML = `
-      <article class="fo-overview fo-overview--${layoutMode}">
+      <article class="fo-overview fo-overview--${mode}">
         <aside class="fo-rail fo-fade">
-          <button type="button" class="fo-back" data-close>← All work</button>
+          ${filedAsChip() ? `<div class="fo-rail__top">
+            <button type="button" class="fo-back" data-close>← All work</button>
+            <button type="button" class="fo-chip" data-close aria-label="Put the ${esc(c.title)} card back in the binder"><img src="${c.hero}" alt=""><span>Card ${c.index}</span></button>
+          </div>` : '<button type="button" class="fo-back" data-close>← All work</button>'}
           <header>
             <p class="fo-eyebrow">${esc(pnl.eyebrow)}</p>
             <h1 id="foTitle">${esc(pnl.title)}</h1>
@@ -2250,7 +2242,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
           <div class="fo-tools"><p class="fo-eyebrow">Tools used</p><ul>${pnl.tools.map((tool) => `<li>${esc(tool)}</li>`).join('')}</ul></div>
         </aside>${hero}
         <div class="fo-body fo-fade">
-          ${pnl.context && layoutMode !== 'intro' ? `<p class="fo-context">${esc(pnl.context)}</p>` : ''}
+          ${pnl.context && mode !== 'intro' ? `<p class="fo-context">${esc(pnl.context)}</p>` : ''}
           <p class="fo-deck">${esc(pnl.deck)}</p>
           <p class="fo-ownership">${esc(pnl.ownership)}</p>
           ${pnl.evidence?.length ? `<div class="fo-evidence">${pnl.evidence.map((m) => figureHTML(m)).join('')}</div>` : ''}
@@ -2373,16 +2365,15 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     return { ins, s };
   };
   // The panel is laid out once, invisibly, to find where everything lands.
-  // Beside the video, the reel's insert unfolds sideways next to the card; on
-  // a phone, where the video sits under the card, it is a gatefold that comes
-  // down from behind it. Both run on the beside clock.
-  const foldKind = (frame, ins) => (layoutMode !== 'beside' ? null : frame.left >= ins.right ? 'side' : 'below');
-  const clockFor = (fold) => (layoutMode === 'video' ? PLAN.video : fold ? PLAN.beside : PLAN.intro);
+  // Beside the video, the reel's insert unfolds sideways next to the card, on
+  // the beside clock (a phone takes the video layout instead: panelMode).
+  const foldKind = (frame, ins) => (panelMode() !== 'beside' ? null : 'side');
+  const clockFor = (fold) => (panelMode() === 'video' ? PLAN.video : fold ? PLAN.beside : PLAN.intro);
   const planOpen = (p, c) => {
     flyout.hidden = false;
     flyout.classList.add('is-measuring');
     const frame = foFrame().getBoundingClientRect();
-    const sleeve = layoutMode === 'video' ? null : syncInsert(p);
+    const sleeve = panelMode() === 'video' ? null : syncInsert(p);
     flyout.classList.remove('is-measuring');
     if (!sleeve) return { g: meet(p, frame, c.back.intro.focus), clock: clockFor(false) };
     const fold = foldKind(frame, sleeve.ins);
@@ -2577,13 +2568,6 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // by panel along its creases (each panel shading as it turns from the
   // lamp), and lies flat exactly where the video plays; the video takes over.
   const REEL_MS = { slide: [1050, 1380], p2: [1330, 1500, 1680], p3: [1520, 1690, 1870], video: [1950, 2010] };
-  // On a phone the card lies bare on the video, no case (fold 'below'): no
-  // plastic tucks over it, and the pocket's well, which is its shadow there,
-  // comes as the card lands and goes as it lifts.
-  const cased = (fold) => fold !== 'below';
-  const shadowWell = (from, to, show, opts) => foArticle.querySelector('.fo-insert__well').animate([
-    { offset: 0, opacity: show ? 0 : 1 }, { offset: from, opacity: show ? 0 : 1 }, { offset: to, opacity: show ? 1 : 0 }, { offset: 1, opacity: show ? 1 : 0 },
-  ], opts);
   const sleeveOpen = (p, plan, total, fromY, c) => {
     const { g, ins, frame } = plan;
     const at = (t) => Math.min(1, t / plan.clock.open);
@@ -2605,14 +2589,12 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       ...panelIn({ from: at(CARD_MS.lift), to: at(860), scrim: [at(200), at(700)], fade: [at(900), at(1350)] }, opts),
       // the copy of the pocket's plastic lies over the card as it tucks in,
       // crossed with the real one so the plastic never doubles
-      ...(cased(plan.fold) ? [
-        plastic.animate([
-          { offset: 0, opacity: 0 }, { offset: at(870), opacity: 0 }, { offset: at(930), opacity: 1 }, { offset: 1, opacity: 1 },
-        ], opts),
-        sleeveIn.animate([
-          { offset: 0, opacity: 1 }, { offset: at(870), opacity: 1 }, { offset: at(930), opacity: 0 }, { offset: 1, opacity: 0 },
-        ], opts),
-      ] : [shadowWell(at(CARD_MS.fly), at(CARD_MS.seat), true, opts)]),
+      plastic.animate([
+        { offset: 0, opacity: 0 }, { offset: at(870), opacity: 0 }, { offset: at(930), opacity: 1 }, { offset: 1, opacity: 1 },
+      ], opts),
+      sleeveIn.animate([
+        { offset: 0, opacity: 1 }, { offset: at(870), opacity: 1 }, { offset: at(930), opacity: 0 }, { offset: 1, opacity: 0 },
+      ], opts),
     ];
     const video = foFrame();
     if (plan.fold) anims.push(...reelOut(ins, frame, at, opts, plan.fold));
@@ -2655,29 +2637,23 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     }
     return anims;
   };
-  // The folded insert waits behind the card. Beside the video its first panel
-  // is centred on the card and it slides out sideways; on a phone, where the
-  // card rests on the video's corner, it is a gatefold whose middle panel is
-  // centred on the card and slides out to the video's middle. Its flaps open
-  // in turn: the one on top first (z-fold: the second panel, carrying the
-  // third; gatefold: the left flap, then the right).
-  const insertOf = (kind) => {
+  // The folded insert waits behind the card, its first panel centred on the
+  // card, and slides out sideways; its second panel opens, carrying the third,
+  // then the third.
+  const insertOf = () => {
     const fold = foArticle.querySelector('.fo-fold');
     const panel = (n) => fold.querySelector(`.fo-fold__panel--${n}`);
-    const below = kind === 'below';
     return {
       fold, p1: panel('1'),
-      flaps: below ? [[panel('l'), -1, 2], [panel('2'), 1, 1]] : [[panel('2'), 1, 1], [panel('3'), 1, 1]],
+      flaps: [[panel('2'), 1, 1], [panel('3'), 1, 1]],
       // the insert's shadow on the page, as wide as the panels lying open
-      spread: below ? (n) => `translateX(${n > 1 ? -100 : 0}%) scaleX(${n})` : (n) => `scaleX(${n})`,
-      rest: below ? 'translate(0px, 0px)' : 'translateX(0px)',
-      start: (ins, frame) => (below
-        ? `translate(${ins.left + ins.width / 2 - frame.left - frame.width / 2}px, ${ins.top + ins.height / 2 - frame.top - frame.height / 2}px)`
-        : `translateX(${ins.left + ins.width / 2 - frame.width / 6 - frame.left}px)`),
+      spread: (n) => `scaleX(${n})`,
+      rest: 'translateX(0px)',
+      start: (ins, frame) => `translateX(${ins.left + ins.width / 2 - frame.width / 6 - frame.left}px)`,
     };
   };
   const reelOut = (ins, frame, at, opts, kind) => {
-    const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf(kind);
+    const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf();
     const x0 = start(ins, frame);
     const R = REEL_MS;
     return [
@@ -2693,7 +2669,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       // the first panel sits in the flaps' shadow until they lift off it
       p1.querySelector('.fo-fold__shade').animate([
         { offset: 0, opacity: .4 }, { offset: at(R.p2[0]), opacity: .4, easing: 'ease-out' },
-        { offset: at(kind === 'below' ? R.p3[2] : R.p2[2]), opacity: 0 }, { offset: 1, opacity: 0 },
+        { offset: at(R.p2[2]), opacity: 0 }, { offset: 1, opacity: 0 },
       ], opts),
       // the insert's shadow on the page widens as it opens, then the video takes it
       fold.querySelector('.fo-fold__shadow').animate([
@@ -2712,14 +2688,14 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // And back: the video hands to the flat insert, which folds up and slides
   // behind the card before the card leaves its pocket.
   const reelIn = (ins, frame, at, opts, kind) => {
-    const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf(kind);
+    const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf();
     const x0 = start(ins, frame);
     return [
       foFrame().animate([{ offset: 0, opacity: 1 }, { offset: .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
       ...crease(f2[0], [0, 170, 340], at, opts, false, f2[1], f2[2]),
       ...crease(f1[0], [200, 370, 540], at, opts, false, f1[1], f1[2]),
       p1.querySelector('.fo-fold__shade').animate([
-        { offset: 0, opacity: 0 }, { offset: at(kind === 'below' ? 0 : 200), opacity: 0, easing: 'ease-in' }, { offset: at(540), opacity: .4 }, { offset: 1, opacity: .4 },
+        { offset: 0, opacity: 0 }, { offset: at(200), opacity: 0, easing: 'ease-in' }, { offset: at(540), opacity: .4 }, { offset: 1, opacity: .4 },
       ], opts),
       fold.querySelector('.fo-fold__shadow').animate([
         { offset: 0, opacity: .4, transform: spread(3), easing: 'cubic-bezier(.45,0,.25,1)' },
@@ -2763,14 +2739,12 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
         { offset: 1, transform: tf(0, endY, 1), zIndex: 4 },
       ], opts),
       ...spin(p, 360, 0, at(up + 40), at(drop - 40), opts),
-      ...(cased(fold) ? [
-        plastic.animate([
-          { offset: 0, opacity: 1 }, { offset: at(up - 20), opacity: 1 }, { offset: at(up + 20), opacity: 0 }, { offset: 1, opacity: 0 },
-        ], opts),
-        sleeveIn.animate([
-          { offset: 0, opacity: 0 }, { offset: at(up - 20), opacity: 0 }, { offset: at(up + 20), opacity: 1 }, { offset: 1, opacity: 1 },
-        ], opts),
-      ] : [shadowWell(at(wait), at(up), false, opts)]),
+      plastic.animate([
+        { offset: 0, opacity: 1 }, { offset: at(up - 20), opacity: 1 }, { offset: at(up + 20), opacity: 0 }, { offset: 1, opacity: 0 },
+      ], opts),
+      sleeveIn.animate([
+        { offset: 0, opacity: 0 }, { offset: at(up - 20), opacity: 0 }, { offset: at(up + 20), opacity: 1 }, { offset: 1, opacity: 1 },
+      ], opts),
       foHolder().animate([{ offset: 0, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
       ...dropAnimations(p, out, endY, raised, at(drop), opts),
       ...panelOut({ from: at(up - 40), to: at(drop - 80), scrim: [at(up), at(drop + 120)], fade: at(fold ? 260 : 190) }, opts),
@@ -2784,7 +2758,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     }
     return anims;
   };
-  const openAnimations = (p, plan, total, fromY, c) => (layoutMode === 'video'
+  const openAnimations = (p, plan, total, fromY, c) => (panelMode() === 'video'
     ? unfoldOpen(p, plan.g, total, fromY, c)
     : sleeveOpen(p, plan, total, fromY, c));
 
@@ -2907,12 +2881,12 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     state = 'closing'; syncControls();
     foVideo()?.pause();
     const raised = lastInput === 'keyboard';
-    const fold = layoutMode === 'video' ? null : foldKind(foFrame().getBoundingClientRect(), foInsert().getBoundingClientRect());
+    const fold = panelMode() === 'video' ? null : foldKind(foFrame().getBoundingClientRect(), foInsert().getBoundingClientRect());
     const clock = clockFor(fold);
     const total = duration(clock.close);
     p.pocket.classList.add('is-flying');
     p.pocket.classList.remove('is-open');
-    running = layoutMode === 'video'
+    running = panelMode() === 'video'
       ? unfoldClose(p, c, raised, { duration: total, fill: 'both', easing: 'linear' })
       : sleeveClose(p, c, raised, total, clock, fold);
     live.textContent = `Closing ${c.title}.`;
