@@ -1991,6 +1991,8 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
         })), opts),
       );
     }
+    // where the free edge falls at each step, for a finger to steer by
+    anims.edges = poses.map((q) => q.edge);
     return anims;
   };
   // Forward, the copy is this page and the next one is laid out under it at
@@ -3165,49 +3167,94 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   pager.prev.addEventListener('click', () => turnBy(-1));
   pager.next.addEventListener('click', () => turnBy(1));
   // On a touch screen the page turns under a finger. A sideways drag across
-  // the cards starts the turn held at its first frame and scrubs it: right to
+  // the cards starts the turn held at its first frame and steers it: right to
   // left lifts this page over the rings, left to right brings the one before
-  // back. Let go a third of the way over, or with a flick, and the sheet
-  // finishes its turn; short of that it falls back. An upward or downward
-  // drag still scrolls (.pockets is touch-action: pan-y).
-  const swipe = { id: null, x0: 0, y0: 0, span: 1, step: 0, at: 0, from: 0, held: null, track: [], ended: -Infinity };
+  // back. The sheet's free edge follows the finger, not the turn's clock: the
+  // clock eases the swing, so a finger mapped to time barely moved the edge
+  // over the first third of a drag and then raced it ahead. The edge goes a
+  // little further than the finger (SWIPE_GAIN), so a drag across the screen
+  // can carry the sheet over, and it eases toward the finger each frame, so a
+  // late start or an uneven touch stream never jumps it. Let go past
+  // SWIPE_GO of the edge's travel, or with a flick, and the sheet finishes
+  // its turn at the finger's speed; short of that, or flicked back, it falls
+  // back. An upward or downward drag still scrolls (.pockets is pan-y).
+  const SWIPE_GAIN = 1.25, SWIPE_GO = .3, SWIPE_FLICK = .3;   // flick in px/ms
+  const swipe = { id: null, x0: 0, y0: 0, dx: 0, step: 0, shown: 0, from: 0, held: null, track: [], raf: 0, ended: -Infinity };
+  const travelOf = (t0) => Math.abs(t0.anims.edges[0] - t0.anims.edges.at(-1)) || 1;
+  const wantOf = (t0) => Math.min(1, Math.max(0, (SWIPE_GAIN * -swipe.dx * swipe.step) / travelOf(t0)));
+  // the point in the turn where the edge has gone share f of its way
+  const atForTravel = (t0, f) => {
+    const e = t0.anims.edges, n = e.length - 1, span = e[0] - e[n];
+    let prev = 0;
+    for (let i = 1; i <= n; i++) {
+      const q = Math.max(prev, (e[0] - e[i]) / span);
+      if (q >= f) return (i - 1 + (q > prev ? (f - prev) / (q - prev) : 0)) / n;
+      prev = q;
+    }
+    return 1;
+  };
+  // how fast the edge moves there at the turn's own speed, in px/ms
+  const edgeSpeed = (t0, at) => {
+    const e = t0.anims.edges, n = e.length - 1, i = Math.min(n - 1, Math.floor(at * n));
+    return (Math.abs(e[i + 1] - e[i]) * n) / t0.anims[0].effect.getTiming().duration;
+  };
+  const steerTurn = (t0) => {
+    let last = performance.now();
+    const tick = (now) => {
+      if (leaf !== t0 || swipe.id === null) { swipe.raf = 0; return; }
+      swipe.shown += (wantOf(t0) - swipe.shown) * (1 - Math.pow(.55, (now - last) / 16.7));
+      last = now;
+      seekTurn(atForTravel(t0, swipe.shown));
+      swipe.raf = requestAnimationFrame(tick);
+    };
+    swipe.raf = requestAnimationFrame(tick);
+  };
   grid.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'touch' || swipe.id !== null || state !== 'seated' || pageCount() < 2) return;
-    Object.assign(swipe, { id: e.pointerId, x0: e.clientX, y0: e.clientY, span: grid.clientWidth * .8, step: 0, at: 0, held: null, track: [[e.timeStamp, e.clientX]] });
+    Object.assign(swipe, { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, step: 0, shown: 0, held: null, track: [[e.timeStamp, e.clientX]] });
   });
   grid.addEventListener('pointermove', (e) => {
     if (e.pointerId !== swipe.id) return;
     const dx = e.clientX - swipe.x0, dy = e.clientY - swipe.y0;
-    swipe.track = [...swipe.track.slice(-5), [e.timeStamp, e.clientX]];
-    if (!swipe.step) {
-      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { swipe.id = null; return; }   // a scroll
-      if (Math.abs(dx) < 10) return;
-      const step = dx < 0 ? 1 : -1;
-      if (page + step < 0 || page + step >= pageCount()) { swipe.id = null; return; }
-      Object.assign(swipe, { step, from: page });
-      swipe.held = turnBy(step, 0).then((held) => { if (held) seekTurn(swipe.at); return held ? leaf : null; });
-    }
-    swipe.at = Math.min(1, Math.max(0, (-dx * swipe.step) / swipe.span));
-    if (leaf && swipe.held) seekTurn(swipe.at);
+    swipe.track = [...swipe.track.slice(-7), [e.timeStamp, e.clientX]];
+    swipe.dx = dx;
+    if (swipe.step) return;
+    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { swipe.id = null; return; }   // a scroll
+    if (Math.abs(dx) < 10) return;
+    const step = dx < 0 ? 1 : -1;
+    if (page + step < 0 || page + step >= pageCount()) { swipe.id = null; return; }
+    Object.assign(swipe, { step, from: page });
+    swipe.held = turnBy(step, 0).then((held) => {
+      const t0 = held ? leaf : null;
+      if (t0 && swipe.id !== null) steerTurn(t0);
+      return t0;
+    });
   });
   const letGo = (e) => {
     if (e.pointerId !== swipe.id) return;
     swipe.id = null;
+    cancelAnimationFrame(swipe.raf);
     if (!swipe.step) return;
     swipe.ended = performance.now();
-    // a flick: the finger's speed over its last few moves, in px/ms, the way the page turns
-    const [[ta, xa], [tb, xb]] = [swipe.track[0], swipe.track.at(-1)];
-    const v = tb > ta ? ((xa - xb) * swipe.step) / (tb - ta) : 0;
-    const go = e.type === 'pointerup' && (swipe.at > 1 / 3 || (v > .35 && swipe.at > .02));
+    if (e.type === 'pointerup') swipe.dx = e.clientX - swipe.x0;
+    // a flick: the finger's speed over its last 90ms, in px/ms, the way the page turns
+    const end = [e.timeStamp, e.clientX];
+    const [ta, xa] = swipe.track.find(([t]) => end[0] - t < 90) ?? end;
+    const v = end[0] > ta ? ((xa - end[1]) * swipe.step) / (end[0] - ta) : 0;
     const { from } = swipe;
     swipe.held.then((t0) => {
       if (!t0 || leaf !== t0) return;
-      seekTurn(swipe.at);
+      const want = wantOf(t0);
+      const go = e.type === 'pointerup' && v > -SWIPE_FLICK && (want > SWIPE_GO || (v > SWIPE_FLICK && want > .02));
+      const at = atForTravel(t0, swipe.shown);
+      seekTurn(at);
       if (!go) {
         t0.back = from;
         live.textContent = `Page ${from + 1} of ${pageCount()}.`;
       }
-      t0.anims.forEach((x) => { x.playbackRate = go ? 1 : -1.5; x.play(); });
+      // it leaves at the finger's speed, never slower than the turn's own
+      const rate = Math.min(2.4, Math.max(go ? 1 : 1.5, (Math.abs(v) * SWIPE_GAIN) / Math.max(edgeSpeed(t0, at), .01)));
+      t0.anims.forEach((x) => { x.playbackRate = go ? rate : -rate; x.play(); });
       Promise.all(t0.anims.map((x) => x.finished)).then(() => { if (leaf === t0) finishTurn(); }, () => {});
     });
   };
@@ -3280,7 +3327,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     applyPose, openStudy, closeStudy, holdLight,
     holdTurn: (step, at) => turnBy(step, at), seekTurn, endTurn: finishTurn,
     unlock: (on = true) => setUnlocked(on, true),
-    get state() { return state; }, get turning() { return Boolean(leaf); },
+    get state() { return state; }, get turning() { return Boolean(leaf); }, get edges() { return leaf?.anims.edges ?? null; },
   };
 })();
 </script>
