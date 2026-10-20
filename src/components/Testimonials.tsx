@@ -53,7 +53,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.',
     name: 'Adam Payne',
-    role: 'Web Design Manager (Ryan’s direct manager)',
+    role: 'Web Design Manager, Tire Rack',
     year: '2026',
   },
   {
@@ -67,7 +67,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens. He designs the whole experience.',
     name: 'Cheryl Carpenter',
-    role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
+    role: 'React Front-End Developer, Tire Rack',
     year: '2026',
   },
   {
@@ -81,7 +81,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'He has been an excellent partner throughout our transition and upgrade to AEM Core Components, helping ensure that designs are both visually strong and technically effective. Since I moved into development, he has played a key role in bridging the gap between creative vision and technical execution.',
     name: 'Patrick Stines',
-    role: 'AEM Development Manager, Tire Rack (senior to Ryan, not his direct manager)',
+    role: 'AEM Development Manager, Tire Rack',
     year: '2026',
   },
   {
@@ -95,7 +95,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'The quality of the experience our participants receive is a direct reflection of the effort and care he puts into it. As a designer, he has an exceptional eye for creating work that is clean, creative and visually engaging.',
     name: 'Amanda Straup',
-    role: 'Assistant Vice President, Digital Operations at Tire Rack',
+    role: 'Assistant Vice President, Digital Operations, Tire Rack',
     year: '2026',
   },
   {
@@ -108,7 +108,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'He truly has a passion for improvement in both his professional and personal life. He is always looking for better and more efficient ways to do things. He loves trying new tools and refining existing processes.',
     name: 'Rob Oxley',
-    role: 'Senior Web Designer, Tire Rack (design peer for over 10 years)',
+    role: 'Senior Web Designer, Tire Rack',
     year: '2026',
   },
   {
@@ -121,7 +121,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.',
     name: 'Ryan Kokesh',
-    role: 'Senior UX Manager (overseeing design 2022-2024)',
+    role: 'Senior UX Manager, Tire Rack',
     year: '2024',
   },
   {
@@ -136,7 +136,7 @@ const testimonials: Testimonial[] = [
     ),
     excerpt: 'Since I started at Tire Rack almost 5 years ago, Ryan has always been a kind and thoughtful mentor to me as a Senior Designer on the Web Design team. He is a very intuitive and collaborative teammate, and always looks for ways that we can improve our design system and user experience throughout our sites.',
     name: 'Gina Saucedo',
-    role: 'Web Designer, Tire Rack (Web Design team)',
+    role: 'Web Designer, Tire Rack',
     year: '2026',
   },
 ];
