@@ -381,14 +381,17 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
   aspect-ratio: 0.735;
   border-radius: 7px;
   --lift: 0%;
+  --rx: 0deg;
   --ry: 0deg;
+  --sx: 0; --sy: 1;   /* away from the lamp, set from layout() */
   --px: 0; --py: 0;
   /* where this card sits in the one sheet of light */
   --ox: calc(-1px * (var(--px) + 10));
   --oy: calc(-1px * (var(--py) + 10));
 }
 .pocket[hidden] { display: none !important; }
-.pocket--raised { --lift: -10%; }
+/* raised, a card is pulled, not slid: it tips back 4° about its bottom edge (Fable review) */
+.pocket--raised { --lift: -10%; --rx: -4deg; }
 .pocket__well {
   position: absolute; inset: 0; border-radius: 7px;
   background:
@@ -566,14 +569,19 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
   transform: translate(0, var(--lift));
   filter: blur(1.5px);
   opacity: 1;
-  box-shadow: 0 0 3px 1px rgba(0,0,0,.55), 8px 10px 10px rgba(0,0,0,.6), 0 0 32px 9px rgba(0,0,0,.6);
+  /* a crisp contact line and one cast, falling away from the lamp (--sx,
+     --sy) and longer for the tilt; the old halo darkened the card above,
+     toward the lamp */
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.5),
+    calc(var(--sx) * 14px) calc(6px + var(--sy) * 10px) 13px rgba(0,0,0,.58);
   transition: transform var(--d-lift) var(--e-out), opacity var(--d-lift) ease, filter var(--d-lift) ease,
     box-shadow var(--d-lift) ease, z-index 0s;
 }
 .card {
   position: absolute; inset: 10px; z-index: 2;
   border-radius: 6px;
-  transform: translate(0, var(--lift));
+  /* the tilt turns about the bottom edge: down half the card, tip, back up */
+  transform: translate(0, var(--lift)) translateY(50%) perspective(900px) rotateX(var(--rx)) translateY(-50%);
   transition: transform var(--d-lift) var(--e-out), z-index 0s linear var(--d-lift);
   cursor: pointer;
   outline: none;
@@ -754,20 +762,23 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 .cf-head, .cf-art, .cf-stats, .cf-foot { position: relative; z-index: 1; }
 .face__holo, .face__glint { display: none; }
 .stage--holo .face__holo, .stage--holo .face__glint {
-  display: block; position: absolute; inset: 0; border-radius: 6px; pointer-events: none; z-index: 0;
+  display: block; position: absolute; inset: -8px; border-radius: 6px; pointer-events: none; z-index: 0;
+  /* 8px of overscan each side, so the held card's foil can slide (--fx, --fy) */
+  transform: translate3d(var(--fx, 0px), var(--fy, 0px), 0);
+  transition: transform 260ms var(--e-out);
 }
 .stage--holo .face__holo {
   background-image: repeating-linear-gradient(122deg,
     hsl(352 95% 66%) 0px, hsl(38 95% 60%) 58px, hsl(95 70% 56%) 115px, hsl(170 75% 56%) 173px,
     hsl(215 95% 66%) 230px, hsl(278 80% 68%) 288px, hsl(352 95% 66%) 345px);
   background-size: var(--BW) var(--BH);
-  background-position: var(--ox) var(--oy);
+  background-position: calc(var(--ox) + 8px) calc(var(--oy) + 8px);
   background-repeat: no-repeat;
   /* a faint even film, plus the streaks of the one noise field */
   -webkit-mask-image: var(--blanket), linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.28));
   mask-image: var(--blanket), linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.28));
   -webkit-mask-size: var(--BW) var(--BH), 100% 100%; mask-size: var(--BW) var(--BH), 100% 100%;
-  -webkit-mask-position: var(--ox) var(--oy), 0 0; mask-position: var(--ox) var(--oy), 0 0;
+  -webkit-mask-position: calc(var(--ox) + 8px) calc(var(--oy) + 8px), 0 0; mask-position: calc(var(--ox) + 8px) calc(var(--oy) + 8px), 0 0;
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   mix-blend-mode: multiply;
   opacity: .32;
@@ -778,7 +789,7 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
     repeating-linear-gradient(32deg,
       rgba(255,255,255,0) 0px, rgba(255,255,255,.55) 14px, rgba(255,255,255,0) 28px, rgba(255,255,255,0) 48px);
   background-size: 140px 140px, var(--BW) var(--BH);
-  background-position: var(--ox) var(--oy), var(--ox) var(--oy);
+  background-position: calc(var(--ox) + 8px) calc(var(--oy) + 8px), calc(var(--ox) + 8px) calc(var(--oy) + 8px);
   background-repeat: repeat, no-repeat;
   mix-blend-mode: overlay;
   opacity: 1;
@@ -1035,8 +1046,25 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
   .fo-overview { column-gap: 32px; padding: 32px; grid-template-columns: 220px minmax(0, 1fr); }
   .fo-header { padding-inline: 32px; }
 }
+/* ---------- the phone's gate ----------
+   On a phone the card flips over and unfolds into the video: its back is the
+   middle of the intro's first frame, and two flaps folded behind it swing out
+   to either side, printed side up, until the frame lies flat where the video
+   plays. Panels are placed from script (foldGeometry). */
+.fo-hero { position: relative; }
+.fo-gate {
+  position: absolute; left: 0; top: 0; width: 100%; z-index: 3;
+  perspective: 900px; transform-style: preserve-3d; visibility: hidden; pointer-events: none;
+}
+.fo-gate__mid, .fo-gate__flap { position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; }
+.fo-gate__mid { background-repeat: no-repeat; }
+.fo-gate__flap--l { transform-origin: 100% 50%; }
+.fo-gate__flap--r { transform-origin: 0 50%; }
+.fo-gate .fo-fold__front { background-repeat: no-repeat; }
 /* phones: the video leads, so the card has somewhere visible to land */
 @media (max-width: 700px) {
+  /* the card lands centred on the video, so its back shows the frame's middle */
+  .face--back img { object-position: 50% 50% !important; }
   .fo-overview { grid-template-columns: 1fr; grid-template-areas: "hero" "rail" "body"; padding: 24px; }
   .fo-hero--intro .fo-top { grid-template-columns: 1fr; gap: 20px; }
   /* the card, filed: a chip beside All work once it has become the video */
@@ -1563,10 +1591,12 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     lifted.forEach((p) => {
       const f = geo.faces.get(p);
       if (!f || p.classList.contains('is-flying') || p.classList.contains('is-open')) return;
-      // where the card is now, not where it is going
-      const top = Math.round((f.y + new DOMMatrixReadOnly(getComputedStyle(p.querySelector('.card')).transform).m42) * 2) / 2;
+      // where the card is now, not where it is going, tilt included
+      const bb = binder.getBoundingClientRect(), cb = p.querySelector('.card').getBoundingClientRect();
+      const half = (v) => Math.round(v * 2) / 2;
+      const top = half(cb.top - bb.top), cx0 = half(cb.left - bb.left), cx1 = half(cb.right - bb.left), cy1 = half(cb.bottom - bb.top);
       const cut = (r) => {
-        const x0 = Math.max(f.x, r.x), y0 = Math.max(top, r.y), x1 = Math.min(f.x + f.w, r.x + r.w), y1 = Math.min(top + f.h, r.y + r.h);
+        const x0 = Math.max(cx0, r.x), y0 = Math.max(top, r.y), x1 = Math.min(cx1, r.x + r.w), y1 = Math.min(cy1, r.y + r.h);
         return x1 > x0 && y1 > y0 ? `M${x0} ${y0}H${x1}V${y1}H${x0}Z` : '';
       };
       geo.slots.forEach((r, el) => { if (el !== p) sleeves += cut(r); });
@@ -1616,6 +1646,11 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       const r = p.getBoundingClientRect();
       p.style.setProperty('--px', Math.round(r.left - br.left));
       p.style.setProperty('--py', Math.round(r.top - br.top));
+      // the way this card's shadow falls when it is raised: away from the lamp
+      const dx = r.left + r.width / 2 - br.left - .5 * br.width, dy = r.top + r.height / 2 - br.top - .42 * br.height;
+      const len = Math.hypot(dx, dy) || 1;
+      p.style.setProperty('--sx', (dx / len).toFixed(3));
+      p.style.setProperty('--sy', Math.max(.35, dy / len).toFixed(3));
       const fx = ex(r.left - br.left + 10), fy = ex(r.top - br.top + 10), fw = ex(r.width - 20), fh = ex(r.height - 20);
       const art = p.querySelector('.face--front .cf-art');
       geo.faces.set(p, { x: fx, y: fy, w: fw, h: fh, art: [fx + art.offsetLeft, fy + art.offsetTop, art.offsetWidth, art.offsetHeight] });
@@ -2052,7 +2087,24 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
 
   // ---- hover: a card slips a tenth of the way out of its sleeve ----
   // A pointer or pen over the pocket raises it, and so does keyboard focus.
-  const raise = (p, on) => { if ((state === 'seated' || state === 'posed') && !leaf) p.classList.toggle('pocket--raised', on); };
+  const raise = (p, on) => {
+    if ((state === 'seated' || state === 'posed') && !leaf) p.classList.toggle('pocket--raised', on);
+    if (!on) { p.style.removeProperty('--fx'); p.style.removeProperty('--fy'); }
+  };
+  // The card in hand catches the lamp as it moves (Fable review): its holo
+  // film and glitter slide up to FOIL_SHIFT px against the pointer, so its
+  // colour shifts under the hand. A transform on that one card only.
+  const FOIL_SHIFT = 7;
+  grid.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch' || reduced()) return;
+    const p = e.target.closest('.pocket--raised');
+    if (!p) return;
+    const r = p.querySelector('.card').getBoundingClientRect();
+    const nx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - .5) * 2));
+    const ny = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - .5) * 2));
+    p.style.setProperty('--fx', `${(-nx * FOIL_SHIFT).toFixed(1)}px`);
+    p.style.setProperty('--fy', `${(-ny * FOIL_SHIFT).toFixed(1)}px`);
+  });
   const cardOf = (p) => p.querySelector('.card');
   grid.addEventListener('pointerover', (e) => {
     const p = e.target.closest('.pocket:not(.pocket--empty)');
@@ -2202,13 +2254,20 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
               <div class="fo-fold__panel fo-fold__panel--3">${face(true)}</div>
             </div>
           </div>`;
+    // the phone's gate: the card's back as the middle panel, a flap each side
+    const gate = `
+          <div class="fo-gate" aria-hidden="true" style="aspect-ratio:${intro.width} / ${intro.height};--poster:url('${intro.poster}');--r:${intro.frame === 'reel' ? 0 : 10}px;--h:${c.theme.h};--s:${c.theme.s}">
+            <div class="fo-gate__mid"></div>
+            <div class="fo-gate__flap fo-gate__flap--l">${face(true)}</div>
+            <div class="fo-gate__flap fo-gate__flap--r">${face(true)}</div>
+          </div>`;
     const problem = pnl.problemPunch || pnl.problem.length ? `
             <p class="fo-eyebrow">The problem</p>
             ${pnl.problemPunch ? `<p class="fo-intro__punch">${esc(pnl.problemPunch)}</p>` : ''}
             ${pnl.problem.map((line) => `<p>${esc(line)}</p>`).join('')}` : '';
     const hero = {
       video: `
-        <figure class="fo-hero" id="${ids[0]}">${frame}${caption(true)}</figure>`,
+        <figure class="fo-hero" id="${ids[0]}">${frame}${filedAsChip() ? gate : ''}${caption(true)}</figure>`,
       beside: `
         <figure class="fo-hero fo-hero--beside" id="${ids[0]}" style="--ar:${intro.height / intro.width}">
           <div class="fo-top">${insert}${frame}${fold}</div>
@@ -2289,7 +2348,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // takes over. The close runs the same steps backwards.
   // Each layout's clock: the card beside the video runs longer, so the
   // reel's insert has time to unfold.
-  const PLAN = { beside: { open: 2200, close: 1700 }, intro: { open: 1500, close: 1250 }, video: { open: 1500, close: 1250 } };
+  const PLAN = { beside: { open: 2200, close: 1700 }, intro: { open: 1500, close: 1250 }, video: { open: 1500, close: 1250 }, fold: { open: 1900, close: 1500 } };
   const LIFT_END = .18, HANDOFF = .69, DROP = .7;      // the unfold (last pass), as fractions of its clock
   const RAISE = .1;   // a raised card stands a tenth of its height out of its sleeve (.pocket--raised's --lift)
   let running = [];
@@ -2368,14 +2427,14 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // Beside the video, the reel's insert unfolds sideways next to the card, on
   // the beside clock (a phone takes the video layout instead: panelMode).
   const foldKind = (frame, ins) => (panelMode() !== 'beside' ? null : 'side');
-  const clockFor = (fold) => (panelMode() === 'video' ? PLAN.video : fold ? PLAN.beside : PLAN.intro);
+  const clockFor = (fold) => (filedAsChip() ? PLAN.fold : panelMode() === 'video' ? PLAN.video : fold ? PLAN.beside : PLAN.intro);
   const planOpen = (p, c) => {
     flyout.hidden = false;
     flyout.classList.add('is-measuring');
     const frame = foFrame().getBoundingClientRect();
     const sleeve = panelMode() === 'video' ? null : syncInsert(p);
     flyout.classList.remove('is-measuring');
-    if (!sleeve) return { g: meet(p, frame, c.back.intro.focus), clock: clockFor(false) };
+    if (!sleeve) return { g: meet(p, frame, filedAsChip() ? .5 : c.back.intro.focus), clock: clockFor(false) };
     const fold = foldKind(frame, sleeve.ins);
     return { g: meetSleeve(p, sleeve.ins, sleeve.s), ins: sleeve.ins, frame, fold, clock: clockFor(fold) };
   };
@@ -2391,6 +2450,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     return { out, pick: out > clear + 1 ? 1.05 : 1 };
   };
   const liftNow = (el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m42;
+  let fromTf = null;   // the card's transform as a live open starts (held frames start flat)
   const tf = (x, y, k) => `translate(${x}px, ${y}px) scale(${k})`;
   const turn = (deg, k = 1) => `perspective(1400px) rotateY(${deg}deg) scale(${k})`;
   const EASE_IN = 'cubic-bezier(.42,0,1,1)', EASE_OUT = 'cubic-bezier(0,0,.58,1)';
@@ -2488,7 +2548,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     const clipTo = `inset(0px 0px 0px 0px round ${radiusOf(c)}px)`;
     return [
       p.card.animate([
-        { offset: 0, transform: tf(0, fromY, 1), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.3,.6,.2,1)' },
+        { offset: 0, transform: fromTf ?? tf(0, fromY, 1), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.3,.6,.2,1)' },
         { offset: LIFT_END, transform: tf(0, out, pick), zIndex: 4, opacity: 1 },
         { offset: LIFT_END + .001, transform: tf(0, out, pick), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.55,.05,.3,1)' },
         { offset: HANDOFF, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1 },
@@ -2540,6 +2600,93 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       ...panelOut({ from: .22, to: .62, scrim: [.3, .7], fade: .15 }, opts),
     ];
   };
+  // The phone's fold. The card turns over in flight and lands centred on the
+  // video, its back showing the middle of the intro's first frame; there the
+  // gate takes over on the same pixels, and its flaps, folded behind the card,
+  // swing out to each side (card stock until they pass edge-on, then the
+  // print) until the whole frame lies flat; then the video takes over on the
+  // same frame. Every time is in ms on the fold clock (PLAN.fold).
+  const FOLD_MS = { lift: 340, land: 1300, left: [1320, 1480, 1640], right: [1420, 1580, 1740], video: [1780, 1840] };
+  const foldGeometry = (g) => {
+    const gate = foArticle.querySelector('.fo-gate'), r = foFrame().getBoundingClientRect();
+    const W = r.width, H = r.height, w = Math.min(W, g.cr.w * g.s), left = (W - w) / 2, right = W - left - w;
+    const art = (x) => ({ backgroundImage: 'var(--poster)', backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x}px 0` });
+    const mid = gate.querySelector('.fo-gate__mid'), fl = gate.querySelector('.fo-gate__flap--l'), fr = gate.querySelector('.fo-gate__flap--r');
+    Object.assign(mid.style, { left: `${left}px`, width: `${w}px`, ...art(left) });
+    Object.assign(fl.style, { left: '0px', width: `${left}px` });
+    Object.assign(fr.style, { left: `${left + w}px`, width: `${right}px` });
+    Object.assign(fl.querySelector(':scope > .fo-fold__front').style, { ...art(0), borderRadius: 'var(--r) 0 0 var(--r)' });
+    Object.assign(fr.querySelector(':scope > .fo-fold__front').style, { ...art(left + w), borderRadius: '0 var(--r) var(--r) 0' });
+    return { gate, fl, fr };
+  };
+  const foldOpen = (p, g, ms, fromY, c, clock) => {
+    const opts = { duration: ms, fill: 'both', easing: 'linear' };
+    const at = (t) => Math.min(1, t / clock.open);
+    const { out, pick } = rise(g.cr, fromY);
+    const { gate, fl, fr } = foldGeometry(g);
+    const land = at(FOLD_MS.land);
+    return [
+      p.card.animate([
+        { offset: 0, transform: fromTf ?? tf(0, fromY, 1), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.3,.6,.2,1)' },
+        { offset: at(FOLD_MS.lift), transform: tf(0, out, pick), zIndex: 4, opacity: 1 },
+        { offset: at(FOLD_MS.lift) + .001, transform: tf(0, out, pick), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.55,.05,.3,1)' },
+        { offset: land, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1 },
+        { offset: land + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+        { offset: 1, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+      ], opts),
+      ...spin(p, 0, 180, at(500), at(1180), opts),
+      p.backFoil.animate([
+        { offset: 0, opacity: 1 }, { offset: at(1100), opacity: 1 }, { offset: land, opacity: 0 }, { offset: 1, opacity: 0 },
+      ], opts),
+      ...liftAnimations(p, out, fromY, at(FOLD_MS.lift), opts),
+      ...panelIn({ from: at(FOLD_MS.lift), to: at(1140), scrim: [at(260), at(950)], fade: [at(1140), at(1700)] }, opts),
+      gate.animate([
+        { offset: 0, visibility: 'hidden' }, { offset: land, visibility: 'hidden' }, { offset: land + .001, visibility: 'visible' },
+        { offset: at(FOLD_MS.video[1]), visibility: 'visible' }, { offset: Math.min(1, at(FOLD_MS.video[1]) + .001), visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
+      ], opts),
+      // folded behind the card (a pixel back), each flap swings out its own way
+      ...crease(fl, FOLD_MS.left, at, opts, true, 1, -1),
+      ...crease(fr, FOLD_MS.right, at, opts, true, -1, -1),
+      foFrame().animate([
+        { offset: 0, opacity: 0 }, { offset: at(FOLD_MS.video[0]), opacity: 0 }, { offset: at(FOLD_MS.video[1]), opacity: 1 }, { offset: 1, opacity: 1 },
+      ], opts),
+    ];
+  };
+  // And back: the video hands to the flat gate, the flaps fold in behind the
+  // middle panel, the card takes over on its back and turns as it flies home.
+  const foldClose = (p, c, raised, ms, clock) => {
+    const opts = { duration: ms, fill: 'both', easing: 'linear' };
+    const at = (t) => Math.min(1, t / clock.close);
+    const r = foFrame().getBoundingClientRect();
+    const top = Math.min(Math.max(r.top, -r.height), window.innerHeight);
+    const g = meet(p, { left: r.left, top, width: r.width, height: r.height }, .5);
+    const endY = raised ? -RAISE * g.cr.h : 0;
+    const { out, pick } = rise(g.cr, endY);
+    const { gate, fl, fr } = foldGeometry(g);
+    const swap = at(440), drop = at(1050);
+    return [
+      foFrame().animate([{ offset: 0, opacity: 1 }, { offset: .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
+      gate.animate([
+        { offset: 0, visibility: 'visible' }, { offset: swap, visibility: 'visible' }, { offset: swap + .001, visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
+      ], opts),
+      ...crease(fr, [0, 150, 300], at, opts, false, -1, -1),
+      ...crease(fl, [100, 250, 400], at, opts, false, 1, -1),
+      p.card.animate([
+        { offset: 0, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+        { offset: swap, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+        { offset: swap + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.45,0,.3,1)' },
+        { offset: drop, transform: tf(0, out, pick), zIndex: 50, opacity: 1 },
+        { offset: drop + .001, transform: tf(0, out, pick), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.2,.7,.2,1)' },
+        { offset: 1, transform: tf(0, endY, 1), zIndex: 4, opacity: 1 },
+      ], opts),
+      ...spin(p, 180, 0, at(480), at(1000), opts),
+      p.backFoil.animate([
+        { offset: 0, opacity: 0 }, { offset: swap, opacity: 0 }, { offset: at(560), opacity: 1 }, { offset: 1, opacity: 1 },
+      ], opts),
+      ...dropAnimations(p, out, endY, raised, drop, opts),
+      ...panelOut({ from: at(300), to: at(950), scrim: [at(450), at(1100)], fade: at(250) }, opts),
+    ];
+  };
   // Dropping back into the binder is the same in every layout.
   const dropAnimations = (p, out, endY, raised, from, opts) => [
     p.shadow.animate([
@@ -2577,7 +2724,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     placePlastic(ins);
     const anims = [
       p.card.animate([
-        { offset: 0, transform: tf(0, fromY, 1), zIndex: 4, easing: 'cubic-bezier(.3,.6,.2,1)' },
+        { offset: 0, transform: fromTf ?? tf(0, fromY, 1), zIndex: 4, easing: 'cubic-bezier(.3,.6,.2,1)' },
         { offset: at(CARD_MS.lift), transform: tf(0, out, pick), zIndex: 4 },
         { offset: at(CARD_MS.lift) + .001, transform: tf(0, out, pick), zIndex: 50, easing: 'cubic-bezier(.5,.05,.25,1)' },
         { offset: at(CARD_MS.fly), transform: tf(g.dx, g.dy - g.tuck, g.s), zIndex: 50, easing: 'cubic-bezier(.3,.7,.25,1)' },
@@ -2758,7 +2905,8 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     }
     return anims;
   };
-  const openAnimations = (p, plan, total, fromY, c) => (panelMode() === 'video'
+  const openAnimations = (p, plan, total, fromY, c) => (filedAsChip() ? foldOpen(p, plan.g, total, fromY, c, plan.clock)
+    : panelMode() === 'video'
     ? unfoldOpen(p, plan.g, total, fromY, c)
     : sleeveOpen(p, plan, total, fromY, c));
 
@@ -2846,6 +2994,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     if (state === 'posed') resetPose();
     const p = parts[sel];
     const fromY = liftNow(p.card);
+    fromTf = getComputedStyle(p.card).transform;
     state = 'opening'; syncControls();
     fillFlyout(c);
     cueVideo(c);
@@ -2886,7 +3035,8 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     const total = duration(clock.close);
     p.pocket.classList.add('is-flying');
     p.pocket.classList.remove('is-open');
-    running = panelMode() === 'video'
+    running = filedAsChip() ? foldClose(p, c, raised, total, clock)
+      : panelMode() === 'video'
       ? unfoldClose(p, c, raised, { duration: total, fill: 'both', easing: 'linear' })
       : sleeveClose(p, c, raised, total, clock, fold);
     live.textContent = `Closing ${c.title}.`;
@@ -2922,6 +3072,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   let heldClock = PLAN.beside.open;
   function seek(at) {
     const p = parts[sel], c = CARDS[sel];
+    fromTf = null;
     if (poseAt === null || !running.length) {
       clearRunning();
       fillFlyout(c);
