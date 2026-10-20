@@ -1047,10 +1047,12 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
   .fo-header { padding-inline: 32px; }
 }
 /* ---------- the phone's gate ----------
-   On a phone the card flips over and unfolds into the video: its back is the
-   middle of the intro's first frame, and two flaps folded behind it swing out
-   to either side, printed side up, until the frame lies flat where the video
-   plays. Panels are placed from script (foldGeometry). */
+   On a phone the card flips over and unfolds into the video: it lands flush
+   left with the panel's text, its back the left of the intro's first frame,
+   and the rest of the frame unrolls to the right as on desktop, two panels
+   folded behind it swinging out one after the other, printed side up, until
+   the frame lies flat where the video plays. Panels are placed from script
+   (foldGeometry). */
 .fo-hero { position: relative; }
 .fo-gate {
   position: absolute; left: 0; top: 0; width: 100%; z-index: 3;
@@ -1063,8 +1065,8 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 .fo-gate .fo-fold__front { background-repeat: no-repeat; }
 /* phones: the video leads, so the card has somewhere visible to land */
 @media (max-width: 700px) {
-  /* the card lands centred on the video, so its back shows the frame's middle */
-  .face--back img { object-position: 50% 50% !important; }
+  /* the card lands flush left on the video, so its back shows the frame's left */
+  .face--back img { object-position: 0% 50% !important; }
   .fo-overview { grid-template-columns: 1fr; grid-template-areas: "hero" "rail" "body"; padding: 24px; }
   .fo-hero--intro .fo-top { grid-template-columns: 1fr; gap: 20px; }
   /* the card, filed: a chip beside All work once it has become the video */
@@ -2350,7 +2352,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // takes over. The close runs the same steps backwards.
   // Each layout's clock: the card beside the video runs longer, so the
   // reel's insert has time to unfold.
-  const PLAN = { beside: { open: 2200, close: 1700 }, intro: { open: 1500, close: 1250 }, video: { open: 1500, close: 1250 }, fold: { open: 1900, close: 1500 } };
+  const PLAN = { beside: { open: 2200, close: 1700 }, intro: { open: 1500, close: 1250 }, video: { open: 1500, close: 1250 }, fold: { open: 2450, close: 1800 } };
   const LIFT_END = .18, HANDOFF = .69, DROP = .7;      // the unfold (last pass), as fractions of its clock
   const RAISE = .1;   // a raised card stands a tenth of its height out of its sleeve (.pocket--raised's --lift)
   let running = [];
@@ -2436,7 +2438,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     const frame = foFrame().getBoundingClientRect();
     const sleeve = panelMode() === 'video' ? null : syncInsert(p);
     flyout.classList.remove('is-measuring');
-    if (!sleeve) return { g: meet(p, frame, filedAsChip() ? .5 : c.back.intro.focus), clock: clockFor(false) };
+    if (!sleeve) return { g: meet(p, frame, filedAsChip() ? 0 : c.back.intro.focus), clock: clockFor(false) };
     const fold = foldKind(frame, sleeve.ins);
     return { g: meetSleeve(p, sleeve.ins, sleeve.s), ins: sleeve.ins, frame, fold, clock: clockFor(fold) };
   };
@@ -2602,91 +2604,105 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       ...panelOut({ from: .22, to: .62, scrim: [.3, .7], fade: .15 }, opts),
     ];
   };
-  // The phone's fold. The card turns over in flight and lands centred on the
-  // video, its back showing the middle of the intro's first frame; there the
-  // gate takes over on the same pixels, and its flaps, folded behind the card,
-  // swing out to each side (card stock until they pass edge-on, then the
-  // print) until the whole frame lies flat; then the video takes over on the
-  // same frame. Every time is in ms on the fold clock (PLAN.fold).
-  const FOLD_MS = { lift: 340, land: 1300, left: [1320, 1480, 1640], right: [1420, 1580, 1740], video: [1780, 1840] };
+  // The phone's fold. The card turns over in flight, slowly, and lands flush
+  // left on the video, level with the text, its back showing the left of the
+  // intro's first frame; there the gate takes over on the same pixels, and
+  // the rest of the frame unrolls to the right as the desktop's reel does: the
+  // first panel, folded behind the card, swings out on its left edge (card
+  // stock until it passes edge-on, then the print), then the second, folded
+  // behind the first, until the whole frame lies flat; then the video takes
+  // over on the same frame. Every time is in ms on the fold clock (PLAN.fold).
+  const FOLD_MS = { lift: 340, spin: [460, 1460], land: 1500, first: [1520, 1700, 1880], second: [1880, 2060, 2240], video: [2280, 2340] };
+  // The markup's two flaps are the two panels to the right of the card, each
+  // hinged on its left edge; the second waits unseen until the first is flat.
   const foldGeometry = (g) => {
     const gate = foArticle.querySelector('.fo-gate'), r = foFrame().getBoundingClientRect();
-    const W = r.width, H = r.height, w = Math.min(W, g.cr.w * g.s), left = (W - w) / 2, right = W - left - w;
+    const W = r.width, H = r.height, w = Math.min(W, g.cr.w * g.s), rest = (W - w) / 2;
     const art = (x) => ({ backgroundImage: 'var(--poster)', backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x}px 0` });
-    const mid = gate.querySelector('.fo-gate__mid'), fl = gate.querySelector('.fo-gate__flap--l'), fr = gate.querySelector('.fo-gate__flap--r');
-    Object.assign(mid.style, { left: `${left}px`, width: `${w}px`, ...art(left) });
-    Object.assign(fl.style, { left: '0px', width: `${left}px` });
-    Object.assign(fr.style, { left: `${left + w}px`, width: `${right}px` });
-    Object.assign(fl.querySelector(':scope > .fo-fold__front').style, { ...art(0), borderRadius: 'var(--r) 0 0 var(--r)' });
-    Object.assign(fr.querySelector(':scope > .fo-fold__front').style, { ...art(left + w), borderRadius: '0 var(--r) var(--r) 0' });
-    return { gate, fl, fr };
+    const mid = gate.querySelector('.fo-gate__mid'), p1 = gate.querySelector('.fo-gate__flap--l'), p2 = gate.querySelector('.fo-gate__flap--r');
+    Object.assign(mid.style, { left: '0px', width: `${w}px`, ...art(0) });
+    Object.assign(p1.style, { left: `${w}px`, width: `${rest}px`, transformOrigin: '0 50%' });
+    Object.assign(p2.style, { left: `${w + rest}px`, width: `${rest}px`, transformOrigin: '0 50%' });
+    Object.assign(p1.querySelector(':scope > .fo-fold__front').style, { ...art(w), borderRadius: '0' });
+    Object.assign(p2.querySelector(':scope > .fo-fold__front').style, { ...art(w + rest), borderRadius: '0 var(--r) var(--r) 0' });
+    return { gate, p1, p2 };
   };
   const foldOpen = (p, g, ms, fromY, c, clock) => {
     const opts = { duration: ms, fill: 'both', easing: 'linear' };
     const at = (t) => Math.min(1, t / clock.open);
     const { out, pick } = rise(g.cr, fromY);
-    const { gate, fl, fr } = foldGeometry(g);
+    const { gate, p1, p2 } = foldGeometry(g);
     const land = at(FOLD_MS.land);
+    // The card and the gate overlap for a few frames on the same pixels:
+    // swapped on the same instant, real Safari showed the gate a frame late,
+    // and for that frame nothing was there.
+    const shown = at(FOLD_MS.land - 30), gone = at(FOLD_MS.land + 60);
     return [
       p.card.animate([
         { offset: 0, transform: fromTf ?? tf(0, fromY, 1), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.3,.6,.2,1)' },
         { offset: at(FOLD_MS.lift), transform: tf(0, out, pick), zIndex: 4, opacity: 1 },
         { offset: at(FOLD_MS.lift) + .001, transform: tf(0, out, pick), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.55,.05,.3,1)' },
         { offset: land, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1 },
-        { offset: land + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+        { offset: gone, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1 },
+        { offset: gone + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
         { offset: 1, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
       ], opts),
-      ...spin(p, 0, 180, at(500), at(1180), opts),
+      ...spin(p, 0, 180, at(FOLD_MS.spin[0]), at(FOLD_MS.spin[1]), opts),
       p.backFoil.animate([
-        { offset: 0, opacity: 1 }, { offset: at(1100), opacity: 1 }, { offset: land, opacity: 0 }, { offset: 1, opacity: 0 },
+        { offset: 0, opacity: 1 }, { offset: at(FOLD_MS.spin[1] - 80), opacity: 1 }, { offset: land, opacity: 0 }, { offset: 1, opacity: 0 },
       ], opts),
       ...liftAnimations(p, out, fromY, at(FOLD_MS.lift), opts),
       ...panelIn({ from: at(FOLD_MS.lift), to: at(1140), scrim: [at(260), at(950)], fade: [at(1140), at(1700)] }, opts),
       gate.animate([
-        { offset: 0, visibility: 'hidden' }, { offset: land, visibility: 'hidden' }, { offset: land + .001, visibility: 'visible' },
+        { offset: 0, visibility: 'hidden' }, { offset: shown, visibility: 'hidden' }, { offset: shown + .001, visibility: 'visible' },
         { offset: at(FOLD_MS.video[1]), visibility: 'visible' }, { offset: Math.min(1, at(FOLD_MS.video[1]) + .001), visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
       ], opts),
-      // folded behind the card (a pixel back), each flap swings out its own way
-      ...crease(fl, FOLD_MS.left, at, opts, true, 1, -1),
-      ...crease(fr, FOLD_MS.right, at, opts, true, -1, -1),
+      // folded behind the card (a pixel back), the panels swing out rightward in turn
+      ...crease(p1, FOLD_MS.first, at, opts, true, -1, -1),
+      p2.animate([{ offset: 0, opacity: 0 }, { offset: at(FOLD_MS.first[2]), opacity: 0 }, { offset: at(FOLD_MS.first[2]) + .001, opacity: 1 }, { offset: 1, opacity: 1 }], opts),
+      ...crease(p2, FOLD_MS.second, at, opts, true, -1, -1),
       foFrame().animate([
         { offset: 0, opacity: 0 }, { offset: at(FOLD_MS.video[0]), opacity: 0 }, { offset: at(FOLD_MS.video[1]), opacity: 1 }, { offset: 1, opacity: 1 },
       ], opts),
     ];
   };
-  // And back: the video hands to the flat gate, the flaps fold in behind the
-  // middle panel, the card takes over on its back and turns as it flies home.
+  // And back: the video hands to the flat gate, the frame rolls up right to
+  // left behind the card, and the card takes over on its back and turns as it
+  // flies home.
   const foldClose = (p, c, raised, ms, clock) => {
     const opts = { duration: ms, fill: 'both', easing: 'linear' };
     const at = (t) => Math.min(1, t / clock.close);
     const r = foFrame().getBoundingClientRect();
     const top = Math.min(Math.max(r.top, -r.height), window.innerHeight);
-    const g = meet(p, { left: r.left, top, width: r.width, height: r.height }, .5);
+    const g = meet(p, { left: r.left, top, width: r.width, height: r.height }, 0);
     const endY = raised ? -RAISE * g.cr.h : 0;
     const { out, pick } = rise(g.cr, endY);
-    const { gate, fl, fr } = foldGeometry(g);
-    const swap = at(440), drop = at(1050);
+    const { gate, p1, p2 } = foldGeometry(g);
+    const swap = at(560), drop = at(1340);
+    const shown = at(520), gone = at(620);   // card and gate overlap at the swap, as on the way out
     return [
       foFrame().animate([{ offset: 0, opacity: 1 }, { offset: .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
       gate.animate([
-        { offset: 0, visibility: 'visible' }, { offset: swap, visibility: 'visible' }, { offset: swap + .001, visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
+        { offset: 0, visibility: 'visible' }, { offset: gone, visibility: 'visible' }, { offset: gone + .001, visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
       ], opts),
-      ...crease(fr, [0, 150, 300], at, opts, false, -1, -1),
-      ...crease(fl, [100, 250, 400], at, opts, false, 1, -1),
+      ...crease(p2, [0, 130, 260], at, opts, false, -1, -1),
+      p2.animate([{ offset: 0, opacity: 1 }, { offset: at(260), opacity: 1 }, { offset: at(260) + .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
+      ...crease(p1, [260, 390, 520], at, opts, false, -1, -1),
       p.card.animate([
         { offset: 0, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
-        { offset: swap, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
-        { offset: swap + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.45,0,.3,1)' },
+        { offset: shown, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
+        { offset: shown + .001, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1 },
+        { offset: swap, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 1, easing: 'cubic-bezier(.45,0,.3,1)' },
         { offset: drop, transform: tf(0, out, pick), zIndex: 50, opacity: 1 },
         { offset: drop + .001, transform: tf(0, out, pick), zIndex: 4, opacity: 1, easing: 'cubic-bezier(.2,.7,.2,1)' },
         { offset: 1, transform: tf(0, endY, 1), zIndex: 4, opacity: 1 },
       ], opts),
-      ...spin(p, 180, 0, at(480), at(1000), opts),
+      ...spin(p, 180, 0, at(600), at(1320), opts),
       p.backFoil.animate([
-        { offset: 0, opacity: 0 }, { offset: swap, opacity: 0 }, { offset: at(560), opacity: 1 }, { offset: 1, opacity: 1 },
+        { offset: 0, opacity: 0 }, { offset: swap, opacity: 0 }, { offset: at(700), opacity: 1 }, { offset: 1, opacity: 1 },
       ], opts),
       ...dropAnimations(p, out, endY, raised, drop, opts),
-      ...panelOut({ from: at(300), to: at(950), scrim: [at(450), at(1100)], fade: at(250) }, opts),
+      ...panelOut({ from: at(420), to: at(1150), scrim: [at(560), at(1350)], fade: at(300) }, opts),
     ];
   };
   // Dropping back into the binder is the same in every layout.
