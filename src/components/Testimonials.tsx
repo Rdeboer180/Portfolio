@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import SectionBadge from './SectionBadge';
+import SketchArrow from './SketchArrow';
+import { useReveal } from '../hooks/useReveal';
 import { SITE } from '../data/site';
 
 const QuoteIcon = () => (
@@ -30,12 +33,14 @@ const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 interface Testimonial {
   title: string;
   quote: React.ReactNode;
+  /** The lines the home card shows: a contiguous, verbatim run of the quote. */
+  excerpt: string;
   name: string;
   role: string;
   year: string;
 }
 
-// Preserve the existing recommendations verbatim; excerpts below are direct selections.
+// Preserve the existing recommendations verbatim; excerpts are direct selections.
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -46,6 +51,7 @@ const testimonials: Testimonial[] = [
         <p>A team or role that lets him lead projects across technical and nontechnical teams would truly flourish with him in the seat.</p>
       </>
     ),
+    excerpt: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.',
     name: 'Adam Payne',
     role: 'Web Design Manager (Ryan’s direct manager)',
     year: '2026',
@@ -59,8 +65,23 @@ const testimonials: Testimonial[] = [
         <p><H>Any product team would be better with him on it.</H></p>
       </>
     ),
+    excerpt: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens. He designs the whole experience.',
     name: 'Cheryl Carpenter',
     role: 'React Front-End Developer, Tire Rack (WheelRack build partner)',
+    year: '2026',
+  },
+  {
+    title: 'Design-to-Development on AEM',
+    quote: (
+      <>
+        <p>I&rsquo;ve had the pleasure of working with Ryan Deboer for <H>more than 10 years</H>. We first worked together as web designers. I later served as a lead web designer while Ryan was on the design team. For the past three years, I&rsquo;ve worked closely with him in my role as AEM Development Manager.</p>
+        <p>Ryan is a talented senior designer with a <H>strong understanding of AEM, HTML, and CSS</H>. He has been an excellent partner throughout our transition and upgrade to AEM Core Components, helping ensure that designs are <H>both visually strong and technically effective</H>. Since I moved into development, he has played a key role in <H>bridging the gap between creative vision and technical execution</H>. He is a key asset to any team!</p>
+        <p>Ryan is dependable, knowledgeable, detail-oriented, and genuinely a pleasure to work with. His collaboration and expertise have become such an important part of our work that I honestly <H>can&rsquo;t imagine working without him</H>. I highly recommend Ryan to any team looking for a skilled designer and strong cross-functional partner.</p>
+      </>
+    ),
+    excerpt: 'He has been an excellent partner throughout our transition and upgrade to AEM Core Components, helping ensure that designs are both visually strong and technically effective. Since I moved into development, he has played a key role in bridging the gap between creative vision and technical execution.',
+    name: 'Patrick Stines',
+    role: 'AEM Development Manager, Tire Rack (senior to Ryan, not his direct manager)',
     year: '2026',
   },
   {
@@ -72,6 +93,7 @@ const testimonials: Testimonial[] = [
         <p>Most importantly, Ryan is one of the kindest and most professional people I&rsquo;ve worked with. He combines talent, humility and a genuine desire to help his teammates succeed.</p>
       </>
     ),
+    excerpt: 'The quality of the experience our participants receive is a direct reflection of the effort and care he puts into it. As a designer, he has an exceptional eye for creating work that is clean, creative and visually engaging.',
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations at Tire Rack',
     year: '2026',
@@ -84,6 +106,7 @@ const testimonials: Testimonial[] = [
         <p>&hellip; He&rsquo;s always eager to ask questions, see what others have been working on, and find what knowledge he can glean from them. At the same time, he&rsquo;s <H>happy to share his own knowledge and what he has learned</H> from the work he&rsquo;s been doing.</p>
       </>
     ),
+    excerpt: 'He truly has a passion for improvement in both his professional and personal life. He is always looking for better and more efficient ways to do things. He loves trying new tools and refining existing processes.',
     name: 'Rob Oxley',
     role: 'Senior Web Designer, Tire Rack (design peer for over 10 years)',
     year: '2026',
@@ -96,6 +119,7 @@ const testimonials: Testimonial[] = [
         <p>He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. It&rsquo;s also evident that he genuinely <H>values and cares for his colleagues</H>.</p>
       </>
     ),
+    excerpt: 'He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.',
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager (overseeing design 2022-2024)',
     year: '2024',
@@ -110,17 +134,25 @@ const testimonials: Testimonial[] = [
         <p>I know that whenever we are paired together on a project, Ryan will <H>go out of his way to ensure the junior designer (me in this case) has the confidence they need</H> in order to make the project a success.</p>
       </>
     ),
+    excerpt: 'Since I started at Tire Rack almost 5 years ago, Ryan has always been a kind and thoughtful mentor to me as a Senior Designer on the Web Design team. He is a very intuitive and collaborative teammate, and always looks for ways that we can improve our design system and user experience throughout our sites.',
     name: 'Gina Saucedo',
     role: 'Web Designer, Tire Rack (Web Design team)',
     year: '2026',
   },
 ];
 
-const excerpts = [
-  { index: 0, text: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.' },
-  { index: 1, text: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens. He designs the whole experience.' },
-  { index: 4, text: 'He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.' },
-];
+// The home row, in reading order: manager, build partner, AEM partner, the
+// UX manager who oversaw design, then the two design peers. Amanda's stays in
+// the data for the full-quote surfaces.
+const FEATURED = ['Adam Payne', 'Cheryl Carpenter', 'Patrick Stines', 'Ryan Kokesh', 'Rob Oxley', 'Gina Saucedo'];
+const featured = FEATURED.map((name) => {
+  const t = testimonials.find((item) => item.name === name);
+  if (!t) throw new Error(`No testimonial for ${name}`);
+  return t;
+});
+
+const CARD_GAP = 24;        // $spacing-xl, the row's gap
+const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
 
 export const FeaturedEndorsement: React.FC = () => (
   <figure className="featured-endorsement">
@@ -129,25 +161,115 @@ export const FeaturedEndorsement: React.FC = () => (
   </figure>
 );
 
-const Testimonials: React.FC = () => (
-  <section id="testimonials" className="testimonials testimonials--concise ink-ground" aria-labelledby="testimonials-heading">
-    <div className="testimonials__container">
-      <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
-      <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
-      <div className="testimonials__grid">
-        {excerpts.map(({ index, text }) => {
-          const t = testimonials[index];
-          return <figure key={t.name} className="testimonials__card">
-            <QuoteMark />
-            <span className="testimonials__card-title">{t.title}</span>
-            <blockquote className="testimonials__quote">{text}</blockquote>
-            <figcaption className="testimonials__author"><span className="testimonials__name">{t.name}</span><span className="testimonials__role">{t.role}, {t.year}</span></figcaption>
-          </figure>;
-        })}
+const Testimonials: React.FC = () => {
+  const reduceMotion = useReducedMotion();
+  const [sectionRef, revealed] = useReveal<HTMLElement>(0.15);
+  const rowRef = useRef<HTMLDivElement>(null);
+
+  // The row is a scroll-snap carousel, the same one the case studies page
+  // through: a "page" is measured from it (how many cards fit the row, and
+  // which group of that many is in view) rather than imposed on it. The
+  // static file and the first render assume the desktop three.
+  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageCount = Math.max(1, Math.ceil(featured.length / perPage));
+  const page = Math.min(pageIndex, pageCount - 1);
+
+  const measure = useCallback(() => {
+    const el = rowRef.current;
+    const card = el?.querySelector<HTMLElement>('.testimonials__card');
+    if (!el || !card) return { fit: DEFAULT_PER_PAGE, step: 0 };
+    const fit = Math.max(1, Math.round((el.clientWidth + CARD_GAP) / (card.offsetWidth + CARD_GAP)));
+    return { fit, step: fit * (card.offsetWidth + CARD_GAP) };
+  }, []);
+
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return undefined;
+    let frame = 0;
+    const sync = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const { fit, step } = measure();
+        setPerPage(fit);
+        if (step > 0) setPageIndex(Math.round(el.scrollLeft / step));
+      });
+    };
+    sync();
+    el.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      el.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
+    };
+  }, [measure]);
+
+  // jsdom has no element scrollTo; the browser always does.
+  const goToPage = (next: number) => {
+    const el = rowRef.current;
+    const { step } = measure();
+    const target = Math.max(0, Math.min(pageCount - 1, next)) * step;
+    if (!el || typeof el.scrollTo !== 'function' || Math.round(el.scrollLeft) === target) return;
+    el.scrollTo({ left: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
+
+  return (
+    <section
+      id="testimonials"
+      ref={sectionRef}
+      className={`testimonials testimonials--concise ink-ground${revealed ? ' testimonials--revealed' : ''}`}
+      aria-labelledby="testimonials-heading"
+    >
+      <div className="testimonials__container">
+        <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
+        <div className="testimonials__nav">
+          <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
+          {/* The pager holds its place while there is one page, so the row
+              never shifts when a phone measures more pages after mount. */}
+          <div
+            className={`testimonials__pager${pageCount > 1 ? '' : ' testimonials__pager--single'}`}
+            aria-hidden={pageCount > 1 ? undefined : true}
+          >
+            <button
+              type="button"
+              className="testimonials__nav-btn"
+              onClick={() => goToPage(page - 1)}
+              aria-label="Previous recommendations"
+              disabled={page === 0}
+            >
+              <SketchArrow direction="left" className="testimonials__nav-svg" />
+            </button>
+            <span className="testimonials__pages" aria-live="polite">{page + 1} / {pageCount}</span>
+            <button
+              type="button"
+              className="testimonials__nav-btn testimonials__nav-btn--next"
+              onClick={() => goToPage(page + 1)}
+              aria-label="Next recommendations"
+              disabled={page >= pageCount - 1}
+            >
+              <SketchArrow direction="right" className="testimonials__nav-svg" />
+            </button>
+          </div>
+        </div>
+        <div className="testimonials__grid" ref={rowRef}>
+          {featured.map((t, i) => (
+            <figure key={t.name} className="testimonials__card">
+              <QuoteMark />
+              <span className="testimonials__card-title">{t.title}</span>
+              <blockquote className="testimonials__quote">{t.excerpt}</blockquote>
+              <figcaption className="testimonials__author">
+                <span className="testimonials__name">{t.name}</span>
+                <span className="testimonials__role">{t.role}, {t.year}</span>
+                <span className="testimonials__index" aria-hidden="true">{String(i + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer"><span>Read recommendations on LinkedIn <span aria-hidden="true">↗</span></span><span className="sr-only"> (opens in a new tab)</span></a>
       </div>
-      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer"><span>Read recommendations on LinkedIn <span aria-hidden="true">↗</span></span><span className="sr-only"> (opens in a new tab)</span></a>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default Testimonials;

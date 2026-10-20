@@ -20,6 +20,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { motion, useReducedMotion } from 'framer-motion';
 import ProjectLink from './ProjectLink';
 import SectionBadge from './SectionBadge';
+import SketchArrow from './SketchArrow';
 import { cardTitleFor, clientLabelFor, orderedProjects, yearSpanFor } from '../data/projects';
 import { WORK_GROUPS, studiesFor } from '../data/workGroups';
 import { useReveal } from '../hooks/useReveal';
@@ -109,29 +110,6 @@ const BriefcaseIcon = () => (
     <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a3.739,3.739,0,0,0,3.73,3.74H56.27A3.739,3.739,0,0,0,60,54.35V31.92A3.739,3.739,0,0,0,56.27,28.18H55.44Z" />
     <path d="M27.32,17.06a7.613,7.613,0,0,1,5.43,2.29l4.97,5.09a1.639,1.639,0,0,0,1.14.48c1.215.049,15.812-.107,16.58.08-.044-.577.109-9.054-.11-9.32-1.228-.002-9.544.001-10.98,0a4.432,4.432,0,0,1-4.43-4.43V4H15.4a3.73,3.73,0,0,0-3.73,3.73V17.06Z" />
     <path d="M44.35,13.68H54.42a4.425,4.425,0,0,0-.98-1L42.6,4.46a4.339,4.339,0,0,0-.68-.43v7.22A2.433,2.433,0,0,0,44.35,13.68Z" />
-  </svg>
-);
-
-// Hand-sketched carousel arrows — same vocabulary as the hero intro arrows
-// (wobbly cubic strokes, pathLength=1, drawn in via stroke-dashoffset on reveal)
-const SketchArrow = ({ direction }: { direction: 'left' | 'right' }) => (
-  <svg
-    className="case-playground__nav-svg"
-    viewBox="0 0 44 44"
-    aria-hidden="true"
-    focusable="false"
-  >
-    {direction === 'right' ? (
-      <>
-        <path d="M6 23 C 14 19, 26 19, 37 22" fill="none" strokeLinecap="round" pathLength={1} />
-        <path d="M37 22 L29.5 15.5 M37 22 L30.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
-      </>
-    ) : (
-      <>
-        <path d="M38 23 C 30 19, 18 19, 7 22" fill="none" strokeLinecap="round" pathLength={1} />
-        <path d="M7 22 L14.5 15.5 M7 22 L13.5 28.5" fill="none" strokeLinecap="round" pathLength={1} />
-      </>
-    )}
   </svg>
 );
 
@@ -646,7 +624,7 @@ const CaseStudyPlayground: React.FC = () => {
                   aria-label="Previous case studies"
                   disabled={page === 0}
                 >
-                  <SketchArrow direction="left" />
+                  <SketchArrow direction="left" className="case-playground__nav-svg" />
                 </button>
                 <span className="case-playground__pages" aria-live="polite">{page + 1} / {pageCount}</span>
                 <button
@@ -656,7 +634,7 @@ const CaseStudyPlayground: React.FC = () => {
                   aria-label="Next case studies"
                   disabled={page >= pageCount - 1}
                 >
-                  <SketchArrow direction="right" />
+                  <SketchArrow direction="right" className="case-playground__nav-svg" />
                 </button>
               </div>
             )}

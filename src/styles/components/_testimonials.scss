@@ -310,13 +310,109 @@
   // ==========================================
   // Zone C — Testimonial grid
   // ==========================================
+  // The lede on the left, the row's pager on the right. Where both do not
+  // fit, the pager wraps under the lede and stays right-aligned.
+  &__nav {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $spacing-md $spacing-xl;
+    margin: $spacing-xl 0 $spacing-2xl;
+  }
+
+  &__pager {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-left: auto;
+  }
+
+  // One page: the pager keeps its place but is not there to see or to tab
+  // to, so a phone that measures more pages after mount never shifts the row.
+  &__pager--single { visibility: hidden; }
+
+  &__pages {
+    min-width: 5ch;
+    text-align: center;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+  }
+
+  // Sketch arrows: the case-study row's paging, drawn in on reveal
+  &__nav-btn {
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-neutral-dark;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+
+    &:hover {
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+      border-radius: var(--radius-md);
+    }
+
+    &[disabled] {
+      opacity: 0.35;
+      cursor: default;
+      transform: none;
+      color: $color-neutral-dark;
+    }
+  }
+
+  &__nav-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    path {
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 650ms ease 250ms;
+    }
+  }
+
+  // Second arrow (and each arrowhead) draws slightly later — sketched, not stamped
+  &__nav-btn--next &__nav-svg path { transition-delay: 480ms; }
+  &__nav-svg path:nth-child(2) { transition-delay: 620ms; }
+  &__nav-btn--next &__nav-svg path:nth-child(2) { transition-delay: 850ms; }
+  &--revealed &__nav-svg path { stroke-dashoffset: 0; }
+
+  // The row: a scroll-snap carousel at every width (touch swipes, keyboard
+  // scrolls, the arrows page). Three cards fit the desktop row; the rest sit
+  // off the right edge. The row has no scrollbar of its own.
   &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: $spacing-xl;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    // Room for the accent corners and the hover lift, which the overflow
+    // clip would otherwise cut.
+    padding: 6px 6px $spacing-sm;
+    margin: -6px -6px 0;
+
+    &::-webkit-scrollbar { display: none; }
   }
 
   &__card {
+    flex: 0 0 calc((100% - #{$spacing-xl * 2}) / 3);
+    scroll-snap-align: start;
     background: $color-white;
     border-radius: $card-border-radius;
     padding: $spacing-3xl $spacing-2xl $spacing-2xl;
@@ -451,6 +547,16 @@
     color: $color-neutral-muted;
   }
 
+  // The card's place in the row, the way a case-study card carries its index.
+  &__index {
+    margin-top: $spacing-xs;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: $color-neutral-muted;
+  }
+
   // Composes the shared atom (_linkedin-link.scss); only the
   // card-local spacing lives here.
   &__source-link {
@@ -491,8 +597,8 @@
       max-width: 100%;
     }
 
-    &__grid {
-      grid-template-columns: 1fr 1fr;
+    &__card {
+      flex-basis: calc((100% - #{$spacing-xl}) / 2);
     }
   }
 }
@@ -519,9 +625,9 @@
       transform: translate(6px, 6px) rotate(-1.5deg);
     }
 
-    &__grid {
-      grid-template-columns: 1fr;
-    }
+    // One card at a time; the next one's edge shows so the row reads as a row.
+    &__grid { align-items: flex-start; }
+    &__card { flex-basis: 82vw; }
   }
 }
 
@@ -542,7 +648,11 @@
     &__card,
     &__card::before,
     &__card::after,
-    &__card-title { transition: none !important; }
+    &__card-title,
+    &__nav-btn,
+    &__nav-svg path { transition: none !important; }
+
+    &__nav-svg path { stroke-dashoffset: 0; }
 
     // Show stars in their final colored state without staggered timing
     &__team-score-star {
@@ -558,7 +668,7 @@
 
 // Short, attributed peer evidence; LinkedIn is the source for full recommendations.
 .testimonials--concise {
-  .testimonials__lede { margin: var(--space-xl) 0 var(--space-2xl); }
+  .testimonials__lede { margin: 0; }
   .testimonials__card { padding: var(--space-xl); gap: var(--space-lg); }
   .testimonials__quote { font-style: normal; }
   .testimonials__cta { margin-top: var(--space-2xl); }
