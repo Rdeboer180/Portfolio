@@ -22,7 +22,7 @@ Then open <http://127.0.0.1:3100/docs/explorations/binder-specimen/>. The `.clau
 
 ## What stays out of git
 
-`heroes/`, `captures/` and `reference.jpg` are ignored on purpose. The repository is public, the hero package marks its art as private review drafts, and five of the locked heroes show Tire Rack branding. The two scripts regenerate the first two on this machine. The first commit on this branch still holds `reference.jpg` and the first pass's PlayDraft stills, so squash or drop that commit before any push if they should stay private.
+`heroes/`, `hero-overrides/`, `captures/` and `reference.jpg` are ignored on purpose. The repository is public, the hero package marks its art as private review drafts, and six of the seven locked heroes show Tire Rack branding. The two scripts regenerate `heroes/` and `captures/` on this machine. The first commit on this branch still holds `reference.jpg` and the first pass's PlayDraft stills, so squash or drop that commit before any push if they should stay private.
 
 ## What the page is
 
@@ -41,7 +41,7 @@ Everything comes from `src/data/projects.ts` through `build-cards.mjs`, except w
 | Front | index | position in `orderedProjects()`, i.e. `WORK_ORDER` |
 | Front | title and subtitle | `cardTitleFor()`, split at the colon |
 | Front | type badge | first of `groups`: product, systems or AEM; Heatherwood has none and shows a globe |
-| Front | hero | the manifest's `web/` WebP; alt text from the manifest, with "Tire Rack" removed on locked cards |
+| Front | hero | a file Ryan supplied in `hero-overrides/`, else the manifest's `web/` WebP; alt text from the manifest, or from `build-cards.mjs` where the image changed, with "Tire Rack" removed on locked cards |
 | Front | lock | `stream === 'professional'`, the same rule the homepage uses |
 | Front | rows | `metrics[0..2]`; the label splits at " · ", ":" or a closing parenthesis |
 | Front | footer | `yearSpanFor()` and `overview.category` |
@@ -61,7 +61,8 @@ Not on any card: HP, attack values, months, or numbers the study does not state.
 
 ## The hero package, as received
 
-- **Two native PNGs do not match their web copies.** AEM Component System and Seasonal content differ between `artwork/` and `web/`. The AEM PNG is the older stress-test composition on a purple neon ground. In both cases the web copy matches the review sheets Ryan approved, so the specimen uses `web/`. Anyone integrating from `artwork/` would ship the wrong two.
+- **Four heroes come from Ryan, not the package.** On 19 October Ryan supplied the current images for AEM Component System, Bolus Binder, Seasonal content and Heatherwood. They sit in `hero-overrides/` and win over the package.
+- **The package's `web/` copies of AEM and Seasonal content are stale.** Ryan's Seasonal image matches the package's PNG. His AEM image is the PNG's composition on a neutral ground instead of purple. Bolus Binder and Heatherwood were already current in `web/`. Integrate from Ryan's files, not from `web/`.
 - **Two files the handoff names are not in the folder.** `generation-records.json` is missing. The version-1 PNGs for Bolus Binder and Heatherwood are not in `artwork/`, though they still exist in the Codex outputs folder the manifest points to.
 - Every other path in `manifest.json` and `prompts.json` resolves.
 
@@ -94,7 +95,7 @@ The capture script also checks behaviour and prints it: focus lands on Turn over
 | # | Decision | Why it matters | Owner |
 |---|---|---|---|
 | 1 | Publish the heroes | AI-generated; small text, charts and logos can differ from the real screens. The package marks them private drafts. | Ryan |
-| 2 | Tire Rack branding on locked fronts | Five heroes show it and the AEM hero shows the headquarters. The site anonymizes the client while a study is locked. | Ryan |
+| 2 | Tire Rack branding on locked fronts | Six of the seven locked heroes show it. The site anonymizes the client while a study is locked. | Ryan |
 | 3 | Uneven values | Real metrics replace the reference's numbers, so values range from "4" to "React Native + Expo". | Astra |
 | 4 | Locked backs | Need real access control before any protected copy exists in a page. | Opus, running now |
 | 5 | Collection navigation | The pager is a placeholder. | Ryan |

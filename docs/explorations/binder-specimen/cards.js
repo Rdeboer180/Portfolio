@@ -11,7 +11,7 @@ window.BINDER_CARDS = [
     "groupLabel": "Product design",
     "hero": "heroes/wheelrack.webp",
     "heroAlt": "WheelRack system sheets with typography, color specimens and automotive interface components.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "Wholesale",
@@ -46,7 +46,7 @@ window.BINDER_CARDS = [
     "groupLabel": "Product design",
     "hero": "heroes/playdraft.webp",
     "heroAlt": "Three PlayDraft mobile screens showing pack discovery, a live draft board and a champion result.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "Launched",
@@ -126,8 +126,8 @@ window.BINDER_CARDS = [
     "group": "aem",
     "groupLabel": "AEM",
     "hero": "heroes/aem-component-system.webp",
-    "heroAlt": "Two AEM component specimens showing a suspension category hero and a headquarters teaser.",
-    "heroRevision": 2,
+    "heroAlt": "An AEM page editor open on a homepage hero, with its style options, a site-structure map and the button component states.",
+    "heroSource": "supplied",
     "stats": [
       {
         "value": "60%",
@@ -162,7 +162,7 @@ window.BINDER_CARDS = [
     "groupLabel": "AEM",
     "hero": "heroes/tire-categories.webp",
     "heroAlt": "A performance tire category screen beside an enlarged comparison chart.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "Up to +50%",
@@ -197,7 +197,7 @@ window.BINDER_CARDS = [
     "groupLabel": "Product design",
     "hero": "heroes/loopstack.webp",
     "heroAlt": "LoopStack glucose dashboard on a phone beside its green identity and a chart motif.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "90 days",
@@ -267,7 +267,7 @@ window.BINDER_CARDS = [
     "groupLabel": "System design",
     "hero": "heroes/design-enablement.webp",
     "heroAlt": "Hero Crop Simulator with desktop and mobile photograph previews and red crop guides.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "3 → 1",
@@ -302,7 +302,7 @@ window.BINDER_CARDS = [
     "groupLabel": "System design",
     "hero": "heroes/figma-template-governance.webp",
     "heroAlt": "Four Figma plugins presented in a published-tools panel.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "4",
@@ -331,7 +331,7 @@ window.BINDER_CARDS = [
     "groupLabel": "AEM",
     "hero": "heroes/landing-pages.webp",
     "heroAlt": "Three automotive campaign pages arranged as overlapping panels.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "50+",
@@ -365,8 +365,8 @@ window.BINDER_CARDS = [
     "group": "aem",
     "groupLabel": "AEM",
     "hero": "heroes/seasonal-content-system.webp",
-    "heroAlt": "Warehouse and winter mobile commerce hero variants with an AEM authoring panel behind them.",
-    "heroRevision": 1,
+    "heroAlt": "Standard and winter phone homepages beside the AEM folder of winter hero fragments.",
+    "heroSource": "supplied",
     "stats": [
       {
         "value": "20+",
@@ -401,7 +401,7 @@ window.BINDER_CARDS = [
     "groupLabel": "Product design",
     "hero": "heroes/bolus-binder.webp",
     "heroAlt": "Bolus Binder recipe preview with net-carb, protein and fat rings and the estimated two-wave absorption curve.",
-    "heroRevision": 2,
+    "heroSource": "supplied",
     "stats": [
       {
         "value": "React Native + Expo",
@@ -474,7 +474,7 @@ window.BINDER_CARDS = [
     "groupLabel": "System design",
     "hero": "heroes/overscroll-tactics.webp",
     "heroAlt": "Black OTC Games identity printed on warm textured paper.",
-    "heroRevision": 1,
+    "heroSource": "package",
     "stats": [
       {
         "value": "2 runtimes",
@@ -547,7 +547,7 @@ window.BINDER_CARDS = [
     "groupLabel": "Client site",
     "hero": "heroes/heatherwood.webp",
     "heroAlt": "Heatherwood equestrian homepage with three horses beside Riding Lessons and Summer Camps service cards.",
-    "heroRevision": 2,
+    "heroSource": "supplied",
     "stats": [
       {
         "value": "~3⁠–⁠4⁠/⁠mo → 4⁠–⁠5⁠/⁠day",

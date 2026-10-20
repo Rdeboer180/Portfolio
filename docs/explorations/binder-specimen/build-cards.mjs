@@ -9,7 +9,7 @@
 // studies get no back: the specimen ships nothing a locked card would hide.
 import { createRequire } from 'node:module';
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -31,6 +31,16 @@ const P = mod.exports;
 
 const manifest = JSON.parse(readFileSync(join(heroDir, 'manifest.json'), 'utf8'));
 const heroBySlug = new Map(manifest.map((entry) => [entry.slug, entry]));
+
+// Heroes Ryan supplied after the package (19 October). A file in
+// hero-overrides/ wins over the package's web copy. Where the image changed,
+// its alt text lives here, because the manifest describes the older one.
+const OVERRIDE_DIR = join(here, 'hero-overrides');
+const OVERRIDE_ALT = {
+  'aem-component-system': 'An AEM page editor open on a homepage hero, with its style options, a site-structure map and the button component states.',
+  'seasonal-content-system': 'Standard and winter phone homepages beside the AEM folder of winter hero fragments.',
+};
+const overrideFor = (slug) => ['webp', 'png', 'jpg'].map((ext) => join(OVERRIDE_DIR, `${slug}.${ext}`)).find((p) => existsSync(p));
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
@@ -106,13 +116,17 @@ const cards = P.orderedProjects().map((project, i) => {
   const locked = project.stream === 'professional';
   const hero = heroBySlug.get(project.slug);
   if (!hero) throw new Error(`No hero in the manifest for ${project.slug}`);
-  copyFileSync(join(heroDir, hero.web), join(here, 'heroes', `${project.slug}.webp`));
+  const override = overrideFor(project.slug);
+  const heroFile = override ?? join(heroDir, hero.web);
+  const heroName = `${project.slug}${extname(heroFile)}`;
+  copyFileSync(heroFile, join(here, 'heroes', heroName));
+  const alt = (override && OVERRIDE_ALT[project.slug]) || hero.alt;
 
   const [title, subtitle = ''] = P.cardTitleFor(project).split(/:\s+/);
   const titleClass = titleSize(title, subtitle);
   const group = project.groups?.[0] ?? 'client';
   // Locked studies never name the client; the manifest's alt text sometimes does.
-  const heroAlt = locked ? hero.alt.replace(/Tire Rack('s)?\s/g, '') : hero.alt;
+  const heroAlt = locked ? alt.replace(/Tire Rack('s)?\s/g, '') : alt;
 
   const card = {
     slug: project.slug,
@@ -123,9 +137,9 @@ const cards = P.orderedProjects().map((project, i) => {
     locked,
     group,
     groupLabel: GROUP_LABEL[group],
-    hero: `heroes/${project.slug}.webp`,
+    hero: `heroes/${heroName}`,
     heroAlt,
-    heroRevision: hero.revision,
+    heroSource: override ? 'supplied' : 'package',
     stats: (project.metrics ?? []).slice(0, 3).map(stat),
     year: P.yearSpanFor(project),
     category: project.overview?.category ?? project.clientLabel ?? '',
