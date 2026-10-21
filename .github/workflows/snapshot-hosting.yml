@@ -42,6 +42,20 @@ jobs:
           echo "commit on main when captured: $GITHUB_SHA" > snapshot/README.txt
           echo "live-site.tar.gz: the server's docroot exactly as served; server-report.txt: versions, PHP use per site, the portfolio's serving directives, the Varnish config (IPs blanked)." >> snapshot/README.txt
 
+      # The host keeps the portfolio's nginx rules where this account can't
+      # read them, so how the site is served (status, compression, caching,
+      # types) is recorded from outside, as a visitor gets it.
+      - name: Record the live responses
+        run: |
+          for path in / /work/playdraft/ /notes/ /dive/ /about/ /Ryan-DeBoer-Resume.pdf /binder-home/binder.js /binder-home/textures/blanket.webp /fonts/inter-latin.c9407645.woff2 /sitemap.xml /robots.txt /nope-404/; do
+            echo "### $path"
+            curl -s -o /dev/null -D - -H 'Accept-Encoding: br, gzip' "https://www.rdeboerdesigns.com$path" | grep -iE '^(HTTP|content-type|content-encoding|cache-control|expires|vary|location|x-cache|age|server)' | sort
+            echo
+          done > snapshot/live-headers.txt
+          main=$(curl -s https://www.rdeboerdesigns.com/ | grep -o '/static/js/main[^"]*\.js' | head -1)
+          { echo "### $main"; curl -s -o /dev/null -D - -H 'Accept-Encoding: br, gzip' "https://www.rdeboerdesigns.com$main" | grep -iE '^(HTTP|content-encoding|cache-control|expires)' | sort; } >> snapshot/live-headers.txt
+          echo "header blocks: $(grep -c '^###' snapshot/live-headers.txt)"
+
       - name: Save the snapshot
         uses: actions/upload-artifact@v4
         with:
