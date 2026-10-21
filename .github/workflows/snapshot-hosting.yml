@@ -1,0 +1,50 @@
+name: Snapshot hosting
+
+# A read-only copy of what the server is serving and how, to restore or
+# compare against after a server change (the PHP 8.4 upgrade, October 2026).
+# Run it by hand (Actions › Snapshot hosting › Run workflow) before and after.
+# It writes nothing on the server. What it saves is listed in
+# scripts/snapshot-hosting.sh; nothing private goes in, because the
+# repository is public and so are its artifacts to signed-in GitHub users.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: Install SSH helper
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Capture the server report and the live site's files
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_TARGET: ${{ secrets.SSH_TARGET }}
+        run: |
+          mkdir -p snapshot
+          remote() { sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 "$SSH_USER@$SSH_HOST" "$@"; }
+          remote "bash -s -- '$SSH_TARGET'" < scripts/snapshot-hosting.sh > snapshot/server-report.txt
+          remote "tar -C '$SSH_TARGET' -czf - ." > snapshot/live-site.tar.gz
+          # counts only in the log, never the contents
+          echo "report lines: $(wc -l < snapshot/server-report.txt)"
+          echo "site files: $(tar -tzf snapshot/live-site.tar.gz | grep -vc '/$')  archive: $(du -h snapshot/live-site.tar.gz | cut -f1)"
+          echo "commit on main when captured: $GITHUB_SHA" > snapshot/README.txt
+          echo "live-site.tar.gz: the server's docroot exactly as served; server-report.txt: versions, PHP use per site, the portfolio's serving directives, the Varnish config (IPs blanked)." >> snapshot/README.txt
+
+      - name: Save the snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: hosting-snapshot-${{ github.run_number }}
+          path: snapshot/
+          retention-days: 90

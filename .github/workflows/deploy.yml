@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  # Redeploy main by hand (Actions › Build & Deploy › Run workflow): if the
+  # server's copy of the site is ever damaged, this rebuilds it from git and
+  # puts it back exactly, --delete included, without a code change.
+  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
