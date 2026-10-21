@@ -218,6 +218,12 @@ async function main() {
       // it is never here; stripping it anyway keeps that true if a gate moves.
       clone.querySelectorAll('.unlock-bar, .password-modal, .password-modal__overlay, .case-playground__unlock, .side-panel--work')
         .forEach((el) => el.remove());
+      // The homepage binder (CaseStudyBinder) mounts its host and loads its
+      // script after hydration, so neither belongs in the static file: the host
+      // inside the slot React renders empty threw #418 and redrew the whole
+      // page on every load, and the captured script tag held up the page head
+      // with 58 KB before any content showed, then loaded a second time.
+      clone.querySelectorAll('.case-binder__host, script[src*="/binder-home/"], a[data-from-binder]').forEach((el) => el.remove());
 
       // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its
       // modifier classes straight to the DOM after the copy resolves — React

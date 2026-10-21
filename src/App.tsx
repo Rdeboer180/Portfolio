@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, lazy } from 'react';
+import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useParams, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import PageShell from './components/PageShell';
 import { isPanelRoute } from './utils/panelRoutes';
@@ -12,7 +12,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import SelectedWriting from './components/SelectedWriting';
 import SkillMastery from './components/SkillMastery';
-import CaseStudyPlayground from './components/CaseStudyPlayground';
+import CaseStudyBinder from './components/CaseStudyBinder';
 import SystemsInPractice from './components/SystemsInPractice';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
@@ -23,11 +23,10 @@ import { SEARCH_META } from './data/seo';
 import { scrollBehavior } from './utils/motion';
 import { UnlockProvider, useUnlock } from './context/UnlockContext';
 import PasswordModal from './components/PasswordModal';
-import { AuthorModeProvider } from './context/AuthorModeContext';
+import { AuthorModeProvider, useAuthorMode } from './context/AuthorModeContext';
 import { WorkNavigatorProvider } from './context/WorkNavigatorContext';
 import AuthoredSection from './components/AuthoredSection';
 import AuthorBar from './components/AuthorBar';
-import AuthorSidePanel from './components/AuthorSidePanel';
 import PageProperties from './components/PageProperties';
 import LayoutGrid from './components/LayoutGrid';
 import { AUTHORED_COMPONENTS } from './data/authorChrome';
@@ -46,6 +45,14 @@ const SitemapPage = lazy(() => import('./components/SitemapPage'));
 const TalentAtlasPage = lazy(() => import('./components/TalentAtlasPage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
+// The author panel (its finder, the work navigator, the project data and
+// framer-motion with them) loads only once it is opened in author mode.
+const AuthorSidePanel = lazy(() => import('./components/AuthorSidePanel'));
+function AuthorSidePanelGate() {
+  const { authoring, ui } = useAuthorMode();
+  if (!authoring || !ui.panelOpen) return null;
+  return <Suspense fallback={null}><AuthorSidePanel /></Suspense>;
+}
 
 // Redirect legacy hash URLs (#/work/x, #/about, …) to their real paths, and
 // scroll to the anchored section (or top) on every navigation.
@@ -90,6 +97,11 @@ function RouteEffects() {
 
 function HomeRoute() {
   const homeLocation = useLocation();
+  // The homepage's grey grounds carry the desk's grain (src/styles/components/_desk.scss).
+  useEffect(() => {
+    document.documentElement.classList.add('home-desk');
+    return () => document.documentElement.classList.remove('home-desk');
+  }, []);
   useEffect(() => {
     const grounds = document.querySelectorAll<HTMLElement>('.ink-ground');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -129,8 +141,13 @@ function HomeRoute() {
         {/* Below the fold the page is addressable: every section is a component
             the author chrome can name, select and annotate. The specs live in
             src/data/authorChrome.ts so the Asset Panel reads the same list. */}
+        {/* The work as the collectible binder, right under the hero, under the
+            section's "01 / Case studies" header; the endorsement that led the
+            old section is gone. The old section is parked, not deleted: put
+            <CaseStudyPlayground /> back here (and its import) to return to the
+            cards (tag parked/case-study-cards, 21 October 2026). */}
         <AuthoredSection {...AUTHORED_COMPONENTS.playground}>
-          <CaseStudyPlayground />
+          <CaseStudyBinder />
         </AuthoredSection>
         <AuthoredSection {...AUTHORED_COMPONENTS.writing}>
           <SelectedWriting />
@@ -150,12 +167,13 @@ function HomeRoute() {
         <AuthoredSection {...AUTHORED_COMPONENTS.faq}>
           <FAQ />
         </AuthoredSection>
-        <Footer />
       </PageShell>
+      {/* After <main>, not in it, so it is the page's contentinfo landmark */}
+      <Footer />
       {authorChrome && (
         <>
           <LayoutGrid />
-          <AuthorSidePanel />
+          <AuthorSidePanelGate />
           <PageProperties />
           <AuthorBar />
         </>
@@ -186,8 +204,8 @@ function CaseStudyRoute() {
  * The standing bar that used to live here is gone. It rendered above the nav on
  * every page, which made "enter the site password" the first line of the site —
  * the worst possible first impression for chrome whose whole job was to be a
- * quiet standing offer. The affordance now lives in the work section
- * (CaseStudyPlayground), beside the locked objects it actually unlocks.
+ * quiet standing offer. The affordance now lives in the work section (the
+ * binder's locked cards), beside the locked objects it actually unlocks.
  *
  * The modal is held back until after mount, and that delay is load-bearing:
  * the prerender step strips this chrome out of every static file on purpose,
@@ -202,7 +220,7 @@ function CaseStudyRoute() {
  * the note on it.
  */
 function UnlockChrome() {
-  const { promptOpen, unlock, dismissPrompt, continueLocked, unlocked, resolving } = useUnlock();
+  const { promptOpen, pendingStudy, unlock, dismissPrompt, continueLocked, unlocked, resolving } = useUnlock();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
@@ -232,6 +250,7 @@ function UnlockChrome() {
       {mounted && promptOpen && (
         <PasswordModal
           variant="site"
+          study={pendingStudy ?? undefined}
           onUnlock={unlock}
           onDismiss={dismissPrompt}
           onContinue={continueLocked}

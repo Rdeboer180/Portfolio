@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import '../styles/components/_wheelrack-library-tour.scss';
 
 const ROOT = '/images/work/wheelrack/';

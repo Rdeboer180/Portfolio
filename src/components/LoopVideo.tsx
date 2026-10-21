@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 /** Silent, GIF-like media. The whole frame is the keyboard and touch toggle. */
 export default function LoopVideo({ src, poster, label, captions }: { src: string; poster?: string; label: string; captions?: string }) {

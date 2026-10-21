@@ -200,3 +200,16 @@
     height: calc(280px * 19.5 / 9 + 20px - 32px);
   }
 }
+
+// Opened from the homepage binder (BinderTop): the binder's top leads the
+// body column, the rail beside it and the rest of the study under it; on a
+// phone, where the rail stacks, it comes first so the card lands on screen.
+.project-overview--binder {
+  row-gap: $spacing-xl;
+  .project-overview__binder-top { grid-column: 2; grid-row: 1; min-width: 0; scroll-margin-top: $spacing-xl; }
+  .project-overview__rail { grid-column: 1; grid-row: 1 / span 2; }
+  .project-overview__body { grid-column: 2; grid-row: 2; }
+  @media (max-width: 700px) {
+    .project-overview__binder-top { margin-bottom: $spacing-xl; }
+  }
+}

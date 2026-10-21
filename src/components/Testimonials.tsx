@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 import SectionBadge from './SectionBadge';
-import SketchArrow from './SketchArrow';
 import { useReveal } from '../hooks/useReveal';
-import { SITE } from '../data/site';
+import { EMAIL_HREF, SITE } from '../data/site';
 
 const QuoteIcon = () => (
   <svg viewBox="0 0 180 169.8" fill="currentColor" stroke="none">
@@ -20,12 +18,6 @@ const QuoteIcon = () => (
   </svg>
 );
 
-const QuoteMark = () => (
-  <svg className="testimonials__quote-mark" viewBox="0 0 32 32" fill="currentColor">
-    <path d="M4 20.5c0-4.4 3.6-8 8-8h.5V10c0-3.3-2.7-6-6-6H6C4.9 4 4 3.1 4 2s.9-2 2-2h.5C12.3 0 17 4.7 17 10.5v10c0 3-2.5 5.5-5.5 5.5h-2C6.5 26 4 23.5 4 20.5zm18 0c0-4.4 3.6-8 8-8h.5V10c0-3.3-2.7-6-6-6H24c-1.1 0-2-.9-2-2s.9-2 2-2h.5C30.3 0 35 4.7 35 10.5v10c0 3-2.5 5.5-5.5 5.5h-2c-3 0-5.5-2.5-5.5-5.5z" />
-  </svg>
-);
-
 const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
 );
@@ -33,11 +25,13 @@ const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 interface Testimonial {
   title: string;
   quote: React.ReactNode;
-  /** The lines the home card shows: a contiguous, verbatim run of the quote. */
+  /** A contiguous, verbatim run of the quote: the preview line in the list. */
   excerpt: string;
   name: string;
   role: string;
   year: string;
+  /** How they worked with Ryan, as their own recommendation says it; left out where it doesn't. */
+  relation?: string;
 }
 
 // Preserve the existing recommendations verbatim; excerpts are direct selections.
@@ -55,6 +49,7 @@ const testimonials: Testimonial[] = [
     name: 'Adam Payne',
     role: 'Web Design Manager, Tire Rack',
     year: '2026',
+    relation: 'Managed Ryan directly',
   },
   {
     title: 'Design–Engineering Partnership',
@@ -69,6 +64,7 @@ const testimonials: Testimonial[] = [
     name: 'Cheryl Carpenter',
     role: 'React Front-End Developer, Tire Rack',
     year: '2026',
+    relation: 'Ryan’s build partner on WheelRack',
   },
   {
     title: 'Design-to-Development on AEM',
@@ -83,6 +79,7 @@ const testimonials: Testimonial[] = [
     name: 'Patrick Stines',
     role: 'AEM Development Manager, Tire Rack',
     year: '2026',
+    relation: 'Worked with Ryan 10+ years',
   },
   {
     title: 'Craft, Care, and Growth',
@@ -97,6 +94,7 @@ const testimonials: Testimonial[] = [
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations, Tire Rack',
     year: '2026',
+    relation: 'Runs a development program with Ryan',
   },
   {
     title: 'Process Improvement & Shared Learning',
@@ -110,6 +108,7 @@ const testimonials: Testimonial[] = [
     name: 'Rob Oxley',
     role: 'Senior Web Designer, Tire Rack',
     year: '2026',
+    relation: 'Design peer for 10+ years',
   },
   {
     title: 'Systems Knowledge & Cross-Team Trust',
@@ -123,6 +122,7 @@ const testimonials: Testimonial[] = [
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager, Tire Rack',
     year: '2024',
+    relation: 'Direct manager, 2021–2025',   // Ryan, 21 October: his manager of design and UX
   },
   {
     title: 'Mentorship & Confidence',
@@ -138,6 +138,7 @@ const testimonials: Testimonial[] = [
     name: 'Gina Saucedo',
     role: 'Web Designer, Tire Rack',
     year: '2026',
+    relation: 'Mentored by Ryan',
   },
 ];
 
@@ -151,8 +152,12 @@ const featured = FEATURED.map((name) => {
   return t;
 });
 
-const CARD_GAP = 24;        // $spacing-xl, the row's gap
-const DEFAULT_PER_PAGE = 3; // the desktop row; measured after mount
+const initials = (name: string) => name.split(' ').map((part) => part[0]).join('');
+// First names on a phone's row; a Ryan who isn't this Ryan gets his initial
+const shortName = (name: string) => {
+  const [first, last] = name.split(' ');
+  return first === 'Ryan' ? `${first} ${last[0]}.` : first;
+};
 
 export const FeaturedEndorsement: React.FC = () => (
   <figure className="featured-endorsement">
@@ -161,57 +166,42 @@ export const FeaturedEndorsement: React.FC = () => (
   </figure>
 );
 
+// The recommendations as direct messages (concept D2, Ryan's pick, 21
+// October): the people down one side, and the open conversation beside them,
+// where each recommendation arrives as its own paragraphs, a message at a
+// time, with the lines that matter marked. The list is a tablist (arrow keys,
+// Home, End), the conversation its panel; on a phone the list runs across
+// the top. The message box at the foot is the way to reach Ryan.
 const Testimonials: React.FC = () => {
-  const reduceMotion = useReducedMotion();
   const [sectionRef, revealed] = useReveal<HTMLElement>(0.15);
-  const rowRef = useRef<HTMLDivElement>(null);
-
-  // The row is a scroll-snap carousel, the same one the case studies page
-  // through: a "page" is measured from it (how many cards fit the row, and
-  // which group of that many is in view) rather than imposed on it. The
-  // static file and the first render assume the desktop three.
-  const [perPage, setPerPage] = useState(DEFAULT_PER_PAGE);
-  const [pageIndex, setPageIndex] = useState(0);
-  const pageCount = Math.max(1, Math.ceil(featured.length / perPage));
-  const page = Math.min(pageIndex, pageCount - 1);
-
-  const measure = useCallback(() => {
-    const el = rowRef.current;
-    const card = el?.querySelector<HTMLElement>('.testimonials__card');
-    if (!el || !card) return { fit: DEFAULT_PER_PAGE, step: 0 };
-    const fit = Math.max(1, Math.round((el.clientWidth + CARD_GAP) / (card.offsetWidth + CARD_GAP)));
-    return { fit, step: fit * (card.offsetWidth + CARD_GAP) };
+  const [active, setActive] = useState(0);
+  const tabs = useRef<Array<HTMLButtonElement | null>>([]);
+  const t = featured[active];
+  // The list runs down the side, and across the top on a phone: it says so,
+  // so a screen reader names the arrow keys that match (both pairs work).
+  const [across, setAcross] = useState(false);
+  useEffect(() => {
+    const phone = window.matchMedia('(max-width: 640px)');
+    const sync = () => setAcross(phone.matches);
+    sync();
+    phone.addEventListener('change', sync);
+    return () => phone.removeEventListener('change', sync);
   }, []);
 
-  useEffect(() => {
-    const el = rowRef.current;
-    if (!el) return undefined;
-    let frame = 0;
-    const sync = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const { fit, step } = measure();
-        setPerPage(fit);
-        if (step > 0) setPageIndex(Math.round(el.scrollLeft / step));
-      });
+  const onKey = (event: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const last = featured.length - 1;
+    const keys: Record<string, number> = {
+      ArrowDown: i === last ? 0 : i + 1,
+      ArrowRight: i === last ? 0 : i + 1,
+      ArrowUp: i === 0 ? last : i - 1,
+      ArrowLeft: i === 0 ? last : i - 1,
+      Home: 0,
+      End: last,
     };
-    sync();
-    el.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      el.removeEventListener('scroll', sync);
-      window.removeEventListener('resize', sync);
-    };
-  }, [measure]);
-
-  // jsdom has no element scrollTo; the browser always does.
-  const goToPage = (next: number) => {
-    const el = rowRef.current;
-    const { step } = measure();
-    const target = Math.max(0, Math.min(pageCount - 1, next)) * step;
-    if (!el || typeof el.scrollTo !== 'function' || Math.round(el.scrollLeft) === target) return;
-    el.scrollTo({ left: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+    if (!(event.key in keys)) return;
+    event.preventDefault();
+    setActive(keys[event.key]);
+    tabs.current[keys[event.key]]?.focus();
   };
 
   return (
@@ -225,48 +215,71 @@ const Testimonials: React.FC = () => {
         <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
         <div className="testimonials__nav">
           <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
-          {/* The pager holds its place while there is one page, so the row
-              never shifts when a phone measures more pages after mount. */}
-          <div
-            className={`testimonials__pager${pageCount > 1 ? '' : ' testimonials__pager--single'}`}
-            aria-hidden={pageCount > 1 ? undefined : true}
-          >
-            <button
-              type="button"
-              className="testimonials__nav-btn"
-              onClick={() => goToPage(page - 1)}
-              aria-label="Previous recommendations"
-              disabled={page === 0}
-            >
-              <SketchArrow direction="left" className="testimonials__nav-svg" />
-            </button>
-            <span className="testimonials__pages" aria-live="polite">{page + 1} / {pageCount}</span>
-            <button
-              type="button"
-              className="testimonials__nav-btn testimonials__nav-btn--next"
-              onClick={() => goToPage(page + 1)}
-              aria-label="Next recommendations"
-              disabled={page >= pageCount - 1}
-            >
-              <SketchArrow direction="right" className="testimonials__nav-svg" />
-            </button>
+          <p className="testimonials__intro">Pick a person to read what they wrote, the way they&rsquo;d send it: a few messages at a time.</p>
+        </div>
+
+        <div className="testimonials__app">
+          <div className="testimonials__people">
+            <span className="testimonials__people-head" id="testimonials-people">Direct messages</span>
+            <div className="testimonials__list" role="tablist" aria-orientation={across ? 'horizontal' : 'vertical'} aria-labelledby="testimonials-people">
+              {featured.map((p, i) => (
+                <button
+                  key={p.name}
+                  ref={(el) => { tabs.current[i] = el; }}
+                  type="button"
+                  role="tab"
+                  id={`recommendation-tab-${i}`}
+                  aria-selected={i === active}
+                  aria-controls="recommendation-panel"
+                  tabIndex={i === active ? 0 : -1}
+                  className="testimonials__person"
+                  onClick={() => setActive(i)}
+                  onKeyDown={(event) => onKey(event, i)}
+                >
+                  <span className="testimonials__avatar" aria-hidden="true">{initials(p.name)}</span>
+                  <span className="testimonials__person-text">
+                    <span className="testimonials__person-top">
+                      <span className="testimonials__person-name">{p.name}</span>
+                      <span className="testimonials__person-first" aria-hidden="true">{shortName(p.name)}</span>
+                      <span className="testimonials__year" aria-hidden="true">{p.year}</span>
+                    </span>
+                    <span className="testimonials__preview" aria-hidden="true">{p.excerpt}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="testimonials__convo" role="tabpanel" id="recommendation-panel" aria-labelledby={`recommendation-tab-${active}`}>
+            <div className="testimonials__convo-head">
+              <span className="testimonials__avatar testimonials__avatar--sm" aria-hidden="true">{initials(t.name)}</span>
+              <span className="testimonials__who">
+                <span className="testimonials__name">{t.name}</span>
+                <span className="testimonials__role">{t.role}{t.relation ? ` · ${t.relation}` : ''}</span>
+              </span>
+            </div>
+            <figure className="testimonials__messages" key={t.name}>
+              <figcaption className="testimonials__sender">
+                <span className="testimonials__name">{t.name}</span> <time dateTime={t.year}>{t.year}</time>
+              </figcaption>
+              <div className="testimonials__stack">
+                <span className="testimonials__avatar testimonials__avatar--active" aria-hidden="true">{initials(t.name)}</span>
+                <blockquote className="testimonials__thread">{t.quote}</blockquote>
+              </div>
+              <div className="testimonials__foot">
+                <span className="testimonials__tag">{t.title}</span>
+                <a href={SITE.linkedinRecommendationsUrl} className="testimonials__more" target="_blank" rel="noopener noreferrer">
+                  On LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> {t.name}&rsquo;s recommendation (opens in a new tab)</span>
+                </a>
+              </div>
+            </figure>
+            {/* Drawn as a message box, but it's a link: it says what it does */}
+            <a href={EMAIL_HREF} className="testimonials__composer" aria-label="Email Ryan about your team">
+              <span className="testimonials__composer-hint" aria-hidden="true">Message Ryan about your team…</span>
+              <span className="testimonials__send">Get in touch</span>
+            </a>
           </div>
         </div>
-        <div className="testimonials__grid" ref={rowRef}>
-          {featured.map((t, i) => (
-            <figure key={t.name} className="testimonials__card">
-              <QuoteMark />
-              <span className="testimonials__card-title">{t.title}</span>
-              <blockquote className="testimonials__quote">{t.excerpt}</blockquote>
-              <figcaption className="testimonials__author">
-                <span className="testimonials__name">{t.name}</span>
-                <span className="testimonials__role">{t.role}, {t.year}</span>
-                <span className="testimonials__index" aria-hidden="true">{String(i + 1).padStart(2, '0')} / {String(featured.length).padStart(2, '0')}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-        <a href={SITE.linkedinRecommendationsUrl} className="testimonials__cta" target="_blank" rel="noopener noreferrer"><span>Read recommendations on LinkedIn <span aria-hidden="true">↗</span></span><span className="sr-only"> (opens in a new tab)</span></a>
       </div>
     </section>
   );

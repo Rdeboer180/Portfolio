@@ -1,0 +1,55 @@
+// The case studies as the collectible binder (CaseStudyBinder.tsx). Its own
+// styles live in its shadow root; the site only gives it the width and keeps
+// the open binder's inside cover, which runs off the window's left edge, from
+// scrolling the page sideways.
+.case-binder {
+  position: relative;
+  overflow-x: clip;
+  scroll-margin-top: 24px;
+  // the section's grey (with the desk's grain, _desk.scss) starts under the
+  // hero, and this much of it sits above the header
+  padding-top: clamp(48px, 6vw, 112px);
+}
+
+// While a study is open (the script marks its host is-reading from the card's
+// first frame out to its last frame home), the binder's fly-out, scrim and the
+// card in flight sit over the site's fixed nav (z-index 1020).
+.case-binder__host.is-reading {
+  position: relative;
+  z-index: 1100;
+}
+
+// The section's header, above the binder: the same badge and title the
+// case-study section always had, on the site's container.
+.case-binder__intro {
+  max-width: 1186px;
+  margin: 0 auto 48px;
+  padding: 0 $container-padding-x;
+}
+
+.case-binder__title {
+  max-width: $container-text-width;
+  text-wrap: balance;
+  font-family: $font-family-heading;
+  font-size: $font-size-h2;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-dark;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: $spacing-lg 0 0;
+
+  @media (max-width: $breakpoint-md) {
+    font-size: $font-size-h3;
+  }
+}
+
+// Until the binder mounts (a screen before it is seen), its slot holds about
+// the room it will take, so nothing below it jumps when it arrives. Measured
+// on the open binder: 978px at 1440 wide, 817 at 1180, 972 at 1024, 1083 at
+// 820 and 1387 at 390; the binder's layout changes at 600, 1024 and 1180.
+.case-binder__slot:empty {
+  min-height: min(355vw, 1500px);
+  @media (min-width: 600px) { min-height: 132vw; }
+  @media (min-width: 1024px) { min-height: 95vw; }
+  @media (min-width: 1180px) { min-height: min(68vw, 1100px); }
+}

@@ -6,6 +6,7 @@ import { SITE } from '../data/site';
 import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { getNote, KIND_LABEL } from '../data/notes';
+import { NOTE_BODIES } from '../data/notesBodies';
 import Footer from './Footer';
 import { PlayDraftLaunch } from './PlayDraftRelease';
 import '../styles/styles.scss';
@@ -83,7 +84,7 @@ const NotePage: React.FC = () => {
       {note.relatedProject === 'playdraft' && (
         <div className="notes__release"><PlayDraftLaunch context="note" /></div>
       )}
-      <div className="notes__body">{note.body}</div>
+      <div className="notes__body">{NOTE_BODIES[note.slug]}</div>
 
       {/* Close rail is a statement, not a nav. "All notes" lives in the header
           and contact lives in the shared footer below. Build logs get their own

@@ -10,6 +10,7 @@ import { PlayDraftStoreLink } from './PlayDraftRelease';
 import '../styles/components/_project-overview.scss';
 import { ProjectContext } from './ProjectBrand';
 import FramedViewport from './FramedViewport';
+import BinderTop from './BinderTop';
 
 /** Keep related work in the sentence, with the same route-backed drawer navigation. */
 const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
@@ -81,8 +82,13 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
   };
   const overview = project.overview!;
   const reel = project.featuredReel;
+  // Opened from the homepage binder: the study's top is the binder's (the
+  // sleeve its card tucks into, the reel and the walkthrough video), first in
+  // the article so a phone shows it before the rail.
+  const fromBinder = location.state?.fromBinder === project.slug && typeof window !== 'undefined' && Boolean(window.binderHome);
   return (
-    <article className="project-overview">
+    <article className={`project-overview${fromBinder ? ' project-overview--binder' : ''}`}>
+      {fromBinder && <BinderTop slug={project.slug} id="project-walkthrough" />}
       <aside className="project-overview__rail">
         <Link to={getHomeHref()} state={HOME_TOP_STATE} className="project-overview__home">Ryan DeBoer</Link>
         <Link to={getProjectsHref()}>← All work</Link>
@@ -107,13 +113,13 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
         </div>
       </aside>
       <div className="project-overview__body">
-        <section id="project-walkthrough" aria-label={project.featuredVideo || reel || overview.opening?.isVideo ? 'Product walkthrough' : 'Project evidence'}>
-          {!reel && <ProjectPreview project={project} />}
-          {reel && <figure className="project-overview__reel">
+        <section id={fromBinder ? undefined : 'project-walkthrough'} aria-label={project.featuredVideo || reel || overview.opening?.isVideo ? 'Product walkthrough' : 'Project evidence'}>
+          {!fromBinder && !reel && <ProjectPreview project={project} />}
+          {!fromBinder && reel && <figure className="project-overview__reel">
             <LoopVideo src={reel.src} poster={reel.poster} label={reel.alt} captions={reel.captions} />
             <figcaption>{reel.caption}</figcaption>
           </figure>}
-          {!project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
+          {!fromBinder && !project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}
           {project.context && <ProjectContext project={project} className="project-overview__context">{project.context}</ProjectContext>}
           <p className="project-overview__deck">{overview.deck}</p>
           <p className="project-overview__ownership">{overview.ownership}</p>

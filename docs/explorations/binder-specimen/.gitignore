@@ -5,3 +5,10 @@ heroes/
 captures/
 reference.jpg
 hero-overrides/
+
+# The shared pages (parked) carry the same private drafts.
+share/
+share-open/
+
+# Demo recordings (demo-video.mjs, parked with the tag parked/binder-standalone).
+video/

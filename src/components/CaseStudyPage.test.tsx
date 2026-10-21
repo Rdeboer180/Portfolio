@@ -12,6 +12,7 @@ jest.mock('../context/UnlockContext', () => ({
   useUnlock: () => ({ unlocked: mockUnlocked, openPrompt: mockOpenPrompt }),
 }));
 jest.mock('../hooks/useReveal', () => ({ useReveal: () => [null, true] }));
+jest.mock('../hooks/useReducedMotion', () => ({ useReducedMotion: () => true }));
 jest.mock('framer-motion', () => {
   const React = require('react');
   const element = (tag: string) => ({ custom, variants, initial, animate, whileInView, viewport, onViewportEnter, onViewportLeave, ...props }: any) => React.createElement(tag, props);

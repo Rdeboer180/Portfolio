@@ -1,6 +1,6 @@
 import { reviewHref } from '../utils/reviewRoutes';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import { Link } from 'react-router-dom';
 import projects, { ANON_CLIENT, Project, ProjectBeat, ProjectImage, orderedProjects } from '../data/projects';
 import CoverSchematic, { hasSchematic } from './CoverSchematic';

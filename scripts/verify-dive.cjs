@@ -54,7 +54,14 @@ const server = http.createServer((req, res) => {
       const publicExternalLinks = await externalHrefs();
       assert.equal(requests.length, 0, 'Inflight requested on ordinary homepage');
       assert.equal(await page.locator('a[href^="/dive"]').count(), 0);
-      await page.locator('a[href="/work/playdraft"]').click();
+      // the homepage's case studies are the binder: a card opens its study
+      const openPlayDraft = async () => {
+        await page.locator('.case-binder').scrollIntoViewIfNeeded();
+        const card = page.locator('.pocket[data-slug="playdraft"] .card').first();
+        await card.waitFor();
+        await card.click();
+      };
+      await openPlayDraft();
       await page.locator('dialog[open] h1').waitFor();
       assert.equal(requests.length, 0, 'Inflight requested on ordinary case study');
       await page.getByRole('button', { name: 'Close case study', exact: true }).click();
@@ -76,7 +83,7 @@ const server = http.createServer((req, res) => {
       };
       await checkLinks();
       await page.screenshot({ path: path.join(tmpdir(), `dive-home-${width}.png`) });
-      await page.locator('a[href="/dive/work/playdraft"]').click();
+      await openPlayDraft();
       await page.locator('.project-overview h1').waitFor();
       assert.equal(new URL(page.url()).pathname, '/dive/work/playdraft');
       assert.equal(await page.locator('dialog[open]').count(), 0, 'Review reading uses the reusable full-page view');

@@ -35,7 +35,9 @@
     line-height: $line-height-body-sm;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: $color-primary;
+    // Orange Deep: Signal Orange on the tint measured 3.4:1, short of AA for
+    // text this size; the deeper end of the accent is 5:1.
+    color: $color-primary-dark;
   }
 }
 

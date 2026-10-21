@@ -46,7 +46,7 @@
   &__eyebrow {
     font-size: $font-size-caption;
     font-weight: $font-weight-bold;
-    color: $color-primary;
+    color: $color-primary-dark;   // Signal Orange on the light ground was 3.6:1 (axe, 21 October)
     text-transform: uppercase;
     letter-spacing: 0.1em;
     word-break: break-word;

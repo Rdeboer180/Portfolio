@@ -90,11 +90,11 @@ const SkillMastery: React.FC = () => (
       </div>
       {/* Figma states an instance count before it lists the places. Four links, four places. */}
       <ScrollReveal><nav className="sm__evidence" aria-label="Capabilities in practice"><span className="sm__label">Used in {evidence.length} places</span><ul>{evidence.map(item => <li key={item.href}><Link to={item.href}>{item.label}<span>{item.project} <span aria-hidden="true">↗</span></span></Link></li>)}</ul></nav></ScrollReveal>
-      <ScrollReveal><aside className="sm__forge" aria-labelledby="forge-teaser-title">
+      <ScrollReveal><section className="sm__forge" aria-labelledby="forge-teaser-title">
         <ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1} />
         <div><p className="sm__label">A different way to explore</p><h3 id="forge-teaser-title">How these skills connect.</h3><p>I built the Forge to map the mix behind my work. Explore my talent tree, or build your own.</p></div>
         <Link to="/talent-tree/">Explore the Forge <span aria-hidden="true">↗</span></Link>
-      </aside></ScrollReveal>
+      </section></ScrollReveal>
     </div>
   </section>
 );

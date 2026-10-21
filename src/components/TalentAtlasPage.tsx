@@ -7,6 +7,9 @@ import { decodeAtlas, encodeAtlas } from '../data/talent/atlasState';
 import { getHomeHref } from '../utils/homeSession';
 import TalentAtlas from './talent/TalentAtlas';
 import '../styles/styles.scss';
+// the Forge's own styles, loaded with its page rather than with every page
+import '../styles/components/_talent-tree.scss';
+import '../styles/components/_talent-atlas.scss';
 
 const TalentAtlasPage: React.FC<{ own?: boolean }> = ({ own }) => {
   const navigate = useNavigate();

@@ -18,24 +18,41 @@ interface PasswordModalProps {
    * 'site'       — raised once on first load; covers every protected surface.
    */
   variant?: Variant;
+  /** The protected study whose link raised the prompt, by its short name: the prompt then speaks for it. */
+  study?: string;
 }
 
-const COPY: Record<Variant, {
-  title: string; body: string; primary: string; secondary: string;
-}> = {
+// The binder's lock dialog is the model (Ryan, 21 October): it names the
+// study, says in one sentence why it is locked, and offers the two ways on.
+type Copy = { title: string; body: string; primary: string; secondary: string };
+const COPY: Record<Variant, Copy> = {
   'case-study': {
-    title: 'Protected Case Study Images',
-    body: 'The screens in this case study include employer or client work, so they are password protected. Enter the password to view them, or keep reading without them. You will not be asked again unless you open a protected image.',
-    primary: 'Unlock Images',
-    secondary: 'No Thanks, View Without Images',
+    title: 'These screens are password protected',
+    body: 'They include employer or client work. Unlock them to see the screens, or keep reading without them.',
+    primary: 'Unlock',
+    secondary: 'Keep reading without them',
   },
   site: {
     title: 'See the full case studies',
-    body: "Project screens and implementation details are password protected because they include employer or client work. Enter the password once and this device stays unlocked. Continue without a password to read the public overviews. We'll remember your choice on this device and won't prompt you again unless you choose to unlock the work.",
-    primary: 'Unlock the work',
+    body: "Their screens include employer and client work, so the studies are password protected. Unlock them once and this device stays unlocked, or continue to the public overviews and you won't be asked again here.",
+    primary: 'Unlock',
     secondary: 'Continue without a password',
   },
 };
+const studyCopy = (study: string): Copy => ({
+  title: `${study} is password protected`,
+  body: 'Its screens include employer work, so the study is password protected. Unlock it to see the whole study, or read the overview without the screens.',
+  primary: 'Unlock',
+  secondary: 'Read the overview',
+});
+
+const LockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="4" y="10.5" width="16" height="10.5" rx="2" />
+    <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+  </svg>
+);
 
 const CloseIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -46,13 +63,13 @@ const CloseIcon = () => (
 );
 
 const PasswordModal: React.FC<PasswordModalProps> = ({
-  onUnlock, onDismiss, onContinue, variant = 'case-study',
+  onUnlock, onDismiss, onContinue, variant = 'case-study', study,
 }) => {
   const decline = onContinue ?? onDismiss;
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const copy = COPY[variant];
+  const copy = study ? studyCopy(study) : COPY[variant];
 
   // Store the element that had focus before the modal opened so we can restore it
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -154,6 +171,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
           <CloseIcon />
         </button>
 
+        <span className="password-modal__icon"><LockIcon /></span>
         <h2 id="pwd-modal-title">{copy.title}</h2>
         <p>{copy.body}</p>
 
@@ -183,16 +201,18 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
               aria-label="Password"
               autoFocus
             />
-            <button type="submit" className="password-modal__button password-modal__button--primary">
-              Unlock
-            </button>
-            <button
-              type="button"
-              className="password-modal__button password-modal__button--secondary"
-              onClick={() => setShowPassword(false)}
-            >
-              Back
-            </button>
+            <div className="password-modal__buttons">
+              <button type="submit" className="password-modal__button password-modal__button--primary">
+                Unlock
+              </button>
+              <button
+                type="button"
+                className="password-modal__button password-modal__button--secondary"
+                onClick={() => setShowPassword(false)}
+              >
+                Back
+              </button>
+            </div>
             {error && <p className="password-modal__error" role="alert">{error}</p>}
           </form>
         )}

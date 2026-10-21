@@ -392,169 +392,273 @@
   &__nav-btn--next &__nav-svg path:nth-child(2) { transition-delay: 850ms; }
   &--revealed &__nav-svg path { stroke-dashoffset: 0; }
 
-  // The row: a scroll-snap carousel at every width (touch swipes, keyboard
-  // scrolls, the arrows page). Three cards fit the desktop row; the rest sit
-  // off the right edge. The row has no scrollbar of its own.
-  &__grid {
-    display: flex;
-    gap: $spacing-xl;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    // Room for the accent corners and the hover lift, which the overflow
-    // clip would otherwise cut.
-    padding: 6px 6px $spacing-sm;
-    margin: -6px -6px 0;
-
-    &::-webkit-scrollbar { display: none; }
-  }
-
-  &__card {
-    flex: 0 0 calc((100% - #{$spacing-xl * 2}) / 3);
-    scroll-snap-align: start;
-    background: $color-white;
-    border-radius: $card-border-radius;
-    padding: $spacing-3xl $spacing-2xl $spacing-2xl;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
-    position: relative;
+  &__intro {
+    max-width: 360px;
     margin: 0;
-    transition:
-      box-shadow $transition-base,
-      transform $transition-base;
-
-    // Top-left accent corner
-    &::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      width: 40px;
-      height: 40px;
-      border-top: 3px solid $color-primary;
-      border-left: 3px solid $color-primary;
-      border-radius: $card-border-radius 0 0 0;
-      transition: width $transition-base, height $transition-base;
-    }
-
-    // Bottom-right accent corner
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      width: 40px;
-      height: 40px;
-      border-bottom: 3px solid $color-primary;
-      border-right: 3px solid $color-primary;
-      border-radius: 0 0 $card-border-radius 0;
-      transition: width $transition-base, height $transition-base;
-    }
-
-    &:hover {
-      box-shadow: $shadow-lg;
-      transform: translateY(-2px);
-
-      &::before,
-      &::after { width: 48px; height: 48px; }
-
-      .testimonials__card-title {
-        transform: translateX(2px);
-        color: $color-primary;
-      }
-    }
-  }
-
-  &__quote-mark {
-    width: 20px;
-    height: 20px;
-    color: $color-primary;
-    flex-shrink: 0;
-  }
-
-  &__card-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-caption;
-    font-weight: $font-weight-bold;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: $color-primary-muted;
-    transition: color $transition-base, transform $transition-base;
-  }
-
-  &__quote {
-    font-family: $font-family-primary;
-    font-size: $font-size-body;
-    font-style: italic;
-    line-height: $line-height-body-sm;
+    font-size: 15px;
+    line-height: 1.55;
     color: $color-neutral-standard;
-    flex: 1;
-    margin: 0;
-
-    // Multi-paragraph quotes (e.g. the longer LinkedIn recommendations) break
-    // into readable paragraphs with spacing; single-run quotes are unaffected.
-    p {
-      margin: 0 0 $spacing-md;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
   }
 
-  // ==========================================
-  // Inline highlight — reusable accent pattern
-  // ==========================================
-  &__highlight {
-    padding: 1px 4px;
-    border-radius: 3px;
-    transition: background-color 0.25s ease, transform 0.25s ease;
-    display: inline;
-    font-weight: 700;
-    cursor: default;
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-
-    &:hover,
-    &:focus-visible {
-      background-color: $color-primary-md;
-    }
+  // The recommendations as direct messages (Ryan's pick, 21 October): the
+  // people down one side, the open conversation beside them.
+  &__app {
+    display: flex;
+    min-height: 520px;
+    margin-top: $spacing-2xl;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+    overflow: hidden;
   }
 
-  &__author {
+  &__people {
+    flex: 0 0 340px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding-top: $spacing-md;
-    border-top: 1px solid $color-neutral-light;
-    font-style: normal;
+    border-right: 1px solid $color-neutral-light;
+    background: #fafafa;
   }
+
+  &__people-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid $color-neutral-light;
+    font-family: $font-family-heading;
+    font-size: 15px;
+    font-weight: $font-weight-bold;
+  }
+
+  &__list { display: flex; flex-direction: column; }
+
+  &__person {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    padding: 12px 20px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:hover { background: $color-neutral-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+
+    &[aria-selected='true'] {
+      background: $color-primary-light;
+      .testimonials__avatar { background: $color-primary-dark; }
+      .testimonials__year { color: $color-neutral-standard; }   // the muted grey is 4.3:1 on the tint
+    }
+  }
+
+  // Initials in a chat's rounded square: the recommendations come without photos
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: $color-neutral-dark;
+    color: $color-white;
+    font-family: $font-family-heading;
+    font-size: 13px;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.02em;
+    transition: background-color $transition-fast;
+
+    &--sm { width: 32px; height: 32px; border-radius: 8px; font-size: 12px; background: $color-primary-dark; }
+    &--active { width: 40px; height: 40px; border-radius: 10px; font-size: 14px; background: $color-primary-dark; }
+  }
+
+  &__person-text { display: flex; flex-direction: column; min-width: 0; }
+  &__person-top { display: flex; justify-content: space-between; align-items: baseline; gap: $spacing-sm; }
+
+  &__person-name {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-bold;
+    line-height: 1.3;
+  }
+
+  &__person-first { display: none; }
+
+  &__year {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-neutral-muted;
+  }
+
+  &__preview {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+  }
+
+  &__convo { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+  &__convo-head {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: 12px $spacing-xl;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  &__who { display: flex; flex-direction: column; min-width: 0; }
 
   &__name {
     font-family: $font-family-heading;
-    font-size: $font-size-body-sm;
-    font-weight: $font-weight-semibold;
-    line-height: $line-height-body-sm;
+    font-size: 15px;
+    font-weight: $font-weight-bold;
+    line-height: 1.3;
     color: $color-neutral-dark;
   }
 
-  &__role {
-    font-size: $font-size-caption;
-    color: $color-neutral-muted;
+  &__role { font-size: 13px; line-height: 1.4; color: $color-neutral-standard; }
+
+  &__messages {
+    flex: 1;
+    margin: 0;
+    padding: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  // The card's place in the row, the way a case-study card carries its index.
-  &__index {
-    margin-top: $spacing-xs;
+  &__sender {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-sm;
+    padding-left: 52px;
+
+    .testimonials__name { font-size: $font-size-body-sm; }
+
+    time {
+      font-family: $font-family-mono;
+      font-size: $font-size-caption;
+      color: $color-neutral-muted;
+    }
+  }
+
+  &__stack {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: $spacing-md;
+    align-items: start;
+  }
+
+  // Each paragraph of the recommendation, sent as its own message
+  &__thread {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    p {
+      max-width: 620px;
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: $color-neutral-lightest;
+      font-size: $font-size-body;
+      line-height: 1.55;
+      color: $color-neutral-dark;
+      animation: testimonials-message-in 280ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+
+      &:first-child { border-radius: 4px 14px 14px 14px; }
+      &:nth-child(2) { animation-delay: 90ms; }
+      &:nth-child(3) { animation-delay: 180ms; }
+      &:nth-child(n + 4) { animation-delay: 270ms; }
+    }
+  }
+
+  // The lines the writer's words turn on, marked as a comment marks them
+  &__highlight {
+    padding: 0 1px;
+    border-radius: 2px;
+    background: $color-primary-light;
+    box-shadow: inset 0 -2px 0 $color-primary-md;
+  }
+
+  &__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-sm $spacing-lg;
+    margin: 10px 0 0 52px;
+  }
+
+  // What it's about, tagged the way a design tool tags an annotation
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-family: $font-family-mono;
     font-size: 11px;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.08em;
+    font-weight: $font-weight-semibold;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $color-primary-dark;
+
+    &::before {
+      content: '';
+      flex: 0 0 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $color-primary;
+    }
+  }
+
+  &__more {
+    font-size: 13px;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
+    text-underline-offset: 3px;
+
+    &:hover { color: $color-neutral-dark; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; border-radius: 2px; }
+  }
+
+  // The message box, as the way to reach Ryan
+  &__composer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-md;
+    margin: 0 $spacing-xl 20px;
+    padding: 8px 8px 8px 16px;
+    border: 1px solid rgba(27, 27, 27, 0.2);
+    border-radius: $radius-lg;
     color: $color-neutral-muted;
+    font-size: 15px;
+    text-decoration: none;
+    transition: border-color $transition-fast;
+
+    &:hover { border-color: $color-neutral-dark; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; }
+  }
+
+  &__send {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: $radius-md;
+    background: $color-primary-dark;
+    color: $color-white;
+    font-family: $font-family-heading;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: 0.02em;
   }
 
   // Composes the shared atom (_linkedin-link.scss); only the
@@ -597,9 +701,8 @@
       max-width: 100%;
     }
 
-    &__card {
-      flex-basis: calc((100% - #{$spacing-xl}) / 2);
-    }
+    // a narrower list beside the conversation
+    &__people { flex-basis: 280px; }
   }
 }
 
@@ -625,9 +728,36 @@
       transform: translate(6px, 6px) rotate(-1.5deg);
     }
 
-    // One card at a time; the next one's edge shows so the row reads as a row.
-    &__grid { align-items: flex-start; }
-    &__card { flex-basis: 82vw; }
+    // The people run across the top as a row of initials; the conversation
+    // takes the full width under them.
+    &__app { flex-direction: column; min-height: 0; }
+    &__people { flex: none; border-right: 0; border-bottom: 1px solid $color-neutral-light; }
+    &__people-head { display: none; }
+    &__list { flex-direction: row; gap: 4px; padding: 10px; overflow-x: auto; scrollbar-width: none; }
+    &__list::-webkit-scrollbar { display: none; }
+    &__person {
+      flex: 0 0 auto;
+      width: 64px;   // the fifth peeks in, so the row reads as one that scrolls
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 6px;
+      padding: 8px 4px;
+      border-radius: $radius-lg;
+    }
+    &__person-top { justify-content: center; }
+    // first names only, so the row reads at a glance; the full name stays the tab's name
+    &__person-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    &__person-first { display: block; font-size: 12px; font-weight: $font-weight-semibold; text-align: center; }
+    &__year, &__preview { display: none; }
+    &__convo-head { padding: 12px $spacing-lg; }
+    &__messages { padding: $spacing-lg; }
+    &__sender { padding-left: 0; }
+    &__stack { grid-template-columns: 1fr; }
+    &__stack > .testimonials__avatar { display: none; }
+    &__thread p { font-size: 15px; }
+    &__foot { margin-left: 0; }
+    &__composer { flex-wrap: wrap; margin: 0 $spacing-lg $spacing-lg; padding: 12px; }
+    &__send { height: 44px; }
   }
 }
 
@@ -645,14 +775,13 @@
     &__team-score-shadow,
     &__team-score-star,
     &__cta,
-    &__card,
-    &__card::before,
-    &__card::after,
-    &__card-title,
+    &__person,
+    &__avatar,
     &__nav-btn,
     &__nav-svg path { transition: none !important; }
 
     &__nav-svg path { stroke-dashoffset: 0; }
+    &__thread p { animation: none; }
 
     // Show stars in their final colored state without staggered timing
     &__team-score-star {
@@ -669,8 +798,6 @@
 // Short, attributed peer evidence; LinkedIn is the source for full recommendations.
 .testimonials--concise {
   .testimonials__lede { margin: 0; }
-  .testimonials__card { padding: var(--space-xl); gap: var(--space-lg); }
-  .testimonials__quote { font-style: normal; }
   .testimonials__cta { margin-top: var(--space-2xl); }
 }
 .featured-endorsement {
@@ -680,4 +807,9 @@
   max-width: var(--copy-max-width);
   blockquote { margin: 0 0 var(--space-sm); font: var(--text-body-lg)/var(--leading-body-lg) var(--font-body); color: var(--color-text-primary); }
   figcaption { font: var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-text-secondary); }
+}
+
+@keyframes testimonials-message-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
 }

@@ -24,6 +24,9 @@ import { decodeState, encodeState } from '../data/talent/score';
 import TalentConsole, { BUILD_ROUTE, FRONT_ROUTE, HASH_KEY, LEGACY_PARAM } from './talent/TalentConsole';
 import type { ConsoleMode } from './talent/TalentConsole';
 import '../styles/styles.scss';
+// the Forge's own styles, loaded with its page rather than with every page
+import '../styles/components/_talent-tree.scss';
+import '../styles/components/_talent-atlas.scss';
 
 export interface TalentTreePageProps {
   mode?: ConsoleMode;

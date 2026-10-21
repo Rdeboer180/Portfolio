@@ -2,9 +2,7 @@
 // Main Styles Entry Point
 // ============================================
 
-// Import Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@400;500;600;700;800&display=swap');
+// Google Fonts load from public/index.html (beside this stylesheet, not inside it)
 
 // Design tokens (CSS custom properties)
 @import 'tokens';
@@ -36,6 +34,8 @@
 @import 'components/technical';
 @import 'components/work';
 @import 'components/case-study-playground';
+@import 'components/case-binder';
+@import 'components/desk';
 @import 'components/systems-in-practice';
 @import 'components/cover-schematic';
 @import 'components/notes';
@@ -60,8 +60,7 @@
 @import 'components/layers-panel';
 @import 'components/proficiency-dock';
 @import 'components/skill-mastery';
-@import 'components/talent-tree';
-@import 'components/talent-atlas';
+// talent-tree and talent-atlas load with their pages (TalentAtlasPage, TalentTreePage)
 @import 'components/not-found';
 
 @import "components/hero-contract";

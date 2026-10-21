@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400">
+  <!-- The homepage desk: whitewashed boards, 140px planks, one 1400px tile.
+       Grain is fractal noise stretched along the boards; the wash is a
+       slower noise in white over it, thicker on some boards than others.
+       Every filter stitches its tile, so the boards run on without a seam. -->
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0016 0.105" numOctaves="4" seed="11" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.36  0 0 0 0 0.24  0.2 0 0 0 -0.075"/>
+    </filter>
+    <!-- the grain's lines: the noise's zero crossings, thin and wavy, as wood has -->
+    <filter id="lines" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency="0.0022 0.075" numOctaves="3" seed="5" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.33  0 0 0 0 0.22  -1.6 0 0 0 0.2"/>
+    </filter>
+    <filter id="fine" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.42" numOctaves="2" seed="3" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.34  0 0 0 0 0.24  0.22 0 0 0 -0.09"/>
+    </filter>
+    <filter id="wash" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0011 0.018" numOctaves="3" seed="29" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.4 0 0 0 -0.4"/>
+    </filter>
+  </defs>
+
+  <!-- boards: how much wood shows through the wash, board by board -->
+  <g fill="#b89c74">
+    <rect y="0" width="1400" height="140" opacity=".10"/>
+    <rect y="140" width="1400" height="140" opacity=".05"/>
+    <rect y="280" width="1400" height="140" opacity=".13"/>
+    <rect y="420" width="1400" height="140" opacity=".07"/>
+    <rect y="560" width="1400" height="140" opacity=".04"/>
+    <rect y="700" width="1400" height="140" opacity=".11"/>
+    <rect y="840" width="1400" height="140" opacity=".06"/>
+    <rect y="980" width="1400" height="140" opacity=".12"/>
+    <rect y="1120" width="1400" height="140" opacity=".05"/>
+    <rect y="1260" width="1400" height="140" opacity=".09"/>
+  </g>
+
+  <rect width="1400" height="1400" filter="url(#grain)"/>
+  <rect width="1400" height="1400" filter="url(#fine)"/>
+  <rect width="1400" height="1400" filter="url(#lines)"/>
+  <rect width="1400" height="1400" filter="url(#wash)"/>
+
+  <!-- seams between boards: a shadow line and the lit edge of the next board -->
+  <g fill="#6e5a3e" opacity=".2">
+    <rect y="139" width="1400" height="1"/><rect y="279" width="1400" height="1"/><rect y="419" width="1400" height="1"/>
+    <rect y="559" width="1400" height="1"/><rect y="699" width="1400" height="1"/><rect y="839" width="1400" height="1"/>
+    <rect y="979" width="1400" height="1"/><rect y="1119" width="1400" height="1"/><rect y="1259" width="1400" height="1"/>
+    <rect y="1399" width="1400" height="1"/>
+  </g>
+  <g fill="#ffffff" opacity=".8">
+    <rect y="140" width="1400" height="1"/><rect y="280" width="1400" height="1"/><rect y="420" width="1400" height="1"/>
+    <rect y="560" width="1400" height="1"/><rect y="700" width="1400" height="1"/><rect y="840" width="1400" height="1"/>
+    <rect y="980" width="1400" height="1"/><rect y="1120" width="1400" height="1"/><rect y="1260" width="1400" height="1"/>
+    <rect y="0" width="1400" height="1"/>
+  </g>
+
+  <!-- butt joints, staggered board to board -->
+  <g fill="#6e5a3e" opacity=".16">
+    <rect x="410" y="0" width="1" height="139"/>
+    <rect x="1130" y="140" width="1" height="139"/>
+    <rect x="260" y="280" width="1" height="139"/>
+    <rect x="890" y="420" width="1" height="139"/>
+    <rect x="560" y="560" width="1" height="139"/>
+    <rect x="1290" y="700" width="1" height="139"/>
+    <rect x="150" y="840" width="1" height="139"/>
+    <rect x="760" y="980" width="1" height="139"/>
+    <rect x="1010" y="1120" width="1" height="139"/>
+    <rect x="330" y="1260" width="1" height="139"/>
+  </g>
+
+  <!-- two knots, washed over -->
+  <g fill="none" stroke="#8a6f4c" opacity=".09">
+    <ellipse cx="980" cy="350" rx="26" ry="7"/><ellipse cx="980" cy="350" rx="15" ry="4"/>
+    <ellipse cx="240" cy="1045" rx="22" ry="6"/><ellipse cx="240" cy="1045" rx="12" ry="3"/>
+  </g>
+</svg>

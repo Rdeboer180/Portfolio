@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
 
 let mockReduced = false;
-jest.mock('framer-motion', () => ({ useReducedMotion: () => mockReduced }));
+jest.mock('../hooks/useReducedMotion', () => ({ useReducedMotion: () => mockReduced }));
 
 type TestAnimation = { currentTime: number; play: jest.Mock; pause: jest.Mock; cancel: jest.Mock; onfinish: null | (() => void) };
 let animations: TestAnimation[];

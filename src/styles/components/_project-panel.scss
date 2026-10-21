@@ -105,24 +105,21 @@
   .project-panel:not([data-phase='open']) > .project-panel__dismiss { pointer-events: none; }
 }
 
-// One disc for both states: following the pointer, and parked in the strip
-// on keyboard focus. Ink, not orange: it marks an exit, not a state.
+// One mark for both states: following the pointer, and parked in the strip
+// on keyboard focus. White with an ink edge and a soft shadow, no disc: it
+// reads as a cursor, and it holds on the light homepage and the dimmed
+// backdrop alike. Ink, not orange: it marks an exit, not a state.
 .project-panel__cursor,
 .project-panel__dismiss-mark {
-  box-sizing: border-box;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: $color-text-primary;
-  color: $color-white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+  display: block;
+  width: 27px;
+  height: 26px;
   pointer-events: none;
-  svg { width: 16px; height: 16px; overflow: visible; }
-  // 3.6 user units in a 44-unit box drawn at 16px, about 1.3px: the weight
-  // the carousel arrows read at, at their own size.
-  path { stroke: currentColor; stroke-width: 3.6; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  svg {
+    display: block; width: 100%; height: 100%; overflow: visible;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
+  }
+  path { fill: $color-white; stroke: $color-text-primary; stroke-width: 1.6; stroke-linejoin: round; }
 }
 
 .project-panel__cursor {
@@ -130,14 +127,14 @@
   top: 0;
   left: 0;
   z-index: 40;
-  margin: -16px 0 0 -16px;
+  // centred on the pointer, as the native cursor it replaces is aimed
+  margin: -13px 0 0 -13.5px;
   will-change: transform;
-  // Sketched, not stamped: the shaft draws in on each entry, then the head,
-  // the same order the carousel arrows draw in.
-  path { animation: project-panel-cursor-draw 260ms ease-out both; }
-  path:nth-child(2) { animation-delay: 120ms; }
+  // A quiet arrival: it fades in and settles from a touch smaller, on the
+  // inner mark, since the outer span's transform is the pointer's position.
+  svg { animation: project-panel-cursor-in 180ms cubic-bezier(.2, .7, .3, 1) both; }
 }
-@keyframes project-panel-cursor-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes project-panel-cursor-in { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
 
 .project-panel__dismiss-mark { opacity: 0; }
 .project-panel__dismiss:focus-visible .project-panel__dismiss-mark { opacity: 1; }
@@ -157,7 +154,8 @@
   // and the drawer settles back under the pointer without flicker.
   .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover) { right: -8px; }
 }
-@media (prefers-reduced-motion: reduce) { .project-panel__cursor path { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .project-panel__cursor svg { animation-name: project-panel-cursor-fade; } }
+@keyframes project-panel-cursor-fade { from { opacity: 0; } to { opacity: 1; } }
 
 // Every project shares the panel header, including locked and legacy views.
 .project-panel {

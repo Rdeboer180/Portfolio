@@ -248,6 +248,8 @@ const Hero: React.FC = () => {
                   <div className="hero__profile-frame">
                     <img
                       src="/images/hero/ryan-deboer-2026.jpeg"
+                      srcSet="/images/hero/ryan-deboer-2026-800.webp 800w, /images/hero/ryan-deboer-2026-1200.webp 1200w, /images/hero/ryan-deboer-2026.jpeg 1600w"
+                      sizes="(max-width: 850px) 300px, 400px"
                       alt="Ryan DeBoer, product designer"
                       className="hero__profile-img"
                       width={1600}

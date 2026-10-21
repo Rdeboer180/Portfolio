@@ -7,15 +7,13 @@ import ReadingErrorBoundary from './ReadingErrorBoundary';
 
 const readingPositions = new Map<string, number>();
 
-// Return arrow in the hand-sketched vocabulary of SketchArrow
-// (CaseStudyPlayground.tsx) and the hero intro arrows: one wobbly cubic shaft
-// plus a two-stroke head, pathLength=1 so the stroke can draw in. The shaft
-// drops from the top right and runs left, the sketched cousin of ↩, because
-// this exit returns to the page behind rather than stepping to a sibling.
+// The way back: one solid arrow pointing left to the page behind, white with
+// an ink edge so it holds on both the homepage and the backdrop over it
+// (Ryan, 21 October: the black disc with a sketched arrow was jarring, and
+// then one arrow, not a chevron and an arrow).
 const ReturnArrow = () => (
-  <svg viewBox="0 0 44 44" aria-hidden="true" focusable="false">
-    <path d="M33 10 C 36 18, 32 25.5, 21 25.5 C 16 25.6, 12 25.4, 8 25" fill="none" strokeLinecap="round" pathLength={1} />
-    <path d="M8 25 L14.5 18.5 M8 25 L14 31.5" fill="none" strokeLinecap="round" pathLength={1} />
+  <svg viewBox="0 0 29 28" aria-hidden="true" focusable="false">
+    <path d="M2 14 L11 5 V10 H27 V18 H11 V23 Z" />
   </svg>
 );
 
@@ -110,8 +108,13 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
     };
     finishExit.current = finish;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
-    setPhase('closing');
-    exitTimer.current = setTimeout(finish, 280);
+    // Anything in the panel can ask it to wait before it slides away: the
+    // homepage binder's study top (BinderTop) folds its reel and takes its
+    // card out of the sleeve first, then flies the card home as the panel goes.
+    const waits: Promise<unknown>[] = [];
+    document.dispatchEvent(new CustomEvent('portfolio:panel-closing', { detail: { wait: (p: Promise<unknown>) => waits.push(p) } }));
+    const slide = () => { setPhase('closing'); exitTimer.current = setTimeout(finish, 280); };
+    if (waits.length) Promise.all(waits).then(slide, slide); else slide();
   };
 
   useEffect(() => {
@@ -152,7 +155,10 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
   }, [location.pathname, location.key]);
   useEffect(() => {
     const el = dialog.current!;
-    const target = document.activeElement as HTMLElement | null;
+    // The element that had focus, through any shadow root: the homepage
+    // binder's card is inside one, and its host div can't take focus back.
+    let target = document.activeElement as HTMLElement | null;
+    while (target?.shadowRoot?.activeElement) target = target.shadowRoot.activeElement as HTMLElement;
     const overflow = document.body.style.overflow;
     const scroll = location.state?.returnScroll ?? window.scrollY;
     const backgroundPath = location.state?.backgroundLocation?.pathname;

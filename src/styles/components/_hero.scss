@@ -86,9 +86,11 @@
     justify-content: space-between;
     align-items: center;
     padding: $spacing-xl $spacing-3xl;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    // Near-solid white, no backdrop blur: the blur was redone on every scroll
+    // frame and over the binder's moving glare (11-14% of the GPU's work
+    // there; Ryan chose this trade-off, 21 October). What passes under the
+    // nav now shows as a faint sharp ghost rather than a soft tint.
+    background: rgba(255, 255, 255, 0.97);
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 
     &-logo {
@@ -731,7 +733,7 @@
     animation: none;
 
     span {
-      color: $color-primary;
+      color: $color-primary-dark;   // Signal Orange is 3.9:1 at this size (axe, 21 October)
       font-weight: 700;
     }
 

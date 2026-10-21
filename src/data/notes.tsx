@@ -1,9 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import LinkedInLink from '../components/LinkedInLink';
-import PaperArtboardGallery from '../components/PaperArtboardGallery';
-import playdraft from './playdraft.json';
-import { SystemsBoard } from '../components/SystemsInPractice';
 
 // ============================================
 // Notes — the writing stream. Craft is the through-line: field notes record a
@@ -11,119 +5,13 @@ import { SystemsBoard } from '../components/SystemsInPractice';
 // system entries point at the running proof. Bodies are JSX so entries can
 // link into the site (design system, case studies, demos) and reuse the
 // site's own vocabulary. Newest first in the NOTES array.
+//
+// This file holds what lists and headers need (titles, dates, deks); each
+// note's body lives in notesBodies.tsx, which only the note page loads, so
+// the homepage's three titles don't ship every note's full text.
 // ============================================
 
 export type NoteKind = 'reflection' | 'exploration' | 'practice' | 'skill' | 'system';
-
-// Moment frame — the case-study insight-callout vocabulary, carried into
-// notes: one marked, quotable judgment per piece.
-const Callout: React.FC<{ marker: string; children: React.ReactNode }> = ({ marker, children }) => (
-  <aside className="notes__callout">
-    <span className="notes__callout-marker">{marker}</span>
-    <p className="notes__callout-text">{children}</p>
-  </aside>
-);
-
-// Naming graveyard — the exploration tree, left visible. Each branch is a
-// theme that produced names; the verdict is why it died. Dead names are <s>,
-// so the state survives without color. Only the surviving branch is orange.
-const Branch: React.FC<{
-  theme: string;
-  names: string[];
-  verdict: string;
-  kept?: boolean;
-}> = ({ theme, names, verdict, kept }) => (
-  <li className={`notes__branch${kept ? ' notes__branch--kept' : ''}`}>
-    <span className="notes__branch-theme">{theme}</span>
-    <ul className="notes__branch-names">
-      {names.map((name) => (
-        <li key={name} className="notes__branch-name">
-          {kept ? name : <s>{name}</s>}
-        </li>
-      ))}
-    </ul>
-    <p className="notes__branch-verdict">{verdict}</p>
-  </li>
-);
-
-const Graveyard: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ul className="notes__graveyard">{children}</ul>
-);
-
-// Turn frame — two readings of the same problem side by side. Used once, at
-// the point where the naming criteria changed.
-const Turn: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="notes__turn">{children}</div>
-);
-
-const TurnSide: React.FC<{
-  label: string;
-  question: string;
-  kept?: boolean;
-  children: React.ReactNode;
-}> = ({ label, question, kept, children }) => (
-  <div className={`notes__turn-side${kept ? ' notes__turn-side--kept' : ''}`}>
-    <span className="notes__turn-label">{label}</span>
-    <p className="notes__turn-q">{question}</p>
-    <p className="notes__turn-body">{children}</p>
-  </div>
-);
-
-// Term split — dictionary-entry treatment for a two-part name. The summation
-// line is deliberately quieter than a Callout; a piece only gets one of those.
-const Split: React.FC<{ sum: string; children: React.ReactNode }> = ({ sum, children }) => (
-  <div className="notes__split">
-    {children}
-    <p className="notes__split-sum">
-      <span className="notes__split-sum-marker" aria-hidden="true">=</span>
-      <span>{sum}</span>
-    </p>
-  </div>
-);
-
-const Term: React.FC<{ word: string; gloss: string; children: React.ReactNode }> = ({
-  word,
-  gloss,
-  children,
-}) => (
-  <div className="notes__term">
-    <span className="notes__term-head">
-      <span className="notes__term-word">{word}</span>
-      <span className="notes__term-gloss">{gloss}</span>
-    </span>
-    <p className="notes__term-def">{children}</p>
-  </div>
-);
-
-// Umbrella — parent identity over the products it attributes. Shares the
-// graveyard's rail geometry on purpose: same relationship, drawn the same way.
-// The open slot renders as a hollow node, an honest empty state rather than a
-// tidier list of two.
-const Umbrella: React.FC<{ parent: string; children: React.ReactNode }> = ({
-  parent,
-  children,
-}) => (
-  <div className="notes__umbrella">
-    <p className="notes__umbrella-head">
-      <span className="notes__umbrella-parent">{parent}</span>
-      <span className="notes__umbrella-kind">[ Parent ]</span>
-    </p>
-    <ul className="notes__stack">{children}</ul>
-  </div>
-);
-
-const StackItem: React.FC<{
-  name: React.ReactNode;
-  status: string;
-  open?: boolean;
-  children: React.ReactNode;
-}> = ({ name, status, open, children }) => (
-  <li className={`notes__stack-item${open ? ' notes__stack-item--open' : ''}`}>
-    <span className="notes__stack-name">{name}</span>
-    <span className="notes__stack-status">{status}</span>
-    <p className="notes__stack-desc">{children}</p>
-  </li>
-);
 
 export interface Note {
   slug: string;
@@ -135,7 +23,6 @@ export interface Note {
   title: string;
   dek: string;       // one-line summary — index row + meta description
   read: string;      // estimated read time, e.g. '3 min' — index + article meta
-  body: React.ReactNode;
   /** Original site notes do not imply a prior LinkedIn publication. */
   origin?: 'portfolio';
   /** Drafts remain visibly marked while the title and note are being refined. */
@@ -165,14 +52,6 @@ export const NOTES: Note[] = [
     title: 'The line between Figma and the AEM codebase is getting thinner',
     dek: 'With the MCP connection I now push between code and Figma in both directions, and the governance skill I built rides along.',
     read: '2 min',
-    body: (
-      <>
-        <p>The through line between our AEM codebase and Figma is getting thinner and thinner. With the MCP connection, I can now push from code to Figma and from Figma to code, and bring an idea in and out of production with general ease.</p>
-        <p>Every push in either direction adheres to the governance skill I built. The rules travel with the component, so what comes back from Figma still follows what the system already holds, and what goes out to Figma arrives as the option an author can select in AEM.</p>
-        <p>The <Link to="/work/aem-component-system/">AEM component system study</Link> shows the line a component crosses: drawn and given a test in Figma, selected in the AEM editor, shipped as a rule in the Sass branch. The MCP connection is what shortens each crossing.</p>
-        <p>I wrote earlier about the direction I most wanted to prove, working backward from production AEM components into Figma, in <Link to="/notes/aem-meeting-authors-where-they-work/">AEM is starting to meet authors where they work</Link>. This note is where that experiment stands.</p>
-      </>
-    ),
   },
   {
     slug: 'steering-into-aem',
@@ -184,55 +63,6 @@ export const NOTES: Note[] = [
     title: 'Steering into AEM instead of away from it',
     dek: 'My strongest case studies sit behind a password, so the page has to show how I think. I gave it an AEM Author view the curious can open.',
     read: '5 min',
-    body: (
-      <>
-        <p>Since I started this portfolio, I have wanted it to show how I think, what I can do, and what I am good at. The constraint has never changed. My strongest case studies are employer work, so they sit behind a password, and the work cannot do the heavy lifting on its own. The page around it has to.</p>
-        <p>So I keep adding and refining, and I keep watching that no single section gets too loud. One thing the page had never shown was AEM. It mentioned twelve years of it in prose on page after page and showed none of it, even after I wrote about where AEM authoring is heading, including Adobe&rsquo;s Experience Workspace, in <Link to="/notes/aem-meeting-authors-where-they-work/">AEM is starting to meet authors where they work</Link>. Everything a visitor could see spoke Figma: selection frames, a layers panel, spec annotations around the portrait.</p>
-        <p>The push came from <a href="https://jessa.art" target="_blank" rel="noopener noreferrer">Jessa Wolfe&rsquo;s portfolio</a>, which she built as a living design canvas. Her post about it made a point I agree with: AI can get a build started, and taste decides whether anyone loves it. I did not want her canvas. I wanted my own vernacular, and the one I know best is the authoring environment.</p>
-        <p><strong>So I stopped explaining AEM and let the homepage show it, in a layer the curious can open and everyone else can skip.</strong></p>
-
-        <h2>The rules came before the features</h2>
-        <p>Before anything was built, I set the rules it had to follow. Most came from decisions I had already made about this site, and they ruled out more ideas than they let in.</p>
-        <ul>
-          <li>Motion only answers something the reader does. At rest everything is still, and orange marks a state rather than decoration.</li>
-          <li>Every control does something the page can honor. There is no drag and drop, no Publish button, and no device emulator that cannot resize anything.</li>
-          <li>Every annotation is a decision already written down somewhere, and it says where.</li>
-          <li>Employer and client studies stay behind the same password. The new surfaces only repeat what is already public.</li>
-          <li>No new sections. I cut the homepage from about 10,700px to about 9,000px in September, and the new layer adds no height.</li>
-        </ul>
-
-        <h2>Every section now has an address</h2>
-        <p>The switch in the bottom corner offers the two tiers every AEM author works between. Publisher is the page as visitors see it. Author is the same page with its construction showing. In Author, each section below the fold is outlined and named by its resource type, the way AEM addresses a component. The FAQ is <code>core/wcm/components/accordion/v1</code>, because it is an accordion.</p>
-        <p>The peer recommendations render locked, with the policy inherited from the template: verbatim, no paraphrase. That is a real rule of mine, and AEM gave me a way to state it without another sentence of copy.</p>
-        <figure className="notes__figure">
-          <a href="/images/notes/author-publisher/author-locked-component.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open the locked recommendations component at full size">
-            <img src="/images/notes/author-publisher/author-locked-component.jpg" width={2880} height={1800} loading="lazy" alt="The homepage in Author mode. The peer recommendations section has a dashed outline, a lock, the resource type rdeboer/components/recommendation-list, and the policy Inherited from template: verbatim, no paraphrase." />
-          </a>
-          <figcaption>A locked component in Author. The policy carries the rule; the outline shows where it applies.</figcaption>
-        </figure>
-        <p>The Asset Panel docks on the left like AEM&rsquo;s asset finder, with every case study, every note, and the one Experience Fragment on the page. Employer studies show <em>Permission required</em>, and opening one raises the same unlock prompt the cards use. Page properties holds the page&rsquo;s search description, its template, how it was built, and the git commit it was built from, stamped at build time. Seven numbered annotations sit on the sections themselves and explain decisions the page cannot show.</p>
-        <figure className="notes__figure">
-          <a href="/images/notes/author-publisher/author-asset-panel.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open the Asset Panel view at full size">
-            <img src="/images/notes/author-publisher/author-asset-panel.jpg" width={2880} height={1800} loading="lazy" alt="The Asset Panel docked on the left of the homepage, listing case studies with thumbnails and metadata. Employer studies show a lock and Permission required. The author bar sits in the bottom corner." />
-          </a>
-          <figcaption>The Asset Panel docked beside the work. Locked studies read as DAM permissions instead of missing files.</figcaption>
-        </figure>
-
-        <h2>Most of the three days were corrections</h2>
-        <p>Two of the seven annotations overstated their sources. One said five accounts of my process had been cut, when they had been reconciled into one. Another named LinkedIn as the source of every recommendation, which nothing on the page established. Both turned up when each pin was checked against the document it cites, and both were corrected the same day.</p>
-        <p>Opening a case study from the Asset Panel dropped readers out of Author. I wanted Back, or closing the study, to return them exactly where they were, panel and pins included, and now it does. The panel also covered the left side of the page at first. It now docks, and the page re-centers in the remaining space with equal margins on both sides.</p>
-        <p>Testing without reduced motion turned up a bug the live site had been carrying for a while: React was discarding the prerendered homepage on every load and drawing it again. It predated this work. The fix shipped with a deploy check that loads every prerendered route as four kinds of visitor, so a regression fails the build.</p>
-        <p>The work section went through the same cycle. It had grown a row of controls a visitor had to read before reaching the work, so most of them moved into Author. Then I missed choosing the layout, and the Cards, List, and Grid toggle came back to Publisher.</p>
-
-        <h2>Page details moved out of the reading path</h2>
-        <p>Once the page had properties and annotations, some homepage copy fit better there. The FAQ answer about how the site was built became the Built with and Authorship rows in Page properties. A paragraph in How I work that repeated the AEM row in Capabilities moved into that section&rsquo;s annotation. The Case Studies intro line restated its own heading, so I cut it. The How I work board moved into a note of its own, <Link to="/notes/shared-language-better-product-decisions/">Shared language. Better product decisions.</Link></p>
-        <p>Most visitors will never open Author, and that is deliberate. Publisher stays quiet enough to scan in a minute. Author is for the reader who wants to know how something was built, and it gives them the process the locked studies cannot. I only moved what describes the page. Evidence of the work stayed where everyone reads it.</p>
-
-        <h2>What Claude did, and what I decided</h2>
-        <p>Claude researched the reference, proposed most of the AEM mapping, built the components, tested them at desktop and phone widths, and ran the deploys. I set the rules, chose AEM over another canvas, and made the calls that shaped how it feels: Publisher instead of Preview, Asset Panel instead of Side Panel, a docked panel instead of an overlay, cards that run white to their bottom edge, and WheelRack filed under Product Design, where it belongs as a full design system and a 0 to 1 product.</p>
-        <p>I do not know yet how many people will find the switch. The ones I hope find it have authored in AEM themselves, and I suspect they will recognize the locked component before they read a word of it. If that is you, switch to Author in the bottom corner of the <Link to="/">homepage</Link> and tell me what I got wrong.</p>
-      </>
-    ),
   },
   {
     slug: 'shared-language-better-product-decisions',
@@ -243,32 +73,6 @@ export const NOTES: Note[] = [
     dateISO: '2026-10-16',
     title: 'Shared language. Better product decisions.',
     dek: 'Shared context → design + code → validation → context for the next change. The board I work from, and the loop that runs through it.',
-    body: (
-      <>
-        <p>
-          For a new or changed system component, I start with a shared language: what it needs to do,
-          what already exists, and what design and code each need to express.
-          <strong> Shared Product Context is both the starting point and the return point.</strong>
-        </p>
-        <p>
-          My recent exploration brings Figma and custom MCP tools into that planning context.
-          They help me inspect and execute; I own the decisions. Figma and code build from the
-          same plan. After validation, Code Connect captures the implementation relationship back in Figma.
-          Each change should leave a clearer map between intent, design, and production.
-        </p>
-        {/* The board and the loop, drawn settled: a note is read, not scrolled
-            into, so nothing waits on a reveal. Hover or focus a beat to light
-            the nodes it claims. */}
-        <div className="sip sip--note">
-          <SystemsBoard revealed />
-        </div>
-        <p>
-          <Link to="/work/playdraft/">PlayDraft</Link> is the public study where the whole loop is
-          visible: Figma, a token-governed build, Maestro QA, and the{' '}
-          <Link to="/design-system">live system</Link>.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -282,66 +86,6 @@ export const NOTES: Note[] = [
     title: 'I simplified PlayDraft until it stopped feeling like a game',
     dek: 'I overbuilt PlayDraft, then stripped it until it stopped feeling like a game. Working through the correction with multiple LLMs, then making the decisions visible across nine Paper artboards.',
     read: '6 min',
-    body: (
-      <>
-        <p>I wrote my design taste into <Link to="/notes/ryan-design-taste-skill/">a skill an agent can follow</Link>. One of its committed rules is that simplicity means fewer unresolved decisions, not fewer elements. Then I spent months building a mobile app that broke the rule in both directions.</p>
-        <p>When I started building PlayDraft with Claude, I was having an absolute blast. Ideas I would normally explore in Figma turned into working interactions. Animations, progression, rewards, custom transitions, scoring. Every time I found something new I could build, I went looking for a place to put it.</p>
-        <p>Some of that was also a way to avoid launching a v1.</p>
-        <p>The app started to feel like something that had been on the market for ten years, layering on features to keep an established audience engaged. I didn't have an established audience. I had one idea: take what makes a fantasy football draft fun and point it at anything. Somewhere in there, I'd made that idea harder to find.</p>
-        <p>I wanted PlayDraft to get back to its simplest idea: draft anything draftable. Pick a pack, bring people together, take turns, and see what everyone chose. The app had accumulated a lot around that loop. Competitive modes, a Binder, a Store, and progression each gave me another system to maintain and another thing to explain.</p>
-        <p>That pass started with taking those extras out of the next version. Custom packs and ready-made packs could share a drafting flow. A short clock and an eight-hour clock could use the same rules. Drafts needed a clearer home, and the recap deserved more attention.</p>
-        <p>Then I looked at the simplified screens. They felt like a list app. I'd asked for less complexity and ended up with less PlayDraft.</p>
-
-        <h2>Where I pulled it back</h2>
-        <p>The avatars, pack shields, condensed type, and a little visual depth were doing useful work. They helped people recognize themselves, find a pack, and feel like they were about to play something. I wanted to keep that character while reducing the mechanics around it.</p>
-
-        <Callout marker="The correction">
-          My own rule says simplicity is fewer unresolved decisions. I had been reading
-          it as fewer things on screen.
-        </Callout>
-
-        <p>I pushed for a middle ground. Home could still have a strong opening moment, but only one. When a draft needs your turn, that card takes the lead. Pack artwork stays recognizable. Characters represent people, rather than becoming another set of illustrations to generate for every draft choice.</p>
-        <p>Some of the corrections were small and very specific. I asked to try the actual Big Shoulders Display font. We reduced the pack shields to 80% of their previous size without shrinking the whole card. Saving a custom pack also needed to work independently of hosting a game. People should be able to put an idea down and come back to it.</p>
-
-        <figure className="notes__figure">
-          <a href="/images/notes/playdraft-system/home.png" target="_blank" rel="noopener noreferrer">
-            <img src="/images/notes/playdraft-system/home.png" alt="Paper artboard showing the revised PlayDraft Home, Drafts, and Packs screens, with mascot avatars, textured pack shields, and gold actions." width={1380} height={1088} loading="lazy" />
-          </a>
-          <figcaption>The revised Home, Drafts, and Packs direction in Paper. The pack artwork and player identity survived the simplification. Open the image to inspect it at full size.</figcaption>
-        </figure>
-
-        <h2>The back and forth mattered</h2>
-        <p>I worked through the direction with Astra, brought a Claude Fable review back into the thread, and used the wider Opus audit work as context. Passing work between models gave us more chances to question a decision. I still had to decide which feedback fit the game.</p>
-        <p>One review questioned the Gold Rush avatar accent because gold also marks selection and live turns. Removing the accent would have made the rules tidier, but it would have changed an established avatar. We kept its color and gave the current player a small YOU badge. That solved the identification problem without stripping another piece of character.</p>
-        <p>The native review caught things the presentation hadn't made obvious. Player labels overlapped. A green pack shield had picked up a blue glow. Casing drifted between screens. Those were useful disagreements because we could point to a specific frame and fix the rule behind it.</p>
-
-        <PaperArtboardGallery conversation boards={[
-          ['chat-direction', 'My feedback on pack artwork and repeatable patterns', 2066, 1632],
-          ['chat-handoff', 'The Opus and Astra handoff before implementation', 2020, 1464],
-          ['chat-review', 'Bringing Fable’s review back and approving the corrections', 2304, 1966],
-        ]} />
-        <p>In these exchanges, I kept the existing shields, questioned how the pitch would translate into code, and brought the review back into the working thread. The fixes needed my decisions before the next pass.</p>
-
-        <h2>Give the decisions a place to live</h2>
-        <p>Once the direction felt right, we worked backward into the system. A live-turn card needs a named pattern. A pack tile needs rules for its shield, texture, label, and accent. A configuration choice needs to look and behave differently from a filter. Otherwise every new screen starts inventing those answers again.</p>
-        <p>The v2 review now lives across nine artboards in Paper. Foundations and type sit alongside surfaces, controls, repeated patterns, the main screens, the drafting journey, and states. It gives me one place to inspect whether the same decisions hold up across the app.</p>
-        <p>These boards came from the runtime definitions and component work. It's a one-way review snapshot. Paper isn't automatically syncing changes back into the app, and a clean board still needs a native check. Even the display font needed care: Paper uses outlines from the bundled font where it couldn't resolve the exact face.</p>
-
-        <PaperArtboardGallery />
-        <p>You can also <a href="https://app.paper.design/file/01M4GJP6G86WS4Y93D79YZRDQQ/p-1-0" target="_blank" rel="noopener noreferrer">open the review in Paper</a>.</p>
-
-        <h2>Bring it back into the app</h2>
-        <p>Home is the first integration. The rest of the app still needs to move over in steps. I'm checking large text, player stacks, empty states, and what happens when a draft needs attention. VoiceOver and smaller devices need their own pass. A system that works in a review board can still fall apart when someone's name is long or the keyboard opens.</p>
-        <p>I'm glad we caught the over-simplification before treating it as the new direction. I can explain PlayDraft more easily now, and the revised system gives me a way to keep its personality as I build the next screens.</p>
-
-        <h2>I needed the overbuilt version</h2>
-        <p>I'm proud of where PlayDraft landed. It shows more of my technical curiosity and my design judgment than anything else I have made, and not because I built every feature I imagined. I learned which ones didn't belong.</p>
-        <p>The App Store is crowded, and PlayDraft may never find much of an audience. I am fine with that. Taking it from nothing to a released app, with a design system underneath it, has already taught me things a static prototype could not: how a decision holds up in a real build, and which of my own ideas to throw away.</p>
-        <p>I had to make the thing before I could see what it did not need.</p>
-        <p>If you have a few friends willing to draft horror movies, favorite snacks, or anything else worth arguing about, <a href={playdraft.appStoreUrl} target="_blank" rel="noopener noreferrer">play it on iPhone</a> and tell me what still feels unnecessarily complicated. That is the part I am least able to judge on my own.</p>
-        <p><Link to="/work/playdraft/">See the PlayDraft case study</Link>.</p>
-      </>
-    ),
   },
   {
     slug: 'aem-meeting-authors-where-they-work',
@@ -353,55 +97,6 @@ export const NOTES: Note[] = [
     title: 'AEM is starting to meet authors where they work',
     dek: 'What I plan to test with Claude and AEM, and why I want our production component library to inform the work in Figma.',
     read: '5 min',
-    body: (
-      <>
-        <p><em>Updated October 10, 2026.</em></p>
-        <p>The tools change every time I blink. Adobe's recent Developers Live online sessions, including the <a href="https://www.youtube.com/watch?v=b8IeoY4SKBI" target="_blank" rel="noopener noreferrer">September 8 Experience Workspace demo</a>, have me excited about AEM work again. It feels like the authoring experience is finally catching up with how our teams want to work.</p>
-        <p>I spend most of my day in Claude already, building internal tools and automating routine tasks. Much of that work is about keeping our component library and brand assets consistent. Bringing AEM into that process feels like a natural next step.</p>
-        <p>I've spent years building in AEM and helping people use it. Some teammates know their content and customers inside out but have been reluctant to open AEM for years. I want a copy change to take less CMS training. That is where I plan to start with our product design, SEO, and content teams.</p>
-
-        <h2>Start with one copy change</h2>
-        <p>Adobe shipped Content MCP servers in AEM as a Cloud Service in January 2026. The AEM connector for Claude supports page and Content Fragment edits under the signed-in user's AEM permissions.</p>
-        <p>Experience Workspace is a different authoring tool. It is in early access for Edge Delivery Services projects using its document-based repository, and has its own MCP connection. Coworker is another Adobe client for agentic work. Agent and Coworker access depends on the capability, trial or license, and organization. I'll confirm what our setup supports before choosing a path.</p>
-        <p>My first test will be a Content Fragment copy change in a sandbox. Adobe recommends its AI Assistant for practitioners changing or deleting content, because its AEM Agents include safeguards. I'll use that guidance when choosing the workflow for our authors.</p>
-        <p>I want to see whether an SEO teammate can find the right content, edit it through the approved interface, and understand where the change appears. For page copy, I'll compare the markup before and after to check that heading levels, links, and component settings hold up.</p>
-        <p><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service" target="_blank" rel="noopener noreferrer">Adobe's guide to using MCP with AEM</a>.</p>
-
-        <h2>Give the skill our component rules</h2>
-        <p>The Figma-to-AEM demo got me thinking beyond copy edits. In the demo, Coworker evaluates a design against an existing template and maps it to the components that template allows. That connects directly to the component rules I already spend so much time building.</p>
-        <figure className="notes__figure">
-          <a href="/images/notes/aem-authoring/figma-to-aem.png" target="_blank" rel="noopener noreferrer" aria-label="Open the Figma-to-AEM demo frame at full size">
-            <img src="/images/notes/aem-authoring/figma-to-aem.png" width="3490" height="1816" loading="lazy" alt="Adobe demo comparing a cycling page in Figma with its authored AEM page." />
-          </a>
-          <figcaption>A Figma design carried into AEM in Adobe's Coworker demo. Open any frame at full size.</figcaption>
-        </figure>
-        <p>My <Link to="/work/aem-component-system/">AEM component work</Link> covers variants, production styles, and authoring defaults. The <Link to="/work/landing-pages/">template system</Link> defines where authors can use them. I'll map Figma components to those AEM equivalents and provide approved references where the mapping is incomplete.</p>
-        <p>A custom skill can hold the guidance we usually have to explain: which variant fits, which brand assets to use, and when to stop and ask. AEM permissions and policies still apply. I'll review what the agent produces against our component rules and the rendered page.</p>
-        <p>I'm also studying Adobe's published <a href="https://github.com/adobe/skills" target="_blank" rel="noopener noreferrer"><code>figma-to-content</code> skill</a>. It targets document-based Edge Delivery Services content, a separate workflow from the Coworker demo. I'll assess what we can adapt to our system.</p>
-        <figure className="notes__figure">
-          <a href="/images/notes/aem-authoring/template-mapping.png" target="_blank" rel="noopener noreferrer" aria-label="Open the template evaluation frame at full size">
-            <img src="/images/notes/aem-authoring/template-mapping.png" width="3744" height="2594" loading="lazy" alt="Coworker evaluates a content-page template, identifies its allowed components, and proposes mappings from design blocks to Teaser, Separator, Text, and Title." />
-          </a>
-          <figcaption>The demo checks allowed components and existing header and footer Experience Fragments before proposing a page mapping.</figcaption>
-        </figure>
-
-        <h2>Then try the other direction</h2>
-        <p>What interests me even more is working backward from our production AEM components into Figma. A designer choosing a teaser variant should see the same options an author has in AEM.</p>
-        <p>I'll start with one component family. Its properties, content limits, responsive behavior, and template restrictions will guide the Figma version. Engineering and I will compare it with the rendered component before expanding the library.</p>
-        <p>I haven't proved this reverse workflow yet. It is the experiment I most want to build, because it could give the design team a more accurate starting point for the pages we already ship.</p>
-
-        <h2>Make the first pilot useful</h2>
-        <p>Once access is confirmed, I'll bring a designer, an SEO teammate, and a content manager into the sandbox with one familiar landing page. We'll start with copy edits, then assess a draft built from an approved Figma design. I'll track time to a reviewed draft, requests for help, and corrections. The time I spend preparing the skill and component mapping counts too.</p>
-        <figure className="notes__figure">
-          <a href="/images/notes/aem-authoring/authored-page-summary.png" target="_blank" rel="noopener noreferrer" aria-label="Open the authored page summary at full size">
-            <img src="/images/notes/aem-authoring/authored-page-summary.png" width="5120" height="2880" loading="lazy" alt="Adobe Coworker summary lists nine authored components, four imported images, inherited header and footer fragments, and CTA links still needing real destinations." />
-          </a>
-          <figcaption>Adobe's demo lists what it created and flags placeholder CTA links that still need real destinations.</figcaption>
-        </figure>
-        <p>Those placeholder links are a useful reminder of what still needs a person. I'll check the content and links as well as the component choices before anything is published.</p>
-        <p>I want to see whether this makes an ordinary content update easier for someone who has avoided AEM for years. That will tell me more about the next step than the demo alone can.</p>
-      </>
-    ),
   },
   {
     slug: 'the-fundamentals-make-room-for-more',
@@ -413,34 +108,6 @@ export const NOTES: Note[] = [
     title: 'The fundamentals make room for more',
     dek: 'Sixteen years of design fundamentals, new workflows, and the ideas I now get to try.',
     read: '4 min',
-    body: (
-      <>
-        <p>I took <Link to="/work/playdraft/">PlayDraft</Link> from an idea to a full mobile app build in two months. That's crazy to me.</p>
-        <p>For a long time, an idea like that came with a second thought: when would I ever find the time to learn everything needed to make it? I could imagine the experience I wanted. Getting it into something I could actually use was a much bigger commitment.</p>
-        <p>Agentic tools gave me a way to start. I could build, ask questions, change things, and learn through an app I wanted to exist. React Native became something I was learning with a reason to keep going.</p>
-        <p>I keep coming back to how good that feels. There are ideas I now get to try that I would previously have left alone.</p>
-        <h2>More ideas feel possible</h2>
-        <p>Motion and video are part of that excitement too. I can have an idea for how something should move or how a story might unfold, then get help making a version I can react to. I don't have to put every idea behind months of learning a new production tool before I find out whether there is anything in it.</p>
-        <p>I'm still learning. I just get to do more of that learning while making the thing.</p>
-        <p><Link to="/notes/exploring-my-portfolio-in-paper/">Paper has been giving me that feeling</Link> with my portfolio. I can prompt a direction, look at it on the canvas, make adjustments, and try again. I can get specific about what I want to change while the idea is still fresh.</p>
-        <p>That is where the speed matters to me. I get to spend less time wondering whether something might work and more time looking at a version of it. Sometimes that gives me a better direction. Sometimes it makes the problem with the idea obvious. Either way, I have something to work with.</p>
-        <h2>I still have to know what I am looking at</h2>
-        <p><strong>The fundamentals give me discernment and direction. Agentic tools give me more ways to act on both.</strong></p>
-        <p>Sixteen years of design still show up in what I notice. I look at where my eye goes first and whether that is where it should go. I can enjoy an animation and still decide it is pulling attention away from what someone needs to do.</p>
-        <p>Those are the things I am using when I look at an agent's output. I need to know what is working, explain what feels wrong, and choose what deserves another pass.</p>
-        <p>My portfolio exploration made that very clear. It became easy to generate more things to say and more ways to present them. The page got too talkative. On mobile, I ended up removing the role panel and annotations around the portrait so the introduction had room.</p>
-        <p>The tools helped me produce and revise the alternatives. I had to decide what earned its place.</p>
-        <p>That is why the fundamentals matter so much to me in this workflow. They help me <Link to="/notes/ryan-design-taste-skill/">give useful direction before a prompt</Link> and make a decision after it. The ability to produce more versions makes that judgment something I use more often.</p>
-        <h2>The people are part of what is fueling me</h2>
-        <p>I've just joined the Dive Club Discord, and I'm excited to get involved.</p>
-        <p>I've spent months working through the Dive Club catalog, and Dive Radio has become part of my week. I come away wanting to open a project and try something I just saw.</p>
-        <p>I think some of the most talented designers in the industry are gathering around these conversations. What I like is how willing they are to explore the tools and show their work while they are figuring things out. Every week seems to bring another model or another possibility to make sense of.</p>
-        <p>Joining the Discord gives me a place to bring my own experiments into that conversation. I want to see what other people are trying, share what I am making, and follow an idea further because somebody helped me see another possibility in it.</p>
-        <p>There is a lot I want to explore, and being around that kind of curiosity makes me want to keep going.</p>
-        <p>I built a mobile app in two months. Now I'm looking again at the other ideas I thought I would never have time to make.</p>
-        <p>A lot more of them feel worth starting.</p>
-      </>
-    ),
   },
   {
     slug: 'exploring-my-portfolio-in-paper',
@@ -451,31 +118,6 @@ export const NOTES: Note[] = [
     title: 'Exploring my portfolio in Paper',
     dek: 'What changed when I used Paper to explore the story, then tested those decisions in the working site.',
     read: '3 min',
-    body: (
-      <>
-        <p>I’ve been using my portfolio to explore a different way of working between the canvas and code. Paper gave me somewhere to try a direction, change the copy, and compare ideas before committing them to the site.</p>
-        <p>The first question was about how I introduce myself. I’m applying for product design and systems roles, but my curiosity has taken me further into building. I wanted the opening to show that range without making someone sort through a collection of job titles to understand where I fit.</p>
-        <p>We explored three directions in Paper, then combined the systems thinking with the creative builder angle. I moved the portrait, tried different headline treatments, and turned the layer panel into roles I can occupy. The shared product context stayed at the center of the systems story: decide what something needs to mean, build it, then bring what we learn back into the next decision.</p>
-        <figure className="notes__figure">
-          <img src="/images/notes/paper-exploration/paper-hero-exploration.webp" width="1345" height="2000" loading="lazy" alt="Early Paper concept pairing a portrait and roles panel with systems and creative builder copy." />
-          <figcaption>An early Paper direction. The composition brought systems thinking and the creative builder story together; the wording and hierarchy were still being explored.</figcaption>
-        </figure>
-        <p><strong>The useful part was having something concrete to disagree with.</strong> I could point at a frame, change it, and ask for a version with less copy. The tools helped generate and revise alternatives. I still had to decide which one sounded like me, which details earned their space, and what the page needed to communicate first.</p>
-        <p>The mobile pass made that distinction clearer. We brought the hero into an editable frame so I could adjust it directly. That frame gave us the direction; the site's spacing and typography tokens governed the implementation. On smaller screens, the role panel and annotations came off the portrait. The image came first, followed by the product-design copy. The circle animation had to fit inside that composition instead of spilling into the next section.</p>
-        <figure className="notes__figure notes__figure--mobile">
-          <img src="/images/notes/paper-exploration/paper-mobile-direction.webp" width="390" height="1000" loading="lazy" alt="Edited mobile Paper frame with the portrait above the headline and product design introduction." />
-          <figcaption>My mobile direction in Paper. Removing the panels gave the portrait and introduction room; the site’s tokens still governed the final spacing.</figcaption>
-        </figure>
-        <p>There was a cost to the exploration. I kept finding interesting things to explain, and the portfolio grew more talkative. A polished frame could make that feel resolved before the working page showed how much reading it asked of someone. The local preview was where spacing, motion, and the weight of the copy became easier to judge.</p>
-        <figure className="notes__figure">
-          <img src="/images/notes/paper-exploration/implemented-hero.webp" width="1440" height="1100" loading="lazy" alt="Implemented portfolio hero with Passionate Designer and Curious Builder headline, portrait and interactive roles panel." />
-          <figcaption>The implemented hero before this next editing pass. Motion and responsive behavior made the reading load easier to judge than a static frame.</figcaption>
-        </figure>
-        <p>I’m still exploring this workflow. It hasn’t replaced Figma or become a rule for every project. It has given me another way to put a decision in front of me early and test whether it survives implementation.</p>
-        <p>That same curiosity is part of why I keep <Link to="/work/playdraft/">building and evolving PlayDraft</Link>. The app brings a different set of constraints: behavior, edge cases, and a release that has to work beyond the frame. Paper helps me explore the direction. A working product tells me where it needs another pass.
-</p>
-      </>
-    ),
   },
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -492,82 +134,6 @@ export const NOTES: Note[] = [
     dateISO: '2026-08-31',
     title: 'I cannot learn a tool from a tutorial. I have to build something I will have to maintain.',
     dek: 'Late 2025 I was using LLMs as a better search box. The path to shipping internal tooling ran through one thing: picking a real product and being stuck with it.',
-    body: (
-      <>
-        <p>
-          Toward the end of 2025 I was using LLMs mostly as a better search box and a copy editor.
-          Routine questions, recipes, cleaning up things I had already written. Useful, and entirely
-          outside the work.
-        </p>
-        <p>
-          What changed it was not an article. It was hundreds of hours of{' '}
-          <Link to="/notes/studying-the-tape/">watching people I learn from at a distance</Link>{' '}
-          (Tommy Geoco and Michael Riddering especially) change their own workflows in
-          public, over months. Eventually watching stopped being enough. I wanted into the weeds
-          myself.
-        </p>
-
-        <h2>Pay for it yourself, then pick something you actually want</h2>
-        <p>
-          So I paid for Claude and Codex out of pocket, picked a product I genuinely wanted to
-          exist, and started building. <Link to="/work/playdraft/">PlayDraft</Link> began as a
-          design exploration and is now a React Native app on the App Store. Getting it there ran
-          through product strategy, game mechanics, a token-governed design system, front-end
-          implementation, testing, and App Store constraints.
-        </p>
-        <p>
-          It may still make exactly zero dollars in the App Store. As a place to learn it has
-          already been worth more than that, because it forced decisions no tutorial or tool
-          comparison could have manufactured, including{' '}
-          <Link to="/notes/eight-wrong-first-drafts/">eight where my first idea lost to a number</Link>.
-          A tutorial hands you a finished decision. A product you are stuck with hands you the
-          argument.
-        </p>
-
-        <h2>Then I asked for it at work</h2>
-        <p>
-          About six months ago I brought the practice into my day job, which meant going to my
-          managers and to IT and making an actual case: an internal tooling effort, company access
-          to Claude and Opus, room to explore new workflows inside work we were already doing.
-        </p>
-        <p>
-          They said yes. That is the part of this I would have found least believable a year
-          earlier, and it is the part that mattered most. Personal practice stays a hobby until
-          somebody lets you point it at the real thing. Now those tools run daily against{' '}
-          <Link to="/work/design-enablement/">internal applications and workflow tools</Link>, and
-          against reusable agent skills: some that remove repeat setup, others that carry
-          team standards and context into work that used to start from scratch, like{' '}
-          <Link to="/notes/ryan-design-taste-skill/">the one that encodes my own taste</Link>.
-        </p>
-
-        <Callout marker="The method">
-          I need a real system to make, maintain, test, and occasionally undo. Tutorials give you
-          the making and stop there.
-        </Callout>
-
-        <h2>The pattern is older than the tools</h2>
-        <p>
-          None of this approach is new for me. When I was learning how to establish a design system
-          for a large organization, I went and found the right training and spent months inside the
-          problem before I pushed a single token into Tokens Studio or a component into Storybook.
-          The result was{' '}
-          <Link to="/work/wheelrack/">a system other people build from</Link>, and it took that long
-          because a design system is not a file either. It is something you maintain, argue with,
-          and occasionally roll back.
-        </p>
-        <p>
-          The tools changed. The way I learn them did not. I still cannot get there by reading about
-          it, and I still cannot tell whether I understand something until I have had to keep it
-          working for a few months.
-        </p>
-        <p>
-          Which tool are you choosing to learn through a real project right now?
-        </p>
-        <p className="notes__source">
-          <LinkedInLink label="A shorter version of this started as a post" surface="note_source" />
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   // Two live client engagements. Deliberately scoped to what is Ryan's to tell:
@@ -585,112 +151,6 @@ export const NOTES: Note[] = [
     dateISO: '2026-08-31',
     title: 'The brief came second: two projects where I was already the audience',
     dek: 'A Type 1 diabetes practice and an NFL analyst, both in progress. Each started from something I was already obsessed with, and each ended in a tool, not a file.',
-    body: (
-      <>
-        <p>
-          Two engagements are running right now that I did not pitch in any normal sense. In both
-          cases I was already deep in the subject before there was any work to do, and the brief
-          arrived afterwards. That order turns out to change what you make.
-        </p>
-
-        <h2>A Type 1 practice, for reasons that are not professional</h2>
-        <p>
-          T1D Hub is a Type 1 diabetes practice Dr. Brian Huber is opening, and Brian is a close
-          friend. I have been a Type 1 diabetic for most of my life, and I now have two young kids
-          and a real understanding that this could become part of their lives too. So when he
-          started building the practice, I was not a designer looking at a healthcare brief. I was
-          about as close to both the vision and the people it needs to serve as a designer can get.
-        </p>
-        <p>
-          What I brought first was a mark and a small design system, plus a working prototype to
-          discuss with Brian.
-        </p>
-        <p>
-          I also wrote a vision handoff for a personalized portal. It describes onboarding based
-          on someone's diabetes experience, an education library organized as courses, and a place
-          to find support.
-        </p>
-        <p>
-          Most of that is years out. Writing it down early helps us make room for it in the first version.
-        </p>
-        <figure className="notes__figure">
-          <img
-            src="/images/notes/t1d-hub/logo-system.png"
-            alt="T1D Hub logo system: the primary lockup on white and the reversed lockup on navy. In both, a continuous glucose monitor trace runs through the wordmark, entering at the T and connecting across the 1 and D."
-            loading="lazy"
-          />
-          <figcaption>
-            The mark and the rule that governs it. A CGM trace runs through the wordmark, and it has
-            to stay connected in every configuration. That constraint is the whole idea: the line a
-            Type 1 reads every day is the line holding the name together.
-          </figcaption>
-        </figure>
-        <p>
-          I am a contributor to Brian's practice, not the owner of it, and the site has not
-          launched yet. The part
-          I keep coming back to is that being the patient is the whole reason I can be useful. I
-          know what the typical version of this experience feels like from the other side of it,
-          and I have wanted the different version to exist for a long time. It is the same reason{' '}
-          <Link to="/work/loopstack/">LoopStack</Link> exists.
-        </p>
-
-        <h2>An NFL analyst, and a brand that applies itself</h2>
-        <p>
-          The other is <a href="https://x.com/DhananiZain" target="_blank" rel="noopener noreferrer">Zain
-          Dhanani</a>, who does NFL analysis and hosts The CutUp. I have been a fantasy football
-          obsessive for years, which is also{' '}
-          <Link to="/work/playdraft/">where PlayDraft came from</Link>, so this one started from
-          the same place: I was in the audience first.
-        </p>
-        <p>
-          It began as ordinary asset work. A banner that stops getting cropped on mobile, a podcast
-          cover at the size the platforms actually want. But the recurring need was not assets, it
-          was that every screengrab he posts should look like it came from the show. That is
-          usually solved with a brand guideline nobody opens, or by the designer becoming a
-          bottleneck on every post.
-        </p>
-        <p>
-          So the deliverable became a tool. It is an agent skill: Zain drops it into Claude once,
-          then says &ldquo;brand this for X&rdquo; and gets back a framed image in the show&rsquo;s
-          treatment, header and footer, handle and link, in either of two styles. It runs in batches
-          and carries its own fonts and marks, so there is nothing to download and nothing to
-          remember.
-        </p>
-        <p>
-          Like{' '}
-          <Link to="/notes/ryan-design-taste-skill/">my design-taste skill</Link>, it gives the agent
-          written rules to follow on each request.
-        </p>
-        <p>
-          My favorite detail is the least visible one. It pads the image before it frames it, so
-          the branding can never cover the first or last line of text in the screenshot. That bug
-          would have shown up on the first real post, and the brand would have quietly become the
-          thing that ate the content.
-        </p>
-
-        <Callout marker="The pattern">
-          In both, the useful thing was not the file. It was the thing that keeps working when I am
-          not in the room.
-        </Callout>
-
-        <h2>What I am not sure about yet</h2>
-        <p>
-          I believe in shipping the system rather than the artifact, and I have{' '}
-          <Link to="/work/design-enablement/">built internal tooling on exactly that bet</Link>{' '}
-          before. What I have not proven is whether it holds up in client work. A design system
-          only pays off if the next person extends it instead of redesigning around it. A branding
-          tool only pays off if it actually gets installed and used, rather than admired once and
-          forgotten.
-        </p>
-        <p>
-          Neither of these has run long enough to tell me. Both are the kind of work I want more
-          of, and both started the same way, which is the part I did not plan and now think is the
-          point: I was{' '}
-          <Link to="/notes/nobody-clapped/">already building in these spaces for myself</Link>{' '}
-          before either was a project. The obsession was the qualification.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -702,110 +162,6 @@ export const NOTES: Note[] = [
     dateISO: '2026-08-24',
     title: 'Build the thing you would still care about if nobody clapped',
     dek: 'Four months inside PlayDraft: what building from an actual obsession costs when the system you want turns out not to be measurable yet.',
-    body: (
-      <>
-        <p>
-          I love fantasy football. Not the games so much as everything around them: rankings, ADP
-          movement, roster construction, the group chat arguing about a late round pick, and the
-          specific feeling of having seen value before the rest of the room did.
-        </p>
-        <p>
-          For about four months I have been trying to find out whether that feeling can exist
-          outside of football. Could drafting be a social game about anything? Could friends draft
-          pizza toppings, movie characters, snacks or superpowers and still get the ownership, the
-          debate, the sense that their taste was on the line? Could it stay casual enough to play
-          on a couch while the systems underneath actually held up?
-        </p>
-        <p>
-          That became <Link to="/work/playdraft/">PlayDraft</Link>. At its simplest it may end up
-          being a small game I play with my friends. As a design project it has turned into the
-          most complete thing I have made: product strategy, visual design, systems, front end
-          logic, game mechanics, scoring models, AI assisted iteration, and a long run of moments
-          where my first idea lost to evidence.
-        </p>
-
-        <h2>The rabbit hole was the math</h2>
-        <p>
-          The clearest of those was a scoring rule I wanted badly. It was built to reward the gem
-          finder, the player who reaches before consensus catches up, and it was exactly the kind
-          of mechanic I thought the game should have. Then I ran 400 simulated drafts against it.
-          It rewarded the safe pick 99 to 100 percent of the time, which is the precise inverse of
-          its purpose. The obvious repair traded one problem for another: it handed the win to
-          whoever drafted last, so a skill mechanic had quietly become a seat lottery.
-        </p>
-        <p>
-          The lesson was not that my formula was miscalibrated. It was that the thing I wanted to
-          reward is not measurable yet. With a static popularity list and no outcome data, &ldquo;did
-          you find a gem&rdquo; has no evidence behind it, and you cannot detect a gem without
-          proof that it was one. So I did not kill the idea. I deferred it to the unlock it
-          actually needs, which is population data I am already collecting. That was one of{' '}
-          <Link to="/notes/eight-wrong-first-drafts/">eight decisions I wrote up where the first
-          idea lost to a number</Link>, sorted by how late each one surfaced.
-        </p>
-        <Callout marker="The rhythm">
-          Build the thing I want to be true. Test whether the product can actually support it.
-          Decide whether to ship it, simplify it, or shelve it until the system is ready.
-        </Callout>
-
-        <h2>The craft moved under the frame</h2>
-        <p>
-          The game is not the only place this happens. Over the same stretch of months I was cutting a studio mark
-          out of a finished board of falling blocks for{' '}
-          <Link to="/work/overscroll-tactics/">Overscroll Tactics</Link>, and the interesting
-          questions there were underneath the frame too: whether the pieces obeyed real rules
-          rather than decorative ones, whether the offcuts matched the cut exactly, whether the
-          whole thing survived being ported to a second runtime without the geometry drifting.
-        </p>
-        <p>
-          Design craft used to stop at the polished frame. Most of mine now lives below it, in the
-          prompt, the component, the rule, the query, the simulation, the edge case, the code
-          comment that turns out to be lying, and the thing I almost shipped before a number proved
-          me wrong. That is the work I want more of: the overlap between product design, systems
-          thinking, front end execution, and AI assisted workflows.
-        </p>
-
-        <h2>The part that has been harder than I expected</h2>
-        <p>
-          The hard part has not been the math. It is explainability. The interface has to feel fun, the scoring has to feel
-          fair, the packs have to stay replayable, the room flow has to be obvious, and the winner
-          has to feel earned. All of that is achievable. The one I keep failing is the last one:
-          when the system makes a call, the player has to understand why.
-        </p>
-        <p>
-          I shelved a finished bonus mechanic over exactly that. On its verification run it flipped
-          second and third, which was the intent, and the test passed. I could not explain the
-          result to the player who lost. A surprise you cannot explain afterwards is
-          indistinguishable from a bug, so it went on the shelf. I still do not know whether that
-          was judgment or nerves.
-        </p>
-
-        <h2>Why I keep going</h2>
-        <p>
-          None of this is finished and it is not a case study wrapped in a bow. It is a real
-          artifact of someone trying to move from taste to system, system to prototype, prototype
-          to evidence, and evidence back into better product judgment. I have written elsewhere
-          about <Link to="/notes/what-id-keep/">which parts of the craft I would keep if every tool
-          changed tomorrow</Link>. This is the other half of that answer: what I would build if
-          nobody were watching.
-        </p>
-        <p>
-          There is something worth defending in building from a genuine obsession rather than
-          chasing a trend, polishing a fake app for a portfolio, or performing craft from a safe
-          distance. The thing you would still care about if nobody clapped is also the thing that
-          teaches you, because you want it to be better and you will argue with your own
-          assumptions until it gets more honest.
-        </p>
-        <p>
-          PlayDraft might stay a game I play with my friends. It might become the clearest signal
-          in my portfolio of how I think across design, systems, code and iteration. Either way I
-          would still be working on it, which is the only test I trust now: what would I build if I
-          knew I was going to love it, even if no one else did?
-        </p>
-        <p className="notes__source">
-          <LinkedInLink label="A shorter version of this started as a post" surface="note_source" />
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -817,111 +173,6 @@ export const NOTES: Note[] = [
     dateISO: '2026-08-24',
     title: 'I worried the new tools were taking me away from design. They made me specific about it.',
     dek: 'My work moved from Figma into code and AI at the same time one of my teachers did. Four parts of the craft I would keep if every tool changed tomorrow.',
-    body: (
-      <>
-        <p>
-          Michael W. (Mizko) is one of the people who taught me how to think in
-          Figma. Not shortcuts: how to structure a file, how to build a system, how to turn a
-          visual decision into a rule other people could follow. Then he went quiet on YouTube for
-          more than a year. When he came back, most of his attention had moved toward AI and
-          building things.
-        </p>
-        <p>
-          That caught me because my own week had drifted the same way at roughly the same time,
-          without either of us telling the other. Figma is still in my process. I still care
-          about the artboards, the component logic, the small decisions that make a product feel
-          considered. It just isn&rsquo;t where all of the work lives anymore. More of my week now
-          happens in Claude, in code, in Markdown files, in plugins and tests and products that
-          actually run.
-        </p>
-        <p>
-          For a while I read that as drift. If the file stopped being the deliverable, was I still
-          doing the thing I signed up for?
-        </p>
-        <Callout marker="The turn">
-          The shift didn&rsquo;t move me away from the parts of design I love. It forced me to say
-          exactly which parts those were.
-        </Callout>
-
-        <h2>Four things I&rsquo;d keep if every tool changed tomorrow</h2>
-        <p>
-          I wrote these down as a gut list, then went looking for whether the work backed them up.
-          It does, which is the only reason I trust the list.
-        </p>
-        <Split sum="none of these name a tool">
-          <Term word="Building systems" gloss="the rule, not the screen">
-            The part I&rsquo;d protect first. A 20-year-old dealer platform with no system behind
-            it became{' '}
-            <Link to="/work/wheelrack/">one built from scratch</Link>, and the argument that
-            settled it was about tokens, not layouts.
-          </Term>
-          <Term word="The visual details" gloss="down to favicon size">
-            Construction, really:{' '}
-            <Link to="/work/overscroll-tactics/">making a mark hold up at 4000% and at 16px</Link>.
-            The rules that keep a mark intact are the same discipline as the rules that keep an
-            interface intact.
-          </Term>
-          <Term word="The rule that solves ten screens" gloss="instead of decorating one">
-            I designed 50+ landing pages by hand before building{' '}
-            <Link to="/work/landing-pages/">the governed template system two junior designers use
-            now</Link>. The pages were the work; the system was the point.
-          </Term>
-          <Term word="Staying until it survives" gloss="past the point the screens look finished">
-            The one that changed most. Stopping at a polished file used to be allowed. Now an idea
-            isn&rsquo;t finished until{' '}
-            <Link to="/work/playdraft/">it runs on a phone</Link> and I&rsquo;ve watched it fail
-            against something real.
-          </Term>
-        </Split>
-
-        <h2>What the tools actually changed</h2>
-        <p>
-          Not the judgment. The distance between deciding something and finding out whether the
-          decision was any good. That gap used to be weeks and a handoff; now it is often an
-          afternoon. Which sounds purely good, and mostly is, except that a shorter loop punishes
-          a confident guess faster than it rewards one, something I&rsquo;ve now{' '}
-          <Link to="/notes/eight-wrong-first-drafts/">written down eight times over</Link>.
-        </p>
-        <p>
-          The honest part I keep circling: writing a throwaway simulation, a plugin, a governance
-          file is fast now, and that speed is the reason I test ideas instead of arguing about
-          them. What the tooling cannot do is distrust its own output. Deciding to go looking for
-          the number that could prove me wrong is still mine, and it is most of the job.
-        </p>
-
-        <h2>The cost nobody warns you about</h2>
-        <p>
-          This work is harder to show. A Figma file is a portfolio piece: you open it and
-          the craft is right there. A Markdown file that keeps a brand from drifting, an{' '}
-          <Link to="/work/figma-template-governance/">internal plugin that removes a repetitive step</Link>,
-          a test that catches a bug before a user does: all real, all close to invisible. Half of
-          my strongest work now lives inside systems I can describe but can&rsquo;t open, which is
-          why the independent products exist at all. That is a genuine trade, not a humblebrag.
-        </p>
-
-        <h2>Not a prescription</h2>
-        <p>
-          Watching someone who taught me one chapter of this career turn the same corner
-          independently was reassuring, and reassurance is all it was. It doesn&rsquo;t mean every
-          designer should follow the same path or chase every release. I&rsquo;ve{' '}
-          <Link to="/notes/where-is-my-role-moving/">asked in public where the role is going</Link>{' '}
-          for months without landing anywhere final, and I&rsquo;ve argued before that{' '}
-          <Link to="/notes/photoshop-taught-me-composition/">tools expire while the judgment
-          you built with them doesn&rsquo;t</Link>. This is the same argument, made specific: not
-          which tools to keep, but which four things you&rsquo;d want to still be doing if all of
-          them were gone by Monday.
-        </p>
-        <p>
-          I don&rsquo;t think my four are anyone else&rsquo;s four. I do think naming them is
-          worth an afternoon, because you can&rsquo;t protect a part of the craft you&rsquo;ve
-          never said out loud. So: which part of design would you keep doing even if the tools
-          changed completely?
-        </p>
-        <p className="notes__source">
-          <LinkedInLink label="This started as a post: the conversation is there" surface="note_source" />
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -938,147 +189,6 @@ export const NOTES: Note[] = [
       label: 'Source notes: all eight, with the numbers',
       href: '/artifacts/eight-wrong-first-drafts.html',
     },
-    body: (
-      <>
-        <p>
-          I keep a running file of decisions that went the wrong way first. Not bugs exactly. Decisions:
-          the moment where I had a clear, confident answer and something measurable
-          disagreed with it. Eight of them came out of <Link to="/work/playdraft">PlayDraft</Link> in
-          one stretch of build work. Six were caught before a player ever saw them. Two were not.
-        </p>
-        <p>
-          What interests me now isn&rsquo;t that the first idea was wrong. That&rsquo;s
-          ordinary. It&rsquo;s that the eight sort cleanly by <em>how</em> I found out, and that
-          ordering turns out to be a cost ladder. The cheapest catches took minutes. The most
-          expensive one had been sitting in the codebase for six days wearing a comment that said
-          it was fixed.
-        </p>
-
-        <h2>The one that rewarded exactly what it punished</h2>
-        <p>
-          The clearest example first, because it&rsquo;s the one where the gap between the idea and
-          the evidence was widest.
-        </p>
-        <Turn>
-          <TurnSide label="First idea" question="Reward the gem-finder">
-            Pay drafters for reaching (taking something later than the world takes it)
-            so that chalk never settles into the solved meta. Coherent, popular, and the kind of
-            rule you can explain in one sentence.
-          </TurnSide>
-          <TurnSide label="What 400 drafts said" question="It rewarded chalk 99–100% of the time" kept>
-            The precise inverse of its purpose. The obvious repair, normalising across the
-            whole pack, just moved the win to the last seat instead, at roughly 90&ndash;100%.
-            A seat lottery wearing a skill mechanic.
-          </TurnSide>
-        </Turn>
-        <p>
-          What shipped was honest chalk scoring with a comment saying so out loud. The real finding
-          wasn&rsquo;t that the formula was miscalibrated; it was that the thing I wanted to reward
-          isn&rsquo;t measurable yet. With a static popularity list and no outcome data,
-          &ldquo;did you find a gem&rdquo; has no evidence behind it. You cannot detect a gem
-          without proof that it was one. That&rsquo;s not a rejection. It&rsquo;s a feature waiting
-          on population data that&rsquo;s already being collected.
-        </p>
-
-        <h2>Four ways of finding out, cheapest first</h2>
-        <p>
-          Sorting the eight by their catch mechanism produced a ladder I didn&rsquo;t expect to be
-          so tidy. Each rung costs more than the one above it.
-        </p>
-        <Split sum="the later the catch, the more it costs">
-          <Term word="A simulation" gloss="minutes · nobody saw it">
-            Two scoring ideas died here. The reach bonus above, and a rule locking each round to one
-            category, which turned out to be safe in the deep packs where categories are
-            nearly free, and broken in the shallow ones where it would actually have mattered. The
-            smallest fast-food category is 14 items, about seven on a live board; at eight seats it
-            is exhausted before the round completes.
-          </Term>
-          <Term word="A measurement" gloss="minutes · once I stopped guessing">
-            I was certain untracked media was bloating a 650 MB build. I inspected the archive
-            instead of reasoning about it: the ignore file was excluding all of that correctly, and
-            624 MB of the 650 was <code>.git</code>, re-added by the build tool after the patterns
-            were applied. 650 MB to 25 MB, verified by diffing both archives file by file. A
-            diversity bonus died the same way: every major category in movies and music tops
-            out at 98&ndash;100, so a five-pick roster spanning five categories costs about two
-            points against pure chalk. Players were already drafting diverse rosters by accident.
-            The lever was never variety. It was scarcity.
-          </Term>
-          <Term word="A real session" gloss="after it shipped">
-            Two bugs survived mockups, fixtures, review and a full test suite, then died within
-            minutes of a real board. One race bar announced &ldquo;kev is close behind &middot; 0
-            picks&rdquo; on the opening pick: true by subtraction, nonsense as a sentence, and
-            shown at the one moment nobody is chasing anyone. A fixture never contains a drafter
-            with zero picks, and never contains someone losing.
-          </Term>
-          <Term word="A comment" gloss="six days, or never">
-            The expensive rung. A celebration layout marked centred, commented, and marked fixed six
-            days earlier still wasn&rsquo;t centred: the container said{' '}
-            <code>justify-content: center</code> while its last child said{' '}
-            <code>margin-top: auto</code>, and an auto margin eats the free space before
-            justify-content ever sees it. The prose asserted something the code contradicted, and
-            everyone downstream believed the prose.
-          </Term>
-        </Split>
-
-        <Callout marker="The point">
-          The first idea is a hypothesis. Testing it almost always costs less than shipping it.
-        </Callout>
-
-        <h2>The two that got out</h2>
-        <p>
-          Six of the eight never reached a player. The two that did are the ones worth writing down.
-        </p>
-        <p>
-          A push notification told competitive players they had two minutes to pick. The competitive
-          clock is 30 seconds. The number almost certainly came from a nearby constant (clock
-          plus sweeper lag), but that lag is what an <em>abandoned</em> pick costs everyone
-          else, not time the player ever had. On the one mode whose own code comment calls the alert
-          &ldquo;the product,&rdquo; the notification was walking people into missed turns while
-          telling them they had four times the time they did. It surfaced only because someone
-          specifying an unrelated feature said &ldquo;since it&rsquo;s 30 second clocks&rdquo; and
-          the number didn&rsquo;t match.
-        </p>
-        <p>
-          The other was quieter and worse. Turn alerts were sent by the client that had just picked:
-          simple, no server work, and correct right up until nobody picked. The timeout
-          sweeper has no client, so a missed clock meant the next player was never told they were
-          on it, and that cascades: one player times out, the next is never alerted, the next times
-          out. A room can auto-draft itself to completion in total silence. The competitive mode had
-          already fixed this exact failure and left a comment describing it word for word. Nobody
-          noticed it applied to casual too.
-        </p>
-
-        <h2>What I actually changed</h2>
-        <p>
-          Not the ideas. The order of operations. Simulate before shipping, measure before
-          diagnosing, and treat a confident explanation as the thing most in need of a number. Four
-          of these eight were killed by a query or a loop that took minutes to write, and in every
-          one of those four the confident explanation and the true one were different.
-        </p>
-        <p>
-          The tooling half of that is worth naming honestly: writing a simulation harness or a
-          throwaway query is fast now, and that speed is the reason eight of these got tested at all
-          rather than argued about. What the tooling cannot do is distrust its own output. Every one
-          of these was caught because someone went looking for a number capable of contradicting a
-          belief, and deciding to go looking is still the job.
-        </p>
-        <p>
-          There&rsquo;s a habit underneath the other three. Comments rot into lies, and the two
-          worst-aged defects here were both places where prose asserted something the code did not
-          do. So I write down <em>why</em> now, not <em>what</em>. A &ldquo;what&rdquo; comment
-          agrees with you forever. A &ldquo;why&rdquo; is checkable, and a checkable claim is the
-          only kind that can be caught being wrong.
-        </p>
-        <p>
-          The part I&rsquo;m least sure about: one bonus mechanic was finished, verified, and proven
-          to do exactly what it was designed to do. On its verification run it flipped second
-          and third, which was the intent. I shelved it anyway, because I couldn&rsquo;t explain the
-          result to the player who lost. A surprise you can&rsquo;t explain afterwards is
-          indistinguishable from a bug. I still don&rsquo;t know whether that was good judgment or
-          just nerves.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1092,206 +202,6 @@ export const NOTES: Note[] = [
     title: 'I needed an LLC. I ended up naming my design practice.',
     dek: 'Six weeks naming an umbrella for PlayDraft: Playgrove, then Imaginefield, then Overscroll Tactics, including the branch I threw away and went back for.',
     artifact: { label: 'overscrolltactics.com', href: 'https://overscrolltactics.com/' },
-    body: (
-      <>
-        <p>
-          I set out to name a company. Six weeks later I had a name for the way I work, which is
-          not the same thing and turned out to be more useful.
-        </p>
-        <p>
-          <Link to="/work/playdraft/">PlayDraft</Link> stopped being a portfolio mockup around the
-          first TestFlight build, and a working product with a domain attached needs somewhere to
-          legally live. The filing was the easy part. Deciding what name went on it took the rest
-          of the summer.
-        </p>
-
-        <h2>PlayDraft could have been the company</h2>
-        <p>
-          It has its own brand, and naming the LLC after it would have taken ten minutes. It would
-          also have been wrong for everything after it: a recipe tool for diabetics is not a
-          PlayDraft spinoff. Product is not studio, and the parent had to hold PlayDraft without
-          making the rest look like it came out of PlayDraft.
-        </p>
-
-        <h2>The naming graveyard</h2>
-        <p>
-          Everything that didn&rsquo;t make it, grouped the way the exploration actually branched.
-        </p>
-        <Graveyard>
-          <Branch
-            theme="Play"
-            names={[
-              'Playgrove Studios',
-              'Playcraft Studios',
-              'Playlab',
-              'Field Play',
-              'Field of Play',
-              'PlayWard',
-              'PlayTapir Studio',
-              'Playmorrow Labs',
-            ]}
-            verdict="Every one turned the company into a game studio. PlayDraft is a game; the company holding it is not."
-          />
-          <Branch
-            theme="Craft"
-            names={['CraftGrove', 'Craft Labs', 'Craftmorrow Labs']}
-            verdict="True and unownable at once. Craft is the most crowded word in design naming."
-          />
-          <Branch
-            theme="Tactical"
-            names={['Tactical Grove', 'Tactical Labs', 'Tactical Studios']}
-            verdict="Killed early for sounding like a defense contractor. The call I got wrong, and I didn't find out for a month."
-          />
-          <Branch
-            theme="Imagination"
-            names={[
-              'Imagine Apps',
-              'Imaginefield',
-              'Imaginefield Works',
-              'Imaginefield Labs',
-              'Imaginefield Foundry',
-              'Imaginefield Collective',
-              'Imaginefield Product Co.',
-              'Imaginefield Games',
-            ]}
-            verdict="The best of the safe answers."
-          />
-          <Branch
-            theme="Behavior"
-            names={['Overscroll Tactics']}
-            kept
-            verdict="Kept. The only one that described the work instead of the output."
-          />
-        </Graveyard>
-        <p>
-          Imaginefield led for two weeks and got close enough that I pictured the letterhead. The
-          problem was subtler than availability: it described where the ideas would happen and said
-          nothing about what I do once they show up.
-        </p>
-
-        <h2>The paperwork was never the hard part</h2>
-        <p>
-          A single-member, member-managed Indiana LLC, filed online through INBiz. Roughly $95 to
-          file, about $98 all-in, around $32 for the biennial report. Formation services were
-          selling convenience I didn&rsquo;t need, and acting as my own registered agent trades a
-          little address privacy for not paying someone yearly to receive mail. One evening for all
-          of it, against six weeks on the name.
-        </p>
-
-        <h2>Every name answered the wrong question</h2>
-        <p>
-          Somewhere in the Imaginefield stretch the side projects stopped looking like unrelated
-          apps. The same questions kept surfacing:
-        </p>
-        <ul>
-          <li>How far into implementation can a designer actually go?</li>
-          <li>How should a design system work when both people and agents read it?</li>
-        </ul>
-        <p>
-          The projects were the lab. I had been trying to name the equipment.
-        </p>
-        <Callout marker="The turn">
-          Every name on my list described what I make. Not one of them described how I work.
-        </Callout>
-        <Turn>
-          <TurnSide label="Was asking" question="What do I build?">
-            Produces studio names. Playgrove, Imaginefield Works. Category labels that age badly
-            the moment I build outside the category.
-          </TurnSide>
-          <TurnSide label="Should ask" question="How do I work?" kept>
-            Produces a name for a method, which survives a change of subject. What sits underneath
-            can be anything, as long as it was made the same way.
-          </TurnSide>
-        </Turn>
-
-        <h2>Overscroll. Tactics.</h2>
-        <p>
-          The definition arrived before I was sure about the name: thinking beyond conventional
-          patterns and executing with precision.
-        </p>
-        <Split sum="Go past the expected stopping point. Have a reason.">
-          <Term word="overscroll" gloss="[ the behavior ]">
-            The part of an interface that keeps moving after it has technically hit its edge. Read
-            as a working method, it&rsquo;s the decision not to stop where the discipline says
-            you&rsquo;re finished. The design isn&rsquo;t the end. Neither is the prototype, or the
-            system.
-          </Term>
-          <Term word="tactics" gloss="[ the constraint ]">
-            The counterweight. Exploration that doesn&rsquo;t produce better decisions is a hobby
-            with good taste. Go past the boundary because something on the other side is worth
-            having.
-          </Term>
-        </Split>
-        <p>
-          Both halves are load-bearing. &ldquo;Overscroll&rdquo; alone is an art project;
-          &ldquo;Tactics&rdquo; alone is the defense contractor I talked myself out of in July.
-        </p>
-
-        <h2>Negative space does the joining</h2>
-        <p>
-          One non-negotiable: an O and a T combined, where the gap between the letters carries the
-          relationship instead of a third shape. A later pass pushed toward a cursor silhouette,
-          which reads as digital interaction without the usual tells. Not purely design, not purely
-          engineering, not a game studio, not an agency.
-        </p>
-        <pre>
-          <code>{`OVERSCROLL TACTICS / IDENTITY BRIEF v0
-
-mark        O + T combined. Negative space does the joining.
-validate    One color first, before any gradient or texture.
-scale       Emblem and wordmark each work alone, down to
-            favicon size.
-excluded    Angle brackets, pixel grids, terminal type,
-            anything that reads "developer logo."`}</code>
-        </pre>
-        <p>
-          The marks were one-color tests on a black artboard when I wrote this. They have since
-          resolved and shipped: the emblem is now{' '}
-          <Link to="/work/overscroll-tactics/">die-cut out of a played board in the studio ident</Link>,
-          on the site and on every cold launch of PlayDraft. The deliverable was still never a
-          logo. A parent with too much character turns every product underneath it into a variant
-          of itself, which is{' '}
-          <Link to="/work/wheelrack/">partner theming in a token architecture</Link> at a much
-          smaller scale.
-        </p>
-
-        <h2>Two products and an empty slot</h2>
-        <Umbrella parent="Overscroll Tactics">
-          <StackItem name={<Link to="/work/playdraft/">PlayDraft</Link>} status="On the App Store">
-            Social drafting product with its own brand and design-system foundation, built in
-            React Native and Expo.
-          </StackItem>
-          <StackItem
-            name={<Link to="/work/bolus-binder/">Bolus Binder</Link>}
-            status="In TestFlight"
-          >
-            Recipe storage where the nutrition leads: carbohydrate breakdown, ingredient
-            composition, expected glucose behavior. Afterbite, Bolus and mealCurve lost to it.
-          </StackItem>
-          <StackItem name="The next one" status="Open" open>
-            Whatever the next question turns out to be worth building.
-          </StackItem>
-        </Umbrella>
-        <p>
-          Bolus Binder is the clearest test of whether the umbrella works. It has nothing to do
-          with PlayDraft, and under a name like Playgrove it would have needed an explanation.{' '}
-          <Link to="/work/loopstack/">LoopStack</Link> predates all of this, and I haven&rsquo;t
-          worked out whether it wants a parent.
-        </p>
-
-        <h2>Nothing here is finished</h2>
-        <p>
-          My strongest professional work lives inside proprietary enterprise systems. I can
-          describe it and I can&rsquo;t open the repo, so independent products are the second proof
-          layer: systems work and architecture decisions in public, nothing redacted.
-        </p>
-        <p>
-          The mark has resolved since; the sub-brand rules still haven&rsquo;t been tested against
-          a second product. I spent six weeks trying to name what I build. The answer was to name
-          how I work, and it had been sitting in a branch I&rsquo;d already thrown away.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1302,47 +212,6 @@ excluded    Angle brackets, pixel grids, terminal type,
     dateISO: '2026-08-05',
     title: 'Two files keep the brand from drifting',
     dek: 'PRODUCT.md and DESIGN.md turn my design judgment into a record any agent or teammate builds from, so the site stays consistent when I move fast.',
-    body: (
-      <>
-        <p>
-          Two files sit at the root of this repo doing quiet work: PRODUCT.md and DESIGN.md. One
-          records who the site is for and what it has to prove. The other records the visual
-          system it runs on: the tokens, the single accent, the rule that surfaces stay flat until
-          you touch them.
-        </p>
-        <p>
-          They exist because I build fast, often with agents, and speed is where brand consistency
-          usually breaks. A generated screen looks plausible and quietly reaches for a purple
-          gradient, a floating card, a second accent color. These files are the guardrail. Before
-          anything gets designed, the agent, or me, reads the rules and builds from my tokens
-          instead of its defaults.
-        </p>
-        <Callout marker="The point">
-          A style guide only governs if something reads it. These are built to be read, by a person
-          and an agent.
-        </Callout>
-        <h2>Consistency you can verify</h2>
-        <p>
-          This is the same move as the rest of the site. The{' '}
-          <Link to="/design-system">design system</Link> renders every token on a live page. The{' '}
-          <Link to="/notes/ryan-design-taste-skill">design-taste skill</Link> encodes the judgment
-          behind it. PRODUCT.md and DESIGN.md close the loop: the record a person reads and the
-          record an agent reads are the same record. If a value isn&rsquo;t in them, new work
-          doesn&rsquo;t get to use it.
-        </p>
-        <h2>The cost is keeping them true</h2>
-        <p>
-          A rulebook only helps if it stays current, and a stale DESIGN.md is worse than none
-          because it lies with confidence. So I treat these like code. When the system changes, the
-          file changes in the same commit, and an agent can audit the site against them without me
-          in the room.
-        </p>
-        <p>
-          None of this shows on the page, which is the point of governance. You feel it in what
-          stays consistent, not in anything you can see.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1353,68 +222,6 @@ excluded    Angle brackets, pixel grids, terminal type,
     dateISO: '2026-07-30',
     title: 'How this site works',
     dek: 'The portfolio is its own case study: tokens, the selection vernacular, prerendering, and where AI actually sits in the process.',
-    body: (
-      <>
-        <p>
-          When someone asks how I work, this site is the thing I point at. Not the case studies
-          on it. The site itself. It went through{' '}
-          <Link to="/work/wheelrack/">the workflow in my WheelRack case study</Link>: start from a
-          reference, build tokens before components, add motion only when it carries meaning, and
-          keep AI out of the final call.
-        </p>
-        <h2>One vocabulary, written down</h2>
-        <p>
-          The foundation is a small token system. A primary orange with light, muted, and dark
-          roles. Two neutral ramps, an 8-step spacing scale, a radius set I actually stuck to.
-          All of it lives on a page you can open right now:{' '}
-          <Link to="/design-system">the design system</Link> renders every token the site
-          consumes. If a value isn&rsquo;t on that page, the site doesn&rsquo;t use it. That rule
-          has caught me more than once.
-        </p>
-        <h2>The selection vernacular</h2>
-        <p>
-          The homepage went on a motion diet. An orange comet used to run around every card
-          border, ambient and always on. A paintbrush stroke swept across key phrases before they
-          bolded. The always-on versions got cut, because motion that exists to be noticed competes
-          with work that exists to be read.
-        </p>
-        <p>
-          What came back is quieter and says more. Cards wear Figma-style selection frames and key
-          copy gets selected the way a cursor drags across text before it bolds. The comet did not
-          earn its way back: what ships is the frame itself, with four corner handles that fade in
-          once as the grid reveals and then stay put. The border never animates. That was the
-          right call. A perimeter tracing itself is exactly the kind of motion that competes
-          with the work. The interface speaks the language of the tools it was made in, and orange
-          means one thing: selected.
-        </p>
-        <h2>Crawlable without a framework migration</h2>
-        <p>
-          This is a React single-page app, which search engines have historically read as an
-          empty div. The obvious fix was migrating frameworks. I didn&rsquo;t want to spend the
-          month. Instead the build opens every route in a real browser at deploy time and writes
-          the finished HTML to disk, so each case study is a crawlable page with its own title,
-          meta, and structured data while visitors still get the client-side app.
-        </p>
-        <Callout marker="Decision">
-          Boring architecture, applied carefully, beats a rewrite.
-        </Callout>
-        <h2>Where AI sits</h2>
-        <p>
-          Agents audit this site constantly. Accessibility passes, copy passes against a
-          hiring-manager lens, dead-link sweeps, image consistency checks. They draft, too. But
-          every visual direction starts from a reference I picked, every finding gets verified
-          before it ships, and the judgment layer is documented in{' '}
-          <Link to="/notes/ryan-design-taste-skill">my note on the installable design-taste skill</Link> so the tools
-          inherit my standards instead of their defaults. The brand rules themselves live in{' '}
-          <Link to="/notes/governance-in-markdown">my note on the two files an agent reads before it builds</Link>.
-        </p>
-        <p>
-          AI speeds up exploration. I stay responsible for the decisions, the details, and the
-          systems behind what ships. The rest of these notes go deeper on single decisions. This
-          one is the map.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1427,73 +234,6 @@ excluded    Angle brackets, pixel grids, terminal type,
     title: 'A design-taste system an agent can follow',
     dek: 'My taste, written as an operational skill: modes, dials, anti-defaults, and a pre-flight check any agent (or designer) can run.',
     artifact: { label: 'Read the full skill (Markdown)', href: '/skills/ryan-design-taste.md' },
-    body: (
-      <>
-        <p>
-          The most useful design document I own isn&rsquo;t a component library. It&rsquo;s a
-          2,500-line Markdown file that teaches an AI agent how I make decisions. It works on
-          people too, which I did not expect.
-        </p>
-        <p>
-          When I started using agents for real design work, the failure was never effort. It was
-          defaults. Purple gradients. Glassmorphism. Three equal feature cards. Motion because
-          motion is available. Better prompting per task didn&rsquo;t fix it. Writing the
-          judgment down once, as a skill the agent loads before any visual work, did.
-        </p>
-        <h2>What it encodes</h2>
-        <p>
-          Every task starts with a one-line design read: what the surface is, who it&rsquo;s for,
-          which visual mode applies. Then four dials get set before anything is drawn.
-        </p>
-        <pre>
-          <code>{`## 2. THE FOUR DIALS
-
-DESIGN_VARIANCE   how far composition may depart from convention
-MOTION_INTENSITY  how central motion is to comprehension
-VISUAL_DENSITY    how much information is visible at once
-SYSTEM_RIGOR      how strongly output maps to tokens + production
-
-| Product context              | Var | Mot | Den | Rigor |
-| Enterprise system flow       |  3  |  2  |  7  |  10   |
-| Health-data product          |  4  |  3  |  7  |   9   |
-| Portfolio homepage           |  7  |  4  |  5  |   7   |
-| Live game room               |  6  |  6  |  7  |   9   |`}</code>
-        </pre>
-        <p>
-          After that come the parts that do the real work: per-product visual modes with their
-          own tokens and patterns, a global anti-defaults list, and a pre-flight check the agent
-          has to pass before delivering anything. A sample of the rules that earn their keep:
-        </p>
-        <pre>
-          <code>{`- Clarity before novelty. Novelty is rejected when it adds
-  ambiguous controls, ornamental layout shifts, or visual noise.
-- Evidence belongs near the claim.
-- Dense is acceptable; confusing is not.
-- Mobile is a product state, not a crop.
-- The accent should be scarce enough to mean something.
-- Never default to: purple-to-blue SaaS gradients, glassmorphism,
-  icons inside decorative circles, pill-shaped everything,
-  ambient animated blobs, scroll hijacking.`}</code>
-        </pre>
-        <h2>Why publish it</h2>
-        <Callout marker="Position">
-          Taste is usually claimed, rarely shown. A skill file is taste in a verifiable form.
-        </Callout>
-        <p>
-          You can read the rules, then look at{' '}
-          <Link to="/design-system">the system this site runs on</Link> and the{' '}
-          <Link to="/work/playdraft/">PlayDraft case study</Link>, and decide for yourself
-          whether the output matches the standard. The selection-frame cards and the
-          text-selection highlight both came out of this loop. An agent proposed directions, the
-          skill constrained them, I made the call.
-        </p>
-        <p>
-          The full file is linked above. It&rsquo;s written for agents, which turns out to be
-          good discipline for writing systems for humans. Every rule has to say when to use it,
-          when not to, and how to check whether it worked.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1504,46 +244,6 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dateISO: '2026-07-23',
     title: 'I used to think being a good communicator meant walking in with the answer',
     dek: 'The design conversations that actually moved work forward started with a question I hadn’t resolved yet.',
-    body: (
-      <>
-        <p>
-          I used to think being a good communicator meant walking into the room with the answer.
-          Polished rationale, objections anticipated, everything resolved before anyone else saw
-          it. It felt like preparation. Most of the time it was armor.
-        </p>
-        <p>
-          The conversations that actually moved work forward went the other way. I&rsquo;d walk
-          in with a sharp question and the two directions I was genuinely torn between. People
-          engage differently with an open decision than with a defended one. They tell you things
-          they were going to keep to themselves.
-        </p>
-        <Callout marker="What changed">
-          Certainty ends the conversation. A good question starts one.
-        </Callout>
-        <h2>It shows up in how the work gets made</h2>
-        <p>
-          On <Link to="/work/wheelrack/">WheelRack</Link>, the best outcomes came from bringing
-          the developer in before the design was resolved. Edge cases surfaced while they were
-          still cheap to solve. Components got specced against what could actually be built
-          rather than what looked good in a frame. That isn&rsquo;t a process improvement so much
-          as being honest earlier.
-        </p>
-        <p>
-          Remote work sharpened this. When you&rsquo;re not in the building, communication stops
-          being incidental and becomes the medium the work travels through. At distance, being
-          clear about what you don&rsquo;t know is worth more than performing confidence about
-          what you do.
-        </p>
-        <h2>The fun part is not a distraction</h2>
-        <p>
-          Some of the best work I&rsquo;ve been part of happened when people were enjoying
-          themselves. Not the manufactured-culture version. The specific kind of energy where a
-          team is curious about the same problem at the same time and nobody is protecting their
-          turf. I&rsquo;ve never found a process that reliably produces it, but I know what
-          usually starts it: walking in with the question instead of the verdict.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1555,63 +255,6 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dateISO: '2026-07-21',
     title: 'Where the heck is my role moving forward?',
     dek: 'Six months of asking the same question in public, and the answer I keep landing on: the job is moving toward judgment, not away from craft.',
-    body: (
-      <>
-        <p>
-          I&rsquo;ve been asking one question out loud since spring, in about a dozen different
-          ways. Design feels more open-ended right now than at any point in my career.
-          &ldquo;Everyone is a designer&rdquo; stopped being a punchline. Underneath all of it
-          sits the question most designers I talk to are actually sitting with: where the heck is
-          my role moving forward?
-        </p>
-        <p>
-          Six months ago I had no idea. I&rsquo;m still not certain, but the fog has thinned
-          enough to see a shape.
-        </p>
-        <h2>Being first to visualize stopped being the moat</h2>
-        <p>
-          For most of my career, part of a designer&rsquo;s leverage was speed of visualization.
-          Being the person who could show the thing before anyone else could describe it. That
-          skill hasn&rsquo;t become worthless. It has become common. Anyone with a prompt can get
-          to a plausible screen now.
-        </p>
-        <p>
-          So the value moves. Less on producing the first artifact, more on deciding which
-          artifact deserves to exist, what it has to survive in production, and what happens at
-          the edges nobody bothered to generate.
-        </p>
-        <Callout marker="The shift">
-          The designer&rsquo;s job may become less about being first to visualize and more about
-          being right about what should exist.
-        </Callout>
-        <h2>The through line isn&rsquo;t design</h2>
-        <p>
-          Looking back at sixteen years of visual design, front-end code, design systems, and now
-          AI-assisted product work, the constant was never a tool or even a discipline. It was
-          refusing to hand off something I didn&rsquo;t understand. Learning the CMS well enough
-          to author a seasonal storefront, as shown in <Link to="/work/seasonal-content-system/">the seasonal content case study</Link>.
-          Learning Sass well enough to ship it. Learning the token pipeline well enough to challenge decisions across a design system, as shown in{' '}
-          <Link to="/work/wheelrack/">the WheelRack case study</Link>.
-        </p>
-        <p>
-          That instinct is why this moment reads as an opening to me rather than a threat. The
-          same curiosity that pulled me into code is pulling me into agent workflows now.
-        </p>
-        <h2>What I&rsquo;m betting on</h2>
-        <p>
-          My official title has been Senior Web Designer for years. The work stopped fitting the
-          label a long time ago. A 200-token design system a React team builds against. An AEM
-          component rebuild where I shipped production Sass. Two native apps taken from brand to
-          TestFlight. Aesthetic execution ran through all of it, and it&rsquo;s the part
-          I&rsquo;d never give up, but it was never the whole job.
-        </p>
-        <p>
-          Titles lag reality. Portfolios don&rsquo;t have to. That&rsquo;s why this site leads
-          with systems, implementation, and outcomes, and why the title on it now says what the
-          work says: product design engineer.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1622,50 +265,6 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dateISO: '2026-07-19',
     title: 'Studying the tape',
     dek: 'I watch football breakdowns the way I watch design interviews: for the decision behind the play.',
-    body: (
-      <>
-        <p>
-          I spend a probably unreasonable amount of time listening to football breakdowns. Not
-          highlights. Film study. The kind where someone freezes the play and explains why the
-          safety&rsquo;s two-step read decided the outcome before the ball was thrown.
-        </p>
-        <p>
-          It took me embarrassingly long to notice I consume design the same way. Over the past
-          few months I went deep on Dive Club interviews, Config talks, and the small circle of
-          design engineers who publish their actual working methods. Same instinct: skip past the
-          finished artifact, find the decision.
-        </p>
-        <h2>Consumption isn&rsquo;t the practice</h2>
-        <p>
-          Watching a lot of design content is easy and mostly useless on its own. What made it
-          useful was forcing every input to produce an output. A habit changed, a workflow
-          tested, a rule written down. Some weeks that&rsquo;s six habits I&rsquo;m keeping. Some
-          weeks it&rsquo;s one thing I tried and abandoned by Thursday.
-        </p>
-        <Callout marker="The practice">
-          If watching it doesn&rsquo;t change what you make on Monday, it was entertainment.
-        </Callout>
-        <h2>Cultural campfires</h2>
-        <p>
-          Tommy Geoco described the shared things we gather around as cultural campfires, and the
-          phrase stuck with me. Design has fewer of them than it used to. The field is too big
-          and moving too fast for everyone to be watching the same thing. So you build a smaller
-          one: the handful of people whose work you study closely enough that their standards
-          start arguing with yours.
-        </p>
-        <p>
-          Mine assembled mostly by accident. Systems people, interaction people, a recruiter who
-          says the quiet part out loud about what actually gets someone hired. At some point I
-          realized it felt like an Avengers roster of people who have no idea they&rsquo;re on a
-          team.
-        </p>
-        <p>
-          The useful thing that came out of it wasn&rsquo;t inspiration. It was a bar. Every note
-          on this site, and the system underneath it, got measured against people I&rsquo;d be
-          embarrassed to hand something sloppy.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1677,50 +276,6 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dateISO: '2026-07-15',
     title: 'AI doesn’t care about your customers',
     dek: 'Generation is trained on what already existed. Care for the user, the edge cases, and the consequences is the part that stays human.',
-    body: (
-      <>
-        <p>
-          The most exciting thing I keep finding with LLMs is how fast they close the distance
-          between an idea and something you can actually look at. The blank canvas problem is
-          mostly solved. That&rsquo;s real, and I use it every day.
-        </p>
-        <p>
-          What they don&rsquo;t do is care. AI doesn&rsquo;t care about your customers. It has no
-          idea which edge case will hurt someone, which shortcut erodes trust, or which
-          plausible-looking answer is quietly wrong for this particular product.
-        </p>
-        <Callout marker="Division of labor">
-          AI can answer what could exist. It cannot decide what should exist. Someone still has
-          to point it in the right direction.
-        </Callout>
-        <h2>Where I learned this the hard way</h2>
-        <p>
-          <Link to="/work/loopstack/">LoopStack</Link> is a Type 1 diabetes pattern-review app I
-          built for myself. The models were happy to generate dosing calculators, prediction
-          dashboards, and confident recommendations. All plausible. All wrong for this product.
-          The constraint that defined the whole thing was what the app must never do: present
-          itself as medical advice.
-        </p>
-        <p>
-          No model proposed that. It came from being the user and understanding the stakes. Every
-          generated surface got rewritten until observations read as evidence rather than
-          instruction, and a 460-test suite now guards the language the app is allowed to use.
-          Care, made operational.
-        </p>
-        <h2>Care is a practice, not a feeling</h2>
-        <p>
-          It shows up as the unglamorous work. The empty state nobody asked for. The
-          reduced-motion path. The disclosure that says this number is sample data instead of
-          letting you assume otherwise. On <Link to="/work/playdraft/">PlayDraft</Link> it looked
-          like a legal-safety framework gating every pack, and a remote kill switch so any topic
-          can be pulled without shipping a release.
-        </p>
-        <p>
-          None of that came from a prompt. All of it came from asking who gets hurt if
-          I&rsquo;m wrong.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1732,76 +287,6 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
     dateISO: '2026-07-13',
     title: 'A good design system makes better decisions easier',
     dek: 'Success isn’t that I can explain the system. It’s that teams decide well without me, which is also the bar AI agents have to clear.',
-    body: (
-      <>
-        <p>
-          A design system is not successful because the original designer can explain it.
-        </p>
-        <Callout marker="The test">
-          It&rsquo;s successful when teams make better decisions without that designer in the
-          room.
-        </Callout>
-        <p>
-          That test changes what you build. The best systems reduce ambiguity after handoff.
-          Documentation stops being an afterthought and becomes part of the product. Governance
-          stops being an audit you run later and becomes a design problem you solve up front.
-          Adoption starts mattering more than visual polish.
-        </p>
-        <h2>Proof it worked</h2>
-        <p>
-          <Link to="/work/wheelrack/">WheelRack</Link> made this concrete. The token set and
-          component library mattered less than what they enabled. A React developer and I worked
-          from one vocabulary instead of two. Components got specced and validated before
-          implementation. Months later, three or four additional designers onboarded into that
-          workflow without me re-explaining it, which is the part I&rsquo;m proudest of.
-        </p>
-        <h2>The file is not the finish line</h2>
-        <p>
-          For most of my career the system lived in one place: the component library. That worked
-          when the only consumers were designers looking at screens. That&rsquo;s no longer who
-          consumes a design system. Mine now includes:
-        </p>
-        <ul>
-          <li>Markdown that documents intent, not just anatomy</li>
-          <li>Agent skills that encode taste and constraints</li>
-          <li>Code-level rules, like no hex literals in components</li>
-          <li>Copywriting standards that keep AI-drafted text in one voice</li>
-          <li>Report-only audits that flag drift without touching code</li>
-        </ul>
-        <p>
-          On PlayDraft, the pack registry carries its own decision history in source comments.
-          Why a color exists. Why gold stays reserved for winners. The legal posture of every
-          third-party topic. The file the components read is also the file that explains itself.
-          That project&rsquo;s content risk runs through a framework written as a skill:
-        </p>
-        <pre>
-          <code>{`name: playdraft-pack-legal-safety
-description: Conservative product-risk framework for DraftPacks
-  that reference real products, brands, shows, athletes, or
-  franchises. Classifies each pack by content class + risk,
-  decides monetization/artwork/promotion eligibility, and flags
-  anything needing attorney review. Not legal advice. Never
-  call any third-party strategy "zero legal concern."`}</code>
-        </pre>
-        <p>
-          A curator agent applies it on every content audit. That&rsquo;s the point. The framework
-          works whether or not I&rsquo;m the one running it.
-        </p>
-        <h2>Agents are the ultimate not-in-the-room teammate</h2>
-        <p>
-          An agent has no context you didn&rsquo;t write down. It never absorbed the hallway
-          conversation or the reason behind the exception. Which makes it a blunt test of whether
-          your system is real. If it only works when you personally steer every decision, you
-          don&rsquo;t have a system. You have a dependency.
-        </p>
-        <p>
-          Maybe the next evolution of design systems isn&rsquo;t another component library. Maybe
-          it&rsquo;s making everything we&rsquo;ve learned portable:{' '}
-          <Link to="/design-system">tokens on a live page</Link>,{' '}
-          <Link to="/notes/ryan-design-taste-skill">judgment as an installable skill</Link>.
-        </p>
-      </>
-    ),
   },
   // ──────────────────────────────────────────────────────────────────────────
   {
@@ -1812,46 +297,6 @@ description: Conservative product-risk framework for DraftPacks
     dateISO: '2026-06-24',
     title: 'Photoshop taught me composition. The tools changed. The eye didn’t.',
     dek: 'Every tool I’ve learned taught me something that outlived it, and that lineage is what I bring to interfaces I now build in code.',
-    body: (
-      <>
-        <p>
-          Photoshop taught me composition. Illustrator taught me construction, which is really
-          the discipline of{' '}
-          <Link to="/work/overscroll-tactics/">making a mark hold up at 4000% and at favicon size</Link>.
-          Print taught me that you get one shot, so the details had better be right before it goes
-          to press.
-        </p>
-        <p>
-          None of those tools are where I spend my days now. All of those lessons are.
-        </p>
-        <h2>The same question, in a new medium</h2>
-        <p>
-          I keep asking myself one question as I implement new UI: does this actually read? Not
-          whether it matches the mock. Whether the hierarchy does its job, whether the eye lands
-          where it should, whether the thing I care about most looks like the thing I care about
-          most. That&rsquo;s a composition question, and it predates every tool I&rsquo;ve used
-          to answer it.
-        </p>
-        <Callout marker="What carries over">
-          Tools expire. The judgment you built using them doesn&rsquo;t.
-        </Callout>
-        <h2>Making the same mistake twice</h2>
-        <p>
-          I already made this mistake once. Early in my career it meant shipping something
-          because the file looked right, not because the built page held up. Treating the
-          tool&rsquo;s output as the finish line instead of the starting point.
-        </p>
-        <p>
-          The AI version of that mistake is accepting a generated screen because it looks
-          plausible. The correction is the same one it always was. Build it, look at it in the
-          real context at the real size with real content, and be honest about what you see. On
-          this site that discipline is written down as{' '}
-          <Link to="/notes/ryan-design-taste-skill">a skill my agents load</Link>, with an
-          anti-defaults list and a pre-flight check that exist specifically to stop plausible
-          from passing for finished.
-        </p>
-      </>
-    ),
   },
 ];
 

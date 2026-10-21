@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import projects from '../data/projects';
+import { PROTECTED_WORK } from '../data/protectedWork';
 import { useUnlock } from '../context/UnlockContext';
 import { isPanelRoute } from '../utils/panelRoutes';
+import { isUnlocked } from '../utils/unlock';
 
 /** Preserve the source page for every internal reading link, including prose links. */
 export function usePanelNavigation(enabled = true) {
@@ -26,6 +27,8 @@ export function usePanelNavigation(enabled = true) {
         readingOrigin: location.state?.readingOrigin ?? (location.pathname.startsWith('/notes/') ? '/notes' : '/#projects'),
       } : {
         readingDepth: 0,
+        // the homepage binder asked for this study (CaseStudyBinder): its top is the binder's
+        ...(anchor.dataset.fromBinder ? { fromBinder: anchor.dataset.fromBinder } : {}),
         backgroundLocation: location,
         returnScroll: window.scrollY,
         returnFocusHref: anchor.getAttribute('href'),
@@ -39,8 +42,10 @@ export function usePanelNavigation(enabled = true) {
       // Preserve browser history while keeping one panel and one return destination.
       const href = url.pathname.replace(/\/$/, '') + '/' + url.search + url.hash;
       const slug = url.pathname.match(/^\/work\/([^/]+)/)?.[1];
-      const protectedWork = projects.some(project => project.slug === slug && project.stream === 'professional');
-      if (protectedWork && !unlocked && !skipAutomaticPrompt) {
+      const protectedWork = Boolean(slug && PROTECTED_WORK.has(slug));
+      // isUnlocked(): the binder's dialog may have unlocked a moment ago, before
+      // this render's `unlocked` caught up; data-skip-unlock: it already asked
+      if (protectedWork && !unlocked && !isUnlocked() && !skipAutomaticPrompt && !anchor.dataset.skipUnlock) {
         openPrompt(href, { state });
         return;
       }

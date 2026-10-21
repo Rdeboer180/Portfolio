@@ -35,7 +35,7 @@ const GridIcon = () => (
 const AuthorBar: React.FC = () => {
   const { authoring, setAuthoring, ui, update } = useAuthorMode();
   return (
-    <div className={`author-bar${authoring ? ' author-bar--authoring' : ''}`} role="group" aria-label="Author bar">
+    <div className={`author-bar${authoring ? ' author-bar--authoring' : ''}`} role="region" aria-label="Author bar">
       {authoring && (
         <>
           <div className="author-bar__group">

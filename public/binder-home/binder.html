@@ -1,0 +1,176 @@
+<header class="top">
+  <div class="wrap">
+    <span class="top__eyebrow">Exploration · Fable pass</span>
+    <h1>Twelve studies, one light</h1>
+    <p>Hover a card and it slips out of its sleeve. Click a public card and it turns on its way to the case-study panel, where it tucks into a sleeve of its own at the top of the study. The bench switches that top between the card beside the video, the card beside the study's intro with the video below, and last pass's unfold. The spine files the work by discipline, and one lamp lights the whole binder.</p>
+    <p>Card copy comes from <code>src/data/projects.ts</code> through <code>build-cards.mjs</code>. The heroes are AI-generated previews marked as private review drafts, so this page is for review, not publication. Locked studies open with the site's shared password.</p>
+    <div class="chips">
+      <span class="chip">Cards <b>12, in work order</b></span>
+      <span class="chip">Light <b>one source for the page</b></span>
+      <span class="chip">Hover <b>lifts 10%</b></span>
+      <span class="chip">Click <b>tucks into the study</b></span>
+      <span class="chip">Spine <b>work by discipline</b></span>
+      <span class="chip">Locked <b>7 professional studies</b></span>
+    </div>
+  </div>
+</header>
+
+<section class="home-hero" aria-label="Homepage hero, simplified for this mock">
+  <div class="wrap">
+    <p class="home-hero__note">Homepage hero · simplified for this mock</p>
+    <p class="home-hero__title"><span>Passionate Designer</span><span>Curious Builder</span></p>
+    <p class="home-hero__text">I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <b>Giving a damn does not.</b></p>
+    <p class="home-hero__by">Ryan DeBoer <span>· South Bend, IN / Remote US, Eastern Time</span></p>
+  </div>
+</section>
+
+<div class="wrap lab">
+  <section class="stage stage--holo" id="stage" aria-label="Binder">
+    <div class="binder" id="binder">
+      <nav class="binder__spine" id="spine" aria-label="Case studies by discipline">
+        <p class="spine__mark" aria-hidden="true">RDB</p>
+        <ul class="spine__tabs" id="spineTabs"></ul>
+        <p class="spine__foot" id="spineFoot"></p>
+      </nav>
+      <div class="binder__cover" aria-hidden="true"></div>
+      <div class="binder__hinge" aria-hidden="true"></div>
+      <div class="binder__edge" aria-hidden="true"></div>
+      <div class="rings" aria-hidden="true">
+        <span class="rings__glint"><i></i></span>
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+      </div>
+      <div class="pockets" id="pockets"></div>
+      <div class="binder__light" aria-hidden="true"></div>
+      <div class="binder__glare" aria-hidden="true">
+        <div class="binder__band"><i></i></div>
+        <div class="binder__prism"><i></i></div>
+        <div class="binder__gloss"><i></i></div>
+      </div>
+      <div class="binder__hand" aria-hidden="true"><i></i></div>
+      <div class="binder__turn" aria-hidden="true" inert hidden></div>
+    </div>
+
+    <nav class="pager" id="pager" aria-label="Binder pages">
+      <button type="button" class="btn btn--sm" id="pgPrev">Previous page</button>
+      <span class="pager__count" id="pgCount">Page 1 of 2</span>
+      <button type="button" class="btn btn--sm" id="pgNext">Next page</button>
+    </nav>
+
+    <p id="card-help" class="sr-only">Hovering or focusing a card lifts it from its sleeve. Enter or a click opens the case study; Escape closes it. Locked cards ask for the site password first.</p>
+    <p class="sr-only" id="live" aria-live="polite"></p>
+  </section>
+
+  <section class="panel" id="panel" aria-label="Specimen controls">
+    <div>
+      <h2>Selected card</h2>
+      <label class="sr-only" for="pick">Selected card</label>
+      <select class="select" id="pick"></select>
+      <dl class="readout">
+        <dt>state</dt><dd id="roState">seated</dd>
+        <dt>light</dt><dd id="roLight">0.50, 0.40</dd>
+      </dl>
+    </div>
+    <div>
+      <h2>Sequence</h2>
+      <p>Hover lifts; click opens. <kbd>Enter</kbd> opens, <kbd>Esc</kbd> closes.</p>
+      <label class="field-label" for="layout">Panel top</label>
+      <select class="select" id="layout">
+        <option value="beside" selected>Card in a sleeve beside the video</option>
+        <option value="intro">Card and intro, video below</option>
+        <option value="video">Card becomes the video (last pass)</option>
+      </select>
+      <div class="btns">
+        <button class="btn btn--primary" id="bOpen">Open study</button>
+        <button class="btn" id="bClose" disabled>Close</button>
+      </div>
+      <label class="toggle" style="margin-top:12px"><input type="checkbox" id="tSlow"> Slow motion, four times</label>
+      <label class="toggle"><input type="checkbox" id="tUnlock"> Unlocked, as the shared password leaves it</label>
+    </div>
+    <div>
+      <h2>Paused frames</h2>
+      <div class="btns" id="poses">
+        <button class="btn btn--sm" data-pose="live" aria-pressed="true">Live</button>
+        <button class="btn btn--sm" data-pose="seated">Seated</button>
+        <button class="btn btn--sm" data-pose="raised">Raised</button>
+        <button class="btn btn--sm" data-pose="0.12">Lifting</button>
+        <button class="btn btn--sm" data-pose="0.4">Flipping</button>
+        <button class="btn btn--sm" data-pose="0.62">Landing</button>
+        <button class="btn btn--sm" data-pose="0.74">Unfolding</button>
+        <button class="btn btn--sm" data-pose="1">Open</button>
+      </div>
+      <p class="hint">Frames hold the selected card at a point in the open sequence; locked cards only lift until unlocked. Keys <kbd>1</kbd>–<kbd>8</kbd> hold each frame, <kbd>←</kbd> <kbd>→</kbd> scrub a held one, <kbd>Esc</kbd> lets go.</p>
+    </div>
+    <div>
+      <h2>Proof toggles</h2>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="tHolo" checked> Holo themes</label>
+        <label class="toggle"><input type="checkbox" id="tSleeve"> Hide the sleeves</label>
+        <label class="toggle"><input type="checkbox" id="tExplode"> Explode the layers</label>
+        <label class="toggle"><input type="checkbox" id="tLight"> Fix the light</label>
+        <label class="toggle"><input type="checkbox" id="tRM"> Force reduced motion</label>
+        <label class="toggle"><input type="checkbox" id="tOpen"> Open on the homepage</label>
+      </div>
+    </div>
+  </section>
+</div>
+
+<button type="button" class="scrim" id="scrim" tabindex="-1" aria-label="Close the case study"></button>
+<aside class="flyout" id="flyout" role="dialog" aria-modal="true" aria-labelledby="foTitle" hidden>
+  <div class="fo-header">
+    <span class="fo-name">Ryan DeBoer</span>
+    <button type="button" class="fo-close" id="foClose">Close <span aria-hidden="true">×</span></button>
+  </div>
+  <div class="fo-article" id="foArticle"></div>
+</aside>
+
+<div class="sleeve fo-plastic" id="foPlastic" aria-hidden="true"></div>
+
+<dialog class="lock-dialog" id="lockDialog" aria-labelledby="lockTitle" aria-describedby="lockBody">
+  <span class="lock-dialog__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+  <h2 id="lockTitle">Password protected</h2>
+  <p id="lockBody">Its screens include employer work, so the study is password protected. Unlock it to take the card out of its sleeve.</p>
+  <div class="lock-dialog__actions" id="lockAsk">
+    <button type="button" class="btn btn--primary" id="lockUnlock">Unlock</button>
+    <button type="button" class="btn" id="lockKeep">Keep it in the sleeve</button>
+  </div>
+  <form class="lock-dialog__form" id="lockForm" hidden>
+    <label class="sr-only" for="lockPassword">Password</label>
+    <input class="lock-dialog__input" id="lockPassword" type="password" placeholder="Enter password" autocomplete="current-password" aria-describedby="lockNote">
+    <div class="lock-dialog__actions">
+      <button type="submit" class="btn btn--primary">Unlock</button>
+      <button type="button" class="btn" id="lockBack">Back</button>
+    </div>
+    <p class="lock-dialog__note" id="lockNote" role="status" hidden>Incorrect password for this demo. <a id="lockSite" href="https://www.rdeboerdesigns.com/" target="_blank" rel="noopener">Unlock it on rdeboerdesigns.com ↗</a></p>
+  </form>
+  <p class="lock-dialog__alt" id="lockAlt" hidden><button type="button" id="lockOverview">Read the overview without the screens</button></p>
+</dialog>
+
+<section class="wrap notes">
+  <div class="note">
+    <h2>What this page claims</h2>
+    <ul>
+      <li><b>One light for the whole page.</b> A lamp hangs over the middle of the binder, and sheets lie over every pocket at once: one dims the page away from the lamp, and three slide with its reflection, a band of light, the rainbow the foil throws round it and the glare on the plastic. The rainbow falls only on the cards' foil, never on the art. Each card's own film and glitter are laid across the binder, so neighbours continue one sheet of foil.</li>
+      <li><b>The pointer tilts the page.</b> The reflection slides the opposite way, so it crosses the binder card by card and never sits on the card you are pointing at. Left alone, the page sways and the reflection drifts round every card.</li>
+      <li><b>Hover lifts a card a tenth of the way out.</b> It rises 10% from behind the plastic, so its top clears the mouth while the rest stays glossed.</li>
+      <li><b>The card you click is the card at the top of the study.</b> It turns once on its way to the panel, its back (the intro video's first frame) flashing past, and tucks into the panel's own sleeve under its plastic. Beside the video, the reel then draws out from behind it. Close plays it in reverse.</li>
+      <li><b>The spine is the work's index.</b> On desktop the binder's spine lists All work, Product Design, System Design and AEM, as the site files them; a short page keeps its empty sleeves. Below desktop the same tabs run along the cover's top edge.</li>
+      <li><b>Every word is real copy.</b> The cards and the panel come from the project data through a build script; the panel uses the same fields as the site's fly-out.</li>
+      <li><b>Locked cards stop at the gate.</b> They lift on hover and carry a lock until the site's shared password opens them, as on the site; the unlock is remembered where the site remembers it, and a locked card's back and study wait unloaded until then.</li>
+    </ul>
+  </div>
+  <div class="note">
+    <h2>What still needs a decision</h2>
+    <ol>
+      <li><b>The heroes are private drafts.</b> They are AI-generated, and small text, charts and logos can differ from the real screens. Publishing them is Ryan's call.</li>
+      <li><b>Six of the seven locked heroes show Tire Rack branding.</b> The site anonymizes the client while a study is locked. Approve the branding on the public front, or give those cards neutral covers.</li>
+      <li><b>The holo themes step outside the one-accent rule.</b> Twelve hues and a rainbow finish live inside the binder, where the rest of the site keeps Signal Orange as its one accent.</li>
+      <li><b>The reflection moves against the pointer,</b> so the card you point at is never in the glare. Following the pointer instead is a one-line change.</li>
+      <li><b>The open takes 1.5 seconds,</b> against the site panel's 250ms. It is a moment rather than navigation, but it may want to be shorter once seen.</li>
+      <li><b>The panel's top is the card beside the video</b> (Ryan, 20 October). The reel gives up about a third of the column's width for it; the intro version stays on the bench for comparison.</li>
+      <li><b>What the spine carries.</b> Here it indexes the work by discipline. The reference put the site's own nav there: Work, About, Notes, Contact.</li>
+      <li><b>On phones the card's sleeve leads the panel</b> so the card has somewhere visible to land. The site's fly-out puts the rail first.</li>
+      <li><b>The panel here is a mock.</b> In the app, the card would fly above the real dialog and the dialog would render its own sleeve and card; that is integration work for the Opus pass.</li>
+      <li><b>Locked studies never transition</b> until real access control exists.</li>
+    </ol>
+  </div>
+</section>

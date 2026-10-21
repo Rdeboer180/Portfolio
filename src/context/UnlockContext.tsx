@@ -4,6 +4,7 @@ import React, {
 import { useNavigate, NavigateOptions } from 'react-router-dom';
 import { isReviewPath } from '../utils/reviewRoutes';
 import { isUnlocked, persistUnlock, skipsPasswordPrompt, persistSkipPasswordPrompt } from '../utils/unlock';
+import { PROTECTED_WORK_NAMES } from '../data/protectedWork';
 
 interface UnlockValue {
   /** Protected media and case-study overlays are visible. */
@@ -11,6 +12,8 @@ interface UnlockValue {
   skipAutomaticPrompt: boolean;
   /** The password modal is on screen. */
   promptOpen: boolean;
+  /** The protected study whose link raised the prompt, by its short name; null from the nav. */
+  pendingStudy: string | null;
   /** Locked and hydrated — surfaces offering an unlock affordance may show it. */
   lockedReady: boolean;
   /**
@@ -61,6 +64,7 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
+  const [pendingStudy, setPendingStudy] = useState<string | null>(null);
   const [resolving, setResolving] = useState(false);
   const pendingHref = useRef<string | null>(null);
   const pendingOptions = useRef<NavigateOptions | undefined>(undefined);
@@ -75,6 +79,8 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const openPrompt = useCallback((href?: string, options?: NavigateOptions) => {
     pendingOptions.current = options;
     pendingHref.current = href ?? null;
+    const slug = href?.match(/^\/work\/([^/]+)/)?.[1];
+    setPendingStudy((slug && PROTECTED_WORK_NAMES[slug]) || null);
     setPromptOpen(true);
   }, []);
 
@@ -119,10 +125,10 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const value = useMemo<UnlockValue>(
     () => ({
-      unlocked, skipAutomaticPrompt, promptOpen, lockedReady, resolving,
+      unlocked, skipAutomaticPrompt, promptOpen, pendingStudy, lockedReady, resolving,
       openPrompt, unlock, dismissPrompt, continueLocked,
     }),
-    [unlocked, skipAutomaticPrompt, promptOpen, lockedReady, resolving,
+    [unlocked, skipAutomaticPrompt, promptOpen, pendingStudy, lockedReady, resolving,
      openPrompt, unlock, dismissPrompt, continueLocked]
   );
 
