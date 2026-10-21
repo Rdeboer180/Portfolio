@@ -1197,6 +1197,7 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
 
 /* ---------- the locked-card stand-in ---------- */
 .lock-dialog {
+  touch-action: manipulation;   /* a tap acts at once: Safari otherwise waited out a double-tap */
   border: 1px solid var(--hairline); border-radius: 16px; padding: 28px;
   width: min(440px, calc(100% - 32px)); color: var(--ink); background: var(--paper);
   box-shadow: 0 30px 60px -20px rgba(0,0,0,.45);

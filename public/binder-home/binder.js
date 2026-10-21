@@ -1860,6 +1860,9 @@ window.mountBinder = function (document) {
     if (!reduced()) p.card.classList.add('card--nudge');
     live.textContent = `${c.title} is password protected.`;
     dlg.showModal();
+    // the page stays put under the dialog: Safari scrolled it behind the
+    // backdrop (the real document's root, also on the homepage's shadow root)
+    window.document.documentElement.style.overflow = 'hidden';
     lockStep(true);
   };
   lock.unlock.addEventListener('click', () => lockStep(false));
@@ -1879,6 +1882,7 @@ window.mountBinder = function (document) {
     openStudy();
   });
   dlg.addEventListener('close', () => {
+    window.document.documentElement.style.overflow = '';
     parts[sel].card.classList.remove('card--nudge');
     if (unlockedFromDialog) { unlockedFromDialog = false; return; }   // the card is on its way
     live.textContent = `${CARDS[sel].title} stays in its sleeve.`;
@@ -2261,7 +2265,11 @@ window.mountBinder = function (document) {
   // SWIPE_GO of the edge's travel, or with a flick, and the sheet finishes
   // its turn at the finger's speed; short of that, or flicked back, it falls
   // back. An upward or downward drag still scrolls (.pockets is pan-y).
-  const SWIPE_GAIN = 1.25, SWIPE_GO = .3, SWIPE_FLICK = .3;   // flick in px/ms
+  // A turn completes past SWIPE_GO of the edge's travel, or once the finger
+  // has gone SWIPE_GO_PX sideways: on a wide phone an angled swipe covers
+  // less of the page's width, and 30% alone left a deliberate 160px drag
+  // falling back.
+  const SWIPE_GAIN = 1.25, SWIPE_GO = .3, SWIPE_GO_PX = 96, SWIPE_FLICK = .3;   // flick in px/ms
   const swipe = { id: null, x0: 0, y0: 0, dx: 0, step: 0, shown: 0, from: 0, held: null, track: [], raf: 0, ended: -Infinity, back: false, cards: false };
   // where a drag may turn back from: the left BACK_ZONE of the screen, and
   // never less than the spine and a fingertip into the first column
@@ -2296,6 +2304,33 @@ window.mountBinder = function (document) {
     };
     swipe.raf = requestAnimationFrame(tick);
   };
+  // One decision per touch, made on its first SWIPE_DECIDE px and kept: within
+  // SWIPE_ANGLE of horizontal it is a page turn, and from then on the page
+  // doesn't scroll under it (the touchmove below cancels the browser's own
+  // panning); steeper, it is a scroll and the binder stays out of it. Before,
+  // a diagonal drag could start a turn while Safari also scrolled the page,
+  // and the sheet turned over a sliding page and then fell back (Ryan, 21
+  // October). 45° is where the browser itself hands a drag to scrolling
+  // (pan-y): at 40° a drag between the two did neither, turning nothing and
+  // scrolling nothing. Judged over 10px, where the angle has settled.
+  const SWIPE_DECIDE = 10, SWIPE_ANGLE = 45;
+  let axis = null;   // null, 'x' or 'y', per touch
+  const lockOf = (dx, dy) => {
+    if (!axis && Math.hypot(dx, dy) >= SWIPE_DECIDE) axis = Math.atan2(Math.abs(dy), Math.abs(dx)) * 180 / Math.PI <= SWIPE_ANGLE ? 'x' : 'y';
+    return axis;
+  };
+  const touchAt = { x: 0, y: 0, on: false };
+  binder.addEventListener('touchstart', (e) => {
+    axis = null;
+    const t = e.touches[0];
+    if (e.touches.length === 1) Object.assign(touchAt, { x: t.clientX, y: t.clientY, on: !e.target.closest?.('.binder__spine') });
+  }, { passive: true });
+  binder.addEventListener('touchmove', (e) => {
+    if (e.touches.length !== 1 || !touchAt.on) return;
+    const t = e.touches[0];
+    if (swipe.id !== null) trackFinger(t.clientX, t.clientY, e.timeStamp);
+    if (lockOf(t.clientX - touchAt.x, t.clientY - touchAt.y) === 'x' && e.cancelable) e.preventDefault();
+  }, { passive: false });
   binder.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'touch' || swipe.id !== null || state !== 'seated' || pageCount() < 2) return;
     if (e.target.closest?.('.binder__spine')) return;   // on a phone, the tab bar across the top
@@ -2303,14 +2338,18 @@ window.mountBinder = function (document) {
     if (!back && !cards) return;
     Object.assign(swipe, { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, step: 0, shown: 0, held: null, track: [[e.timeStamp, e.clientX]], back, cards });
   });
-  binder.addEventListener('pointermove', (e) => {
-    if (e.pointerId !== swipe.id) return;
-    const dx = e.clientX - swipe.x0, dy = e.clientY - swipe.y0;
-    swipe.track = [...swipe.track.slice(-7), [e.timeStamp, e.clientX]];
+  binder.addEventListener('pointermove', (e) => { if (e.pointerId === swipe.id) trackFinger(e.clientX, e.clientY, e.timeStamp); });
+  // The finger, from pointermove or touchmove, whichever reports first:
+  // Safari on iOS 18 sent its first pointermove only after about 90px, while
+  // its touchmoves came from the first pixels, so the sheet waited and then
+  // jumped to catch up (the simulator pass, 21 October).
+  function trackFinger(x, y, at) {
+    const dx = x - swipe.x0, dy = y - swipe.y0;
+    swipe.track = [...swipe.track.slice(-7), [at, x]];
     swipe.dx = dx;
     if (swipe.step) return;
-    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { swipe.id = null; return; }   // a scroll
-    if (Math.abs(dx) < 10) return;
+    if (!lockOf(dx, dy)) return;   // not decided yet
+    if (axis === 'y') { swipe.id = null; return; }   // a scroll
     const step = dx < 0 ? 1 : -1;
     if (step < 0 ? !swipe.back : !swipe.cards) { swipe.id = null; return; }   // back only from the left of the screen, forward only from the cards
     if (page + step < 0 || page + step >= pageCount()) { swipe.id = null; return; }
@@ -2320,7 +2359,7 @@ window.mountBinder = function (document) {
       if (t0 && swipe.id !== null) steerTurn(t0);
       return t0;
     });
-  });
+  }
   const letGo = (e) => {
     if (e.pointerId !== swipe.id) return;
     swipe.id = null;
@@ -2336,7 +2375,8 @@ window.mountBinder = function (document) {
     swipe.held.then((t0) => {
       if (!t0 || leaf !== t0) return;
       const want = wantOf(t0);
-      const go = e.type === 'pointerup' && v > -SWIPE_FLICK && (want > SWIPE_GO || (v > SWIPE_FLICK && want > .02));
+      const far = -swipe.dx * swipe.step >= SWIPE_GO_PX;
+      const go = e.type === 'pointerup' && v > -SWIPE_FLICK && (want > SWIPE_GO || far || (v > SWIPE_FLICK && want > .02));
       const at = atForTravel(t0, swipe.shown);
       seekTurn(at);
       if (!go) {
