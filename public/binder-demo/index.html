@@ -165,18 +165,27 @@ button, select { font: inherit; }
    over (two halves meeting at the top) and drops through a punched hole with
    a clear reinforcing washer, and casts a soft shadow on the page. The steel
    catches the page's one light: a glint slides along the plate at the lamp's
-   height (--ly) and each ring brightens as the lamp comes level (--glint),
-   both set from script. */
+   height (.rings__glint, moved by a transform) and each ring brightens as the
+   lamp comes level (each .glint's opacity), both set from script. The rings are their own
+   layer: the glint used to be a gradient placed at var(--ly), and every move
+   of the lamp repainted the whole page, about 30 times a second at rest. */
 .rings {
   position: absolute; left: calc(var(--spine-w) - 10px); top: var(--strip-h); bottom: 0; width: 86px; pointer-events: none;
   display: flex; flex-direction: column; justify-content: space-evenly;
-  --ly: .4;
+  will-change: transform;
+}
+.rings__glint {              /* the plate's highlight, clipped to the plate */
+  position: absolute; left: 1px; top: 20px; bottom: 20px; width: 18px; border-radius: 9px; overflow: hidden;
+}
+.rings__glint > i {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%; will-change: transform;
+  background:
+    radial-gradient(46% 6% at 42% 50%, rgba(255,255,255,.95), rgba(255,255,255,.3) 42%, rgba(255,255,255,0) 100%),
+    radial-gradient(70% 26% at 42% 50%, rgba(255,255,255,.2), rgba(255,255,255,0) 100%);
 }
 .rings::before {             /* the plate */
   content: ''; position: absolute; left: 1px; top: 20px; bottom: 20px; width: 18px; border-radius: 9px;
   background:
-    radial-gradient(46% 6% at 42% calc(var(--ly) * 100%), rgba(255,255,255,.95), rgba(255,255,255,.3) 42%, rgba(255,255,255,0) 100%),
-    radial-gradient(70% 26% at 42% calc(var(--ly) * 100%), rgba(255,255,255,.2), rgba(255,255,255,0) 100%),
     linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 3%, rgba(0,0,0,0) 97%, rgba(0,0,0,.35)),
     repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,.06) 1px 2px, rgba(0,0,0,0) 2px 3px),
     linear-gradient(90deg, #212428 0%, #4f555c 8%, #9ea4ac 20%, #dfe2e6 34%, #ffffff 42%, #e3e6e9 50%, #a9aeb6 64%, #6b7178 80%, #3a3e44 92%, #1d1f23 100%);
@@ -192,8 +201,8 @@ button, select { font: inherit; }
     radial-gradient(circle at 40% 36%, #ffffff 0 .9px, #e4e6e9 1.7px, #9aa0a8 3.2px, #4a4f56 4.6px, #1b1d20 5.4px, rgba(0,0,0,.45) 5.9px, rgba(0,0,0,0) 6.6px) top / 12px 12px no-repeat,
     radial-gradient(circle at 40% 36%, #ffffff 0 .9px, #e4e6e9 1.7px, #9aa0a8 3.2px, #4a4f56 4.6px, #1b1d20 5.4px, rgba(0,0,0,.45) 5.9px, rgba(0,0,0,0) 6.6px) bottom / 12px 12px no-repeat;
 }
-.ring { position: relative; height: 52px; width: 86px; --glint: .8; }
-.ring .glint { opacity: var(--glint); }
+.ring { position: relative; height: 52px; width: 86px; }
+.ring .glint { opacity: .8; }
 .ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
 /* ---------- the spine: project-level navigation ----------
@@ -466,7 +475,7 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
     #fff 0%, #fbfcfd 18%, #eceef2 50%, #dde1e7 100%);
   mix-blend-mode: multiply;
 }
-.binder__band { z-index: 7; mix-blend-mode: screen; opacity: .7; }   /* the glare at 70% (Ryan, 20 October) */
+.binder__band { z-index: 7; mix-blend-mode: screen; opacity: .49; }   /* the glare at 70%, then 70% again (Ryan, 20 and 21 October) */
 .binder__band > i {          /* a pale band of light, leaning 22 degrees */
   width: 360px; height: 2600px;
   background: linear-gradient(90deg,
@@ -485,10 +494,10 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
     hsl(215 95% 60%) 120px, hsl(278 80% 62%) 150px, hsl(352 95% 60%) 180px);
   -webkit-mask-image: radial-gradient(closest-side, #000, rgba(0,0,0,.55) 45%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000, rgba(0,0,0,.55) 45%, transparent 100%);
-  opacity: .75;
+  opacity: .53;   /* down with the glare it rings (Ryan, 21 October) */
 }
-.binder__gloss {             /* the lamp's reflection on the plastic, at 70% like the band */
-  z-index: 9; mix-blend-mode: screen; opacity: .7;
+.binder__gloss {             /* the lamp's reflection on the plastic, at the band's strength */
+  z-index: 9; mix-blend-mode: screen; opacity: .49;
   transition: transform 640ms var(--e-out), opacity 300ms ease;
 }
 .binder__gloss > i {
@@ -500,15 +509,16 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
 }
 /* the pointer's hand: a soft shadow cast away from the lamp, over the glare
    too. A hand held well above the page under a lamp casts a wide, faint
-   penumbra, not a spot, and it trails the hand a little. */
+   penumbra, not a spot, and it trails the hand a little. At 70% of its first
+   size and darkness (Ryan, 21 October: "aggressive and too large"). */
 .binder__hand {
   position: absolute; inset: 0; border-radius: inherit; pointer-events: none; overflow: hidden;
   z-index: 10; mix-blend-mode: multiply; opacity: 0; transition: opacity 600ms ease;
 }
 .binder.has-hand .binder__hand { opacity: 1; }
 .binder__hand > i {
-  position: absolute; left: 0; top: 0; width: 580px; height: 480px; will-change: transform;
-  background: radial-gradient(closest-side, rgba(12,14,18,.11), rgba(12,14,18,.085) 30%, rgba(12,14,18,.042) 58%, rgba(12,14,18,.012) 82%, rgba(12,14,18,0) 100%);
+  position: absolute; left: 0; top: 0; width: 406px; height: 336px; will-change: transform;
+  background: radial-gradient(closest-side, rgba(12,14,18,.077), rgba(12,14,18,.06) 30%, rgba(12,14,18,.029) 58%, rgba(12,14,18,.008) 82%, rgba(12,14,18,0) 100%);
   transition: transform 280ms cubic-bezier(.2,.7,.3,1);
 }
 /* ---------- turning a page ----------
@@ -558,28 +568,34 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
 /* ---------- the card ---------- */
 .card__shadow {
   position: absolute; inset: 10px; border-radius: 6px; z-index: 1; pointer-events: none;
-  background: rgba(0,0,0,.55);
-  filter: blur(3px);
-  transform: translate(2px, 3px);
-  opacity: .55;
-  transition: transform var(--d-lift) var(--e-out), opacity var(--d-lift) ease, filter var(--d-lift) ease,
-    box-shadow var(--d-lift) ease, z-index 0s linear var(--d-lift);
+  transition: transform var(--d-lift) var(--e-out), z-index 0s linear var(--d-lift);
 }
+/* Two shadows drawn once and crossfaded, so a raise or a fall animates only
+   opacity and transform: the blur and the cast never repaint mid-motion.
+   ::before is the card in its sleeve, ::after the card stood off the page. */
+.card__shadow::before, .card__shadow::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  background: rgba(0,0,0,.55);
+  transition: opacity var(--d-lift) ease;
+}
+.card__shadow::before { filter: blur(3px); transform: translate(2px, 3px); opacity: .55; }
 /* Out of its sleeve the card stands off the page: a harder, longer shadow,
-   lifted over the neighbouring plastic so the part sticking out casts on it. */
+   lifted over the neighbouring plastic so the part sticking out casts on it:
+   a crisp contact line and one cast, falling away from the lamp (--sx, --sy)
+   and longer for the tilt; the old halo darkened the card above, toward the
+   lamp. */
+.card__shadow::after {
+  filter: blur(1.5px); opacity: 0;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.5),
+    calc(var(--sx) * 14px) calc(6px + var(--sy) * 10px) 13px rgba(0,0,0,.58);
+}
 .pocket--raised .card__shadow {
   z-index: 3;
   transform: translate(0, var(--lift));
-  filter: blur(1.5px);
-  opacity: 1;
-  /* a crisp contact line and one cast, falling away from the lamp (--sx,
-     --sy) and longer for the tilt; the old halo darkened the card above,
-     toward the lamp */
-  box-shadow: 0 0 3px 1px rgba(0,0,0,.5),
-    calc(var(--sx) * 14px) calc(6px + var(--sy) * 10px) 13px rgba(0,0,0,.58);
-  transition: transform var(--d-lift) var(--e-out), opacity var(--d-lift) ease, filter var(--d-lift) ease,
-    box-shadow var(--d-lift) ease, z-index 0s;
+  transition: transform var(--d-lift) var(--e-out), z-index 0s;
 }
+.pocket--raised .card__shadow::before { opacity: 0; }
+.pocket--raised .card__shadow::after { opacity: 1; }
 .card {
   position: absolute; inset: 10px; z-index: 2;
   border-radius: 6px;
@@ -841,10 +857,10 @@ html.is-unlocked .cf-lock { display: none; }   /* unlocked, the pill goes */
 .stage--holo .cf-stats svg { stroke: hsl(var(--h) calc(var(--s) * 75%) 36%); }
 
 /* ---------- reduced motion ---------- */
-.stage--rm .card, .stage--rm .card__shadow, .stage--rm .sleeve { transition: none !important; }
+.stage--rm .card, .stage--rm .card__shadow, .stage--rm .card__shadow::before, .stage--rm .card__shadow::after, .stage--rm .sleeve { transition: none !important; }
 .stage--rm .card--nudge { animation: none; }
 @media (prefers-reduced-motion: reduce) {
-  .card, .card__shadow, .sleeve { transition: none !important; }
+  .card, .card__shadow, .card__shadow::before, .card__shadow::after, .sleeve { transition: none !important; }
   .card--nudge { animation: none; }
 }
 
@@ -1230,6 +1246,7 @@ html.binder-open .share-top__alt--open, html:not(.binder-open) .share-top__alt--
       <div class="binder__hinge" aria-hidden="true"></div>
       <div class="binder__edge" aria-hidden="true"></div>
       <div class="rings" aria-hidden="true">
+        <span class="rings__glint"><i></i></span>
         <div class="ring"></div><div class="ring"></div><div class="ring"></div>
       </div>
       <div class="pockets" id="pockets"></div>
@@ -1557,7 +1574,9 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   });
   // where each ring sits down the page, for its glint (read in layout())
   const ringEls = [...document.querySelectorAll('.ring')], ringsEl = document.querySelector('.rings');
-  let ringYs = ringEls.map(() => .5);
+  const ringGlint = ringsEl.querySelector('.rings__glint > i'), ringGlints = ringEls.map((el) => el.querySelector('.glint'));
+  let ringYs = ringEls.map(() => .5), plateH = 0;
+  const glintAt = ringEls.map(() => -1);   // the opacity each ring's glint last got
 
   // ---- layout: one sheet of foil needs every card's place on the page ----
   // The streaks are one noise field the size of the binder; each card's film
@@ -1586,6 +1605,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // mask has a hole wherever a raised card crosses another pocket (lifted:
   // raised cards, and cards still sliding home).
   const lifted = new Set();
+  const MASK_STEP = 3;
   let drawn = '';
   const buildMasks = () => {
     let d = '', sleeves = '';
@@ -1598,8 +1618,13 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
       if (!f || p.classList.contains('is-flying') || p.classList.contains('is-open')) return;
       // where the card is now, not where it is going, tilt included
       const bb = binder.getBoundingClientRect(), cb = p.querySelector('.card').getBoundingClientRect();
-      const half = (v) => Math.round(v * 2) / 2;
-      const top = half(cb.top - bb.top), cx0 = half(cb.left - bb.left), cx1 = half(cb.right - bb.left), cy1 = half(cb.bottom - bb.top);
+      // in 3px steps, rounded outward: a rising card re-cuts the masks about
+      // a dozen times instead of every frame (each cut repaints three blended
+      // sheets the size of the binder), and the hole stays at least as big as
+      // the card, so no glare ever falls on it; at worst 3px of plastic goes
+      // without glare for a frame
+      const out0 = (v) => Math.floor(v / MASK_STEP) * MASK_STEP, out1 = (v) => Math.ceil(v / MASK_STEP) * MASK_STEP;
+      const top = out0(cb.top - bb.top), cx0 = out0(cb.left - bb.left), cx1 = out1(cb.right - bb.left), cy1 = out1(cb.bottom - bb.top);
       const cut = (r) => {
         const x0 = Math.max(cx0, r.x), y0 = Math.max(top, r.y), x1 = Math.min(cx1, r.x + r.w), y1 = Math.min(cy1, r.y + r.h);
         return x1 > x0 && y1 > y0 ? `M${x0} ${y0}H${x1}V${y1}H${x0}Z` : '';
@@ -1671,6 +1696,7 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     Object.assign(geo, { bw: ex(br.width), bh: ex(br.height), page: `M${sw} ${sh}H${ex(br.width)}V${ex(br.height)}H${sw}Z` });
     buildMasks();
     ringYs = ringEls.map((el) => { const r = el.getBoundingClientRect(); return (r.top + r.height / 2 - br.top) / bh; });
+    plateH = ringGlint.parentElement.offsetHeight;
     applyLight();
   };
   new ResizeObserver(() => layout()).observe(binder);
@@ -1732,8 +1758,14 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     for (const sh of sheets) sh.el.style.transform = `translate3d(${(x - sh.w / 2).toFixed(1)}px, ${(y - sh.h / 2).toFixed(1)}px, 0)${sh.turn}`;
     // the steel catches the same lamp: the plate's glint at its height, and
     // each ring brightest when the lamp is level with it
-    ringsEl.style.setProperty('--ly', Math.min(1, Math.max(0, ly)).toFixed(3));
-    ringEls.forEach((el, k) => el.style.setProperty('--glint', (.5 + .5 * Math.exp(-(((ringYs[k] - ly) / .3) ** 2))).toFixed(3)));
+    // each ring brightest when the lamp is level with it. The glint moves on
+    // the compositor; a ring's own glow is repainted only when it changes by
+    // a step the eye can see, a few times a second as the lamp sways.
+    ringGlint.style.transform = `translate3d(0, ${((Math.min(1, Math.max(0, ly)) - .5) * plateH).toFixed(1)}px, 0)`;
+    ringEls.forEach((el, k) => {
+      const g = Math.round((.5 + .5 * Math.exp(-(((ringYs[k] - ly) / .3) ** 2))) * 40) / 40;
+      if (g !== glintAt[k]) { glintAt[k] = g; if (ringGlints[k]) ringGlints[k].style.opacity = g; }
+    });
     ro.light.textContent = `${lx.toFixed(2)}, ${ly.toFixed(2)}`;
   };
   const homeLight = () => { [lx, ly] = HOME; [tx, ty] = HOME; applyLight(); };
@@ -2096,22 +2128,54 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // A pointer or pen over the pocket raises it, and so does keyboard focus.
   const raise = (p, on) => {
     if ((state === 'seated' || state === 'posed') && !leaf) p.classList.toggle('pocket--raised', on);
-    if (!on) { p.style.removeProperty('--fx'); p.style.removeProperty('--fy'); }
+    if (!on) {
+      // let go: the foil eases back on its CSS transition
+      foils(p).forEach((el) => { el.style.removeProperty('transform'); el.style.removeProperty('transition'); });
+      foilAt.delete(p);
+    }
   };
   // The card in hand catches the lamp as it moves (Fable review): its holo
   // film and glitter slide up to FOIL_SHIFT px against the pointer, so its
-  // colour shifts under the hand. A transform on that one card only.
+  // colour shifts under the hand. A transform on that card's two foil layers
+  // only, at most once a frame, and the pocket is measured when the pointer
+  // arrives (or the page scrolls), not on every move: setting a variable on
+  // the pocket restyled the whole card each time. The film blends with the
+  // card, so every move of it repaints the card: it moves in half-pixel steps,
+  // only when the step changes, and without a transition while the hand is
+  // on it (a transition repainted every frame the pointer moved).
   const FOIL_SHIFT = 7;
+  const foilOf = new WeakMap();
+  function foils(p) {
+    let f = foilOf.get(p);
+    if (!f) { f = [...p.querySelectorAll('.face__holo, .face__glint')]; foilOf.set(p, f); }
+    return f;
+  }
+  const foil = { p: null, rect: null, x: 0, y: 0, frame: 0 };
+  const foilAt = new Map();   // pocket -> the step its foil last took
+  const placeFoil = () => {
+    foil.frame = 0;
+    const p = foil.p;
+    if (!p || !p.classList.contains('pocket--raised')) return;
+    const r = foil.rect ?? (foil.rect = p.getBoundingClientRect());
+    const nx = Math.max(-1, Math.min(1, ((foil.x - r.left) / r.width - .5) * 2));
+    const ny = Math.max(-1, Math.min(1, ((foil.y - r.top) / r.height - .5) * 2));
+    const step = (v) => Math.round(-v * FOIL_SHIFT * 2) / 2;
+    const key = `${step(nx)},${step(ny)}`;
+    if (foilAt.get(p) === key) return;
+    foilAt.set(p, key);
+    const tf = `translate3d(${step(nx)}px, ${step(ny)}px, 0)`;
+    foils(p).forEach((el) => { el.style.transition = 'none'; el.style.transform = tf; });
+  };
   grid.addEventListener('pointermove', (e) => {
     if (e.pointerType === 'touch' || reduced()) return;
     const p = e.target.closest('.pocket--raised');
     if (!p) return;
-    const r = p.querySelector('.card').getBoundingClientRect();
-    const nx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - .5) * 2));
-    const ny = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - .5) * 2));
-    p.style.setProperty('--fx', `${(-nx * FOIL_SHIFT).toFixed(1)}px`);
-    p.style.setProperty('--fy', `${(-ny * FOIL_SHIFT).toFixed(1)}px`);
+    if (p !== foil.p) { foil.p = p; foil.rect = null; }
+    foil.x = e.clientX; foil.y = e.clientY;
+    if (!foil.frame) foil.frame = requestAnimationFrame(placeFoil);
   });
+  window.addEventListener('scroll', () => { foil.rect = null; }, { passive: true, capture: true });
+  window.addEventListener('resize', () => { foil.rect = null; });
   const cardOf = (p) => p.querySelector('.card');
   grid.addEventListener('pointerover', (e) => {
     const p = e.target.closest('.pocket:not(.pocket--empty)');
@@ -2501,9 +2565,11 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
     ];
   };
   const radiusOf = (c) => (c.back.intro.frame === 'reel' ? 0 : 10);
-  const shadowAt = (y, raisedLook) => (raisedLook
-    ? { transform: `translate(0px, ${y}px)`, opacity: 1, filter: 'blur(1.5px)' }
-    : { transform: `translate(2px, ${y + 3}px)`, opacity: .55, filter: 'blur(3px)' });
+  // The shadow's look (in its sleeve or stood off the page) is its two
+  // drawn layers, chosen by the pocket's class; the flight only moves and
+  // fades it. Growing softer as the card rises is a scale and a fade of the
+  // drawn blur, never a blur animated frame by frame.
+  const shadowAt = (y) => ({ transform: `translate(0px, ${y}px) scale(1)`, opacity: 1 });
   const fadeUp = (el, from, to, opts) => el.animate([
     { offset: 0, opacity: 0, transform: 'translateY(14px)' },
     { offset: from, opacity: 0, transform: 'translateY(14px)', easing: 'cubic-bezier(.2,.7,.2,1)' },
@@ -2514,10 +2580,10 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // Lifting out of the binder is the same in every layout.
   const liftAnimations = (p, out, fromY, end, opts, gone = .3) => [
     p.shadow.animate([
-      { offset: 0, ...shadowAt(fromY, fromY < -1), zIndex: 3 },
-      { offset: end, transform: `translate(2px, ${out + 10}px)`, opacity: .3, filter: 'blur(9px)', zIndex: 3 },
-      { offset: gone, transform: `translate(2px, ${out + 18}px)`, opacity: 0, filter: 'blur(14px)', zIndex: 3 },
-      { offset: 1, transform: `translate(2px, ${out + 18}px)`, opacity: 0, filter: 'blur(14px)', zIndex: 3 },
+      { offset: 0, ...shadowAt(fromY), zIndex: 3 },
+      { offset: end, transform: `translate(2px, ${out + 10}px) scale(1.05)`, opacity: .35, zIndex: 3 },
+      { offset: gone, transform: `translate(2px, ${out + 18}px) scale(1.1)`, opacity: 0, zIndex: 3 },
+      { offset: 1, transform: `translate(2px, ${out + 18}px) scale(1.1)`, opacity: 0, zIndex: 3 },
     ], opts),
     p.sleeve.animate([
       { offset: 0, zIndex: 5 }, { offset: end, zIndex: 5 }, { offset: end + .001, zIndex: 3 }, { offset: 1, zIndex: 3 },
@@ -2711,9 +2777,9 @@ window.BINDER_UNLOCK = {"hash":"5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be
   // Dropping back into the binder is the same in every layout.
   const dropAnimations = (p, out, endY, raised, from, opts) => [
     p.shadow.animate([
-      { offset: 0, transform: `translate(2px, ${out + 18}px)`, opacity: 0, filter: 'blur(14px)', zIndex: 3 },
-      { offset: from, transform: `translate(2px, ${out + 18}px)`, opacity: 0, filter: 'blur(14px)', zIndex: 3 },
-      { offset: 1, ...shadowAt(endY, raised), zIndex: 3 },
+      { offset: 0, transform: `translate(2px, ${out + 18}px) scale(1.1)`, opacity: 0, zIndex: 3 },
+      { offset: from, transform: `translate(2px, ${out + 18}px) scale(1.1)`, opacity: 0, zIndex: 3 },
+      { offset: 1, ...shadowAt(endY), zIndex: 3 },
     ], opts),
     p.sleeve.animate([
       { offset: 0, zIndex: 3 }, { offset: from, zIndex: 3 }, { offset: from + .001, zIndex: 5 }, { offset: 1, zIndex: 5 },
