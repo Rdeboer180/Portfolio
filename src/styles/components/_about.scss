@@ -335,6 +335,131 @@ $select-b: blue($color-primary-light);
     span { display: block; }
   }
   .about__signature-underline { display: block; width: 220px; max-width: 100%; height: 16px; margin-top: var(--space-sm); color: var(--color-primary); }
+
+  // Type specimen guides (concept 04). Positions come from Hubot Sans's own
+  // metrics, measured once (ascent 1.09, descent 0.32, cap height 0.729 of
+  // the em), never from the browser: with line-height 1.15 the baseline sits
+  // 0.96em below the top of each line and the cap height 0.231em.
+  .about__signature--specimen {
+    --sig-size: clamp(38px, 1.75vw + 27px, 52px);
+    font-size: var(--sig-size);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+  .about__specimen-word {
+    position: relative;
+    isolation: isolate;
+
+    &::after,
+    &:first-child::before {
+      content: 'baseline' / '';
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      top: calc(var(--sig-size) * 0.96 - 13px);
+      height: 13px;
+      border-bottom: 1px solid $color-secondary;
+      font: 400 11px / 12px $font-family-mono;
+      letter-spacing: 0;
+      color: $color-text-secondary;
+      text-align: right;
+      white-space: nowrap;
+      pointer-events: none;
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 240ms cubic-bezier(0.25, 1, 0.5, 1) var(--guide-delay, 0ms), color $transition-fast, border-color $transition-fast;
+    }
+    &:first-child::before {
+      content: 'cap height' / '';
+      top: calc(var(--sig-size) * 0.231 - 13px);
+    }
+    &:nth-child(2) { --guide-delay: 80ms; }
+    &:nth-child(3) { --guide-delay: 160ms; }
+  }
+  .about__signature.is-visible .about__specimen-word::after,
+  .about__signature.is-visible .about__specimen-word:first-child::before { clip-path: inset(0); }
+
+  // A proof phrase in the copy lights its value word's baseline.
+  @each $value in curiosity, care, collaboration {
+    .about__differentiator-grid[data-proving='#{$value}'] .about__specimen-word[data-value='#{$value}']::after {
+      border-bottom: 1.5px solid $color-primary;
+      color: $color-primary-text;
+    }
+  }
+
+  .about__differentiator-copy { position: relative; }
+  .about__proof {
+    color: $color-text-primary;
+    text-decoration: underline;
+    text-decoration-color: $color-secondary-dark;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color $transition-fast;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration-color: $color-primary;
+      text-decoration-thickness: 1.5px;
+    }
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 3px; }
+  }
+  .about__strong-link {
+    color: $color-text-primary;
+    font-weight: $font-weight-semibold;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color $transition-fast;
+
+    &:hover,
+    &:focus-visible { color: $color-primary-text; }
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 3px; }
+  }
+  .about__proof-rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+
+    > span {
+      display: block;
+      height: 1px;
+      background: $color-secondary;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 240ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    &.is-on > span { transform: scaleX(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about__specimen-word::after,
+    .about__specimen-word:first-child::before { clip-path: none; transition: color $transition-fast, border-color $transition-fast; }
+    .about__proof-rule > span { transition: none; }
+  }
+
+  // Wide screens: the labels hang in the margin, as on a specimen sheet.
+  @media (min-width: 1360px) {
+    .about__specimen-word::after,
+    .about__specimen-word:first-child::before { left: -104px; text-align: left; }
+  }
+  // Two columns, narrower: "Collaboration." would run into its label.
+  @media (min-width: 851px) and (max-width: 1359px) {
+    .about__specimen-word:last-child::after { content: '' / ''; }
+  }
+  @media (min-width: 1100px) {
+    .about__differentiator-grid { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); }
+  }
+  // Phones keep only the first cap height and the last baseline.
+  @media (max-width: 599px) {
+    .about__specimen-word:not(:last-child)::after { display: none; }
+  }
+  @media (max-width: 359px) {
+    .about__specimen-word::after,
+    .about__specimen-word:first-child::before { content: '' / ''; }
+  }
   .about__body { margin-top: 0; margin-bottom: var(--space-xl); }
   .about__evidence-links {
     display: flex;
@@ -350,7 +475,6 @@ $select-b: blue($color-primary-light);
   .about__background .about__cta-links { margin-bottom: 0; }
   @media (max-width: 850px) {
     .about__differentiator-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
-    .about__signature > .reveal-mask { display: inline-block; vertical-align: bottom; }
   }
 }
 
@@ -430,9 +554,13 @@ $select-b: blue($color-primary-light);
 }
 .about__timeline-closing { max-width: var(--copy-max-width); }
 
-// Homepage writing follows the Notes index's editorial rows, using the
-// existing type, spacing, and link treatment rather than another card grid.
+// Homepage writing as a quick-open list (concept 05): a plain list of links
+// with one shared highlight that slides to the active row and opens its dek.
+// Orange means selected, so the kind dots stay ink, slate and steel.
 .selected-writing {
+  $row-cols: 200px minmax(0, 1fr) 56px 52px;
+  $glide: 150ms cubic-bezier(0.25, 1, 0.5, 1);
+
   padding: $spacing-4xl 0;
   background: $color-white;
 
@@ -444,7 +572,7 @@ $select-b: blue($color-primary-light);
 
   &__header {
     display: flex;
-    align-items: baseline;
+    align-items: flex-end;
     justify-content: space-between;
     gap: $spacing-xl;
     margin-bottom: $spacing-xl;
@@ -456,8 +584,94 @@ $select-b: blue($color-primary-light);
       line-height: $line-height-h2;
       letter-spacing: -0.02em;
     }
+  }
 
-    > a { flex-shrink: 0; }
+  &__tools {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-shrink: 0;
+    padding-bottom: 4px;
+  }
+
+  &__filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: $font-family-mono;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-text-secondary;
+  }
+
+  &__select {
+    position: relative;
+    display: inline-flex;
+
+    select {
+      appearance: none;
+      margin: 0;
+      padding: 7px 34px 7px 12px;
+      font-family: $font-family-primary;
+      font-size: 14px;
+      font-weight: $font-weight-medium;
+      letter-spacing: 0;
+      text-transform: none;
+      color: $color-text-primary;
+      background: $color-white;
+      border: 1px solid $color-secondary;
+      border-radius: 8px;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid $color-primary-text;
+        outline-offset: 2px;
+      }
+    }
+
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      margin-top: -6px;
+      pointer-events: none;
+      fill: none;
+      stroke: $color-text-primary;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__results { position: relative; }
+
+  // Painted over the row borders and under the row text.
+  &__highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    height: 0;
+    border-radius: 8px;
+    background: $color-primary-light;
+    box-shadow: inset 0 0 0 1.5px $color-primary;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__results.is-measured &__highlight {
+    opacity: 1;
+    transition: transform $glide, height $glide;
+  }
+
+  // Before the highlight has measured (the prerendered page), the active
+  // row carries the tint itself.
+  &__results:not(.is-measured) &__item.is-active {
+    border-radius: 8px;
+    background: $color-primary-light;
+    box-shadow: inset 0 0 0 1.5px $color-primary;
   }
 
   &__list {
@@ -467,57 +681,217 @@ $select-b: blue($color-primary-light);
     border-top: 1px solid $color-border-default;
   }
 
+  &__item { border-bottom: 1px solid $color-border-default; }
+
   &__row {
+    position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: minmax(140px, 0.25fr) 1fr auto;
-    gap: $spacing-xl;
-    align-items: baseline;
-    padding: $spacing-xl 0;
-    border-bottom: 1px solid $color-border-default;
+    grid-template-columns: $row-cols;
+    align-items: center;
+    column-gap: $spacing-lg;
+    padding: 20px 12px;
     color: $color-text-primary;
     text-decoration: none;
-
-    &:hover .selected-writing__title,
-    &:focus-visible .selected-writing__title {
-      color: $color-primary-text;
-    }
+    border-radius: 8px;
 
     &:focus-visible {
       outline: 2px solid $color-primary-text;
-      outline-offset: 4px;
+      outline-offset: 2px;
     }
   }
 
-  &__meta {
+  &__kind {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-family: $font-family-mono;
     font-size: $font-size-caption;
     color: $color-text-secondary;
   }
 
-  &__title {
-    font-size: $font-size-body-lg;
-    font-weight: $font-weight-medium;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
+  &__dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $color-text-primary;
+
+    &--exploration { background: $color-secondary-dark; }
+    &--system { background: $color-secondary; }
+    &--reflection { background: none; box-shadow: inset 0 0 0 1.5px $color-text-primary; }
+    &--skill { background: none; box-shadow: inset 0 0 0 1.5px $color-secondary-dark; }
   }
 
-  &__arrow { color: $color-primary-text; }
+  &__name {
+    font-size: 17px;
+    font-weight: $font-weight-medium;
+    line-height: 1.4;
+  }
+
+  &__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  &__status {
+    margin-left: 14px;
+    font-family: $font-family-mono;
+    font-size: 11.5px;
+    font-weight: $font-weight-regular;
+    color: $color-text-secondary;
+    white-space: nowrap;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 6px;
+      border: 1px solid $color-secondary-dark;
+      vertical-align: 1px;
+    }
+  }
+
+  &__read {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-text-secondary;
+    text-align: right;
+  }
+
+  &__go {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__arrow {
+    fill: none;
+    stroke: $color-primary;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  kbd {
+    display: inline-block;
+    min-width: 20px;
+    box-sizing: border-box;
+    padding: 0 6px;
+    border: 1px solid #d6dce4;
+    border-bottom: 2px solid $color-secondary;
+    border-radius: 4px;
+    background: $color-white;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 17px;
+    color: $color-text-primary;
+    text-align: center;
+    vertical-align: 1px;
+  }
+
+  &__key { display: none !important; }
+
+  &__detail {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    column-gap: $spacing-lg;
+    padding: 0 12px 18px;
+    animation: selected-writing-dek $glide both;
+  }
+
+  &__when {
+    margin: 0;
+    font-family: $font-family-mono;
+    font-size: 11.5px;
+    line-height: 1.75;
+    color: $color-text-secondary;
+  }
+
+  &__dek {
+    margin: 0;
+    max-width: 740px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: $color-text-secondary;
+  }
+
+  &__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-md;
+    padding: 14px 12px 0;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+  }
+
+  // Key hints only where there is a keyboard-and-mouse setup to use them.
+  &__hint { display: none; }
+
+  @media (hover: hover) and (pointer: fine) {
+    &__hint { display: inline; }
+    &__item.is-active &__key { display: inline-block !important; }
+    &__item.is-active &__arrow { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__results.is-measured &__highlight { transition: none; }
+    &__detail { animation: none; }
+  }
 
   @media (max-width: $breakpoint-md) {
     padding: $spacing-3xl 0;
 
     &__header {
-      align-items: flex-start;
       flex-wrap: wrap;
+      align-items: flex-start;
       gap: $spacing-lg;
     }
 
-    &__row {
-      grid-template-columns: 1fr auto;
-      gap: $spacing-md;
+    &__tools {
+      width: 100%;
+      justify-content: space-between;
     }
 
-    &__meta { grid-column: 1 / -1; }
+    // 16px keeps iOS from zooming the page when the select opens.
+    &__select select { font-size: 16px; }
+
+    &__row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: 'kind read' 'name go';
+      row-gap: 6px;
+      padding: 16px 12px;
+    }
+
+    &__kind { grid-area: kind; }
+    &__name { grid-area: name; }
+    &__read { grid-area: read; }
+    &__go { grid-area: go; align-self: end; }
+
+    &__status {
+      display: block;
+      margin: 4px 0 0;
+    }
+
+    // Phones open a row on the first tap; the key hints have nothing to do.
+    &__hint,
+    &__item.is-active &__key { display: none !important; }
+    &__item.is-active &__arrow { display: block; }
+
+    &__detail {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 6px;
+      padding: 0 12px 16px;
+    }
   }
+}
+
+@keyframes selected-writing-dek {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

@@ -79,8 +79,8 @@ export const AUTHORED_COMPONENTS = {
     anchor: 'writing',
     related: { label: 'Open the index', href: '/notes/' },
     annotation: {
-      text: 'The three newest notes, read from the same list that builds the Notes index. Nothing here is chosen by hand, so the section cannot drift from the index.',
-      source: 'SelectedWriting.tsx, NOTES_BY_DATE.slice(0, 3)',
+      text: 'The three newest notes, read from the same list that builds the Notes index, and the Kind filter counts that same list. Nothing here is chosen by hand, so the section cannot drift from the index.',
+      source: 'SelectedWriting.tsx, NOTES_BY_DATE filtered by kind, first 3',
     },
   },
   bio: {

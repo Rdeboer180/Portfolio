@@ -224,6 +224,12 @@ async function main() {
       // page on every load, and the captured script tag held up the page head
       // with 58 KB before any content showed, then loaded a second time.
       clone.querySelectorAll('.case-binder__host, script[src*="/binder-home/"], a[data-from-binder]').forEach((el) => el.remove());
+      // The homepage notes list (SelectedWriting) measures its shared
+      // highlight after mount. The client's first render has neither the
+      // measured class nor the inline position, and the active row carries
+      // the tint itself until then, so the static file shows the same.
+      clone.querySelectorAll('.selected-writing__results').forEach((el) => el.classList.remove('is-measured'));
+      clone.querySelectorAll('.selected-writing__highlight').forEach((el) => el.removeAttribute('style'));
 
       // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its
       // modifier classes straight to the DOM after the copy resolves — React

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import UserIcon from './icons/UserIcon';
@@ -32,8 +32,40 @@ const CareerMilestone: React.FC<{ step: typeof progression[number] }> = ({ step 
   );
 };
 
+// Why me as a type specimen (concept 04): steel guides sit on the h2's cap
+// height and baselines, and each value word has one proof phrase in the
+// copy. Pointing at the phrase turns its word's baseline orange and rules
+// the phrase's line. The guide idea follows Matt Silva's portfolio
+// (mattsilva.dev).
+type Value = 'curiosity' | 'care' | 'collaboration';
+const VALUES: { word: string; value: Value }[] = [
+  { word: 'Curiosity.', value: 'curiosity' },
+  { word: 'Care.', value: 'care' },
+  { word: 'Collaboration.', value: 'collaboration' },
+];
+
 const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   const [signatureRef, signatureVisible] = useReveal<HTMLHeadingElement>(0.3);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const [proof, setProof] = useState<{ value: Value; y: number } | null>(null);
+
+  // The rule sits on the bottom of the line box the phrase ends on, clear of
+  // its underline and of the next line's capitals.
+  const prove = (value: Value) => (event: React.SyntheticEvent<HTMLAnchorElement>) => {
+    const copy = copyRef.current;
+    const rects = event.currentTarget.getClientRects();
+    if (!copy || !rects.length) return;
+    const last = rects[rects.length - 1];
+    const lineHeight = parseFloat(getComputedStyle(event.currentTarget).lineHeight) || last.height;
+    setProof({ value, y: last.bottom + (lineHeight - last.height) / 2 - copy.getBoundingClientRect().top });
+  };
+  const proofProps = (value: Value) => ({
+    className: 'about__proof',
+    onPointerEnter: prove(value),
+    onFocus: prove(value),
+    onPointerLeave: () => setProof(null),
+    onBlur: () => setProof(null),
+  });
   const introRef = useHighlightSweep<HTMLDivElement>({
     selector: '.animated-bold',
     activeClass: 'animated-bold--active',
@@ -48,17 +80,18 @@ const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
       <div className="about__differentiator ink-ground" ref={introRef}>
         <div className="about__container">
           <SectionBadge icon={<UserIcon />} label="Why me?" index="02" />
-          <div className="about__differentiator-grid">
-            <h2 id="about-differentiator-title" ref={signatureRef} className={`about__signature${signatureVisible ? ' is-visible' : ''}`}>
-              {['Curiosity.', 'Care.', 'Collaboration.'].map((word, index) => (
-                <React.Fragment key={word}><span className="reveal-mask"><span className="reveal-mask__inner" style={{ '--reveal-delay': `${120 + index * 100}ms` } as React.CSSProperties}>{word}</span></span>{' '}</React.Fragment>
+          <div className="about__differentiator-grid" data-proving={proof?.value}>
+            <h2 id="about-differentiator-title" ref={signatureRef} className={`about__signature about__signature--specimen${signatureVisible ? ' is-visible' : ''}`}>
+              {VALUES.map(({ word, value }) => (
+                <React.Fragment key={value}><span className="about__specimen-word" data-value={value}>{word}</span>{' '}</React.Fragment>
               ))}
             </h2>
-            <div className="about__differentiator-copy">
+            <div className="about__differentiator-copy" ref={copyRef}>
               {compact ? (
                 <>
-                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and building products of my own. <Link to="/talent-tree/" className="about__inline-link">My Custom Built Designer Forge</Link> maps 16 years of growth: the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
-                  <p className="about__body">My work connects UX, product design, brand, and implementation through shared components for the web and React Native. At Tire Rack, I bring 12+ years of AEM experience and partner with engineers on our CMS framework. I also build internal agentic tools and skills to reduce repetitive work for my team and the teams we work with. <Link to="/notes/aem-meeting-authors-where-they-work/" className="about__inline-link">My plans for agentic AEM authoring</Link> build on that same goal.</p>
+                  <span className={`about__proof-rule${proof ? ' is-on' : ''}`} style={proof ? { transform: `translateY(${proof.y}px)` } : undefined} aria-hidden="true"><span /></span>
+                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and <Link to="/work/playdraft/" {...proofProps('curiosity')}>building products of my own<span className="sr-only"> (PlayDraft case study)</span></Link>. <Link to="/talent-tree/" className="about__strong-link">My Custom Built Designer Forge</Link> maps 16 years of growth: the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
+                  <p className="about__body">My work connects UX, product design, brand, and implementation through shared components for the web and React Native. At Tire Rack, I bring 12+ years of AEM experience and <Link to="/work/aem-component-system/" {...proofProps('collaboration')}>partner with engineers on our CMS framework<span className="sr-only"> (AEM Component System case study)</span></Link>. I also build <Link to="/work/design-enablement/" {...proofProps('care')}>internal agentic tools and skills<span className="sr-only"> (Tools that scale design case study)</span></Link> to reduce repetitive work for my team and the teams we work with. <Link to="/notes/aem-meeting-authors-where-they-work/" className="about__strong-link">My plans for agentic AEM authoring</Link> build on that same goal.</p>
                   <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
                 </>
               ) : (
