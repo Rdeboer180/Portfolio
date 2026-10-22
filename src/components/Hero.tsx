@@ -118,7 +118,7 @@ const Hero: React.FC = () => {
               </h1>
             </AuthoredSection>
             <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
-              <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means governance teams can follow and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
+              <p>I learn by building things I will have to maintain, and that taught me to write my judgment down. Professionally and in my own projects, that means Figma MCP prototypes, rules governance teams can follow, and taste files an agent can build from, so the work stays consistent when I am not in the room. I fight for consistency and simplicity because the tools can change. <strong className="animated-bold">Giving a damn does not.</strong></p>
               <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
               <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
                 {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
