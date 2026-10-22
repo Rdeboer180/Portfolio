@@ -1,62 +1,274 @@
 @import '../variables';
 
-// Calm, readable capabilities. The Forge remains a secondary destination.
+// 05 / Capabilities (concept 11, simplified). One key says how the work was
+// done: solid hands-on, dashed directed, double partnered. Steel for
+// structure; the accent on the one highlighted capability and on mastered
+// talents. One label size (12px mono) for every small label.
+$sm-cols: 330px minmax(0, 360px) minmax(0, 1fr);
+$sm-label: 12px/1.5 $font-family-mono;
+
 .sm {
   background: $color-white;
   padding: $section-pad-y 0;
+
   &__container { max-width: $container-max-width; margin: 0 auto; padding: 0 $container-padding-x; }
-  &__rule { max-width: $container-text-width; }
+  &__label { margin: 0; font: $sm-label; text-transform: uppercase; letter-spacing: .08em; color: $color-neutral-muted; }
+
   &__title { margin: 24px 0 12px; font: $font-weight-bold #{$font-size-h2}/1.25 $font-family-heading; letter-spacing: -.025em; color: $color-neutral-dark; }
-  &__intro { max-width: $container-text-width; margin: 0; font-size: $font-size-body; line-height: 1.6; color: $color-neutral-standard; }
-  &__capabilities { margin-top: 34px; border-top: 1px solid $color-secondary-light; }
-  &__capability {
-    display: grid; grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr); gap: 28px; padding: 24px 0; border-bottom: 1px solid $color-neutral-light;
-    h3 { display: flex; align-items: baseline; gap: 7px; margin: 3px 0 0; font: 700 18px/1.3 $font-family-heading; letter-spacing: -.02em; }
-    p { margin: 0; font-size: 14px; line-height: 1.65; color: $color-neutral-standard; }
-    .sm__label { margin-bottom: 6px; font: 10px/1.5 $font-family-mono; }
+  &__intro { max-width: 640px; margin: 0; font-size: $font-size-body; line-height: 1.6; color: $color-neutral-standard; }
+
+  // The key, on one line under the intro
+  &__key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+
+    li { display: flex; align-items: center; gap: 10px; font-size: 14px; line-height: 1.4; color: $color-neutral-standard; }
+    strong { font-weight: $font-weight-semibold; color: $color-neutral-dark; }
   }
-  // Instance diamond: the capability is a component in use, not a list bullet.
-  // flex-start, not center: the diamond belongs on the first line of the name,
-  // and these names wrap to two lines at most widths.
-  &__glyph { width: 11px; height: 11px; flex: 0 0 11px; align-self: flex-start; margin-top: 6px; color: $color-secondary-dark; }
-  &__label { font: 10px/1.5 $font-family-mono; text-transform: uppercase; letter-spacing: .09em; color: $color-neutral-muted; }
-  // Properties panel: name in the gutter, value beside it, one hairline row each.
-  // One grid for the whole panel, so every property name in a capability
-  // shares a gutter sized to the longest of them ("Agent-assisted").
-  &__props { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 7px 12px; margin: 0; align-items: baseline; }
+
+  // The key's three line styles
+  &__line {
+    display: block;
+    width: 28px;
+    height: 10px;
+    flex: none;
+    overflow: visible;
+
+    path { fill: none; stroke: $color-neutral-dark; stroke-width: 1.5; }
+    &--accent path { stroke: $color-primary; }
+  }
+
+  // ── Rows ───────────────────────────────────────────────────────────────────
+  &__columns {
+    display: grid;
+    grid-template-columns: $sm-cols;
+    column-gap: 40px;
+    margin-top: 40px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $color-neutral-dark;
+  }
+
+  &__capability {
+    display: grid;
+    grid-template-columns: $sm-cols;
+    column-gap: 40px;
+    row-gap: 12px;
+    padding: 22px 0;
+    border-bottom: 1px solid $color-neutral-light;
+  }
+
+  &__name {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 8px;
+    align-content: start;
+
+    h3 { margin: 1px 0 0; font: 700 18px/1.3 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
+  }
+
+  &__icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: $color-secondary;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    &--accent { stroke: $color-primary; }
+  }
+
+  // Project links, each followed by its line in the key (none where the split
+  // isn't on record, which costs nothing because the line trails the link).
+  &__used {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li { display: flex; align-items: center; gap: 10px; min-height: 28px; font-size: 14px; }
+    a { color: $color-primary-dark; text-decoration: underline; text-underline-offset: 3px; }
+  }
+
+  // Properties panel: the same 112px label column in every row (the longest
+  // label, "Agent-assisted", fits it), so values align down the section.
+  &__props { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px 14px; margin: 0; align-items: baseline; align-content: start; }
   &__prop {
     display: contents;
-    dt { font: 10px/1.6 $font-family-mono; letter-spacing: .03em; color: $color-neutral-muted; }
+    dt { font: $sm-label; color: $color-neutral-muted; }
     dd { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.5; color: $color-neutral-dark; }
   }
-  &__evidence {
-    display: flex; align-items: baseline; gap: 24px; padding: 22px 0;
-    > span { flex-shrink: 0; }
-    ul { display: flex; flex-wrap: wrap; gap: 16px 28px; margin: 0; padding: 0; list-style: none; }
-    a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; font-size: 12px; color: $color-primary-dark; text-decoration: underline; text-underline-offset: 3px; > span { color: $color-neutral-muted; font-size: 11px; } }
+
+  &__practice { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
+
+  // ── How I prototype ────────────────────────────────────────────────────────
+  &__workflow {
+    margin-top: $spacing-4xl;
+
+    h3 { max-width: 760px; margin: 0; font: 700 24px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
+
+    ol {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 40px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 14px;
+      border-top: 1px solid $color-neutral-dark;
+    }
+
+    h4 { margin: 0; font: 700 17px/1.3 $font-family-heading; letter-spacing: -.01em; color: $color-neutral-dark; }
+    p { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
   }
+  &__step-n { font: $sm-label; letter-spacing: .08em; color: $color-secondary-dark; }
+  &__step-mode { display: flex; align-items: center; gap: 10px; margin-top: 4px; font: $sm-label; color: $color-secondary-dark; }
+
+  // ── The Forge ──────────────────────────────────────────────────────────────
   &__forge {
-    display: flex; align-items: center; gap: 22px; padding: 26px 0 0; border-top: 1px solid $color-secondary-light;
-    .forge-crest { display: block; width: 54px; height: 60px; flex: 0 0 54px; filter: drop-shadow(0 3px 3px rgba(27,27,27,.1)); }
-    h3 { margin: 5px 0 6px; font: 700 19px/1.3 $font-family-heading; letter-spacing: -.02em; }
-    p { margin: 0; font-size: 14px; line-height: 1.6; color: $color-neutral-standard; }
-    .sm__label { font: 10px/1.5 $font-family-mono; color: $color-neutral-muted; }
-    > a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-left: auto; flex-shrink: 0; font-size: 13px; font-weight: 600; color: $color-primary-dark; text-underline-offset: 4px; }
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+    margin-top: $spacing-4xl;
+    padding-top: $spacing-2xl;
+    border-top: 1px solid $color-neutral-light;
   }
+
+  &__forge-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h3 { margin: 8px 0 0; font: 700 24px/1.2 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
+    > p { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
+  }
+
+  &__class {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .forge-crest { display: block; width: 56px; height: 62px; flex: 0 0 56px; filter: drop-shadow(0 3px 3px rgba(27, 27, 27, .1)); }
+    strong { font: 700 19px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
+  }
+
+  &__forge-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 22px;
+
+    a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: $color-primary-dark; text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  }
+
+  &__lanes {
+    margin: 0;
+    border: 1px solid $color-secondary-light;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  &__lanes-head {
+    padding: 12px 20px;
+    border-bottom: 1px solid $color-neutral-light;
+    background: $color-neutral-lightest;
+    font: $sm-label;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+  }
+
+  &__lanes-body { display: flex; flex-direction: column; gap: 22px; padding: 20px 24px 6px; }
+
+  &__lane {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+
+    ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  }
+  &__lane-name { margin: 0; font: 700 15px/1.3 $font-family-heading; color: $color-neutral-dark; }
+
+  &__node { display: flex; flex-direction: column; gap: 6px; }
+  &__node-ring {
+    width: 14px;
+    height: 14px;
+    box-sizing: border-box;
+    border: 2px solid $color-neutral-dark;
+    border-radius: 50%;
+    background: $color-white;
+  }
+  &__node--max &__node-ring { border-color: $color-primary; }
+  &__node--directed &__node-ring { border-style: dashed; }
+  &__node-name { font-size: 14px; font-weight: 600; color: $color-neutral-dark; }
+
+  &__pips {
+    display: flex;
+    gap: 3px;
+
+    > span[aria-hidden] { width: 7px; height: 7px; box-sizing: border-box; border: 1px solid $color-secondary; }
+    > span.is-on { border-color: $color-neutral-dark; background: $color-neutral-dark; }
+    &--max > span.is-on { border-color: $color-primary; background: $color-primary; }
+  }
+
+  &__lanes-note {
+    margin: 14px 0 0;
+    padding: 12px 20px 14px;
+    border-top: 1px solid $color-neutral-light;
+    font-size: 14px;
+    line-height: 1.5;
+    color: $color-neutral-standard;
+  }
+
   a:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 4px; }
 }
-@media (max-width: 1000px) {
-  .sm__capability { grid-template-columns: 170px minmax(0, 1fr); gap: 12px 24px; }
-  .sm__practice { grid-column: 2; }
-  .sm__forge { flex-wrap: wrap; > div { flex: 1; } > a { margin-left: 76px; } }
+
+// ── Narrower desktops: the rows fold to two columns ──────────────────────────
+@media (max-width: 1100px) {
+  .sm {
+    &__columns { display: none; }
+    &__capability { grid-template-columns: 300px minmax(0, 1fr); }
+    &__practice { grid-column: 2; }
+    &__workflow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+    &__forge { grid-template-columns: minmax(0, 1fr); gap: $spacing-2xl; }
+  }
 }
+
+// ── Phones: one column, a tight workflow list, no lanes ──────────────────────
 @media (max-width: 639px) {
-  .sm__title { font-size: 28px; }
-  .sm__capability { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 22px 0; h3 { font-size: 19px; margin: 0; } }
-  // The property gutter costs more than it earns once the row is one column.
-  .sm__props { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  .sm__prop + .sm__prop dt { margin-top: 8px; }
-  .sm__practice { grid-column: auto; }
-  .sm__evidence { flex-direction: column; gap: 10px; ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; } }
-  .sm__forge { gap: 14px; .forge-crest { width: 44px; height: 50px; flex-basis: 44px; } > a { margin-left: 58px; } }
+  .sm {
+    &__title { font-size: 28px; }
+    &__key { flex-direction: column; gap: 6px; }
+    &__capability { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    &__practice { grid-column: auto; }
+    // The property gutter costs more than it earns once the row is one column.
+    &__props { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    &__prop + &__prop dt { margin-top: 8px; }
+    &__workflow {
+      h3 { font-size: 21px; }
+      ol { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      li { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 10px; row-gap: 4px; padding: 14px 0; border-top: 1px solid $color-neutral-light; }
+      li > * { grid-column: 2; }
+      .sm__step-n { grid-column: 1; grid-row: 1; padding-top: 3px; }
+    }
+    // The class, the line and the links carry the Forge on a phone.
+    &__lanes { display: none; }
+  }
 }
