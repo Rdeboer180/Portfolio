@@ -142,10 +142,10 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-// The home row, in reading order: manager, build partner, AEM partner, the
-// UX manager who oversaw design, then the two design peers. Amanda's stays in
-// the data for the full-quote surfaces.
-const FEATURED = ['Adam Payne', 'Cheryl Carpenter', 'Patrick Stines', 'Ryan Kokesh', 'Rob Oxley', 'Gina Saucedo'];
+// The home row, in reading order: manager, build partner, the operations
+// leader he runs the development program with, AEM partner, the UX manager
+// who oversaw design, then the two design peers.
+const FEATURED = ['Adam Payne', 'Cheryl Carpenter', 'Amanda Straup', 'Patrick Stines', 'Ryan Kokesh', 'Rob Oxley', 'Gina Saucedo'];
 const featured = FEATURED.map((name) => {
   const t = testimonials.find((item) => item.name === name);
   if (!t) throw new Error(`No testimonial for ${name}`);
