@@ -115,7 +115,7 @@ export const AUTHORED_COMPONENTS = {
     policy: 'Inherited from template: verbatim, no paraphrase',
     annotation: {
       text: 'Every quote is a verbatim excerpt from a written recommendation. Excerpts are direct selections, never paraphrase, which is why this component is locked in the template.',
-      source: 'Testimonials.tsx, line 43',
+      source: 'Testimonials.tsx, line 35',
     },
   },
   capabilities: {

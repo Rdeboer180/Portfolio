@@ -25,8 +25,6 @@ const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 interface Testimonial {
   title: string;
   quote: React.ReactNode;
-  /** A contiguous, verbatim run of the quote: the preview line in the list. */
-  excerpt: string;
   name: string;
   role: string;
   year: string;
@@ -34,7 +32,7 @@ interface Testimonial {
   relation?: string;
 }
 
-// Preserve the existing recommendations verbatim; excerpts are direct selections.
+// Preserve the existing recommendations verbatim.
 const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
@@ -45,7 +43,6 @@ const testimonials: Testimonial[] = [
         <p>A team or role that lets him lead projects across technical and nontechnical teams would truly flourish with him in the seat.</p>
       </>
     ),
-    excerpt: 'He runs large projects from a design perspective, coordinates with leaders and ICs from corresponding teams on his own, and has a strong record of delivering large bodies of work without issue.',
     name: 'Adam Payne',
     role: 'Web Design Manager, Tire Rack',
     year: '2026',
@@ -60,7 +57,6 @@ const testimonials: Testimonial[] = [
         <p><H>Any product team would be better with him on it.</H></p>
       </>
     ),
-    excerpt: 'He owned the design side; I owned the build, and it was one of the best collaborations I’ve had. Ryan doesn’t just design screens. He designs the whole experience.',
     name: 'Cheryl Carpenter',
     role: 'React Front-End Developer, Tire Rack',
     year: '2026',
@@ -75,7 +71,6 @@ const testimonials: Testimonial[] = [
         <p>Ryan is dependable, knowledgeable, detail-oriented, and genuinely a pleasure to work with. His collaboration and expertise have become such an important part of our work that I honestly <H>can&rsquo;t imagine working without him</H>. I highly recommend Ryan to any team looking for a skilled designer and strong cross-functional partner.</p>
       </>
     ),
-    excerpt: 'He has been an excellent partner throughout our transition and upgrade to AEM Core Components, helping ensure that designs are both visually strong and technically effective. Since I moved into development, he has played a key role in bridging the gap between creative vision and technical execution.',
     name: 'Patrick Stines',
     role: 'AEM Development Manager, Tire Rack',
     year: '2026',
@@ -90,7 +85,6 @@ const testimonials: Testimonial[] = [
         <p>Most importantly, Ryan is one of the kindest and most professional people I&rsquo;ve worked with. He combines talent, humility and a genuine desire to help his teammates succeed.</p>
       </>
     ),
-    excerpt: 'The quality of the experience our participants receive is a direct reflection of the effort and care he puts into it. As a designer, he has an exceptional eye for creating work that is clean, creative and visually engaging.',
     name: 'Amanda Straup',
     role: 'Assistant Vice President, Digital Operations, Tire Rack',
     year: '2026',
@@ -104,7 +98,6 @@ const testimonials: Testimonial[] = [
         <p>&hellip; He&rsquo;s always eager to ask questions, see what others have been working on, and find what knowledge he can glean from them. At the same time, he&rsquo;s <H>happy to share his own knowledge and what he has learned</H> from the work he&rsquo;s been doing.</p>
       </>
     ),
-    excerpt: 'He truly has a passion for improvement in both his professional and personal life. He is always looking for better and more efficient ways to do things. He loves trying new tools and refining existing processes.',
     name: 'Rob Oxley',
     role: 'Senior Web Designer, Tire Rack',
     year: '2026',
@@ -118,7 +111,6 @@ const testimonials: Testimonial[] = [
         <p>He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at <H>building and maintaining strong relationships</H>, which significantly enhances his overall effectiveness. It&rsquo;s also evident that he genuinely <H>values and cares for his colleagues</H>.</p>
       </>
     ),
-    excerpt: 'He consistently takes the initiative to engage relevant teams (including UX, UXR, Analytics, Imaging, and SEO) whenever needed. He excels at building and maintaining strong relationships, which significantly enhances his overall effectiveness.',
     name: 'Ryan Kokesh',
     role: 'Senior UX Manager, Tire Rack',
     year: '2024',
@@ -134,7 +126,6 @@ const testimonials: Testimonial[] = [
         <p>I know that whenever we are paired together on a project, Ryan will <H>go out of his way to ensure the junior designer (me in this case) has the confidence they need</H> in order to make the project a success.</p>
       </>
     ),
-    excerpt: 'Since I started at Tire Rack almost 5 years ago, Ryan has always been a kind and thoughtful mentor to me as a Senior Designer on the Web Design team. He is a very intuitive and collaborative teammate, and always looks for ways that we can improve our design system and user experience throughout our sites.',
     name: 'Gina Saucedo',
     role: 'Web Designer, Tire Rack',
     year: '2026',
@@ -163,6 +154,31 @@ export const FeaturedEndorsement: React.FC = () => (
   <figure className="featured-endorsement">
     <blockquote>“That gave us one vocabulary to work from instead of two, and it made my half of the work a lot easier to do well.”</blockquote>
     <figcaption><strong>Cheryl Carpenter</strong> · React Front-End Developer, Tire Rack · WheelRack build partner, on the token and component library, 2026. <a href="#testimonials" className="about__inline-link">Read the recommendations</a></figcaption>
+  </figure>
+);
+
+// One recommendation as a conversation: the sender, each paragraph as its own
+// message, and the through-line tag. A sizer copy is hidden and inert; it only
+// holds the space (see the slot below).
+const Thread: React.FC<{ t: Testimonial; sizer?: boolean }> = ({ t, sizer }) => (
+  <figure
+    className={`testimonials__messages${sizer ? ' testimonials__messages--sizer' : ''}`}
+    aria-hidden={sizer || undefined}
+    inert={sizer || undefined}
+  >
+    <figcaption className="testimonials__sender">
+      <span className="testimonials__name">{t.name}</span> <time dateTime={t.year}>{t.year}</time>
+    </figcaption>
+    <div className="testimonials__stack">
+      <span className="testimonials__avatar testimonials__avatar--active" aria-hidden="true">{initials(t.name)}</span>
+      <blockquote className="testimonials__thread">{t.quote}</blockquote>
+    </div>
+    <div className="testimonials__foot">
+      <span className="testimonials__tag">{t.title}</span>
+      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__more" target="_blank" rel="noopener noreferrer">
+        On LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> {t.name}&rsquo;s recommendation (opens in a new tab)</span>
+      </a>
+    </div>
   </figure>
 );
 
@@ -215,7 +231,6 @@ const Testimonials: React.FC = () => {
         <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
         <div className="testimonials__nav">
           <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
-          <p className="testimonials__intro">Pick a person to read what they wrote, the way they&rsquo;d send it: a few messages at a time.</p>
         </div>
 
         <div className="testimonials__app">
@@ -243,7 +258,10 @@ const Testimonials: React.FC = () => {
                       <span className="testimonials__person-first" aria-hidden="true">{shortName(p.name)}</span>
                       <span className="testimonials__year" aria-hidden="true">{p.year}</span>
                     </span>
-                    <span className="testimonials__preview" aria-hidden="true">{p.excerpt}</span>
+                    {/* The thread's through-line, the way the old cards named each
+                        recommendation's core value: Ryan's own label, so the
+                        quotes themselves stay verbatim. Desktop only. */}
+                    <span className="testimonials__preview" aria-hidden="true">{p.title}</span>
                   </span>
                 </button>
               ))}
@@ -258,21 +276,13 @@ const Testimonials: React.FC = () => {
                 <span className="testimonials__role">{t.role}{t.relation ? ` · ${t.relation}` : ''}</span>
               </span>
             </div>
-            <figure className="testimonials__messages" key={t.name}>
-              <figcaption className="testimonials__sender">
-                <span className="testimonials__name">{t.name}</span> <time dateTime={t.year}>{t.year}</time>
-              </figcaption>
-              <div className="testimonials__stack">
-                <span className="testimonials__avatar testimonials__avatar--active" aria-hidden="true">{initials(t.name)}</span>
-                <blockquote className="testimonials__thread">{t.quote}</blockquote>
-              </div>
-              <div className="testimonials__foot">
-                <span className="testimonials__tag">{t.title}</span>
-                <a href={SITE.linkedinRecommendationsUrl} className="testimonials__more" target="_blank" rel="noopener noreferrer">
-                  On LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> {t.name}&rsquo;s recommendation (opens in a new tab)</span>
-                </a>
-              </div>
-            </figure>
+            {/* Every thread is drawn once more in the same cell, unseen and
+                inert, so the cell is always as tall as the longest one and the
+                window holds its height from person to person on desktop. */}
+            <div className="testimonials__slot">
+              {featured.map((p) => <Thread key={p.name} t={p} sizer />)}
+              <Thread key={t.name} t={t} />
+            </div>
             {/* Drawn as a message box, but it's a link: it says what it does */}
             <a href={EMAIL_HREF} className="testimonials__composer" aria-label="Email Ryan about your team">
               <span className="testimonials__composer-hint" aria-hidden="true">Message Ryan about your team…</span>

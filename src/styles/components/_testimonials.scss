@@ -392,13 +392,6 @@
   &__nav-btn--next &__nav-svg path:nth-child(2) { transition-delay: 850ms; }
   &--revealed &__nav-svg path { stroke-dashoffset: 0; }
 
-  &__intro {
-    max-width: 360px;
-    margin: 0;
-    font-size: 15px;
-    line-height: 1.55;
-    color: $color-neutral-standard;
-  }
 
   // The recommendations as direct messages (Ryan's pick, 21 October): the
   // people down one side, the open conversation beside them.
@@ -504,12 +497,16 @@
     color: $color-neutral-muted;
   }
 
+  // The thread's through-line, set the way the old recommendation cards set
+  // their core value: small, tracked capitals under the name.
   &__preview {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 13px;
-    line-height: 1.5;
+    margin-top: 3px;
+    font-family: $font-family-heading;
+    font-size: 11px;
+    font-weight: $font-weight-semibold;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: $color-neutral-standard;
   }
 
@@ -534,6 +531,23 @@
   }
 
   &__role { font-size: 13px; line-height: 1.4; color: $color-neutral-standard; }
+
+  // The open thread and an unseen copy of every thread share one grid cell,
+  // so the cell is as tall as the longest recommendation and the window
+  // doesn't change height from person to person.
+  &__slot {
+    flex: 1;
+    display: grid;
+
+    > * { grid-area: 1 / 1; }
+  }
+
+  &__messages--sizer {
+    visibility: hidden;
+    pointer-events: none;
+
+    .testimonials__thread p { animation: none; }
+  }
 
   &__messages {
     flex: 1;
@@ -744,6 +758,8 @@
     // The people run across the top as a row of initials; the conversation
     // takes the full width under them.
     &__app { flex-direction: column; min-height: 0; }
+    // A phone takes each thread at its own height; the reserve is desktop's.
+    &__messages--sizer { display: none; }
     &__people { flex: none; border-right: 0; border-bottom: 1px solid $color-neutral-light; }
     &__people-head { display: none; }
     &__list { flex-direction: row; gap: 4px; padding: 10px; overflow-x: auto; scrollbar-width: none; }
