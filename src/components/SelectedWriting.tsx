@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { NOTES_BY_DATE, KIND_LABEL, NoteKind } from '../data/notes';
 
 // Homepage writing as a quick-open list: the three newest notes, one of
-// them highlighted with its dek open, arrows to move and Enter to open.
+// them highlighted with its dek open, arrows to move and Enter to open. The
+// keys work without a legend under the list (Ryan, 22 October: the legend
+// read as confusing); the active row's Enter key is the only key shown.
 // It stays a plain list of links (never a listbox), so every row reads and
 // opens the same way with or without the keys. The mechanism follows the
 // launcher on Marco Cornacchia's portfolio (marco.fyi); concept 05 on the
@@ -141,9 +143,6 @@ const SelectedWriting: React.FC = () => {
         </div>
 
         <div className="selected-writing__foot">
-          <span className="selected-writing__hint" aria-hidden="true">
-            <kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>Enter</kbd> to open
-          </span>
           <span aria-live="polite">{countLine}</span>
         </div>
       </div>

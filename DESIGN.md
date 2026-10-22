@@ -77,6 +77,8 @@ spacing:
   2xl: "32px"
   3xl: "48px"
   4xl: "64px"
+  5xl: "80px"
+  6xl: "96px"
 components:
   button-primary:
     backgroundColor: "{colors.signal-orange}"
@@ -306,3 +308,5 @@ The review route is `/talent-tree/atlas/`. See `references/core-ui-elements/patt
 `--copy-max-width: 900px` is the standard maximum for copy blocks. The existing Sass `$container-text-width` alias resolves to this CSS token, so About, notes, case-study prose, page introductions, and `.copy-block` share one adjustable ceiling. Cards, sidebars, and split layouts remain constrained by their parent columns.
 
 The homepage hero is a deliberate narrower composition: 540px copy, a 64px column gap, and a 518px visual at the full desktop container width. Its eyebrow uses 0.08em tracking with a 6px gap to the headline; the headline uses 52px / 58px, weight 800, and −0.04em tracking. The heading scales from 44px to 52px between the tablet breakpoint and the full desktop container. Heading-to-body, body-to-location, and location-to-actions gaps are 12px. Paragraphs are separated by 16px. The existing responsive portrait order, animation, and heading height reservation remain in use.
+
+The hero closes on 96px (`6xl`) before the case-study binder on desktop, so the binder starts as its own band rather than as the hero's last row (October 2026). 5xl (80px) and 6xl (96px) continue the scale's 16px steps above 3xl; they are for gaps between major bands, never for spacing inside components, and 6xl is the token form of the 96px section rhythm (`$section-pad-y`). Phones keep 48px (`3xl`).

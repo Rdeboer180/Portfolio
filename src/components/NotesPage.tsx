@@ -22,6 +22,16 @@ const NotesPage: React.FC = () => {
   const fieldNotes = NOTES_BY_DATE.filter((n) => ['reflection', 'exploration', 'practice'].includes(n.kind) && !n.inProgress);
   const logs = NOTES_BY_DATE.filter((n) => n.inProgress);
   const resolved = NOTES_BY_DATE.filter((n) => n.kind === 'skill' || n.kind === 'system');
+  // The three streams, in reading order. The jump row and the sections both
+  // read this list, so a stream's name and count can't disagree between them.
+  const streams = [
+    { id: 'field-notes', index: '01', label: 'Field Notes', ariaLabel: 'Field notes', notes: fieldNotes,
+      sub: 'Observations, experiments, and plans from the work. Some start on LinkedIn; others begin here.' },
+    { id: 'in-progress', index: '02', label: 'In Progress', ariaLabel: 'Explorations in progress', notes: logs,
+      sub: "Work that isn't settled. Published while the decisions are still moving, discarded directions included." },
+    { id: 'resolved', index: '03', label: 'Resolved', ariaLabel: 'Systems and skills', notes: resolved,
+      sub: 'The settled artifacts: how things work, and the skills that encode the judgment.' },
+  ];
   // NOTES_BY_DATE is sorted newest first, so the head of it is the one entry
   // that gets the tint and the selection frame.
   const newestSlug = NOTES_BY_DATE[0]?.slug;
@@ -77,44 +87,40 @@ const NotesPage: React.FC = () => {
       </section></ScrollReveal>
       </div>
 
+      {/* One quiet row to get around: the three streams and their counts, each
+          a jump to its section. The binder on the homepage is the showpiece;
+          this page only has to be easy to move through. */}
+      <nav className="notes__jump" aria-label="Note streams">
+        {streams.map((stream) => (
+          <a key={stream.id} href={`#${stream.id}`} className="notes__jump-link">
+            <span className="notes__jump-index" aria-hidden="true">{stream.index}</span>
+            {stream.label}
+            <span className="notes__jump-count">{stream.notes.length}</span>
+          </a>
+        ))}
+      </nav>
+
       <ScrollReveal className="notes__release notes__release--index"><PlayDraftLaunch context="index" /></ScrollReveal>
 
       {/* Each stream is a rail plus its rows: the rail carries the number at
-          display scale, the name, the count and one handwritten aside; the rows
-          stay hairline-separated with a read-time and sketch-arrow. Stream 01
-          alone takes the accent, so orange still means one thing on the page. */}
-      <NoteStream
-        index="01"
-        label="Field Notes"
-        ariaLabel="Field notes"
-        sub="Observations, experiments, and plans from the work. Some start on LinkedIn; others begin here."
-        aside="the rough cut is on LinkedIn"
-        count={fieldNotes.length}
-        notes={fieldNotes}
-        accent
-        newestSlug={newestSlug}
-        rail={<LinkedInLink label="Read them as they land" surface="notes_stream" />}
-      />
-      <NoteStream
-        index="02"
-        label="In Progress"
-        ariaLabel="Explorations in progress"
-        sub="Work that isn't settled. Published while the decisions are still moving, discarded directions included."
-        aside="dated because they will age"
-        count={logs.length}
-        notes={logs}
-        newestSlug={newestSlug}
-      />
-      <NoteStream
-        index="03"
-        label="Resolved"
-        ariaLabel="Systems and skills"
-        sub="The settled artifacts: how things work, and the skills that encode the judgment."
-        aside="the artifact, not the argument"
-        count={resolved.length}
-        notes={resolved}
-        newestSlug={newestSlug}
-      />
+          display scale, the name, the count and a one-line description; the
+          rows stay hairline-separated with a read-time and sketch-arrow.
+          Stream 01 alone takes the accent, so orange still means one thing. */}
+      {streams.map((stream, i) => (
+        <NoteStream
+          key={stream.id}
+          id={stream.id}
+          index={stream.index}
+          label={stream.label}
+          ariaLabel={stream.ariaLabel}
+          sub={stream.sub}
+          count={stream.notes.length}
+          notes={stream.notes}
+          accent={i === 0}
+          newestSlug={newestSlug}
+          rail={i === 0 ? <LinkedInLink label="Read them as they land" surface="notes_stream" /> : undefined}
+        />
+      ))}
 
       <Footer />
     </article>
@@ -123,11 +129,11 @@ const NotesPage: React.FC = () => {
 
 // ── Stream section — numbered rule + identity rail + entry rows ─────────────
 const NoteStream: React.FC<{
+  id: string;
   index: string;
   label: string;
   ariaLabel: string;
   sub: string;
-  aside: string;
   count: number;
   notes: typeof NOTES_BY_DATE;
   rail?: React.ReactNode;
@@ -135,15 +141,15 @@ const NoteStream: React.FC<{
   accent?: boolean;
   /** Slug of the newest note on the page; that row wears the selection frame. */
   newestSlug?: string;
-}> = ({ index, label, ariaLabel, sub, aside, count, notes, rail, accent, newestSlug }) => (
+}> = ({ id, index, label, ariaLabel, sub, count, notes, rail, accent, newestSlug }) => (
   <section
+    id={id}
     className={`notes__section${accent ? ' notes__section--accent' : ''}`}
     aria-label={ariaLabel}
   >
-    {/* The rail delineates the stream, replacing the thin horizontal rule it
-        used to carry: a stream number at display scale, its name, its count,
-        and one handwritten aside, all in one column against a vertical edge.
-        Only the first stream takes the accent — one section at a time. */}
+    {/* The rail delineates the stream: a stream number at display scale, its
+        name, its count and one line on what belongs in it, against a vertical
+        edge. Only the first stream takes the accent, one section at a time. */}
     <div className="notes__section-grid">
       <ScrollReveal className="notes__section-rail">
         <span className="notes__stream-index" aria-hidden="true">{index}</span>
@@ -151,14 +157,6 @@ const NoteStream: React.FC<{
         <span className="notes__section-count">
           {count} {count === 1 ? 'entry' : 'entries'}
         </span>
-        {/* The aside lives in the rail rather than its own margin column, which
-            is what lets it survive: the rail already stacks above the rows on
-            narrow screens, so the note comes with it as a lead-in line. */}
-        <span className="notes__stream-aside" aria-hidden="true">{aside}</span>
-        <svg className="notes__stream-arrow" viewBox="0 0 120 22" aria-hidden="true" focusable="false">
-          <path d="M6 14 C 40 14, 78 10, 112 8" fill="none" strokeLinecap="round" />
-          <path d="M112 8 L 102 12 M112 8 L 104 3" fill="none" strokeLinecap="round" />
-        </svg>
         <p className="notes__stream-sub">{sub}</p>
         {rail}
       </ScrollReveal>
@@ -178,9 +176,9 @@ const NoteStream: React.FC<{
               <h3 className="notes__row-title">{note.title}</h3>
               <p className="notes__row-dek">{note.dek}</p>
             </div>
-            {/* Marching-ants marquee — Photoshop's selection border, in Signal
-                Orange. Its own element rather than a pseudo: the newest row
-                already spends ::before and ::after on corner handles. */}
+            {/* Selection frame: Photoshop's dashed marquee, held still and in a
+                light orange. Its own element rather than a pseudo: the newest
+                row already spends ::before and ::after on corner handles. */}
             <span className="notes__row-marquee" aria-hidden="true" />
             <div className="notes__row-aside">
               <span className="notes__row-read">{note.read} read</span>

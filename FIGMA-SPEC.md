@@ -89,6 +89,8 @@ Generated from codebase at `/portfolio-site/src/`
 | `spacing/2xl` | 32px |
 | `spacing/3xl` | 48px |
 | `spacing/4xl` | 64px |
+| `spacing/5xl` | 80px |
+| `spacing/6xl` | 96px |
 
 #### INCONSISTENCIES FOUND:
 | Issue | Locations |

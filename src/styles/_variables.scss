@@ -12,6 +12,10 @@
 $color-primary-light: #fdede9;
 $color-primary-md: #f9c4b0;
 $color-primary-muted: #f07654;
+// Signal Orange softened for quiet hover states: lighter and less saturated
+// than the dark text orange, still 3.6:1 on white for large bold type and
+// for a focus outline.
+$color-primary-soft: #d9653f;
 $color-primary: #f03d01;
 $color-primary-dark: #c23001;
 
@@ -107,6 +111,8 @@ $spacing-xl: $spacing-unit * 3;     // 24px
 $spacing-2xl: $spacing-unit * 4;    // 32px
 $spacing-3xl: $spacing-unit * 6;    // 48px
 $spacing-4xl: $spacing-unit * 8;    // 64px
+$spacing-5xl: $spacing-unit * 10;   // 80px
+$spacing-6xl: $spacing-unit * 12;   // 96px, the same as $section-pad-y
 
 // ============================================
 // BORDER RADIUS

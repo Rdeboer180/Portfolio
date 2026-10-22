@@ -254,12 +254,54 @@
     max-width: $container-max-width;
     margin: $spacing-3xl auto 0;
     padding: 0 $container-padding-x;
+    scroll-margin-top: 96px;
 
     // Last stream carries the homepage's between-section cadence to the footer
     &:last-of-type {
       padding-bottom: $section-pad-y;
     }
   }
+
+  // ── Jump row ───────────────────────────────────────────────────────────────
+  // The three streams and their counts on one line under the intro: a way
+  // around the page, set in the mono meta voice so it reads as navigation
+  // rather than another headline.
+  &__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs $spacing-xl;
+    width: 100%;
+    max-width: $container-max-width;
+    margin: $spacing-2xl auto 0;
+    padding: 0 $container-padding-x;
+  }
+
+  &__jump-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    min-height: 44px;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+    text-decoration: none;
+    transition: color 160ms ease;
+
+    &:hover {
+      color: $color-primary-soft;
+      transition: color 300ms ease 60ms;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary-soft;
+      outline-offset: 2px;
+    }
+  }
+
+  &__jump-index { color: $color-secondary-dark; }
+  &__jump-count { color: $color-neutral-muted; }
 
   // ── Stream rail ────────────────────────────────────────────────────────────
   // The rail replaces the thin horizontal rule that used to open each stream.
@@ -288,29 +330,6 @@
     text-transform: uppercase;
     color: $color-neutral-dark;
     max-width: 12ch;
-  }
-
-  // The aside is the one set note per stream, never a second per entry.
-  &__stream-aside {
-    display: block;
-    margin-top: $spacing-lg;
-    padding-top: $spacing-lg;
-    border-top: 1px solid $color-neutral-light;
-    @include system-note(17px);
-    max-width: 18ch;
-  }
-
-  &__stream-arrow {
-    display: block;
-    width: 120px;
-    height: 22px;
-    margin: 6px 0 0 -4px;
-
-    path {
-      stroke: $color-primary;
-      stroke-width: 1.4;
-      fill: none;
-    }
   }
 
   // ReadMe-style split: identity rail left, entries right
@@ -360,36 +379,36 @@
 
 
   // ── Selection marquee ──────────────────────────────────────────────────────
-  // Photoshop's marching ants, in Signal Orange: four 1px edges drawn as
-  // repeating gradients, each marching in the direction that reads as one
-  // continuous rotation around the row. Four backgrounds rather than a dashed
-  // border because a CSS border dashes each side independently and the corners
-  // never line up.
-  //
-  // This loops, which the motion rules otherwise forbid. It earns the exception
-  // the same way the real thing does: it runs only while a row is actually
-  // hovered or focused, so it is reporting a state the pointer is holding open
-  // rather than asking for attention on its own.
+  // Photoshop's selection frame, kept as the row's hover state but quiet: the
+  // dashes hold still (no marching; a list is hovered too often for a loop),
+  // and they come in light orange, slowly and a beat late, so a cursor
+  // passing over the list doesn't strobe. Leaving is quick. Keyboard focus
+  // gets the stronger soft orange, which clears 3:1 as a focus indicator.
+  // Four backgrounds rather than a dashed border because a CSS border dashes
+  // each side independently and the corners never line up.
   &__row-marquee {
+    --marquee: #{$color-primary-md};
     position: absolute;
     // Rows carry vertical padding but no horizontal padding, so inset:0 would
-    // run the ants straight down the edge of the date and the read time. The
-    // box widens to the same boundary the newest row's tint uses, so the
-    // marquee lands in the same place on every row, tinted or not.
+    // run the frame straight down the edge of the date and the read time. The
+    // box widens to the same boundary the newest row's tint uses, so it lands
+    // in the same place on every row, tinted or not.
     inset: 0 (-$spacing-xl);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 120ms ease;
+    transition: opacity 160ms ease;
 
     background-image:
-      repeating-linear-gradient(90deg, #{$color-primary} 0 5px, transparent 5px 10px),
-      repeating-linear-gradient(90deg, #{$color-primary} 0 5px, transparent 5px 10px),
-      repeating-linear-gradient(0deg, #{$color-primary} 0 5px, transparent 5px 10px),
-      repeating-linear-gradient(0deg, #{$color-primary} 0 5px, transparent 5px 10px);
+      repeating-linear-gradient(90deg, var(--marquee) 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(90deg, var(--marquee) 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(0deg, var(--marquee) 0 5px, transparent 5px 10px),
+      repeating-linear-gradient(0deg, var(--marquee) 0 5px, transparent 5px 10px);
     background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
     background-position: 0 0, 0 100%, 0 0, 100% 0;
     background-repeat: no-repeat;
   }
+
+  &__row:focus-visible &__row-marquee { --marquee: #{$color-primary-soft}; }
 
   // The tinted row's box already extends past the text column, so its marquee
   // sits flush instead of widening again.
@@ -400,7 +419,7 @@
   &__row:hover &__row-marquee,
   &__row:focus-visible &__row-marquee {
     opacity: 1;
-    animation: notesMarquee 1200ms linear infinite;
+    transition: opacity 300ms ease 80ms;
   }
 
   // ── Newest entry ───────────────────────────────────────────────────────────
@@ -411,7 +430,9 @@
   // standing information.
   &__section-rows &__row--newest {
     position: relative;
-    background: $color-primary-light;
+    // Half the usual primary tint: enough to say "newest" without the row
+    // reading as a highlighted alert.
+    background: mix($color-primary-light, $color-white, 50%);
     // The tint is a surface, so it needs real inset on all four sides. The
     // negative margin cancels the horizontal half so the text still lines up
     // with the untinted rows above and below it.
@@ -464,7 +485,8 @@
 
     &:hover .notes__row-title,
     &:focus-visible .notes__row-title {
-      color: $color-primary-dark;
+      color: $color-primary-soft;
+      transition: color 300ms ease 80ms;
     }
 
     // Sketch arrow draws in on hover/focus — case-study CTA vocabulary
@@ -504,24 +526,35 @@
     width: 32px;
     height: 32px;
     overflow: visible;
-    color: $color-primary;
+    color: $color-primary-soft;
 
     path {
       stroke: currentColor;
-      stroke-width: 1.8;
+      stroke-width: 1.6;
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
-      transition: stroke-dashoffset 450ms ease;
+      transition: stroke-dashoffset 200ms ease;
     }
+  }
 
-    path:nth-child(2) {
-      transition-delay: 120ms;
-    }
+  // Drawn in after the frame and the title have arrived, the head a beat
+  // after the shaft; undrawn quickly on the way out.
+  &__row:hover &__row-arrow path,
+  &__row:focus-visible &__row-arrow path {
+    transition: stroke-dashoffset 450ms ease 160ms;
+  }
 
-    @media (prefers-reduced-motion: reduce) {
-      path {
-        transition: none;
-      }
+  &__row:hover &__row-arrow path:nth-child(2),
+  &__row:focus-visible &__row-arrow path:nth-child(2) {
+    transition-delay: 300ms;
+  }
+
+  // Reduced motion: the arrow is simply there on hover, no draw.
+  @media (prefers-reduced-motion: reduce) {
+    &__row-arrow path,
+    &__row:hover &__row-arrow path,
+    &__row:focus-visible &__row-arrow path {
+      transition: none;
     }
   }
 
@@ -551,7 +584,7 @@
     font-weight: $font-weight-bold;
     color: $color-neutral-dark;
     margin: 0 0 $spacing-sm;
-    transition: color $transition-fast;
+    transition: color 160ms ease;
   }
 
   &__row-dek {
@@ -1102,14 +1135,7 @@
     &__stream-label { margin-top: 0; max-width: none; }
     &__section-count { grid-column: 2; margin-top: 2px; }
 
-    &__stream-aside {
-      grid-column: 1 / -1;
-      margin-top: $spacing-md;
-      padding-top: $spacing-md;
-      max-width: none;
-    }
 
-    &__stream-arrow { display: none; }
     &__stream-sub { grid-column: 1 / -1; max-width: $container-text-width; }
 
     // Meta rail stacks above the title once the row is a single column.
@@ -1223,23 +1249,6 @@
     font-size: $font-size-body-sm;
     line-height: 1.6;
     color: $color-neutral-muted;
-  }
-}
-
-// Each edge steps one full dash cycle (10px) per iteration, in the rotational
-// direction of its side, so the ants appear to travel around the row rather
-// than each edge sliding on its own.
-@keyframes notesMarquee {
-  to {
-    background-position: 10px 0, -10px 100%, 0 -10px, 100% 10px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  // The marquee still marks the hovered row; it just stops marching.
-  .notes__row:hover .notes__row-marquee,
-  .notes__row:focus-visible .notes__row-marquee {
-    animation: none;
   }
 }
 

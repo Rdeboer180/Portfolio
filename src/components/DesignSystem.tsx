@@ -96,6 +96,8 @@ const spacingScale = [
   { name: '2xl', value: '32px' },
   { name: '3xl', value: '48px' },
   { name: '4xl', value: '64px' },
+  { name: '5xl', value: '80px' },
+  { name: '6xl', value: '96px' },
 ];
 
 const radiusScale = [
