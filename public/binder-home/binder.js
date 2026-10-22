@@ -55,11 +55,15 @@ window.mountBinder = function (document) {
   ];
 
   // ---- cards, from cards.js ----
-  const statRow = (s, k) => `
+  // on a protected card both states are drawn and html.is-unlocked picks one
+  const valueHTML = (value, locked, shutText = svg(ICON.lock)) => (locked
+    ? `<span class="v__shut">${shutText}</span><span class="v__open">${esc(value)}</span>`
+    : esc(value));
+  const statRow = (s, k, locked) => `
     <li>${svg(ROW_ICONS[k % 3])}
       <span class="l">${esc(s.primary)}</span>
       ${s.secondary ? `<span class="s">${esc(s.secondary)}</span>` : ''}
-      <span class="v v--${s.size}">${esc(s.value)}</span>
+      <span class="v v--${s.size}">${valueHTML(s.value, locked)}</span>
     </li>`;
   const frontHTML = (c, i) => `
     <div class="face face--front">
@@ -77,7 +81,7 @@ window.mountBinder = function (document) {
         <img src="${c.hero}" alt="${esc(c.heroAlt)}" width="1280" height="800" decoding="async"${i >= 6 ? ' loading="lazy"' : ''}>
         ${c.locked ? `<figcaption class="cf-lock"><span class="cf-lock__shut">${svg(ICON.lock)}Password protected</span><span class="cf-lock__open">${svg(ICON.unlocked)}<span class="sr-only">Unlocked</span></span></figcaption>` : ''}
       </figure>
-      <ul class="cf-stats" aria-label="Highlights from the study">${c.stats.map(statRow).join('')}</ul>
+      <ul class="cf-stats" aria-label="Highlights from the study">${c.stats.map((s, k) => statRow(s, k, c.locked)).join('')}</ul>
       <footer class="cf-foot"><span>${esc(c.year)}</span><span>${esc(c.category)}</span></footer>
     </div>`;
   // The back is the intro video's first look: its poster, full bleed, under the foil.
@@ -92,7 +96,7 @@ window.mountBinder = function (document) {
   // makes its contents presentational): the title, the project type, the
   // years and the kind of work; its stats are its description (statsOf).
   const cardLabel = (c) => `${c.title}${c.subtitle ? `: ${c.subtitle}` : ''}. ${c.typeLabel}, ${c.year}, ${c.category}. Card ${c.index} of ${total}.${shut(c) ? ' Password protected.' : ' Opens the case study.'}`;
-  const statsOf = (c) => c.stats.map((x) => `${x.primary}${x.secondary ? ` (${x.secondary})` : ''}: ${x.value}.`).join(' ');
+  const statsOf = (c) => c.stats.map((x) => `${esc(x.primary)}${x.secondary ? ` (${esc(x.secondary)})` : ''}: ${valueHTML(x.value, c.locked, 'locked')}.`).join(' ');
 
   grid.innerHTML = CARDS.map((c, i) => `
     <div class="pocket${c.locked ? ' pocket--locked' : ''}" data-i="${i}" data-slug="${c.slug}" style="--h:${c.theme.h};--s:${c.theme.s}">
@@ -105,7 +109,7 @@ window.mountBinder = function (document) {
           <div class="card__edge card__edge--r" aria-hidden="true"></div>
         </div>
       </div>
-      <p class="sr-only" id="card-stats-${i}">${esc(statsOf(c))}</p>
+      <p class="sr-only" id="card-stats-${i}">${statsOf(c)}</p>
       <div class="card__shadow" aria-hidden="true"></div>
       <div class="sleeve" aria-hidden="true"></div>
     </div>`).join('');
