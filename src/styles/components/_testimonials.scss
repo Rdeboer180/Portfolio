@@ -410,6 +410,19 @@
     border: 1px solid $color-border-default;
     border-radius: $card-border-radius;
     overflow: hidden;
+    // A window set down on the desk, lit like the rest of the room (upper
+    // left): the room's hard contact edge, then two casts in the desk's warm
+    // shadow brown leaning down and right, so the white lifts off the grain
+    // instead of reading as a lighter board. On the app itself, not a ::before
+    // cast, because the app clips its children.
+    box-shadow:
+      var(--shadow-room),
+      6px 12px 24px -8px rgba(70, 55, 35, 0.2),
+      18px 34px 64px -20px rgba(70, 55, 35, 0.26);
+
+    @media (prefers-contrast: more) {
+      box-shadow: var(--shadow-room);
+    }
   }
 
   &__people {
