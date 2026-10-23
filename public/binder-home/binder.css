@@ -885,6 +885,37 @@ button, select { font: inherit; }
 }
 .stage--holo .cf-stats svg { stroke: hsl(var(--h) calc(var(--s) * 75%) 36%); }
 
+/* ---------- a dark-type card (theme.tone 'dark'), after the Umbreon card ----------
+   The same film, its lightness inverted: a deep ground, light ink, and the
+   stat icons in gold for the rings. Inks measured against the lightest stop. */
+.pocket--dark { --card-ink: #f2f6f6; --card-ink-2: hsl(var(--h) 28% 84%); --card-ink-3: hsl(var(--h) 24% 76%); }
+.stage--holo .pocket--dark .face--front {
+  background:
+    repeating-linear-gradient(108deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,.07) 12px, rgba(255,255,255,0) 27px, rgba(0,0,0,.08) 40px, rgba(255,255,255,0) 54px),
+    radial-gradient(120% 70% at 15% 0%, hsl(var(--h) calc(var(--s) * 70%) 34% / .85), transparent 60%),
+    linear-gradient(160deg,
+      hsl(var(--h) calc(var(--s) * 80%) 24%) 0%,
+      hsl(var(--h) calc(var(--s) * 70%) 15%) 40%,
+      hsl(var(--h) calc(var(--s) * 75%) 21%) 66%,
+      hsl(var(--h) calc(var(--s) * 70%) 11%) 100%);
+  background-size: var(--BW) var(--BH), auto, auto;
+  background-position: var(--ox) var(--oy), 0 0, 0 0;
+  background-repeat: no-repeat;
+}
+.stage--holo .pocket--dark .cf-index, .stage--holo .pocket--dark .cf-foot { color: var(--card-ink-3); }
+.stage--holo .pocket--dark .cf-title p { color: var(--card-ink-2); }
+.stage--holo .pocket--dark .cf-foot { border-top-color: rgba(255,255,255,.18); }
+.stage--holo .pocket--dark .cf-stats li {
+  background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04));
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 1px 0 rgba(255,255,255,.1) inset;
+}
+.stage--holo .pocket--dark .cf-stats svg { stroke: hsl(43 92% 62%); }
+.stage--holo .pocket--dark .cf-type { box-shadow: 0 1px 2px rgba(0,0,0,.5), inset 0 0 0 1px hsl(43 92% 62% / .7), inset 0 -2px 3px rgba(0,0,0,.25); }
+.fo-fold--dark .fo-fold__back {
+  background: linear-gradient(160deg, hsl(var(--h) calc(var(--s) * 80%) 24%), hsl(var(--h) calc(var(--s) * 70%) 15%) 40%, hsl(var(--h) calc(var(--s) * 75%) 21%) 66%, hsl(var(--h) calc(var(--s) * 70%) 11%));
+}
+
 /* ---------- reduced motion ---------- */
 .stage--rm .card, .stage--rm .card__shadow, .stage--rm .card__shadow::before, .stage--rm .card__shadow::after, .stage--rm .sleeve { transition: none !important; }
 .stage--rm .card--nudge { animation: none; }

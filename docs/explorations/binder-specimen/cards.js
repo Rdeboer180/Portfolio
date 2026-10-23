@@ -207,7 +207,7 @@ window.BINDER_CARDS = [
   {
     "slug": "design-enablement",
     "index": "02",
-    "title": "Tools that scale design",
+    "title": "Tools that optimize and automate tasks",
     "subtitle": "",
     "titleSize": "w",
     "locked": true,
@@ -227,21 +227,21 @@ window.BINDER_CARDS = [
     "heroSource": "artwork v1",
     "stats": [
       {
+        "value": "~12 h → 1.5⁠–⁠3.5 h",
+        "size": "s",
+        "primary": "Hands-on per tire test",
+        "secondary": "Estimate from the plan"
+      },
+      {
+        "value": "0 High",
+        "size": "m",
+        "primary": "QA findings on the test 363 pilot",
+        "secondary": ""
+      },
+      {
         "value": "3 → 1",
         "size": "l",
-        "primary": "Steps in the photography task",
-        "secondary": ""
-      },
-      {
-        "value": "3 teams",
-        "size": "m",
-        "primary": "Design, UX & Photography workflows served",
-        "secondary": ""
-      },
-      {
-        "value": "Zero",
-        "size": "l",
-        "primary": "AEM placements needed to validate hero crops",
+        "primary": "Steps in the photography crop check",
         "secondary": ""
       }
     ],
@@ -249,22 +249,22 @@ window.BINDER_CARDS = [
     "category": "Internal tools",
     "back": {
       "intro": {
-        "src": "../../../public/assets/portfolio-safe/web-apps/cover-loop.mp4",
-        "poster": "../../../public/assets/portfolio-safe/web-apps/cover-loop-poster.jpg",
+        "src": "../../../public/images/work/design-enablement/tire-test-automation.mp4",
+        "poster": "../../../public/images/work/design-enablement/tire-test-automation-poster.jpg",
         "captions": null,
-        "caption": "",
-        "alt": "Scaling Design Through Internal Tooling preview",
-        "frame": "preview",
+        "caption": "A visualization of the 3C pilot (stage test 363), compressed to five seconds. The hands-on time at the end is an estimate from the plan, not yet measured across a full run.",
+        "alt": "tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the title, copy and five tires fill in with their ratings, and an independent QA check reports 0 High findings.",
+        "frame": "reel",
         "focus": 0.55,
-        "posterAt": 0.5,
-        "width": 1280,
-        "height": 800
+        "posterAt": 4.6,
+        "width": 1600,
+        "height": 900
       }
     },
     "panel": {
       "eyebrow": "Internal tools · 2025–2026",
-      "title": "Tools that scale design",
-      "status": "In daily team use",
+      "title": "Tools that optimize and automate tasks",
+      "status": "Plugin piloted on stage · Simulator in daily use",
       "role": "Product design · AI-assisted build",
       "nav": [
         "Walkthrough",
@@ -279,22 +279,33 @@ window.BINDER_CARDS = [
         "React",
         "VS Code"
       ],
-      "context": "Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.",
-      "problemPunch": "A crop problem found in AEM was already a late-stage problem.",
+      "context": "Tire Rack is a national online tire and wheel retailer. Its design, content and photography teams produce the pages, tire tests and imagery behind its digital shopping experience.",
+      "problemPunch": "People were retyping documents that already had the answers.",
       "problem": [
-        "I had been using AI-assisted builds to remove repetition from my own work. My manager noticed and brought me a request from Photography: make hero crop decisions easier before the image reached AEM.",
-        "Photography needed a preview that matched the live site, while Design and UX needed a reusable format for stakeholder reviews.",
-        "Checking crops in AEM pushed breakpoint and safe-zone problems late into the workflow, after other people had already committed time to the asset."
+        "A tire test page takes about 12 hours hands-on and about 4 days elapsed. Every word and number already exists in four Workfront documents, but someone copies them into the admin by hand: up to 38 ratings for each of 5 to 9 tires, chart grids ticked one box at a time, and QA done by eye.",
+        "Hero imagery had the same shape of problem. Checking a crop in AEM pushed breakpoint and safe-zone problems late, after other people had already committed time to the asset.",
+        "I had been using AI-assisted builds to remove repetition from my own work. My manager noticed, and the requests started coming from other teams."
       ],
-      "deck": "I built a browser-based crop simulator so Photography and Design could check an image against the live site before placing it in AEM. Shared Figma presentation components carry the work into stakeholder review.",
-      "ownership": "I designed and built the tools alongside production work. Our AI team helped host the simulator internally behind company sign-in.",
+      "deck": "tr-tire-tests is a Claude Code plugin with MCP tools that builds a tire test page in the new stage admin from its four Workfront documents, then checks its own work. The Hero Crop Simulator lets Design and Photography check responsive crops before an image reaches AEM.",
+      "ownership": "I designed and built both tools alongside production work. Our AI team helped host the simulator internally behind company sign-in.",
       "evidence": [],
       "decisions": [
         {
-          "title": "Use the production rules in the preview",
-          "body": "The simulator uses the live responsive CSS, gradients, and safe zones. Teams can compare desktop, tablet, and mobile crops before committing the image to a page.",
+          "title": "Never guess",
+          "body": "The plugin builds a prep report first: every field, the file it came from, and whether it will be filled or left for a person. A blank in the documents stays blank and goes on the to-do list. Nothing is written until someone confirms the tire names and types a single-use approval code.",
           "link": null,
-          "image": null,
+          "image": {
+            "src": "../../../public/images/work/design-enablement/tire-test-1-pull-in-docs.jpg",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "The four Workfront documents checked off beside an empty stage admin form for test 363, with counts of 13 test fields, 5 tires, 115 ratings and 13 charts",
+            "caption": "Four documents in, a sealed plan: 12 saves listed and 8 fields left alone.",
+            "width": 2400,
+            "height": 1350
+          },
           "images": [],
           "wide": null,
           "artboards": [],
@@ -302,23 +313,42 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
-          "title": "Spend the review on the work",
-          "body": "Reusable Figma layouts, charts, status markers, and callouts give stakeholder presentations a shared structure. The related Figma starter and plugin workflow covers project setup through handoff.",
-          "link": {
-            "text": "Figma starter and plugin workflow",
-            "url": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
-          },
+          "title": "Read every save back, then check it independently",
+          "body": "Each save is read back, and the run stops at the first mismatch. A separate checker then works out the page from the documents alone and compares it with stage. On test 363 that was 12 saves, 115 ratings, 13 charts and 0 High findings. The plugin only writes to stage; pushing to production stays manual.",
+          "link": null,
           "image": {
-            "src": "../../../public/assets/portfolio-safe/web-apps/internalTool_SlidesTemplate.png",
+            "src": "../../../public/images/work/design-enablement/tire-test-3-qa-done.jpg",
             "display": null,
             "poster": null,
             "video": false,
             "frame": null,
             "crop": null,
-            "alt": "Componentized Figma presentation system with reusable project deck templates, layouts, charts, and callouts",
-            "caption": "Every layout, chart, and callout is a component. Decks assemble instead of being rebuilt.",
-            "width": 2820,
-            "height": 1278
+            "alt": "All four steps complete: 12 of 12 saves, 13 of 13 charts, five rated tires, and an independent QA panel reporting 0 High findings",
+            "caption": "A separate checker rebuilt the page from the documents: 0 High findings.",
+            "width": 2400,
+            "height": 1350
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Use the production rules in the preview",
+          "body": "The crop simulator uses the live responsive CSS, gradients and safe zones, so teams compare desktop, tablet and mobile crops before committing an image to a page.",
+          "link": null,
+          "image": {
+            "src": "../../../public/assets/portfolio-safe/web-apps/cover-loop.mp4",
+            "display": null,
+            "poster": "../../../public/assets/portfolio-safe/web-apps/cover-poster.jpg",
+            "video": true,
+            "frame": null,
+            "crop": null,
+            "alt": "Hero Crop Simulator previewing responsive hero crops across breakpoints",
+            "caption": "Production-accurate hero previews across breakpoints, checked before anything touches AEM.",
+            "width": 1280,
+            "height": 646
           },
           "images": [],
           "wide": null,
@@ -328,7 +358,7 @@ window.BINDER_CARDS = [
         }
       ],
       "outcomeMetric": null,
-      "outcome": "The photography task went from three steps to one. Teams now validate hero crops without placing an image in AEM first, and the presentation components reduce repeated review setup. I maintain the tools alongside production work.",
+      "outcome": "By the plan’s estimate a tire test drops from about 12 hours hands-on and 4 days elapsed to about 1.5 to 3.5 hours and 1 day; the saves on the pilot took about a minute. Those figures have not been measured across a full run yet. The crop simulator took the photography task from three steps to one.",
       "outcomeImages": [],
       "href": "https://www.rdeboerdesigns.com/work/design-enablement/"
     }
@@ -348,8 +378,8 @@ window.BINDER_CARDS = [
       "product"
     ],
     "theme": {
-      "h": 218,
-      "s": 1
+      "h": 310,
+      "s": 0.8
     },
     "hero": "heroes/playdraft.jpg",
     "heroAlt": "Three PlayDraft mobile screens showing pack discovery, a live draft board and a champion result.",
@@ -1008,8 +1038,9 @@ window.BINDER_CARDS = [
       "systems"
     ],
     "theme": {
-      "h": 356,
-      "s": 0.9
+      "h": 186,
+      "s": 0.75,
+      "tone": "dark"
     },
     "hero": "heroes/figma-template-governance.jpg",
     "heroAlt": "Four Figma plugins presented in a published-tools panel.",

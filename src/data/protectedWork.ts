@@ -11,7 +11,7 @@ export const PROTECTED_WORK_NAMES: Readonly<Record<string, string>> = {
   'seasonal-content-system': 'Seasonal Content System',
   'landing-pages': 'AEM Landing Governance',
   'aem-component-system': 'AEM Component System',
-  'design-enablement': 'Tools that scale design',
+  'design-enablement': 'Tools that optimize and automate tasks',
   'photography-workflow-agent': 'Photography Workflow Agent',
 };
 

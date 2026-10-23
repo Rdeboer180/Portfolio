@@ -171,7 +171,7 @@ const POSTER_AT = {
   // the protected studies' loops open from black; their posters are the
   // first lit frame (none matches exactly, nearest at 12 of 24fps)
   'tire-categories': 0.5,
-  'design-enablement': 0.5,
+  'design-enablement': 4.6,    // the tire test reel; its poster is the frame at 4.6s, the finished QA state
   'landing-pages': 0.5,
 };
 
@@ -300,12 +300,12 @@ const TYPE_LABEL = { web: 'Web', mobile: 'Mobile app', aem: 'AEM', tools: 'Inter
 // page would otherwise match. s scales how much colour the silver takes.
 const THEME = {
   wheelrack: { h: 35, s: 0.8 },                   // the amber and orange palette rows
-  playdraft: { h: 218, s: 1 },                    // the navy ground
+  playdraft: { h: 310, s: 0.8 },                  // Psychic, after the Espeon card: pink to lilac (Ryan, 23 Oct)
   'aem-component-system': { h: 4, s: 0.9 },       // the header red
   'tire-categories': { h: 350, s: 0.9 },          // the category page's red
   loopstack: { h: 128, s: 0.85 },                 // the chart green
   'design-enablement': { h: 205, s: 0.8 },        // second hue; amber would repeat WheelRack
-  'figma-template-governance': { h: 356, s: 0.9 }, // the red glow
+  'figma-template-governance': { h: 186, s: 0.75, tone: 'dark' }, // Dark, after the Umbreon card: deep teal, light ink, gold rings (Ryan, 23 Oct)
   'landing-pages': { h: 22, s: 1 },               // the sunset
   'seasonal-content-system': { h: 205, s: 0.85 }, // second hue, the snow; red would fill the row
   'bolus-binder': { h: 224, s: 0.8 },             // the nutrition rings
