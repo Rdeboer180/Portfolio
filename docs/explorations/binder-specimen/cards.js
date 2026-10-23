@@ -1041,9 +1041,8 @@ window.BINDER_CARDS = [
       "systems"
     ],
     "theme": {
-      "h": 186,
-      "s": 0.75,
-      "tone": "dark"
+      "h": 35,
+      "s": 0.35
     },
     "hero": "heroes/figma-template-governance.jpg",
     "heroAlt": "Four Figma plugins presented in a published-tools panel.",

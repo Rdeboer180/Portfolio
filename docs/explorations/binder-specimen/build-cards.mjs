@@ -306,7 +306,7 @@ const THEME = {
   'tire-categories': { h: 350, s: 0.9 },          // the category page's red
   loopstack: { h: 128, s: 0.85 },                 // the chart green
   'design-enablement': { h: 205, s: 0.8 },        // second hue; amber would repeat WheelRack
-  'figma-template-governance': { h: 186, s: 0.75, tone: 'dark' }, // Dark, after the Umbreon card: deep teal, light ink, gold rings (Ryan, 23 Oct)
+  'figma-template-governance': { h: 35, s: 0.35 }, // the same paper as Overscroll Tactics (Ryan, 23 Oct)
   'landing-pages': { h: 22, s: 1 },               // the sunset
   'seasonal-content-system': { h: 205, s: 0.85 }, // second hue, the snow; red would fill the row
   'bolus-binder': { h: 224, s: 0.8 },             // the nutrition rings
