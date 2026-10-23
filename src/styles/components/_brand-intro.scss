@@ -39,7 +39,7 @@ $bi-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
     path {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
-      animation: brandIntroDraw 1100ms $bi-ease both;
+      animation: brandIntroDraw 1000ms ease-out both;   // T1D Hub motion: CGM trace draw, easeOut 1000ms
     }
   }
 

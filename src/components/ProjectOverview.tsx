@@ -138,7 +138,9 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
         </section>
         <section id="project-decisions" aria-labelledby="project-decisions-title">
           <h2 id="project-decisions-title" className="project-overview__eyebrow">Key decisions</h2>
-          {overview.decisions.map((decision, index) => <section className={`project-overview__decision${decision.images?.length ? ' project-overview__decision--comparison' : decision.image ? '' : ' project-overview__decision--text'}`} key={decision.title}>
+          {overview.decisions.map((decision, index) => <React.Fragment key={decision.title}>
+          {decision.part && decision.part !== overview.decisions[index - 1]?.part && <h3 className="project-overview__part">{decision.part}</h3>}
+          <section className={`project-overview__decision${decision.images?.length ? ' project-overview__decision--comparison' : decision.image ? '' : ' project-overview__decision--text'}`}>
             <div>
               <span className="project-overview__number" aria-hidden="true">0{index + 1}</span>
               <h3>{decision.title}</h3>
@@ -159,7 +161,7 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
                 <figcaption>{decision.quote.name}<span>{decision.quote.role}</span></figcaption>
               </figure>}
             </div>}
-          </section>)}
+          </section></React.Fragment>)}
         </section>
         <section id="project-outcome" className="project-overview__outcome">
           <h2>Outcome and current scope</h2>

@@ -1856,3 +1856,16 @@
     transform: none;
   }
 }
+
+// A study told in parts (ApproachSubsection.part): the heading where a part begins.
+.cs__part {
+  margin: $spacing-3xl 0 $spacing-xl;
+  padding-top: $spacing-md;
+  border-top: 2px solid $color-neutral-dark;
+  font: 600 13px/1.3 $font-family-mono;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-neutral-dark;
+
+  &:first-child { margin-top: 0; }
+}

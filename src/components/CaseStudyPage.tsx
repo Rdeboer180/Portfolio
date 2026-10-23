@@ -928,8 +928,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                   )}
                 </div>
                 <div className="cs__approach-subs">
-                  {project.approachSubsections.map((sub) => (
-                    <div key={sub.key} className="cs__approach-sub">
+                  {project.approachSubsections.map((sub, i, subs) => (
+                    <React.Fragment key={sub.key}>
+                    {sub.part && sub.part !== subs[i - 1]?.part && <h3 className="cs__part">{sub.part}</h3>}
+                    <div className="cs__approach-sub">
                       {sub.systemMarker && (
                         <span className="cs__system-marker">{sub.systemMarker}</span>
                       )}
@@ -984,6 +986,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                         </figure>
                       )}
                     </div>
+                    </React.Fragment>
                   ))}
                 </div>
               </section>

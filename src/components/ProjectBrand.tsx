@@ -9,7 +9,8 @@ const BRANDS: Record<string, Brand> = {
   playdraft: { name: 'PlayDraft', src: '/images/brands/playdraft-on-white.svg' },
   heatherwood: { name: 'Heatherwood Equestrian Academy', src: '/images/brands/heatherwood.svg', wordmark: true },
   loopstack: { name: 'LoopStack', src: '/images/brands/loopstack.svg' },
-  'bolus-binder': { name: 'Bolus Binder', src: '/images/brands/bolus-binder.png' },
+  // The study leads with the clinic brand; the app icon stays in the app's own captures.
+  'bolus-binder': { name: 'T1D Hub', src: '/images/brands/t1d-hub.svg', wordmark: true },
   'overscroll-tactics': { name: 'Overscroll Tactics', src: '/images/brands/overscroll-tactics.svg' },
 };
 

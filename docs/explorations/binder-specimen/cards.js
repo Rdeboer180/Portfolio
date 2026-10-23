@@ -1829,8 +1829,8 @@ window.BINDER_CARDS = [
   {
     "slug": "bolus-binder",
     "index": "10",
-    "title": "Bolus Binder",
-    "subtitle": "Cooking comes first",
+    "title": "T1D Hub",
+    "subtitle": "Brand system to Bolus Binder",
     "titleSize": "l",
     "locked": false,
     "group": "product",
@@ -1868,7 +1868,7 @@ window.BINDER_CARDS = [
       }
     ],
     "year": "2026",
-    "category": "Personal product",
+    "category": "Brand system · Companion app",
     "back": {
       "intro": {
         "src": "../../../public/images/work/bolus-binder/bolus-binder-app-preview.mp4",
@@ -1884,9 +1884,9 @@ window.BINDER_CARDS = [
       }
     },
     "panel": {
-      "eyebrow": "Personal product · 2026",
-      "title": "Bolus Binder",
-      "status": "TestFlight · React Native build",
+      "eyebrow": "Brand system · Companion app · 2026",
+      "title": "T1D Hub + Bolus Binder",
+      "status": "Brand v1.0 · App in TestFlight",
       "role": "Brand Lead (T1D Hub) · Product Design · Design System · Agent-Assisted Build (React Native)",
       "nav": [
         "Walkthrough",
@@ -1913,32 +1913,25 @@ window.BINDER_CARDS = [
         "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
         "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge."
       ],
-      "deck": "Living with Type 1 diabetes, I wanted cooking to come first. I built the T1D Hub brand with Dr. Brian Huber’s practice, then carried its system into a companion app that brings portions, nutrition context, and estimated absorption into one place.",
-      "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI, design system, and agent-assisted React Native build of Bolus Binder.",
+      "deck": "I built the T1D Hub brand identity and design system with Dr. Brian Huber’s Type 1 practice, then carried that system into Bolus Binder, a companion app for seeing how a meal is likely to metabolize before you cook it.",
+      "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI and agent-assisted React Native build of Bolus Binder.",
       "evidence": [],
       "decisions": [
         {
-          "title": "Keep the recipe familiar",
-          "body": "I kept saving and cooking recipes at the center. Familiar folders, timing filters, and saved versions help me return to a meal; a separate cooking log preserves when I made it.",
+          "title": "Draw the mark around the line a Type 1 reads every day",
+          "body": "A CGM trace runs through the wordmark, entering at the T and holding the name together. It has to stay connected in every configuration, so the four approved lockups ship with their rules written beside them: never remove the trace, never below 28px, never alter the navy and sky split.",
           "link": null,
           "image": {
-            "src": "../../../public/images/work/bolus-binder/app/03-folder-dinners.png",
+            "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png",
             "display": null,
             "poster": null,
             "video": false,
             "frame": null,
-            "crop": {
-              "x": 0,
-              "y": 150,
-              "width": 1206,
-              "height": 1650,
-              "sourceWidth": 1206,
-              "sourceHeight": 2622
-            },
-            "alt": "Dinner recipes grouped in a folder with timing and rating filters",
-            "caption": "Recipe organization · simulator capture with demo data.",
-            "width": 1206,
-            "height": 2622
+            "crop": null,
+            "alt": "T1D Hub logo system page showing primary and reversed lockups alongside five usage rules.",
+            "caption": "Four approved configurations, with the constraints written next to them, so the marketing team can place the mark without asking.",
+            "width": 1600,
+            "height": 1484
           },
           "images": [],
           "wide": null,
@@ -1947,8 +1940,44 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
+          "title": "Give the practice a system it can extend without me",
+          "body": "Design System v1.0 went to Brian in June 2026 as a working site: twelve color tokens with clinical meaning, Sora, Inter and JetBrains Mono for data, components, a CGM chart language, calm motion rules, and the brand on the website, an office wall, slides and business cards. With it went a vision handoff for a patient portal and education platform, and one instruction: extend the system, do not redesign the brand.",
+          "link": null,
+          "image": null,
+          "images": [
+            {
+              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.",
+              "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.",
+              "width": 1600,
+              "height": 1199
+            },
+            {
+              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-type-system.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "T1D Hub type system: Sora ExtraBold for display, Inter for body, JetBrains Mono for glucose readings.",
+              "caption": "Mono is reserved for data, so a glucose number never reads as body copy.",
+              "width": 1600,
+              "height": 1853
+            }
+          ],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
           "title": "Make portions change the whole meal",
-          "body": "Portion changes update the ingredient quantities and nutrition together. The collapsed header keeps the portion and macro totals visible as I move through the recipe.",
+          "body": "The same system, carried into the kitchen. Portion changes update the ingredient quantities and nutrition together, and the collapsed header keeps the portion and macro totals visible as I move through the recipe.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/bolus-binder/app/06-recipe-detail-collapsed.png",
@@ -1977,7 +2006,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Separate estimates from observations",
-          "body": "The nutrition view labels the absorption pattern as estimated. It is not measured CGM data or a dosing recommendation. Reviewing observed glucose patterns belongs to the separate LoopStack exploration.",
+          "body": "The nutrition view labels the absorption pattern as estimated. It is not measured CGM data or a dosing recommendation, and it uses the clinic’s chart colors with the same meanings. Reviewing observed glucose patterns belongs to the separate LoopStack exploration.",
           "link": {
             "text": "LoopStack exploration",
             "url": "https://www.rdeboerdesigns.com/work/loopstack/"
@@ -2009,19 +2038,19 @@ window.BINDER_CARDS = [
         }
       ],
       "outcomeMetric": null,
-      "outcome": "The React Native app is in TestFlight. These captures document implemented product flows, not validated health outcomes. Observed glucose integration remains future work.",
+      "outcome": "The T1D Hub brand and design system are with the practice and its marketing team. Bolus Binder is in TestFlight; these captures document implemented flows with demo data, not validated health outcomes. Observed glucose integration remains future work.",
       "outcomeImages": [
         {
-          "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png",
+          "src": "../../../public/images/work/bolus-binder/supporting/outcome/t1dhub-cgm-visual-language.png",
           "display": null,
           "poster": null,
           "video": false,
           "frame": null,
           "crop": null,
-          "alt": "T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.",
-          "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.",
+          "alt": "CGM visual language: a 24-hour glucose trace with in-range, above and below bands, beside a Time In Range summary.",
+          "caption": "The chart language the brand and the app share with the CGM a patient already reads: green in range, amber above, red urgent low.",
           "width": 1600,
-          "height": 1199
+          "height": 558
         }
       ],
       "href": "https://www.rdeboerdesigns.com/work/bolus-binder/"
