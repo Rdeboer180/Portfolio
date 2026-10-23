@@ -205,8 +205,137 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "playdraft",
+    "slug": "design-enablement",
     "index": "02",
+    "title": "Tools that scale design",
+    "subtitle": "",
+    "titleSize": "w",
+    "locked": true,
+    "group": "systems",
+    "groupLabel": "System design",
+    "type": "tools",
+    "typeLabel": "Internal tools",
+    "groups": [
+      "systems"
+    ],
+    "theme": {
+      "h": 205,
+      "s": 0.8
+    },
+    "hero": "heroes/design-enablement.jpg",
+    "heroAlt": "Hero Crop Simulator with desktop and mobile photograph previews and red crop guides.",
+    "heroSource": "artwork v1",
+    "stats": [
+      {
+        "value": "3 → 1",
+        "size": "l",
+        "primary": "Steps in the photography task",
+        "secondary": ""
+      },
+      {
+        "value": "3 teams",
+        "size": "m",
+        "primary": "Design, UX & Photography workflows served",
+        "secondary": ""
+      },
+      {
+        "value": "Zero",
+        "size": "l",
+        "primary": "AEM placements needed to validate hero crops",
+        "secondary": ""
+      }
+    ],
+    "year": "2025–2026",
+    "category": "Internal tools",
+    "back": {
+      "intro": {
+        "src": "../../../public/assets/portfolio-safe/web-apps/cover-loop.mp4",
+        "poster": "../../../public/assets/portfolio-safe/web-apps/cover-loop-poster.jpg",
+        "captions": null,
+        "caption": "",
+        "alt": "Scaling Design Through Internal Tooling preview",
+        "frame": "preview",
+        "focus": 0.55,
+        "posterAt": 0.5,
+        "width": 1280,
+        "height": 800
+      }
+    },
+    "panel": {
+      "eyebrow": "Internal tools · 2025–2026",
+      "title": "Tools that scale design",
+      "status": "In daily team use",
+      "role": "Product design · AI-assisted build",
+      "nav": [
+        "Walkthrough",
+        "Decisions",
+        "Outcome"
+      ],
+      "links": [],
+      "tools": [
+        "Figma",
+        "Claude",
+        "TypeScript",
+        "React",
+        "VS Code"
+      ],
+      "context": "Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.",
+      "problemPunch": "A crop problem found in AEM was already a late-stage problem.",
+      "problem": [
+        "I had been using AI-assisted builds to remove repetition from my own work. My manager noticed and brought me a request from Photography: make hero crop decisions easier before the image reached AEM.",
+        "Photography needed a preview that matched the live site, while Design and UX needed a reusable format for stakeholder reviews.",
+        "Checking crops in AEM pushed breakpoint and safe-zone problems late into the workflow, after other people had already committed time to the asset."
+      ],
+      "deck": "I built a browser-based crop simulator so Photography and Design could check an image against the live site before placing it in AEM. Shared Figma presentation components carry the work into stakeholder review.",
+      "ownership": "I designed and built the tools alongside production work. Our AI team helped host the simulator internally behind company sign-in.",
+      "evidence": [],
+      "decisions": [
+        {
+          "title": "Use the production rules in the preview",
+          "body": "The simulator uses the live responsive CSS, gradients, and safe zones. Teams can compare desktop, tablet, and mobile crops before committing the image to a page.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Spend the review on the work",
+          "body": "Reusable Figma layouts, charts, status markers, and callouts give stakeholder presentations a shared structure. The related Figma starter and plugin workflow covers project setup through handoff.",
+          "link": {
+            "text": "Figma starter and plugin workflow",
+            "url": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
+          },
+          "image": {
+            "src": "../../../public/assets/portfolio-safe/web-apps/internalTool_SlidesTemplate.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Componentized Figma presentation system with reusable project deck templates, layouts, charts, and callouts",
+            "caption": "Every layout, chart, and callout is a component. Decks assemble instead of being rebuilt.",
+            "width": 2820,
+            "height": 1278
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        }
+      ],
+      "outcomeMetric": null,
+      "outcome": "The photography task went from three steps to one. Teams now validate hero crops without placing an image in AEM first, and the presentation components reduce repeated review setup. I maintain the tools alongside production work.",
+      "outcomeImages": [],
+      "href": "https://www.rdeboerdesigns.com/work/design-enablement/"
+    }
+  },
+  {
+    "slug": "playdraft",
+    "index": "03",
     "title": "PlayDraft",
     "subtitle": "A social drafting game",
     "titleSize": "l",
@@ -505,7 +634,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "aem-component-system",
-    "index": "03",
+    "index": "04",
     "title": "AEM Component System",
     "subtitle": "",
     "titleSize": "w",
@@ -865,8 +994,413 @@ window.BINDER_CARDS = [
     }
   },
   {
+    "slug": "figma-template-governance",
+    "index": "05",
+    "title": "Figma starter template & governance",
+    "subtitle": "",
+    "titleSize": "w",
+    "locked": true,
+    "group": "systems",
+    "groupLabel": "System design",
+    "type": "tools",
+    "typeLabel": "Internal tools",
+    "groups": [
+      "systems"
+    ],
+    "theme": {
+      "h": 356,
+      "s": 0.9
+    },
+    "hero": "heroes/figma-template-governance.jpg",
+    "heroAlt": "Four Figma plugins presented in a published-tools panel.",
+    "heroSource": "artwork v1",
+    "stats": [
+      {
+        "value": "4",
+        "size": "l",
+        "primary": "Internal Figma plugins built with agent assistance",
+        "secondary": ""
+      },
+      {
+        "value": "15+",
+        "size": "l",
+        "primary": "Web and UX designers the shared template and tools are built for",
+        "secondary": ""
+      }
+    ],
+    "year": "2026",
+    "category": "Professional work",
+    "back": {
+      "intro": {
+        "src": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4",
+        "poster": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg",
+        "captions": null,
+        "caption": "16-second tour using original screenshots and footage. Layer Cleanup is shown in the published tools list.",
+        "alt": "Quick tour of four internal Figma plugins using original screenshots and footage",
+        "frame": "reel",
+        "focus": 0.5,
+        "posterAt": 0,
+        "width": 1280,
+        "height": 800
+      }
+    },
+    "panel": {
+      "eyebrow": "Professional work · 2026",
+      "title": "Figma Template Governance",
+      "status": "Internally published · Governance and rollout ongoing",
+      "role": "Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development",
+      "nav": [
+        "Walkthrough",
+        "Decisions",
+        "Outcome"
+      ],
+      "links": [],
+      "tools": [
+        "Figma",
+        "Claude",
+        "Workfront"
+      ],
+      "context": "Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.",
+      "problemPunch": "A reviewer should not have to reconstruct the project from the file.",
+      "problem": [
+        "Project context lived in Workfront while the design evolved in Figma. Reviewers needed a consistent way to find the brief, inspect the proof, and see what was ready for handoff.",
+        "I moved proof preparation from Figma Slides into the working design file, where the team was already comfortable."
+      ],
+      "deck": "A shared Figma starter and four internal plugins for a team of 15+ Web and UX designers.",
+      "ownership": "I designed the template and workflows, built the plugins with agent assistance, and partnered with the lead PM on project metadata.",
+      "evidence": [
+        {
+          "src": "../../../public/images/work/figma-template-governance/starter-template-cover.png",
+          "display": null,
+          "poster": null,
+          "video": false,
+          "frame": null,
+          "crop": null,
+          "alt": "Original Figma starter-template cover with the Project Info Card, plugin instructions, and supporting links",
+          "caption": "The starter-template cover keeps the brief, guide, and project links together.",
+          "width": 3516,
+          "height": 1532
+        },
+        {
+          "src": "../../../public/images/work/figma-template-governance/plugin-suite.png",
+          "display": null,
+          "poster": null,
+          "video": false,
+          "frame": null,
+          "crop": null,
+          "alt": "Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup",
+          "caption": "Four tools published to the team’s Figma workspace.",
+          "width": 646,
+          "height": 872
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Put the project context where the work starts",
+          "body": "A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Keep proof preparation with the design",
+          "body": "Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/figma-template-governance/proof-template.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Original proof template with desktop and mobile snapshots",
+            "caption": "Proofs use shared layouts and explicit snapshot refreshes.",
+            "width": 2740,
+            "height": 1540
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Make handoff readiness explainable",
+          "body": "Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/figma-template-governance/actual-checklist-frame.jpg",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Project Checklist in the original working Figma file",
+            "caption": "",
+            "width": 1280,
+            "height": 720
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        }
+      ],
+      "outcomeMetric": null,
+      "outcome": "Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.",
+      "outcomeImages": [],
+      "href": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
+    }
+  },
+  {
+    "slug": "bolus-binder",
+    "index": "06",
+    "title": "T1D Hub",
+    "subtitle": "Brand system to Bolus Binder",
+    "titleSize": "l",
+    "locked": false,
+    "group": "product",
+    "groupLabel": "Product design",
+    "type": "mobile",
+    "typeLabel": "Mobile app",
+    "groups": [
+      "product"
+    ],
+    "theme": {
+      "h": 224,
+      "s": 0.8
+    },
+    "hero": "heroes/bolus-binder.webp",
+    "heroAlt": "Bolus Binder recipe preview with net-carb, protein and fat rings and the estimated two-wave absorption curve.",
+    "heroSource": "supplied file",
+    "stats": [
+      {
+        "value": "React Native + Expo",
+        "size": "s",
+        "primary": "Agent-assisted iOS build",
+        "secondary": "Running in TestFlight"
+      },
+      {
+        "value": "1 → 2",
+        "size": "l",
+        "primary": "One system, two experiences",
+        "secondary": "The T1D Hub clinic brand and the Bolus Binder companion app"
+      },
+      {
+        "value": "1.5×",
+        "size": "l",
+        "primary": "Portion-aware nutrition",
+        "secondary": "Macros and the absorption estimate rescale with the serving"
+      }
+    ],
+    "year": "2026",
+    "category": "Brand system · Companion app",
+    "back": {
+      "intro": {
+        "src": "../../../public/images/work/bolus-binder/bolus-binder-app-preview.mp4",
+        "poster": "../../../public/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg",
+        "captions": null,
+        "caption": "A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.",
+        "alt": "Bolus Binder recipe library, recipe detail, nutrition, recipe folders, meal planning, and cook mode",
+        "frame": "reel",
+        "focus": 0.5,
+        "posterAt": 0,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    "panel": {
+      "eyebrow": "Brand system · Companion app · 2026",
+      "title": "T1D Hub + Bolus Binder",
+      "status": "Brand v1.0 · App in TestFlight",
+      "role": "Brand Lead (T1D Hub) · Product Design · Design System · Agent-Assisted Build (React Native)",
+      "nav": [
+        "Walkthrough",
+        "Decisions",
+        "Outcome"
+      ],
+      "links": [
+        {
+          "label": "Try the TestFlight build",
+          "url": "https://testflight.apple.com/join/YSyjkS3k"
+        }
+      ],
+      "tools": [
+        "Figma",
+        "Illustrator",
+        "React Native",
+        "Expo",
+        "Claude",
+        "VS Code"
+      ],
+      "context": "T1D Hub is the Type 1 diabetes practice Dr. Brian Huber is building, and in partnership with Brian I oversee its brand: the logo, the design system behind it, and the site, where I work directly with his marketing team. Bolus Binder is the companion app that carries that system into the kitchen, so a patient can see how a meal or recipe is likely to metabolize before they cook it.",
+      "problemPunch": "Cooking and nutrition context belong together.",
+      "problem": [
+        "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
+        "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge."
+      ],
+      "deck": "I built the T1D Hub brand identity and design system with Dr. Brian Huber’s Type 1 practice, then carried that system into Bolus Binder, a companion app for seeing how a meal is likely to metabolize before you cook it.",
+      "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI and agent-assisted React Native build of Bolus Binder.",
+      "evidence": [],
+      "decisions": [
+        {
+          "title": "Draw the mark around the line a Type 1 reads every day",
+          "body": "A CGM trace runs through the wordmark, entering at the T and holding the name together. It has to stay connected in every configuration, so the four approved lockups ship with their rules written beside them: never remove the trace, never below 28px, never alter the navy and sky split.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "T1D Hub logo system page showing primary and reversed lockups alongside five usage rules.",
+            "caption": "Four approved configurations, with the constraints written next to them, so the marketing team can place the mark without asking.",
+            "width": 1600,
+            "height": 1484
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Give the practice a system it can extend without me",
+          "body": "Design System v1.0 went to Brian in June 2026 as a working site: twelve color tokens with clinical meaning, Sora, Inter and JetBrains Mono for data, components, a CGM chart language, calm motion rules, and the brand on the website, an office wall, slides and business cards.",
+          "link": null,
+          "image": null,
+          "images": [
+            {
+              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.",
+              "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.",
+              "width": 1600,
+              "height": 1199
+            },
+            {
+              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-type-system.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "T1D Hub type system: Sora ExtraBold for display, Inter for body, JetBrains Mono for glucose readings.",
+              "caption": "Mono is reserved for data, so a glucose number never reads as body copy.",
+              "width": 1600,
+              "height": 1853
+            }
+          ],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Hand off a vision, so the next team extends instead of redesigning",
+          "body": "With the logo files and web assets went a future-vision handoff for Brian’s marketing team or an agency: a patient portal and education platform that starts with an onboarding questionnaire, then a personalized dashboard, an education library organized as courses, and a community space. Its first instruction is to build on the existing logo and design system rather than redesign the brand. One of its pillars, nutrition and metabolic response, is where Bolus Binder comes in.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Make portions change the whole meal",
+          "body": "The same system, carried into the kitchen. Portion changes update the ingredient quantities and nutrition together, and the collapsed header keeps the portion and macro totals visible as I move through the recipe.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/bolus-binder/app/06-recipe-detail-collapsed.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": {
+              "x": 0,
+              "y": 150,
+              "width": 1206,
+              "height": 1550,
+              "sourceWidth": 1206,
+              "sourceHeight": 2622
+            },
+            "alt": "Collapsed recipe header keeps the scaled portion and nutrition totals visible",
+            "caption": "Scaled portion and nutrition context · seeded demo data.",
+            "width": 1206,
+            "height": 2622
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Separate estimates from observations",
+          "body": "The nutrition view labels the absorption pattern as estimated. It is not measured CGM data or a dosing recommendation, and it uses the clinic’s chart colors with the same meanings. Reviewing observed glucose patterns belongs to the separate LoopStack exploration.",
+          "link": {
+            "text": "LoopStack exploration",
+            "url": "https://www.rdeboerdesigns.com/work/loopstack/"
+          },
+          "image": {
+            "src": "../../../public/images/work/bolus-binder/app/07-nutrition-expected-response.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": {
+              "x": 0,
+              "y": 1220,
+              "width": 1206,
+              "height": 1350,
+              "sourceWidth": 1206,
+              "sourceHeight": 2622
+            },
+            "alt": "Nutrition view marks its absorption pattern as Estimated",
+            "caption": "Estimated pattern, not an observed glucose response.",
+            "width": 1206,
+            "height": 2622
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        }
+      ],
+      "outcomeMetric": null,
+      "outcome": "The T1D Hub brand and design system are with the practice and its marketing team. Bolus Binder is in TestFlight; these captures document implemented flows with demo data, not validated health outcomes. Observed glucose integration remains future work.",
+      "outcomeImages": [
+        {
+          "src": "../../../public/images/work/bolus-binder/supporting/outcome/t1dhub-cgm-visual-language.png",
+          "display": null,
+          "poster": null,
+          "video": false,
+          "frame": null,
+          "crop": null,
+          "alt": "CGM visual language: a 24-hour glucose trace with in-range, above and below bands, beside a Time In Range summary.",
+          "caption": "The chart language the brand and the app share with the CGM a patient already reads: green in range, amber above, red urgent low.",
+          "width": 1600,
+          "height": 558
+        }
+      ],
+      "href": "https://www.rdeboerdesigns.com/work/bolus-binder/"
+    }
+  },
+  {
     "slug": "tire-categories",
-    "index": "04",
+    "index": "07",
     "title": "Tire Category Redesign",
     "subtitle": "Path to the right tire",
     "titleSize": "n",
@@ -1023,7 +1557,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "loopstack",
-    "index": "05",
+    "index": "08",
     "title": "LoopStack",
     "subtitle": "Patterns worth reviewing",
     "titleSize": "l",
@@ -1201,301 +1735,8 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "design-enablement",
-    "index": "06",
-    "title": "Tools that scale design",
-    "subtitle": "",
-    "titleSize": "w",
-    "locked": true,
-    "group": "systems",
-    "groupLabel": "System design",
-    "type": "tools",
-    "typeLabel": "Internal tools",
-    "groups": [
-      "systems"
-    ],
-    "theme": {
-      "h": 205,
-      "s": 0.8
-    },
-    "hero": "heroes/design-enablement.jpg",
-    "heroAlt": "Hero Crop Simulator with desktop and mobile photograph previews and red crop guides.",
-    "heroSource": "artwork v1",
-    "stats": [
-      {
-        "value": "3 → 1",
-        "size": "l",
-        "primary": "Steps in the photography task",
-        "secondary": ""
-      },
-      {
-        "value": "3 teams",
-        "size": "m",
-        "primary": "Design, UX & Photography workflows served",
-        "secondary": ""
-      },
-      {
-        "value": "Zero",
-        "size": "l",
-        "primary": "AEM placements needed to validate hero crops",
-        "secondary": ""
-      }
-    ],
-    "year": "2025–2026",
-    "category": "Internal tools",
-    "back": {
-      "intro": {
-        "src": "../../../public/assets/portfolio-safe/web-apps/cover-loop.mp4",
-        "poster": "../../../public/assets/portfolio-safe/web-apps/cover-loop-poster.jpg",
-        "captions": null,
-        "caption": "",
-        "alt": "Scaling Design Through Internal Tooling preview",
-        "frame": "preview",
-        "focus": 0.55,
-        "posterAt": 0.5,
-        "width": 1280,
-        "height": 800
-      }
-    },
-    "panel": {
-      "eyebrow": "Internal tools · 2025–2026",
-      "title": "Tools that scale design",
-      "status": "In daily team use",
-      "role": "Product design · AI-assisted build",
-      "nav": [
-        "Walkthrough",
-        "Decisions",
-        "Outcome"
-      ],
-      "links": [],
-      "tools": [
-        "Figma",
-        "Claude",
-        "TypeScript",
-        "React",
-        "VS Code"
-      ],
-      "context": "Tire Rack is a national online tire and wheel retailer. Its design and photography teams produce the pages, imagery, and project materials behind its digital shopping experience.",
-      "problemPunch": "A crop problem found in AEM was already a late-stage problem.",
-      "problem": [
-        "I had been using AI-assisted builds to remove repetition from my own work. My manager noticed and brought me a request from Photography: make hero crop decisions easier before the image reached AEM.",
-        "Photography needed a preview that matched the live site, while Design and UX needed a reusable format for stakeholder reviews.",
-        "Checking crops in AEM pushed breakpoint and safe-zone problems late into the workflow, after other people had already committed time to the asset."
-      ],
-      "deck": "I built a browser-based crop simulator so Photography and Design could check an image against the live site before placing it in AEM. Shared Figma presentation components carry the work into stakeholder review.",
-      "ownership": "I designed and built the tools alongside production work. Our AI team helped host the simulator internally behind company sign-in.",
-      "evidence": [],
-      "decisions": [
-        {
-          "title": "Use the production rules in the preview",
-          "body": "The simulator uses the live responsive CSS, gradients, and safe zones. Teams can compare desktop, tablet, and mobile crops before committing the image to a page.",
-          "link": null,
-          "image": null,
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Spend the review on the work",
-          "body": "Reusable Figma layouts, charts, status markers, and callouts give stakeholder presentations a shared structure. The related Figma starter and plugin workflow covers project setup through handoff.",
-          "link": {
-            "text": "Figma starter and plugin workflow",
-            "url": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
-          },
-          "image": {
-            "src": "../../../public/assets/portfolio-safe/web-apps/internalTool_SlidesTemplate.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Componentized Figma presentation system with reusable project deck templates, layouts, charts, and callouts",
-            "caption": "Every layout, chart, and callout is a component. Decks assemble instead of being rebuilt.",
-            "width": 2820,
-            "height": 1278
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        }
-      ],
-      "outcomeMetric": null,
-      "outcome": "The photography task went from three steps to one. Teams now validate hero crops without placing an image in AEM first, and the presentation components reduce repeated review setup. I maintain the tools alongside production work.",
-      "outcomeImages": [],
-      "href": "https://www.rdeboerdesigns.com/work/design-enablement/"
-    }
-  },
-  {
-    "slug": "figma-template-governance",
-    "index": "07",
-    "title": "Figma starter template & governance",
-    "subtitle": "",
-    "titleSize": "w",
-    "locked": true,
-    "group": "systems",
-    "groupLabel": "System design",
-    "type": "tools",
-    "typeLabel": "Internal tools",
-    "groups": [
-      "systems"
-    ],
-    "theme": {
-      "h": 356,
-      "s": 0.9
-    },
-    "hero": "heroes/figma-template-governance.jpg",
-    "heroAlt": "Four Figma plugins presented in a published-tools panel.",
-    "heroSource": "artwork v1",
-    "stats": [
-      {
-        "value": "4",
-        "size": "l",
-        "primary": "Internal Figma plugins built with agent assistance",
-        "secondary": ""
-      },
-      {
-        "value": "15+",
-        "size": "l",
-        "primary": "Web and UX designers the shared template and tools are built for",
-        "secondary": ""
-      }
-    ],
-    "year": "2026",
-    "category": "Professional work",
-    "back": {
-      "intro": {
-        "src": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4",
-        "poster": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg",
-        "captions": null,
-        "caption": "16-second tour using original screenshots and footage. Layer Cleanup is shown in the published tools list.",
-        "alt": "Quick tour of four internal Figma plugins using original screenshots and footage",
-        "frame": "reel",
-        "focus": 0.5,
-        "posterAt": 0,
-        "width": 1280,
-        "height": 800
-      }
-    },
-    "panel": {
-      "eyebrow": "Professional work · 2026",
-      "title": "Figma Template Governance",
-      "status": "Internally published · Governance and rollout ongoing",
-      "role": "Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development",
-      "nav": [
-        "Walkthrough",
-        "Decisions",
-        "Outcome"
-      ],
-      "links": [],
-      "tools": [
-        "Figma",
-        "Claude",
-        "Workfront"
-      ],
-      "context": "Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.",
-      "problemPunch": "A reviewer should not have to reconstruct the project from the file.",
-      "problem": [
-        "Project context lived in Workfront while the design evolved in Figma. Reviewers needed a consistent way to find the brief, inspect the proof, and see what was ready for handoff.",
-        "I moved proof preparation from Figma Slides into the working design file, where the team was already comfortable."
-      ],
-      "deck": "A shared Figma starter and four internal plugins for a team of 15+ Web and UX designers.",
-      "ownership": "I designed the template and workflows, built the plugins with agent assistance, and partnered with the lead PM on project metadata.",
-      "evidence": [
-        {
-          "src": "../../../public/images/work/figma-template-governance/starter-template-cover.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "Original Figma starter-template cover with the Project Info Card, plugin instructions, and supporting links",
-          "caption": "The starter-template cover keeps the brief, guide, and project links together.",
-          "width": 3516,
-          "height": 1532
-        },
-        {
-          "src": "../../../public/images/work/figma-template-governance/plugin-suite.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup",
-          "caption": "Four tools published to the team’s Figma workspace.",
-          "width": 646,
-          "height": 872
-        }
-      ],
-      "decisions": [
-        {
-          "title": "Put the project context where the work starts",
-          "body": "A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.",
-          "link": null,
-          "image": null,
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Keep proof preparation with the design",
-          "body": "Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/figma-template-governance/proof-template.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Original proof template with desktop and mobile snapshots",
-            "caption": "Proofs use shared layouts and explicit snapshot refreshes.",
-            "width": 2740,
-            "height": 1540
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Make handoff readiness explainable",
-          "body": "Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/figma-template-governance/actual-checklist-frame.jpg",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Project Checklist in the original working Figma file",
-            "caption": "",
-            "width": 1280,
-            "height": 720
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        }
-      ],
-      "outcomeMetric": null,
-      "outcome": "Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.",
-      "outcomeImages": [],
-      "href": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
-    }
-  },
-  {
     "slug": "landing-pages",
-    "index": "08",
+    "index": "09",
     "title": "AEM Landing Governance",
     "subtitle": "",
     "titleSize": "w",
@@ -1692,7 +1933,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "seasonal-content-system",
-    "index": "09",
+    "index": "10",
     "title": "Seasonal content, without rebuilds",
     "subtitle": "",
     "titleSize": "w",
@@ -1824,236 +2065,6 @@ window.BINDER_CARDS = [
       "outcome": "The geo-based seasonal program is live. Two junior designers author the swaps, and I handle final review and AEM/Target sync issues. Winter conversion has generally strengthened, but weather, marketing, and product changes also contribute.",
       "outcomeImages": [],
       "href": "https://www.rdeboerdesigns.com/work/seasonal-content-system/"
-    }
-  },
-  {
-    "slug": "bolus-binder",
-    "index": "10",
-    "title": "T1D Hub",
-    "subtitle": "Brand system to Bolus Binder",
-    "titleSize": "l",
-    "locked": false,
-    "group": "product",
-    "groupLabel": "Product design",
-    "type": "mobile",
-    "typeLabel": "Mobile app",
-    "groups": [
-      "product"
-    ],
-    "theme": {
-      "h": 224,
-      "s": 0.8
-    },
-    "hero": "heroes/bolus-binder.webp",
-    "heroAlt": "Bolus Binder recipe preview with net-carb, protein and fat rings and the estimated two-wave absorption curve.",
-    "heroSource": "supplied file",
-    "stats": [
-      {
-        "value": "React Native + Expo",
-        "size": "s",
-        "primary": "Agent-assisted iOS build",
-        "secondary": "Running in TestFlight"
-      },
-      {
-        "value": "1 → 2",
-        "size": "l",
-        "primary": "One system, two experiences",
-        "secondary": "The T1D Hub clinic brand and the Bolus Binder companion app"
-      },
-      {
-        "value": "1.5×",
-        "size": "l",
-        "primary": "Portion-aware nutrition",
-        "secondary": "Macros and the absorption estimate rescale with the serving"
-      }
-    ],
-    "year": "2026",
-    "category": "Brand system · Companion app",
-    "back": {
-      "intro": {
-        "src": "../../../public/images/work/bolus-binder/bolus-binder-app-preview.mp4",
-        "poster": "../../../public/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg",
-        "captions": null,
-        "caption": "A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.",
-        "alt": "Bolus Binder recipe library, recipe detail, nutrition, recipe folders, meal planning, and cook mode",
-        "frame": "reel",
-        "focus": 0.5,
-        "posterAt": 0,
-        "width": 1280,
-        "height": 720
-      }
-    },
-    "panel": {
-      "eyebrow": "Brand system · Companion app · 2026",
-      "title": "T1D Hub + Bolus Binder",
-      "status": "Brand v1.0 · App in TestFlight",
-      "role": "Brand Lead (T1D Hub) · Product Design · Design System · Agent-Assisted Build (React Native)",
-      "nav": [
-        "Walkthrough",
-        "Decisions",
-        "Outcome"
-      ],
-      "links": [
-        {
-          "label": "Try the TestFlight build",
-          "url": "https://testflight.apple.com/join/YSyjkS3k"
-        }
-      ],
-      "tools": [
-        "Figma",
-        "Illustrator",
-        "React Native",
-        "Expo",
-        "Claude",
-        "VS Code"
-      ],
-      "context": "T1D Hub is the Type 1 diabetes practice Dr. Brian Huber is building, and in partnership with Brian I oversee its brand: the logo, the design system behind it, and the site, where I work directly with his marketing team. Bolus Binder is the companion app that carries that system into the kitchen, so a patient can see how a meal or recipe is likely to metabolize before they cook it.",
-      "problemPunch": "Cooking and nutrition context belong together.",
-      "problem": [
-        "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
-        "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge."
-      ],
-      "deck": "I built the T1D Hub brand identity and design system with Dr. Brian Huber’s Type 1 practice, then carried that system into Bolus Binder, a companion app for seeing how a meal is likely to metabolize before you cook it.",
-      "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI and agent-assisted React Native build of Bolus Binder.",
-      "evidence": [],
-      "decisions": [
-        {
-          "title": "Draw the mark around the line a Type 1 reads every day",
-          "body": "A CGM trace runs through the wordmark, entering at the T and holding the name together. It has to stay connected in every configuration, so the four approved lockups ship with their rules written beside them: never remove the trace, never below 28px, never alter the navy and sky split.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "T1D Hub logo system page showing primary and reversed lockups alongside five usage rules.",
-            "caption": "Four approved configurations, with the constraints written next to them, so the marketing team can place the mark without asking.",
-            "width": 1600,
-            "height": 1484
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Give the practice a system it can extend without me",
-          "body": "Design System v1.0 went to Brian in June 2026 as a working site: twelve color tokens with clinical meaning, Sora, Inter and JetBrains Mono for data, components, a CGM chart language, calm motion rules, and the brand on the website, an office wall, slides and business cards. With it went a vision handoff for a patient portal and education platform, and one instruction: extend the system, do not redesign the brand.",
-          "link": null,
-          "image": null,
-          "images": [
-            {
-              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png",
-              "display": null,
-              "poster": null,
-              "video": false,
-              "frame": null,
-              "crop": null,
-              "alt": "T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.",
-              "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.",
-              "width": 1600,
-              "height": 1199
-            },
-            {
-              "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-type-system.png",
-              "display": null,
-              "poster": null,
-              "video": false,
-              "frame": null,
-              "crop": null,
-              "alt": "T1D Hub type system: Sora ExtraBold for display, Inter for body, JetBrains Mono for glucose readings.",
-              "caption": "Mono is reserved for data, so a glucose number never reads as body copy.",
-              "width": 1600,
-              "height": 1853
-            }
-          ],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Make portions change the whole meal",
-          "body": "The same system, carried into the kitchen. Portion changes update the ingredient quantities and nutrition together, and the collapsed header keeps the portion and macro totals visible as I move through the recipe.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/bolus-binder/app/06-recipe-detail-collapsed.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": {
-              "x": 0,
-              "y": 150,
-              "width": 1206,
-              "height": 1550,
-              "sourceWidth": 1206,
-              "sourceHeight": 2622
-            },
-            "alt": "Collapsed recipe header keeps the scaled portion and nutrition totals visible",
-            "caption": "Scaled portion and nutrition context · seeded demo data.",
-            "width": 1206,
-            "height": 2622
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Separate estimates from observations",
-          "body": "The nutrition view labels the absorption pattern as estimated. It is not measured CGM data or a dosing recommendation, and it uses the clinic’s chart colors with the same meanings. Reviewing observed glucose patterns belongs to the separate LoopStack exploration.",
-          "link": {
-            "text": "LoopStack exploration",
-            "url": "https://www.rdeboerdesigns.com/work/loopstack/"
-          },
-          "image": {
-            "src": "../../../public/images/work/bolus-binder/app/07-nutrition-expected-response.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": {
-              "x": 0,
-              "y": 1220,
-              "width": 1206,
-              "height": 1350,
-              "sourceWidth": 1206,
-              "sourceHeight": 2622
-            },
-            "alt": "Nutrition view marks its absorption pattern as Estimated",
-            "caption": "Estimated pattern, not an observed glucose response.",
-            "width": 1206,
-            "height": 2622
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        }
-      ],
-      "outcomeMetric": null,
-      "outcome": "The T1D Hub brand and design system are with the practice and its marketing team. Bolus Binder is in TestFlight; these captures document implemented flows with demo data, not validated health outcomes. Observed glucose integration remains future work.",
-      "outcomeImages": [
-        {
-          "src": "../../../public/images/work/bolus-binder/supporting/outcome/t1dhub-cgm-visual-language.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "CGM visual language: a 24-hour glucose trace with in-range, above and below bands, beside a Time In Range summary.",
-          "caption": "The chart language the brand and the app share with the CGM a patient already reads: green in range, amber above, red urgent low.",
-          "width": 1600,
-          "height": 558
-        }
-      ],
-      "href": "https://www.rdeboerdesigns.com/work/bolus-binder/"
     }
   },
   {

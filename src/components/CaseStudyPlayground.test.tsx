@@ -243,7 +243,7 @@ test('the Asset Panel opens the folders under Case studies, a client folder filt
   const folders = within(panel).getByRole('list', { name: 'Case study folders' });
   fireEvent.click(within(folders).getByRole('button', { name: /^Client/ }));
   fireEvent.click(within(folders).getByRole('button', { name: /^Personal products/ }));
-  expect(cardSlugs(container)).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
+  expect(cardSlugs(container)).toEqual(['playdraft', 'bolus-binder', 'loopstack', 'overscroll-tactics']);
   // No chip claims a client selection.
   expect(within(chips()).getAllByRole('button').every((button) => button.getAttribute('aria-pressed') === 'false')).toBe(true);
 });

@@ -22,8 +22,8 @@ describe('work order', () => {
     expect(new Set(WORK_ORDER).size).toBe(WORK_ORDER.length);
   });
 
-  it('opens on WheelRack, PlayDraft and the AEM component system', () => {
-    expect(slugsOf(orderedProjects()).slice(0, 3)).toEqual(['wheelrack', 'playdraft', 'aem-component-system']);
+  it('opens on WheelRack, the design enablement tools and PlayDraft', () => {
+    expect(slugsOf(orderedProjects()).slice(0, 3)).toEqual(['wheelrack', 'design-enablement', 'playdraft']);
   });
 });
 
@@ -58,7 +58,7 @@ describe('groups', () => {
   });
 
   it('resolves a group to its studies, and a client to the studies it names', () => {
-    expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
+    expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'bolus-binder', 'loopstack', 'overscroll-tactics']);
     expect(slugsOf(studiesFor('client', 'heatherwood'))).toEqual(['heatherwood']);
     expect(slugsOf(studiesFor('client', 'employer'))).toHaveLength(7);
   });

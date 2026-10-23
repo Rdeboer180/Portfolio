@@ -2624,17 +2624,20 @@ for (const project of projects) {
  * with the home. Page 1 of the home is the first three: WheelRack, PlayDraft,
  * AEM. A visible study missing from this list is appended, never dropped.
  */
+// Ordered for design-engineering reviews (23 Oct 2026, the ContinuED Senior
+// Design Engineer review): Figma-to-code systems, code prototypes, Figma
+// plugins and a multi-surface system lead; commerce outcomes follow.
 export const WORK_ORDER = [
   'wheelrack',
+  'design-enablement',
   'playdraft',
   'aem-component-system',
+  'figma-template-governance',
+  'bolus-binder',
   'tire-categories',
   'loopstack',
-  'design-enablement',
-  'figma-template-governance',
   'landing-pages',
   'seasonal-content-system',
-  'bolus-binder',
   'overscroll-tactics',
   'heatherwood',
 ];
@@ -2645,7 +2648,7 @@ export const WORK_ORDER = [
  * WORK_ORDER so the pick can change without reordering anything else; every
  * slug here must also be in WORK_ORDER.
  */
-export const FEATURED: readonly string[] = ['wheelrack', 'playdraft', 'aem-component-system'];
+export const FEATURED: readonly string[] = ['wheelrack', 'design-enablement', 'playdraft'];
 
 /** Visible studies in WORK_ORDER, with any unlisted study after them in file order. */
 export const orderedProjects = (): Project[] => {
