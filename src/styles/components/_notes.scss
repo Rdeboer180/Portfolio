@@ -610,15 +610,17 @@
     padding: $spacing-lg $spacing-2xl 0;
     counter-reset: note-section;
 
-    p,
-    li {
+    // Prose rules skip embedded components (.note-embed: the prototypes),
+    // which carry their own type; :where keeps the specificity unchanged.
+    p:where(:not(.note-embed *)),
+    li:where(:not(.note-embed *)) {
       font-size: $font-size-body;
       line-height: 1.7;
       color: $color-neutral-standard;
       max-width: $container-text-width;
     }
 
-    p {
+    p:where(:not(.note-embed *)) {
       margin: 0 0 $spacing-xl;
     }
 
@@ -642,16 +644,16 @@
       }
     }
 
-    ul {
+    ul:where(:not(.note-embed *)) {
       margin: 0 0 $spacing-xl;
       padding-left: $spacing-xl;
     }
 
-    li {
+    li:where(:not(.note-embed *)) {
       margin-bottom: $spacing-sm;
     }
 
-    a {
+    a:where(:not(.note-embed *)) {
       color: $color-primary-dark;
       text-decoration: underline;
       text-underline-offset: 2px;

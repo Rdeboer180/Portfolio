@@ -1735,16 +1735,16 @@ window.BINDER_CARDS = [
     "category": "Professional work",
     "back": {
       "intro": {
-        "src": null,
-        "poster": "../../../public/images/work/seasonal-content-system/CS_thumbnail_AEM_Winterization_safe.jpg",
+        "src": "../../../public/images/work/seasonal-content-system/seasonal-swap-reel.mp4",
+        "poster": "../../../public/images/work/seasonal-content-system/seasonal-swap-reel-poster.jpg",
         "captions": null,
-        "caption": "",
-        "alt": "AEM winter seasonal content, homepage project card",
-        "frame": "preview",
+        "caption": "Winter pages captured live on 23 October 2026; non-winter pages from the Internet Archive (homepage 2 August 2026, tires 11 July 2026, packages 6 August 2025). The archive kept no tires hero image, so that pair starts at the headline.",
+        "alt": "The Tire Rack homepage, tires and packages pages on a season timeline: a frost line winterizes each page, the swapped fragments are named, then each page splits to show the non-winter version southern states see beside the winter version for winter climates.",
+        "frame": "reel",
         "focus": 0.25,
         "posterAt": 0,
-        "width": 4572,
-        "height": 3199
+        "width": 1280,
+        "height": 720
       }
     },
     "panel": {
@@ -1753,7 +1753,7 @@ window.BINDER_CARDS = [
       "status": "Live · Ongoing seasonal ownership",
       "role": "Senior Web Designer / AEM Content Strategist",
       "nav": [
-        "Project evidence",
+        "Walkthrough",
         "Decisions",
         "Outcome"
       ],
@@ -1844,27 +1844,27 @@ window.BINDER_CARDS = [
       "h": 224,
       "s": 0.8
     },
-    "hero": "heroes/bolus-binder.jpg",
+    "hero": "heroes/bolus-binder.webp",
     "heroAlt": "Bolus Binder recipe preview with net-carb, protein and fat rings and the estimated two-wave absorption curve.",
-    "heroSource": "artwork v2",
+    "heroSource": "supplied file",
     "stats": [
       {
         "value": "React Native + Expo",
         "size": "s",
         "primary": "Agent-assisted iOS build",
-        "secondary": ""
+        "secondary": "Running in TestFlight"
       },
       {
-        "value": "v1.0",
+        "value": "1 → 2",
         "size": "l",
-        "primary": "T1D Hub design system",
-        "secondary": "Delivered June 2026 for a local Type 1 clinic"
+        "primary": "One system, two experiences",
+        "secondary": "The T1D Hub clinic brand and the Bolus Binder companion app"
       },
       {
-        "value": "12",
+        "value": "1.5×",
         "size": "l",
-        "primary": "Color tokens carrying clinical semantics",
-        "secondary": "In range, above range, urgent low"
+        "primary": "Portion-aware nutrition",
+        "secondary": "Macros and the absorption estimate rescale with the serving"
       }
     ],
     "year": "2026",
@@ -1887,7 +1887,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Personal product · 2026",
       "title": "Bolus Binder",
       "status": "TestFlight · React Native build",
-      "role": "Product Design · Brand & Design System · Agent-Assisted Build (React Native)",
+      "role": "Brand Lead (T1D Hub) · Product Design · Design System · Agent-Assisted Build (React Native)",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -1901,18 +1901,20 @@ window.BINDER_CARDS = [
       ],
       "tools": [
         "Figma",
+        "Illustrator",
         "React Native",
         "Expo",
         "Claude",
         "VS Code"
       ],
-      "context": "Bolus Binder is my independent recipe app for people living with Type 1 diabetes. Its visual system draws on T1D Hub, a separate identity engagement for a local Type 1 diabetes clinic.",
+      "context": "T1D Hub is the Type 1 diabetes practice Dr. Brian Huber is building, and in partnership with Brian I oversee its brand: the logo, the design system behind it, and the site, where I work directly with his marketing team. Bolus Binder is the companion app that carries that system into the kitchen, so a patient can see how a meal or recipe is likely to metabolize before they cook it.",
       "problemPunch": "Cooking and nutrition context belong together.",
       "problem": [
-        "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it."
+        "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
+        "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge."
       ],
-      "deck": "Living with Type 1 diabetes, I wanted cooking to come first. I designed and built a recipe keeper that brings portions, nutrition context, and meal planning into one app.",
-      "ownership": "I own the product direction, UX/UI, design system, and agent-assisted React Native build. The app draws on the T1D Hub visual system from my separate clinic identity work.",
+      "deck": "Living with Type 1 diabetes, I wanted cooking to come first. I built the T1D Hub brand with Dr. Brian Huber’s practice, then carried its system into a companion app that brings portions, nutrition context, and estimated absorption into one place.",
+      "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI, design system, and agent-assisted React Native build of Bolus Binder.",
       "evidence": [],
       "decisions": [
         {
@@ -2017,7 +2019,7 @@ window.BINDER_CARDS = [
           "frame": null,
           "crop": null,
           "alt": "T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.",
-          "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively.",
+          "caption": "Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.",
           "width": 1600,
           "height": 1199
         }

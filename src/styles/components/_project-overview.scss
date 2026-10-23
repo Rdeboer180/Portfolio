@@ -45,6 +45,8 @@
   &__crop img { position: absolute; max-height: none; }
   &__decision--text { grid-template-columns: 1fr !important; max-width: 66ch; }
   &__reel video { display: block; width: 100%; aspect-ratio: 16 / 9; background: $color-neutral-dark; object-fit: contain; }
+  // the reel's frame, where a brand intro (BrandIntro) lays its plate
+  &__reel-frame { position: relative; }
   &__deck { font-size: $font-size-body-lg; margin: $spacing-2xl 0 $spacing-md; }
   &__context { margin: $spacing-2xl 0 $spacing-md; }
   &__context + &__deck { margin-top: $spacing-md; }

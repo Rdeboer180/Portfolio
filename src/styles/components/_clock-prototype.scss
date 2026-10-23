@@ -1,0 +1,424 @@
+@import '../variables';
+
+// PlayDraftClockPrototype. The room uses PlayDraft's own dark tokens
+// (src/design-system/colors.ts in the app); the inspector uses the
+// portfolio's. Durations multiply by --pd-k: 1, 4 in slow motion, 0 reduced.
+$pd-canvas: #0d1626;
+$pd-surface: #16223a;
+$pd-elevated: #1d3052;
+$pd-gold: #fbbf24;
+$pd-gold-soft: #fde68a;
+$pd-teal: #5ad1c2;
+$pd-red: #f87171;
+$pd-text: #e8edf6;
+$pd-muted: #9aa8bf;
+$pd-line: rgba(255, 255, 255, 0.08);
+$pd-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+.pdp {
+  --pd-k: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: $spacing-lg;
+  margin: $spacing-2xl 0;
+  padding: $spacing-lg;
+  border: 1px solid $color-border-default;
+  border-radius: $card-border-radius;
+  background: $color-neutral-lightest;
+  font-size: 14px;
+  line-height: 1.45;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    padding: $spacing-md;
+  }
+
+  small { font-size: 0.82em; }
+}
+
+.pdp-room {
+  min-width: 0;
+  padding: 14px;
+  border-radius: 14px;
+  background: $pd-canvas;
+  color: $pd-text;
+
+  button { font: inherit; }
+}
+
+// the on-clock strip: gold when it is yours, red when it runs low
+.pdp-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: $pd-surface;
+  box-shadow: inset 0 0 0 1px $pd-line;
+  transition:
+    background calc(200ms * var(--pd-k)) ease-out,
+    box-shadow calc(200ms * var(--pd-k)) ease-out;
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: $pd-elevated;
+    font-weight: 700;
+  }
+
+  &__body {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+
+    small { color: $pd-muted; }
+  }
+
+  &__x2 {
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: $pd-gold;
+    color: $pd-canvas;
+    font-weight: 800;
+    font-size: 12px;
+  }
+
+  &__clock {
+    min-width: 46px;
+    text-align: right;
+    font: 700 20px/1 $font-family-mono;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--mine {
+    background: rgba(251, 191, 36, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.55);
+
+    .pdp-strip__body b, .pdp-strip__clock { color: $pd-gold-soft; }
+    .pdp-strip__avatar { background: $pd-gold; color: $pd-canvas; }
+  }
+
+  &--urgent {
+    background: rgba(248, 113, 113, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.6);
+
+    .pdp-strip__clock { color: $pd-red; animation: pdpPulse calc(1s * var(--pd-k)) ease-in-out infinite; }
+    .pdp-strip__avatar { background: $pd-red; color: $pd-canvas; }
+  }
+
+  &--expired {
+    background: rgba(248, 113, 113, 0.1);
+
+    .pdp-strip__body b { color: $pd-red; }
+  }
+}
+
+// reduced motion: the clock stays red but does not pulse
+.pdp.is-reduced .pdp-strip__clock { animation: none; }
+
+@keyframes pdpPulse {
+  50% { opacity: 0.45; }
+}
+
+.pdp-board {
+  margin: 12px 0;
+  display: grid;
+  gap: 6px;
+
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+
+    &--head span {
+      padding: 0 4px;
+      font: 600 11px/1 $font-family-mono;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: $pd-muted;
+
+      &.is-up { color: $pd-gold-soft; }
+    }
+  }
+}
+
+.pdp-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px dashed $pd-line;
+  color: $pd-muted;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+
+  &.is-up { border: 1px solid rgba(251, 191, 36, 0.6); color: $pd-gold-soft; }
+
+  &.is-filled {
+    border: 1px solid transparent;
+    background: $pd-elevated;
+    color: $pd-text;
+    font-weight: 600;
+  }
+
+  &.is-new { animation: pdpLand calc(420ms * var(--pd-k)) $pd-ease both; }
+
+  em {
+    margin-left: auto;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(248, 113, 113, 0.18);
+    color: $pd-red;
+    font: 600 10px/1.4 $font-family-mono;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+}
+
+@keyframes pdpLand {
+  from { transform: scale(0.94); background: rgba(251, 191, 36, 0.35); }
+  to { transform: none; background: $pd-elevated; }
+}
+
+.pdp-next {
+  margin: 8px 2px 0;
+  color: $pd-muted;
+  font-size: 13px;
+
+  b { color: $pd-gold-soft; }
+}
+
+.pdp-why {
+  font-size: inherit;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: $pd-surface;
+  color: $pd-text;
+  animation: pdpWhy calc(220ms * var(--pd-k)) $pd-ease both;
+
+  b { color: $pd-teal; }
+}
+
+@keyframes pdpWhy {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.pdp-panel {
+  padding: 10px;
+  border-radius: 10px;
+  background: $pd-surface;
+}
+
+.pdp-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+
+  button {
+    flex: 1;
+    padding: 7px 8px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: $pd-muted;
+    font-weight: 600;
+    cursor: pointer;
+
+    span { opacity: 0.7; font-weight: 500; }
+
+    &[aria-selected='true'] { background: $pd-elevated; color: $pd-text; }
+  }
+}
+
+.pdp-search {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid $pd-line;
+  border-radius: 8px;
+  background: $pd-canvas;
+  color: $pd-text;
+  font: inherit;
+
+  &::placeholder { color: $pd-muted; }
+}
+
+.pdp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+
+  button {
+    padding: 4px 10px;
+    border: 1px solid $pd-line;
+    border-radius: 999px;
+    background: transparent;
+    color: $pd-muted;
+    cursor: pointer;
+
+    &[aria-pressed='true'] { border-color: $pd-teal; color: $pd-teal; }
+  }
+}
+
+.pdp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 228px;
+  overflow: auto;
+
+  li {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 6px;
+    border-top: 1px solid $pd-line;
+
+    > span:first-child { display: grid; min-width: 0; }
+    small { color: $pd-muted; }
+
+    // what the clock will draft at zero, under the rule in force
+    &.is-target { box-shadow: inset 2px 0 0 $pd-gold; }
+    &.is-taken { color: $pd-muted; }
+  }
+
+  &__empty { color: $pd-muted; }
+
+  &__actions {
+    display: flex;
+    gap: 4px;
+    flex: none;
+
+    button {
+      padding: 4px 8px;
+      border: 1px solid $pd-line;
+      border-radius: 6px;
+      background: transparent;
+      color: $pd-text;
+      cursor: pointer;
+
+      &:disabled { opacity: 0.35; cursor: default; }
+    }
+
+    .pdp-draft {
+      border-color: transparent;
+      background: $pd-gold;
+      color: $pd-canvas;
+      font-weight: 700;
+    }
+  }
+}
+
+.pdp-queue__lead { margin: 0 0 6px; color: $pd-muted; font-size: inherit; }
+
+.pdp-sample {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: $pd-muted;
+}
+
+.pdp-room :focus-visible { outline: 2px solid $pd-teal; outline-offset: 2px; }
+
+// ---------- the inspector, in the portfolio's own type ----------
+.pdp-inspector {
+  min-width: 0;
+  font-size: 13px;
+  color: $color-neutral-dark;
+}
+
+.pdp-eyebrow {
+  margin: 0 0 8px;
+  font: 600 11px/1 $font-family-mono;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $color-neutral-muted;
+}
+
+.pdp-rule {
+  display: grid;
+  gap: 6px;
+  margin-bottom: $spacing-md;
+
+  label {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 6px;
+    padding: 8px 10px;
+    border: 1px solid $color-border-default;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+
+    small { grid-column: 2; color: $color-neutral-muted; }
+    &.is-on { border-color: $color-neutral-dark; }
+  }
+}
+
+.pdp-run {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: $spacing-md;
+
+  button {
+    padding: 5px 10px;
+    border: 1px solid #b9bfc7;
+    border-radius: 4px;
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+
+    &.is-primary { border-color: $color-neutral-dark; background: $color-neutral-dark; color: #fff; }
+    &:disabled { opacity: 0.45; cursor: default; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+}
+
+.pdp-states {
+  margin: 0 0 $spacing-md;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 7px 10px;
+    border-left: 2px solid #d9dde2;
+    color: $color-neutral-muted;
+
+    b { display: block; color: $color-neutral-standard; }
+    span { display: none; }
+
+    &.is-on {
+      border-left-color: $color-primary;
+
+      b { color: $color-neutral-dark; }
+      span { display: block; margin-top: 2px; color: $color-neutral-standard; }
+    }
+  }
+}
+
+.pdp-controls {
+  display: grid;
+  gap: 6px;
+  margin-bottom: $spacing-md;
+
+  label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+}
+
+.pdp-motion {
+  summary { cursor: pointer; font-weight: 600; }
+
+  table { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 12px; }
+  th, td { padding: 6px 4px; border-top: 1px solid #d9dde2; text-align: left; vertical-align: top; }
+  th { font-weight: 600; color: $color-neutral-muted; }
+  td small { display: block; color: $color-neutral-muted; }
+}

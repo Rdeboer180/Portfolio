@@ -1,0 +1,326 @@
+@import '../variables';
+
+// WheelRackFitmentPrototype. Every duration is multiplied by --fp-k: 1 at
+// normal speed, 4 in slow motion, 0 under reduced motion, so the inspector's
+// toggles change the real timings rather than a copy of them.
+$fp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$fp-ink: #1b1b1b;
+$fp-line: #d9dde2;
+$fp-action: #1f6a8f;
+$fp-radio: #c40d0d;
+$fp-mark: #fff1c9;
+
+.fp {
+  --fp-k: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: $spacing-lg;
+  margin: $spacing-2xl 0;
+  padding: $spacing-lg;
+  border: 1px solid $color-border-default;
+  border-radius: $card-border-radius;
+  background: $color-neutral-lightest;
+  font-size: 14px;
+  line-height: 1.45;
+  color: $fp-ink;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    padding: $spacing-md;
+  }
+
+  small { font-size: 0.82em; color: $color-neutral-muted; }
+}
+
+.fp-stage {
+  position: relative;
+  min-width: 0;
+  padding: 18px 20px 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(27, 27, 27, 0.05), 0 10px 24px -16px rgba(27, 27, 27, 0.3);
+}
+
+.fp-finish {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $fp-line;
+
+  &__swatches { display: flex; gap: 8px; }
+}
+
+.fp-swatch {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--sw);
+  box-shadow: 0 0 0 1px $fp-line;
+  cursor: pointer;
+  transition: box-shadow calc(160ms * var(--fp-k)) ease-out;
+
+  &.is-on { box-shadow: 0 0 0 2px $fp-ink; }
+  &:focus-visible { outline: 2px solid $color-primary; outline-offset: 3px; }
+}
+
+.fp-switch {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+// the rear row folds away on a square vehicle: grid rows 1fr to 0fr
+.fp-axles {
+  &__rear {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows calc(280ms * var(--fp-k)) $fp-ease,
+      opacity calc(180ms * var(--fp-k)) ease-out;
+  }
+
+  &__rear-inner { min-height: 0; overflow: hidden; }
+
+  &.is-square .fp-axles__rear {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.fp-row {
+  position: relative;
+  margin: 0;
+  padding: 26px 8px 12px;
+  border: 0;
+  border-bottom: 1px solid $fp-line;
+  border-radius: 6px;
+
+  &__legend {
+    position: absolute;
+    top: 6px;
+    right: 0;
+    padding: 0;
+  }
+
+  &__sizes { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  &__spec { margin: 8px 0; font-size: inherit; }
+
+  &__buy {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  &__price {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+    small { font-weight: 400; margin-right: 4px; }
+  }
+
+  // the row the system changed: a wash that fades, so the eye finds it once
+  &.is-changed { animation: fpMark calc(900ms * var(--fp-k)) ease-out both; }
+}
+
+@keyframes fpMark {
+  from { background: $fp-mark; }
+  to { background: transparent; }
+}
+
+.fp-tag {
+  display: inline-block;
+  padding: 3px 12px;
+  background: #4a4f57;
+  color: #fff;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 600;
+  transform: skewX(-12deg);
+}
+
+.fp-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+
+  input { accent-color: $fp-radio; margin: 0; }
+  &.is-missing { color: #a3a8af; cursor: not-allowed; }
+}
+
+.fp-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  select {
+    min-width: 72px;
+    padding: 6px 8px;
+    border: 1px solid #b9bfc7;
+    border-radius: 4px;
+    background: #fff;
+    font: inherit;
+  }
+}
+
+.fp-changed {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: $fp-mark;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fp-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding-top: 14px;
+
+  &__total {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+    small { font-size: 13px; font-weight: 400; margin-right: 4px; }
+  }
+}
+
+// the action keeps one footprint; the two labels crossfade in it
+.fp-action {
+  position: relative;
+  display: grid;
+  min-width: 180px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 4px;
+  background: $fp-action;
+  color: #fff;
+  font: 600 15px/1.2 $font-family-primary;
+  cursor: default;
+
+  &__label {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity calc(160ms * var(--fp-k)) linear;
+
+    &.is-on { opacity: 1; }
+  }
+}
+
+.fp-note {
+  font-size: inherit;
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: #f1f2f4;
+  animation: fpNote calc(220ms * var(--fp-k)) $fp-ease both;
+}
+
+@keyframes fpNote {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fp-sample {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: $color-neutral-muted;
+}
+
+// ---------- the inspector ----------
+.fp-inspector {
+  min-width: 0;
+  font-size: 13px;
+
+  &__eyebrow {
+    margin: 0 0 8px;
+    font: 600 11px/1 $font-family-mono;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
+  }
+}
+
+.fp-states {
+  margin: 0 0 $spacing-md;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 8px 10px;
+    border-left: 2px solid $fp-line;
+    color: $color-neutral-muted;
+    transition: border-color calc(160ms * var(--fp-k)) ease-out, color calc(160ms * var(--fp-k)) ease-out;
+
+    b { display: block; color: $color-neutral-standard; }
+    span { display: none; }
+
+    &.is-on {
+      border-left-color: $color-primary;
+      color: $color-neutral-standard;
+
+      b { color: $fp-ink; }
+      span { display: block; margin-top: 2px; }
+    }
+  }
+}
+
+.fp-try {
+  margin-bottom: $spacing-md;
+
+  button {
+    margin: 0 6px 6px 0;
+    padding: 5px 10px;
+    border: 1px solid #b9bfc7;
+    border-radius: 4px;
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+
+    &[aria-pressed='true'] { border-color: $fp-ink; background: $fp-ink; color: #fff; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+}
+
+.fp-controls {
+  display: grid;
+  gap: 6px;
+  margin-bottom: $spacing-md;
+
+  label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+}
+
+.fp-motion {
+  summary { cursor: pointer; font-weight: 600; }
+
+  table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 6px 4px;
+    border-top: 1px solid $fp-line;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th { font-weight: 600; color: $color-neutral-muted; }
+  td small { display: block; }
+}

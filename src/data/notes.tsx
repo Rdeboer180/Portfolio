@@ -43,6 +43,29 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'playdraft-pick-on-the-clock',
+    kind: 'practice',
+    origin: 'portfolio',
+    status: 'draft',
+    relatedProject: 'playdraft',
+    date: 'October 23, 2026',
+    dateISO: '2026-10-23',
+    title: 'The clock drafted what the search box showed',
+    dek: 'PlayDraft’s clock used to draft the top row of whatever the search box showed. A prototype of the pick on the clock runs the old rule beside the fix.',
+    read: '4 min',
+  },
+  {
+    slug: 'prototyping-wheelrack-fitment',
+    kind: 'practice',
+    origin: 'portfolio',
+    status: 'draft',
+    date: 'October 23, 2026',
+    dateISO: '2026-10-23',
+    title: 'The state WheelRack’s frames could not show',
+    dek: 'WheelRack’s hardest state was one sentence in a spec frame. I rebuilt it as a code prototype, with its transitions, timings and reduced-motion version.',
+    read: '4 min',
+  },
+  {
     slug: 'the-line-between-figma-and-the-codebase',
     kind: 'practice',
     origin: 'portfolio',

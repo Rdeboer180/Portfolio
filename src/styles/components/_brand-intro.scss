@@ -1,0 +1,83 @@
+// The brand plate drawn over a study's reel before it plays (BrandIntro.tsx).
+// One clock, in CSS: the trace draws (0 to 1.1s), its nodes pop as it
+// passes, the letterforms wipe in along it (0.9 to 1.9s), the trace settles
+// into the art (1.7 to 2.1s), the plate holds, then lifts (2.6 to 3.1s). The
+// lift's animationend is the component's hand-off to the reel.
+$bi-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+.brand-intro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+  animation: brandIntroLift 500ms $bi-ease 2600ms both;
+
+  // held on its first frame until BrandIntro sees it on screen
+  &:not(.is-running),
+  &:not(.is-running) * { animation-play-state: paused; }
+
+  &__mark {
+    width: min(46%, 520px);
+    height: auto;
+    overflow: visible;
+  }
+
+  // the letterforms, wiped in left to right once the trace is ahead of them
+  &__art {
+    clip-path: inset(-10% 110% -10% -2%);
+    animation: brandIntroWipe 1000ms $bi-ease 900ms both;
+  }
+
+  &__trace {
+    animation: brandIntroSettle 400ms ease 1700ms both;
+
+    path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: brandIntroDraw 1100ms $bi-ease both;
+    }
+  }
+
+  &__node {
+    fill: #fff;
+    transform: scale(0);
+    animation: brandIntroPop 320ms $bi-ease both;
+  }
+}
+
+@keyframes brandIntroDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes brandIntroPop {
+  from { transform: scale(0); }
+  70% { transform: scale(1.18); }
+  to { transform: scale(1); }
+}
+
+@keyframes brandIntroWipe {
+  from { clip-path: inset(-10% 110% -10% -2%); }
+  to { clip-path: inset(-10% -2% -10% -2%); }
+}
+
+@keyframes brandIntroSettle {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes brandIntroLift {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // BrandIntro renders nothing here; the rule is a belt for a plate painted
+  // before the hook reads the setting.
+  .brand-intro { display: none; }
+}

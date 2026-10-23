@@ -237,6 +237,9 @@
       margin: 0 0 $spacing-3xl;
       overflow: visible;
 
+      // the reel's frame, where a brand intro lays its plate
+      .cs__reel { position: relative; border-radius: $card-border-radius-lg; }
+
       video {
         display: block;
         width: 100%;

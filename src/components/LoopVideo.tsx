@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
-/** Silent, GIF-like media. The whole frame is the keyboard and touch toggle. */
-export default function LoopVideo({ src, poster, label, captions }: { src: string; poster?: string; label: string; captions?: string }) {
+/** Silent, GIF-like media. The whole frame is the keyboard and touch toggle.
+ *  `hold` keeps it on its poster (a brand intro playing over it) until released. */
+export default function LoopVideo({ src, poster, label, captions, hold = false }: { src: string; poster?: string; label: string; captions?: string; hold?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
   const [inView, setInView] = useState(false);
   const [visible, setVisible] = useState(!document.hidden);
   const [choice, setChoice] = useState<'play' | 'pause' | null>(null);
   const [playing, setPlaying] = useState(false);
-  const shouldPlay = inView && visible && (choice === 'play' || (!reduced && choice !== 'pause'));
+  const shouldPlay = !hold && inView && visible && (choice === 'play' || (!reduced && choice !== 'pause'));
   useEffect(() => {
     const update = () => setVisible(!document.hidden);
     document.addEventListener('visibilitychange', update);

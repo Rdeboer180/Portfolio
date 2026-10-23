@@ -17,6 +17,7 @@ import ProjectOverview from './ProjectOverview';
 import FramedViewport from './FramedViewport';
 import { ProjectContext } from './ProjectBrand';
 import WheelRackLibraryTour from './WheelRackLibraryTour';
+import BrandIntro from './BrandIntro';
 import '../styles/styles.scss';
 
 /* ─── Lightbox ─── */
@@ -542,6 +543,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
 
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
   const [thesisRef, thesisVisible] = useReveal<HTMLDivElement>(0.3);
+  // The reel, so a brand intro (BrandIntro) can start it as its plate lifts.
+  const reelRef = useRef<HTMLVideoElement>(null);
 
   // One unlock covers every protected surface on the site — the password gates
   // the person, not the page. The prompt itself is raised once on first load by
@@ -701,16 +704,29 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
             one glance away after the resolve. */}
         {!locked && project.featuredReel && (
           <figure className="cs__featured-image cs__featured-image--video">
-            <video
-              src={project.featuredReel.src}
-              poster={project.featuredReel.poster}
-              aria-label={project.featuredReel.alt}
-              controls
-              playsInline
-              preload="metadata"
-            >
-              {project.featuredReel.captions && <track kind="captions" src={project.featuredReel.captions} srcLang="en" label="English" />}
-            </video>
+            {/* The brand plate draws in over the reel's poster, then the reel
+                starts muted; without the plate the reel waits to be played. */}
+            <div className="cs__reel">
+              <video
+                ref={reelRef}
+                src={project.featuredReel.src}
+                poster={project.featuredReel.poster}
+                aria-label={project.featuredReel.alt}
+                controls
+                playsInline
+                preload={project.reelIntro ? 'auto' : 'metadata'}
+              >
+                {project.featuredReel.captions && <track kind="captions" src={project.featuredReel.captions} srcLang="en" label="English" />}
+              </video>
+              {project.reelIntro && (
+                <BrandIntro brand={project.reelIntro} onDone={() => {
+                  const v = reelRef.current;
+                  if (!v) return;
+                  v.muted = true;
+                  v.play()?.catch(() => {});
+                }} />
+              )}
+            </div>
             {project.featuredReel.caption && (
               <figcaption className="cs__caption">{project.featuredReel.caption}</figcaption>
             )}

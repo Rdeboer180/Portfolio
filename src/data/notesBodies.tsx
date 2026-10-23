@@ -4,6 +4,8 @@ import LinkedInLink from '../components/LinkedInLink';
 import PaperArtboardGallery from '../components/PaperArtboardGallery';
 import playdraft from './playdraft.json';
 import { SystemsBoard } from '../components/SystemsInPractice';
+import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
+import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
 // dates and the rest live in notes.tsx, which the homepage and the index read
@@ -120,6 +122,63 @@ const StackItem: React.FC<{
 );
 
 export const NOTE_BODIES: Record<string, React.ReactNode> = {
+  'playdraft-pick-on-the-clock': (
+    <>
+      <p>In <Link to="/work/playdraft/">PlayDraft</Link>&rsquo;s draft room, the Queue tab makes one promise: <em>#1 is your next target</em>. Until 15 August 2026, the clock did not keep it. When a turn ran out, the room drafted the top row of the Available list, which moves with the search box and the category chips. A player who queued three names, typed into search and let the clock run got something they never chose and could not have predicted.</p>
+      <p>The queue was written, saved and reorderable. Nothing read it. Every screen of the room looked right in isolation; the bug lived in the seconds between them, where a static frame has nothing to show.</p>
+      <p><strong>A rule about what happens when nobody is touching anything can only be reviewed by watching it happen.</strong></p>
+      <p>So I rebuilt the pick on the clock as a prototype, with the app&rsquo;s rules copied from its own code and a 20-second clock so you do not have to wait out a real one. Press <em>Try the bug</em>, run the clock out, then switch the rule and do it again.</p>
+
+      <PlayDraftClockPrototype />
+
+      <h2>The clock&rsquo;s choice has an order, and the order is the promise</h2>
+      <p>When a turn expires, the fix drafts the first item in your queue that is still available, in your own order. If someone already took it, it skips it and keeps going, because one sniped pick should not switch off the rest of the queue. With an empty queue, the common case, it takes the top of the visible list, as the old rule did. If a search has filtered everything away, it falls back to the whole pool, so the room can never sit at 0:00. In the app that order is a small function with its own tests, outside the draft screen, because it decides what a player ends up owning without them touching anything.</p>
+      <p>The prototype marks the clock&rsquo;s target with a gold edge, in whichever list the current rule reads, so you can see what it is about to take before it takes it.</p>
+
+      <h2>0:00 has to say something</h2>
+      <p>The live room&rsquo;s server gives a missed pick a grace period and resolves it on a sweep, so the clock can sit at zero for a minute or more. In the first QA draft that silence read as a broken room. Now the strip says <em>Time&rsquo;s up</em> and <em>Auto-picking for you</em> for as long as it takes. The prototype holds that state for 1.4 seconds, and then the clock says what it took and why.</p>
+      <p>The other states are smaller decisions with the same aim, making the room&rsquo;s next move legible: the strip goes gold when it is your turn, warns <em>&times;2</em> when the snake gives you back-to-back picks, and turns red at ten seconds, which a screen reader hears once. Bots take the most popular item left, 650ms into their turn, long enough to read as a pick and short enough that a round takes seconds. Under reduced motion the clock still turns red, it just does not pulse.</p>
+
+      <h2>What I would hand over now</h2>
+      <ul>
+        <li>The clock&rsquo;s fallback order as a function with tests, kept out of the screen component.</li>
+        <li>Every state of the on-clock strip, with its copy, including the ones nobody designs on purpose: paused, expired, and waiting on the server.</li>
+        <li>A prototype someone can break by doing two things at once: queue a pick, search for something else, and let the clock run.</li>
+      </ul>
+      <p>Agents built PlayDraft&rsquo;s room from my rules, and Claude Code built this prototype from the app&rsquo;s own functions. The rule I had not written down was the one that mattered: what the clock does when you are not looking. That gap was mine, and so was deciding the order that closed it.</p>
+      <p>The bug is fixed. What I keep wondering is how many other rooms have a queue nothing reads.</p>
+    </>
+  ),
+  'prototyping-wheelrack-fitment': (
+    <>
+      <p>The hardest state in the <Link to="/work/wheelrack/">WheelRack</Link> purchasing component was one sentence in a spec frame: <em>Your selected finish/fitment combination is unavailable. The closest alternative has been selected on your behalf.</em> A dealer picks a finish, and the size they had chosen does not exist in it. The system changes their order for them and says so.</p>
+      <p>The frame showed the after. It could not show which row moved, how a dealer finds it, how long the change stays marked, what happens to the total on the way, or what a screen reader hears. Those answers lived in my head, in Slack threads with Cheryl Carpenter, who owned the React build, and in the 40+ hours I spent comparing that build against Figma.</p>
+      <p><strong>A static comp can show a state. Only a prototype can show the change between two of them.</strong></p>
+      <p>So I rebuilt the component in code for this note. The states and the rule are the 2024 spec&rsquo;s. The sizes, finishes and prices are sample data. Pick Matte Bronze or Gloss Silver and watch the rows.</p>
+
+      <WheelRackFitmentPrototype />
+
+      <h2>The rule is a function, not a sentence</h2>
+      <p>&ldquo;Closest alternative&rdquo; reads as obvious until two sizes are equally close. In the prototype it is three comparisons in order: the same diameter first, then the nearest width, then the nearest offset. Written that way, an engineer can test it, and a product owner can disagree with it before it ships instead of after.</p>
+
+      <h2>The system acted, so it has to point at what it did</h2>
+      <p>The changed row gets a warm wash that fades over 900ms, long enough for the eye to land on it once, short enough that it is gone by the time the dealer reaches the quantity. The note slides up 4px in 220ms. The totals count to their new value in 240ms, so the price change reads as a consequence rather than a glitch. Focus stays on the finish the dealer picked; moving it to the changed row would punish them for a choice that was valid.</p>
+      <p>A screen reader hears one sentence that names both sizes: the one that was chosen and the one that replaced it. The visual note says the same thing in the spec&rsquo;s words.</p>
+
+      <h2>Reduced motion is a different state, not a slower one</h2>
+      <p>Turn on Reduced motion in the inspector and nothing animates. The wash would have been the only signal of which row changed, so it becomes a static &ldquo;Changed&rdquo; tag that stays until the dealer touches a control. Slow motion does the opposite: every timing runs four times longer, from the same variables, so what you review is what ships.</p>
+
+      <h2>What the handoff would carry</h2>
+      <ul>
+        <li>Four named states: resting, closest alternative, square fitment, and the quote partner&rsquo;s action.</li>
+        <li>A timing table for every change, with its reduced-motion behavior beside it.</li>
+        <li>The closest-alternative rule as a testable function, and the sentence a screen reader announces.</li>
+        <li>The things that do not change: the action keeps one footprint when Add to cart becomes Get quote, and the rear row folds away rather than jumping when the vehicle is square.</li>
+      </ul>
+      <p>Claude Code built this component from the spec frames and the rule as I wrote them. I set what each state had to show, the timings, and what reduced motion keeps, and I checked the result against the original frames.</p>
+      <p>Would this have saved hours in 2024? Some of them. The reconciliation was mostly about tokens and responsive behavior, which a prototype does not settle on its own. But this state would have reached Cheryl as something she could click instead of something she had to imagine.</p>
+    </>
+  ),
   'the-line-between-figma-and-the-codebase': (
     <>
       <p>The through line between our AEM codebase and Figma is getting thinner and thinner. With the MCP connection, I can now push from code to Figma and from Figma to code, and bring an idea in and out of production with general ease.</p>

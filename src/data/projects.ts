@@ -193,6 +193,8 @@ export interface Project {
   featuredVideoPublic?: boolean;
   /** Case-study hero reel, distinct from the short homepage card loop. */
   featuredReel?: { src: string; poster: string; alt: string; caption?: string; captions?: string };
+  /** A brand drawn in over the reel before it plays (BrandIntro). */
+  reelIntro?: 't1d-hub';
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
   // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
@@ -625,6 +627,7 @@ const projects: Project[] = [
     outcomeLiveLinks: [
       { label: 'Explore the live WheelRack experience', url: 'https://wheelrack.com/pitstop/search' },
     ],
+    relatedNote: { href: '/notes/prototyping-wheelrack-fitment/', label: 'The state WheelRack’s frames could not show', lead: 'The closest-alternative state, rebuilt as a code prototype:' },
     outcomeLiveLinksLabel: 'Live product',
     metrics: [
       { value: 'Wholesale', label: 'Framework reused 6 months after the build' },
@@ -792,21 +795,22 @@ const projects: Project[] = [
   {
     slug: 'bolus-binder',
     coverGround: '#ecf1f6',
-    client: 'Bolus Binder (personal product) · T1D Hub (local clinic)',
-    context: 'Bolus Binder is my independent recipe app for people living with Type 1 diabetes. Its visual system draws on T1D Hub, a separate identity engagement for a local Type 1 diabetes clinic.',
-    title: 'Bolus Binder: A diabetes-aware recipe keeper',
+    client: 'Bolus Binder (personal product) · T1D Hub (Dr. Brian Huber’s Type 1 practice)',
+    context: 'T1D Hub is the Type 1 diabetes practice Dr. Brian Huber is building, and in partnership with Brian I oversee its brand: the logo, the design system behind it, and the site, where I work directly with his marketing team. Bolus Binder is the companion app that carries that system into the kitchen, so a patient can see how a meal or recipe is likely to metabolize before they cook it.',
+    title: 'Bolus Binder: Cooking comes first. Design systems carry further.',
     cardTitle: 'Bolus Binder: Cooking comes first',
-    cardHook: 'I designed and built a React Native recipe app around living with Type 1 diabetes, keeping portions, nutrition, and meal planning close to the food.',
+    cardHook: 'I built the T1D Hub brand with Dr. Brian Huber’s practice, then carried its system into Bolus Binder, a React Native companion app that keeps portions, nutrition and estimated absorption close to the food.',
     cardStatus: '[ In TestFlight ]',
-    seoTitle: 'Bolus Binder: a diabetes-aware recipe app in React Native, on the T1D Hub design system',
+    seoTitle: 'Bolus Binder: a diabetes-aware recipe app in React Native, built on the T1D Hub brand system',
     summary:
-      'I designed and built a React Native recipe app around my own Type 1 diabetes workflow: saving recipes, adjusting portions, planning meals, and keeping nutrition context close to the food.',
+      'I designed and built a React Native recipe app around my own Type 1 diabetes workflow: saving recipes, scaling portions, planning meals, and keeping nutrition and estimated absorption close to the food. Its visual system is T1D Hub’s, the clinic brand I own in partnership with Dr. Brian Huber, from the logo through the design system to the site his marketing team runs. A controlled diabetic already reads a CGM trace every day; the brand and the app meet that expectation instead of competing with it.',
+    reelIntro: 't1d-hub',
     thesis: 'Save the recipe. Understand the meal.',
     year: '2026',
-    tags: ['Product Design', 'Mobile (iOS)', 'Brand System', 'Design System', 'Health Data', 'React Native'],
-    role: 'Product Design · Brand & Design System · Agent-Assisted Build (React Native)',
-    tools: ['Figma', 'React Native', 'Expo', 'Claude', 'VS Code'],
-    timeline: 'April → August 2026 · TestFlight',
+    tags: ['Product Design', 'Mobile (iOS)', 'Brand Identity', 'Brand System', 'Design System', 'Health Data', 'React Native'],
+    role: 'Brand Lead (T1D Hub) · Product Design · Design System · Agent-Assisted Build (React Native)',
+    tools: ['Figma', 'Illustrator', 'React Native', 'Expo', 'Claude', 'VS Code'],
+    timeline: 'T1D Hub brand live July 2026 · Bolus Binder April → August 2026, in TestFlight',
     stream: 'passion',
     groups: ['product'],
     clientLabel: 'Personal product',
@@ -819,43 +823,40 @@ const projects: Project[] = [
       caption: 'A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.',
     },
     timeToLive:
-      'Concept in April, named in August, TestFlight build running now.',
+      'T1D Hub mark and system in the spring, the clinic site live in July 2026, Bolus Binder in TestFlight since August.',
     metrics: [
-      { value: 'React Native + Expo', label: 'Agent-assisted iOS build' },
-      { value: 'v1.0', label: 'T1D Hub design system, delivered June 2026 for a local Type 1 clinic' },
-      { value: '12', label: 'Color tokens carrying clinical semantics: in range, above range, urgent low' },
-      { value: '3', label: 'Type roles: Sora for display, Inter for body, JetBrains Mono for data' },
+      { value: 'React Native + Expo', label: 'Agent-assisted iOS build · Running in TestFlight' },
+      { value: '1 → 2', label: 'One system, two experiences · The T1D Hub clinic brand and the Bolus Binder companion app' },
+      { value: '1.5×', label: 'Portion-aware nutrition · Macros and the absorption estimate rescale with the serving' },
+      { value: '12', label: 'Color tokens carrying clinical semantics · In range, above range, urgent low' },
+      { value: 'July 2026', label: 'T1D Hub brand live · Logo, design system and site, with the practice’s marketing team' },
     ],
 
     problemPunch: 'Cooking and nutrition context belong together.',
     problem: [
-  "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it."
+  "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
+  "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge.",
 ],
 
     gapsPunch: 'A portion change should update the whole recipe.',
     gaps: [
       'Changing the portion needed to update ingredients and nutrition together. Saved recipes, versions, and cooking history also needed to remain useful when I returned to a meal.',
+      'The brand had to work in two places at once: on the clinic site Brian’s marketing team runs, and inside an app that shows how a meal is likely to metabolize. One system, or the two would drift.',
 ],
 
     constraintsPunch: 'Describe behavior, never prescribe a dose.',
     constraints: [
       'The app presents nutrition context, estimates, and cooking history. It never tells anyone how much insulin to take, and the copy holds that line.',
+      'The trace, the in-range green and the alert red mean the same thing in the app as on a CGM. Nothing in the interface uses them decoratively, so a reading never looks like a decoration and a decoration never looks like a reading.',
     ],
 
     approachSubsections: [
       {
-        key: 'model',
-        label: 'Keep recipes, versions, and cooking events distinct',
-        systemMarker: 'DATA MODEL',
+        key: 'brand',
+        label: '01 — A real brand, built to be used',
+        systemMarker: 'BRAND',
         description:
-          'Recipes retain their ingredients, steps, and saved versions. Cooking events build a separate log, so planning and cooking do not erase the recipe. Bolus Binder starts with food and nutrition context; LoopStack is a separate app for reviewing observed glucose patterns.',
-      },
-      {
-        key: 'system',
-        label: "A visual foundation from separate clinic identity work",
-        systemMarker: 'BRAND + SYSTEM',
-        description:
-          "The visual language draws on the T1D Hub identity system I created for a local Type 1 clinic. That is a separate engagement. The brand boards shown here document its colors, type and logo rules, not the Bolus Binder app interface or clinic use of the app.",
+          'Brian is a close friend, and I have been a Type 1 for most of my life, so the practice did not get a designer looking at a healthcare brief. It got a patient. I drew the T1D Hub mark around the one line a Type 1 reads every day: a CGM trace runs through the wordmark, entering at the T and holding the name together, and it has to stay connected in every configuration. Around the mark I built the foundations the practice could run without me: the logo system, the palette, the type, and the rules written beside each one. Those are what Brian’s marketing team works from on the site, and what I review with them when a page goes up.',
         gridColumns: 2,
         images: [
           {
@@ -869,13 +870,23 @@ const projects: Project[] = [
             src: '/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png',
             alt: 'T1D Hub logo system page showing primary and reversed lockups alongside five usage rules.',
             layout: 'half',
-            caption: 'Four approved configurations, with the constraints written next to them.',
+            caption: 'Four approved configurations, with the constraints written next to them, so the marketing team can place the mark without asking.',
           },
+        ],
+      },
+      {
+        key: 'system',
+        label: '02 — From clinic identity to companion app',
+        systemMarker: 'DESIGN SYSTEM',
+        description:
+          'Bolus Binder is built on the same system, not a lookalike of it. The twelve color tokens carry their clinical meaning across: green is in range, amber is above, red is an urgent low, on the clinic site and in the app alike, so the colors a patient already trusts on a CGM mean the same thing when they open a recipe. Sora carries the headings, Inter the body, and JetBrains Mono is reserved for numbers, so a glucose figure or a carb count never reads as prose. The component behaviors and the hierarchy follow the same rules. That is the bridge between the brand work for the practice and the product I built on it.',
+        gridColumns: 2,
+        images: [
           {
             src: '/images/work/bolus-binder/supporting/approach/t1dhub-color-system.png',
             alt: 'T1D Hub color system: twelve tokens across navy, sky, neutral and alert families, plus four gradients.',
             layout: 'half',
-            caption: 'Alert red, amber and green carry clinical meaning, so they are never used decoratively.',
+            caption: 'Alert red, amber and green carry clinical meaning, so they are never used decoratively, on the site or in the app.',
           },
           {
             src: '/images/work/bolus-binder/supporting/approach/t1dhub-type-system.png',
@@ -885,16 +896,71 @@ const projects: Project[] = [
           },
         ],
       },
+      {
+        key: 'product',
+        label: '03 — Cooking first, diabetes context second',
+        systemMarker: 'PRODUCT',
+        description:
+          'The recipe comes first. Scale a serving and the ingredients, the net carbs, protein and fat, and the estimated absorption pattern move together, so a patient can see how the meal is likely to metabolize before they cook it. Recipes keep their ingredients, steps and saved versions; cooking events go to a separate log, so planning and cooking never erase the recipe. The absorption curve is labelled as an estimate. It is not an observed CGM reading and never a dose; reviewing observed glucose patterns belongs to LoopStack, a separate app.',
+        gridColumns: 3,
+        images: [
+          {
+            src: '/images/work/bolus-binder/app/04-recipe-detail-hero.png',
+            alt: 'Bolus Binder recipe detail with the photo, the serving control and the nutrition rings',
+            layout: 'half',
+            crop: { x: 0, y: 150, width: 1206, height: 1650, sourceWidth: 1206, sourceHeight: 2622 },
+            caption: 'The recipe, with its serving control and nutrition rings. Simulator capture, demo data.',
+          },
+          {
+            src: '/images/work/bolus-binder/app/06-recipe-detail-collapsed.png',
+            alt: 'Collapsed recipe header keeps the scaled portion and nutrition totals visible',
+            layout: 'half',
+            crop: { x: 0, y: 150, width: 1206, height: 1650, sourceWidth: 1206, sourceHeight: 2622 },
+            caption: 'Scale the portion and the totals follow it through the steps.',
+          },
+          {
+            src: '/images/work/bolus-binder/app/07-nutrition-expected-response.png',
+            alt: 'Nutrition view marks its absorption pattern as Estimated',
+            layout: 'half',
+            crop: { x: 0, y: 1220, width: 1206, height: 1350, sourceWidth: 1206, sourceHeight: 2622 },
+            caption: 'The two-wave absorption estimate, labelled as an estimate.',
+          },
+        ],
+      },
+      {
+        key: 'build',
+        label: '04 — From design ownership to TestFlight',
+        systemMarker: 'BUILD',
+        description:
+          'The foundations were drawn in Figma and taken into React Native with Expo through an agent-assisted build: I set the system, described each screen against it, reviewed the working states, and refined the interface where the build drifted from the tokens or the hierarchy. The result is a working app distributed through TestFlight, so the people it is for can cook with it rather than look at a prototype of it.',
+        gridColumns: 2,
+        images: [
+          {
+            src: '/images/work/bolus-binder/app/01-recipes-home.png',
+            alt: 'Bolus Binder recipe library on the T1D Hub system',
+            layout: 'half',
+            crop: { x: 0, y: 150, width: 1206, height: 1650, sourceWidth: 1206, sourceHeight: 2622 },
+            caption: 'The library, on the clinic’s type and color system.',
+          },
+          {
+            src: '/images/work/bolus-binder/app/16-cook-mode.png',
+            alt: 'Bolus Binder cook mode, one step at a time',
+            layout: 'half',
+            crop: { x: 0, y: 150, width: 1206, height: 1650, sourceWidth: 1206, sourceHeight: 2622 },
+            caption: 'Cook mode, the state reviewed most often during the build.',
+          },
+        ],
+      },
     ],
 
     outcomeNote:
-      'The React Native app is in TestFlight. The simulator captures show implemented flows with demo data, not measured health outcomes or evidence of clinical adoption. Observed glucose integration remains future work.',
+      'The T1D Hub brand is live on the practice’s site, authored by Brian’s marketing team from the system and reviewed with me. The Bolus Binder companion app is in TestFlight. The simulator captures show implemented flows with demo data, not measured health outcomes or evidence of clinical adoption. Observed glucose integration remains future work.',
     outcomeImages: [
       {
         src: '/images/work/bolus-binder/supporting/outcome/t1dhub-cgm-visual-language.png',
         alt: 'CGM visual language: a 24-hour glucose trace with in-range, above and below bands, beside a Time In Range summary.',
         layout: 'full',
-        caption: 'The chart language Bolus Binder inherits: green in range, amber above, red urgent low.',
+        caption: 'The chart language the brand and the app share with the CGM a patient already reads: green in range, amber above, red urgent low.',
       },
     ],
     outcomeInstall: {
@@ -943,6 +1009,15 @@ const projects: Project[] = [
     tools: ['Adobe Experience Manager', 'Adobe Target', 'Figma', 'HTML/SCSS', 'Adobe Creative Suite'],
     timeline: '10+ years',
     featured: '/images/work/seasonal-content-system/CS_thumbnail_AEM_Winterization_safe.jpg',
+    // The intro reel (scripts/seasonal-reel, render-seasonal-reel.mjs): the
+    // live winter pages on 23 Oct 2026 against the Internet Archive's
+    // non-winter copies of the same URLs. Not public before unlock.
+    featuredReel: {
+      src: '/images/work/seasonal-content-system/seasonal-swap-reel.mp4',
+      poster: '/images/work/seasonal-content-system/seasonal-swap-reel-poster.jpg',
+      alt: 'The Tire Rack homepage, tires and packages pages on a season timeline: a frost line winterizes each page, the swapped fragments are named, then each page splits to show the non-winter version southern states see beside the winter version for winter climates.',
+      caption: 'Winter pages captured live on 23 October 2026; non-winter pages from the Internet Archive (homepage 2 August 2026, tires 11 July 2026, packages 6 August 2025). The archive kept no tires hero image, so that pair starts at the headline.',
+    },
     timeToLive: '10+ years of continuous ownership. Deployed seasonally each fall, with same-day content swaps.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -2496,8 +2571,8 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   }),
   'bolus-binder': p => ({
     title: 'Bolus Binder', category: "Personal product", status: 'TestFlight · React Native build',
-    deck: 'Living with Type 1 diabetes, I wanted cooking to come first. I designed and built a recipe keeper that brings portions, nutrition context, and meal planning into one app.',
-    ownership: 'I own the product direction, UX/UI, design system, and agent-assisted React Native build. The app draws on the T1D Hub visual system from my separate clinic identity work.',
+    deck: 'Living with Type 1 diabetes, I wanted cooking to come first. I built the T1D Hub brand with Dr. Brian Huber’s practice, then carried its system into a companion app that brings portions, nutrition context, and estimated absorption into one place.',
+    ownership: 'In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI, design system, and agent-assisted React Native build of Bolus Binder.',
     decisions: [
       { title: 'Keep the recipe familiar', body: 'I kept saving and cooking recipes at the center. Familiar folders, timing filters, and saved versions help me return to a meal; a separate cooking log preserves when I made it.', image: { src: '/images/work/bolus-binder/app/03-folder-dinners.png', alt: 'Dinner recipes grouped in a folder with timing and rating filters', layout: 'half', crop: { x: 0, y: 150, width: 1206, height: 1650, sourceWidth: 1206, sourceHeight: 2622 }, caption: 'Recipe organization · simulator capture with demo data.' } },
       { title: 'Make portions change the whole meal', body: 'Portion changes update the ingredient quantities and nutrition together. The collapsed header keeps the portion and macro totals visible as I move through the recipe.', image: { src: '/images/work/bolus-binder/app/06-recipe-detail-collapsed.png', alt: 'Collapsed recipe header keeps the scaled portion and nutrition totals visible', layout: 'half', crop: { x: 0, y: 150, width: 1206, height: 1550, sourceWidth: 1206, sourceHeight: 2622 }, caption: 'Scaled portion and nutrition context · seeded demo data.' } },

@@ -57,7 +57,13 @@ const capabilities: Capability[] = [
   {
     name: 'Visual craft & prototyping',
     icon: 'craft',
-    used: [{ title: 'Heatherwood', href: '/work/heatherwood/', mode: 'hands-on' }],
+    // The two prototype notes' components were built by Claude Code from
+    // Ryan's spec and PlayDraft's own rules, so they carry the directed line.
+    used: [
+      { title: 'Heatherwood', href: '/work/heatherwood/', mode: 'hands-on' },
+      { title: 'WheelRack prototype', href: '/notes/prototyping-wheelrack-fitment/', mode: 'directed' },
+      { title: 'PlayDraft prototype', href: '/notes/playdraft-pick-on-the-clock/', mode: 'directed' },
+    ],
     props: [{ label: 'Tools', text: 'Figma · Illustrator · Photoshop · Figma Make' }],
     practice: 'Identity, type and interface design, carried into a site the owner can maintain.',
   },

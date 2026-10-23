@@ -11,6 +11,7 @@ import '../styles/components/_project-overview.scss';
 import { ProjectContext } from './ProjectBrand';
 import FramedViewport from './FramedViewport';
 import BinderTop from './BinderTop';
+import BrandIntro from './BrandIntro';
 
 /** Keep related work in the sentence, with the same route-backed drawer navigation. */
 const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
@@ -82,6 +83,7 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
   };
   const overview = project.overview!;
   const reel = project.featuredReel;
+  const [introDone, setIntroDone] = React.useState(false);
   // Opened from the homepage binder: the study's top is the binder's (the
   // sleeve its card tucks into, the reel and the walkthrough video), first in
   // the article so a phone shows it before the rail.
@@ -116,7 +118,12 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
         <section id={fromBinder ? undefined : 'project-walkthrough'} aria-label={project.featuredVideo || reel || overview.opening?.isVideo ? 'Product walkthrough' : 'Project evidence'}>
           {!fromBinder && !reel && <ProjectPreview project={project} />}
           {!fromBinder && reel && <figure className="project-overview__reel">
-            <LoopVideo src={reel.src} poster={reel.poster} label={reel.alt} captions={reel.captions} />
+            {/* A brand intro draws in over the reel's poster and holds the
+                loop until its plate lifts (Bolus Binder opens on T1D Hub). */}
+            <div className="project-overview__reel-frame">
+              <LoopVideo src={reel.src} poster={reel.poster} label={reel.alt} captions={reel.captions} hold={Boolean(project.reelIntro) && !introDone} />
+              {project.reelIntro && !introDone && <BrandIntro brand={project.reelIntro} onDone={() => setIntroDone(true)} />}
+            </div>
             <figcaption>{reel.caption}</figcaption>
           </figure>}
           {!fromBinder && !project.featuredVideo && !reel && overview.opening && <OverviewMedia image={overview.opening} opening />}

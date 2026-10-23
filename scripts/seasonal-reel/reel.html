@@ -1,0 +1,174 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Seasonal content intro reel (render-seasonal-reel.mjs). Three Tire Rack
+   pages as slices on one season timeline. The marker runs from August to
+   October, a frost line winterizes each page in turn, the fragments that
+   changed are named, then the same three URLs split down the middle to show
+   both audiences at once: southern states keep the non-winter fragment,
+   winter climates get the winter one. The thaw returns it to the start, so it
+   loops. Driven by seek(t); no CSS animation, so every frame is exact.
+
+   Sources: winter, tirerack.com on 23 October 2026. Non-winter, the Internet
+   Archive: homepage 2 August 2026, tires 11 July 2026, packages 6 August 2025.
+   The archive kept no tires hero image, so the tires pair starts at the
+   headline in both seasons. */
+:root{--ink:#16181b;--paper:#f4f5f7;--slate:#4a4f57;--mute:#8b919a;--hair:#dfe2e6;--frost:#9fd3ff;--frost-deep:#2d7fd3;--sun:#f0a020;--red:#d40000;--head:'Hubot Sans',Inter,sans-serif;--body:Inter,-apple-system,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--paper)}
+#stage{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--paper);-webkit-font-smoothing:antialiased;font-family:var(--body);color:var(--ink)}
+#sky{position:absolute;inset:0;background:linear-gradient(180deg,#eef6ff 0%,var(--paper) 60%);opacity:0}
+.eyebrow{position:absolute;left:64px;top:38px;font:600 12px/1 var(--mono);letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
+#title{position:absolute;left:64px;top:58px;font:800 30px/1.1 var(--head);letter-spacing:-.01em}
+#title span{display:inline-block}
+.slice{position:absolute;top:124px;width:300px;height:500px}
+.slice .url,.slice .aud{position:absolute;left:0;right:0;top:-24px;height:14px;font:600 12px/1 var(--mono);color:var(--slate)}
+.slice .aud span{position:absolute;top:0;letter-spacing:.06em;text-transform:uppercase}
+.slice .aud .s{left:0}.slice .aud .w{right:0;color:var(--frost-deep)}
+.slice .url b{color:var(--mute);font-weight:500}
+.page{position:absolute;inset:0;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 1px 0 rgba(22,24,27,.06),0 18px 40px -18px rgba(22,24,27,.35)}
+.page img{position:absolute;left:0;top:0;width:300px;height:500px;display:block}
+.page .winter{clip-path:inset(0 0 100% 0)}
+.page .fade{position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 92%)}
+.edge{position:absolute;left:-6px;right:-6px;height:3px;border-radius:2px;background:#fff;box-shadow:0 0 0 1px var(--frost),0 0 18px 6px rgba(159,211,255,.85);opacity:0}
+.split{position:absolute;top:-8px;bottom:-8px;width:2px;left:150px;background:var(--ink);opacity:0}
+.split:before{content:"";position:absolute;left:-5px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--ink)}
+.chip{position:absolute;left:12px;padding:6px 9px 6px 8px;border-radius:6px;background:var(--ink);color:#fff;font:600 11.5px/1 var(--mono);letter-spacing:.02em;white-space:nowrap;opacity:0;display:flex;align-items:center;gap:7px}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--frost)}
+.season{position:absolute;top:-28px;padding:4px 7px;border-radius:5px;font:600 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:0}
+.season.w{right:0;background:var(--frost-deep);color:#fff}
+.season.s{right:0;background:#fff;color:var(--ink);box-shadow:0 0 0 1px var(--hair)}
+/* the season timeline */
+#line{position:absolute;left:64px;right:64px;top:668px;height:2px;background:var(--hair)}
+#line .fill{position:absolute;left:0;top:0;height:2px;background:linear-gradient(90deg,var(--sun),var(--frost-deep));transform-origin:0 50%}
+.month{position:absolute;top:681px;transform:translateX(-50%);font:600 11px/1 var(--mono);letter-spacing:.1em;color:var(--mute)}
+#marker{position:absolute;top:661px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--sun)}
+#date{position:absolute;top:634px;transform:translateX(-50%);padding:6px 9px;border-radius:6px;background:var(--ink);color:#fff;font:600 12px/1 var(--mono);white-space:nowrap}
+#end{position:absolute;inset:0;display:grid;place-items:center;background:rgba(22,24,27,.86);opacity:0}
+#end .k{display:flex;gap:56px}
+#end .k div{color:#fff;text-align:left}
+#end .k b{display:block;font:800 54px/1 var(--head);letter-spacing:-.02em}
+#end .k span{display:block;margin-top:10px;font:500 14px/1.35 var(--body);color:#c9ced6;max-width:190px}
+#end p{position:absolute;bottom:92px;left:0;right:0;text-align:center;margin:0;font:600 13px/1 var(--mono);letter-spacing:.08em;color:#9aa1ab;text-transform:uppercase}
+#snow{position:absolute;inset:0;pointer-events:none}
+#snow i{position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 2px rgba(45,127,211,.35)}
+</style></head><body><div id="stage">
+<div id="sky"></div>
+<div class="eyebrow">Tire Rack · AEM Experience Fragments + Adobe Target</div>
+<div id="title"><span id="t1">Same URLs.</span> <span id="t2">Two seasons.</span></div>
+<div id="slices"></div>
+<div id="snow"></div>
+<div id="line"><div class="fill"></div></div>
+<div id="months"></div>
+<div id="marker"></div>
+<div id="date"></div>
+<div id="end"><div class="k">
+  <div><b>20+</b><span>Experience Fragments swapped by authoring</span></div>
+  <div><b>6</b><span>High-traffic landing pages governed</span></div>
+  <div><b>0</b><span>Page rebuilds or duplicate URLs for the season</span></div>
+</div><p>Same URLs · southern states keep non-winter · winter climates get winter</p></div>
+</div>
+<script>
+const SLICES = [
+  { key: 'home', url: 'tirerack.com', path: '/', x: 150, chips: ['Hero image + copy', 'Shop Winter Tires'] },
+  { key: 'tires', url: 'tirerack.com', path: '/tires', x: 490, chips: ['Hero headline'] },
+  { key: 'packages', url: 'tirerack.com', path: '/packages', x: 830, chips: ['Hero image', 'Shop Winter Packages'] },
+];
+const MONTHS = ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'];
+const L = 64, R = 1280 - 64;
+const monthX = (m) => L + (R - L) * (m + 0.5) / MONTHS.length;   // a month label's centre
+document.getElementById('months').innerHTML = MONTHS.map((m, i) => `<div class="month" style="left:${monthX(i)}px">${m}</div>`).join('');
+document.getElementById('slices').innerHTML = SLICES.map((s) => `
+  <div class="slice" id="s-${s.key}" style="left:${s.x}px">
+    <div class="url">${s.url}<b>${s.path}</b></div>
+    <div class="aud"><span class="s">← South</span><span class="w">Winter →</span></div>
+    <div class="season s">Non-winter</div><div class="season w">Winter</div>
+    <div class="page">
+      <img class="summer" src="${s.key}-summer.jpg" alt="">
+      <img class="winter" src="${s.key}-winter.jpg" alt="">
+      <div class="fade"></div>
+      <div class="split"></div>
+    </div>
+    <div class="edge"></div>
+    ${s.chips.map((c, k) => `<div class="chip" style="top:${396 - k * 34}px"><i></i>${c}</div>`).join('')}
+  </div>`).join('');
+
+// deterministic snow
+let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const FLAKES = Array.from({ length: 70 }, () => ({ x: rnd() * 1280, y: rnd() * 720, r: 1.4 + rnd() * 2.6, v: 40 + rnd() * 70, sway: rnd() * 6.28, o: .55 + rnd() * .45 }));
+const snowEl = document.getElementById('snow');
+snowEl.innerHTML = FLAKES.map(() => '<i></i>').join('');
+const flakes = [...snowEl.children];
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ramp = (t, a, b) => clamp((t - a) / (b - a));
+const ease = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const out = (p) => 1 - Math.pow(1 - p, 3);
+const mix = (a, b, p) => a + (b - a) * p;
+const $ = (s, r = document) => r.querySelector(s);
+
+// timeline (seconds)
+const T = { sweep: 1.1, sweepEach: 1.5, stagger: .45, chips: 3.9, split: 6.3, endIn: 9.3, endOut: 11.2, thaw: 11.4, end: 12.6 };
+window.T_END = T.end;
+
+window.seek = (t) => {
+  // season marker: Aug 2 to Oct 1 before the frost, then on to Oct 23 while it sweeps
+  const thaw = ease(ramp(t, T.thaw, T.end));
+  const go = ease(ramp(t, .3, 1.2)), go2 = ease(ramp(t, 1.2, 3.4));
+  const m = (1.05 + 1.95 * go + .71 * go2) * (1 - thaw) + 1.05 * thaw;   // months from Jul 1
+  const mx = L + (R - L) * m / MONTHS.length;
+  $('#marker').style.left = `${mx}px`;
+  $('#marker').style.boxShadow = `0 0 0 3px ${m >= 2.98 ? 'var(--frost-deep)' : 'var(--sun)'}`;
+  $('#line .fill').style.transform = `scaleX(${(mx - L) / (R - L)})`;
+  const d = $('#date'); d.style.left = `${mx}px`;
+  d.textContent = m >= 3.66 ? 'Oct 23 · winter, live' : m >= 2.98 ? 'Oct 1 · winter program' : m >= 2 ? 'Sep · non-winter' : 'Aug 2 · non-winter';
+  $('#sky').style.opacity = String(go2 * (1 - thaw) * (1 - ramp(t, T.split, T.split + .6) * .6));
+
+  // title: second phrase swaps with the season
+  $('#t2').textContent = t < T.split ? 'Two seasons.' : 'Two audiences.';
+  $('#t2').style.opacity = String(t < T.split ? 1 : ramp(t, T.split + .1, T.split + .5));
+  $('#t2').style.color = t < T.split ? (m >= 2.98 ? 'var(--frost-deep)' : 'var(--ink)') : 'var(--frost-deep)';
+
+  const splitP = ease(ramp(t, T.split, T.split + .9)) * (1 - ease(ramp(t, T.endIn - .2, T.endIn + .3)));
+  SLICES.forEach((s, i) => {
+    const el = $(`#s-${s.key}`);
+    const a = T.sweep + i * T.stagger;
+    let p = out(ramp(t, a, a + T.sweepEach));                    // frost reveals winter top to bottom
+    const thawP = ease(ramp(t, T.thaw + i * .1, T.end - .2 + i * .05));
+    p = p * (1 - thawP);
+    const y = 500 * p;
+    // during the split the winter page shows on the right half only
+    const left = 150 * splitP;
+    $('.winter', el).style.clipPath = `inset(0 0 ${500 - y}px ${left}px)`;
+    const edge = $('.edge', el);
+    edge.style.top = `${y - 1}px`;
+    edge.style.opacity = String((p > .01 && p < .99 && thawP === 0) ? 1 : 0);
+    $('.season.w', el).style.opacity = String(clamp(p * 3 - 2) * (1 - thawP) * (1 - splitP));
+    $('.season.s', el).style.opacity = String((1 - clamp(p * 3)) * (1 - splitP));
+    $('.url', el).style.opacity = String(1 - splitP);
+    $('.aud', el).style.opacity = String(splitP);
+    $('.split', el).style.opacity = String(splitP);
+    $('.split', el).style.transform = `scaleY(${splitP})`;
+    el.querySelectorAll('.chip').forEach((c, k) => {
+      const ca = T.chips + i * .25 + k * .18;
+      const cp = out(ramp(t, ca, ca + .35)) * (1 - ramp(t, T.split - .3, T.split));
+      c.style.opacity = String(cp);
+      c.style.transform = `translateY(${(1 - cp) * 8}px)`;
+    });
+  });
+
+  // snow while it is winter
+  const snowP = clamp(ramp(t, T.sweep, T.sweep + .8) * (1 - ramp(t, T.thaw, T.thaw + .6)));
+  flakes.forEach((f, k) => {
+    const F = FLAKES[k];
+    const yy = (F.y + F.v * t) % 760 - 20;
+    const xx = F.x + Math.sin(F.sway + t * 1.3) * 10;
+    f.style.cssText = `left:${xx}px;top:${yy}px;width:${F.r * 2}px;height:${F.r * 2}px;opacity:${snowP * F.o * (1 - .65 * splitP)}`;
+  });
+
+  const e = ease(ramp(t, T.endIn, T.endIn + .5)) * (1 - ease(ramp(t, T.endOut, T.endOut + .45)));
+  $('#end').style.opacity = String(e);
+  $('#end .k').style.transform = `translateY(${(1 - e) * 10}px)`;
+};
+window.__ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {}))).then(() => document.fonts.ready);
+window.__ready.then(() => { if (!window.__record) { const t0 = performance.now(); const loop = () => { window.seek(((performance.now() - t0) / 1000) % T.end); requestAnimationFrame(loop); }; loop(); } });
+</script></body></html>
