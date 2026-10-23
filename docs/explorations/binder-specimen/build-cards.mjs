@@ -65,6 +65,7 @@ const placeHero = (src, slug) => {
 const CURRENT_ALT = {
   'aem-component-system': 'An AEM page editor open on a homepage hero, with its style options, a site-structure map and the button component states.',
   'seasonal-content-system': 'Standard and winter phone homepages beside the AEM folder of winter hero fragments.',
+  'design-enablement': 'A laptop open on a published Tire Rack tire test page, beside the tr-tire-tests MCP workflow (read documents, build in stage, independent QA, human review) and the Hero Crop Simulator at desktop and mobile widths.',
 };
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);

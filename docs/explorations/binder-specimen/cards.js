@@ -225,9 +225,9 @@ window.BINDER_CARDS = [
       "h": 205,
       "s": 0.8
     },
-    "hero": "heroes/design-enablement.jpg",
-    "heroAlt": "Hero Crop Simulator with desktop and mobile photograph previews and red crop guides.",
-    "heroSource": "artwork v1",
+    "hero": "heroes/design-enablement.webp",
+    "heroAlt": "A laptop open on a published tire test page, beside the tr-tire-tests MCP workflow (read documents, build in stage, independent QA, human review) and the Hero Crop Simulator at desktop and mobile widths.",
+    "heroSource": "supplied file",
     "stats": [
       {
         "value": "~12 h → 1.5⁠–⁠3.5 h",
