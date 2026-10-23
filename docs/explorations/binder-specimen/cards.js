@@ -62,7 +62,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Professional work · 2023 to 2024 design · 2026 launch",
       "title": "WheelRack",
       "status": "Live · Dealer platform",
-      "role": "I built the full design system and designed the complete dealer product, partnering with engineering on React and Storybook.",
+      "role": "I built the design system from scratch and designed the complete dealer product, specified for our React engineer.",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -86,32 +86,25 @@ window.BINDER_CARDS = [
         "Dealers used the roughly 20-year-old wheel visualizer on tablets, but the interface was not responsive. Six retail partners carried different versions of the experience, without shared tokens or components.",
         "The redesign had to accommodate partner branding and purchasing rules while proving that the new React and microservices stack could support the full journey."
       ],
-      "deck": "Tokens, components, responsive rules, and edge cases became one shared library, applied across vehicle search, wheel fitment, and checkout for six retail partners.",
+      "deck": "A design system built from nothing, a dealer product from vehicle search through checkout with every edge case specified for React, and a platform that grew from six retail partners to ten.",
       "ownership": "I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.",
       "evidence": [],
       "decisions": [
         {
-          "title": "Make repeated controls predictable",
-          "body": "I defined shared tokens and the resting, hover, and focus states of repeated controls. Those specifications gave the Figma library, Storybook, and React build a common vocabulary.",
+          "title": "Start from tokens, not screens",
+          "body": "Six partners ran different versions of the experience with nothing shared, so I built 200+ tokens in Tokens Studio, then the components from them, each in every state the React build had to support. 50+ went into Storybook, named the way Figma names them.",
           "link": null,
           "image": {
-            "src": "../../../public/images/work/wheelrack/evidence/filter-states.png",
-            "display": "../../../public/images/work/wheelrack/overview-samples/filter-states-120-335-1860-455.webp",
+            "src": "../../../public/images/work/wheelrack/dev-notes/color-tokens.jpg",
+            "display": null,
             "poster": null,
             "video": false,
             "frame": null,
-            "crop": {
-              "x": 120,
-              "y": 335,
-              "width": 1860,
-              "height": 455,
-              "sourceWidth": 3604,
-              "sourceHeight": 5185
-            },
-            "alt": "Filter component specifications showing resting, hover, and keyboard-focus states",
-            "caption": "Filter controls share explicit resting, hover, and focus states. The rules apply across the filter categories below them.",
-            "width": 1280,
-            "height": 313
+            "crop": null,
+            "alt": "WheelRack color primitives: neutral, primary, secondary, success, warning and error ramps with their roles",
+            "caption": "Color ramps with roles, the base every partner theme builds on.",
+            "width": 1800,
+            "height": 906
           },
           "images": [],
           "wide": null,
@@ -121,7 +114,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Put fitment inside the component",
-          "body": "Front and rear configurations, finishes, availability, and partner-specific purchasing actions needed explicit variants. I resolved those combinations before the component was reused across the journey.",
+          "body": "Front and rear configurations, finishes, availability and partner-specific purchasing actions became explicit variants of one purchase component, resolved before it was reused across the journey.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/wheelrack/evidence/product-variants.png",
@@ -149,30 +142,42 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
-          "title": "Specify behavior, then check the build",
-          "body": "I specified behavior and responsive rules while Cheryl Carpenter owned the React web build. Reviewing it together sharpened my understanding of props, states, and reusable components: a foundation I later carried into building PlayDraft in React Native with agents.",
-          "link": {
-            "text": "building PlayDraft in React Native",
-            "url": "https://www.rdeboerdesigns.com/work/playdraft/"
-          },
+          "title": "Design the edge cases before the build",
+          "body": "A finish change that removes the chosen size, an optional rear set, two notes at once, a vehicle with no wheels: each was designed on desktop and mobile, and annotated in the terms Cheryl Carpenter’s React build used, down to the focus variable and the fly-out padding.",
+          "link": null,
           "image": {
-            "src": "../../../public/images/work/wheelrack/evidence/form-documentation.png",
-            "display": "../../../public/images/work/wheelrack/overview-samples/form-documentation-458-1428-1120-550.webp",
+            "src": "../../../public/images/work/wheelrack/dev-notes/details-stacked.jpg",
+            "display": null,
             "poster": null,
             "video": false,
             "frame": null,
-            "crop": {
-              "x": 458,
-              "y": 1428,
-              "width": 1120,
-              "height": 550,
-              "sourceWidth": 2100,
-              "sourceHeight": 3569
-            },
-            "alt": "Form input documentation showing two sizes, icon placements, and placeholder, active, focus, error, and disabled states",
-            "caption": "Form library reference: two input sizes with consistent icon placement and interaction states.",
-            "width": 1120,
-            "height": 550
+            "crop": null,
+            "alt": "Wheel details with two notes stacked: the O.E. tire size mismatch and the closest-alternative selection",
+            "caption": "Two notes at once, stacked in a set order.",
+            "width": 1330,
+            "height": 460
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Annotate in the build’s own terms",
+          "body": "Cheryl Carpenter owned the React build; I owned the design of the whole product, and we worked daily in Slack and on calls. My notes named focus rings by their CSS variable, listed every state and size in tables, and mapped numbered callouts to a behavior table. Then I spent 40+ hours checking her build against Figma, screen by screen.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/wheelrack/dev-notes/filter-hover-focus.jpg",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Filter dropdown component notes: hover states, focus outline styles, and a +8 left padding rule for the mobile fly-out",
+            "caption": "Hover, focus and the mobile fly-out padding, written beside the component.",
+            "width": 1920,
+            "height": 525
           },
           "images": [],
           "wide": null,
@@ -183,24 +188,22 @@ window.BINDER_CARDS = [
             "name": "Cheryl Carpenter",
             "role": "React Front-End Developer · WheelRack build partner"
           }
+        },
+        {
+          "title": "Make a new partner a theme, not a new product",
+          "body": "Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
         }
       ],
       "outcomeMetric": null,
-      "outcome": "The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.",
-      "outcomeImages": [
-        {
-          "src": "../../../public/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "WheelRack interface with numbered callouts mapped to written behavior specifications",
-          "caption": "Numbered callouts connect the interface to the behavior specifications used by engineering.",
-          "width": 2550,
-          "height": 1650
-        }
-      ],
+      "outcome": "The journey is live from vehicle selection through checkout. Partners grew from six to ten during the build, and the framework later extended into Wholesale.",
+      "outcomeImages": [],
       "href": "https://www.rdeboerdesigns.com/work/wheelrack/"
     }
   },
@@ -249,14 +252,14 @@ window.BINDER_CARDS = [
     "category": "Internal tools",
     "back": {
       "intro": {
-        "src": "../../../public/images/work/design-enablement/tire-test-automation.mp4",
-        "poster": "../../../public/images/work/design-enablement/tire-test-automation-poster.jpg",
+        "src": "../../../public/images/work/design-enablement/internal-tools-reel.mp4",
+        "poster": "../../../public/images/work/design-enablement/internal-tools-reel-poster.jpg",
         "captions": null,
-        "caption": "A visualization of the 3C pilot (stage test 363), compressed to five seconds. The hands-on time at the end is an estimate from the plan, not yet measured across a full run.",
-        "alt": "tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the title, copy and five tires fill in with their ratings, and an independent QA check reports 0 High findings.",
+        "caption": "tr-tire-tests on the 3C pilot (stage test 363), compressed to five seconds; the finished page for test 363 on tirerack.com; the Hero Crop Simulator in use. The hands-on time in the first part is an estimate from the plan, not yet measured across a full run.",
+        "alt": "Three parts. tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the fields, tires and ratings fill in, and an independent QA check reports 0 High findings. Then the finished test page live on tirerack.com. Then the Hero Crop Simulator previewing one hero image at desktop, tablet and mobile crops.",
         "frame": "reel",
         "focus": 0.55,
-        "posterAt": 4.6,
+        "posterAt": 6.2,
         "width": 1600,
         "height": 900
       }

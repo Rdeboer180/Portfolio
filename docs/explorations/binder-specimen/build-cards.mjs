@@ -171,7 +171,7 @@ const POSTER_AT = {
   // the protected studies' loops open from black; their posters are the
   // first lit frame (none matches exactly, nearest at 12 of 24fps)
   'tire-categories': 0.5,
-  'design-enablement': 4.6,    // the tire test reel; its poster is the frame at 4.6s, the finished QA state
+  'design-enablement': 6.2,    // the tools reel; its poster is the frame at 6.2s, the plugin's finished QA state
   'landing-pages': 0.5,
 };
 

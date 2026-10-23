@@ -115,6 +115,8 @@ export interface ProjectOverview {
     wide?: ProjectImage;
     /** Scrollable artboards (framed desktop and phone) shown side by side after the media. */
     artboards?: ProjectImage[];
+    /** Spec crops (dev notes, edge-case states) in a two-column grid after the media. */
+    gallery?: ProjectImage[];
     /** Short evidence list under the body, e.g. each fix beside what it replaced. */
     points?: string[];
     /** Code that proves the decision shipped, rendered after the media. */
@@ -504,9 +506,9 @@ const projects: Project[] = [
     cardTitle: 'WheelRack: Design system to full product',
     seoTitle: 'WheelRack: Enterprise React Design System for a Wholesale Ecommerce Platform',
     thesis: 'Shared rules for the details that make wheel fitment complicated.',
-    summary: 'I built WheelRack’s complete design system and designed the full dealer product, from vehicle search through checkout. I defined tokens, components, responsive behavior, and edge cases, partnering with engineering on the React and Storybook implementation across six retail partners.',
+    summary: 'I built WheelRack’s design system from scratch and designed the full dealer product, from vehicle search through checkout. I specified every state and edge case in the terms our React engineer built from, and the designs and the dealer experience helped the platform grow from six retail partners to ten.',
     ownership: 'I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.',
-    cardHook: 'I built the full design system, partnered with engineering on React and Storybook, and designed the complete dealer product, edge cases included.',
+    cardHook: 'A design system built from scratch, a full dealer product specified for React with its edge cases, and a platform that grew from six partners to ten.',
     compactStory: true,
     annotations: {
       problem: 'Dealers were already on tablets. The interface had to catch up.',
@@ -536,26 +538,38 @@ const projects: Project[] = [
     ],
     approachSubsections: [
       {
-        key: 'journey',
-        label: 'Define the journey around dealer tasks',
-        description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes. Those rules gave the team a shared starting point for each screen.',
-        libraryTour: true,
+        key: 'foundation',
+        part: 'Part 1 · A design system built from scratch',
+        label: 'Start from tokens, not screens',
+        systemMarker: 'Shared foundation',
+        description: 'There was no system to inherit. Six retail partners ran different versions of the experience, without shared tokens or components, so I started from nothing: 200+ tokens for color, spacing, type, radius, shadow and icon scale, built in Tokens Studio before Figma Variables existed. Color ramps carry roles, and each collection opens with what it is, how to use it and how not to, so a designer or an engineer reads the rule before the value.',
+        images: [
+          { src: '/images/work/wheelrack/dev-notes/color-tokens.jpg', alt: 'WheelRack color primitives: neutral, primary, secondary, success, warning and error ramps with their roles', layout: 'full', caption: 'Color ramps with roles, the base every partner theme builds on.' },
+          { src: '/images/work/wheelrack/evidence/structure-tokens.png', alt: 'WheelRack spacing, radius and icon-scale tokens with a description and how-not-to-use rules', layout: 'half', caption: 'Structure: spacing, radius and icon scale, each with its rules.' },
+          { src: '/images/work/wheelrack/evidence/typography.png', alt: 'WheelRack type primitives with how-to-use rules and an accessibility note', layout: 'half', caption: 'Type primitives, with the one approved partner exception written down.' },
+        ],
       },
       {
-        key: 'foundation',
-        label: 'Give repeated controls the same rules',
-        systemMarker: 'Shared foundation',
-        description: 'I defined color, spacing, typography, and shadow tokens, then built the controls and larger components from them. The original work used Tokens Studio before Figma Variables. The same token vocabulary carried into Storybook and React; each component’s states and responsive behavior still needed to be specified.',
-        images: [{
-          src: '/images/work/wheelrack/evidence/filter-states.png',
-          alt: 'Filter component specifications showing resting, hover, and keyboard-focus states',
-          layout: 'full',
-          crop: { x: 120, y: 335, width: 1860, height: 455, sourceWidth: 3604, sourceHeight: 5185 },
-          caption: 'Filter controls share explicit resting, hover, and focus states. The rules apply across the filter categories below them.',
-        }],
+        key: 'library',
+        part: 'Part 1 · A design system built from scratch',
+        label: 'Every control, in every state React supports',
+        systemMarker: 'Component library',
+        description: 'From the tokens I built the components: buttons, filters, form controls and the larger purchase and results components, each drawn and named in every state the React build had to support, including resting, hover, focus, disabled, error and unavailable. 50+ of them went into Storybook, named the way Figma names them, so a story’s controls and a Figma variant described the same thing.',
+        libraryTour: true,
+        images: [
+          { src: '/images/work/wheelrack/dev-notes/button-states.jpg', alt: 'Button library page labelling hover and focus treatments, with four state rows for each icon placement', layout: 'half', caption: 'Buttons: hover, focus and disabled for every size and icon placement.' },
+          { src: '/images/work/wheelrack/dev-notes/filter-reset-states.jpg', alt: 'Reset Filters link in default, hover, focus and disabled states', layout: 'half', caption: 'A small control still gets all four states.' },
+        ],
+      },
+      {
+        key: 'journey',
+        part: 'Part 2 · The full product, specified for React',
+        label: 'Define the journey around dealer tasks',
+        description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes. Those rules gave the team a shared starting point for each screen.',
       },
       {
         key: 'fitment',
+        part: 'Part 2 · The full product, specified for React',
         label: 'Resolve fitment inside the product component',
         systemMarker: 'Component behavior',
         description: 'A wheel model could carry several finishes and sizes, and front and rear configurations could differ on the same vehicle. I designed variants for those combinations, partner-specific cart or quote actions, and availability warnings. The purchasing component had to account for each case before it could be reused across the journey.',
@@ -593,17 +607,33 @@ const projects: Project[] = [
         ],
       },
       {
+        key: 'edge-cases',
+        part: 'Part 2 · The full product, specified for React',
+        label: 'The edge cases were designed, not discovered',
+        systemMarker: 'Edge cases',
+        description: 'Fitment makes the unhappy paths common. A finish change can remove the size a dealer picked, a vehicle may take an optional rear set, two notes can need the same space, and a vehicle or a filter combination can return nothing. I designed each of those states before the build, on desktop and mobile, with the message it shows and what the dealer can do next.',
+        images: [
+          { src: '/images/work/wheelrack/dev-notes/fitment-step1-finish-change.jpg', alt: 'Front and rear size options where changing the finish greys out sizes that finish does not come in', layout: 'half', caption: 'A finish change greys out the sizes it does not come in.' },
+          { src: '/images/work/wheelrack/dev-notes/optional-rear-fitment.jpg', alt: 'Product tile with an optional rear fitment selected, its own size, quantity and price, and a set-of-four total', layout: 'half', caption: 'An optional rear set, priced on its own and in the set total.' },
+          { src: '/images/work/wheelrack/dev-notes/details-stacked.jpg', alt: 'Wheel details with two notes stacked: the O.E. tire size mismatch and the closest-alternative selection', layout: 'half', caption: 'Two notes at once, stacked in a set order.' },
+          { src: '/images/work/wheelrack/dev-notes/details-stacked-mobile.jpg', alt: 'The same two stacked notes on the mobile details page', layout: 'half', caption: 'The same stack on mobile.' },
+          { src: '/images/work/wheelrack/dev-notes/empty-no-wheels-vehicle.jpg', alt: 'Empty state for a vehicle with no available wheels, with a New Vehicle Search action', layout: 'half', caption: 'No wheels for this vehicle: say so, and offer a new search.' },
+          { src: '/images/work/wheelrack/dev-notes/empty-no-filter-match.jpg', alt: 'Empty state when applied filters match nothing, with Reset All Filters', layout: 'half', caption: 'Filters that match nothing: name them, and offer a reset.' },
+          { src: '/images/work/wheelrack/dev-notes/tile-error-alerts.jpg', alt: 'Product tile with error and alert slots: a 500 error message and a product that failed to load', layout: 'half', caption: 'Slots for a failed request and a product that no longer exists.' },
+          { src: '/images/work/wheelrack/dev-notes/filter-load-error.jpg', alt: 'Filter panel showing an error loading filters for the selected vehicle', layout: 'half', caption: 'Even the filter panel has a failure state.' },
+        ],
+      },
+      {
         key: 'documentation',
-        label: 'Make the rules usable by engineering',
+        part: 'Part 2 · The full product, specified for React',
+        label: 'Annotations written in the build’s own terms',
         systemMarker: 'Design + engineering',
-        description: 'Cheryl and I worked together daily through Slack threads and calls. I supplied behavior specifications for complex components; she owned the React implementation and stress-tested behavior across viewports. The form documentation shown here makes the intended input sizes, icon placements, and focus, error, and disabled states explicit.',
-        images: [{
-          src: '/images/work/wheelrack/evidence/form-documentation.png',
-          alt: 'Form input documentation showing two sizes, icon placements, and placeholder, active, focus, error, and disabled states',
-          layout: 'full',
-          crop: { x: 458, y: 1428, width: 1120, height: 550, sourceWidth: 2100, sourceHeight: 3569 },
-          caption: 'Form library reference: two input sizes with consistent icon placement and interaction states.',
-        }],
+        description: 'Cheryl Carpenter owned the React build, and I owned the design of the whole product. We worked together daily in Slack threads and calls, and she stress-tested every viewport. My notes were written for her code rather than for a review deck: focus rings named by their CSS variable, state tables with each size and value, which radio style means a filter and which means a fitment choice, and layout rules such as the extra padding a mobile fly-out needs.',
+        images: [
+          { src: '/images/work/wheelrack/dev-notes/filter-hover-focus.jpg', alt: 'Filter dropdown component notes: hover states, focus outline styles, and a +8 left padding rule for the mobile fly-out', layout: 'full', caption: 'Hover, focus and the mobile fly-out padding, written beside the component.' },
+          { src: '/images/work/wheelrack/dev-notes/form-how-to-use.jpg', alt: 'Form documentation: focus uses box-shadow var(--focus-std), orange outline on focus, blue radio for navigation filters', layout: 'half', caption: 'How to use it and how not to: focus is always var(--focus-std).' },
+          { src: '/images/work/wheelrack/dev-notes/form-state-tables.jpg', alt: 'Form component state tables listing sizes, icon placements and every state for inputs, radios, checkboxes and dropdowns', layout: 'half', caption: 'State tables an engineer can build each variant from.' },
+        ],
         quote: {
           text: 'That gave us one vocabulary to work from instead of two, and it made my half of the work a lot easier to do well.',
           name: 'Cheryl Carpenter',
@@ -612,18 +642,29 @@ const projects: Project[] = [
       },
       {
         key: 'reconciliation',
-        label: 'Check the build and feed corrections back',
+        part: 'Part 2 · The full product, specified for React',
+        label: 'A behavior spec, then 40+ hours checking the build against it',
         systemMarker: 'Implementation review',
-        description: 'A shared vocabulary did not remove the reconciliation work. I spent 40+ hours comparing the React build against Figma, reviewing token names, responsive behavior, and component fidelity screen by screen. Weekly stakeholder reviews kept decisions moving as the work progressed.',
-        images: [{
-          src: '/images/work/wheelrack/supporting/outcome/wheelrack-final-desktop-01.png',
-          alt: 'WheelRack interface with numbered callouts mapped to written behavior specifications',
-          layout: 'full',
-          caption: 'Numbered callouts connect the interface to the behavior specifications used by engineering.',
-        }],
+        description: 'The behavior spec was the contract: a 22-page proof, version 1.0 published in August 2024, where each numbered callout on a screen maps to a row in a UI behavior table. Then I spent 40+ hours comparing the React build against Figma screen by screen, checking token names, responsive behavior and component fidelity, and fed the corrections back. Weekly stakeholder reviews kept decisions moving.',
+        images: [
+          { src: '/images/work/wheelrack/dev-notes/ui-behavior-callouts.jpg', alt: 'Results page mock with numbered callouts beside New Vehicle Search, the filters, a product and Add To Cart', layout: 'half', caption: 'Numbered callouts on the screen…' },
+          { src: '/images/work/wheelrack/dev-notes/ui-behavior-table.jpg', alt: 'UI behavior table with an ID, name and written description for each numbered element', layout: 'half', caption: '…map to rows in the behavior table.' },
+        ],
+      },
+      {
+        key: 'partners',
+        part: 'Part 3 · A product that helped win partners',
+        label: 'Designs that helped bring in new partners',
+        systemMarker: 'Outcome',
+        description: 'The designs and the dealer experience became part of how WheelRack grew. Retail partners went from six to ten during the build, alongside other business factors. Because every partner sits on the same tokens and components, a new partner is a theme and its purchasing rules, not a new product. Six months after the build, Tire Rack extended the same framework into Wholesale, and I helped additional designers start working in it.',
+        bullets: [
+          'Partners grew from 6 to 10 during the build.',
+          'A new partner is a theme and purchasing rules on one shared system.',
+          'The framework was extended into Wholesale six months later.',
+        ],
       },
     ],
-    outcomeNote: 'WheelRack is live from vehicle selection through checkout. Six months after the build, Tire Rack extended the framework into Wholesale, and I helped additional designers join that workflow. Partner adoption grew from six to ten during the build; that growth also reflects business factors beyond the redesign.',
+    outcomeNote: 'WheelRack is live from vehicle selection through checkout. Retail partners grew from six to ten during the build; the designs and the dealer experience helped win them, alongside other business factors. Six months after the build, Tire Rack extended the framework into Wholesale, and I helped additional designers join that workflow.',
     takeaways: [
       'I would plan the design/build comparison into the work from the start. Tokens gave us common names, but we still had to check how the components behaved on screen.',
       'Working with Cheryl on React web components and Storybook sharpened my understanding of props, states, and reuse. That vocabulary helped prepare me to explore React Native, while learning what needed to change for a native app.',
@@ -1676,10 +1717,10 @@ $mobile-max-width: 768px;
     featured: '/assets/portfolio-safe/web-apps/cover-poster.jpg',
     featuredVideo: '/assets/portfolio-safe/web-apps/cover-loop.mp4',
     featuredReel: {
-      src: '/images/work/design-enablement/tire-test-automation.mp4',
-      poster: '/images/work/design-enablement/tire-test-automation-poster.jpg',
-      alt: 'tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the title, copy and five tires fill in with their ratings, and an independent QA check reports 0 High findings.',
-      caption: 'A visualization of the 3C pilot (stage test 363), compressed to five seconds. The hands-on time at the end is an estimate from the plan, not yet measured across a full run.',
+      src: '/images/work/design-enablement/internal-tools-reel.mp4',
+      poster: '/images/work/design-enablement/internal-tools-reel-poster.jpg',
+      alt: 'Three parts. tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the fields, tires and ratings fill in, and an independent QA check reports 0 High findings. Then the finished test page live on tirerack.com. Then the Hero Crop Simulator previewing one hero image at desktop, tablet and mobile crops.',
+      caption: 'tr-tire-tests on the 3C pilot (stage test 363), compressed to five seconds; the finished page for test 363 on tirerack.com; the Hero Crop Simulator in use. The hands-on time in the first part is an estimate from the plan, not yet measured across a full run.',
     },
 
     // ── 01 Problem ──
@@ -2486,17 +2527,18 @@ const evidence = (project: Project, key: string, index = 0): ProjectImage | unde
 
 const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   wheelrack: p => ({
-    title: 'WheelRack', category: 'Professional work', role: 'I built the full design system and designed the complete dealer product, partnering with engineering on React and Storybook.',
+    title: 'WheelRack', category: 'Professional work', role: 'I built the design system from scratch and designed the complete dealer product, specified for our React engineer.',
     status: 'Live · Dealer platform',
-    deck: 'Tokens, components, responsive rules, and edge cases became one shared library, applied across vehicle search, wheel fitment, and checkout for six retail partners.',
+    deck: 'A design system built from nothing, a dealer product from vehicle search through checkout with every edge case specified for React, and a platform that grew from six retail partners to ten.',
     ownership: p.ownership!, opening: p.studyHero,
     decisions: [
-      { title: 'Make repeated controls predictable', body: 'I defined shared tokens and the resting, hover, and focus states of repeated controls. Those specifications gave the Figma library, Storybook, and React build a common vocabulary.', image: evidence(p, 'foundation') },
-      { title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability, and partner-specific purchasing actions needed explicit variants. I resolved those combinations before the component was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
-      { title: 'Specify behavior, then check the build', body: 'I specified behavior and responsive rules while Cheryl Carpenter owned the React web build. Reviewing it together sharpened my understanding of props, states, and reusable components: a foundation I later carried into building PlayDraft in React Native with agents.', bodyLink: { text: 'building PlayDraft in React Native', to: '/work/playdraft/' }, image: evidence(p, 'documentation'), quote: subsection(p, 'documentation')?.quote },
+      { part: 'A design system built from scratch', title: 'Start from tokens, not screens', body: 'Six partners ran different versions of the experience with nothing shared, so I built 200+ tokens in Tokens Studio, then the components from them, each in every state the React build had to support. 50+ went into Storybook, named the way Figma names them.', image: evidence(p, 'foundation'), gallery: subsection(p, 'library')?.images },
+      { part: 'The full product, specified for React', title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability and partner-specific purchasing actions became explicit variants of one purchase component, resolved before it was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
+      { part: 'The full product, specified for React', title: 'Design the edge cases before the build', body: 'A finish change that removes the chosen size, an optional rear set, two notes at once, a vehicle with no wheels: each was designed on desktop and mobile, and annotated in the terms Cheryl Carpenter’s React build used, down to the focus variable and the fly-out padding.', image: evidence(p, 'edge-cases', 2), gallery: (subsection(p, 'edge-cases')?.images ?? []).filter((_, i) => i !== 2) },
+      { part: 'The full product, specified for React', title: 'Annotate in the build’s own terms', body: 'Cheryl Carpenter owned the React build; I owned the design of the whole product, and we worked daily in Slack and on calls. My notes named focus rings by their CSS variable, listed every state and size in tables, and mapped numbered callouts to a behavior table. Then I spent 40+ hours checking her build against Figma, screen by screen.', image: evidence(p, 'documentation'), gallery: [evidence(p, 'documentation', 1)!, evidence(p, 'documentation', 2)!, evidence(p, 'reconciliation')!, evidence(p, 'reconciliation', 1)!], quote: subsection(p, 'documentation')?.quote },
+      { part: 'A product that helped win partners', title: 'Make a new partner a theme, not a new product', body: 'Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.' },
     ],
-    outcome: 'The journey is live from vehicle selection through checkout. The framework later extended into Wholesale. Partner adoption grew during the build, but business factors also contributed; that growth is not a clean measure of design impact.',
-    outcomeImages: [findImage(p, 'wheelrack-final-desktop-01')!],
+    outcome: 'The journey is live from vehicle selection through checkout. Partners grew from six to ten during the build, and the framework later extended into Wholesale.',
   }),
   'design-enablement': p => ({
     title: 'Tools that optimize and automate tasks', category: 'Internal tools', role: 'Product design · AI-assisted build',

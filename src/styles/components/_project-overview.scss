@@ -226,3 +226,19 @@
   text-transform: uppercase;
   color: $color-neutral-dark;
 }
+
+// Spec crops after a decision (decision.gallery): dev notes and edge-case
+// states, two to a row, each at its own height; one column on phones.
+.project-overview__gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $spacing-lg;
+  align-items: start;
+
+  figure { margin: 0; }
+  // small crops keep their own size rather than blowing up to the column
+  img { display: block; width: auto; max-width: 100%; height: auto; max-height: 420px; object-fit: contain; background: #fff; border: 1px solid $color-border-default; border-radius: $radius-md; }
+  figcaption { margin-top: $spacing-xs; font-size: 13px; line-height: 1.45; color: $color-neutral-muted; }
+
+  @media (max-width: 700px) { grid-template-columns: 1fr; }
+}
