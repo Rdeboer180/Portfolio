@@ -1242,7 +1242,7 @@ window.BINDER_CARDS = [
       "problemPunch": "Cooking and nutrition context belong together.",
       "problem": [
         "Living with Type 1 diabetes, I wanted the recipe to come first. I wanted space to make and enjoy a meal, then keep the portions and nutrition context available when I returned to it.",
-        "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to belong to that world: the same calm, clinical clarity they expect from their devices and their clinic, with the recipe still in charge."
+        "The people T1D Hub serves already read a CGM trace every day, and they know what a controlled day looks like on it. A companion app from the practice had to look and behave like the devices and the clinic they already trust, with the recipe still in charge."
       ],
       "deck": "I built the T1D Hub brand identity and design system with Dr. Brian Huber’s Type 1 practice, then carried that system into Bolus Binder, a companion app for seeing how a meal is likely to metabolize before you cook it.",
       "ownership": "In partnership with Brian I oversee the T1D Hub brand, from the logo and design system to the site his marketing team runs. I own the product direction, UX/UI and agent-assisted React Native build of Bolus Binder.",
@@ -1250,7 +1250,7 @@ window.BINDER_CARDS = [
       "decisions": [
         {
           "title": "Draw the mark around the line a Type 1 reads every day",
-          "body": "A CGM trace runs through the wordmark, entering at the T and holding the name together. It has to stay connected in every configuration, so the four approved lockups ship with their rules written beside them: never remove the trace, never below 28px, never alter the navy and sky split.",
+          "body": "A CGM trace runs through the wordmark, entering at the T and holding the name together. It has to stay connected in every configuration, so the four approved lockups ship with their rules written beside them: never remove the trace, never use it below 28px, and never change the navy and sky split.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/bolus-binder/supporting/approach/t1dhub-logo-system.png",
@@ -1272,7 +1272,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Give the practice a system it can extend without me",
-          "body": "Design System v1.0 went to Brian in June 2026 as a working site: twelve color tokens with clinical meaning, Sora, Inter and JetBrains Mono for data, components, a CGM chart language, calm motion rules, and the brand on the website, an office wall, slides and business cards.",
+          "body": "Design System v1.0 went to Brian in June 2026 as a working site: twelve color tokens with clinical meaning, Sora and Inter for type with JetBrains Mono for data, components, a CGM chart language, calm motion rules, and the brand on the website, an office wall, slides and business cards.",
           "link": null,
           "image": null,
           "images": [
@@ -1319,7 +1319,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Make portions change the whole meal",
-          "body": "The same system, carried into the kitchen. Portion changes update the ingredient quantities and nutrition together, and the collapsed header keeps the portion and macro totals visible as I move through the recipe.",
+          "body": "Bolus Binder runs on the same system. Portion changes update the ingredient quantities and nutrition together, and the collapsed header keeps the portion and macro totals visible as I move through the recipe.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/bolus-binder/app/06-recipe-detail-collapsed.png",

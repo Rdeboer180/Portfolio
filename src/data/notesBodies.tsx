@@ -131,7 +131,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
 
       <PlayDraftClockPrototype />
 
-      <h2>The clock&rsquo;s choice has an order, and the order is the promise</h2>
+      <h2>The clock drafts in a fixed order</h2>
       <p>When a turn expires, the fix drafts the first item in your queue that is still available, in your own order. If someone already took it, it skips it and keeps going, because one sniped pick should not switch off the rest of the queue. With an empty queue, the common case, it takes the top of the visible list, as the old rule did. If a search has filtered everything away, it falls back to the whole pool, so the room can never sit at 0:00. In the app that order is a small function with its own tests, outside the draft screen, because it decides what a player ends up owning without them touching anything.</p>
       <p>The prototype marks the clock&rsquo;s target with a gold edge, in whichever list the current rule reads, so you can see what it is about to take before it takes it.</p>
 
@@ -145,7 +145,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
         <li>Every state of the on-clock strip, with its copy, including the ones nobody designs on purpose: paused, expired, and waiting on the server.</li>
         <li>A prototype someone can break by doing two things at once: queue a pick, search for something else, and let the clock run.</li>
       </ul>
-      <p>Agents built PlayDraft&rsquo;s room from my rules, and Claude Code built this prototype from the app&rsquo;s own functions. The rule I had not written down was the one that mattered: what the clock does when you are not looking. That gap was mine, and so was deciding the order that closed it.</p>
+      <p>Agents built PlayDraft&rsquo;s room from my rules, and Claude Code built this prototype from the app&rsquo;s own functions. I had not written down what the clock does when you are not looking. That gap was mine, and so was deciding the order that closed it.</p>
       <p>The bug is fixed. What I keep wondering is how many other rooms have a queue nothing reads.</p>
     </>
   ),
@@ -158,15 +158,15 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
 
       <WheelRackFitmentPrototype />
 
-      <h2>The rule is a function, not a sentence</h2>
+      <h2>Write the rule as a function</h2>
       <p>&ldquo;Closest alternative&rdquo; reads as obvious until two sizes are equally close. In the prototype it is three comparisons in order: the same diameter first, then the nearest width, then the nearest offset. Written that way, an engineer can test it, and a product owner can disagree with it before it ships instead of after.</p>
 
       <h2>The system acted, so it has to point at what it did</h2>
       <p>The changed row gets a warm wash that fades over 900ms, long enough for the eye to land on it once, short enough that it is gone by the time the dealer reaches the quantity. The note slides up 4px in 220ms. The totals count to their new value in 240ms, so the price change reads as a consequence rather than a glitch. Focus stays on the finish the dealer picked; moving it to the changed row would punish them for a choice that was valid.</p>
       <p>A screen reader hears one sentence that names both sizes: the one that was chosen and the one that replaced it. The visual note says the same thing in the spec&rsquo;s words.</p>
 
-      <h2>Reduced motion is a different state, not a slower one</h2>
-      <p>Turn on Reduced motion in the inspector and nothing animates. The wash would have been the only signal of which row changed, so it becomes a static &ldquo;Changed&rdquo; tag that stays until the dealer touches a control. Slow motion does the opposite: every timing runs four times longer, from the same variables, so what you review is what ships.</p>
+      <h2>Reduced motion gets its own state</h2>
+      <p>Turn on Reduced motion in the inspector and nothing animates. The wash would have been the only signal of which row changed, so it becomes a static &ldquo;Changed&rdquo; tag that stays until the dealer touches a control. Slow motion does the opposite: every timing runs four times longer, from the same variables, so the timings you review are the ones in the code.</p>
 
       <h2>What the handoff would carry</h2>
       <ul>
