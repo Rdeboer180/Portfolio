@@ -1,13 +1,14 @@
 /** Record the seasonal content intro reel (scripts/seasonal-reel/reel.html) to
  *  public/images/work/seasonal-content-system/seasonal-swap-reel.mp4 and its
- *  poster, frame by frame through seek(t). The poster is the split: both
- *  seasons on the same three URLs. */
+ *  poster, frame by frame through seek(t). The poster is the winter state at
+ *  3.5s: the binder's unfold cuts its panels from it, and the later split
+ *  would draw its dividers through them. */
 import path from 'node:path'; import { spawn } from 'node:child_process'; import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = path.join(root, 'scripts/seasonal-reel/reel.html');
 const out = path.join(root, process.env.OUT || 'public/images/work/seasonal-content-system/seasonal-swap-reel.mp4');
-const FPS = 30, POSTER_AT = Number(process.env.POSTER_AT || 7.6);
+const FPS = 30, POSTER_AT = Number(process.env.POSTER_AT || 3.5);
 const browser = await chromium.launch({ args: ['--allow-file-access-from-files'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 await page.addInitScript(() => { window.__record = true; });

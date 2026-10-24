@@ -259,7 +259,7 @@ window.BINDER_CARDS = [
         "alt": "Three parts. tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the fields, tires and ratings fill in, and an independent QA check reports 0 High findings. Then the finished test page live on tirerack.com. Then the Hero Crop Simulator previewing one hero image at desktop, tablet and mobile crops.",
         "frame": "reel",
         "focus": 0.55,
-        "posterAt": 6.2,
+        "posterAt": 6.9,
         "width": 1600,
         "height": 900
       }
@@ -1235,14 +1235,14 @@ window.BINDER_CARDS = [
     "category": "Brand system · Companion app",
     "back": {
       "intro": {
-        "src": "../../../public/images/work/bolus-binder/bolus-binder-app-preview.mp4",
-        "poster": "../../../public/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg",
+        "src": "../../../public/images/work/bolus-binder/bolus-binder-t1d-reel.mp4",
+        "poster": "../../../public/images/work/bolus-binder/bolus-binder-t1d-reel-poster.jpg",
         "captions": null,
-        "caption": "A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.",
-        "alt": "Bolus Binder recipe library, recipe detail, nutrition, recipe folders, meal planning, and cook mode",
+        "caption": "The T1D Hub mark, then the app: a sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.",
+        "alt": "The T1D Hub mark draws in, its CGM trace first and then the letterforms, then fades into Bolus Binder: recipe library, recipe detail, nutrition, recipe folders, meal planning and cook mode",
         "frame": "reel",
         "focus": 0.5,
-        "posterAt": 0,
+        "posterAt": 2.3,
         "width": 1280,
         "height": 720
       }
@@ -1820,7 +1820,7 @@ window.BINDER_CARDS = [
         "alt": "AEM Landing Page System & SEO Template Framework preview",
         "frame": "preview",
         "focus": 0.5,
-        "posterAt": 0.5,
+        "posterAt": 2,
         "width": 1280,
         "height": 800
       }
@@ -2016,7 +2016,7 @@ window.BINDER_CARDS = [
         "alt": "The Tire Rack homepage, tires and packages pages on a season timeline: a frost line winterizes each page, the swapped fragments are named, then each page splits to show the non-winter version southern states see beside the winter version for winter climates.",
         "frame": "reel",
         "focus": 0.25,
-        "posterAt": 0,
+        "posterAt": 3.5,
         "width": 1280,
         "height": 720
       }

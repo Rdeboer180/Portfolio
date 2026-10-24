@@ -849,7 +849,6 @@ const projects: Project[] = [
     seoTitle: 'T1D Hub brand identity and design system, carried into Bolus Binder, a React Native companion app',
     summary:
       'This study has two parts. The first is T1D Hub, the brand identity and design system I built with Dr. Brian Huber for his Type 1 practice, from the logo to the site his marketing team runs. The second is Bolus Binder, a React Native companion app on the same system, where scaling a recipe moves its nutrition and estimated absorption with it. A controlled diabetic already reads a CGM trace every day, so both use the trace and the colors they already know.',
-    reelIntro: 't1d-hub',
     thesis: 'The clinic’s colors mean the same thing in the kitchen.',
     year: '2026',
     tags: ['Product Design', 'Mobile (iOS)', 'Brand Identity', 'Brand System', 'Design System', 'Health Data', 'React Native'],
@@ -860,12 +859,14 @@ const projects: Project[] = [
     groups: ['product'],
     clientLabel: 'T1D Hub · Personal product',
     featured: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
-    featuredVideo: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
+    // The T1D Hub mark (BrandIntro's animation, rendered into the file so the
+    // binder's unfold plays it too), then the app. Poster: the finished mark.
+    featuredVideo: '/images/work/bolus-binder/bolus-binder-t1d-reel.mp4',
     featuredReel: {
-      src: '/images/work/bolus-binder/bolus-binder-app-preview.mp4?v=2',
-      poster: '/images/work/bolus-binder/bolus-binder-app-preview-poster.jpg',
-      alt: 'Bolus Binder recipe library, recipe detail, nutrition, recipe folders, meal planning, and cook mode',
-      caption: 'A sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.',
+      src: '/images/work/bolus-binder/bolus-binder-t1d-reel.mp4',
+      poster: '/images/work/bolus-binder/bolus-binder-t1d-reel-poster.jpg',
+      alt: 'The T1D Hub mark draws in, its CGM trace first and then the letterforms, then fades into Bolus Binder: recipe library, recipe detail, nutrition, recipe folders, meal planning and cook mode',
+      caption: 'The T1D Hub mark, then the app: a sequence of simulator stills with seeded demo data, captured in August 2026. Not an interaction recording.',
     },
     timeToLive:
       'T1D Hub mark and design system by June 2026, the clinic site live in July 2026, Bolus Binder in TestFlight since August.',

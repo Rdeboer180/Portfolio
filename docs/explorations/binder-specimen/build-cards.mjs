@@ -165,15 +165,17 @@ const BACK_FOCUS = {
 // the poster (96×54 grayscale, least squared error); each lies inside a run of
 // frames that match it, so a seek that lands a frame early or late still matches.
 const POSTER_AT = {
-  playdraft: 1.4,             // frames 38–102 of 60fps; its first frame is dark
+  playdraft: 1.4,             // held from about 0.6s (30fps since the Oct 24 re-encode); its first frame is dark
+  'bolus-binder': 2.3,        // the finished T1D Hub mark, before the plate fades into the app
+  'seasonal-content-system': 3.5, // all three pages in winter; the split later draws dividers through the phones
   loopstack: 1.1,             // frames 30–46 of 30fps
   'overscroll-tactics': 2.56, // frames 58–92 of 25fps, the held last pose
   heatherwood: 0.6,           // frames 9–49 of 30fps
   // the protected studies' loops open from black; their posters are the
   // first lit frame (none matches exactly, nearest at 12 of 24fps)
   'tire-categories': 0.5,
-  'design-enablement': 6.2,    // the tools reel; its poster is the frame at 6.2s, the plugin's finished QA state
-  'landing-pages': 0.5,
+  'design-enablement': 6.9,    // the tools reel's held QA state (6.3–7.2s), with a keyframe there
+  'landing-pages': 2.0,      // held from 0.8s; at 0.5s only one frame matched the poster, mid-fade
 };
 
 /** The video the study's fly-out opens on: its reel, or the cover loop ProjectPreview plays;

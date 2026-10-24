@@ -1145,6 +1145,12 @@ html.is-unlocked .v__open { display: inline; }
   box-shadow: inset 0 0 0 1px rgba(20, 22, 26, .16);
 }
 .fo-fold__shade { background: #06080b; opacity: 0; }
+/* the shades and the card stock round with the fronts, or their square
+   corners poke past a 10px cover loop while a panel turns (backs are
+   mirrored, so the outer edge is their local left) */
+.fo-fold__panel--1 > .fo-fold__shade { border-radius: var(--r) 0 0 var(--r); }
+.fo-fold__panel--3 > .fo-fold__shade:not(.fo-fold__shade--back) { border-radius: 0 var(--r) var(--r) 0; }
+.fo-fold__panel--3 > .fo-fold__back, .fo-fold__panel--3 > .fo-fold__shade--back { border-radius: var(--r) 0 0 var(--r); }
 .fo-fold__shadow {
   position: absolute; top: 5%; bottom: -3%; left: 1%; width: calc(100% / 3);
   background: rgba(0, 0, 0, .5); filter: blur(16px); transform-origin: 0 50%; opacity: 0;
@@ -2955,12 +2961,15 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   // hinged on its left edge; the second waits unseen until the first is flat.
   const foldGeometry = (g) => {
     const gate = foArticle.querySelector('.fo-gate'), r = foFrame().getBoundingClientRect();
-    const W = r.width, H = r.height, w = Math.min(W, g.cr.w * g.s), rest = (W - w) / 2;
+    // snapped to device pixels, the flaps' edges land on whole pixels and the
+    // three widths sum to the frame, so no antialiased seam shows the page
+    const px = (v) => Math.round(v * devicePixelRatio) / devicePixelRatio;
+    const W = r.width, H = r.height, w = px(Math.min(W, g.cr.w * g.s)), rest = px((W - w) / 2);
     const art = (x) => ({ backgroundImage: 'var(--poster)', backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x}px 0` });
     const mid = gate.querySelector('.fo-gate__mid'), p1 = gate.querySelector('.fo-gate__flap--l'), p2 = gate.querySelector('.fo-gate__flap--r');
     Object.assign(mid.style, { left: '0px', width: `${w}px`, ...art(0) });
     Object.assign(p1.style, { left: `${w}px`, width: `${rest}px`, transformOrigin: '0 50%' });
-    Object.assign(p2.style, { left: `${w + rest}px`, width: `${rest}px`, transformOrigin: '0 50%' });
+    Object.assign(p2.style, { left: `${w + rest}px`, width: `${W - w - rest}px`, transformOrigin: '0 50%' });
     Object.assign(p1.querySelector(':scope > .fo-fold__front').style, { ...art(w), borderRadius: '0' });
     Object.assign(p2.querySelector(':scope > .fo-fold__front').style, { ...art(w + rest), borderRadius: '0 var(--r) var(--r) 0' });
     return { gate, p1, p2 };
@@ -2996,9 +3005,9 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
         { offset: at(FOLD_MS.video[1]), visibility: 'visible' }, { offset: Math.min(1, at(FOLD_MS.video[1]) + .001), visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
       ], opts),
       // folded behind the card (a pixel back), the panels swing out rightward in turn
-      ...crease(p1, FOLD_MS.first, at, opts, true, -1, -1),
+      ...crease(p1, FOLD_MS.first, at, opts, true, -1, -1, GATE_SHADE),
       p2.animate([{ offset: 0, opacity: 0 }, { offset: at(FOLD_MS.first[2]), opacity: 0 }, { offset: at(FOLD_MS.first[2]) + .001, opacity: 1 }, { offset: 1, opacity: 1 }], opts),
-      ...crease(p2, FOLD_MS.second, at, opts, true, -1, -1),
+      ...crease(p2, FOLD_MS.second, at, opts, true, -1, -1, GATE_SHADE),
       foFrame().animate([
         // at .004 rather than 0 until it fades in: the video's frame is drawn and
         // uploaded behind the gate from the start, not in the frame it appears
@@ -3022,13 +3031,13 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
     const swap = at(560), drop = at(1340);
     const shown = at(520), gone = at(620);   // card and gate overlap at the swap, as on the way out
     return [
-      foFrame().animate([{ offset: 0, opacity: 1 }, { offset: .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
+      foFrame().animate([{ offset: 0, opacity: 1 }, { offset: at(150), opacity: 0 }, { offset: 1, opacity: 0 }], opts),
       gate.animate([
         { offset: 0, visibility: 'visible' }, { offset: gone, visibility: 'visible' }, { offset: gone + .001, visibility: 'hidden' }, { offset: 1, visibility: 'hidden' },
       ], opts),
-      ...crease(p2, [0, 130, 260], at, opts, false, -1, -1),
+      ...crease(p2, [0, 130, 260], at, opts, false, -1, -1, GATE_SHADE),
       p2.animate([{ offset: 0, opacity: 1 }, { offset: at(260), opacity: 1 }, { offset: at(260) + .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
-      ...crease(p1, [260, 390, 520], at, opts, false, -1, -1),
+      ...crease(p1, [260, 390, 520], at, opts, false, -1, -1, GATE_SHADE),
       p.card.animate([
         { offset: 0, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
         { offset: shown, transform: tf(g.dx, g.dy, g.s), zIndex: 50, opacity: 0 },
@@ -3114,9 +3123,12 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   // A panel turning on its crease: rotation and the shade on whichever side
   // faces the viewer, keyed together. t = [start, edge-on, flat].
   const PANEL_SHADE = .55;
+  // the phone gate's flaps are narrow as they pass edge-on, and a full shade
+  // read as a dark line on light posters
+  const GATE_SHADE = .3;
   // A flap hinged on its right edge turns the other way (hand -1); one that
   // folds over another sits a pixel higher (lift).
-  const crease = (panel, t, at, opts, open = true, hand = 1, lift = 1) => {
+  const crease = (panel, t, at, opts, open = true, hand = 1, lift = 1, shadeAt = PANEL_SHADE) => {
     const [a, b, c] = t.map(at);
     const ang = (open ? [-180, -90, 0] : [0, -90, -180]).map((d) => d * hand || 0);
     const z = open ? [`${lift}px`, `${lift}px`, '0px'] : ['0px', `${lift}px`, `${lift}px`];
@@ -3138,8 +3150,8 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
         ? [{ offset: 0, opacity: 0 }, { offset: b, opacity: 0 }, { offset: b1, opacity: 1 }, { offset: 1, opacity: 1 }]
         : [{ offset: 0, opacity: 1 }, { offset: b, opacity: 1 }, { offset: b1, opacity: 0 }, { offset: 1, opacity: 0 }], opts));
       anims.push(shade.animate(later
-        ? [{ offset: 0, opacity: 0 }, { offset: b, opacity: 0 }, { offset: b1, opacity: PANEL_SHADE, easing: EASE_OUT }, { offset: c, opacity: 0 }, { offset: 1, opacity: 0 }]
-        : [{ offset: 0, opacity: 0 }, { offset: a, opacity: 0, easing: EASE_IN }, { offset: b, opacity: PANEL_SHADE }, { offset: b1, opacity: 0 }, { offset: 1, opacity: 0 }], opts));
+        ? [{ offset: 0, opacity: 0 }, { offset: b, opacity: 0 }, { offset: b1, opacity: shadeAt, easing: EASE_OUT }, { offset: c, opacity: 0 }, { offset: 1, opacity: 0 }]
+        : [{ offset: 0, opacity: 0 }, { offset: a, opacity: 0, easing: EASE_IN }, { offset: b, opacity: shadeAt }, { offset: b1, opacity: 0 }, { offset: 1, opacity: 0 }], opts));
     }
     return anims;
   };
@@ -3158,8 +3170,19 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
       start: (ins, frame) => `translateX(${ins.left + ins.width / 2 - frame.width / 6 - frame.left}px)`,
     };
   };
+  // Flat 3D panels are antialiased at their edges, so where two meet the page
+  // shows through as a light hairline; each later panel bleeds 1px over the
+  // one before, with the poster laid in pixels to match.
+  const bleedFold = (fold) => {
+    const W = fold.offsetWidth, H = fold.offsetHeight;
+    ['1', '2', '3'].forEach((n, k) => {
+      const f = fold.querySelector(`.fo-fold__panel--${n} > .fo-fold__front`), b = k ? 1 : 0;
+      Object.assign(f.style, { left: `${-b}px`, backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-(k * W / 3 - b)}px 0` });
+    });
+  };
   const reelOut = (ins, frame, at, opts, kind) => {
     const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf();
+    bleedFold(fold);
     const x0 = start(ins, frame);
     const R = REEL_MS;
     return [
@@ -3195,9 +3218,11 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   // behind the card before the card leaves its pocket.
   const reelIn = (ins, frame, at, opts, kind) => {
     const { fold, p1, flaps: [f1, f2], spread, rest, start } = insertOf();
+    bleedFold(fold);
     const x0 = start(ins, frame);
     return [
-      foFrame().animate([{ offset: 0, opacity: 1 }, { offset: .001, opacity: 0 }, { offset: 1, opacity: 0 }], opts),
+      // the video fades onto the poster rather than cutting to it
+      foFrame().animate([{ offset: 0, opacity: 1 }, { offset: at(150), opacity: 0 }, { offset: 1, opacity: 0 }], opts),
       ...crease(f2[0], [0, 170, 340], at, opts, false, f2[1], f2[2]),
       ...crease(f1[0], [200, 370, 540], at, opts, false, f1[1], f1[2]),
       p1.querySelector('.fo-fold__shade').animate([
@@ -3461,7 +3486,10 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   // does the panel slide away while the card flies home.
   let pending = null;   // the card a study was asked for, until its top arrives
   const toTop = (el, r) => {
-    if (!ON_HOME || el.matches(':popover-open')) return;
+    if (!ON_HOME) return;
+    // already up: hide and re-show, so it rises back above a dialog opened
+    // after it (StrictMode re-runs the panel's showModal in dev)
+    if (el.matches(':popover-open')) el.hidePopover();
     for (const [k, v] of [['--pop-x', r.x], ['--pop-y', r.y], ['--pop-w', r.w], ['--pop-h', r.h]]) el.style.setProperty(k, `${v}px`);
     el.setAttribute('popover', 'manual');
     el.showPopover();

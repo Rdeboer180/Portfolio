@@ -1133,6 +1133,12 @@ button, select { font: inherit; }
   box-shadow: inset 0 0 0 1px rgba(20, 22, 26, .16);
 }
 .fo-fold__shade { background: #06080b; opacity: 0; }
+/* the shades and the card stock round with the fronts, or their square
+   corners poke past a 10px cover loop while a panel turns (backs are
+   mirrored, so the outer edge is their local left) */
+.fo-fold__panel--1 > .fo-fold__shade { border-radius: var(--r) 0 0 var(--r); }
+.fo-fold__panel--3 > .fo-fold__shade:not(.fo-fold__shade--back) { border-radius: 0 var(--r) var(--r) 0; }
+.fo-fold__panel--3 > .fo-fold__back, .fo-fold__panel--3 > .fo-fold__shade--back { border-radius: var(--r) 0 0 var(--r); }
 .fo-fold__shadow {
   position: absolute; top: 5%; bottom: -3%; left: 1%; width: calc(100% / 3);
   background: rgba(0, 0, 0, .5); filter: blur(16px); transform-origin: 0 50%; opacity: 0;
