@@ -629,24 +629,42 @@ button, select { font: inherit; }
   transform-style: preserve-3d;
   transform: perspective(1400px) rotateY(var(--ry));
 }
-/* unlocked, the pill gives way to an open lock, a round badge in the art's
-   top-left corner in the type badge's colours (Ryan, 21 and 24 October):
-   the card still says it was protected, without the words */
+/* unlocked, the pill gives way to an open lock, a round badge in the same
+   corner, in the type badge's colours (Ryan, 21 and 24 October): the card
+   still says it was protected, without the words. Echoes of it ride the
+   card's back, the fold's first panel and the fly-out's video, so it stays
+   in place through the open. */
 .cf-lock__shut { display: contents; }
 .cf-lock__open { display: none; }
 :host(.is-unlocked) .cf-lock {
-  top: calc(var(--cw) * .022); bottom: auto; left: calc(var(--cw) * .022);
+  left: calc(var(--cw) * .02); bottom: calc(var(--cw) * .02);
   width: calc(var(--cw) * .074); height: calc(var(--cw) * .074); padding: 0;
   display: grid; place-items: center; border-radius: 50%; color: var(--card-ink);
   background: radial-gradient(circle at 32% 28%, #ffffff, #dfe2e7 46%, #b9bec6 100%);
   box-shadow: 0 1px 2px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.7), inset 0 -2px 3px rgba(0,0,0,.12);
 }
 :host(.is-unlocked) .cf-lock svg { width: calc(var(--cw) * .04); height: calc(var(--cw) * .04); }
-:host(.is-unlocked) .stage--holo .cf-lock {
+:host(.is-unlocked) .stage--holo .cf-lock, :host(.is-unlocked) .fo-lock {
   color: #fff;
   background: radial-gradient(circle at 32% 28%, hsl(var(--h) calc(var(--s) * 85%) 50%), hsl(var(--h) calc(var(--s) * 80%) 38%) 58%, hsl(var(--h) calc(var(--s) * 85%) 26%));
   box-shadow: 0 1px 2px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.45), inset 0 -2px 3px rgba(0,0,0,.2);
 }
+/* the echoes: hidden while locked, and placed where the front's badge sits */
+.cf-lock--echo { display: none; }
+:host(.is-unlocked) .cf-lock--echo { display: grid; z-index: 6; }
+/* on the back: the front's art window ends .782cw down (.032 padding, .165
+   header, a 1.6 window across .936cw), the badge .02cw inside it */
+:host(.is-unlocked) .cf-lock--back { left: calc(var(--cw) * .052); top: calc(var(--cw) * .688); bottom: auto; }
+/* in the fly-out, on phones, where the card becomes the video: --lock-x/y/s
+   are set as it lands (its width is the gate's middle panel) */
+:host(.is-unlocked) .fo-lock {
+  position: absolute; left: var(--lock-x, 2%); top: var(--lock-y, auto); bottom: auto;
+  width: var(--lock-s, 34px); height: var(--lock-s, 34px); padding: 0;
+  display: grid; place-items: center; border-radius: 50%; z-index: 3; pointer-events: none;
+}
+/* only the phone gate places it (lockSpot): beside a sleeve, the card keeps its own */
+:host(.is-unlocked) .fo-lock:not([style*="--lock-y"]) { display: none; }
+:host(.is-unlocked) .fo-lock svg { width: 54%; height: 54%; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 :host(.is-unlocked) .cf-lock__shut { display: none; }
 :host(.is-unlocked) .cf-lock__open { display: contents; }
 /* a locked card acknowledges the touch without leaving its sleeve */

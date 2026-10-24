@@ -85,9 +85,11 @@ window.mountBinder = function (document) {
       <footer class="cf-foot"><span>${esc(c.year)}</span><span>${esc(c.category)}</span></footer>
     </div>`;
   // The back is the intro video's first look: its poster, full bleed, under the foil.
+  const lockEcho = (c, cls) => (c.locked ? `<span class="cf-lock cf-lock--echo ${cls}" aria-hidden="true" style="--h:${c.theme.h};--s:${c.theme.s}"><span class="cf-lock__open">${svg(ICON.unlocked)}</span></span>` : '');
   const backHTML = (c) => `
     <div class="face face--back face--video" aria-hidden="true">
       <img data-src="${c.back.intro.poster}" alt="" decoding="async" style="object-position:${c.back.intro.focus * 100}% 50%">
+      ${lockEcho(c, 'cf-lock--back')}
       <div class="face__foil"></div>
     </div>`;
 
@@ -1083,6 +1085,7 @@ window.mountBinder = function (document) {
               ${intro.captions ? `<track kind="captions" srclang="en" label="English" src="${intro.captions}">` : ''}
             </video>
             <button type="button" class="fo-pause" aria-label="Pause the video">${svg(ICON.pause)}${svg(ICON.play)}</button>` : ''}
+            ${lockEcho(c, 'fo-lock')}
           </div>`;
     const caption = (fade) => (intro.caption ? `<figcaption${fade ? ' class="fo-fade"' : ''}>${esc(intro.caption)}</figcaption>` : '');
     // the panel's own sleeve, with a copy of the card waiting to be shown
@@ -1097,7 +1100,7 @@ window.mountBinder = function (document) {
     const fold = `
           <div class="fo-fold${c.theme.tone === 'dark' ? ' fo-fold--dark' : ''}" aria-hidden="true" style="aspect-ratio:${intro.width} / ${intro.height};--poster:url('${intro.poster}');--r:${intro.frame === 'reel' ? 0 : 10}px;--h:${c.theme.h};--s:${c.theme.s}">
             <div class="fo-fold__shadow"></div>
-            <div class="fo-fold__panel fo-fold__panel--1">${face(false)}</div>
+            <div class="fo-fold__panel fo-fold__panel--1">${face(false)}${lockEcho(c, 'fo-lock')}</div>
             <div class="fo-fold__panel fo-fold__panel--2">${face(true)}
               <div class="fo-fold__panel fo-fold__panel--3">${face(true)}</div>
             </div>
@@ -1105,7 +1108,7 @@ window.mountBinder = function (document) {
     // the phone's gate: the card's back as the middle panel, a flap each side
     const gate = `
           <div class="fo-gate" aria-hidden="true" style="aspect-ratio:${intro.width} / ${intro.height};--poster:url('${intro.poster}');--r:${intro.frame === 'reel' ? 0 : 10}px;--h:${c.theme.h};--s:${c.theme.s}">
-            <div class="fo-gate__mid"></div>
+            <div class="fo-gate__mid">${lockEcho(c, 'fo-lock')}</div>
             <div class="fo-gate__flap fo-gate__flap--l">${face(true)}</div>
             <div class="fo-gate__flap fo-gate__flap--r">${face(true)}</div>
           </div>`;
@@ -1473,6 +1476,14 @@ window.mountBinder = function (document) {
   const FOLD_MS = { lift: 340, spin: [460, 1460], land: 1500, first: [1520, 1700, 1880], second: [1880, 2060, 2240], video: [2280, 2340] };
   // The markup's two flaps are the two panels to the right of the card, each
   // hinged on its left edge; the second waits unseen until the first is flat.
+  // The unlocked badge's spot, in the fly-out's pixels: the card lands at the
+  // width w (the gate's middle, the fold's first panel), so the badge keeps
+  // the place it had on the card.
+  const lockSpot = (host, w) => {
+    if (!host) return;
+    for (const [k, v] of [['--lock-x', w * .052], ['--lock-y', w * .688], ['--lock-s', w * .074]]) host.style.setProperty(k, `${v}px`);
+    host.querySelectorAll('.fo-lock').forEach((el) => el.setAttribute('style', `${el.getAttribute('style') || ''};--lock-y:${w * .688}px`.replace(/^;/, '')));
+  };
   const foldGeometry = (g) => {
     const gate = foArticle.querySelector('.fo-gate'), r = foFrame().getBoundingClientRect();
     // snapped to device pixels, the flaps' edges land on whole pixels and the
@@ -1482,6 +1493,7 @@ window.mountBinder = function (document) {
     const art = (x) => ({ backgroundImage: 'var(--poster)', backgroundSize: `${W}px ${H}px`, backgroundPosition: `${-x}px 0` });
     const mid = gate.querySelector('.fo-gate__mid'), p1 = gate.querySelector('.fo-gate__flap--l'), p2 = gate.querySelector('.fo-gate__flap--r');
     Object.assign(mid.style, { left: '0px', width: `${w}px`, ...art(0) });
+    lockSpot(gate.parentElement, w);
     Object.assign(p1.style, { left: `${w}px`, width: `${rest}px`, transformOrigin: '0 50%' });
     Object.assign(p2.style, { left: `${w + rest}px`, width: `${W - w - rest}px`, transformOrigin: '0 50%' });
     Object.assign(p1.querySelector(':scope > .fo-fold__front').style, { ...art(w), borderRadius: '0' });
@@ -1827,9 +1839,11 @@ window.mountBinder = function (document) {
     const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, '0')).join('');
   };
+  let topHost = null;   // the site panel's study top (mountTop), its own shadow root
   const setUnlocked = (on, remember) => {
     unlocked = Boolean(on);
     document.documentElement.classList.toggle('is-unlocked', unlocked);
+    topHost?.classList.toggle('is-unlocked', unlocked);
     if (unlocked) pockets.forEach(loadBack);
     parts.forEach((p, i) => p.card.setAttribute('aria-label', cardLabel(CARDS[i])));
     pick.querySelectorAll('option').forEach((o, i) => { o.textContent = pickLabel(CARDS[i]); });
@@ -2054,6 +2068,10 @@ window.mountBinder = function (document) {
     filled = null;
     // the site unlocked a protected study on the way in
     if (shut(c) && (flag('localStorage', UNLOCK.key) || flag('sessionStorage', UNLOCK.legacyKey))) setUnlocked(true, false);
+    // the study's top is its own shadow root, so its :host(.is-unlocked)
+    // rules need the class on this host too (setUnlocked keeps it in step)
+    topHost = el;
+    el.classList.toggle('is-unlocked', unlocked);
     const flying = pending === i && !reduced() && state === 'seated';
     if (!flying) pending = null;
     sel = i;
