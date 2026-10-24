@@ -253,7 +253,7 @@ window.BINDER_CARDS = [
     "back": {
       "intro": {
         "src": "../../../public/images/work/design-enablement/internal-tools-reel.mp4",
-        "poster": "../../../public/images/work/design-enablement/internal-tools-reel-poster.jpg",
+        "poster": "../../../public/images/work/design-enablement/internal-tools-reel-poster-v2.jpg",
         "captions": null,
         "caption": "tr-tire-tests on the 3C pilot (stage test 363), compressed to five seconds; the finished page for test 363 on tirerack.com; the Hero Crop Simulator in use. The hands-on time in the first part is an estimate from the plan, not yet measured across a full run.",
         "alt": "Three parts. tr-tire-tests building test 363 on stage: four Workfront documents are read, the plan is approved, the fields, tires and ratings fill in, and an independent QA check reports 0 High findings. Then the finished test page live on tirerack.com. Then the Hero Crop Simulator previewing one hero image at desktop, tablet and mobile crops.",
@@ -1813,8 +1813,8 @@ window.BINDER_CARDS = [
     "category": "Professional work",
     "back": {
       "intro": {
-        "src": "../../../public/assets/portfolio-safe/landing-pages/cover-loop.mp4",
-        "poster": "../../../public/assets/portfolio-safe/landing-pages/cover-loop-poster.jpg",
+        "src": "../../../public/assets/portfolio-safe/landing-pages/cover-loop-v2.mp4",
+        "poster": "../../../public/assets/portfolio-safe/landing-pages/cover-loop-v2-poster.jpg",
         "captions": null,
         "caption": "",
         "alt": "AEM Landing Page System & SEO Template Framework preview",
@@ -2010,7 +2010,7 @@ window.BINDER_CARDS = [
     "back": {
       "intro": {
         "src": "../../../public/images/work/seasonal-content-system/seasonal-swap-reel.mp4",
-        "poster": "../../../public/images/work/seasonal-content-system/seasonal-swap-reel-poster.jpg",
+        "poster": "../../../public/images/work/seasonal-content-system/seasonal-swap-reel-poster-winter.jpg",
         "captions": null,
         "caption": "Winter pages captured live on 23 October 2026; non-winter pages from the Internet Archive (homepage 2 August 2026, tires 11 July 2026, packages 6 August 2025). The archive kept no tires hero image, so that pair starts at the headline.",
         "alt": "The Tire Rack homepage, tires and packages pages on a season timeline: a frost line winterizes each page, the swapped fragments are named, then each page splits to show the non-winter version southern states see beside the winter version for winter climates.",

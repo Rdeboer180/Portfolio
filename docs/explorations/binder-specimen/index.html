@@ -3122,7 +3122,8 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   };
   // A panel turning on its crease: rotation and the shade on whichever side
   // faces the viewer, keyed together. t = [start, edge-on, flat].
-  const PANEL_SHADE = .55;
+  // .55 read as a dark bar when a panel was a sliver, edge-on (24 Oct)
+  const PANEL_SHADE = .35;
   // the phone gate's flaps are narrow as they pass edge-on, and a full shade
   // read as a dark line on light posters
   const GATE_SHADE = .3;

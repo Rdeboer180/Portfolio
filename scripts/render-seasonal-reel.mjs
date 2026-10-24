@@ -25,6 +25,6 @@ for (let i = 0; i < frames; i++) {
 ff.stdin.end();
 await new Promise((res, rej) => ff.on('exit', c => c === 0 ? res() : rej(new Error('ffmpeg ' + c))));
 await page.evaluate(t => window.seek(t), POSTER_AT);
-await page.screenshot({ type: 'jpeg', quality: 90, path: out.replace(/\.mp4$/, '-poster.jpg') });
+await page.screenshot({ type: 'jpeg', quality: 90, path: out.replace(/\.mp4$/, '-poster-winter.jpg') });
 await browser.close();
 console.log(`wrote ${frames} frames (${T.toFixed(2)}s @ ${FPS}fps) + poster -> ${path.relative(root, out)}`);
