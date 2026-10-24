@@ -508,7 +508,7 @@ const projects: Project[] = [
     thesis: 'Shared rules for the details that make wheel fitment complicated.',
     summary: 'I built WheelRack’s design system from scratch and designed the full dealer product, from vehicle search through checkout. I specified every state and edge case in the terms our React engineer built from, and the designs and the dealer experience helped the platform grow from six retail partners to ten.',
     ownership: 'I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.',
-    cardHook: 'A design system built from scratch, a full dealer product specified for React with its edge cases, and a platform that grew from six partners to ten.',
+    cardHook: 'I built the design system from scratch and designed the full dealer product, specified for React down to its edge cases. Partners grew from six to ten during the build.',
     compactStory: true,
     annotations: {
       problem: 'Dealers were already on tablets. The interface had to catch up.',
@@ -609,7 +609,7 @@ const projects: Project[] = [
       {
         key: 'edge-cases',
         part: 'Part 2 · The full product, specified for React',
-        label: 'The edge cases were designed, not discovered',
+        label: 'The edge cases were designed before the build',
         systemMarker: 'Edge cases',
         description: 'Fitment makes the unhappy paths common. A finish change can remove the size a dealer picked, a vehicle may take an optional rear set, two notes can need the same space, and a vehicle or a filter combination can return nothing. I designed each of those states before the build, on desktop and mobile, with the message it shows and what the dealer can do next.',
         images: [
@@ -628,7 +628,7 @@ const projects: Project[] = [
         part: 'Part 2 · The full product, specified for React',
         label: 'Annotations written in the build’s own terms',
         systemMarker: 'Design + engineering',
-        description: 'Cheryl Carpenter owned the React build, and I owned the design of the whole product. We worked together daily in Slack threads and calls, and she stress-tested every viewport. My notes were written for her code rather than for a review deck: focus rings named by their CSS variable, state tables with each size and value, which radio style means a filter and which means a fitment choice, and layout rules such as the extra padding a mobile fly-out needs.',
+        description: 'Cheryl Carpenter owned the React build, and I owned the design of the whole product. We worked together daily in Slack threads and calls, and she stress-tested every viewport. My notes were written for her code: focus rings named by their CSS variable, state tables with each size and value, which radio style means a filter and which means a fitment choice, and layout rules such as the extra padding a mobile fly-out needs.',
         images: [
           { src: '/images/work/wheelrack/dev-notes/filter-hover-focus.jpg', alt: 'Filter dropdown component notes: hover states, focus outline styles, and a +8 left padding rule for the mobile fly-out', layout: 'full', caption: 'Hover, focus and the mobile fly-out padding, written beside the component.' },
           { src: '/images/work/wheelrack/dev-notes/form-how-to-use.jpg', alt: 'Form documentation: focus uses box-shadow var(--focus-std), orange outline on focus, blue radio for navigation filters', layout: 'half', caption: 'How to use it and how not to: focus is always var(--focus-std).' },
@@ -656,7 +656,7 @@ const projects: Project[] = [
         part: 'Part 3 · A product that helped win partners',
         label: 'Designs that helped bring in new partners',
         systemMarker: 'Outcome',
-        description: 'The designs and the dealer experience became part of how WheelRack grew. Retail partners went from six to ten during the build, alongside other business factors. Because every partner sits on the same tokens and components, a new partner is a theme and its purchasing rules, not a new product. Six months after the build, Tire Rack extended the same framework into Wholesale, and I helped additional designers start working in it.',
+        description: 'Retail partners went from six to ten during the build, and the designs and the dealer experience helped win them, alongside other business factors. Every partner sits on the same tokens and components, so adding one means a new theme and its purchasing rules on the same product. Six months after the build, Tire Rack extended the same framework into Wholesale, and I helped additional designers start working in it.',
         bullets: [
           'Partners grew from 6 to 10 during the build.',
           'A new partner is a theme and purchasing rules on one shared system.',
@@ -1716,7 +1716,7 @@ $mobile-max-width: 768px;
     cardTitle: 'Tools that optimize and automate tasks',
     seoTitle: 'Design Enablement: a Claude Code plugin for tire test pages and a responsive crop simulator',
     summary:
-      'Two internal tools, one rule: automate the repetition and keep the judgment with a person. tr-tire-tests is a Claude Code plugin with MCP tools that builds a tire test page in the new stage admin straight from its Workfront documents, then checks its own work. The Hero Crop Simulator lets Design and Photography check responsive crops before an image reaches AEM.',
+      'Both internal tools automate repetitive work and leave the judgment with a person. tr-tire-tests is a Claude Code plugin with MCP tools that builds a tire test page in the new stage admin straight from its Workfront documents, then checks its own work. The Hero Crop Simulator lets Design and Photography check responsive crops before an image reaches AEM.',
     cardHook: 'A Claude Code plugin builds tire test pages on stage from their source documents and checks its own work; a crop simulator checks hero images before they reach AEM.',
     year: '2025–2026',
     tags: [
@@ -1756,7 +1756,7 @@ $mobile-max-width: 768px;
     ],
 
     // ── 03 Constraints ──
-    constraintsPunch: 'Fast is not worth anything if it publishes the wrong page.',
+    constraintsPunch: 'A fast tool that publishes the wrong page costs more time than it saves.',
     constraints: [
       'The plugin could only write to stage. It never publishes, pushes or deletes anything, and it never touches the old admin. Pushing to production stays a manual step.',
       'It could not guess. A blank in the documents stays blank and goes on a to-do list instead of being filled with something plausible.',
@@ -1819,7 +1819,7 @@ $mobile-max-width: 768px;
       "On the 3C pilot, tr-tire-tests filled test 363 on stage with 12 saves, 115 ratings and 13 charts, and the independent check found 0 High findings. By the plan's estimate a tire test drops from about 12 hours hands-on and 4 days elapsed to about 1.5 to 3.5 hours and 1 day. What is left for a person is a few questions, a preview to check, and a short to-do list: the real hero image, the video ID and related tests. Those numbers have not been measured across a full run yet. The crop simulator took the photography task from three steps to one.",
     takeaways: [
   "The useful work was deciding what the tool must never do: guess, publish, or touch production.",
-  "A tool that checks itself is not enough. The QA step rebuilds the expected page from the documents without looking at what the plugin wrote.",
+  "The plugin's own checks were not enough. The QA step rebuilds the expected page from the documents without looking at what the plugin wrote.",
   "Both tools started from the same move: find the source that already holds the rules, and read it instead of retyping it."
 ],
     outcomeArtifacts: [
@@ -2544,14 +2544,14 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   wheelrack: p => ({
     title: 'WheelRack', category: 'Professional work', role: 'I built the design system from scratch and designed the complete dealer product, specified for our React engineer.',
     status: 'Live · Dealer platform',
-    deck: 'A design system built from nothing, a dealer product from vehicle search through checkout with every edge case specified for React, and a platform that grew from six retail partners to ten.',
+    deck: 'I built WheelRack’s design system from nothing and designed the dealer product from vehicle search through checkout, with every edge case specified for React. Retail partners grew from six to ten during the build.',
     ownership: p.ownership!, opening: p.studyHero,
     decisions: [
       { part: 'A design system built from scratch', title: 'Start from tokens, not screens', body: 'Six partners ran different versions of the experience with nothing shared, so I built 200+ tokens in Tokens Studio, then the components from them, each in every state the React build had to support. 50+ went into Storybook, named the way Figma names them.', image: evidence(p, 'foundation'), gallery: subsection(p, 'library')?.images },
       { part: 'The full product, specified for React', title: 'Put fitment inside the component', body: 'Front and rear configurations, finishes, availability and partner-specific purchasing actions became explicit variants of one purchase component, resolved before it was reused across the journey.', image: p.approachSubsections?.find(s => s.key === 'fitment')?.variants?.[0].image },
       { part: 'The full product, specified for React', title: 'Design the edge cases before the build', body: 'A finish change that removes the chosen size, an optional rear set, two notes at once, a vehicle with no wheels: each was designed on desktop and mobile, and annotated in the terms Cheryl Carpenter’s React build used, down to the focus variable and the fly-out padding.', image: evidence(p, 'edge-cases', 2), gallery: (subsection(p, 'edge-cases')?.images ?? []).filter((_, i) => i !== 2) },
       { part: 'The full product, specified for React', title: 'Annotate in the build’s own terms', body: 'Cheryl Carpenter owned the React build; I owned the design of the whole product, and we worked daily in Slack and on calls. My notes named focus rings by their CSS variable, listed every state and size in tables, and mapped numbered callouts to a behavior table. Then I spent 40+ hours checking her build against Figma, screen by screen.', image: evidence(p, 'documentation'), gallery: [evidence(p, 'documentation', 1)!, evidence(p, 'documentation', 2)!, evidence(p, 'reconciliation')!, evidence(p, 'reconciliation', 1)!], quote: subsection(p, 'documentation')?.quote },
-      { part: 'A product that helped win partners', title: 'Make a new partner a theme, not a new product', body: 'Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.' },
+      { part: 'A product that helped win partners', title: 'Add partners as themes on one product', body: 'Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.' },
     ],
     outcome: 'The journey is live from vehicle selection through checkout. Partners grew from six to ten during the build, and the framework later extended into Wholesale.',
   }),

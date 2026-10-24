@@ -86,7 +86,7 @@ window.BINDER_CARDS = [
         "Dealers used the roughly 20-year-old wheel visualizer on tablets, but the interface was not responsive. Six retail partners carried different versions of the experience, without shared tokens or components.",
         "The redesign had to accommodate partner branding and purchasing rules while proving that the new React and microservices stack could support the full journey."
       ],
-      "deck": "A design system built from nothing, a dealer product from vehicle search through checkout with every edge case specified for React, and a platform that grew from six retail partners to ten.",
+      "deck": "I built WheelRack’s design system from nothing and designed the dealer product from vehicle search through checkout, with every edge case specified for React. Retail partners grew from six to ten during the build.",
       "ownership": "I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.",
       "evidence": [],
       "decisions": [
@@ -190,7 +190,7 @@ window.BINDER_CARDS = [
           }
         },
         {
-          "title": "Make a new partner a theme, not a new product",
+          "title": "Add partners as themes on one product",
           "body": "Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.",
           "link": null,
           "image": null,
