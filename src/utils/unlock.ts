@@ -20,12 +20,16 @@ const UNLOCK_KEY = 'rd-unlocked';
 const LEGACY_SESSION_KEY = 'cs-unlocked';
 
 /**
- * Accepted passwords, as SHA-256. Two work:
- *   1. REACT_APP_PROJECT_PASSWORD_HASH — the private one, from .env.local
- *   2. the hash below — "#showWork", the shareable one Ryan hands to recruiters
+ * The one accepted password, as SHA-256: the shareable one Ryan hands to
+ * recruiters. Neither the password nor its hash lives in this repository. The
+ * build reads the hash from REACT_APP_PROJECT_PASSWORD_HASH: the
+ * PROJECT_PASSWORD_HASH repo secret in CI, .env.local on a laptop. Without it
+ * nothing unlocks, so a build that lost the secret fails closed.
+ *
+ * It still ships inside the bundle, the way any client-side check must, so
+ * keeping it out of the source keeps it out of reading view, not out of reach.
  */
-const SHOW_WORK_HASH =
-  '5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be60e9a063d9503f29';
+const PASSWORD_HASH = process.env.REACT_APP_PROJECT_PASSWORD_HASH;
 
 const sha256 = async (value: string): Promise<string> => {
   const data = new TextEncoder().encode(value);
@@ -35,10 +39,10 @@ const sha256 = async (value: string): Promise<string> => {
     .join('');
 };
 
-/** True when the supplied password matches either accepted secret. */
+/** True when the supplied password is the accepted one. */
 export const verifyPassword = async (password: string): Promise<boolean> => {
-  const hash = await sha256(password);
-  return hash === SHOW_WORK_HASH || hash === process.env.REACT_APP_PROJECT_PASSWORD_HASH;
+  if (!PASSWORD_HASH) return false;
+  return (await sha256(password)) === PASSWORD_HASH;
 };
 
 // Storage access is wrapped — Safari private mode throws on write, and a
