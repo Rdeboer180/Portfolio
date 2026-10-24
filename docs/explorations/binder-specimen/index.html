@@ -641,11 +641,24 @@ html.binder-open .home-hero { display: block; padding-block: 64px 48px; }
   transform-style: preserve-3d;
   transform: perspective(1400px) rotateY(var(--ry));
 }
-/* unlocked, the pill gives way to an open lock in the same corner (Ryan,
-   21 October): the card still says it was protected, without the words */
+/* unlocked, the pill gives way to an open lock, a round badge in the art's
+   top-left corner in the type badge's colours (Ryan, 21 and 24 October):
+   the card still says it was protected, without the words */
 .cf-lock__shut { display: contents; }
 .cf-lock__open { display: none; }
-html.is-unlocked .cf-lock { padding: calc(var(--cw) * .011); }
+html.is-unlocked .cf-lock {
+  top: calc(var(--cw) * .022); bottom: auto; left: calc(var(--cw) * .022);
+  width: calc(var(--cw) * .074); height: calc(var(--cw) * .074); padding: 0;
+  display: grid; place-items: center; border-radius: 50%; color: var(--card-ink);
+  background: radial-gradient(circle at 32% 28%, #ffffff, #dfe2e7 46%, #b9bec6 100%);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.7), inset 0 -2px 3px rgba(0,0,0,.12);
+}
+html.is-unlocked .cf-lock svg { width: calc(var(--cw) * .04); height: calc(var(--cw) * .04); }
+html.is-unlocked .stage--holo .cf-lock {
+  color: #fff;
+  background: radial-gradient(circle at 32% 28%, hsl(var(--h) calc(var(--s) * 85%) 50%), hsl(var(--h) calc(var(--s) * 80%) 38%) 58%, hsl(var(--h) calc(var(--s) * 85%) 26%));
+  box-shadow: 0 1px 2px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.45), inset 0 -2px 3px rgba(0,0,0,.2);
+}
 html.is-unlocked .cf-lock__shut { display: none; }
 html.is-unlocked .cf-lock__open { display: contents; }
 /* a locked card acknowledges the touch without leaving its sleeve */

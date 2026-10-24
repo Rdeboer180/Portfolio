@@ -20,6 +20,7 @@ declare global {
     __binderNavigate?: (slug: string) => void;
     __binderOverview?: (slug: string) => void;
     __binderUnlocked?: () => void;
+    binder?: { unlock?: (on?: boolean) => void };
   }
 }
 
@@ -118,7 +119,7 @@ const CaseStudyBinder: React.FC = () => {
   const slot = useRef<HTMLDivElement>(null);
   // The binder's dialog checks the password itself; the site learns of it
   // here, so the nav, the studies and other pages unlock in the same moment.
-  const { unlock } = useUnlock();
+  const { unlock, unlocked } = useUnlock();
   const navigate = useNavigate();
   useEffect(() => {
     routerNavigate = (to) => navigate(to);
@@ -128,6 +129,12 @@ const CaseStudyBinder: React.FC = () => {
     window.__binderUnlocked = unlock;
     return () => { if (window.__binderUnlocked === unlock) delete window.__binderUnlocked; };
   }, [unlock]);
+  // and the other way: the site's own prompt unlocking tells the binder, which
+  // only hears another tab's unlock (storage events skip the page that wrote),
+  // so its cards drop "Password protected" in the same moment
+  useEffect(() => {
+    if (unlocked) window.binder?.unlock?.(true);
+  }, [unlocked]);
   useEffect(() => {
     const at = slot.current;
     if (!at) return undefined;
