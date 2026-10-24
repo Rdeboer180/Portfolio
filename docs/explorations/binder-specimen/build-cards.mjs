@@ -152,7 +152,7 @@ const BACK_FOCUS = {
   // the protected studies, shown once unlocked
   wheelrack: 0.75,            // the wheel visualizer and the car
   'aem-component-system': 0.5, // the Shop by Vehicle sheet
-  'tire-categories': 0.3,     // the mega menu's panel
+  'tire-categories': 0.5,     // the reel's poster: the Performance modal, centred
   'design-enablement': 0.55,  // the crop simulator's previews
   'figma-template-governance': 0.5, // the Tools panel
   'landing-pages': 0.5,       // the middle deal tile
@@ -173,7 +173,7 @@ const POSTER_AT = {
   heatherwood: 0.6,           // frames 9–49 of 30fps
   // the protected studies' loops open from black; their posters are the
   // first lit frame (none matches exactly, nearest at 12 of 24fps)
-  'tire-categories': 0.5,
+  'tire-categories': 3.6,    // the reel's Performance modal with its chart built (keyframe there)
   'design-enablement': 6.9,    // the tools reel's held QA state (6.3–7.2s), with a keyframe there
   'landing-pages': 2.0,      // held from 0.8s; at 0.5s only one frame matched the poster, mid-fade
 };

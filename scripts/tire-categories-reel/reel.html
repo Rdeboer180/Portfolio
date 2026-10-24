@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+/* Tire Categories intro reel (render-tire-categories-reel.mjs). No titles:
+   the work alone, live on tirerack.com, captured 24 October 2026.
+   The Tire Categories & Types page and its icon grid, the Performance
+   "Category Performance Averages" modal building its chart, three category
+   pages (Winter, All-Terrain, Performance), then a flip through eight child
+   pages with their Tire Features icons in place. Driven by seek(t). */
+*{box-sizing:border-box}html,body{margin:0;background:#e9eaec}
+#stage{position:relative;width:1600px;height:900px;overflow:hidden;background:#e9eaec}
+.seg{position:absolute;inset:0;opacity:0;overflow:hidden;background:#fff}
+.seg img{position:absolute;left:0;top:0;width:1600px;display:block}
+#book{background:radial-gradient(120% 90% at 50% 40%,#f4f5f7,#dfe1e5)}
+.page{position:absolute;left:112px;top:63px;width:1376px;height:774px;transform-origin:0 50%;transform-style:preserve-3d}
+.page .face,.page .back{position:absolute;inset:0;backface-visibility:hidden;border-radius:6px;overflow:hidden}
+.page .face{background:#fff;box-shadow:0 2px 0 rgba(0,0,0,.04),0 24px 48px -20px rgba(20,24,30,.45)}
+.page .face img{width:100%;height:100%;object-fit:cover;display:block}
+.page .back{transform:rotateY(180deg);background:linear-gradient(90deg,#fafafa,#ededed)}
+.page .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,0) 60%);opacity:0;pointer-events:none}
+#bookWrap{position:absolute;inset:0;perspective:2600px}
+</style></head><body><div id="stage">
+<div class="seg" id="types"><img src="types.jpg" alt=""></div>
+<div class="seg" id="modal"><img id="modalImg" src="modal/f000.jpg" alt=""></div>
+<div class="seg" id="winter"><img src="winter.jpg" alt=""></div>
+<div class="seg" id="allterrain"><img src="allterrain.jpg" alt=""></div>
+<div class="seg" id="performance"><img src="performance.jpg" alt=""></div>
+<div class="seg" id="book"><div id="bookWrap"></div></div>
+</div>
+<script>
+const KIDS = ['studless', 'winter-perf', 'studdable', 'at-onroad', 'at-offroad', 'mud', 'rugged', 'max-perf'];
+const wrap = document.getElementById('bookWrap');
+// last page at the bottom of the stack, the first on top
+wrap.innerHTML = KIDS.map((k, i) => `<div class="page" style="z-index:${KIDS.length - i}"><div class="face"><img src="kid-${k}.jpg" alt=""><i class="shade"></i></div><div class="back"></div></div>`).join('');
+const pages = [...wrap.children];
+const MODAL = Array.from({ length: 25 }, (_, i) => `modal/f${String(i).padStart(3, '0')}.jpg`);
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ramp = (t, a, b) => clamp((t - a) / (b - a));
+const ease = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const $ = (id) => document.getElementById(id);
+const X = .25;   // crossfade
+
+// [id, start, end]
+const SEG = [['types', 0, 2.0], ['modal', 1.9, 4.0], ['winter', 3.9, 5.6], ['allterrain', 5.5, 7.2], ['performance', 7.1, 8.4], ['book', 8.3, 14.4]];
+window.T_END = 14.4;
+const pan = (id, y) => { $(id).querySelector('img').style.transform = `translateY(${-y}px)`; };
+
+window.seek = (t) => {
+  SEG.forEach(([id, a, b], i) => {
+    const first = i === 0, last = i === SEG.length - 1;
+    const op = (first ? 1 : ramp(t, a, a + X)) * (last ? 1 : 1 - ramp(t, b - X / 2, b + X / 2));
+    $(id).style.opacity = String(t < a || t > b + X ? 0 : op);
+    $(id).style.zIndex = String(i + 1);
+  });
+  // the types page, down to its icon grid
+  pan('types', 640 * ease(ramp(t, .45, 1.7)));
+  // the modal builds its chart
+  $('modalImg').src = MODAL[Math.round(clamp((t - 2.0) / 1.5) * (MODAL.length - 1))];
+  // the category pages: hero, averages, then their types
+  pan('winter', 860 * ease(ramp(t, 4.15, 5.45)));
+  pan('allterrain', 900 * ease(ramp(t, 5.75, 7.05)));
+  pan('performance', 700 * ease(ramp(t, 7.35, 8.3)));
+  // the book: each child page turns away over its left edge
+  pages.forEach((pg, i) => {
+    if (i === pages.length - 1) return;   // the last stays
+    const s = 8.85 + i * .68, p = ease(ramp(t, s, s + .55));
+    pg.style.transform = `rotateY(${-178 * p}deg)`;
+    pg.querySelector('.shade').style.opacity = String(Math.sin(Math.PI * p) * .9);
+  });
+};
+window.__ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {}))).then(() => Promise.all(MODAL.map((src) => { const im = new Image(); im.src = src; return im.decode().catch(() => {}); })));
+window.__ready.then(() => { if (!window.__record) { const t0 = performance.now(); const loop = () => { window.seek(((performance.now() - t0) / 1000) % window.T_END); requestAnimationFrame(loop); }; loop(); } });
+</script></body></html>

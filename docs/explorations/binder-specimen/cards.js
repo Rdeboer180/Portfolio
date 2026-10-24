@@ -1477,16 +1477,16 @@ window.BINDER_CARDS = [
     "category": "Professional work",
     "back": {
       "intro": {
-        "src": "../../../public/assets/portfolio-safe/tire-categories/cover-loop.mp4",
-        "poster": "../../../public/assets/portfolio-safe/tire-categories/cover-loop-poster.jpg",
+        "src": "../../../public/images/work/tire-categories/tire-categories-reel.mp4",
+        "poster": "../../../public/images/work/tire-categories/tire-categories-reel-poster.jpg",
         "captions": null,
-        "caption": "",
-        "alt": "Tire Category Page Redesign & Optimizations preview",
-        "frame": "preview",
-        "focus": 0.3,
-        "posterAt": 0.5,
-        "width": 1280,
-        "height": 800
+        "caption": "The live pages on tirerack.com, captured 24 October 2026: the types page and its Performance chart, three category pages, then eight sub-category pages with their icons in place.",
+        "alt": "The Tire Categories & Types page and its icon grid; the Performance category modal building its performance chart; the Winter, All-Terrain and Performance category pages; then a flip through eight sub-category pages, each with its Tire Features icons.",
+        "frame": "reel",
+        "focus": 0.5,
+        "posterAt": 3.6,
+        "width": 1600,
+        "height": 900
       }
     },
     "panel": {
@@ -1519,12 +1519,34 @@ window.BINDER_CARDS = [
         "I needed to translate that knowledge into a comparison someone could use, even if this was the first Tire Rack page they had seen."
       ],
       "deck": "A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.",
-      "ownership": "I designed the hierarchy and icon system and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.",
+      "ownership": "I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.",
       "evidence": [],
       "decisions": [
         {
-          "title": "Give a search visitor the essentials first",
-          "body": "SEO needed depth; shoppers needed a useful comparison. I brought the performance chart forward and reduced each category to three essential takeaways, so the page makes sense even when someone arrives directly from search.",
+          "title": "Make the types page a comparison",
+          "body": "Every category on Tire Categories & Types gets an icon, a short description and a Category Performance Averages link. The modal builds its chart in CSS, with reduced-motion behavior, a text fallback and screen-reader labels, so a shopper can compare categories before choosing one.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/tire-categories/primaryHome+icons_safe.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Annotated category-page proof: mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal",
+            "caption": "The annotated proof: category layouts with numbered callouts mapped to written UI behavior specs",
+            "width": 2416,
+            "height": 1439
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Give each category its own photography and template",
+          "body": "I redesigned the layout and template for each category page and directed its photoshoot, so the photography shows the driving conditions the category suits. The performance chart and three essential takeaways come first, so the page makes sense to someone arriving straight from search.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/tire-categories/supporting/outcome/in-page-application.png",
@@ -1545,23 +1567,23 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
-          "title": "Give each category a visual explanation",
-          "body": "Icons and purposeful photography show the strengths and driving conditions each category suits. The comparison chart also works without animation, with reduced-motion behavior, text fallback and screen-reader labels.",
+          "title": "Design the icons once, place them on every child page",
+          "body": "I designed a suite of over 32 icons for the sub-category pages. Each one names a tire feature, such as winter traction, off-road durability or heavy duty build, and carries a line of copy, so the pages beneath each category explain themselves the same way.",
           "link": null,
-          "image": {
-            "src": "../../../public/images/work/tire-categories/primaryHome+icons_safe.png",
+          "image": null,
+          "images": [],
+          "wide": {
+            "src": "../../../public/images/work/tire-categories/icon-suite.jpg",
             "display": null,
             "poster": null,
             "video": false,
             "frame": null,
             "crop": null,
-            "alt": "Annotated category-page proof: mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal",
-            "caption": "The annotated proof: category layouts with numbered callouts mapped to written UI behavior specs",
-            "width": 2416,
-            "height": 1439
+            "alt": "The tire-feature icon suite: wet, dry and winter traction, track and competition, compact design, summer and winter only, handling, special use, tread life, off-road durability and traction, ride comfort, heavy duty, period-correct aesthetics, studdable, all-season, drag use and authentic handling, each with its label and description, in stacked and inline layouts",
+            "caption": "The icon suite, each icon in its stacked and inline layout, with the label and line of copy it carries on the page.",
+            "width": 4000,
+            "height": 1935
           },
-          "images": [],
-          "wide": null,
           "artboards": [],
           "points": [],
           "quote": null

@@ -720,6 +720,14 @@ const projects: Project[] = [
     timeline: '2 months',
     featured: '/images/work/tire-categories/CS_thumbnail_TireCategories_safe.jpg',
     featuredVideo: '/assets/portfolio-safe/tire-categories/cover-loop.mp4',
+    // The intro reel (scripts/tire-categories-reel, render-tire-categories-
+    // reel.mjs): the live pages, no titles; the decisions sit in the copy.
+    featuredReel: {
+      src: '/images/work/tire-categories/tire-categories-reel.mp4',
+      poster: '/images/work/tire-categories/tire-categories-reel-poster.jpg',
+      alt: 'The Tire Categories & Types page and its icon grid; the Performance category modal building its performance chart; the Winter, All-Terrain and Performance category pages; then a flip through eight sub-category pages, each with its Tire Features icons.',
+      caption: 'The live pages on tirerack.com, captured 24 October 2026: the types page and its Performance chart, three category pages, then eight sub-category pages with their icons in place.',
+    },
     timeToLive: '~2 months from brief to system launch across 30+ category pages',
 
     // \u2500\u2500 01 Problem \u2500\u2500
@@ -781,6 +789,12 @@ const projects: Project[] = [
             alt: 'Annotated category-page proof: mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal',
             layout: 'full',
             caption: 'The annotated proof: category layouts with numbered callouts mapped to written UI behavior specs',
+          },
+          {
+            src: '/images/work/tire-categories/icon-suite.jpg',
+            alt: 'The tire-feature icon suite: wet, dry and winter traction, track and competition, compact design, summer and winter only, handling, special use, tread life, off-road durability and traction, ride comfort, heavy duty, period-correct aesthetics, studdable, all-season, drag use and authentic handling, each with its label and description, in stacked and inline layouts',
+            layout: 'full',
+            caption: 'The icon suite, each icon in its stacked and inline layout, with the label and line of copy it carries on the page.',
           },
         ],
       },
@@ -2556,11 +2570,11 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   'tire-categories': p => ({
     title: 'Tire Categories', category: 'Professional work', status: 'Live · 30+ category pages',
     deck: 'A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.',
-    ownership: 'I designed the hierarchy and icon system and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.',
-    opening: evidence(p, 'system'),
+    ownership: 'I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.',
     decisions: [
-      { title: "Give a search visitor the essentials first", body: "SEO needed depth; shoppers needed a useful comparison. I brought the performance chart forward and reduced each category to three essential takeaways, so the page makes sense even when someone arrives directly from search.", image: p.outcomeImages?.[0] },
-      { title: "Give each category a visual explanation", body: "Icons and purposeful photography show the strengths and driving conditions each category suits. The comparison chart also works without animation, with reduced-motion behavior, text fallback and screen-reader labels.", image: evidence(p, 'system') },
+      { title: 'Make the types page a comparison', body: 'Every category on Tire Categories & Types gets an icon, a short description and a Category Performance Averages link. The modal builds its chart in CSS, with reduced-motion behavior, a text fallback and screen-reader labels, so a shopper can compare categories before choosing one.', image: evidence(p, 'system') },
+      { title: 'Give each category its own photography and template', body: 'I redesigned the layout and template for each category page and directed its photoshoot, so the photography shows the driving conditions the category suits. The performance chart and three essential takeaways come first, so the page makes sense to someone arriving straight from search.', image: p.outcomeImages?.[0] },
+      { title: 'Design the icons once, place them on every child page', body: 'I designed a suite of over 32 icons for the sub-category pages. Each one names a tire feature, such as winter traction, off-road durability or heavy duty build, and carries a line of copy, so the pages beneath each category explain themselves the same way.', wide: evidence(p, 'system', 1) },
       { title: 'Let authors change the data', body: 'Reusable AEM components give content teams control of category copy and performance data without waiting for engineering.' },
     ],
     outcome: p.outcomeNote!,
