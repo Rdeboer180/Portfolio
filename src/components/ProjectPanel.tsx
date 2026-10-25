@@ -96,10 +96,15 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
   const article = location.pathname.startsWith('/notes/');
   const [stateReady, setStateReady] = useState(fromNavigation);
   const panelState = stateReady ? location.state : null;
+  // Mid-slide the panel is not a target for the pointer: the second click of
+  // a double-click on a card lands on the backdrop or the dismiss strip beside
+  // the arriving panel and shut it at once. The phase is 'open' for the whole
+  // 250ms slide, so the panel's own transform says when it has arrived (none
+  // at rest, and always none with motion reduced).
+  const atRest = () => !dialog.current || getComputedStyle(dialog.current).transform === 'none';
+  const closeByPointer = () => { if (atRest()) close(); };
   const close = () => {
     if (closing.current) return;
-    // Mid-slide the panel is not a target: a second click of a double-click
-    // landed on the backdrop beside the arriving panel and shut it at once.
     if (phase === 'opening') return;
     closing.current = true;
     const finish = () => {
@@ -246,11 +251,11 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
   };
   // Same rule the header button uses to decide between "All notes" and "All work".
   const notesExit = panelState?.readingOrigin === '/notes' || (!panelState?.readingOrigin && article);
-  return <dialog open={initialDirect.current} onKeyDown={trapFocus} ref={dialog} className="project-panel" data-phase={phase} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'transform' && closing.current) finishExit.current?.(); }} aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) close(); } }}>
+  return <dialog open={initialDirect.current} onKeyDown={trapFocus} ref={dialog} className="project-panel" data-phase={phase} onTransitionEnd={event => { if (event.target === event.currentTarget && event.propertyName === 'transform' && closing.current) finishExit.current?.(); }} aria-label={article ? 'Article' : 'Project case study'} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left) closeByPointer(); } }}>
     {/* First in DOM order because it sits first visually, left of everything. The
         backdrop click above stays as the fallback below 850px, where the strip
         button is not shown, and during the slide in or out. */}
-    <DismissStrip label={notesExit ? 'All notes' : 'Back to all work'} open={phase === 'open'} onDismiss={close} />
+    <DismissStrip label={notesExit ? 'All notes' : 'Back to all work'} open={phase === 'open'} onDismiss={closeByPointer} />
     <header className="project-panel__header">
       <div className="project-panel__identity">
         <Link to={getHomeHref()} state={HOME_TOP_STATE} className="project-panel__name">Ryan DeBoer</Link>

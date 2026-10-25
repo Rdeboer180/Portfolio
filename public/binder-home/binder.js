@@ -594,7 +594,8 @@ window.mountBinder = function (document) {
   const renderPage = (n) => {
     const per = perPage(), list = listed();
     const shown = new Set(list.slice(n * per, n * per + per));
-    pockets.forEach((p, i) => { p.hidden = !shown.has(i); });
+    // a card raised on the page it leaves (focus came back to it) comes down
+    pockets.forEach((p, i) => { p.hidden = !shown.has(i); if (p.hidden) p.classList.remove('pocket--raised'); });
     blanks.forEach((x, k) => { x.hidden = k >= per - shown.size; });
     layout();
     return shown;
@@ -2092,34 +2093,9 @@ window.mountBinder = function (document) {
   let pending = null;   // the card a study was asked for, until its top arrives
   let openToken = 0;    // which pickup the fallback timer belongs to
   // Whatever the binder puts in the top layer draws over the site's panel,
-  // its header included, while that header stays over the study as it
-  // scrolls (24 Oct). So while a card or plastic is up there, each frame cuts
-  // it away wherever it passes under the header: the header slides in and
-  // out with the panel, and the card lifts, flies and scrolls under it. A
-  // margin round the box keeps the card's own glow.
-  const above = new Set();
-  let aboveFrame = 0;
-  const CUT = 48;
-  const cutUnder = (el, h) => {
-    const r = el.getBoundingClientRect();
-    if (!h || !r.width || h.bottom <= r.top || h.right <= r.left || h.left >= r.right) {
-      if (el.style.clipPath) el.style.clipPath = '';
-      return;
-    }
-    const w = el.offsetWidth, ht = el.offsetHeight, sx = w / r.width, sy = ht / r.height;
-    const x0 = Math.max(-CUT, (h.left - r.left) * sx), x1 = Math.min(w + CUT, (h.right - r.left) * sx);
-    const yb = Math.min(ht + CUT, (h.bottom - r.top) * sy);
-    el.style.clipPath = `polygon(${-CUT}px ${-CUT}px, ${x0}px ${-CUT}px, ${x0}px ${yb}px, ${x1}px ${yb}px, ${x1}px ${-CUT}px, ${w + CUT}px ${-CUT}px, ${w + CUT}px ${ht + CUT}px, ${-CUT}px ${ht + CUT}px)`;
-  };
-  const keepUnder = () => {
-    aboveFrame = above.size ? requestAnimationFrame(keepUnder) : 0;
-    // the site's own document (the binder's is its shadow root): the panel's
-    // header while the panel is open, then the site's own nav, which a card
-    // flying home from the top of the screen passes under
-    const site = window.document;
-    const h = (site.querySelector('dialog.project-panel[open] .project-panel__header') ?? site.querySelector('.hero__nav'))?.getBoundingClientRect();
-    above.forEach((el) => cutUnder(el, h));
-  };
+  // its header included, and over the site's nav once the panel has gone:
+  // the card flies over both. Cut away under the header (24 Oct) it lost its
+  // top edge mid-flight, and the flight read worse for it (25 Oct).
   const toTop = (el, r) => {
     if (!ON_HOME) return;
     // already up: hide and re-show, so it rises back above a dialog opened
@@ -2128,16 +2104,12 @@ window.mountBinder = function (document) {
     for (const [k, v] of [['--pop-x', r.x], ['--pop-y', r.y], ['--pop-w', r.w], ['--pop-h', r.h]]) el.style.setProperty(k, `${v}px`);
     el.setAttribute('popover', 'manual');
     el.showPopover();
-    above.add(el);
-    if (!aboveFrame) aboveFrame = requestAnimationFrame(keepUnder);
   };
   const offTop = (el) => {
     if (!ON_HOME || !el.hasAttribute('popover')) return;
     if (el.matches(':popover-open')) el.hidePopover();
     el.removeAttribute('popover');
     ['--pop-x', '--pop-y', '--pop-w', '--pop-h'].forEach((v) => el.style.removeProperty(v));
-    above.delete(el);
-    el.style.clipPath = '';
   };
   const plasticTop = () => toTop(plastic, { x: 0, y: 0, w: 0, h: 0 });   // placePlastic sets its box
   function homeOpen(c) {
@@ -2159,9 +2131,12 @@ window.mountBinder = function (document) {
     setTimeout(() => {
       if (pending !== asked || state !== 'seated' || token !== openToken) return;
       pending = null;
-      p.lift?.cancel(); p.lift = null;
-      offTop(p.card);
-      p.pocket.classList.remove('is-flying');
+      // the card goes back down the way it came up, not in one frame
+      const back = p.lift;
+      const seat = () => { if (p.lift === back) { p.lift = null; offTop(p.card); p.pocket.classList.remove('is-flying'); } };
+      if (!back || reduced()) { back?.cancel(); seat(); return; }
+      back.reverse();
+      back.finished.then(() => { seat(); back.cancel(); }, () => {});
     }, 4000);
   }
   // The site's panel stays free to scroll while a card flies into it.
@@ -2224,8 +2199,12 @@ window.mountBinder = function (document) {
     fillFlyout(c);
     cueVideo(c);
     if (!flying) {
-      // reopened from history, or with motion reduced: the study is simply open
-      parts.forEach((x) => { x.lift?.cancel(); x.lift = null; x.pocket.classList.remove('is-flying'); });
+      // reopened from history, or with motion reduced: the study is simply
+      // open. Forward pressed while a close is still landing the card: that
+      // close's animations and its top-layer card go, or they outlive it.
+      clearRunning();
+      parts.forEach((x) => { x.lift?.cancel(); x.lift = null; offTop(x.card); x.pocket.classList.remove('is-flying'); });
+      offTop(plastic);
       if (pageOf(i) !== page) showPage(pageOf(i));
       p.pocket.classList.add('is-open');
       p.pocket.classList.remove('pocket--raised');
@@ -2667,8 +2646,10 @@ window.mountBinder = function (document) {
   // ?pick=<slug>&layout=beside|intro|video&pose=0..1 (or raised), or
   // &play=1 (or a delay in ms) to open the study by itself after a moment,
   // for recording it, and &close=<ms> to close it again that long after.
+  // The bench's only: on the homepage the query is the site's, and a held
+  // pose there left the binder 'posed', which no open or fallback resets.
   const q = new URLSearchParams(location.search);
-  if (q.has('pose') || q.has('play')) {
+  if (!ON_HOME && (q.has('pose') || q.has('play'))) {
     document.fonts.ready.then(() => setTimeout(() => {
       const i = CARDS.findIndex((c) => c.slug === q.get('pick'));
       if (i > -1) select(i);

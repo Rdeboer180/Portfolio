@@ -74,6 +74,11 @@ export const UnlockProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (isUnlocked()) setUnlocked(true);
     setSkipAutomaticPrompt(isReviewPath() || skipsPasswordPrompt());
     setReady(true);
+    // Unlocked in another tab: this one hears it as the binder already does,
+    // so a protected study opens as its overview instead of asking again.
+    const sync = () => { if (isUnlocked()) setUnlocked(true); };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
   }, []);
 
   const openPrompt = useCallback((href?: string, options?: NavigateOptions) => {

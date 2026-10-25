@@ -10,8 +10,19 @@ export function usePanelNavigation(enabled = true) {
   const location = useLocation();
   const navigate = useNavigate();
   const { unlocked, skipAutomaticPrompt, openPrompt } = useUnlock();
-  // the location a reading link last opened from: one open per location
+  // the location a reading link last opened from, until the router moves:
+  // one open per click. Cleared on every move, because a close goes back to
+  // the very entry it opened from (same key), and the next open must work.
   const opened = useRef<string | null>(null);
+  useEffect(() => { opened.current = null; }, [location.key]);
+  // A Back or Forward clears it too: React can batch a push and a Back that
+  // land before it renders into one commit at the same key, and the effect
+  // above would never see the move.
+  useEffect(() => {
+    const clear = () => { opened.current = null; };
+    window.addEventListener('popstate', clear);
+    return () => window.removeEventListener('popstate', clear);
+  }, []);
   useEffect(() => {
     if (!enabled) return;
     const open = (event: MouseEvent) => {
