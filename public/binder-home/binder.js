@@ -2014,6 +2014,32 @@ window.mountBinder = function (document) {
   // first (closing): the reel folds, the card leaves its sleeve, and only then
   // does the panel slide away while the card flies home.
   let pending = null;   // the card a study was asked for, until its top arrives
+  // Whatever the binder puts in the top layer draws over the site's panel,
+  // its header included, while that header stays over the study as it
+  // scrolls (24 Oct). So while a card or plastic is up there, each frame cuts
+  // it away wherever it passes under the header: the header slides in and
+  // out with the panel, and the card lifts, flies and scrolls under it. A
+  // margin round the box keeps the card's own glow.
+  const above = new Set();
+  let aboveFrame = 0;
+  const CUT = 48;
+  const cutUnder = (el, h) => {
+    const r = el.getBoundingClientRect();
+    if (!h || !r.width || h.bottom <= r.top || h.right <= r.left || h.left >= r.right) {
+      if (el.style.clipPath) el.style.clipPath = '';
+      return;
+    }
+    const w = el.offsetWidth, ht = el.offsetHeight, sx = w / r.width, sy = ht / r.height;
+    const x0 = Math.max(-CUT, (h.left - r.left) * sx), x1 = Math.min(w + CUT, (h.right - r.left) * sx);
+    const yb = Math.min(ht + CUT, (h.bottom - r.top) * sy);
+    el.style.clipPath = `polygon(${-CUT}px ${-CUT}px, ${x0}px ${-CUT}px, ${x0}px ${yb}px, ${x1}px ${yb}px, ${x1}px ${-CUT}px, ${w + CUT}px ${-CUT}px, ${w + CUT}px ${ht + CUT}px, ${-CUT}px ${ht + CUT}px)`;
+  };
+  const keepUnder = () => {
+    aboveFrame = above.size ? requestAnimationFrame(keepUnder) : 0;
+    // the site's own document: the binder's is its shadow root
+    const h = window.document.querySelector('dialog.project-panel[open] .project-panel__header')?.getBoundingClientRect();
+    above.forEach((el) => cutUnder(el, h));
+  };
   const toTop = (el, r) => {
     if (!ON_HOME) return;
     // already up: hide and re-show, so it rises back above a dialog opened
@@ -2022,12 +2048,16 @@ window.mountBinder = function (document) {
     for (const [k, v] of [['--pop-x', r.x], ['--pop-y', r.y], ['--pop-w', r.w], ['--pop-h', r.h]]) el.style.setProperty(k, `${v}px`);
     el.setAttribute('popover', 'manual');
     el.showPopover();
+    above.add(el);
+    if (!aboveFrame) aboveFrame = requestAnimationFrame(keepUnder);
   };
   const offTop = (el) => {
     if (!ON_HOME || !el.hasAttribute('popover')) return;
     if (el.matches(':popover-open')) el.hidePopover();
     el.removeAttribute('popover');
     ['--pop-x', '--pop-y', '--pop-w', '--pop-h'].forEach((v) => el.style.removeProperty(v));
+    above.delete(el);
+    el.style.clipPath = '';
   };
   const plasticTop = () => toTop(plastic, { x: 0, y: 0, w: 0, h: 0 });   // placePlastic sets its box
   function homeOpen(c) {
@@ -2053,6 +2083,40 @@ window.mountBinder = function (document) {
       p.pocket.classList.remove('is-flying');
     }, 4000);
   }
+  // The site's panel stays free to scroll while a card flies into it.
+  // Holding it still sent the scroll through to the page behind (24 Oct).
+  // The card and the plastic over the sleeve fly in the top layer toward a
+  // sleeve measured at takeoff, so each frame they take on how far the panel
+  // has scrolled since: the plastic all of it, since it lies on the sleeve,
+  // and the card more of it the further it has flown, none as it leaves its
+  // pocket and all of it by the time it reaches the sleeve. On the `translate`
+  // property, so the flight's own transform keyframes are left alone.
+  const followPanel = (p, plan, fromY, total) => {
+    const scroller = foArticle?.getRootNode().host?.closest('.project-panel__article');
+    if (!scroller) return () => {};
+    const y0 = scroller.scrollTop, t0 = performance.now();
+    const from = [0, rise(plan.g.cr, fromY).out];
+    const path = [plan.g.dx - from[0], plan.g.dy - (plan.g.tuck ?? 0) - from[1]];
+    const len2 = path[0] ** 2 + path[1] ** 2 || 1;
+    let frame = 0, shown = 0, k = 0;
+    const tick = () => {
+      frame = requestAnimationFrame(tick);
+      const dy = y0 - scroller.scrollTop;
+      if (!dy && !shown) return;
+      const m = new DOMMatrixReadOnly(getComputedStyle(p.card).transform);
+      const along = ((m.m41 - from[0]) * path[0] + (m.m42 - from[1]) * path[1]) / len2;
+      // Progress only goes forward: tucking into a sleeve above the card's
+      // lifted point reads as a step back along the path. All of it is
+      // taken on before the flight ends, whatever the layout's path.
+      const late = ((performance.now() - t0) / total - .7) / .25;
+      k = Math.min(1, Math.max(k, along >= .98 ? 1 : along, late));
+      p.card.style.translate = `0 ${dy * k * k * (3 - 2 * k)}px`;
+      plastic.style.translate = `0 ${dy}px`;
+      shown = dy;
+    };
+    frame = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(frame); p.card.style.translate = ''; plastic.style.translate = ''; };
+  };
   // React may mount a study's top twice in a row (development's strict
   // mode): only the latest mount flies, and the card stays asked for until
   // its flight starts.
@@ -2108,14 +2172,16 @@ window.mountBinder = function (document) {
     if (panelMode() !== 'video') plasticTop();
     running = openAnimations(p, plan, duration(plan.clock.open), fromY, c);
     if (!await playPainted(running, 'opening')) return;
+    const unfollow = followPanel(p, plan, fromY, duration(plan.clock.open));
     await settled(running);
-    if (state !== 'opening') return;
+    if (state !== 'opening') { unfollow(); return; }
     commit([p.card, p.shadow, p.sleeve], () => {
       p.pocket.classList.add('is-open');
       p.pocket.classList.remove('pocket--raised', 'is-flying');
       foFrame()?.classList.add('is-shown');
       foHolder()?.classList.add('is-seated');
       clearRunning();
+      unfollow();
       offTop(p.card); offTop(plastic);
     });
     state = 'open'; syncControls();
