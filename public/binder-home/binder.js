@@ -2053,24 +2053,6 @@ window.mountBinder = function (document) {
       p.pocket.classList.remove('is-flying');
     }, 4000);
   }
-  // The site's panel scrolls under the card in flight, and the card's target
-  // is measured once at takeoff, so a scroll mid-flight left the card hanging
-  // where the sleeve had been while the sleeve moved on (24 Oct). The mock's
-  // own fly-out holds still under the card (.flyout.is-opening); this does
-  // the same for the site's scroller, found from the mounted top. Held before
-  // planOpen, so the sleeve is measured in the held layout, and released once
-  // the card is seated, or the moment the flight is called off.
-  let heldScroller = null;
-  const holdPanel = (on) => {
-    if (!ON_HOME) return;
-    if (on) {
-      heldScroller = foArticle?.getRootNode().host?.closest('.project-panel__article') ?? null;
-      if (heldScroller) heldScroller.style.overflow = 'hidden';
-    } else if (heldScroller) {
-      heldScroller.style.overflow = '';
-      heldScroller = null;
-    }
-  };
   // React may mount a study's top twice in a row (development's strict
   // mode): only the latest mount flies, and the card stays asked for until
   // its flight starts.
@@ -2119,16 +2101,15 @@ window.mountBinder = function (document) {
     fromTf = getComputedStyle(p.card).transform;
     p.lift?.cancel(); p.lift = null;
     state = 'opening'; syncControls();
-    holdPanel(true);
     const plan = planOpen(p, c);
     p.pocket.classList.add('is-flying');
     binder.classList.remove('has-hand');
     toTop(p.card, cardBox(p));
     if (panelMode() !== 'video') plasticTop();
     running = openAnimations(p, plan, duration(plan.clock.open), fromY, c);
-    if (!await playPainted(running, 'opening')) { holdPanel(false); return; }
+    if (!await playPainted(running, 'opening')) return;
     await settled(running);
-    if (state !== 'opening') { holdPanel(false); return; }
+    if (state !== 'opening') return;
     commit([p.card, p.shadow, p.sleeve], () => {
       p.pocket.classList.add('is-open');
       p.pocket.classList.remove('pocket--raised', 'is-flying');
@@ -2136,7 +2117,6 @@ window.mountBinder = function (document) {
       foHolder()?.classList.add('is-seated');
       clearRunning();
       offTop(p.card); offTop(plastic);
-      holdPanel(false);
     });
     state = 'open'; syncControls();
     foVideo()?.play().catch(() => {});
@@ -2185,7 +2165,6 @@ window.mountBinder = function (document) {
   // is simply home again.
   function homeReset() {
     clearRunning();
-    holdPanel(false);
     parts.forEach((x) => { x.lift?.cancel(); x.lift = null; offTop(x.card); x.pocket.classList.remove('is-open', 'is-flying', 'pocket--raised'); });
     offTop(plastic);
     state = 'seated'; syncControls();
