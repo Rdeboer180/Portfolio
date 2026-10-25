@@ -274,6 +274,14 @@ The hero's inspector chip (`class / Guardrail Architect · Lv 16`) is the same c
 ### Section Rule (signature)
 - A numbered badge seated on a full-width 1px hairline, with 5px square selection handles bookending it. Tells the reader where they are on a long page. The accent variant (orange) is reserved for exactly one section at a time (current work); handles and line ride on CSS custom properties so dark bands can re-tone them.
 
+### Prompt display
+How Ryan's own prompts appear anywhere the site or a prototype shows the conversation behind the work (prompt timelines, process notes, "what I asked for" moments). Use it every time a prompt is quoted; don't fall back to an indented blockquote.
+- **Anatomy:** a 44px Ink circle avatar with "RD" (Hubot Sans 800, white), then a bubble: Mist (#f5f5f5) fill, 16px radius, 14px/18px padding, no border. Inside, a header line with "Ryan" (Inter 600, 16px, Ink) and the time or message id in Menlo 13px Graphite, then the prompt in Inter 400, 17px, line-height 1.55, Ink.
+- **What changed:** directly under the bubble, a Menlo 12.5px uppercase label with 0.1em tracking in Graphite ("What changed"), then the outcome as body copy in Slate. The label is the only device; no bold lead-in.
+- **Quote rules:** the prompt is copied exactly as typed, typos kept; trims use an ellipsis. The bubble is a `<blockquote>`; the avatar is `aria-hidden`.
+- **Compact:** in narrow cards and side panels the avatar drops to 32px and the prompt to 15px. Below 520px wide every prompt uses the compact size.
+- **Why:** it reads as a conversation, so the reader can tell Ryan's words from the narration at a glance, and the outcome label keeps the decision separate from the ask.
+
 ### Navigation
 - Top bar: wordmark left ("Ryan DeBoer"), text links, and a primary "Get in touch" pill right. Links are ink, hover to Signal Orange. Mobile collapses to a toggle that animates a selection-frame box. Nav is quiet and lets the hero lead.
 
