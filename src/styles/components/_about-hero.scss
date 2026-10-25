@@ -1,6 +1,6 @@
 // ============================================
 // About Hero — text-first editorial intro
-// Reading column leads; craft marks sit in light margins.
+// Reading column leads; process words sit in a faint left margin.
 // ============================================
 
 @import '../variables';
@@ -16,7 +16,7 @@
     margin: 0 auto;
     padding: 0 $container-padding-x;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 236px;
+    grid-template-columns: minmax(0, 1fr);
     gap: 48px;
     align-items: start;
   }
@@ -146,43 +146,6 @@
       }
     }
   }
-
-  // ── Right margin — artifact cluster (decoration) ─────────────────────────
-  &__artifacts {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xl;
-    padding-top: 6px;
-  }
-
-  &__note {
-    align-self: flex-start;
-    max-width: 210px;
-    background: $color-primary-light;
-    border: 1px solid $color-primary-md;
-    border-radius: $radius-lg;
-    padding: 14px 18px;
-    box-shadow: 0 10px 22px -16px rgba($color-primary, 0.6);
-    @include system-note(18px);
-  }
-
-  &__comment {
-    text-align: right;
-    max-width: 210px;
-    align-self: flex-end;
-    font-family: $font-family-primary;
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 1.35;
-    color: $color-neutral-muted;
-  }
-
-  &__comment-arrow {
-    display: block;
-    margin: 0 0 2px auto;
-    color: $color-neutral-light;
-    overflow: visible;
-  }
 }
 
 // ── Responsive ───────────────────────────────────────────────────────────────
@@ -196,20 +159,6 @@
 
     &__process { display: none; }
     &__column { padding-left: 0; }
-
-    // Keep only the handwritten note; drop the heavier artifacts on small widths
-    &__artifacts {
-      flex-direction: row;
-    }
-
-    &__note {
-      max-width: none;
-      font-size: 22px;
-    }
-
-    &__comment {
-      display: none;
-    }
   }
 }
 

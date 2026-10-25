@@ -1,6 +1,6 @@
 // ============================================
 // AboutHero — text-first editorial hero ("Craft is the through-line.")
-// The writing leads; loose craft marks live quietly in the margins. Calm
+// The writing leads; faint process words sit in the left margin. Calm
 // Waabi-style masked reveal on load (useReveal + .reveal-* utilities), plays
 // once, fully reduced-motion safe.
 // ============================================
@@ -73,6 +73,12 @@ const AboutHero: React.FC = () => {
               skills to reduce repetitive work and help my team and the teams we work with
               get from an idea to production sooner.
             </p>
+            <p>
+              Away from the desk, I'm a husband and dad in South Bend. Sunday dinners, Survivor
+              nights with my mom and my oldest friend, and a dynasty fantasy football league that's
+              been running for a decade. I like sticking with things long enough to make them
+              better, which is most of what a design system asks for.
+            </p>
           </div>
 
           <section className="about-hero__practice reveal-fade" style={d(1100)} aria-labelledby="about-practice-heading">
@@ -89,17 +95,6 @@ const AboutHero: React.FC = () => {
             <Link to={`${getHomeHref()}#mastery`} className="about__read-more">Explore my capabilities and project evidence →</Link>
           </section>
         </div>
-
-        {/* Right margin — artifact cluster (decoration), revealed last */}
-        <aside className="about-hero__artifacts" aria-label="Margin notes">
-          <div className="reveal-fade" style={d(1150)}>
-            <div className="about-hero__note">the file is not the finish line</div>
-          </div>
-
-          <div className="about-hero__comment reveal-fade" style={d(1370)}>
-            <span>not everything fits in a job title</span>
-          </div>
-        </aside>
       </div>
     </header>
   );
