@@ -180,10 +180,11 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
               <p><DecisionCopy decision={decision} /></p>
             </div>
             {decision.images?.length ? <ComparisonRow title={decision.title} images={decision.images} /> : decision.image && <OverviewMedia image={decision.image} cap={cappedWidth(decision.image)} />}
-            {(decision.wide || decision.artboards?.length || decision.gallery?.length || decision.points?.length || decision.code || decision.quote) && <div className="project-overview__proof">
+            {(decision.wide || decision.artboards?.length || decision.gallery?.length || decision.sheet || decision.points?.length || decision.code || decision.quote) && <div className="project-overview__proof">
               {decision.wide && <OverviewMedia image={decision.wide} />}
               {decision.artboards?.length ? <div className="project-overview__artboards">{decision.artboards.map(image => <OverviewMedia key={image.src} image={image} />)}</div> : null}
               {decision.gallery?.length ? <div className="project-overview__gallery">{decision.gallery.map(image => <OverviewMedia key={image.src} image={image} />)}</div> : null}
+              {decision.sheet && <div className="project-overview__sheet"><OverviewMedia image={decision.sheet} /></div>}
               {decision.points?.length ? <ul className="project-overview__points">{decision.points.map(point => <li key={point}>{point}</li>)}</ul> : null}
               {decision.code && <figure className="project-overview__code">
                 {decision.code.filename && <div className="project-overview__code-file">{decision.code.filename}</div>}

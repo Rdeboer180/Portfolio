@@ -117,6 +117,8 @@ export interface ProjectOverview {
     artboards?: ProjectImage[];
     /** Spec crops (dev notes, edge-case states) in a two-column grid after the media. */
     gallery?: ProjectImage[];
+    /** One tall spec sheet (a whole dev-note page) after the gallery, at the full column and uncapped so its notes can be read. */
+    sheet?: ProjectImage;
     /** Short evidence list under the body, e.g. each fix beside what it replaced. */
     points?: string[];
     /** Code that proves the decision shipped, rendered after the media. */
@@ -649,8 +651,7 @@ const projects: Project[] = [
         systemMarker: 'Implementation review',
         description: 'The behavior spec was the contract: a 22-page proof, version 1.0 published in August 2024, where each numbered callout on a screen maps to a row in a UI behavior table. Then I spent 40+ hours comparing the React build against Figma screen by screen, checking token names, responsive behavior and component fidelity, and fed the corrections back. Weekly stakeholder reviews kept decisions moving.',
         images: [
-          { src: '/images/work/wheelrack/dev-notes/ui-behavior-callouts.jpg', alt: 'Results page mock with numbered callouts beside New Vehicle Search, the filters, a product and Add To Cart', layout: 'half', caption: 'Numbered callouts on the screen…' },
-          { src: '/images/work/wheelrack/dev-notes/ui-behavior-table.jpg', alt: 'UI behavior table with an ID, name and written description for each numbered element', layout: 'half', caption: '…map to rows in the behavior table.' },
+          { src: '/images/work/wheelrack/dev-notes/results-dev-notes.webp', alt: 'Dev-note sheet for the desktop results page: the Wheel Visualizer, the featured fitment card and the wheel results, with 13 numbered callouts beside 16 notes, each labelled interaction, state, development, data, token or accessibility, naming the React state it changes, such as selectedFinish, selectedDiameter, selectedSize and quantity', layout: 'full', caption: 'The results page as dev notes: 16 notes on 13 callouts, each typed (interaction, state, data, accessibility) and, where it changes one, naming the React state.' },
         ],
       },
       {
@@ -2556,7 +2557,9 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
         // The loop stacks the notes the gallery does not show (scripts/render-wheelrack-dev-notes.mjs);
         // it runs the full column so a sheet's labels can be read.
         wide: { src: '/images/work/wheelrack/dev-notes-stack.mp4', isVideo: true, videoPoster: '/images/work/wheelrack/dev-notes-stack-poster.jpg', alt: 'Eight WheelRack dev-note sheets stacking in a loop: filter hover and focus, the filter panel and its mobile fly-out, filter headers and price ranges, inputs, checkboxes and radios, dropdowns and buttons, each state labelled', layout: 'full', caption: 'More of the notes: filters, form controls and buttons, each state labelled beside the component.' },
-        gallery: [evidence(p, 'documentation', 1)!, evidence(p, 'documentation', 2)!, evidence(p, 'reconciliation')!, evidence(p, 'reconciliation', 1)!], quote: subsection(p, 'documentation')?.quote,
+        gallery: [evidence(p, 'documentation', 1)!, evidence(p, 'documentation', 2)!], quote: subsection(p, 'documentation')?.quote,
+        // the results page as one detailed dev-note sheet, where the numbered callouts and their notes used to be two crops
+        sheet: evidence(p, 'reconciliation'),
         // Rebuilt after launch, not during the 2024 build, so the copy never says it shaped the build.
         prototype: { id: 'wheelrack-fitment', title: 'Try the state the frames could not show', lead: 'The hardest state was one line in a spec frame: a finish that does not come in the chosen size, so the system picks the closest one and says so. After launch, I rebuilt it in code to show what the frame could not. Pick Matte Bronze or Gloss Silver and watch the rows.', href: p.relatedNote!.href, label: 'Read the full prototype note' } },
       { part: 'A product that helped win partners', title: 'Add partners as themes on one product', body: 'Partners grew from six to ten during the build. The designs and the dealer experience helped win them, alongside other business factors, and every new partner landed on the same tokens and components. Tire Rack later extended the framework into Wholesale.' },

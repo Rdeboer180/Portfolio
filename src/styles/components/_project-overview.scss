@@ -254,6 +254,14 @@
   @media (max-width: 700px) { grid-template-columns: 1fr; }
 }
 
+// A whole dev-note page under the gallery (decision.sheet): the full column,
+// with no height cap, since its notes are only worth showing if they read.
+.project-overview .project-overview__sheet {
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; max-height: none; object-fit: contain; background: #fff; border: 1px solid $color-border-default; border-radius: $radius-md; }
+  figcaption { margin-top: $spacing-xs; font-size: 13px; line-height: 1.45; color: $color-neutral-muted; }
+}
+
 // A live code prototype under its decision (decision.prototype): a band of
 // its own between two decisions, not numbered, with its note one link away.
 // The prototype's own stylesheet stacks its inspector by viewport, for the
