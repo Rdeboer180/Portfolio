@@ -12,6 +12,25 @@ import { ProjectContext } from './ProjectBrand';
 import FramedViewport from './FramedViewport';
 import BinderTop from './BinderTop';
 import BrandIntro from './BrandIntro';
+import WheelRackFitmentPrototype from './WheelRackFitmentPrototype';
+
+/** Live code prototypes a decision can embed (decision.prototype.id). Each also lives in its note. */
+const PROTOTYPES: Record<NonNullable<ProjectOverviewData['decisions'][number]['prototype']>['id'], React.FC> = {
+  'wheelrack-fitment': WheelRackFitmentPrototype,
+};
+
+/** The prototype itself, in place under its decision, with the way out to the note that explains it. */
+const OverviewPrototype: React.FC<{ prototype: NonNullable<ProjectOverviewData['decisions'][number]['prototype']> }> = ({ prototype }) => {
+  const Prototype = PROTOTYPES[prototype.id];
+  const titleId = `prototype-${prototype.id}`;
+  return <section className="project-overview__prototype" aria-labelledby={titleId}>
+    <p className="project-overview__eyebrow">Code prototype</p>
+    <h3 id={titleId}>{prototype.title}</h3>
+    <p>{prototype.lead}</p>
+    <Prototype />
+    <Link to={prototype.href} className="project-overview__prototype-link">{prototype.label} →</Link>
+  </section>;
+};
 
 /** Keep related work in the sentence, with the same route-backed drawer navigation. */
 const DecisionCopy: React.FC<{ decision: ProjectOverviewData['decisions'][number] }> = ({ decision }) => {
@@ -162,7 +181,8 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
                 <figcaption>{decision.quote.name}<span>{decision.quote.role}</span></figcaption>
               </figure>}
             </div>}
-          </section></React.Fragment>)}
+          </section>
+          {decision.prototype && <OverviewPrototype prototype={decision.prototype} />}</React.Fragment>)}
         </section>
         <section id="project-outcome" className="project-overview__outcome">
           <h2>Outcome and current scope</h2>

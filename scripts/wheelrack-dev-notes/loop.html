@@ -1,0 +1,81 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+/* WheelRack dev-notes loop (render-wheelrack-dev-notes.mjs), for decision 04
+   of the study, "Annotate in the build's own terms". Eight dev-note sheets
+   land one on another; each lands, holds long enough to read its label, and
+   steps back as the next arrives. Four stay in view, so the deck never ends
+   and the loop has no seam. Sheets are crops of the boards already in
+   public/images/work/wheelrack/, none of them shown elsewhere in the
+   decision. Flat at rest: a sheet only carries a shadow while it moves.
+   Driven by seek(t) for frame-exact recording. */
+:root{--ground:#f4f6f7;--paper:#fff;--ink:#1b1b1b;--steel:#8f9daf;--steel-dark:#5e6c7c;--line:rgba(27,27,27,.12);--mono:Menlo,Consolas,monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ground)}
+#stage{position:relative;width:1600px;height:1000px;overflow:hidden;background:var(--ground);-webkit-font-smoothing:antialiased}
+.sheet{position:absolute;left:140px;top:150px;width:1320px;height:800px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;transform-origin:50% 0;will-change:transform}
+.sheet header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #eceff3;font:500 21px/1 var(--mono);color:var(--steel-dark)}
+.sheet header b{font-weight:500;color:var(--steel)}
+.sheet .art{position:absolute;left:0;right:0;top:56px;bottom:0;display:flex;align-items:center;justify-content:center}
+.sheet .crop{position:relative;overflow:hidden}
+.sheet .crop img{position:absolute;display:block;max-width:none}
+.sheet .shade{position:absolute;inset:0;background:var(--ground);pointer-events:none;opacity:0}
+</style></head><body><div id="stage"></div>
+<script>
+const SRC = '../../public/images/work/wheelrack/';
+// [label, file, natural size, crop in it (x, y, w, h) or null for the whole file]
+const SHEETS = [
+  ['Filters / hover, focus, fly-out padding', 'dev-notes/filter-hover-focus.jpg', [1920, 525], null],
+  ['Filter panel / each group open', 'evidence/filter-states.png', [3604, 5185], [110, 1300, 1440, 1150]],
+  ['Mobile filters / the fly-out, group by group', 'evidence/filter-states.png', [3604, 5185], [110, 2520, 1440, 1300]],
+  ['Filter headers + price range / every state', 'evidence/filter-states.png', [3604, 5185], [2500, 400, 1050, 800]],
+  ['Inputs / every icon, size and state', 'evidence/form-documentation.png', [2100, 3569], [430, 1400, 1180, 590]],
+  ['Checkboxes + radios / every state', 'evidence/form-documentation.png', [2100, 3569], [430, 1975, 1370, 375]],
+  ['Dropdowns / closed and open', 'evidence/form-documentation.png', [2100, 3569], [440, 2390, 1620, 1135]],
+  ['Buttons / hover, focus, disabled', 'dev-notes/button-states.jpg', [1373, 665], null],
+];
+const ART_W = 1320 - 64, ART_H = 800 - 56 - 48;   // the sheet's art area, inside its margins
+const stage = document.getElementById('stage');
+const sheets = SHEETS.map(([label, file, [W, H], crop], i) => {
+  const [x, y, w, h] = crop ?? [0, 0, W, H];
+  const s = Math.min(ART_W / w, ART_H / h, 1);   // never past the source's own pixels
+  const el = document.createElement('div');
+  el.className = 'sheet';
+  el.innerHTML = `<header><span>${label}</span><b>${String(i + 1).padStart(2, '0')} / ${String(SHEETS.length).padStart(2, '0')}</b></header>`
+    + `<div class="art"><div class="crop" style="width:${w * s}px;height:${h * s}px"><img src="${SRC}${file}" alt="" style="width:${W * s}px;left:${-x * s}px;top:${-y * s}px"></div></div><div class="shade"></div>`;
+  stage.appendChild(el);
+  return el;
+});
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ramp = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = (p) => 1 - Math.pow(1 - p, 4);       // a sheet decelerates onto the stack
+const easeInOut = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const P = 1.9, ARRIVE = .62, STEP = .55;   // one sheet every P seconds; the deck steps back over STEP
+const N = SHEETS.length;
+window.T_END = N * P;
+// Sheet 01, landed and still: the poster, and what the decision's still used to show.
+window.POSTER_AT = ARRIVE + .5;
+
+window.seek = (t) => {
+  t = ((t % window.T_END) + window.T_END) % window.T_END;
+  sheets.forEach((el, i) => {
+    // time since this sheet last landed, counting the previous lap, so the deck has no first frame
+    const age = (t - i * P + window.T_END) % window.T_END;
+    const enter = easeOut(ramp(age, 0, ARRIVE));
+    // how far back the sheets that landed after it have pushed it
+    let depth = 0;
+    for (let k = 1; k * P <= age; k++) depth += easeInOut(ramp(age, k * P, k * P + STEP));
+    const lift = 1 - enter;
+    el.style.transform = `translateY(${-28 * depth + 860 * lift}px) rotate(${1.6 * lift}deg) scale(${1 - .045 * depth})`;
+    el.style.opacity = String(clamp(4 - depth));
+    el.style.zIndex = String(1000 - Math.round(age * 10));
+    el.style.boxShadow = lift > .001 ? `0 ${2 + 22 * lift}px ${6 + 40 * lift}px rgba(27,27,27,${(.16 * lift).toFixed(3)})` : 'none';
+    el.querySelector('.shade').style.opacity = String(Math.min(.6, .2 * depth));
+    // a sheet that has stepped back shows its edge, not half a line of its label
+    el.querySelector('header').style.color = `rgba(94,108,124,${(1 - clamp(depth * 1.6)).toFixed(3)})`;
+    el.querySelector('header b').style.opacity = String(1 - clamp(depth * 1.6));
+  });
+};
+window.seek(0);
+window.__ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {})));
+window.__ready.then(() => { if (!window.__record) { const t0 = performance.now(); const loop = () => { window.seek((performance.now() - t0) / 1000); requestAnimationFrame(loop); }; loop(); } });
+</script></body></html>

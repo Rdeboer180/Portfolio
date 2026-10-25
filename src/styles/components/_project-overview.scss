@@ -183,6 +183,9 @@
 // A framed board scrolls at its natural height; the decision's fixed image height must not reach it.
 .project-overview .framed__screen img { height: auto; max-height: none; object-fit: unset; background: none; }
 .project-overview .project-overview__proof img { height: auto; max-height: 560px; }
+// A full-width loop sits at a fractional height on a phone, and the decision
+// video's ink ground showed as a hairline under a light clip (WheelRack 04).
+.project-overview .project-overview__proof > figure video { background: none; }
 .project-overview .project-overview__proof .framed__screen img { max-height: none; }
 
 // Desktop and phone artboards side by side: the browser takes the room, the
@@ -242,3 +245,21 @@
 
   @media (max-width: 700px) { grid-template-columns: 1fr; }
 }
+
+// A live code prototype under its decision (decision.prototype): a band of
+// its own between two decisions, not numbered, with its note one link away.
+// The prototype's own stylesheet stacks its inspector by viewport, for the
+// note's column; beside the rail the body is narrower than the viewport says
+// (533px at 1024), so here it stacks by the band's own width instead.
+.project-overview__prototype {
+  container-type: inline-size;
+  padding: $spacing-2xl 0;
+  border-top: 1px solid $color-border-default;
+  > p { margin: 0; }
+  h3 { font-size: $font-size-h5; margin: $spacing-sm 0 $spacing-md; }
+  .fp { margin: $spacing-xl 0 $spacing-md; }
+  @container (max-width: 720px) {
+    .fp { grid-template-columns: 1fr; padding: $spacing-md; }
+  }
+}
+.project-overview__prototype-link { font-size: $font-size-body-sm; font-weight: 600; }
