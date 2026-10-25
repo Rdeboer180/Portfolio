@@ -137,6 +137,14 @@
   --case-study-tray-h: 92px;
   --case-study-icon-size: 48px;
   border-radius: var(--radius-lg);
+  // The tray shares its class with the old work section's folder tray, whose
+  // later rule (`.case-playground__tray`: absolute, a notch-high slot) also
+  // reaches here and collapsed the coins behind the rail's label.
+  position: relative;
+  top: auto;
+  right: auto;
+  width: auto;
+  height: var(--case-study-tray-h);
 }
 
 .project-overview__preview {

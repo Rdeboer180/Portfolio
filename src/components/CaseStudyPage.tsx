@@ -547,8 +547,10 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
   const reelRef = useRef<HTMLVideoElement>(null);
 
   // One unlock covers every protected surface on the site — the password gates
-  // the person, not the page. The prompt itself is raised once on first load by
-  // UnlockChrome; here a locked overlay only needs to be able to re-open it.
+  // the person, not the page. A direct visit to a locked study shows its public
+  // view without a prompt; the prompt is raised by a reading link
+  // (usePanelNavigation) and drawn by UnlockChrome. Here a locked overlay only
+  // needs to be able to open it.
   const { unlocked: isUnlocked, openPrompt } = useUnlock();
 
   // Employer/client studies gate their middle sections and all imagery. The

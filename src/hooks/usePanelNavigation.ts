@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PROTECTED_WORK } from '../data/protectedWork';
 import { useUnlock } from '../context/UnlockContext';
@@ -10,6 +10,8 @@ export function usePanelNavigation(enabled = true) {
   const location = useLocation();
   const navigate = useNavigate();
   const { unlocked, skipAutomaticPrompt, openPrompt } = useUnlock();
+  // the location a reading link last opened from: one open per location
+  const opened = useRef<string | null>(null);
   useEffect(() => {
     if (!enabled) return;
     const open = (event: MouseEvent) => {
@@ -20,6 +22,11 @@ export function usePanelNavigation(enabled = true) {
       // Same-page anchors retain their own scrolling behavior.
       if (url.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '')) return;
       event.preventDefault();
+      // One panel per click. A second reading link before the router has
+      // moved (a double-click, or a second binder card while the first lifts)
+      // would push a second entry from this stale `location`, and the panel's
+      // close then backs onto the duplicate: a modal nobody can see or close.
+      if (opened.current === location.key) return;
       const state = isPanelRoute(location.pathname) ? {
         ...location.state,
         readingDepth: (location.state?.readingDepth ?? 0) + 1,
@@ -46,9 +53,10 @@ export function usePanelNavigation(enabled = true) {
       // isUnlocked(): the binder's dialog may have unlocked a moment ago, before
       // this render's `unlocked` caught up; data-skip-unlock: it already asked
       if (protectedWork && !unlocked && !isUnlocked() && !skipAutomaticPrompt && !anchor.dataset.skipUnlock) {
-        openPrompt(href, { state });
+        openPrompt(href, { state });   // the prompt may be closed, and another link clicked, from this same location
         return;
       }
+      opened.current = location.key;
       navigate(href, { state });
     };
     document.addEventListener('click', open, true);

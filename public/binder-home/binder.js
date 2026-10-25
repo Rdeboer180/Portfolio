@@ -354,7 +354,16 @@ window.mountBinder = function (document) {
   let layoutFrame = 0;
   new ResizeObserver(() => {
     if (layoutFrame) return;
-    layoutFrame = requestAnimationFrame(() => { layoutFrame = 0; layout(); });
+    layoutFrame = requestAnimationFrame(() => {
+      layoutFrame = 0;
+      // taken out of the page (the homepage left): a 0-high binder has no
+      // geometry, and laying it out filled the sway with NaN keyframes
+      if (!binder.isConnected || !binder.offsetHeight) return;
+      layout();
+      // the copy of the card seated in the study's sleeve is laid out at the
+      // binder card's size, so a resize while a study is open re-fits it
+      if (ON_HOME && state === 'open' && panelMode() !== 'video' && foArticle?.querySelector('.fo-insert__card')) syncInsert(parts[sel]);
+    });
   }).observe(binder);
   // Every way a card is raised or let down (hover, focus, a held frame, the
   // end of a close) goes through its pocket's class, so the holes follow it:
@@ -799,7 +808,7 @@ window.mountBinder = function (document) {
   const turnBy = (step, hold = null) => {
     finishTurn();
     const n = Math.max(0, Math.min(pageCount() - 1, page + step));
-    if (n === page) return Promise.resolve(false);
+    if (n === page || pending !== null) return Promise.resolve(false);   // a card on its way keeps its page
     if (reduced() || state !== 'seated') { setPage(n); return Promise.resolve(false); }
     const from = page, dir = n > from ? 1 : -1;
     const fresh = listed().slice(n * perPage(), n * perPage() + perPage()).some((i) => !painted.has(i));
@@ -827,7 +836,7 @@ window.mountBinder = function (document) {
       if (hold !== null) t0.anims.forEach((x) => x.pause());
       turnLayer.style.visibility = '';
       setPage(n);
-      live.textContent = `Page ${n + 1} of ${pageCount()}.`;
+      if (hold === null) live.textContent = `Page ${n + 1} of ${pageCount()}.`;   // a held turn says where it lands when it does
       if (hold !== null) {
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
         if (leaf === t0) t0.anims.forEach((x) => { x.currentTime = hold * opts.duration; });
@@ -975,7 +984,11 @@ window.mountBinder = function (document) {
   // over or under the video; the card is then filed as a chip by All work.
   // Desktop and tablet keep the sleeve and the reel beside the video.
   const mqNarrow = window.matchMedia('(max-width: 700px)');
-  const panelMode = () => (layoutMode === 'beside' && mqNarrow.matches ? 'video' : layoutMode);
+  // The study's top is filled for one mode, and a phone turned while it is
+  // open changes what mqNarrow says: the close goes by the mode it was
+  // filled in (fillFlyout sets it), so it closes what is there.
+  let filledMode = null;
+  const panelMode = () => filledMode ?? (layoutMode === 'beside' && mqNarrow.matches ? 'video' : layoutMode);
   const filedAsChip = () => layoutMode === 'beside' && panelMode() === 'video';
   const timedPoses = [...poses.querySelectorAll('button[data-pose]')].slice(3);
   const renderPoseButtons = () => LAYOUT_POSES[panelMode()].forEach(([at, label], k) => {
@@ -1014,6 +1027,23 @@ window.mountBinder = function (document) {
     v.pause();
     if (v.readyState) v.currentTime = at;
     else v.addEventListener('loadedmetadata', () => { v.currentTime = at; }, { once: true });
+    watchVideo(v);
+  };
+  // A walkthrough plays only while it is in view: scrolled past, it pauses,
+  // and comes back where it was when it is seen again (unless the reader
+  // paused it). The site's own loops do the same (LoopVideo).
+  let videoWatch = null;
+  const watchVideo = (v) => {
+    videoWatch?.disconnect();
+    if (!('IntersectionObserver' in window)) return;
+    let wasPlaying = false;
+    videoWatch = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { if (wasPlaying && state === 'open') v.play().catch(() => {}); }
+      else if (!v.paused) { wasPlaying = true; v.pause(); }
+      else if (e.target.dataset.seen) wasPlaying = false;
+      e.target.dataset.seen = '1';
+    }, { threshold: .15 });
+    videoWatch.observe(v);
   };
   // ---- the study's own media, laid out as ProjectOverview lays it out ----
   // A portrait capture stops growing at 620px tall (MEDIA_MAX_HEIGHT): its
@@ -1071,8 +1101,10 @@ window.mountBinder = function (document) {
 
   let filled = null;
   const fillFlyout = (c) => {
+    filledMode = null;
     const mode = panelMode();
     const key = `${c.slug}:${mode}`;
+    filledMode = mode;
     if (filled === key) { foArticle.scrollTop = 0; return; }
     filled = key;
     const pnl = c.panel, intro = c.back.intro;
@@ -1202,6 +1234,9 @@ window.mountBinder = function (document) {
   // Each layout's clock: the card beside the video runs longer, so the
   // reel's insert has time to unfold.
   const PLAN = { beside: { open: 2200, close: 1700 }, intro: { open: 1500, close: 1250 }, video: { open: 1500, close: 1250 }, fold: { open: 2450, close: 1800 } };
+  // On the homepage the close runs quicker than its clock: the reader asked
+  // to leave, and the panel waits for the card (24 Oct).
+  const CLOSE_PACE = .6;
   const LIFT_END = .18, HANDOFF = .69, DROP = .7;      // the unfold (last pass), as fractions of its clock
   const RAISE = .1;   // a raised card stands a tenth of its height out of its sleeve (.pocket--raised's --lift)
   let running = [];
@@ -1925,6 +1960,9 @@ window.mountBinder = function (document) {
     if (unlockedFromDialog) { unlockedFromDialog = false; return; }   // the card is on its way
     live.textContent = `${CARDS[sel].title} stays in its sleeve.`;
     parts[sel].card.focus({ preventScroll: true });
+    // WebKit shows that focus as :focus-visible, which raises the card for a
+    // touch that never meant to: only a keyboard user gets the raised card
+    if (lastInput !== 'keyboard') raise(parts[sel].pocket, false);
   });
 
   async function openStudy() {
@@ -2014,6 +2052,7 @@ window.mountBinder = function (document) {
   // first (closing): the reel folds, the card leaves its sleeve, and only then
   // does the panel slide away while the card flies home.
   let pending = null;   // the card a study was asked for, until its top arrives
+  let openToken = 0;    // which pickup the fallback timer belongs to
   // Whatever the binder puts in the top layer draws over the site's panel,
   // its header included, while that header stays over the study as it
   // scrolls (24 Oct). So while a card or plastic is up there, each frame cuts
@@ -2036,8 +2075,11 @@ window.mountBinder = function (document) {
   };
   const keepUnder = () => {
     aboveFrame = above.size ? requestAnimationFrame(keepUnder) : 0;
-    // the site's own document: the binder's is its shadow root
-    const h = window.document.querySelector('dialog.project-panel[open] .project-panel__header')?.getBoundingClientRect();
+    // the site's own document (the binder's is its shadow root): the panel's
+    // header while the panel is open, then the site's own nav, which a card
+    // flying home from the top of the screen passes under
+    const site = window.document;
+    const h = (site.querySelector('dialog.project-panel[open] .project-panel__header') ?? site.querySelector('.hero__nav'))?.getBoundingClientRect();
     above.forEach((el) => cutUnder(el, h));
   };
   const toTop = (el, r) => {
@@ -2073,10 +2115,11 @@ window.mountBinder = function (document) {
     }
     live.textContent = `Opening ${c.title}.`;
     window.__binderNavigate?.(c.slug);
-    // the password prompt was turned down, or the study never gave the binder its top
-    const asked = sel;
+    // the password prompt was turned down, or the study never gave the binder
+    // its top: this open's own timer, so an earlier one can't cut a new flight
+    const asked = sel, token = ++openToken;
     setTimeout(() => {
-      if (pending !== asked || state !== 'seated') return;
+      if (pending !== asked || state !== 'seated' || token !== openToken) return;
       pending = null;
       p.lift?.cancel(); p.lift = null;
       offTop(p.card);
@@ -2191,15 +2234,30 @@ window.mountBinder = function (document) {
   // The site's panel asks before it slides away: resolve once the card is out
   // of its sleeve, and fly it home while the panel goes.
   function closing() {
+    try { return closeFromPanel(); }
+    catch (err) {   // whatever went wrong, the card is home and the binder answers again
+      console.error('binder close:', err);
+      homeReset();
+      return Promise.resolve();
+    }
+  }
+  function closeFromPanel() {
     if (state !== 'open') return Promise.resolve();
     const c = CARDS[sel], p = parts[sel];
     if (reduced()) { homeReset(); live.textContent = `${c.title} is back in its sleeve.`; return Promise.resolve(); }
     state = 'closing'; syncControls();
     foVideo()?.pause();
     const raised = false;
-    const fold = panelMode() === 'video' ? null : foldKind(foFrame().getBoundingClientRect(), foInsert().getBoundingClientRect());
+    // A second's wait before the panel moved read as lag (24 Oct). Scrolled
+    // past where the card sits, the fold and the card's lift would only play
+    // off screen, so the card leaves at once and the panel goes with it. In
+    // view, the close keeps its steps at CLOSE_PACE of their clock.
+    const seat = (panelMode() === 'video' ? foFrame() : foInsert())?.getBoundingClientRect();
+    const headBottom = window.document.querySelector('dialog.project-panel[open] .project-panel__header')?.getBoundingClientRect().bottom ?? 0;
+    const seen = !!seat && seat.bottom > headBottom + 24 && seat.top < window.innerHeight - 24;
+    const fold = !seen || panelMode() === 'video' ? null : foldKind(foFrame().getBoundingClientRect(), foInsert().getBoundingClientRect());
     const clock = clockFor(fold);
-    const total = duration(clock.close);
+    const total = duration(clock.close * CLOSE_PACE);
     p.pocket.classList.add('is-flying');
     p.pocket.classList.remove('is-open');
     toTop(p.card, cardBox(p));
@@ -2209,8 +2267,9 @@ window.mountBinder = function (document) {
       ? unfoldClose(p, c, raised, { duration: total, fill: 'both', easing: 'linear' })
       : sleeveClose(p, c, raised, total, clock, fold);
     live.textContent = `Closing ${c.title}.`;
-    // when the panel may go: the card has left its sleeve (or the video)
-    const leave = filedAsChip() ? 640 : panelMode() === 'video' ? 320 : (fold ? 1000 : 420);
+    // when the panel may go: the card has left its sleeve (or the video),
+    // or at once when that happened off screen
+    const leave = !seen ? 0 : (filedAsChip() ? 640 : panelMode() === 'video' ? 320 : (fold ? 1000 : 420)) * CLOSE_PACE;
     const out = new Promise((r) => setTimeout(r, duration(leave)));
     (async () => {
       if (!await playPainted(running, 'closing')) return;
@@ -2223,6 +2282,7 @@ window.mountBinder = function (document) {
         offTop(p.card); offTop(plastic);
       });
       state = 'seated'; syncControls();
+      if (relayoutDue) relayout();
       live.textContent = `${c.title} is back in its sleeve.`;
     })();
     return out;
@@ -2234,21 +2294,38 @@ window.mountBinder = function (document) {
     parts.forEach((x) => { x.lift?.cancel(); x.lift = null; offTop(x.card); x.pocket.classList.remove('is-open', 'is-flying', 'pocket--raised'); });
     offTop(plastic);
     state = 'seated'; syncControls();
+    if (relayoutDue) relayout();
   }
   function unmountTop(el) {
     if (foArticle?.getRootNode() !== el.shadowRoot) return;
     if (state === 'open' || state === 'opening') homeReset();
     foArticle = $('foArticle');
-    filled = null;
+    filled = null; filledMode = null;
   }
   if (ON_HOME) {
     window.binderHome = { mountTop, unmountTop, closing };
+    // Back pressed while a card is still being picked up, before the study
+    // has opened a panel: no panel event comes, and the card hung lifted
+    // until the four-second fallback. The address says the homepage is back.
+    window.addEventListener('popstate', () => {
+      if (pending === null) return;
+      requestAnimationFrame(() => {
+        if (pending !== null && !/^\/work\//.test(window.location.pathname) && !window.document.querySelector('dialog.project-panel')) { pending = null; homeReset(); }
+      });
+    });
     document.addEventListener('portfolio:reading-panel', (e) => {
       // the panel is open: a card on its way goes over it at once, before the
       // study (loaded on demand) has given the binder its top
       if (e.detail && pending !== null && parts[pending].lift) toTop(parts[pending].card, cardBox(parts[pending]));
       // the panel went away without the binder's close (a link, Back)
       if (!e.detail && state !== 'seated' && state !== 'closing') homeReset();
+      // or before the study even arrived (Back right after the click), while
+      // the card is still being picked up. Settled a frame on: in development
+      // React mounts the panel twice (true, false, true in a few ms), and the
+      // false between must not cancel the pickup.
+      if (!e.detail && pending !== null) requestAnimationFrame(() => {
+        if (pending !== null && !window.document.querySelector('dialog.project-panel')) { pending = null; homeReset(); }
+      });
     });
   }
 
@@ -2309,15 +2386,17 @@ window.mountBinder = function (document) {
 
   // ---- input ----
   const indexOf = (el) => Number(el.closest('.pocket').dataset.i);
+  // a card being picked up for the site (pending) is already on its way:
+  // a second click or key then would ask for a second study
   grid.addEventListener('click', (e) => {
     const cardEl = e.target.closest('.card');
-    if (!cardEl || leaf || (state !== 'seated' && state !== 'posed')) return;
+    if (!cardEl || leaf || pending !== null || (state !== 'seated' && state !== 'posed')) return;
     if (select(indexOf(cardEl))) openStudy();
   });
   grid.addEventListener('keydown', (e) => {
     const cardEl = e.target.closest && e.target.closest('.card');
     if (!cardEl || e.target !== cardEl) return;
-    if ((e.key === 'Enter' || e.key === ' ') && !leaf && (state === 'seated' || state === 'posed')) {
+    if ((e.key === 'Enter' || e.key === ' ') && !leaf && pending === null && (state === 'seated' || state === 'posed')) {
       e.preventDefault();
       if (select(indexOf(cardEl))) openStudy();
     }
@@ -2351,7 +2430,7 @@ window.mountBinder = function (document) {
   scrim.addEventListener('click', closeStudy);
   $('spine').addEventListener('click', (e) => {
     const tab = e.target.closest('.spine__tab');
-    if (!tab || (state !== 'seated' && state !== 'posed')) return;
+    if (!tab || pending !== null || (state !== 'seated' && state !== 'posed')) return;
     if (state === 'posed') applyPose('live');
     setFilter(tab.dataset.filter);
     const f = FILTERS.find((x) => x.id === tab.dataset.filter);
@@ -2490,10 +2569,10 @@ window.mountBinder = function (document) {
       const go = e.type === 'pointerup' && v > -SWIPE_FLICK && (want > SWIPE_GO || far || (v > SWIPE_FLICK && want > .02));
       const at = atForTravel(t0, swipe.shown);
       seekTurn(at);
-      if (!go) {
-        t0.back = from;
-        live.textContent = `Page ${from + 1} of ${pageCount()}.`;
-      }
+      // the page is read out once, where the sheet lands: back where it was,
+      // or the page it turned to (turnBy says nothing for a held turn)
+      if (!go) t0.back = from;
+      live.textContent = `Page ${(go ? page : from) + 1} of ${pageCount()}.`;
       // it leaves at the finger's speed, never slower than the turn's own
       const rate = Math.min(2.4, Math.max(go ? 1 : 1.5, (Math.abs(v) * SWIPE_GAIN) / Math.max(edgeSpeed(t0, at), .01)));
       t0.anims.forEach((x) => { x.playbackRate = go ? rate : -rate; x.play(); });
@@ -2506,7 +2585,10 @@ window.mountBinder = function (document) {
   binder.addEventListener('click', (e) => { if (performance.now() - swipe.ended < 400) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
   pick.addEventListener('change', () => { if (state === 'posed') applyPose('live'); select(Number(pick.value)); });
 
-  const relayout = () => { if (state === 'seated') showPage(pageOf(sel)); };
+  // a change while a study is open (a tablet turned) waits for the binder
+  // to be seated again, then lays the page out for the new width
+  let relayoutDue = false;
+  const relayout = () => { if (state === 'seated') { relayoutDue = false; showPage(pageOf(sel)); } else relayoutDue = true; };
   mqPhone.addEventListener('change', relayout);
   mqTablet.addEventListener('change', relayout);
 

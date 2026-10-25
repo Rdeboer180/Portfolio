@@ -98,6 +98,9 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
   const panelState = stateReady ? location.state : null;
   const close = () => {
     if (closing.current) return;
+    // Mid-slide the panel is not a target: a second click of a double-click
+    // landed on the backdrop beside the arriving panel and shut it at once.
+    if (phase === 'opening') return;
     closing.current = true;
     const finish = () => {
       if (!finishExit.current) return;
@@ -188,8 +191,22 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
       document.dispatchEvent(new CustomEvent('portfolio:reading-panel', { detail: false }));
       document.body.style.overflow = overflow;
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        // A home link (HOME_TOP_STATE) asked for the top, not the reader's old position.
-        if (window.location.pathname === backgroundPath && !(window.history.state?.usr?.toTop)) {
+        // A home link (HOME_TOP_STATE) asked for the top, not the reader's old
+        // position. Its state is the home entry's for good, so only the first
+        // return after it honours the flag; later ones restore as usual.
+        const toTop = Boolean(window.history.state?.usr?.toTop);
+        if (toTop) {
+          try { window.history.replaceState({ ...window.history.state, usr: { ...window.history.state.usr, toTop: false } }, ''); } catch { /* the position is restored next time */ }
+        }
+        // Opened by its address (no page behind it), the close lands on the
+        // homepage's work section: focus goes to the study's own card there,
+        // where the reader would pick up, instead of being dropped on the body.
+        if (!backgroundPath && !toTop) {
+          const slug = window.location.pathname === '/' && location.pathname.match(/^\/work\/([^/]+)/)?.[1];
+          const card = slug ? document.querySelector('.case-binder__host')?.shadowRoot?.querySelector<HTMLElement>(`.pocket[data-slug="${slug}"] .card`) : null;
+          (card ?? document.querySelector<HTMLElement>('#main-content'))?.focus({ preventScroll: true });
+        }
+        if (window.location.pathname === backgroundPath && !toTop) {
           if (returnMeta) {
             document.title = returnMeta.title;
             document.querySelectorAll('meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]').forEach(meta => meta.remove());
@@ -203,7 +220,13 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
             if (canonical && returnMeta.canonical) canonical.href = returnMeta.canonical;
           }
           window.scrollTo({ top: scroll, behavior: 'instant' as ScrollBehavior });
-          const returnTarget = target?.isConnected ? target : Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href]')).find(anchor => anchor.getAttribute('href') === returnHref && anchor.className === returnClass);
+          // The link that opened the study, or the binder card for it; never a
+          // link that merely matches by address (an unclassed link in another
+          // section took focus thousands of pixels away after a reload).
+          const slug = backgroundPath && returnHref?.match(/^\/work\/([^/]+)/)?.[1];
+          const card = slug ? document.querySelector('.case-binder__host')?.shadowRoot?.querySelector<HTMLElement>(`.pocket[data-slug="${slug}"] .card`) : null;
+          const returnTarget = target?.isConnected ? target
+            : card ?? (returnClass ? Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href]')).find(anchor => anchor.getAttribute('href') === returnHref && anchor.className === returnClass) : null);
           (returnTarget || document.querySelector<HTMLElement>('#main-content'))?.focus({ preventScroll: true });
         }
       }));

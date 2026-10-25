@@ -97,8 +97,23 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
   const goToSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    navigate({ pathname: location.pathname, hash: `#${id}` }, { replace: true, state: location.state });
-    document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    const target = document.getElementById(id);
+    if (!target) return;
+    // The address only: the router's navigate gave the location a new key,
+    // which replayed the panel's arrival (focus to the title, an instant jump
+    // to the hash) over the smooth scroll and lost the reader's place.
+    window.history.replaceState(window.history.state, '', `#${id}`);
+    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    target.scrollIntoView({ behavior, block: 'start' });
+    // Images above the target are lazy and unsized, so the page grows under
+    // the scroll and the section lands short: once the page is still again,
+    // or when it last changes size, the scroll is made good.
+    const article = target.closest<HTMLElement>('.project-panel__article') ?? document.scrollingElement as HTMLElement;
+    let settle: ReturnType<typeof setTimeout> | undefined;
+    const again = () => target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    const watcher = new ResizeObserver(() => { clearTimeout(settle); settle = setTimeout(again, 120); });
+    watcher.observe(article.firstElementChild ?? article);
+    setTimeout(() => { watcher.disconnect(); clearTimeout(settle); }, 2500);
   };
   const overview = project.overview!;
   const reel = project.featuredReel;

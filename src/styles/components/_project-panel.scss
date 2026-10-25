@@ -132,9 +132,11 @@
   will-change: transform;
   // A quiet arrival: it fades in and settles from a touch smaller, on the
   // inner mark, since the outer span's transform is the pointer's position.
-  svg { animation: project-panel-cursor-in 180ms cubic-bezier(.2, .7, .3, 1) both; }
+  // It starts already half there: the native cursor is gone the moment this
+  // one is drawn, and a fade from nothing left a beat with no cursor (24 Oct).
+  svg { animation: project-panel-cursor-in 140ms cubic-bezier(.2, .7, .3, 1) both; }
 }
-@keyframes project-panel-cursor-in { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+@keyframes project-panel-cursor-in { from { opacity: .55; transform: scale(.9); } to { opacity: 1; transform: none; } }
 
 .project-panel__dismiss-mark { opacity: 0; }
 .project-panel__dismiss:focus-visible .project-panel__dismiss-mark { opacity: 1; }
@@ -155,7 +157,7 @@
   .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover) { right: -8px; }
 }
 @media (prefers-reduced-motion: reduce) { .project-panel__cursor svg { animation-name: project-panel-cursor-fade; } }
-@keyframes project-panel-cursor-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes project-panel-cursor-fade { from { opacity: .55; } to { opacity: 1; } }
 
 // Every project shares the panel header, including locked and legacy views.
 .project-panel {
@@ -189,6 +191,12 @@
 }
 
 // Freeze the underlying page while a reading drawer owns attention.
+// The page under the panel holds still. `html` carries `overflow-x: clip`,
+// which makes it the viewport's scroll container, so the `overflow: hidden`
+// the panel puts on `body` never reached the viewport: a wheel over the
+// dismiss strip scrolled the homepage under the panel, and the card then
+// flew home to where its pocket used to be.
+.reading-panel-open { overflow: hidden; }
 .reading-panel-open #main-content,
 .reading-panel-open #main-content *,
 .reading-panel-open #main-content *::before,

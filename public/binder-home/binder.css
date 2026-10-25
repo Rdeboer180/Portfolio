@@ -1326,6 +1326,11 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
 .note ul, .note ol { margin: 0; padding-left: 20px; color: var(--slate); font-size: 15px; }
 .note li { margin-bottom: 8px; }
 .note li b { color: var(--ink); }
+/* the narrowest phones: four tabs across the strip, so "AEM" is not cut off */
+@media (max-width: 359px) {
+  .binder__spine .spine__tab, .spine__tabs .spine__tab { padding: 8px 6px; font-size: 12.5px; letter-spacing: -.01em; }
+  .spine__tabs .spine__tab[aria-pressed="true"]::before { left: 6px; right: 6px; }
+}
 
 /* ---------- on the homepage: the binder alone, open under the hero ---------- */
 .top, .panel, .notes, .home-hero, .flyout, .scrim { display: none !important; }
