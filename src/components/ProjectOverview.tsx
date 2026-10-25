@@ -1,6 +1,6 @@
 import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
 import ProjectPreview from './ProjectPreview';
 import LoopVideo from './LoopVideo';
@@ -93,7 +93,6 @@ const ComparisonRow: React.FC<{ title: string; images: ProjectImage[] }> = ({ ti
 /** A route-backed article: the rail is navigation, never a modal or a second main. */
 const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const goToSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
