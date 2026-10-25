@@ -7,13 +7,15 @@ import ReadingErrorBoundary from './ReadingErrorBoundary';
 
 const readingPositions = new Map<string, number>();
 
-// The way back: one solid arrow pointing left to the page behind, white with
-// an ink edge so it holds on both the homepage and the backdrop over it
-// (Ryan, 21 October: the black disc with a sketched arrow was jarring, and
-// then one arrow, not a chevron and an arrow).
+// The way back: Ryan's notched chevron pointing left to the page behind (25
+// October, replacing the block arrow of 21 October), white with a 1px ink
+// edge so it holds on both the homepage and the backdrop over it. Two 45°
+// bars, mirror images about the middle: the upper one runs to the point and
+// is cut square there, the lower one stops short of it, leaving the notch.
+// Traced from his drawing at 96px (98% overlap) and set on a 57×94 box.
 const ReturnArrow = () => (
-  <svg viewBox="0 0 29 28" aria-hidden="true" focusable="false">
-    <path d="M2 14 L11 5 V10 H27 V18 H11 V23 Z" />
+  <svg viewBox="0 0 57 94" aria-hidden="true" focusable="false">
+    <path d="M2.25 47 L14 58.75 L55 17.75 V7.53 A5.5 5.5 0 0 0 45.61 3.64 Z M17.75 62.5 L29.5 50.75 L55 76.25 V86.47 A5.5 5.5 0 0 1 45.61 90.36 Z" />
   </svg>
 );
 

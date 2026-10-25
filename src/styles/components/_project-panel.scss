@@ -112,14 +112,16 @@
 .project-panel__cursor,
 .project-panel__dismiss-mark {
   display: block;
-  width: 27px;
+  // the chevron's 57×94 box at 26px tall
+  width: 16px;
   height: 26px;
   pointer-events: none;
   svg {
     display: block; width: 100%; height: 100%; overflow: visible;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
   }
-  path { fill: $color-white; stroke: $color-text-primary; stroke-width: 1.6; stroke-linejoin: round; }
+  // 1px on screen whatever the box's scale
+  path { fill: $color-white; stroke: $color-text-primary; stroke-width: 1px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 }
 
 .project-panel__cursor {
@@ -128,7 +130,7 @@
   left: 0;
   z-index: 40;
   // centred on the pointer, as the native cursor it replaces is aimed
-  margin: -13px 0 0 -13.5px;
+  margin: -13px 0 0 -8px;
   will-change: transform;
   // A quiet arrival: it fades in and settles from a touch smaller, on the
   // inner mark, since the outer span's transform is the pointer's position.
