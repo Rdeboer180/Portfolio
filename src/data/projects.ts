@@ -622,9 +622,6 @@ const projects: Project[] = [
           { src: '/images/work/wheelrack/dev-notes/details-stacked.jpg', alt: 'Wheel details with two notes stacked: the O.E. tire size mismatch and the closest-alternative selection', layout: 'half', caption: 'Two notes at once, stacked in a set order.' },
           { src: '/images/work/wheelrack/dev-notes/details-stacked-mobile.jpg', alt: 'The same two stacked notes on the mobile details page', layout: 'half', caption: 'The same stack on mobile.' },
           { src: '/images/work/wheelrack/dev-notes/empty-no-wheels-vehicle.jpg', alt: 'Empty state for a vehicle with no available wheels, with a New Vehicle Search action', layout: 'half', caption: 'No wheels for this vehicle: say so, and offer a new search.' },
-          { src: '/images/work/wheelrack/dev-notes/empty-no-filter-match.jpg', alt: 'Empty state when applied filters match nothing, with Reset All Filters', layout: 'half', caption: 'Filters that match nothing: name them, and offer a reset.' },
-          { src: '/images/work/wheelrack/dev-notes/tile-error-alerts.jpg', alt: 'Product tile with error and alert slots: a 500 error message and a product that failed to load', layout: 'half', caption: 'Slots for a failed request and a product that no longer exists.' },
-          { src: '/images/work/wheelrack/dev-notes/filter-load-error.jpg', alt: 'Filter panel showing an error loading filters for the selected vehicle', layout: 'half', caption: 'Even the filter panel has a failure state.' },
         ],
       },
       {
