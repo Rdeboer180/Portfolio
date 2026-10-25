@@ -164,6 +164,7 @@ button, select { font: inherit; }
   position: absolute; left: calc(var(--spine-w) - 10px); top: var(--strip-h); bottom: 0; width: 86px; pointer-events: none;
   display: flex; flex-direction: column; justify-content: space-evenly;
   will-change: transform;
+  z-index: 6;                /* over a page lying turned on the cover (.binder__landed), and over the sheet as it lands */
 }
 .rings__glint {              /* the plate's highlight, clipped to the plate */
   position: absolute; left: 1px; top: 20px; bottom: 20px; width: 18px; border-radius: 9px; overflow: hidden;
@@ -533,14 +534,25 @@ button, select { font: inherit; }
    under the light (z 5, below the sheets at 6 to 10), so the page's one lamp
    falls on the turning sheet as on the page, and nothing that blends rides
    inside the 3D layers. The sheet may rise toward the viewer past the
-   binder's top and bottom, but it leaves past the binder's left edge. */
+   binder's top and bottom; it comes down on the cover. */
 .binder__turn {
   position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  clip-path: polygon(0 -200%, 400% -200%, 400% 400%, 0 400%);
+  clip-path: polygon(var(--turn-clip, 0px) -200%, 400% -200%, 400% 400%, var(--turn-clip, 0px) 400%);
 }
 .binder__turn[hidden] { display: none; }
+/* Where a turned page goes (Ryan, 25 October: it used to fade away past
+   the spine, and "the old page just vanished"): flat on the cover, under
+   the ring plate and arcs, and it lies there, one sheet per page turned,
+   until a turn back lifts it. Below desktop the cover is out of view past
+   the binder's edge, so the sheet leaves past that edge instead. */
+.binder__landed {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  clip-path: polygon(var(--turn-clip, 0px) -200%, 400% -200%, 400% 400%, var(--turn-clip, 0px) 400%);
+}
+.leaf__landed { position: absolute; pointer-events: auto; cursor: pointer; }   /* the page lying there is the one before: a click turns back to it */
+@media (max-width: 1179px) { .binder { --turn-clip: var(--spine-w); } }
 /* The sheet in the air carries its cards without their film, glitter or
-   soft shadows, and no colour filters: for the turn's 0.7s they read the
+   soft shadows, and no colour filters: for the turn's 0.9s they read the
    same at speed, and each was a pass the browser repainted every frame of it
    (Safari most of all; the performance review, 21 October). The page under
    it and the page it lands on keep their full finish. */
@@ -551,6 +563,10 @@ button, select { font: inherit; }
 .turn__shadow {              /* the sheet's shadow on the page under it */
   position: absolute; width: 300px; transform-origin: 0 50%; opacity: 0;
   background: linear-gradient(90deg, rgba(6,7,9,.6), rgba(6,7,9,.28) 38%, rgba(6,7,9,0));
+}
+.turn__shadow--cover {       /* and on the cover, as the sheet comes down over it */
+  transform-origin: 100% 50%;
+  background: linear-gradient(270deg, rgba(6,7,9,.6), rgba(6,7,9,.28) 38%, rgba(6,7,9,0));
 }
 .leaf__seg { position: absolute; top: 0; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; }
 .leaf__seg .leaf__seg { left: 100%; }

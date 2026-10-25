@@ -606,6 +606,7 @@ window.mountBinder = function (document) {
     shown.forEach((i) => painted.add(i));
     if (!shown.has(sel)) select(listed()[page * perPage()], false);
     syncControls();
+    if (!leaf) syncLanded();   // a turn lays its own sheet down when it lands
   };
   const showPage = (n) => { finishTurn(); setPage(n); };
   function select(i, follow = true) {
@@ -626,11 +627,16 @@ window.mountBinder = function (document) {
   // ---- turning a page ----
   // A page turns on its rings. The sheet lifts at its free edge, bows as it
   // swings over (the edge leading on the way up and trailing on the way
-  // down), shows its back once it has passed the eye, and falls away past
-  // the spine. Previous is the same turn run backwards. What turns is a copy
-  // of the page's cards and foil, in two segments so the sheet can bow; the
-  // real page lies under it, and the page's light lies over both.
-  const TURN_MS = 1080, TURN_SHADE = .42, TURN_N = 48, TURN_GONE = [108, 158];
+  // down), shows its back once it has passed the eye, and comes down flat
+  // on the cover, where it lies until a turn back lifts it. Previous is the
+  // same turn run backwards. What turns is a copy of the page's cards and
+  // foil, in two segments so the sheet can bow; the real page lies under
+  // it, and the page's light lies over both. Until 25 October the sheet
+  // faded away past the spine instead, 22 degrees short of flat, and a turn
+  // back faded it in: Ryan asked for a turn where the old page doesn't
+  // just vanish, and chose the landing over it.
+  const TURN_MS = 900, TURN_SHADE = .42, TURN_N = 48;
+  const TURN_DUSK = .16;       // a sheet on the cover lies that much further from the lamp than the page
   const TURN_WAITING = .004;   // a face waiting its turn: painted, never seen
   const turnLayer = binder.querySelector('.binder__turn');
   let leaf = null;           // the page turning, if one is
@@ -646,16 +652,11 @@ window.mountBinder = function (document) {
   };
   // Over a turn forward (u from 0 to 1): the sheet's angle on the rings, and
   // how far its outer half bows ahead of (-) or behind (+) the inner half.
-  const SWING = bezier(.48, 0, .32, 1);
+  // The swing eases in for the lift and eases less at the end, so the sheet
+  // settles on the cover in its last 130ms rather than hovering over it.
+  const SWING = bezier(.48, 0, .55, .95);
   const swingAt = (u) => -180 * SWING(u);
   const bowAt = (u) => -20 * hump(0, .16, .5, u) + 13 * hump(.42, .7, 1, u);
-  // The sheet has faded by the time it lies past the spine (TURN_GONE), so a
-  // turn ends there, and a turn back starts there: no dead time either way.
-  const TURN_END = (() => {
-    let lo = 0, hi = 1;
-    for (let k = 0; k < 30; k++) { const m = (lo + hi) / 2; if (-swingAt(m) >= TURN_GONE[1]) hi = m; else lo = m; }
-    return hi;
-  })();
   // The sheet bends just past the rings' holes; the eye sits over its middle.
   const turnGeometry = () => {
     const br = binder.getBoundingClientRect();
@@ -715,13 +716,40 @@ window.mountBinder = function (document) {
     const seg = el('div', 'leaf__seg', { width: `${w + over}px`, ...(over ? { left: `calc(100% - ${over}px)` } : {}) }, front, back);
     return { seg, front, back, sheen, shades: [front.lastChild, back.lastChild] };
   };
+  // The pages turned so far lie on the cover, one sheet each, built from the
+  // same reverse as the turning sheet's back and laid where it lands, so the
+  // swap at 180 degrees changes no pixel (under a thousand faint ones in a
+  // 1440 by 860 frame, measured 25 October). A turn back lifts the top one.
+  // The stack follows the page count wherever the page is set without a
+  // turn (a tab, the pick, a resize, reduced motion).
+  const landedLayer = binder.querySelector('.binder__landed');
+  const landedSheet = (g, slots) => {
+    const shade = el('i', 'leaf__shade');
+    shade.style.opacity = TURN_DUSK;
+    return el('div', 'leaf__landed', { left: `${g.hx - g.W}px`, top: `${g.top}px`, width: `${g.W}px`, height: `${g.H}px` }, reverseOf(g, slots, 0), shade);
+  };
+  const syncLanded = (count = page) => {
+    const g = turnGeometry();
+    const key = `${g.bw}x${g.bh}@${g.hx},${g.top}`;
+    if (landedLayer.dataset.geo !== key) { landedLayer.replaceChildren(); landedLayer.dataset.geo = key; }
+    while (landedLayer.children.length > count) landedLayer.lastChild.remove();
+    if (landedLayer.children.length < count) {
+      const slots = slotsOf(g);
+      while (landedLayer.children.length < count) landedLayer.append(landedSheet(g, slots));
+    }
+    landedLayer.hidden = !count;
+  };
+  // The sheet lying on the cover is the page before, and it covers the
+  // index there: a click on it turns back to it (the pager and a swipe
+  // still do, and the index is in reach again once it lifts).
+  landedLayer.addEventListener('click', () => { if (state === 'seated') turnBy(-1); });
   // Every frame of the turn is worked out up front (TURN_N steps), so each
   // half of the sheet shows its back at the moment it passes the eye, which
   // is not at 90 degrees: the eye sits over the middle of the page.
-  const turnAnimations = (g, { a, b, shadow }, dir, opts) => {
+  const turnAnimations = (g, { a, b, shadow, cover }, dir, opts) => {
     const rad = Math.PI / 180;
     const pose = (o) => {
-      const u = (dir > 0 ? o : 1 - o) * TURN_END;
+      const u = dir > 0 ? o : 1 - o;
       const th = swingAt(u), de = bowAt(u);
       const t = th * rad, d = (th + de) * rad;
       const qx = g.hx + g.wA * Math.cos(t), qz = -g.wA * Math.sin(t);
@@ -746,10 +774,9 @@ window.mountBinder = function (document) {
       return out;
     };
     const frames = (fn) => offs.map((o, i) => ({ offset: o, ...fn(poses[i]) }));
-    const gone = (q) => 1 - ramp(TURN_GONE[0], TURN_GONE[1], -q.th);   // the sheet falls away past the spine
-    // A face shows by opacity alone: stepped at the moment its half passes
-    // the eye and multiplied by the fade. Opacity and transform are all the
-    // turn animates, so the compositor runs it without the main thread. A
+    // A face shows by opacity alone, stepped at the moment its half passes
+    // the eye. Opacity and transform are all the turn animates, so the
+    // compositor runs it without the main thread. A
     // face waiting its turn is held at 0.4%, not 0, so it is painted with the
     // rest before the sheet moves rather than in the middle of the swing; it
     // faces away from the eye then, so it shows nothing.
@@ -757,7 +784,7 @@ window.mountBinder = function (document) {
     const faceFrames = (at, upAtStart, front) => {
       const shown = (o) => at.reduce((up, x) => (o >= x ? !up : up), upAtStart) === front;
       const near = (o) => at.some((x) => o >= x - 1e-6 && o <= x + .0006);
-      const value = (o, show) => (show ? Math.max(gone(pose(o)), WAITING) : WAITING);
+      const value = (o, show) => (show ? 1 : WAITING);
       const list = offs.filter((o) => !near(o)).map((o) => ({ offset: o, opacity: value(o, shown(o)) }));
       for (const x of at) {
         list.push({ offset: x, opacity: value(x, shown(x - 1e-6)) }, { offset: Math.min(1, x + .0005), opacity: value(x, shown(x + .0005)) });
@@ -766,7 +793,7 @@ window.mountBinder = function (document) {
     };
     // Flat is never quite flat (0.05 degrees, under a pixel at the free edge),
     // so the sheet is already a 3D layer while it is painted, not first on
-    // the frame it starts to move; the same goes for what fades in.
+    // the frame it starts to move.
     const tilt = (deg) => (Math.abs(deg) < .05 ? -.05 : deg).toFixed(3);
     const anims = [
       a.seg.animate(frames((q) => ({ transform: `rotateY(${tilt(q.th)}deg)` })), opts),
@@ -776,13 +803,21 @@ window.mountBinder = function (document) {
         opacity: Math.max(WAITING, .62 * ramp(0, 16, -q.th) * (1 - ramp(80, 128, -q.th))),
       })), opts),
     ];
+    // Past the vertical the sheet shades the cover under it, from the hinge
+    // out to its edge, until it lies down on that shadow.
+    anims.push(cover.animate(frames((q) => ({
+      transform: `scaleX(${(Math.max(0, -q.edge) * 1.3 / 300 + .001).toFixed(3)})`,
+      opacity: Math.max(WAITING, .55 * ramp(92, 135, -q.th) * (1 - ramp(172, 180, -q.th))),
+    })), opts));
+    // the back, turned up to the lamp as it lands, still lies further from it than the page
+    const dusk = (q) => TURN_DUSK * ramp(70, 150, -q.th);
     for (const [s, key, ang] of [[a, 'aUp', (q) => q.t], [b, 'bUp', (q) => q.d]]) {
       const at = flips(key);
       anims.push(
         s.front.animate(faceFrames(at, poses[0][key], true), opts),
         s.back.animate(faceFrames(at, poses[0][key], false), opts),
         s.shades[0].animate(frames((q) => ({ opacity: Math.max(WAITING, TURN_SHADE * (1 - Math.cos(ang(q)))) })), opts),
-        s.shades[1].animate(frames((q) => ({ opacity: Math.max(WAITING, TURN_SHADE * (1 + Math.cos(ang(q)))) })), opts),
+        s.shades[1].animate(frames((q) => ({ opacity: Math.max(WAITING, TURN_SHADE * (1 + Math.cos(ang(q))), dusk(q)) })), opts),
         s.sheen.animate(frames((q) => ({
           transform: `translateX(${(g.W * (.95 - 1.45 * ramp(0, 75, -q.th))).toFixed(1)}px)`,
           opacity: Math.max(WAITING, .9 * hump(0, 26, 72, -q.th)),
@@ -821,8 +856,9 @@ window.mountBinder = function (document) {
     a.seg.append(b.seg);
     Object.assign(a.seg.style, { left: `${g.hx}px`, top: `${g.top}px`, height: `${g.H}px` });
     const shadow = el('i', 'turn__shadow', { left: `${g.hx}px`, top: `${g.top}px`, height: `${g.H}px` });
+    const cover = el('i', 'turn__shadow turn__shadow--cover', { left: `${g.hx - 300}px`, top: `${g.top}px`, height: `${g.H}px` });
     Object.assign(turnLayer.style, { perspective: `${g.P}px`, perspectiveOrigin: `${g.ex}px ${g.top + g.H / 2}px`, visibility: 'hidden' });
-    turnLayer.replaceChildren(...(under ? [under] : []), el('div', 'turn__floor', {}, shadow), a.seg);
+    turnLayer.replaceChildren(...(under ? [under] : []), el('div', 'turn__floor', {}, shadow, cover), a.seg);
     turnLayer.hidden = false;
     const t0 = { to: n, anims: [] };
     leaf = t0;
@@ -831,10 +867,11 @@ window.mountBinder = function (document) {
     const decoded = Promise.all([...turnLayer.querySelectorAll('img')].map((x) => x.decode().catch(() => {})));
     return Promise.race([decoded, new Promise((r) => setTimeout(r, 160))]).then(async () => {
       if (leaf !== t0) return false;
-      const opts = { duration: duration(TURN_MS * TURN_END), delay: hold === null ? (fresh || dir < 0 ? TURN_WAIT_FIRST : TURN_WAIT) : 0, fill: 'both', easing: 'linear' };
-      t0.anims = turnAnimations(g, { a, b, shadow }, dir, opts);
+      const opts = { duration: duration(TURN_MS), delay: hold === null ? (fresh || dir < 0 ? TURN_WAIT_FIRST : TURN_WAIT) : 0, fill: 'both', easing: 'linear' };
+      t0.anims = turnAnimations(g, { a, b, shadow, cover }, dir, opts);
       if (hold !== null) t0.anims.forEach((x) => x.pause());
       turnLayer.style.visibility = '';
+      if (dir < 0) syncLanded(n);   // the sheet lifting off the cover takes the landed one's place
       setPage(n);
       if (hold === null) live.textContent = `Page ${n + 1} of ${pageCount()}.`;   // a held turn says where it lands when it does
       if (hold !== null) {
@@ -885,6 +922,7 @@ window.mountBinder = function (document) {
     // too soon (back) lands on the page it left
     const to = t0.back ?? t0.to;
     if (page !== to) setPage(to);
+    syncLanded();   // the sheet that just came down lies on the cover
   }
 
   // ---- hover: a card slips a tenth of the way out of its sleeve ----
