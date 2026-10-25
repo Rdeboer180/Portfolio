@@ -2064,14 +2064,6 @@ Frame every output as:
       status: 'Original release on iOS · v2 in development',
       decisions: [
         {
-          title: "Decide what not to ship",
-          body: "PlayDraft is where I knew I was a builder as well as a designer. On Dive Club, Vercel design engineers John Pham and Glenn Hitchcock drew the line I'd felt: you know exactly what's possible in code, and you can describe it clearly enough to test it. Rhiannon Bell, VP of UX for Google Search, called the role a \"visual problem solver\" on another episode, and that's the description I'd pick. Building with agents made nearly anything possible, so part of quality became what I chose to leave out.",
-          points: [
-            "My first release had a store, tickets, card packs, a card collection and next-day voting. They all shipped, and most of them pulled attention away from the draft.",
-            "The v2 navigation keeps four places: Home, Drafts, Packs and Custom.",
-          ],
-        },
-        {
           title: "Simplify the mechanics, keep the game",
           bodyLink: { text: 'first simplification pass', to: '/notes/simplifying-playdraft-without-losing-the-game/' },
           body: "My first simplification pass went too far. The app started to feel like a list. I brought back the textured shields and character avatars, and gave Home a clearer job. It leads with creation when you are idle and your next pick when it is your turn.",
