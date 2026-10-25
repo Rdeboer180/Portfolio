@@ -197,6 +197,8 @@ On the talent tree's Ink panel, orange is spent only on earned state: the ramp a
 ### Named Rules
 **The Annotation Rule.** Caveat is reserved exclusively for hand-drawn craft marks (margin notes, the circled FAQ "?", underline flourishes). It never sets UI, labels, or body copy. Its rarity is what makes it read as a human mark rather than a font choice.
 
+**The Full-Column Rule.** Body copy takes the width of its column, the same as the copy above and below it. Don't cap a block at 66ch (or another `ch` measure) inside a full-width section: one narrow block between full-width ones looks like a mistake, not a reading measure. `--copy-max-width` is the ceiling for prose. Removed from the case-study decisions in October 2026.
+
 **The Authored-Casing Rule.** Headings render exactly as they are written. There is no global `text-transform` on `h1`–`h6`: a `capitalize` rule used to live there and was removed because it overrode authored copy (note titles lost their intended casing, and browsers treat an apostrophe as a word break, so "What I've designed recently" rendered as "What I'Ve Designed Recently"). Casing is applied per role instead, where `uppercase` is set deliberately on eyebrows, badges, and micro-labels. Write the heading in the casing you want to see, and keep sibling headings in one hierarchy consistent with each other.
 
 ## Layout

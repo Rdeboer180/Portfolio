@@ -251,6 +251,11 @@ const AtomsContent: React.FC = () => (
         cards or split-layout columns still constrain it. The homepage hero uses
         a separate 540px copy column.
       </p>
+      <p className="copy-block">
+        Don't cap a block at 66ch inside a full-width section. Body copy takes
+        the width of its column, like the copy above and below it; one narrow
+        block between full-width ones looks like a mistake.
+      </p>
     </section>
 
     {/* ======================== BORDER RADIUS ======================== */}

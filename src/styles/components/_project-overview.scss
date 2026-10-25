@@ -43,7 +43,7 @@
   &__opening video, &__decision video { display: block; width: 100%; max-height: 620px; background: $color-neutral-dark; }
   &__crop { display: block; position: relative; overflow: hidden; width: 100%; background: $color-neutral-lightest; }
   &__crop img { position: absolute; max-height: none; }
-  &__decision--text { grid-template-columns: 1fr !important; max-width: 66ch; }
+  &__decision--text { grid-template-columns: 1fr !important; }
   &__reel video { display: block; width: 100%; aspect-ratio: 16 / 9; background: $color-neutral-dark; object-fit: contain; }
   // the reel's frame, where a brand intro (BrandIntro) lays its plate
   &__reel-frame { position: relative; }
