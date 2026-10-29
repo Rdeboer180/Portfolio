@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Experience Systems Lab</title>
-<meta name="rd-teardown" content="2026-11-27">
+<meta name="rd-teardown" content="2027-01-31">
 <link rel="icon" href="data:,">
 <style>
 :root{color-scheme:light;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;--hair:#e5e5e5;--orange:#f03d01;--orange-deep:#c23001;--cool:#f4f6f7}
@@ -41,7 +41,7 @@ button[disabled]{opacity:.6;cursor:progress}
 <script>
 (() => {
   const SALT = 'RGF9xJIXobQID+HH3YTFwg==', ITER = 250000, BIN = 'index.bin', STORE = 'rd-lab-key';
-  const RETIRED = Date.now() > new Date('2026-11-27T23:59:59-05:00').getTime();
+  const RETIRED = Date.now() > new Date('2027-01-31T23:59:59-05:00').getTime();
   const $ = id => document.getElementById(id);
   const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
   const toB64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
@@ -81,7 +81,7 @@ button[disabled]{opacity:.6;cursor:progress}
   });
   if (RETIRED) {
     store.clear(); $('load').hidden = true; $('gate').hidden = false;
-    $('lede').innerHTML = 'This lab was retired on 2026-11-27. The current work is at <a href="https://www.rdeboerdesigns.com/">rdeboerdesigns.com</a>.';
+    $('lede').innerHTML = 'This page was retired on 2027-01-31. The current work is at <a href="https://www.rdeboerdesigns.com/">rdeboerdesigns.com</a>.';
     $('form').hidden = true; return;
   }
   const saved = store.get();
