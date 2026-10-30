@@ -43,6 +43,16 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'prompts-that-steered-the-binder',
+    kind: 'practice',
+    origin: 'portfolio',
+    date: 'October 30, 2026',
+    dateISO: '2026-10-30',
+    title: 'The prompts that steered my binder',
+    dek: 'Claude agents built my homepage binder in three days. These are the prompts where I steered it, typos kept, and the fix I reverted after launch.',
+    read: '5 min',
+  },
+  {
     slug: 'playdraft-pick-on-the-clock',
     kind: 'practice',
     origin: 'portfolio',
