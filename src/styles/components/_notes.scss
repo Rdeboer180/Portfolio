@@ -1349,3 +1349,36 @@
     }
   }
 }
+
+// Prompt — a message sent to an agent, quoted verbatim. Neutral so it reads as
+// source material; the accent is kept for the session tag.
+.notes__body .notes__prompt {
+  margin: $spacing-lg 0;
+  max-width: $container-text-width;
+  padding: $spacing-md $spacing-lg;
+  background: $color-neutral-lightest;
+  border: 1px solid $color-border-default;
+  border-radius: $card-border-radius;
+
+  & + .notes__prompt { margin-top: -$spacing-sm; }
+}
+
+.notes__body .notes__prompt-text {
+  margin: 0;
+  font-family: $font-family-mono;
+  font-size: 14px;
+  line-height: 1.65;
+  color: $color-neutral-dark;
+}
+
+.notes__body .notes__prompt-meta {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-sm;
+  font-family: $font-family-mono;
+  font-size: $font-size-caption;
+  letter-spacing: 0.04em;
+  color: $color-neutral-muted;
+}
+
+.notes__body .notes__prompt-id { color: $color-primary; }

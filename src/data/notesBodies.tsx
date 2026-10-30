@@ -121,7 +121,66 @@ const StackItem: React.FC<{
   </li>
 );
 
+// Prompt — one message I sent an agent, quoted verbatim (typos kept), with
+// its session tag and time. Quiet furniture, so the words carry it.
+const Prompt: React.FC<{ id?: string; when?: string; children: React.ReactNode }> = ({ id, when, children }) => (
+  <figure className="notes__prompt">
+    <blockquote className="notes__prompt-text">{children}</blockquote>
+    <figcaption className="notes__prompt-meta">
+      Ryan{id ? <span className="notes__prompt-id">{id}</span> : null}{when ? <span>{when}</span> : null}
+    </figcaption>
+  </figure>
+);
+
 export const NOTE_BODIES: Record<string, React.ReactNode> = {
+  'prompts-that-steered-the-binder': (
+    <>
+      <p>Between 19 and 21 October I rebuilt the case studies on my <Link to="/">homepage</Link> as a binder of collectible cards. Claude agents wrote the code and ran the measurements. The look, the motion and what got cut were my calls, and the prompts are where I made them. Every quote below is copied from my sessions, typos kept.</p>
+      <figure className="notes__figure">
+        <video src="/images/notes/prompts-binder-flight.mp4" poster="/images/notes/prompts-binder-flight-poster.webp" width="1040" height="420" autoPlay muted loop playsInline preload="metadata" aria-label="The PlayDraft card turning over and landing in its sleeve beside the study's intro video, which unfolds out from behind it." />
+        <figcaption>The open today: the PlayDraft card turns over, lands in its sleeve, and the study&rsquo;s intro video unfolds from behind it.</figcaption>
+      </figure>
+      <Callout marker="The pattern">The prompts that worked named a real object or gave a number.</Callout>
+
+      <h2>Name the real object</h2>
+      <Prompt id="A055" when="20 Oct · 10:02">next page and previous page need an actual flip page animation similar to a binder flipping through pages</Prompt>
+      <p>Next and Previous now turn a real page. It lifts at the free edge, swings over the rings and falls away past the spine.</p>
+      <Prompt id="A041" when="19 Oct · 23:09">&hellip;we need one central light source tho&hellip;</Prompt>
+      <p>The first holographic pass put the same highlight on every card, which is the tell of a template. One lamp now hangs over the whole binder, and its glare crosses the cards as you move.</p>
+
+      <h2>Set the bar by comparison</h2>
+      <Prompt id="A058" when="20 Oct · 10:18">&hellip;still looks like a vector i could spin up in 5 minutes vs matching the visuals of the sleeves and cards themselves</Prompt>
+      <p>The rings and spine were rebuilt to match the material of the sleeves around them.</p>
+      <Prompt id="A049" when="20 Oct · 09:18">&hellip;the video unfolding needs more care how can we connect this to the craft? &hellip;</Prompt>
+      <p>The study&rsquo;s intro video became a printed insert folded in three. It slides out from behind the card, unfolds one panel at a time, and lies flat exactly where the video plays.</p>
+
+      <h2>Give a number</h2>
+      <Prompt id="A062">make the hover state only push the card up by 10% not 15%</Prompt>
+      <Prompt id="A061">dial back the glare effect to 70% opacity</Prompt>
+      <p>Hover now lifts a card 10%. The glare went to 70%, and later to 49% once the grey bands and grain were in.</p>
+
+      <h2>Say what I won&rsquo;t accept, and what I&rsquo;d give up</h2>
+      <Prompt id="A090" when="20 Oct · 16:41">avoid the unprofessional transition of content disapearing and turning into something else</Prompt>
+      <p>On phones I rejected the version where the card turned into the video. The card flips, lands flush left and unrolls, as it does on desktop.</p>
+      <Prompt id="A119" when="20 Oct · 22:57">is there a reason the case study binder page is so much more fluid than on my homepage binder?</Prompt>
+      <Prompt id="A122" when="20 Oct · 23:01">&hellip;thats the biggest avenue i am willing to simplify if its causing choppiness</Prompt>
+      <p>I offered up the glare first. Three agents audited the homepage and agreed the cost was the lamp&rsquo;s endless sway, not the look. It moved to the compositor and the glare stayed. With the binder in view, the main thread at rest went from 271ms per three seconds to 2ms.</p>
+
+      <h2>The fix that passed its own test</h2>
+      <p>The binder was live when I found this one, on 24 October. On the homepage a card flies into the study panel as a fixed element, aimed at where its sleeve was at takeoff. Scroll during the flight and it hung over the text, then jumped into place. An agent&rsquo;s fix held the panel&rsquo;s scroller still for the flight, and its own test passed. The test checked that the panel stayed at the top. It never checked where my scroll went instead.</p>
+      <Prompt when="24 Oct · 22:36">revert to the prior version, this fix broke the scroll to where if i scroll while the animaiton is ongoing the scroll is still fixed to the canvas behind the fly out</Prompt>
+      <Prompt when="24 Oct · 22:36">what was our other option to explore in regards to fixing the card animation&rsquo;s fixed positioning? can we lock vertical scrolling until the animation ends? can we make it relative while the animation is in progress?</Prompt>
+      <p>Three options came back: lock all scrolling for about a second and a half, hand the card into the panel mid-flight and risk a one-frame jump, or let the card follow the scroll. I picked the one that keeps scrolling live, since that was my complaint both times.</p>
+      <Prompt when="25 Oct · 00:37">it looks like its z-index is higher than the nav (&lt;header class=&quot;project-panel__header&quot;&gt;) z-index until the animation finalizes which looks off, please fix then this can go live</Prompt>
+      <p>The card now clips away wherever it passes under the panel&rsquo;s header. I caught that on localhost and on my phone, and it shipped with the follow-the-scroll fix as one commit.</p>
+      <figure className="notes__figure">
+        <img src="/images/notes/prompts-binder-scroll-follow.webp" width="1080" height="864" loading="lazy" alt="The study panel scrolled mid-flight, with the PlayDraft card following the scroll and clipped under the panel's header." />
+        <figcaption>Scrolling mid-flight today: the card follows the panel and slips under its header.</figcaption>
+      </figure>
+      <p><strong>The agent&rsquo;s check passed because it tested what it was told to test. Using it myself is what failed it.</strong></p>
+      <p>Revert fast, ask for the options, pick the one that matches the complaint, and test on a real device before it goes live.</p>
+    </>
+  ),
   'playdraft-pick-on-the-clock': (
     <>
       <p>In <Link to="/work/playdraft/">PlayDraft</Link>&rsquo;s draft room, the Queue tab makes one promise: <em>#1 is your next target</em>. Until 15 August 2026, the clock did not keep it. When a turn ran out, the room drafted the top row of the Available list, which moves with the search box and the category chips. A player who queued three names, typed into search and let the clock run got something they never chose and could not have predicted.</p>
