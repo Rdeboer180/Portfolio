@@ -43,6 +43,16 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'building-the-binder',
+    kind: 'practice',
+    origin: 'portfolio',
+    date: 'October 30, 2026',
+    dateISO: '2026-10-30',
+    title: 'The default card is free now',
+    dek: 'Why my homepage’s case studies became a binder of collectible cards, and the detail work that kept it from being a gimmick.',
+    read: '4 min',
+  },
+  {
     slug: 'playdraft-pick-on-the-clock',
     kind: 'practice',
     origin: 'portfolio',

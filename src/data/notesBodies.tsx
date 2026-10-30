@@ -122,6 +122,49 @@ const StackItem: React.FC<{
 );
 
 export const NOTE_BODIES: Record<string, React.ReactNode> = {
+  'building-the-binder': (
+    <>
+      <p>Until 21 October, the case studies on my homepage were a grid of white cards: a header, an endorsement, filter chips, a pager, and a schematic or screenshot on each. It was clear and it was correct. It also looked like what anyone can now generate in an afternoon.</p>
+      <figure className="notes__figure">
+        <img src="/images/notes/building-the-binder/before-card-grid.webp" width="1600" height="1000" loading="lazy" alt="The old case-study section: a heading, an endorsement quote, filter chips and a row of white cards." />
+        <figcaption>Before: clear, correct, and indistinguishable from a template.</figcaption>
+      </figure>
+      <p>So I replaced it with a binder of collectible cards. Each study is a card in a clear sleeve, with the study&rsquo;s real numbers on the front, generated from the same data file the studies read, never typed by hand. Click one and it lifts out of its sleeve, turns over, and becomes the top of the study it stands for.</p>
+      <p><strong>The default card is free now. The judgment about what goes on it isn&rsquo;t.</strong></p>
+      <figure className="notes__figure">
+        <img src="/images/notes/building-the-binder/after-binder.webp" width="1600" height="1000" loading="lazy" alt="The homepage binder: a dark binder with a spine that files work by discipline, rings, and holographic cards in clear sleeves." />
+        <figcaption>After: the spine files the work by discipline, and each card carries its study&rsquo;s numbers.</figcaption>
+      </figure>
+
+      <h2>One lamp, not a shine per card</h2>
+      <p>The first holographic pass put the same highlight on every card. That repetition is the tell of a template, so one lamp now hangs over the whole binder, and its glare crosses the cards as you move. The rule that came out of it: anything that follows the light belongs to the page, not to a card. The first build of that lamp ran at 29fps. Rebuilt on transforms, it held 60.</p>
+
+      <h2>The thing you click is the thing you open</h2>
+      <p>The back of each card is the study&rsquo;s intro video. Nothing cross-fades between the card and the study: the card turns over and tucks into a sleeve beside the video in the reading panel. On phones I rejected the version where the card turned into the video, because content that disappears and becomes something else reads as a glitch. The card flips, lands flush left and unrolls, as it does on desktop.</p>
+
+      <h2>The layers have to be real</h2>
+      <p>The page, the sleeve&rsquo;s plastic, the card, the foil and the glare are separate layers. The foil is laid across the binder, so neighbouring cards continue one sheet instead of repeating it. The glare stops half a pixel inside each sleeve&rsquo;s weld: rounded to whole pixels, it drew a hairline I caught on review, and the capture checks now assert that half pixel.</p>
+      <figure className="notes__figure">
+        <img src="/images/notes/building-the-binder/layers-exploded.webp" width="1600" height="1171" loading="lazy" alt="A proof frame of the binder with the sleeves offset from the cards, showing the plastic, card and foil as separate layers." />
+        <figcaption>A proof frame with the sleeves pulled off their cards, to check the layers are really separate.</figcaption>
+      </figure>
+
+      <h2>The look stayed; the cost went</h2>
+      <p>When I asked why the standalone demo felt more fluid than the homepage, three agents audited it and agreed: the cost was the lamp&rsquo;s endless sway, not the look. It moved to the compositor and the glare stayed.</p>
+      <ul>
+        <li>Main thread at rest with the binder in view: 271ms per 3 seconds, now 2ms.</li>
+        <li>Card art: 5.3MB, now 640KB.</li>
+        <li>Desktop first paint: 1.52s, now 0.87s.</li>
+        <li>Main script, gzipped: 253KB, now 179KB.</li>
+      </ul>
+      <p>Those are local production builds measured in Chromium, not field data.</p>
+
+      <h2>What I built and cut</h2>
+      <p>An evening went into a wood desk under the binder, with a coffee stain and pencils that fell onto it, built against the agents&rsquo; written advice. I tuned the pencils&rsquo; physics and shadows, then chose plain grey bands carrying the grain and cut the rest. The old card grid is parked in git, in case the binder turns out to be clunky.</p>
+      <p>Claude Fable and Claude Opus wrote the code and ran the measurements and the audits. I made the calls: one lamp, the card back as the video, the sleeve beside it over the layout they recommended, the realism bar, the phone behaviour, building the desk and then cutting it, and which trade-offs to take.</p>
+      <p>Maybe the binder is a novelty that wears off. The studies behind it are the same either way. The binder decides whether anyone opens one.</p>
+    </>
+  ),
   'playdraft-pick-on-the-clock': (
     <>
       <p>In <Link to="/work/playdraft/">PlayDraft</Link>&rsquo;s draft room, the Queue tab makes one promise: <em>#1 is your next target</em>. Until 15 August 2026, the clock did not keep it. When a turn ran out, the room drafted the top row of the Available list, which moves with the search box and the category chips. A player who queued three names, typed into search and let the clock run got something they never chose and could not have predicted.</p>
