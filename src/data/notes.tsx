@@ -46,7 +46,6 @@ export const NOTES: Note[] = [
     slug: 'playdraft-pick-on-the-clock',
     kind: 'practice',
     origin: 'portfolio',
-    status: 'draft',
     relatedProject: 'playdraft',
     date: 'August 2026',
     dateISO: '2026-08',
