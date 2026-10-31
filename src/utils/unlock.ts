@@ -26,6 +26,23 @@ const LEGACY_SESSION_KEY = 'cs-unlocked';
  */
 const SHOW_WORK_HASH =
   '5d475714a2748f755e10ae76ad5b2f2c7dcb1c43dbcbe8be60e9a063d9503f29';
+/** The same password's core ("showwork"), so a dropped "#", a capital or a pasted space still opens it. */
+const SHOW_WORK_CORE_HASH =
+  '26598ba51fccbca6b312206c0e830246c05839dd74e94c4c0c601d730106ed08';
+
+/**
+ * Reduces a typed password to its core, the way /lab/ derives its key: no wrapping
+ * quotes, brackets or trailing punctuation, no "password:" a copy dragged in, no
+ * leading "#", lower case.
+ */
+export const passwordCore = (value: string): string =>
+  value
+    .normalize('NFKC')
+    .trim()
+    .replace(/^[\s"'`“”‘’([{<]+|[\s"'`“”‘’)\]}>.,;:!?]+$/g, '')
+    .replace(/^pass(?:word)?\s*[:=-]?\s*/i, '')
+    .replace(/^[\s"'`“”‘’]*#+/, '')
+    .toLowerCase();
 
 const sha256 = async (value: string): Promise<string> => {
   const data = new TextEncoder().encode(value);
@@ -38,7 +55,8 @@ const sha256 = async (value: string): Promise<string> => {
 /** True when the supplied password matches either accepted secret. */
 export const verifyPassword = async (password: string): Promise<boolean> => {
   const hash = await sha256(password);
-  return hash === SHOW_WORK_HASH || hash === process.env.REACT_APP_PROJECT_PASSWORD_HASH;
+  if (hash === SHOW_WORK_HASH || hash === process.env.REACT_APP_PROJECT_PASSWORD_HASH) return true;
+  return (await sha256(passwordCore(password))) === SHOW_WORK_CORE_HASH;
 };
 
 // Storage access is wrapped — Safari private mode throws on write, and a

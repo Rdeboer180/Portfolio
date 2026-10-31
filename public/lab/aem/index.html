@@ -47,7 +47,12 @@ button[disabled]{opacity:.6;cursor:progress}
   const toB64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
   const store = { get() { try { return localStorage.getItem(STORE); } catch { return null; } }, set(v) { try { localStorage.setItem(STORE, v); } catch {} }, clear() { try { localStorage.removeItem(STORE); } catch {} } };
   let payload = null;
-  const getPayload = () => payload || (payload = fetch(BIN, { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('missing'); return r.arrayBuffer(); }));
+  // A web page in place of the file (a fallback route, a work network's block page) is a load failure, not a wrong password
+  const getPayload = () => payload || (payload = fetch(BIN, { cache: 'no-cache' }).then(r => { if (!r.ok || /html/i.test(r.headers.get('content-type') || '')) throw new Error('missing'); return r.arrayBuffer(); }).catch(e => { payload = null; throw e; }));
+  const core = pw => pw.normalize('NFKC').trim()
+  .replace(/^[\s"'`“”‘’([{<]+|[\s"'`“”‘’)\]}>.,;:!?]+$/g, '')
+  .replace(/^pass(?:word)?\s*[:=-]?\s*/i, '')
+  .replace(/^[\s"'`“”‘’]*#+/, '').toLowerCase();
   async function open(rawKey) {
     const key = await crypto.subtle.importKey('raw', rawKey, 'AES-GCM', false, ['decrypt']);
     const buf = new Uint8Array(await getPayload());
@@ -63,7 +68,7 @@ button[disabled]{opacity:.6;cursor:progress}
   }
   function show(html) { document.open(); document.write(html); document.close(); }
   async function derive(pw) {
-    const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+    const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(core(pw)), 'PBKDF2', false, ['deriveBits']);
     return crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(SALT), iterations: ITER, hash: 'SHA-256' }, k, 256);
   }
   function ask() { $('load').hidden = true; $('gate').hidden = false; $('pw').focus(); }
@@ -84,8 +89,15 @@ button[disabled]{opacity:.6;cursor:progress}
     $('lede').innerHTML = 'This page was retired on 2027-01-31. The current work is at <a href="https://www.rdeboerdesigns.com/">rdeboerdesigns.com</a>.';
     $('form').hidden = true; return;
   }
+  // A link that carries the password, …/lab/playground/#showWork, opens straight through
+  async function fromLink() {
+    const raw = await derive(decodeURIComponent(location.hash));
+    const html = await open(raw);
+    store.set(toB64(raw)); history.replaceState(null, '', location.pathname + location.search); show(html);
+  }
   const saved = store.get();
-  if (saved) { $('load').hidden = false; open(b64(saved)).then(show, () => { store.clear(); ask(); }); }
+  if (saved) { $('load').hidden = false; open(b64(saved)).then(show, () => { store.clear(); location.hash.length > 1 ? fromLink().catch(ask) : ask(); }); }
+  else if (location.hash.length > 1) { $('load').hidden = false; fromLink().catch(ask); }
   else ask();
 })();
 </script>
