@@ -26,7 +26,7 @@ export const GraysAlmanac: React.FC<ArtifactSize> = ({ width, height }) => (
 // over a rule, the track count, the song in bold, the artist, and the
 // outlined progress bar filling under them.
 type IpodSong = { title: string; artist: string; n: number; of: number };
-// wherever the iPod is drawn, it is playing: Come Together, my 1.01, unless a press has moved it on
+// wherever the iPod is drawn, it is playing: Babe I’m Gonna Leave You, my 1.01, unless a press has moved it on
 const FIRST = DRAFTS.songs.picks[0];
 const DEFAULT_SONG: IpodSong = { title: FIRST?.title ?? '', artist: FIRST?.sub ?? '', n: 1, of: DRAFTS.songs.picks.length };
 

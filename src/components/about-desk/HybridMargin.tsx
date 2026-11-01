@@ -20,7 +20,7 @@ import { ReactComponent as Disc } from '../../assets/desk/objects/disc.svg';
 import { ReactComponent as Phone } from '../../assets/desk/objects/phone.svg';
 
 const BY_ID = Object.fromEntries(DESK_THINGS.map((t) => [t.id, t]));
-// the iPod's screen starts on Come Together, Ryan's first pick; every press shuffles to another song
+// the iPod's screen starts on Babe I’m Gonna Leave You, Ryan's first pick; every press shuffles to another song
 let lastSong = 0;
 const nextSong = () => {
   const n = DRAFTS.songs.picks.length;
@@ -52,7 +52,7 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
   const open = prop.id === 'pods' && taps > 0;
   // the Game Boy: how many times it has been switched on (its boot screen replays on each)
   const [boots, setBoots] = useState(0);
-  // the iPod: which of the ten is on its Now Playing screen (Come Together, my 1.01, to start)
+  // the iPod: which of the ten is on its Now Playing screen (Babe I’m Gonna Leave You, my 1.01, to start)
   const [song, setSong] = useState(0);
 
   // pressed, a prop is set down on the desk and stays down while its note is open:
