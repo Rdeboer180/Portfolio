@@ -10,7 +10,15 @@ import React from 'react';
 // the screw posts, the rubber under the buttons, the little green board at the
 // lower left, the brass speaker under its grille. The lens is black, the
 // screen off; the light catches the upper left and runs off the lens glass.
-export const GameBoyColor: React.FC<{ width: number; height: number }> = ({ width, height }) => {
+// Pressed, the Game Boy turns on the way a Game Boy Color does: the screen
+// lights white, the logo's letters come in one by one through the colours of
+// the C-O-L-O-R before settling blue, and the bar under it fades up. Here the
+// logo reads T10 GAMES and the bar carries the name, white on black (Ryan,
+// 1 Nov, after a photo of a backlit GBC). `boot` counts presses: each one
+// restarts the sequence; 0 leaves the screen off.
+const BOOT_WORD = 'T10 GAMES';
+
+export const GameBoyColor: React.FC<{ width: number; height: number; boot?: number }> = ({ width, height, boot = 0 }) => {
   const body = 'M14 0H234A14 14 0 0 1 248 14V398A26 26 0 0 1 222 424H26A26 26 0 0 1 0 398V14A14 14 0 0 1 14 0Z';
   const grille: [number, number][] = [[0, 0]];
   [9, 17].forEach((r, ring) => { const n = ring ? 14 : 7; for (let i = 0; i < n; i += 1) grille.push([r * Math.cos((2 * Math.PI * i) / n), r * Math.sin((2 * Math.PI * i) / n)]); });
@@ -85,6 +93,22 @@ export const GameBoyColor: React.FC<{ width: number; height: number }> = ({ widt
       <rect x="51" y="33" width="146" height="126" rx="3" fill="#0e0e11" />
       <rect x="53" y="35" width="142" height="122" rx="2" fill="url(#gbc-lcd)" />
       <rect x="53" y="35" width="142" height="122" rx="2" fill="#1b2a12" opacity=".08" />
+      {boot > 0 && (
+        <g className="gbc-boot" key={boot}>
+          <rect className="gbc-boot__light" x="53" y="35" width="142" height="122" rx="2" fill="#f3f7ff" />
+          <text className="gbc-boot__logo" x="124" y="98" textAnchor="middle" fontFamily="'Hubot Sans', Inter, sans-serif" fontWeight="800" fontStyle="italic" fontSize="19" letterSpacing="-.3">
+            {Array.from(BOOT_WORD).map((ch, i) => (
+              <tspan key={i} className="gbc-boot__ch" style={{ animationDelay: `${180 + i * 70}ms` } as React.CSSProperties}>{ch === ' ' ? '\u00a0' : ch}</tspan>
+            ))}
+          </text>
+          <g className="gbc-boot__bar">
+            <rect x="82" y="111" width="84" height="12" rx="1" fill="#111" />
+            <text x="124" y="119.6" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="700" fontSize="7.4" letterSpacing=".2" fill="#fff">Ryan DeBoer</text>
+          </g>
+          {/* the glass over the lit screen catches the light too */}
+          <path d="M53 120L120 35H150L53 157Z" fill="#fff" opacity=".07" />
+        </g>
+      )}
       <circle cx="33" cy="80" r="3.2" fill="#3a1212" />
       <path d="M38.5 76.5a5 5 0 0 1 0 7M41.5 74.5a8 8 0 0 1 0 11M44.5 72.5a11 11 0 0 1 0 15" fill="none" stroke="#8a8994" strokeWidth=".9" />
       <text x="34" y="96" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="600" fontSize="5.2" letterSpacing=".6" fill="#8a8994">POWER</text>

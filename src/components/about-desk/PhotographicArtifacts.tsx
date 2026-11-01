@@ -30,7 +30,7 @@ type IpodSong = { title: string; artist: string; n: number; of: number };
 const FIRST = DRAFTS.songs.picks[0];
 const DEFAULT_SONG: IpodSong = { title: FIRST?.title ?? '', artist: FIRST?.sub ?? '', n: 1, of: DRAFTS.songs.picks.length };
 
-export const IpodMini: React.FC<ArtifactSize & { song?: IpodSong }> = ({ width, height, song = DEFAULT_SONG }) => {
+export const IpodMini: React.FC<ArtifactSize & { song?: IpodSong; onEnd?: () => void }> = ({ width, height, song = DEFAULT_SONG, onEnd }) => {
   const id = useId().replace(/:/g, '');
   return (
     <svg className="s" viewBox="0 0 161 290" width={width} height={height} style={{ width, height }} aria-hidden="true" focusable="false">
@@ -64,9 +64,9 @@ export const IpodMini: React.FC<ArtifactSize & { song?: IpodSong }> = ({ width, 
             <text x="33" y="41" className="ipod-screen__count">{song.n} of {song.of}</text>
             <text x="81" y="56" textAnchor="middle" className="ipod-screen__title">{song.title}</text>
             <text x="81" y="66" textAnchor="middle" className="ipod-screen__artist">{song.artist}</text>
-            {/* the progress bar: outlined, filling from the left */}
+            {/* the progress bar: outlined, filling from the left; when it fills, the next song plays */}
             <rect x="36" y="80" width="90" height="5.4" rx="1" fill="#c8d0d1" stroke="#2b3134" strokeWidth=".7" />
-            <rect className="ipod-screen__fill" x="36.6" y="80.6" width="88.8" height="4.2" fill="#2b3134" />
+            <rect className="ipod-screen__fill" x="36.6" y="80.6" width="88.8" height="4.2" fill="#2b3134" onAnimationEnd={onEnd} />
           </g>
         </g>
       )}

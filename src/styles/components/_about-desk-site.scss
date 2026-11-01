@@ -240,3 +240,25 @@
     &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
   }
 }
+
+// ── the Game Boy's boot screen (PropDrawings.tsx) ─────────────────────────
+// the screen lights, the letters of T10 GAMES drop in one by one through the
+// C-O-L-O-R colours and settle on the logo's blue, then the name's bar fades up
+.about-desk {
+  .gbc-boot__light { animation: gbc-light 260ms ease-out both; }
+  @keyframes gbc-light { from { opacity: 0; } }
+  .gbc-boot__ch { fill: #2b3fd6; animation: gbc-letter 900ms cubic-bezier(.2, .72, .18, 1) both; }
+  @keyframes gbc-letter {
+    0% { opacity: 0; fill: #e8317e; }
+    18% { opacity: 1; fill: #e8317e; }
+    36% { fill: #7a4fc9; }
+    54% { fill: #2fae5f; }
+    72% { fill: #f2b51c; }
+    100% { opacity: 1; fill: #2b3fd6; }
+  }
+  .gbc-boot__bar { animation: gbc-bar 420ms ease-out 1000ms both; }
+  @keyframes gbc-bar { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .gbc-boot__light, .gbc-boot__ch, .gbc-boot__bar { animation: none; }
+  }
+}

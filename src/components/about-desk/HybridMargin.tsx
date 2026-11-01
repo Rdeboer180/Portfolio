@@ -27,6 +27,11 @@ const nextSong = () => {
   lastSong = (lastSong + 1 + Math.floor(Math.random() * (n - 1))) % n;
   return lastSong;
 };
+// when a song's bar fills, the next of the ten plays, in order
+const followingSong = () => {
+  lastSong = (lastSong + 1) % DRAFTS.songs.picks.length;
+  return lastSong;
+};
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 interface PropProps {
@@ -45,6 +50,8 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
   const over = prop.over ? ` prop--${prop.over}` : '';
   // the case opens on the first click and stays open; later clicks only open its note
   const open = prop.id === 'pods' && taps > 0;
+  // the Game Boy: how many times it has been switched on (its boot screen replays on each)
+  const [boots, setBoots] = useState(0);
   // the iPod: which of the ten is on its Now Playing screen (Come Together, my 1.01, to start)
   const [song, setSong] = useState(0);
 
@@ -71,7 +78,8 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
       if (prop.id === 'sketch' && pencil && !pencil.getAnimations().length) rollPencilOff(pencil);
       // a 20 g cartridge flicks away; a 190 g console gathers speed under the finger; a paper cover grips
       if (prop.id === 'pkred') wait = pushFlat(el, from, { dist: 12, reach: 30, turn: 3, ms: 180 });
-      if (prop.id === 'gbc') wait = pushFlat(el, from, { dist: 7, reach: 20, turn: 2, ms: 280, ramp: true });
+      // the console barely moves under the finger (a fifth of the first push, 1 Nov): the press is for the power, not the shove
+      if (prop.id === 'gbc') wait = pushFlat(el, from, { dist: 1.4, reach: 4, turn: 0.4, ms: 280, ramp: true });
       if (prop.id === 'almanac') wait = pushFlat(el, from, { dist: 3, reach: 9, turn: 3.5, ms: 320, ramp: true });
       if (prop.id === 'pad') pressGlass(el);
     }
@@ -84,6 +92,8 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
       e.stopPropagation();
       return;
     }
+    // the Game Boy turns on, and its note waits for the logo and the name to come up
+    if (prop.id === 'gbc') { setBoots((n) => n + 1); if (!rm) wait = Math.max(wait, 1400); }
     if (note) window.setTimeout(() => onNote(note, prop.id), wait);
     e.stopPropagation();
   };
@@ -107,11 +117,11 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
       </>
     );
   } else if (prop.id === 'pkred') drawing = <PokemonRedCart width={w} height={h} />;
-  else if (prop.id === 'gbc') drawing = <GameBoyColor width={w} height={h} />;
+  else if (prop.id === 'gbc') drawing = <GameBoyColor width={w} height={h} boot={boots} />;
   else if (prop.id === 'almanac') drawing = <GraysAlmanac width={w} height={h} />;
   else if (prop.id === 'ipod') {
     const pick = DRAFTS.songs.picks[song];
-    drawing = <IpodMini width={w} height={h} song={pick ? { title: pick.title, artist: pick.sub ?? '', n: song + 1, of: DRAFTS.songs.picks.length } : undefined} />;
+    drawing = <IpodMini width={w} height={h} onEnd={() => setSong(followingSong())} song={pick ? { title: pick.title, artist: pick.sub ?? '', n: song + 1, of: DRAFTS.songs.picks.length } : undefined} />;
   }
   else if (prop.id === 'ndball') drawing = <Football width={thing.width} height={thing.height} />;
   else if (prop.id === 'phone') {

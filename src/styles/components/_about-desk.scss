@@ -831,6 +831,11 @@
   &--hybrid .loose--card:hover .pocket--archive, &--hybrid .loose--card:focus-visible .pocket--archive { --lift: -10%; --rx: -4deg; }
   &--hybrid .loose--card:hover .pocket--archive .card__shadow::before, &--hybrid .loose--card:focus-visible .pocket--archive .card__shadow::before { opacity: 0; }
   &--hybrid .loose--card:hover .pocket--archive .card__shadow::after, &--hybrid .loose--card:focus-visible .pocket--archive .card__shadow::after { opacity: 1; }
+  // a click opens the card's note and grows it to 110% while the note is open,
+  // still in its own place in the stack (Ryan, 1 Nov)
+  &--hybrid .loose--card { scale: 1; transition: translate 220ms var(--desk-out), rotate 220ms var(--desk-out), filter 220ms var(--desk-out), scale 220ms var(--desk-out); }
+  &--hybrid .loose--card.is-picked { scale: 1.1; }
+  @media (prefers-reduced-motion: reduce) { &--hybrid .loose--card { transition: none; } }
 
   // the pencil: one free layer over the whole page
   &--hybrid > .free-pencil {

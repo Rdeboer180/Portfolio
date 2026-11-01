@@ -66,6 +66,8 @@ interface ThingProps {
   turn: number;
   z: number;
   held: boolean;
+  /** an archive card whose note is open: it stays grown at 110% */
+  picked?: boolean;
   linked: boolean;
   taps: number;
   open: boolean;
@@ -75,8 +77,8 @@ interface ThingProps {
   onNudge: (id: string, e: React.KeyboardEvent) => void;
 }
 const SOFT = new Set(['pods', 'bud', 'disc']);
-const Thing = React.memo<ThingProps>(({ thing, left, top, turn, z, held, linked, taps, open, register, onGrab, onTap, onNudge }) => {
-  const className = `loose loose--${thing.kind}${thing.bare ? ' loose--bare' : ''}${SOFT.has(thing.kind) ? ' loose--soft' : ''}${held ? ' is-held' : ''}${linked ? ' is-linked' : ''}${thing.from ? ' is-out' : ''}`;
+const Thing = React.memo<ThingProps>(({ thing, left, top, turn, z, held, picked, linked, taps, open, register, onGrab, onTap, onNudge }) => {
+  const className = `loose loose--${thing.kind}${thing.bare ? ' loose--bare' : ''}${SOFT.has(thing.kind) ? ' loose--soft' : ''}${held ? ' is-held' : ''}${picked ? ' is-picked' : ''}${linked ? ' is-linked' : ''}${thing.from ? ' is-out' : ''}`;
   const size: React.CSSProperties = { width: thing.width, height: thing.height };
   // the thing keeps its own size wherever it is put: an absolutely placed box
   // with no width shrinks to the space left before the desk's right edge
@@ -421,6 +423,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
         turn={placed[thing.id].turn}
         z={placed[thing.id].z}
         held={held === thing.id}
+        picked={thing.kind === 'card' && note?.from === thing.id}
         linked={!!link && link.to === thing.id}
         taps={taps[thing.id] || 0}
         open={thing.kind === 'pods' && podsOpen}

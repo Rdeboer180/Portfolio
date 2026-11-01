@@ -328,8 +328,12 @@ export function useDesk(root: React.RefObject<HTMLElement | null>, { folderHeigh
       return { x: x / n, y: y / n };
     };
     setTaps((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-    top.current += 1;
-    setZ((prev) => ({ ...prev, [id]: top.current }));
+    // an archive card on the hybrid's mat keeps its place in the stack: a click only opens its note
+    const still = flat && kind === 'card';
+    if (!still) {
+      top.current += 1;
+      setZ((prev) => ({ ...prev, [id]: top.current }));
+    }
     const p = live.current[id];
     if (kind === 'ball') { const a = away(); glide(id, { x: a.x * 0.32, y: a.y * 0.32 }, 0.94); }
     if (kind === 'disc') spinDown(id, 0.9, 0.982);
@@ -362,7 +366,7 @@ export function useDesk(root: React.RefObject<HTMLElement | null>, { folderHeigh
     // the notebook opens its note on the first turn only; after that, a click just turns the page
     if (thing.note && !(kind === 'book' && (taps[id] || 0) > 0)) {
       const note = thing.note;
-      noteTimer.current = window.setTimeout(() => onNote(note, id), rm ? 0 : 380);
+      noteTimer.current = window.setTimeout(() => onNote(note, id), rm || still ? 0 : 380);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taps, onNote]);
