@@ -173,7 +173,7 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
       <ul className="note__list">
         {NOTES_BY_DATE.slice(0, 5).map((n) => (
           <li key={n.slug}>
-            <small className="note__list-meta"><span>{KIND_LABEL[n.kind]}</span>{n.date} · {n.read}</small>
+            <small className="note__list-meta"><span className="bracketed">{KIND_LABEL[n.kind].replace(/^\[\s*|\s*\]$/g, '')}</span>{n.date} · {n.read}</small>
             <Link to={`/notes/${n.slug}/`}>{n.title}</Link>
           </li>
         ))}
@@ -307,7 +307,7 @@ export const DeskNote: React.FC<{ note: string; side: 'left' | 'right'; onClose:
         {body}
       </aside>
       {/* the rest of the window is the way back, with the homepage drawer's return cursor */}
-      <DismissStrip label="Back to the desk" open={settled} onDismiss={onClose} side={side} width="min(480px, 100vw)" />
+      <DismissStrip label="Back to the desk" open={settled} onDismiss={onClose} side={side} width="min(550px, 100vw)" />
     </>
   );
 };

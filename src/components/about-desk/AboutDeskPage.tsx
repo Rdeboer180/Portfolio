@@ -504,7 +504,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
             <HybridMargin gutter={shelf.gutter} onNote={onNote} />
           </div>
           <div className="desk-band__head desk-band__head--lower">
-            <SectionBadge index="02" label="The archive" icon={<svg viewBox="0 0 24 24"><path d="M4 6h16v4H4zM6 10v9h12v-9M10 14h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>} />
+            <SectionBadge ruled label="The archive" icon={<svg viewBox="0 0 24 24"><path d="M4 6h16v4H4zM6 10v9h12v-9M10 14h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>} />
             <h2>The early work, my notes, and the Forge</h2>
           </div>
           <section className="shelf__lower shelf__lower--hybrid" aria-label="My notes, the archive and the Forge">

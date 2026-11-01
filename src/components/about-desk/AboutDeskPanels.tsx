@@ -44,6 +44,45 @@ export const WikiLink: React.FC<WikiLinkProps> = ({ to, children, onOn, onOff, h
 
 type Wiki = (to: string, label: React.ReactNode) => React.ReactNode;
 
+/** every draft list on the desk, in the order the things sit on it, with the thing that opens it */
+const DRAFT_LISTS: { note: string; label: string; from: string }[] = [
+  { note: 'pokemon', label: 'My top 10 Pokémon', from: 'Pokémon Red' },
+  { note: 'tv', label: 'My favorite TV series', from: 'The four-star ball' },
+  { note: 'games', label: 'My top 10 games', from: 'Game Boy Color' },
+  { note: 'designers', label: 'The designers I learn from', from: 'Illustrator CS disc' },
+  { note: 'songs:0', label: 'My top 10 songs', from: 'iPod mini' },
+  { note: 'podcasts', label: 'My top 10 podcasts', from: 'AirPods Pro' },
+  { note: 'movies', label: 'My favorite movies', from: 'Grays Sports Almanac' },
+  { note: 'goat', label: 'My GOAT athletes', from: 'Notre Dame football' },
+];
+
+/**
+ * The way into the draft lists from the page itself, so a phone (where the
+ * desk's things are not in the margins) reaches every one: a short intro, each
+ * list as a row that opens its note, then the playground and the Loop build.
+ */
+const DraftLists: React.FC = () => {
+  const open = useOpenNote();
+  return (
+    <aside className="draft-lists" aria-labelledby="draft-lists-title">
+      <h3 id="draft-lists-title">Find out more about me in my draft lists</h3>
+      <p>Every thing on this desk opens one of my top tens, drafted the way PlayDraft drafts: movies, podcasts, songs, games and the rest.</p>
+      <ul>
+        {DRAFT_LISTS.map((l) => (
+          <li key={l.note}>
+            <button type="button" id={`t-list-${l.note.replace(':', '-')}`} onClick={() => open(l.note, `list-${l.note.replace(':', '-')}`)}>
+              <b>{l.label}</b><small>{l.from}</small><span aria-hidden="true">→</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p className="draft-lists__more">
+        Also on the desk: <NoteLink note="pad" id="playground">my prototype playground</NoteLink> · <NoteLink note="loop" id="loop">my Loop build</NoteLink>
+      </p>
+    </aside>
+  );
+};
+
 /** A plain link that says what it opens (my top 10 movies) and opens that note in the slide-out, wherever its thing is on the desk */
 const NoteLink: React.FC<{ note: string; id: string; children: React.ReactNode }> = ({ note, id, children }) => {
   const open = useOpenNote();
@@ -87,6 +126,12 @@ const FrontReveal: React.FC = () => {
         </span></span>
       </h1>
       <p className="about-desk__dek reveal-fade" style={delay(1000)}>I’m a senior product designer who kept moving closer to how the work gets built.</p>
+      {/* the old About hero's three paragraphs, kept in their place under the line (Ryan, 1 Nov) */}
+      <div className="about-desk__intro reveal-fade" style={delay(1050)}>
+        <p>My work spans UX, product design, and design systems for the web and React Native. I partner with engineers to carry interaction and brand decisions into reusable components and working products.</p>
+        <p>At Tire Rack, that includes 12+ years of AEM front-end authoring, building component variants and guardrails, and contributing template and Sass code to our internal CMS framework. I also build internal agentic tools and reusable skills to reduce repetitive work and help my team and the teams we work with get from an idea to production sooner.</p>
+        <p>Away from the desk, I’m a husband and dad in South Bend. Sunday dinners, Survivor nights with my mom and my oldest friend, and a dynasty fantasy football league that’s been running for a decade. I like sticking with things long enough to make them better, which is most of what a design system asks for.</p>
+      </div>
       <dl className="about-desk__facts reveal-fade" style={delay(1100)} aria-label="Ryan DeBoer at a glance">
         {FACTS.map((f) => (
           <div key={f.label} className={f.label === 'Availability' ? 'fact fact--flip' : 'fact'}>
@@ -260,9 +305,7 @@ export const WhoPanel: React.FC<{ wiki: Wiki }> = ({ wiki }) => (
       <p>Football Sundays are sacred. I’ve run a dynasty fantasy football league, the Grandville Gremlins, for about a decade, and every team has a custom mascot and logo I designed. It keeps a tight group of high school and college friends connected year-round. And like most people, I unwind with good TV and film. Always watching something.</p>
       <p>A lot of what I do for fun still involves building things. I manage my Type 1 diabetes using a custom-coded branch of the Loop app, a closed-loop insulin delivery system I’ve configured and maintained myself. It’s equal parts health management and engineering hobby, and it eventually became a product: <Link to="/work/loopstack/">LoopStack</Link>, a pattern-review app built on my own data.</p>
       <p>I like traditions and sticking with something long enough to make it better. That carries into my work too.</p>
-      <p className="about-desk__onthedesk">
-        Open <NoteLink note="tv" id="tv">my top 10 TV series</NoteLink> · <NoteLink note="card:grandville-gremlins" id="gremlins">the Gremlins league crest</NoteLink> · <NoteLink note="movies" id="movies">my top 10 movies</NoteLink> · <NoteLink note="podcasts" id="podcasts">my top 10 podcasts</NoteLink> · <NoteLink note="loop" id="loop">my Loop build</NoteLink>
-      </p>
+      <DraftLists />
     </section>
     <Story num="06" />
     <Story num="07" aside="left" />
