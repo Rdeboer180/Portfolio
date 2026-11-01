@@ -36,7 +36,7 @@ const HIDDEN_WORK_ROUTES = [...readFileSync(new URL('../src/data/projects.ts', i
   .map((m) => `/work/${m[1]}`);
 // /talent-tree/build is linked from the front door, so the crawler reaches it
 // anyway; listing it means the build path prerenders even if that link moves.
-const EXTRA_ROUTES = ['/design-system', '/sitemap', '/talent-tree', '/talent-tree/build', ...new Set(HIDDEN_WORK_ROUTES)];
+const EXTRA_ROUTES = ['/design-system', '/sitemap', '/demo/tire-fitment', '/talent-tree', '/talent-tree/build', ...new Set(HIDDEN_WORK_ROUTES)];
 
 // Rendered so a direct link resolves, but kept out of the sitemap and marked
 // noindex. Rendering a route and publishing it are two decisions, and hidden
@@ -54,7 +54,7 @@ const EXTRA_ROUTES = ['/design-system', '/sitemap', '/talent-tree', '/talent-tre
 // file and went straight into the sitemap with no robots tag, because nobody
 // added it here. A hidden study is now rendered and noindexed by the same
 // derivation, so the pair cannot fall out of step again.
-const NOINDEX_ROUTES = new Set(['/design-system', ...HIDDEN_WORK_ROUTES]);
+const NOINDEX_ROUTES = new Set(['/design-system', '/demo/tire-fitment', ...HIDDEN_WORK_ROUTES]);
 
 // Content routes seeded deterministically from the data files so the sitemap
 // never depends on link-discovery timing. The /notes children were occasionally

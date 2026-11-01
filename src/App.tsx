@@ -42,6 +42,7 @@ const AboutDeskPage = lazy(() => import('./components/about-desk/AboutDeskPage')
 const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
+const LabDemoPage = lazy(() => import('./components/LabDemoPage'));
 const TalentAtlasPage = lazy(() => import('./components/TalentAtlasPage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
@@ -300,6 +301,8 @@ function AppRoutes() {
         <Route path="/notes" element={<PageShell><NotesPage /></PageShell>} />
         <Route path="/notes/:slug" element={<PageShell><NotePage /></PageShell>} />
         <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
+        {/* the Tire Fitment Prototype under the site's own nav and footer; the trackpad on /about opens it */}
+        <Route path="/demo/tire-fitment" element={<PageShell><LabDemoPage /></PageShell>} />
         <Route path="/talent-tree" element={<PageShell><TalentAtlasPage /></PageShell>} />
         <Route path="/talent-tree/build" element={<PageShell><TalentAtlasPage own /></PageShell>} />
         <Route path="/talent-tree/atlas" element={<Navigate to="/talent-tree/" replace />} />

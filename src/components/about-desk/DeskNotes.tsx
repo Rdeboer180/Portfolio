@@ -34,7 +34,7 @@ const FromPlayDraft = () => (
 
 /** the playground's four prototypes, as its directory lists them (/lab/playground/) */
 const PROTOTYPES = [
-  { href: '/lab/fitment-confidence/', label: 'Demo', title: 'Tire Fitment Prototype', what: 'Pick a vehicle and the page narrows to the sizes that fit, and says so when a tire isn’t made for your car. The method end to end, with the handoff attached.', go: 'Open the prototype' },
+  { href: '/demo/tire-fitment/', label: 'Demo', title: 'Tire Fitment Prototype', what: 'Pick a vehicle and the page narrows to the sizes that fit, and says so when a tire isn’t made for your car. The method end to end, with the handoff attached.', go: 'Open the prototype' },
   { href: '/lab/wheelrack-handoff/', label: 'WheelRack · Tire Rack', title: 'A prototype as the handoff', what: 'Two product tiles rebuilt from the live site, the edge case as it ships next to the fix. Dev notes name the React state that owns each rule.', go: 'Open WheelRack' },
   { href: '/lab/binder/', label: 'Portfolio binder', title: 'Judgment over agent output', what: 'My homepage rebuilt as a binder of collectible cards with Claude agents, with the prompts that steered it and the calls I made against their advice.', go: 'Open the binder' },
   { href: '/lab/aem/', label: 'AEM QA · Tire Rack', title: 'One review entry per change', what: 'A skill builds the review doc for an AEM update: each change gets its rule, captures and diff, so design, engineering and QA read the same entry.', go: 'Open AEM' },

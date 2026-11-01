@@ -1,0 +1,11 @@
+// The fitment demo page (LabDemoPage): the homepage's fixed nav over a frame
+// that runs the prototype at its full height, then the site footer.
+.lab-demo {
+  min-height: 100vh;
+  background: #fff;
+}
+.lab-demo__frame {
+  display: block;
+  width: 100%;
+  border: 0;
+}
