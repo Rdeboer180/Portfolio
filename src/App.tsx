@@ -38,7 +38,7 @@ import templateContent from './data/homepage-template';
 // Secondary routes are code-split — they aren't needed to paint the landing page.
 const DesignSystem = lazy(() => import('./components/DesignSystem'));
 const CaseStudyPage = lazy(() => import('./components/CaseStudyPage'));
-const AboutPage = lazy(() => import('./components/AboutPage'));
+const AboutDeskPage = lazy(() => import('./components/about-desk/AboutDeskPage'));
 const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
@@ -274,7 +274,11 @@ function AppRoutes() {
       {!background && <UnlockChrome />}
       <Routes location={background || location}>
         <Route path="/" element={<HomeRoute />} />
-        <Route path="/about" element={<PageShell><AboutPage /></PageShell>} />
+        {/* About is the canvas (1 Nov 2026): the page as an artboard, the desk's things scattered in its margins.
+            The editorial About it replaces (AboutPage.tsx) is parked, not deleted. The /about-desk drafts redirect here. */}
+        <Route path="/about" element={<PageShell><AboutDeskPage key="about" variant="hybrid" flavor="c" /></PageShell>} />
+        <Route path="/about-desk/*" element={<Navigate to="/about" replace />} />
+        <Route path="/about-desk" element={<Navigate to="/about" replace />} />
         <Route path="/resume" element={<PageShell><ResumePage /></PageShell>} />
         {/* Preserve the case-study URLs linked from the approved resume PDF. */}
         <Route path="/wheelrack" element={<Navigate to="/work/wheelrack/" replace />} />

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="s" viewBox="0 0 212 212">
+      <defs>
+        <clipPath id="disc-clip"><circle cx="106" cy="106" r="105"></circle></clipPath>
+        <linearGradient id="disc-streak" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"></stop><stop offset=".4" stop-color="#fff" stop-opacity=".35"></stop><stop offset=".5" stop-color="#fff" stop-opacity=".6"></stop><stop offset=".6" stop-color="#fff" stop-opacity=".35"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop></linearGradient>
+      </defs>
+      <g data-part="spin" style="transform-origin: 106px 106px; will-change: transform"><image href="/images/desk/cd-illustrator.webp" x="0" y="0" width="212" height="212"></image></g>
+      <g class="mul" fill="none" stroke-width="4" stroke-linecap="butt" opacity=".75">
+        <circle cx="106" cy="106" r="102" stroke="#f7a9cf" stroke-dasharray="107 534"></circle>
+        <circle cx="106" cy="106" r="102" stroke="#8fd8ff" stroke-dasharray="107 534" stroke-dashoffset="-107"></circle>
+        <circle cx="106" cy="106" r="102" stroke="#a7f0b0" stroke-dasharray="107 534" stroke-dashoffset="-214"></circle>
+        <circle cx="106" cy="106" r="102" stroke="#ffe483" stroke-dasharray="107 534" stroke-dashoffset="-321"></circle>
+        <circle cx="106" cy="106" r="102" stroke="#f7a9cf" stroke-dasharray="107 534" stroke-dashoffset="-428"></circle>
+        <circle cx="106" cy="106" r="102" stroke="#b9a6ff" stroke-dasharray="107 534" stroke-dashoffset="-535"></circle>
+      </g>
+      <g clip-path="url(#disc-clip)" class="scr"><g class="glide" style="transform: translate(var(--streak-x, 0px), var(--streak-y, 0px))"><rect x="60" y="-80" width="60" height="380" fill="url(#disc-streak)" transform="rotate(28 90 110)"></rect></g></g>
+      <circle cx="106" cy="106" r="14" fill="#efece6" stroke="#000" stroke-opacity=".3"></circle>
+      <circle cx="106" cy="106" r="104.5" fill="none" stroke="#000" stroke-opacity=".18"></circle>
+    </svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="s" viewBox="0 0 1120 780">
+      <defs>
+        <pattern id="ob-rule" width="40" height="34" patternUnits="userSpaceOnUse"><path d="M0 33.5H40" stroke="#d9d2bf" stroke-width="1"></path></pattern>
+        <linearGradient id="ob-gutter" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="0"></stop><stop offset=".5" stop-color="#000" stop-opacity=".28"></stop><stop offset="1" stop-color="#000" stop-opacity="0"></stop></linearGradient>
+        <linearGradient id="ob-pageL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f7f4ea"></stop><stop offset=".92" stop-color="#f4f0e4"></stop><stop offset="1" stop-color="#e6e0cf"></stop></linearGradient>
+        <linearGradient id="ob-pageR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e6e0cf"></stop><stop offset=".08" stop-color="#f4f0e4"></stop><stop offset="1" stop-color="#f7f4ea"></stop></linearGradient>
+        <linearGradient id="ob-ribbon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a1d1d"></stop><stop offset=".5" stop-color="#a32a2a"></stop><stop offset="1" stop-color="#7a1d1d"></stop></linearGradient>
+      </defs>
+      <path d="M12 0h548v780H12a12 12 0 0 1-12-12V12A12 12 0 0 1 12 0z" fill="#26282c"></path>
+      <path d="M560 0h548a12 12 0 0 1 12 12v756a12 12 0 0 1-12 12H560z" fill="#26282c"></path>
+      <rect x="1088" y="0" width="22" height="780" fill="#101114"></rect>
+      <g fill="#ebe5d6"><rect x="30" y="34" width="522" height="718"></rect><rect x="568" y="34" width="522" height="718"></rect></g>
+      <g fill="#e2dbc9"><rect x="26" y="30" width="526" height="722"></rect><rect x="568" y="30" width="526" height="722"></rect></g>
+      <rect x="22" y="26" width="530" height="726" fill="url(#ob-pageL)"></rect>
+      <rect x="568" y="26" width="530" height="726" fill="url(#ob-pageR)"></rect>
+      <rect x="22" y="26" width="530" height="726" fill="url(#ob-rule)"></rect>
+      <rect x="568" y="26" width="530" height="726" fill="url(#ob-rule)"></rect>
+      <rect x="500" y="26" width="120" height="726" fill="url(#ob-gutter)"></rect>
+      <path d="M552 26v726M568 26v726" stroke="#000" stroke-opacity=".25"></path>
+      
+      
+      <path d="M530 752h26v88l-13-18-13 18z" fill="url(#ob-ribbon)"></path>
+    </svg>

@@ -100,6 +100,12 @@ export const storySections: StorySection[] = [
     body: [
       'I’m a husband and father first. My wife Stephanie, our kids, and the life we are building ' +
         'at home shape the kind of work I want and the pace I can sustain.',
+      'Outside work, I spend time with the people I\'ve known longest: Survivor nights ' +
+        'with my mom and childhood best friend, Sunday family dinners, board games with cousins, ' +
+        'and a dynasty fantasy football league that has somehow become a decade-long strategy ' +
+        'system.',
+      'I like traditions and sticking with something long enough to make it better. ' +
+        'That carries into my work too.',
     ],
     annotation: 'Show up. Stay invested. Build things that last.',
   },
@@ -278,6 +284,8 @@ export type StrengthVoucher =
 export interface StrengthRow {
   /** Who the work was with. */
   with: string;
+  /** The row as a channel on the about page (Channels.tsx): a slug, no # */
+  channel: string;
   /** The strengths, as the mono meta of the relationship. */
   phrases: string[];
   /** Who said so, or the artifact that shows it. */
@@ -287,6 +295,7 @@ export interface StrengthRow {
 export const strengthRows: StrengthRow[] = [
   {
     with: 'With engineers',
+    channel: 'engineering-partnership',
     phrases: ['Engineering partnership', 'Framework & template development'],
     vouchers: [
       {
@@ -299,6 +308,7 @@ export const strengthRows: StrengthRow[] = [
   },
   {
     with: 'With product and stakeholders',
+    channel: 'product-and-stakeholders',
     phrases: [
       'Product team integration',
       'Cross-functional facilitation',
@@ -316,6 +326,7 @@ export const strengthRows: StrengthRow[] = [
   },
   {
     with: 'With designers',
+    channel: 'design-leadership',
     phrases: ['Design leadership', 'Mentoring & design advocacy'],
     vouchers: [
       {
@@ -334,6 +345,7 @@ export const strengthRows: StrengthRow[] = [
   },
   {
     with: 'Over the long run',
+    channel: 'over-the-long-run',
     phrases: ['Systems thinking', 'Process improvement'],
     vouchers: [
       {
@@ -352,6 +364,7 @@ export const strengthRows: StrengthRow[] = [
   },
   {
     with: 'In writing',
+    channel: 'in-writing',
     phrases: ['Written documentation', 'Process documentation'],
     vouchers: [
       {

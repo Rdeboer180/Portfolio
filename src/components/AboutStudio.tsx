@@ -3,7 +3,7 @@ import { useReveal } from '../hooks/useReveal';
 
 type StudioPointId = 'monitor' | 'system-wall' | 'walking-pad' | 'game-shelf' | 'library';
 
-interface StudioPoint {
+export interface StudioPoint {
   id: StudioPointId;
   number: string;
   label: string;
@@ -25,7 +25,7 @@ interface StudioPoint {
 // the Canvas is where the system lives, this room is what habits make that
 // believable — so nothing here restates the four-beat loop, and every proof
 // names something a reader can go and check elsewhere on the site.
-const STUDIO_POINTS: StudioPoint[] = [
+export const STUDIO_POINTS: StudioPoint[] = [
   {
     id: 'monitor',
     number: '01',

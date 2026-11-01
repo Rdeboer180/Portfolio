@@ -19,6 +19,9 @@ interface LayersPanelProps {
   grouping?: boolean;
   action?: LayerAction;
   showProfileGroup?: boolean; // renders locked "Profile UI" folder + child rows above type layers
+  /** the compact panel's title and accessible name, when it lists something other than roles */
+  title?: string;
+  label?: string;
 }
 
 const EyeIcon = () => (
@@ -44,14 +47,14 @@ const LockIcon = () => (
 );
 
 const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
-  ({ activeIndex, compact = false, onLayerClick, controlsId, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false }, ref) => {
+  ({ activeIndex, compact = false, onLayerClick, controlsId, roles = defaultRoles, grouping = false, action = null, showProfileGroup = false, title, label }, ref) => {
     const [minimized, setMinimized] = useState(false);
     const layersId = useId();
     return (
       <div
         className={`layers-panel${compact ? ' layers-panel--roles' : ''}${grouping ? ' layers-panel--grouping' : ''}`}
         ref={ref}
-        aria-label={compact ? "Design roles" : "Photoshop layers panel mockup"}
+        aria-label={compact ? (label ?? "Design roles") : "Photoshop layers panel mockup"}
       >
         {/* Decorative Photoshop chrome — hidden from assistive tech; only the
             layer rows below are meaningful/interactive. */}
@@ -61,10 +64,10 @@ const LayersPanel = forwardRef<HTMLDivElement, LayersPanelProps>(
         </div>
 
         <div className="layers-panel__titlebar" aria-hidden={compact ? undefined : true}>
-          <div className="layers-panel__title">{compact ? "Roles / Layers" : "Layers"}</div>
+          <div className="layers-panel__title">{compact ? (title ?? "Roles / Layers") : "Layers"}</div>
           {compact ? (
             <button type="button" className="layers-panel__minimize"
-              aria-label={minimized ? 'Expand role layers' : 'Minimize role layers'}
+              aria-label={minimized ? `Expand ${(label ?? 'role layers').toLowerCase()}` : `Minimize ${(label ?? 'role layers').toLowerCase()}`}
               aria-expanded={!minimized} aria-controls={layersId}
               onClick={() => setMinimized(value => !value)}>
               <span aria-hidden="true">{minimized ? '+' : '−'}</span>

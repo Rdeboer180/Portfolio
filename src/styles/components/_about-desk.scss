@@ -1,0 +1,850 @@
+// ============================================
+// About desk — the About page as a desk you scroll down (/about-desk)
+// ============================================
+// The desk is 1440px of whitewashed board, scaled to the window; the note on
+// it is a folder with three tabs; everything else is a thing at real size
+// (3.175px a millimetre) that casts the room's light, one source up and to
+// the left, down and to the right. Under 900px the folder stands alone and
+// the archive cards become a row to swipe.
+
+.about-desk {
+  --desk-ink: var(--color-neutral-dark);
+  position: relative;
+  min-height: 100vh;
+  background: #f2f3f3 url('../../assets/desk/grain-2x.webp') 0 0 / 1400px 1400px;
+  color: var(--desk-ink);
+  font-family: var(--font-body);
+
+  // ── the about page's nav ───────────────────────────────────────────────
+  &__nav {
+    position: sticky;
+    top: 0;
+    z-index: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg) var(--space-3xl);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  &__logo { font: var(--weight-bold) var(--text-body)/1 var(--font-heading); letter-spacing: -0.02em; color: var(--desk-ink); text-decoration: none; }
+  &__nav-right { display: flex; align-items: center; gap: var(--space-md); }
+  &__hint { display: inline-flex; align-items: center; gap: var(--space-sm); margin-right: var(--space-sm); font: 500 var(--text-body-sm)/1 var(--font-body); color: var(--color-neutral-muted); }
+  &__hint svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  &__back { margin-left: var(--space-md); font: 400 var(--text-body-sm)/1 var(--font-body); color: var(--color-neutral-muted); text-decoration: none; }
+  &__back:hover { color: var(--color-primary-dark); }
+  &__logo:focus-visible, &__back:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+  // ── the desk, scaled to the window ─────────────────────────────────────
+  // clip, not hidden: hidden would make this a scroll box and the tab strip could not stick
+  &__viewport { position: relative; overflow: clip; }
+  &__desk { position: absolute; left: 50%; top: 0; translate: -50% 0; }
+  &__mat { position: absolute; z-index: 0; filter: drop-shadow(2px 3px 0 rgba(27, 27, 27, 0.1)) drop-shadow(14px 18px 16px rgba(27, 27, 27, 0.14)); }
+
+  .s { display: block; overflow: visible; }
+  .s text { user-select: none; -webkit-user-select: none; }
+  .s .mul { mix-blend-mode: multiply; }
+  .s .scr { mix-blend-mode: screen; }
+  .s .ovl { mix-blend-mode: overlay; }
+  .s .glide { transition: transform 140ms linear; }
+
+  // ── a thing you can pick up ────────────────────────────────────────────
+  .loose {
+    position: absolute;
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: translate 260ms cubic-bezier(0.2, 0.72, 0.18, 1), rotate 260ms cubic-bezier(0.2, 0.72, 0.18, 1), filter 260ms cubic-bezier(0.2, 0.72, 0.18, 1);
+    filter: drop-shadow(2px 3px 0 rgba(27, 27, 27, 0.1)) drop-shadow(0 1px 2px rgba(27, 27, 27, 0.12)) drop-shadow(14px 18px 16px rgba(27, 27, 27, 0.14));
+
+    &:hover { translate: 0 -6px; rotate: -1.2deg; filter: drop-shadow(3px 5px 0 rgba(27, 27, 27, 0.08)) drop-shadow(0 2px 3px rgba(27, 27, 27, 0.12)) drop-shadow(20px 28px 24px rgba(27, 27, 27, 0.16)); }
+    &:active, &.is-held { translate: 0 -12px; rotate: 1deg; transition-duration: 120ms; }
+    // the pointer stays a pointer on hover and click; only a drag shows the closed hand
+    &.is-held { cursor: grabbing; }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 6px; border-radius: var(--radius-sm); }
+    img { -webkit-user-drag: none; pointer-events: none; }
+    // the site caps svg and img at their box; on the desk a thing is always its real size
+    > svg, > img { max-width: none; flex: none; }
+    // a drawing that brings its own contact shadow casts none from the page
+    &--bare, &--bare:hover { filter: none; }
+    // the selection frame, for whatever a [[link]] points at
+    &.is-linked::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      pointer-events: none;
+      border-radius: 2px;
+      border: 1px solid rgba(240, 61, 1, 0.45);
+      background-image: linear-gradient(var(--color-primary) 0 0), linear-gradient(var(--color-primary) 0 0), linear-gradient(var(--color-primary) 0 0), linear-gradient(var(--color-primary) 0 0);
+      background-size: 7px 7px;
+      background-repeat: no-repeat;
+      background-position: -4px -4px, calc(100% + 4px) -4px, -4px calc(100% + 4px), calc(100% + 4px) calc(100% + 4px);
+    }
+    // the archive card lifts from the desk the way it leaves its sleeve
+    .pocket--archive { --cw: 220px; }
+    &:hover .pocket--archive { --lift: -4%; --rx: -4deg; }
+  }
+  .tag {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 10px);
+    translate: -50% 0;
+    white-space: nowrap;
+    font: 600 var(--text-caption)/1 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--color-neutral-muted);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .loose:hover .tag, .loose:focus-visible .tag { opacity: 1; }
+  // the notebook's ribbon hangs at its centre, so its label sits to the right of it
+  .loose--book .tag { left: 68%; }
+
+  // ── the line from a [[link]] to what it names ──────────────────────────
+  &__line { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 760; overflow: visible; }
+  &__line-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: about-desk-draw 480ms cubic-bezier(0.2, 0.72, 0.18, 1) forwards; }
+  @keyframes about-desk-draw { to { stroke-dashoffset: 0; } }
+
+  // ── the folder ─────────────────────────────────────────────────────────
+  &__folder { position: absolute; z-index: 1; }
+  // the tab strip scrolls with the folder at every width: nothing on the page sticks but the site nav
+  &__tabs { position: relative; z-index: 30; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); height: 58px; padding-right: 22px; }
+  .ftab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+    height: 58px;
+    box-sizing: border-box;
+    padding: 0 34px 12px var(--space-xl);
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+    background: #e6e9ec;
+    color: var(--color-neutral-standard);
+    clip-path: polygon(0 6px, 6px 0, calc(100% - 22px) 0, 100% 100%, 0 100%);
+    translate: 0 6px;
+    transition: translate var(--transition-fast), background var(--transition-fast);
+    box-shadow: inset 0 -8px 10px -8px rgba(27, 27, 27, 0.18);
+
+    &:hover { translate: 0 2px; background: #eef0f2; }
+    &.is-open { translate: 0 0; background: #fff; color: var(--desk-ink); box-shadow: none; z-index: 2; }
+    &__index { font: 500 10px/1 var(--font-mono); letter-spacing: 0.14em; color: var(--color-neutral-muted); }
+    &__label { font: var(--weight-extrabold) var(--text-body-lg)/1.1 var(--font-heading); letter-spacing: -0.01em; }
+    &.is-open .ftab__label::after { content: ''; display: block; width: 28px; height: 2px; margin-top: 6px; background: var(--color-primary); }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -4px; }
+  }
+  &__body {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: var(--space-3xl) 56px var(--space-2xl);
+    background: #fff;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
+    box-shadow: var(--shadow-room), 14px 18px 32px rgba(27, 27, 27, 0.1);
+  }
+  &__title { margin: 0 0 var(--space-xl); font: var(--weight-extrabold) 3.4rem/1.04 var(--font-heading); letter-spacing: -0.025em; color: var(--desk-ink); }
+  &__from { margin: var(--space-lg) 0 var(--space-xl); font: 400 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-neutral-muted); }
+  &__tag { display: inline-block; margin-left: var(--space-sm); padding: 2px var(--space-sm); border-radius: var(--radius-full); background: var(--color-secondary-light); color: var(--color-secondary-dark); font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); }
+  &__backlinks {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-md);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-md);
+    border-top: 1px dashed var(--color-neutral-light);
+    font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono);
+    color: var(--color-neutral-muted);
+    b { color: var(--color-neutral-standard); font-weight: 700; }
+  }
+  &__count { margin-left: auto; }
+
+  // a [[link]]: brackets faint, the name in the accent, a dashed rule under it
+  .wl { color: var(--color-primary-dark); text-decoration: none; border-bottom: 1px dashed rgba(194, 48, 1, 0.45); cursor: pointer; font-weight: 500; }
+  .wl::before { content: '[['; color: var(--color-neutral-muted); font: 400 0.85em var(--font-mono); letter-spacing: -0.05em; margin-right: 1px; }
+  .wl::after { content: ']]'; color: var(--color-neutral-muted); font: 400 0.85em var(--font-mono); letter-spacing: -0.05em; margin-left: 1px; }
+  .wl:hover, .wl:focus-visible { background: var(--color-primary-light); border-bottom-style: solid; outline: none; }
+
+  // ── At a glance, on the folder's front ─────────────────────────────────
+  .glance { margin: 0 0 var(--space-3xl); padding: var(--space-xl) var(--space-xl) var(--space-lg); border-radius: var(--radius-md); background: var(--color-secondary-light); }
+  .glance__eyebrow { margin: 0 0 var(--space-xs); font: 700 var(--text-caption)/var(--leading-caption) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+  .glance h2 { margin: 0 0 var(--space-lg); font: var(--weight-extrabold) var(--text-h5)/var(--leading-h5) var(--font-heading); color: var(--desk-ink); }
+  .glance__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg); margin: 0 0 var(--space-lg); }
+  .glance__facts dt { font: 600 var(--text-caption)/var(--leading-caption) var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-muted); }
+  .glance__facts dd { margin: 2px 0 0; font: 700 var(--text-body)/var(--leading-body) var(--font-heading); color: var(--desk-ink); }
+  .glance p { margin: 0 0 var(--space-lg); font: 400 var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-neutral-standard); }
+  .glance__evidence { margin: 0 0 var(--space-lg); padding: 0; list-style: none; display: grid; gap: var(--space-xs); }
+  .glance__evidence li { font: 400 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-neutral-standard); }
+  .glance__evidence a { font-weight: 700; color: var(--color-primary-dark); }
+  .glance__stack { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); margin: 0 0 var(--space-lg); }
+  .glance__stack > span:first-child { margin-right: var(--space-xs); font: 600 var(--text-caption)/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-muted); }
+  .glance__chip { padding: 4px var(--space-md); border-radius: var(--radius-full); background: #fff; box-shadow: inset 0 0 0 1px var(--color-border-default); font: 500 var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--desk-ink); }
+  .glance__links { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+
+  // ── inside a tab ───────────────────────────────────────────────────────
+  .panel > section { margin: 0 0 var(--space-3xl); }
+  .panel h2 { margin: 0 0 var(--space-md); font: var(--weight-extrabold) var(--text-h4)/var(--leading-h4) var(--font-heading); letter-spacing: -0.015em; color: var(--desk-ink); }
+  .panel h3 { margin: 0 0 var(--space-xs); font: var(--weight-extrabold) var(--text-h5)/var(--leading-h5) var(--font-heading); color: var(--desk-ink); }
+  .panel p { margin: 0 0 var(--space-md); font: 400 var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-neutral-standard); }
+  .panel p.lead { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); color: var(--desk-ink); }
+  // text links in the tabs take the accent; buttons keep their own colors
+  .panel a:not(.btn) { color: var(--color-primary-dark); }
+  .panel .more { display: inline-block; margin-top: var(--space-xs); font: 700 var(--text-body-sm)/var(--leading-body-sm) var(--font-heading); text-decoration: none; }
+  .panel .more:hover { text-decoration: underline; }
+  .panel .label { margin: 0 0 var(--space-xs); font: 700 var(--text-caption)/var(--leading-caption) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+  &__onthedesk { font: 500 var(--text-body-sm)/var(--leading-body-sm) var(--font-body) !important; color: var(--color-neutral-muted) !important; }
+  // a link that names what it opens, in the site's link style: no brackets, an underline, the orange of a link
+  .note-link {
+    display: inline; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: var(--color-primary-dark);
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: rgba(194, 48, 1, 0.4);
+    &:hover { color: var(--color-primary); text-decoration-color: currentColor; }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 2px; }
+  }
+  &__closer { margin-top: var(--space-xl) !important; }
+  &__fine { font-size: var(--text-body-sm) !important; line-height: var(--leading-body-sm) !important; }
+  // the about page's own margin note (the system-note mixin: heading face,
+  // orange-dark, never rotated), set beside the section it belongs to
+  .panel p.about-desk__aside {
+    float: right;
+    width: 190px;
+    margin: 0 -110px var(--space-md) var(--space-lg);
+    shape-outside: margin-box;
+    font: 700 20px/1.25 var(--font-heading);
+    letter-spacing: -0.005em;
+    color: var(--color-primary-dark);
+  }
+  .panel p.about-desk__aside--left { float: left; margin: 0 var(--space-lg) var(--space-md) -120px; }
+
+  // the loop, as the site's 2×2 circuit
+  .beats { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2xl) var(--space-xl); }
+  .beat { display: grid; align-content: start; }
+  .beat__n { font: 700 var(--text-body-sm)/1.4 var(--font-mono); color: var(--color-primary-dark); }
+  .beat h3 { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+  .beat p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+  .beat__meta { margin: 0 0 var(--space-sm) !important; font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono) !important; color: var(--color-neutral-muted) !important; }
+  .beat__cost { margin: var(--space-sm) 0 !important; padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); background: var(--color-primary-light); }
+  .beat__cost b { display: block; margin-bottom: 2px; font: 700 var(--text-caption)/var(--leading-caption) var(--font-heading); letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-primary-dark); }
+  .beat__cost span { font: 400 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--desk-ink); }
+  .beat__ev { font: 600 var(--text-body-sm)/var(--leading-body-sm) var(--font-body) !important; }
+  .beat__ev small { display: block; font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-neutral-muted); }
+  .beat__rel { margin: var(--space-xs) 0 0 !important; font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono) !important; color: var(--color-neutral-muted) !important; }
+
+  // key and value: the tools, the room's facts
+  .kv { margin: 0 0 var(--space-md); }
+  .kv > div { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--space-lg); padding: var(--space-md) 0; border-top: 1px solid var(--color-neutral-light); }
+  .kv > div:last-child { border-bottom: 1px solid var(--color-neutral-light); }
+  .kv dt { font: var(--weight-extrabold) var(--text-body)/var(--leading-body) var(--font-heading); color: var(--desk-ink); }
+  .kv dd { margin: 0; font: 400 var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-neutral-standard); }
+
+  // in other people's words
+  .words { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-xl); margin: 0 0 var(--space-md); }
+  .words > div { display: grid; gap: var(--space-xs); padding: var(--space-lg) 0; border-top: 1px solid var(--color-neutral-light); }
+  .words dt { font: var(--weight-extrabold) var(--text-body)/var(--leading-body) var(--font-heading); color: var(--desk-ink); }
+  .words dd { margin: 0; }
+  .words .phrases { margin: 0 0 var(--space-sm) !important; font: 500 var(--text-caption)/var(--leading-caption) var(--font-mono) !important; color: var(--color-neutral-muted) !important; }
+  .words q { display: block; font: 600 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--desk-ink); quotes: '\201C' '\201D'; }
+  .words cite { display: block; margin: 2px 0 var(--space-sm); font: normal 400 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-neutral-muted); }
+
+  // the timeline, two columns
+  .steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-xl); margin: 0 0 var(--space-lg); padding: 0; list-style: none; }
+  .steps li { position: relative; padding: 0 0 var(--space-xl) var(--space-xl); border-left: 1px solid var(--color-secondary-muted); }
+  .steps li::before { content: ''; position: absolute; left: -4px; top: 8px; width: 7px; height: 7px; background: var(--color-secondary-dark); }
+  .steps li:last-child::before { background: var(--color-primary); }
+  .steps time { display: block; font: 600 var(--text-body-sm)/var(--leading-body-sm) var(--font-mono); color: var(--color-primary-dark); }
+  .steps h3 { margin: 2px 0 var(--space-xs); font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+  .steps p { margin: 0; font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+
+  // the room, five stops
+  .stops { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2xl) var(--space-xl); }
+  .stops li { display: grid; align-content: start; }
+  .stops .n { font: 700 var(--text-body-sm)/1.4 var(--font-mono); color: var(--color-primary-dark); }
+  .stops h3 { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); }
+  .stops p { font-size: var(--text-body-sm); line-height: var(--leading-body-sm); }
+  .stops .proof { margin-top: var(--space-xs); padding-left: var(--space-lg); box-shadow: inset 2px 0 0 var(--color-secondary-muted); }
+  .stops .proof b { display: block; font: 700 var(--text-caption)/var(--leading-caption) var(--font-heading); letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-muted); }
+
+  // ── get in touch, as a fly-out ─────────────────────────────────────────
+  &__scrim { position: fixed; inset: 0; z-index: 900; background: rgba(20, 18, 15, 0.56); border: 0; padding: 0; cursor: pointer; transition: background-color 250ms cubic-bezier(0.32, 0.72, 0, 1); }
+  &__flyout {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 901;
+    width: min(520px, 100vw);
+    box-sizing: border-box;
+    padding: var(--space-2xl) var(--space-3xl);
+    overflow-y: auto;
+    background: #fff;
+    border-left: 1px solid var(--color-border-light);
+    box-shadow: -24px 0 48px rgba(20, 18, 15, 0.16);
+    // the step aside when the way back is pointed at, on the homepage drawer's easing
+    transition: translate 250ms cubic-bezier(0.32, 0.72, 0, 1);
+    h2 { margin: var(--space-xl) 0 var(--space-sm); font: var(--weight-extrabold) var(--text-h2)/var(--leading-h2) var(--font-heading); letter-spacing: -0.02em; }
+    h3 { margin: var(--space-xl) 0 var(--space-xs); font: 700 var(--text-body-sm)/var(--leading-body-sm) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+    p { margin: 0 0 var(--space-md); font: 400 var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-neutral-standard); }
+  }
+  &__close { gap: var(--space-sm); }
+  &__chevron { width: 10px; height: 16px; fill: currentColor; }
+  &__flyout-links { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+  &__flyout-links a {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 24px;
+    border-radius: var(--btn-radius);
+    border: 1px solid var(--desk-ink);
+    font: var(--weight-extrabold) var(--text-body-sm)/1 var(--font-heading);
+    color: var(--desk-ink);
+    background: #fff;
+    text-decoration: none;
+    &:hover { background: var(--desk-ink); color: #fff; }
+  }
+
+
+  // stuck under the nav, the strip sits on a band of the folder's paper
+  &__tabs.is-stuck::before {
+    content: ''; position: absolute; z-index: -1; left: -1px; right: -1px; top: -40px; bottom: 0;
+    background: #fff; box-shadow: 0 10px 18px -12px rgba(27, 27, 27, 0.28);
+  }
+
+  // the live About hero's eyebrow and headline, carried over with its reveal
+  &__eyebrow { margin: var(--space-lg) 0 var(--space-md); font: 500 var(--text-caption)/1.4 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-primary-dark); }
+  &__hero &__title { line-height: 0.98; letter-spacing: -0.03em; }
+
+  // the folder's front: a line from the hero and three facts, then the tabs take over
+  &__dek { margin: var(--space-md) 0 0; max-width: 36ch; font: 500 var(--text-body-lg)/var(--leading-body-lg) var(--font-body); color: var(--color-neutral-standard); }
+  &__facts {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); margin: var(--space-xl) 0 var(--space-2xl); padding: var(--space-md) 0;
+    border-top: 1px solid var(--color-border-light); border-bottom: 1px solid var(--color-border-light);
+    dt { font: 600 var(--text-caption)/var(--leading-caption) var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-neutral-muted); }
+    dd { margin: 4px 0 0; font: 700 var(--text-body)/1.3 var(--font-heading); color: var(--desk-ink); }
+  }
+  &--compact &__facts { grid-template-columns: minmax(0, 1fr); }
+
+  // ── the tabs keep the desk still: every panel is laid out, the away ones unseen
+  .panel.is-away { position: absolute; top: 0; left: 56px; right: 56px; visibility: hidden; pointer-events: none; }
+  // the site's buttons transition everything, visibility included; an away tab hides at once
+  .panel.is-away, .panel.is-away * { transition: none !important; }
+
+  // ── motion (plans/006-about-desk-motion.md) ─────────────────────────────
+  --desk-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --desk-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  .loose__body { display: block; width: 100%; height: 100%; transform-origin: 50% 50%; will-change: transform; }
+  .loose__body > .s { display: block; }
+  // round and white things cast a soft shadow only: the hard offset read as a second rim
+  .loose--soft { filter: drop-shadow(0 1px 1.5px rgba(27, 27, 27, 0.16)) drop-shadow(10px 14px 14px rgba(27, 27, 27, 0.14)); }
+  .loose--soft:hover { filter: drop-shadow(0 2px 2px rgba(27, 27, 27, 0.14)) drop-shadow(16px 24px 22px rgba(27, 27, 27, 0.16)); }
+  .loose--ball:hover, .loose--disc:hover, .loose--bud:hover { rotate: 0deg; }
+  .loose--phone:hover { rotate: 0deg; translate: 0 -4px; }
+  .loose__screen { position: absolute; overflow: hidden; background: #f2f2f7; }
+
+  // the buds tumble out of the case onto the desk
+  .loose--bud .loose__body { animation: desk-bud-out 560ms var(--desk-out) both; }
+  #t-bud-r .loose__body { animation-delay: 70ms; }
+  @keyframes desk-bud-out {
+    from { transform: translate(60px, -90px) rotate(-120deg) scale(0.55); opacity: 0; }
+    60% { opacity: 1; }
+    to { transform: none; opacity: 1; }
+  }
+
+  // the AirPods case: the lid swings up on its hinge and over
+  // the AirPods case (DeskDrawings.tsx): the deck inside, the buds in their wells,
+  // the shell in front of them, the lid over all of it until it swings open
+  .pods { position: relative; perspective: 560px; }
+  .pods__inside, .pods__shell { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+  .pods__inside { z-index: 1; }
+  .pods__shell { z-index: 3; }
+  .pods__pro-bud { position: absolute; z-index: 2; display: block; width: 69px; height: 98px; filter: drop-shadow(0 1px 1px rgba(46, 34, 20, 0.22)) drop-shadow(6px 10px 9px rgba(46, 34, 20, 0.18)); }
+  .pods__pro-bud-y { display: block; transform-origin: 50% 50%; }
+  .pods__pro-bud svg { display: block; }
+  .pods__lid { position: absolute; left: 0; right: 0; top: 0; height: 35.75%; z-index: 4; transform-origin: 50% 0; transform-style: preserve-3d; transition: transform 340ms cubic-bezier(0.34, 1.3, 0.64, 1); }
+  .pods__lid-face, .pods__lid-under { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; }
+  .pods__lid-under { transform: rotateX(180deg); }
+  // open, the lid is up and back, behind the buds as they come out
+  .pods.is-open .pods__lid { transform: rotateX(118deg); z-index: 1; }
+  .pods__led { fill: #a8a8a8; transition: fill 200ms ease 160ms; }
+  .pods__led-glow { opacity: 0; transition: opacity 260ms ease 160ms; }
+  .pods.is-open .pods__led { fill: #34d26c; }
+  .pods.is-open .pods__led-glow { opacity: 1; }
+
+  // the Dragon Ball (DeskDrawings.tsx): its shadow and halo lie on the desk and
+  // travel with it; the glass, its inner light and the room's shine squash together
+  .db { position: relative; display: block; }
+  .db__travel, .db__ball { position: absolute; inset: 0; display: block; will-change: transform; }
+  .db__shadow, .db__glass, .db__shine { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+  .db__shadow { transition: translate 240ms var(--desk-out), opacity 240ms var(--desk-out); }
+  .db__core, .db__halo, .db__rim { position: absolute; border-radius: 50%; opacity: 0; pointer-events: none; will-change: opacity, transform; }
+  // the light starts in the middle of the glass, so the stars go pale in it while the rim stays orange
+  .db__core { inset: 0; background: radial-gradient(circle at 51% 54%, #fffbe8 0%, rgba(255, 238, 176, 0.92) 18%, rgba(255, 204, 96, 0.55) 42%, rgba(255, 170, 52, 0) 70%); }
+  // warm next to the glass, orange further out, gone by the edge
+  .db__halo { inset: -50%; background: radial-gradient(closest-side, rgba(255, 210, 112, 0.86) 48%, rgba(255, 164, 60, 0.52) 62%, rgba(246, 118, 36, 0.22) 80%, rgba(246, 118, 36, 0) 100%); }
+  // the glass's own edge, lit from inside: a bright band just outside the ball (the ball's edge is at 83%)
+  .db__rim { inset: -10%; background: radial-gradient(closest-side, rgba(255, 226, 140, 0) 78%, rgba(255, 232, 156, 0.85) 85%, rgba(255, 180, 80, 0.5) 91%, rgba(255, 150, 50, 0.16) 96%, rgba(255, 140, 40, 0) 100%); }
+  // the ball brings its own shadow, and keeps the room's light where it is when lifted
+  .loose.loose--ball, .loose.loose--ball:hover { filter: none; }
+  .prop.prop--ball:hover { rotate: 0deg; }
+  .prop--ball:hover .db__shadow { translate: 2px 9px; opacity: 0.86; }
+  // the focus ring is round and rolls with the ball
+  .prop.prop--ball:focus-visible { outline: none; }
+  .prop--ball:focus-visible .db__ball { outline: 2px solid var(--color-primary); outline-offset: 8px; border-radius: 50%; }
+
+  // the football (DeskDrawings.tsx): it travels and yaws about its own middle (rollFootball)
+  .fb { position: relative; display: block; }
+  .fb__travel { display: block; transform-origin: 50.2% 51.6%; will-change: transform; }
+
+  // the trackpad: a fingertip on the glass, and a force click's ring
+  .pad { position: relative; overflow: hidden; border-radius: 6%; }
+  // the trackpad is a wedge, 5mm at the front and 11mm at the back, set down at
+  // an angle the way a hand leaves it: its back edge shows under the glass, and
+  // it sits on a short lip of shadow before the long cast
+  // (box-shadows, so the edge keeps the pad's rounded corners through its turn)
+  .prop--pad .pad { box-shadow: 0 2px 0 #c3c6cb, 0 4px 0 #a9adb3, 0 6px 0 #8a8e95, 0 7px 0 rgba(70, 74, 80, 0.6); }
+  &--hybrid .prop--pad { filter: drop-shadow(0 1px 0 rgba(46, 34, 20, 0.22)) drop-shadow(0 4px 3px rgba(46, 34, 20, 0.2)) drop-shadow(var(--cast-far)); }
+  &--hybrid .prop--pad:hover { filter: drop-shadow(0 1px 0 rgba(46, 34, 20, 0.2)) drop-shadow(0 6px 4px rgba(46, 34, 20, 0.16)) drop-shadow(var(--cast-far-lift)); }
+  &--hybrid .prop--pad:active, &--hybrid .prop--pad.is-down { filter: drop-shadow(0 1px 0 rgba(46, 34, 20, 0.22)) drop-shadow(0 4px 3px rgba(46, 34, 20, 0.2)) drop-shadow(var(--cast-far)); }
+  .pad__finger {
+    position: absolute; left: var(--fx, 50%); top: var(--fy, 50%); width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 65%); opacity: 0; transition: opacity 200ms ease; pointer-events: none;
+  }
+  .loose--pad:hover .pad__finger { opacity: 1; }
+  .pad__ring { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 0 0 1px rgba(27, 27, 27, 0.08); pointer-events: none; animation: desk-ring 380ms var(--desk-out) forwards; }
+  @keyframes desk-ring { from { transform: scale(0.4); opacity: 1; } to { transform: scale(6); opacity: 0; } }
+
+  // the notebook: a leaf turns on the spine onto the next spread
+  .book { position: relative; perspective: 2600px; }
+  .book > .s { display: block; }
+  .book__slot, .book__leaf { position: absolute; }
+  // the pages sit on the drawing's ruled lines: one rule every 29.9px, every
+  // line of type on a rule, titles held to two lines
+  .book__page {
+    --rule: 29.9px;
+    position: absolute; inset: 0; box-sizing: border-box; padding: calc(var(--rule) * 1) 34px 0 38px; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--rule) - 1px), #d9d2bf calc(var(--rule) - 1px) var(--rule)), linear-gradient(90deg, #f4f0e4, #f7f4ea);
+    color: #2b2b2b; text-align: left;
+    ol { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--rule); }
+    li { display: grid; min-width: 0; }
+    time { font: 600 11px/var(--rule) var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: #7b7e85; height: var(--rule); }
+    li b {
+      font: 700 19px/var(--rule) var(--font-heading); letter-spacing: -0.01em;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+  }
+  .book__folio { flex: none; height: var(--rule); font: 700 12px/var(--rule) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+  .book__title { flex: none; margin: 0; font: 800 36px/calc(var(--rule) * 2) var(--font-heading); letter-spacing: -0.02em; color: #2b2b2b; }
+  .book__dek { flex: none; margin: 0 0 var(--rule); font: 500 16px/var(--rule) var(--font-body); color: #6a6a6a; }
+  .book__more { margin-top: auto; margin-bottom: var(--rule); font: 700 17px/var(--rule) var(--font-heading); color: #b52e00; }
+  .book__more--quiet { color: #8a8a8a; font-weight: 600; }
+  .book__graph { display: block; width: 100%; height: auto; margin-top: 4px; overflow: visible; }
+  .book__graph text { font: 600 15px var(--font-heading); fill: #3a3a3a; }
+  .book__graph .book__graph-hub { font-size: 18px; font-weight: 800; fill: #c23001; }
+  .book__leaf { transform-origin: 0 50%; transform-style: preserve-3d; animation: desk-leaf 640ms var(--desk-in-out) forwards; z-index: 2; }
+  .book__leaf-front, .book__leaf-back { position: absolute; inset: 0; backface-visibility: hidden; box-shadow: 0 0 24px rgba(27, 27, 27, 0.12); }
+  .book__leaf-back { transform: rotateY(180deg); }
+  @keyframes desk-leaf { from { transform: rotateY(0deg); } to { transform: rotateY(-180deg); } }
+  // the hint sits on the page's last ruled line, in the notebook's own ink
+  .book__hint { position: absolute; right: 7%; bottom: 6%; font: 700 13px/1 var(--font-heading); letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-standard); }
+
+  // ── the notes, sliding in from the side away from the thing ─────────────
+  // the same veil the homepage's case studies and notes draw over the page (.project-panel::backdrop)
+  &__scrim--note { background: rgba(0, 0, 0, 0.48); animation: desk-fade 200ms ease-out both; }
+  @keyframes desk-fade { from { opacity: 0; } }
+  .note { width: min(480px, 100vw); animation: desk-note-in 300ms var(--desk-out) both; }
+  .note--left { right: auto; left: 0; border-left: 0; border-right: 1px solid var(--color-border-light); box-shadow: 24px 0 48px rgba(20, 18, 15, 0.16); --note-from: -40px; }
+  .note--right { --note-from: 40px; }
+  @keyframes desk-note-in { from { transform: translateX(var(--note-from)); opacity: 0; } }
+  .note h4 { margin: var(--space-lg) 0 var(--space-xs); font: 700 var(--text-caption)/var(--leading-caption) var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-muted); }
+  .note__dek { font-weight: 600 !important; color: var(--desk-ink) !important; }
+  // what PlayDraft is, above every draft: quieter than the line that names the board
+  .note__intro { font-size: var(--text-body-sm) !important; line-height: var(--leading-body-sm) !important; color: var(--color-neutral-standard) !important; }
+  .note__art { display: block; width: 100%; height: auto; margin: var(--space-md) 0; border-radius: var(--radius-md); }
+  .note__stats { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-sm); }
+  .note__stats li { display: grid; grid-template-columns: 72px 1fr; gap: var(--space-sm); align-items: baseline; }
+  .note__stats b { font: var(--weight-extrabold) var(--text-body)/1.2 var(--font-heading); color: var(--color-primary-dark); }
+  .note__stats span { font: 600 var(--text-body-sm)/1.4 var(--font-body); color: var(--desk-ink); }
+  .note__stats small { display: block; font-weight: 400; color: var(--color-neutral-muted); }
+  // a link inside a sentence is underlined, not told apart by colour alone
+  .note p a { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  // the way in to PlayDraft under every draft: a plain link, the site's link style, a size up from the fine print
+  .note__cta { margin: var(--space-md) 0 0 !important; font: 600 var(--text-body)/1.4 var(--font-body) !important; }
+  .note__cta a { color: var(--color-primary-dark); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: rgba(194, 48, 1, 0.4); &:hover { color: var(--color-primary); text-decoration-color: currentColor; } }
+  .note__cta + .note__fine { margin-top: var(--space-sm) !important; }
+  .note__fine { margin-top: var(--space-lg) !important; font-size: var(--text-body-sm) !important; color: var(--color-neutral-muted) !important; }
+  .note__next, .note__cards button {
+    display: block; width: 100%; padding: var(--space-sm) 0; border: 0; border-top: 1px solid var(--color-border-light); background: none; text-align: left; cursor: pointer;
+    font: 700 var(--text-body)/1.3 var(--font-heading); color: var(--desk-ink);
+    &:hover { color: var(--color-primary-dark); }
+  }
+  .note__cards { margin: var(--space-md) 0 0; padding: 0; list-style: none; }
+  // the archive note: the seven cards in a page of sleeves, three across. Pointed at
+  // or focused, a card untucks 10% and tips back 4°, as the binder's cards do;
+  // nothing changes its z-index
+  .note__sleeves { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg) var(--space-md); margin: var(--space-lg) 0 0; padding: 0; list-style: none; }
+  .note__sleeve {
+    display: grid; gap: 4px; width: 100%; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; color: var(--desk-ink);
+    b { margin-top: 6px; font: 700 var(--text-body-sm)/1.25 var(--font-heading); }
+    small { font: 400 var(--text-caption)/1.35 var(--font-body); color: var(--color-neutral-muted); }
+    &:hover b { color: var(--color-primary-dark); }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; border-radius: 8px; }
+  }
+  // the sleeve: a clear pocket the card sits down in, its top edge a hairline of plastic
+  .note__sleeve-well {
+    position: relative; display: block; border-radius: 8px; padding: 4px 4px 0; overflow: visible;
+    background: linear-gradient(180deg, rgba(27, 27, 27, 0.04), rgba(27, 27, 27, 0.08));
+    box-shadow: inset 0 0 0 1px rgba(27, 27, 27, 0.08);
+  }
+  // the card sizes all of its type from --cw, so it takes a length, not a percentage
+  .note__sleeve-well .pocket--archive { --cw: 112px; margin: 0 auto; }
+  .note__sleeve-well { display: grid; justify-items: center; }
+  .note__sleeve:hover .pocket--archive, .note__sleeve:focus-visible .pocket--archive { --lift: -10%; --rx: -4deg; }
+  .note__sleeve:hover .card__shadow::before, .note__sleeve:focus-visible .card__shadow::before { opacity: 0; }
+  .note__sleeve:hover .card__shadow::after, .note__sleeve:focus-visible .card__shadow::after { opacity: 1; }
+  .note__cards b { font-family: var(--font-mono); color: var(--color-primary-dark); margin-right: 6px; }
+  .note__cards small, .note__list small { display: block; font: 400 var(--text-body-sm)/1.4 var(--font-body); color: var(--color-neutral-muted); }
+  // the newest notes as the notes page lists them (DESIGN.md: a structured list, not cards):
+  // a Menlo meta line over a Hubot title, rows on the 8px scale (16px each side) and
+  // separated by the 10%-ink hairline, a hairline closing the list too
+  .note__list { margin: var(--space-md) 0 var(--space-lg); padding: 0; list-style: none; border-bottom: 1px solid var(--color-border-default); }
+  .note__list li { display: grid; gap: 6px; padding: var(--space-md) 0; border-top: 1px solid var(--color-border-default); }
+  .note__list a { font: 700 var(--text-body-lg)/1.3 var(--font-heading); letter-spacing: -0.01em; color: var(--desk-ink); text-decoration: none; text-wrap: balance; &:hover { color: var(--color-primary-dark); } }
+  .note__list .note__list-meta { display: flex; flex-wrap: wrap; gap: 10px; font: 400 var(--text-caption)/var(--leading-caption) var(--font-mono) !important; letter-spacing: 0.02em; text-transform: uppercase; color: var(--color-neutral-muted) !important; }
+  .note__list-meta span { color: var(--color-neutral-standard); }
+  // the trackpad's note: the playground's prototypes, each a short case study
+  .note__protos { margin: var(--space-sm) 0 var(--space-md); padding: 0; list-style: none; display: grid; gap: var(--space-sm); }
+  .note__protos a {
+    display: grid; gap: 4px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border-light); border-radius: 10px;
+    background: var(--color-neutral-white, #fff); color: var(--desk-ink); text-decoration: none;
+    transition: border-color 160ms ease, translate 160ms ease;
+    &:hover, &:focus-visible { border-color: var(--color-primary); translate: 0 -2px; }
+  }
+  .note__protos small { font: 700 var(--text-caption)/1.4 var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+  .note__protos b { font: 700 var(--text-body)/1.3 var(--font-heading); }
+  .note__protos span { font: 400 var(--text-body-sm)/1.5 var(--font-body); color: var(--color-neutral-standard); }
+  .note__protos em { font: 600 var(--text-body-sm)/1.4 var(--font-body); font-style: normal; color: var(--color-primary-dark); }
+  .note__links { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin: var(--space-md) 0; }
+  // two or more buttons stack at one width, so their edges line up in the narrow slide-out
+  .note__links:has(> :nth-child(2)) { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .note__links:has(> :nth-child(2)) > .btn { justify-content: center; width: 100%; box-sizing: border-box; }
+  .note__listens { margin: var(--space-md) 0 var(--space-lg); display: grid; gap: var(--space-sm); }
+  .note__listens div { display: grid; grid-template-columns: 128px 1fr; gap: var(--space-sm); padding-top: var(--space-sm); border-top: 1px solid var(--color-border-light); }
+  .note__listens dt { font: 700 var(--text-caption)/1.5 var(--font-heading); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-primary-dark); }
+  .note__listens dd { margin: 0; font: 600 var(--text-body-sm)/1.5 var(--font-body); color: var(--desk-ink); }
+
+  // ── a PlayDraft draft room (DraftRoom.tsx): one drafter's board of ten ──
+  // The app's own design system (PlayDraft repo, src/design-system/colors.ts and
+  // typography.ts): canvas navy, card surface, the subtle border, gold (gold-400)
+  // for the on-clock state with navy text on it (white on gold is forbidden
+  // there), teal (accent.link) for a custom draft's write-ins, Rajdhani for
+  // display, Inter for the rest. --pack and --pack-deep are the pack's accent pair.
+  .pdr {
+    --pd-canvas: #0d1626; --pd-surface: #16223a; --pd-elevated: #1d3052; --pd-text: #e8ecf2; --pd-secondary: #a0b3ca; --pd-muted: #7a96b6;
+    --pd-line: rgba(160, 179, 202, 0.14); --pd-line-strong: rgba(160, 179, 202, 0.32); --pd-gold: #f0c853; --pd-gold-deep: #9b690c; --pd-on-gold: #1d2d47;
+    --pd-teal: #5ad1c2; --pd-teal-deep: #0c2a2e; --pd-display: 'Rajdhani', 'Hubot Sans', sans-serif;
+    margin: var(--space-md) 0 var(--space-lg); padding: 14px; border-radius: 22px; background: var(--pd-canvas); color: var(--pd-text);
+    font-family: 'Inter', sans-serif;
+    b, small, span { color: inherit; }
+  }
+  // the room's header: the pack's shield, whose draft it is
+  .pdr__top {
+    display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px;
+    border: 1px solid color-mix(in srgb, var(--pack) 22%, transparent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--pack) 20%, var(--pack-deep)) 0%, var(--pack-deep) 65%, #132b52 140%);
+  }
+  .pdr__shield { flex: none; width: 44px; height: auto; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35)); }
+  .pdr__top > div { display: grid; gap: 4px; min-width: 0; }
+  .pdr__kind { font: 700 12px/1 var(--pd-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--pack) !important; }
+  .pdr__title { font: 700 22px/1.05 var(--pd-display); letter-spacing: 0.01em; text-transform: uppercase; }
+  // the results card (PlayDraft's results screen): the dark teal card with its
+  // soft diagonal sheen, the drafter on top, then the picks as hairline rows
+  .pdr__card {
+    margin-top: 12px; padding: 18px 18px 6px; border-radius: 16px; border: 1px solid rgba(90, 209, 194, 0.18);
+    background:
+      linear-gradient(118deg, transparent 0 38%, rgba(255, 255, 255, 0.035) 38% 52%, transparent 52% 70%, rgba(255, 255, 255, 0.025) 70% 82%, transparent 82%),
+      linear-gradient(160deg, #1a4a4a 0%, #13343a 45%, #0f2530 100%);
+  }
+  .pdr__drafter { display: flex; align-items: center; gap: 14px; padding-bottom: 12px; }
+  .pdr__avatar {
+    display: grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f6a24a, #c8641c 70%); border: 3px solid var(--pd-gold); box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+    font: 700 20px/1 var(--pd-display); color: #fff !important;
+  }
+  .pdr__drafter-text { display: grid; gap: 2px; }
+  .pdr__drafter-text b { font: 700 24px/1 var(--pd-display); letter-spacing: 0.01em; }
+  .pdr__drafter-text small { font: 500 13px/1.2 'Inter', sans-serif; color: var(--pd-secondary) !important; }
+  .pdr__rows { margin: 0; padding: 0; list-style: none; }
+  .pdr__row {
+    display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(160, 179, 202, 0.16);
+    animation: desk-pick 360ms var(--desk-out) both;
+  }
+  @for $i from 1 through 10 { .pdr__row:nth-child(#{$i}) { animation-delay: #{80 + $i * 35}ms; } }
+  @keyframes desk-pick { from { opacity: 0; transform: translateY(6px); } }
+  .pdr__n { font: 600 20px/1 var(--pd-display); letter-spacing: 0.02em; color: var(--pd-secondary) !important; font-variant-numeric: tabular-nums; }
+  .pdr__row-body { display: grid; gap: 3px; min-width: 0; }
+  .pdr__pick { font: 600 17px/1.25 'Inter', sans-serif; }
+  .pdr__sub { font: 400 14px/1.3 'Inter', sans-serif; color: var(--pd-text) !important; opacity: 0.85; }
+  // a pick's category, in the colour its pack gives that category; a write-in in the custom draft's teal
+  .pdr__cat { font: 500 13px/1.3 'Inter', sans-serif; color: var(--cat, var(--pd-secondary)) !important; }
+  .pdr__cat.is-write-in { color: var(--pd-teal) !important; letter-spacing: 0.04em; }
+  .pdr__row.is-open .pdr__pick { color: var(--pd-gold) !important; }
+  // the queue: in the ten, order to come
+  .pdr__queue { margin-top: 14px; padding: 12px 12px 4px; border-radius: 14px; background: var(--pd-surface); border: 1px solid var(--pd-line); }
+  .pdr__queue-head { margin: 0 0 8px !important; font: 600 13px/1.3 'Inter', sans-serif !important; color: var(--pd-secondary) !important; }
+  .pdr__queue ul { margin: 0; padding: 0; list-style: none; }
+  .pdr__queue li { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--pd-line); font: 500 16px/1.2 'Inter', sans-serif; }
+  .pdr__star { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--pd-elevated); color: var(--pd-secondary) !important; }
+
+  // ── contained: the homepage's container, the things in a tray beside the folder ──
+  // the three versions of the page, as one quiet segmented switch
+  &__variants { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--radius-sm); background: rgba(27, 27, 27, 0.06); }
+  &__variant {
+    padding: 7px 12px; border-radius: calc(var(--radius-sm) - 2px); font: 600 var(--text-body-sm)/1 var(--font-body); color: var(--color-neutral-standard); text-decoration: none; white-space: nowrap;
+    &:hover { color: var(--desk-ink); }
+    &.is-on { background: #fff; color: var(--desk-ink); box-shadow: 0 1px 2px rgba(27, 27, 27, 0.12); }
+  }
+
+
+  .shelf { max-width: var(--container-max); margin: 0 auto; padding: 112px var(--container-px) var(--space-3xl); box-sizing: content-box; }
+  .shelf__row { display: grid; grid-template-columns: 740px minmax(0, 1fr); gap: 40px; align-items: start; }
+  .shelf__main { min-width: 0; }
+  &--contained &__folder { position: relative; width: 740px; }
+  // the tray stays beside whatever part of the folder you are reading
+  .shelf__tray { position: sticky; top: 92px; height: calc(100vh - 116px); max-height: 820px; overflow: clip; border-radius: var(--radius-md); }
+  .shelf__tray-desk { position: relative; }
+  .shelf__lower { margin-top: var(--space-3xl); }
+  .shelf__lower-desk { position: relative; }
+  .shelf__line { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 760; overflow: visible; }
+  // the archive does not pick up here: a card comes to the front while you point at it
+  &--contained .loose--card { cursor: pointer; transition: translate 220ms var(--desk-out), rotate 220ms var(--desk-out), filter 220ms var(--desk-out); }
+  &--contained .loose--card:hover, &--contained .loose--card:focus-visible { translate: 0 -14px; rotate: 0deg; }
+  &--contained .loose--card:active { translate: 0 -10px; }
+
+  // ── hybrid: information first, the props in the margin, nothing sticks or crops ──
+  &--hybrid &__tabs { position: relative; top: auto; }
+  &--hybrid &__tabs.is-stuck::before { content: none; }
+  // the paper takes the whole page wrapper; the props live outside it, in the gutters
+  .shelf__row--hybrid { position: relative; grid-template-columns: minmax(0, 1fr); gap: 0; }
+  &--hybrid &__folder { width: auto; }
+  &--hybrid &__tabs { max-width: 740px; }
+  &--hybrid &__body { padding: var(--space-3xl) 72px var(--space-2xl); }
+  // reading measure stays a reading measure on the wider sheet; grids may use the width
+  &--hybrid .panel > section > p:not(.about-desk__aside), &--hybrid .about-desk__dek, &--hybrid .panel .lead { max-width: 68ch; }
+  &--hybrid .glance { max-width: 820px; }
+  &--hybrid .panel.is-away { left: 72px; right: 72px; }
+  &--hybrid .panel p.about-desk__aside {
+    width: 170px; margin: 4px -16px var(--space-md) var(--space-lg);
+    font: 700 27px/1.05 'Caveat', 'Hubot Sans', cursive; letter-spacing: 0; color: var(--color-primary); rotate: -3deg; transform-origin: left top;
+  }
+  &--hybrid .panel p.about-desk__aside--left { margin: 4px var(--space-lg) var(--space-md) -16px; rotate: 2deg; }
+  // the gutters sit over the paper in the stacking order, so a prop that leans
+  // onto the paper's edge lies on top of it; the window's edge crops the rest
+  .gutters { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .gutter-spot { position: absolute; display: flex; pointer-events: auto; }
+  .gutter-spot--left { right: 100%; justify-content: flex-end; }
+  .gutter-spot--right { left: 100%; justify-content: flex-start; }
+  .gutter-spot--left .prop { margin-right: 40px; }
+  .gutter-spot--right .prop { margin-left: 40px; }
+  // the phone and the first stubs lean onto the paper; the football only touches it
+  // (its drawing carries a wide clear margin, so its box reaches further than the ball)
+  .gutter-spot--left .prop--lean { margin-right: -56px; }
+  .gutter-spot--right .prop--lean { margin-left: -56px; }
+  .gutter-spot--left .prop--touch { margin-right: -92px; }
+  // kiss: onto the paper's 72px margin and no further, tilt included
+  .gutter-spot--left .prop--kiss { margin-right: -12px; }
+  // Pokémon Red bleeds off the desk's top-left corner
+  .gutter-spot--left .prop--pkred { margin-right: 84px; }
+  // the Almanac leans onto the paper's margin, not its text
+  .gutter-spot--left .prop--lean.prop--almanac { margin-right: -36px; }
+  .gutter-spot--right .prop--kiss { margin-left: -12px; }
+  .gutter-spot--right .prop--touch { margin-left: -92px; }
+  // the window crops what runs off it; the page never scrolls sideways
+  &--hybrid { overflow-x: clip; }
+  .prop {
+    position: relative; display: inline-grid; justify-items: center; gap: 10px; padding: 0; margin: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer;
+    filter: drop-shadow(1px 2px 0 rgba(27, 27, 27, 0.08)) drop-shadow(8px 12px 12px rgba(27, 27, 27, 0.14));
+    transition: translate 240ms var(--desk-out), rotate 240ms var(--desk-out), filter 240ms var(--desk-out);
+    &:hover { translate: 0 -5px; rotate: -1.5deg; filter: drop-shadow(1px 3px 0 rgba(27, 27, 27, 0.06)) drop-shadow(14px 22px 20px rgba(27, 27, 27, 0.16)); }
+    // pressed: set down on the desk at once, and held down while its note is open (is-down, HybridMargin)
+    &:active, &.is-down { translate: 0 0; rotate: 0deg; transition-duration: 120ms; filter: drop-shadow(1px 2px 0 rgba(27, 27, 27, 0.08)) drop-shadow(8px 12px 12px rgba(27, 27, 27, 0.14)); }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 8px; border-radius: var(--radius-sm); }
+    // the props that bring their own shadow
+    &.prop--ndball, &.prop--ball { filter: none; }
+  }
+  // the phone's story, as a real button: out of sight until it has keyboard focus
+  .prop__open {
+    position: absolute; left: 50%; bottom: 44px; z-index: 5; translate: -50% 0; padding: 9px 16px; border: 0; border-radius: 999px;
+    background: var(--desk-ink); color: #fff; font: 600 var(--text-body-sm)/1 var(--font-body); white-space: nowrap; cursor: pointer;
+    clip-path: inset(50%); opacity: 0;
+    &:focus-visible { clip-path: none; opacity: 1; outline: 2px solid var(--color-primary); outline-offset: 3px; }
+  }
+  .prop--phone:hover { rotate: 0deg; }
+  .prop__body { position: relative; display: block; }
+  .prop__art { position: relative; display: block; }
+  .prop__art > .s { display: block; }
+  .prop__bud { position: absolute; animation: desk-bud-out 560ms var(--desk-out) both; }
+  .prop__bud--l { left: -70px; top: 130px; rotate: -24deg; }
+  .prop__bud--r { left: 40px; top: 170px; rotate: 152deg; animation-delay: 70ms; }
+  .shelf__lower--hybrid { margin-top: var(--space-4xl, 96px); }
+  .shelf__lower--hybrid .shelf__lower-desk { margin: 0 auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prop, .db__shadow { transition: none; }
+    // no lift under the pointer: with no transition it would only snap; the shadow alone says it is live
+    .prop:hover { translate: 0 0; rotate: 0deg; }
+    .note__protos a { transition: none; translate: none !important; }
+    .prop__bud { animation: none; }
+  }
+
+  // no eyebrows on the hybrid: the headings carry their own weight. Gone are the
+  // hero's Craft / Code / Systems / Care line and the bracketed section labels
+  // ([ Process ], [ Strengths ], [ The room / where it happens ]); the studio
+  // stops' own labels stay, they name the stop rather than introduce a heading
+  &--hybrid &__eyebrow, &--hybrid .panel > section > p.label { display: none; }
+  &--hybrid &__hero &__title { margin-top: var(--space-lg); }
+
+  // ── hybrid atmosphere: one room, one light ──────────────────────────────
+  // Window light falls from the upper left across the boards and fades toward
+  // the lower right, the corners darken a little, and every shadow on the page
+  // is cast the same way: a soft contact shadow plus a longer cast down and
+  // right. No zero-blur offsets (the craft floor's rule), no coloured halos.
+  &--hybrid {
+    --cast-contact: 0 1px 1.5px rgba(46, 34, 20, 0.16);
+    --cast-near: 2px 4px 6px rgba(46, 34, 20, 0.12);
+    --cast-far: 14px 22px 28px rgba(46, 34, 20, 0.16);
+    --cast-far-lift: 22px 34px 38px rgba(46, 34, 20, 0.18);
+  }
+  &--hybrid::before {
+    content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      linear-gradient(118deg, transparent 18%, rgba(255, 252, 244, 0.22) 26%, transparent 34%, transparent 42%, rgba(255, 252, 244, 0.14) 48%, transparent 55%),
+      radial-gradient(110% 60% at 0% 0%, rgba(255, 249, 238, 0.55), transparent 60%),
+      radial-gradient(80% 50% at 100% 100%, rgba(58, 42, 22, 0.10), transparent 70%),
+      linear-gradient(90deg, rgba(58, 42, 22, 0.07), transparent 10%, transparent 90%, rgba(58, 42, 22, 0.09));
+  }
+  &--hybrid > * { position: relative; z-index: 1; }
+  // the footer slides up over the foot of the desk and crops the notebook, as the
+  // next sheet on the pile would: a hairline edge and a soft shadow cast up onto the desk
+  &--hybrid > .footer {
+    z-index: 4; margin-top: -120px;
+    box-shadow: 0 -1px 0 rgba(27, 27, 27, 0.08), 0 -12px 20px -8px rgba(27, 27, 27, 0.22), 0 -32px 56px -20px rgba(27, 27, 27, 0.24);
+  }
+  &--hybrid > .about-desk__nav { position: sticky; z-index: 800; }
+  &--hybrid > .about-desk__scrim, &--hybrid > .about-desk__flyout { position: fixed; z-index: 900; }
+  &--hybrid > .about-desk__flyout { z-index: 901; }
+  // the way back from a note or the fly-out (DismissStrip.tsx, as on the homepage's
+  // drawer): the rest of the window, over the scrim, with the return cursor above it
+  > .dismiss-strip { z-index: 902; }
+  > .dismiss-strip__cursor { z-index: 903; }
+  &--hybrid > .dismiss-strip, &--hybrid > .dismiss-strip__cursor { position: fixed; }
+  @media (hover: hover) and (min-width: 851px) {
+    // pointed at, the desk behind brightens: it is where the way back goes
+    &:has(> .dismiss-strip:hover) > .about-desk__scrim { background-color: rgba(20, 18, 15, 0.2); }
+  }
+  @media (hover: hover) and (min-width: 851px) and (prefers-reduced-motion: no-preference) {
+    // and the slide-out steps 8px aside, away from the pointer; the gap it opens is
+    // scrim, so moving onto it ends the hover and it settles back without flicker
+    &:has(> .dismiss-strip:hover) > .about-desk__flyout { translate: 8px 0; }
+    &:has(> .dismiss-strip:hover) > .note--left { translate: -8px 0; }
+  }
+  // the paper: it lies on the boards, so its shadow is short at the top and long at the foot
+  &--hybrid &__body { box-shadow: var(--cast-contact), 0 6px 14px -6px rgba(46, 34, 20, 0.14), 0 34px 64px -28px rgba(46, 34, 20, 0.30); }
+  &--hybrid .ftab { box-shadow: 0 -1px 2px rgba(46, 34, 20, 0.06); }
+  // props in the gutters and things on the mat cast the same shadow
+  &--hybrid .prop { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far)); }
+  &--hybrid .prop:hover { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far-lift)); }
+  &--hybrid .prop:active, &--hybrid .prop.is-down { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far)); }
+  &--hybrid .prop.prop--ndball, &--hybrid .prop.prop--ball { filter: none; }
+  &--hybrid .loose { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-near)) drop-shadow(var(--cast-far)); }
+  &--hybrid .loose:hover { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far-lift)); }
+  &--hybrid .loose--bare, &--hybrid .loose--bare:hover { filter: none; }
+  // the mat is a sheet on the boards: a thin contact line and a broad soft cast
+  // the mat's shadow is a box-shadow on its rounded rectangle, not a drop-shadow filter:
+  // the same look, but the browser never rasterises the whole mat to blur it (1 Nov)
+  .shelf__lower--hybrid .about-desk__mat { filter: none; border-radius: 12px; box-shadow: 0 1px 1px rgba(46, 34, 20, 0.22), 10px 24px 36px rgba(46, 34, 20, 0.20); }
+  .shelf__lower--hybrid .about-desk__mat > svg { border-radius: 12px; }
+  // The notebook was the heaviest thing on the page: three drop-shadow filters on a
+  // 984px element whose pages turn inside it, so every frame of a page turn re-ran
+  // the filters over the whole book. Its cover is a rounded rectangle, so the same
+  // three shadows sit on it as a box-shadow instead; only the ribbon's own shadow is
+  // given up (1 Nov)
+  // nothing on the canvas is dragged, so no layer is promoted in advance: will-change on every
+  // loose thing kept a dozen large compositor layers alive for nothing
+  &--hybrid .loose__body { will-change: auto; }
+  &--hybrid .loose--book, &--hybrid .loose--book:hover { filter: none; }
+  &--hybrid .loose--book .loose__body { border-radius: 10px; box-shadow: var(--cast-contact), var(--cast-near), var(--cast-far); transition: box-shadow 240ms var(--desk-out); }
+  &--hybrid .loose--book:hover .loose__body { box-shadow: var(--cast-contact), var(--cast-far-lift); }
+  .shelf__lower--hybrid { margin-top: 120px; }
+  // the mat sits as far off the foot of the desk as it does off the folder, so its bottom edge shows before the footer
+  .shelf--hybrid { padding-bottom: 120px; }
+  .shelf__lower--hybrid .shelf__lower-desk { margin: 0; }
+  // handwritten notes on the mat, in the same hand as the margin notes
+  .shelf__note { position: absolute; z-index: 30; margin: 0; font: 700 26px/1 'Caveat', 'Hubot Sans', cursive; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); pointer-events: none; }
+  // written on the wood just above the mat, clear of its ruler
+  .shelf__note--archive { left: 360px; top: -46px; rotate: -3deg; color: var(--color-primary-dark); text-shadow: none; }
+  .shelf__note--book { left: 1060px; top: 560px; rotate: 2deg; max-width: 220px; line-height: 1.1; }
+  // An archive card on the mat answers a pointer the way a card in the homepage's
+  // binder does (binder.css, .pocket--raised): it untucks a little, 10% of its
+  // height, tipping back 4° about its bottom edge, and its shadow trades the
+  // tucked one for the harder cast of a card standing off the page. It never
+  // changes its place in the stack (no z-index, Ryan, 1 Nov): a card under the
+  // notebook slides out from under it, it does not jump on top of it.
+  &--hybrid .loose--card:hover .pocket--archive, &--hybrid .loose--card:focus-visible .pocket--archive { --lift: -10%; --rx: -4deg; }
+  &--hybrid .loose--card:hover .pocket--archive .card__shadow::before, &--hybrid .loose--card:focus-visible .pocket--archive .card__shadow::before { opacity: 0; }
+  &--hybrid .loose--card:hover .pocket--archive .card__shadow::after, &--hybrid .loose--card:focus-visible .pocket--archive .card__shadow::after { opacity: 1; }
+
+  // the pencil: one free layer over the whole page
+  &--hybrid > .free-pencil {
+    position: absolute; z-index: 700; display: block; padding: 0; margin: 0; border: 0; background: none;
+    cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none;
+  }
+  .free-pencil__body { display: block; width: 100%; height: 100%; transform-origin: 50% 50%;
+    filter: drop-shadow(0 1px 1px rgba(46, 34, 20, 0.30)) drop-shadow(6px 10px 8px rgba(46, 34, 20, 0.20));
+    transition: filter 200ms var(--desk-out), scale 200ms var(--desk-out); }
+  .free-pencil__turn { display: block; transform-origin: 50% 50%; }
+  .free-pencil:hover .free-pencil__body { filter: drop-shadow(0 2px 2px rgba(46, 34, 20, 0.26)) drop-shadow(10px 18px 14px rgba(46, 34, 20, 0.22)); }
+  // held: it rises toward the light, so its shadow drops further and softens
+  .free-pencil.is-held { cursor: grabbing; }
+  .free-pencil.is-held .free-pencil__body { scale: 1.06; filter: drop-shadow(0 4px 4px rgba(46, 34, 20, 0.18)) drop-shadow(26px 44px 30px rgba(46, 34, 20, 0.28)); transition-duration: 140ms; }
+  .free-pencil:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 10px; border-radius: var(--radius-sm); }
+  @media (prefers-reduced-motion: reduce) { .free-pencil__body { transition: none; } .free-pencil.is-held .free-pencil__body { scale: none; } }
+
+  // ── compact: the folder alone, the archive as a row ────────────────────
+  &--compact &__nav { padding: var(--space-md) var(--space-lg); }
+  &--compact &__nav-right { gap: var(--space-sm); }
+  &--compact &__logo, &--compact &__back { white-space: nowrap; }
+  &--compact &__back { margin-left: 0; }
+  &--compact &__nav .btn--md { height: 36px; padding: 0 14px; white-space: nowrap; }
+  &__compact { padding: var(--space-xl) var(--space-lg) var(--space-3xl); }
+  &--compact &__folder { position: static; width: auto; max-width: 740px; margin: 0 auto; }
+  &--compact &__tabs { height: auto; padding-right: 0; }
+  &--compact .ftab { height: auto; padding: 14px 24px 12px 14px; gap: 2px; }
+  &--compact .ftab__label { font-size: var(--text-body-sm); }
+  &--compact &__body { padding: var(--space-xl) var(--space-lg) var(--space-lg); }
+  &--compact &__title { font-size: 2.4rem; }
+  &--compact .glance__facts, &--compact .beats, &--compact .words, &--compact .steps, &--compact .stops { grid-template-columns: minmax(0, 1fr); }
+  &--compact .kv > div { grid-template-columns: minmax(0, 1fr); gap: var(--space-xs); }
+  &--compact .panel p.about-desk__aside, &--compact .panel p.about-desk__aside--left { float: none; width: auto; margin: 0 0 var(--space-sm); rotate: -1deg; }
+  &__deck { max-width: 740px; margin: var(--space-2xl) auto 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loose, .s .glide, .ftab, .tag, .pods__lid { transition: none; }
+    .loose--bud .loose__body, .book__leaf, .note, &__scrim--note, .pdr__row, .pad__ring { animation: none; }
+    &__line-draw { animation: none; stroke-dashoffset: 0; }
+  }
+}

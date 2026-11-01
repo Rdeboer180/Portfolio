@@ -1,0 +1,242 @@
+// ============================================
+// About — the canvas (/about-desk, 31 Oct)
+// ============================================
+// The about page set in the site's own language (DESIGN.md, "The Craft
+// Workbench"), after ryan-design-taste 15.4, "workspace as canvas, controls as
+// a light perimeter":
+//   - the site's nav: wordmark, the four links, the Get in touch pill
+//   - the page is an artboard: white, square, a hairline, its frame label
+//     above it, on a Cool Paper canvas with a Steel dot grid
+//   - Hubot over Inter, one orange; the three tabs are the hero's Layers
+//     panel, light as Figma draws it, sticky in a right rail
+//   - the props are scattered on the canvas in both margins; pointed at, each
+//     is selected in the site's selection frame with a layer chip
+//   - the archive, the notebook and the Forge follow under a numbered rule
+// The day/night desk, the window light and the lamp were tried and retired
+// (31 Oct); the canvas is lit by nothing but the page.
+@import '../variables';
+
+.about-desk--site {
+  // ── the site's nav ─────────────────────────────────────────────────────
+  .about-desk__nav { padding: $spacing-xl $spacing-3xl; background: rgba(255, 255, 255, 0.97); border-bottom: 1px solid rgba(0, 0, 0, 0.04); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .about-desk__nav-right { gap: $spacing-2xl; }
+  .about-desk__links { display: flex; align-items: center; gap: $spacing-2xl; }
+  .about-desk__links a { font-size: $font-size-body-sm; color: $color-neutral-muted; text-decoration: none; transition: color $transition-fast; }
+  .about-desk__links a:hover, .about-desk__links a[aria-current='page'] { color: $color-neutral-dark; }
+  .about-desk__cta {
+    font-size: $font-size-body-sm; font-weight: $font-weight-medium; color: $color-neutral-dark; text-decoration: none;
+    padding: $spacing-sm $spacing-lg; border: 1px solid $color-neutral-light; border-radius: $radius-full; transition: all $transition-fast;
+    &:hover { background: $color-neutral-dark; color: $color-white; border-color: $color-neutral-dark; }
+  }
+  .about-desk__links a:focus-visible, .about-desk__cta:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: $radius-full; }
+
+  // ── the page ───────────────────────────────────────────────────────────
+  .shelf--site { padding: 112px var(--container-px, 32px) 0; }
+  .site-top { display: grid; grid-template-columns: minmax(0, 1fr) 216px; gap: 48px; align-items: start; }
+
+  // the folder is the page itself: no paper, no tabs (the Layers panel is the way between them)
+  .about-desk__folder { position: static; }
+  .about-desk__tabs { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; }
+  .about-desk__body { padding: 0; background: none; box-shadow: none; border-radius: 0; overflow: visible; }
+  &.about-desk--hybrid .about-desk__body::after { content: none; }
+  .panel.is-away { left: 0; right: 0; }
+  .about-desk__backlinks { margin-top: $spacing-3xl; }
+
+  // the rail: the hero's Layers panel and its inspector chip, sticky beside the column
+  .site-rail { position: sticky; top: 104px; display: grid; gap: $spacing-md; }
+  // the Layers panel, light, as Figma draws it: white, a hairline, a quiet title row
+  // with a disclosure chevron, each tab a frame layer with its chevron and frame glyph
+  .site-rail .layers-panel--roles {
+    width: 100%; max-width: none; background: $color-white; color: var(--color-neutral-dark);
+    border: 1px solid var(--color-border-default); border-radius: var(--radius-md); box-shadow: none; font-family: var(--font-body);
+    .layers-panel__top, .layers-panel__toolbar, .layers-panel__lockbar, .layers-panel__footer { display: none; }
+    .layers-panel__titlebar { display: flex; align-items: center; justify-content: flex-start; gap: 10px; height: 44px; padding: 0 14px; background: $color-white; border-bottom: 0; }
+    .layers-panel__titlebar::before { content: ''; width: 8px; height: 8px; border-right: 1.5px solid #8a8a8a; border-bottom: 1.5px solid #8a8a8a; rotate: 45deg; translate: 0 -2px; }
+    .layers-panel__title { font: 600 var(--text-body-sm)/1 var(--font-body); color: var(--color-neutral-dark); }
+    .layers-panel__modebar, .layers-panel__eye, .layers-panel__lock, .layers-panel__minimize { display: none; }
+    .layers-panel__layers { background: $color-white; padding: 0 0 8px; }
+    .layers-panel__layer {
+      display: grid; grid-template-columns: 10px 16px 1fr; gap: 10px; align-items: center; height: auto; min-height: 40px; padding: 0 14px 0 28px;
+      background: $color-white; color: var(--color-neutral-dark); border: 0; cursor: pointer;
+    }
+    // the closed chevron before each layer
+    .layers-panel__layer::before { content: ''; width: 6px; height: 6px; border-right: 1.5px solid #9a9a9a; border-bottom: 1.5px solid #9a9a9a; rotate: -45deg; }
+    .layers-panel__layer:not(.layers-panel__layer--selected):hover { background: #f5f5f5; }
+    .layers-panel__layer:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+    // the frame glyph in place of the T: two stacked bars, as Figma marks an auto-layout frame
+    .layers-panel__thumb {
+      width: 16px; height: 14px; border: 0; background: none; font-size: 0; color: transparent;
+      background-image:
+        linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a),
+        linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a), linear-gradient(#8a8a8a, #8a8a8a);
+      background-repeat: no-repeat;
+      background-size: 14px 1.5px, 14px 1.5px, 1.5px 5px, 1.5px 5px, 9px 1.5px, 9px 1.5px, 1.5px 5px, 1.5px 5px;
+      background-position: 0 0, 0 4.5px, 0 0, 12.5px 0, 0 8px, 0 12.5px, 0 8px, 7.5px 8px;
+    }
+    .layers-panel__name { font: 400 var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: inherit; white-space: normal; overflow: visible; text-overflow: clip; }
+    // selected: the site's orange tint, not Figma's blue, so the one accent stays the one accent
+    .layers-panel__layer--selected { background: var(--color-primary-light); color: var(--color-neutral-dark); }
+    .layers-panel__layer--selected .layers-panel__name { font-weight: 500; }
+  }
+  .site-rail__meta {
+    justify-self: start; margin: 0; padding: 4px 10px; border: 1px solid var(--color-border-default); border-radius: $radius-full; background: $color-white;
+    font: 400 12px/1.4 var(--font-mono); color: var(--color-neutral-standard);
+  }
+
+  // ── the archive's heading, under its own section rule ─────────────────
+  .desk-band__head { position: relative; z-index: 2; max-width: 1186px; margin: 0 auto; box-sizing: border-box; padding: 0 var(--container-px, 32px); }
+  .desk-band__head h2 { margin: $spacing-lg 0 $spacing-sm; font: var(--weight-extrabold) var(--text-h2) / 1.2 var(--font-heading); letter-spacing: -0.02em; color: var(--color-neutral-dark); }
+  .desk-band__head p { max-width: 900px; margin: 0; font: 400 var(--text-body-lg) / var(--leading-body-lg) var(--font-body); color: var(--color-neutral-standard); }
+  .desk-band__head--lower { margin-top: 96px; padding: 0; }
+  .shelf__lower--hybrid { margin-top: $spacing-2xl; }
+  .shelf__note--archive { display: none; }
+}
+
+.about-desk--look-canvas {
+  .site-top.shelf__row--hybrid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 216px; gap: 48px; }
+  // a narrower container than the site's 1186, so the margins have room for the things in them
+  .shelf--site { max-width: 1040px; }
+  // the gutters sit beside the whole container, not only the column
+  .gutters { left: calc(-1 * var(--container-px, 32px)); right: calc(-1 * var(--container-px, 32px)); }
+  // the column has no paper margin to lean on: every prop keeps clear of the text
+  .gutter-spot--left .prop, .gutter-spot--left .prop--lean, .gutter-spot--left .prop--touch, .gutter-spot--left .prop--kiss, .gutter-spot--left .prop--lean.prop--almanac { margin-right: 28px; }
+  .gutter-spot--right .prop, .gutter-spot--right .prop--lean, .gutter-spot--right .prop--touch, .gutter-spot--right .prop--kiss { margin-left: 28px; }
+  .gutter-spot--left .prop--pkred { margin-right: 60px; }
+  // the AirPods case, set down off the iPod's line: a little further out, and turned (deskObjects, turn -11)
+  .gutter-spot--right .prop--pods { margin-left: 52px; }
+  .desk-band__head--lower { margin-top: 160px; }
+}
+
+// ── the canvas: the margins are the canvas around an artboard ─────────────
+.about-desk--look-canvas {
+  // no room light: the hybrid's window wash and corner shading stay off the canvas
+  &::before, &::after { content: none; }
+  background: #f4f6f7;
+  background-image: radial-gradient(circle, rgba(143, 157, 175, 0.55) 1px, transparent 1.2px);
+  background-size: 24px 24px;
+  // the page is the artboard: white, square, a hairline, its frame label above it
+  .site-top { padding: 64px 64px 56px; margin: 0 -32px; background: #fff; box-shadow: 0 0 0 1px rgba(27, 27, 27, 0.08); }
+  // the archive sits on the canvas too
+  .desk-band__head--lower h2 { color: var(--color-neutral-dark); }
+}
+.about-desk--look-canvas {
+  .site-frame-label { position: absolute; left: -32px; top: -24px; margin: 0; font: 500 11px/1 var(--font-body); color: var(--color-secondary-dark); }
+  // the things on the canvas are layers too: selected on hover, in the site's selection frame
+  .gutter-spot .prop:hover, .gutter-spot .prop:focus-visible { outline: 1px solid var(--color-primary); outline-offset: 10px; border-radius: 0; }
+  .gutter-spot .prop::before {
+    content: ''; position: absolute; inset: -14px; pointer-events: none; opacity: 0; transition: opacity 120ms ease-out;
+    background:
+      linear-gradient(#fff, #fff) left 1px top 1px / 6px 6px no-repeat,
+      linear-gradient(#fff, #fff) right 1px top 1px / 6px 6px no-repeat,
+      linear-gradient(#fff, #fff) left 1px bottom 1px / 6px 6px no-repeat,
+      linear-gradient(#fff, #fff) right 1px bottom 1px / 6px 6px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) left top / 8px 8px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) right top / 8px 8px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) left bottom / 8px 8px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) right bottom / 8px 8px no-repeat;
+  }
+  .gutter-spot .prop::after {
+    content: 'layer / ' attr(data-chip); position: absolute; left: -10px; top: calc(100% + 18px); white-space: nowrap; pointer-events: none;
+    padding: 4px 10px; border: 1px solid rgba(240, 61, 1, 0.45); border-radius: $radius-full; background: $color-white;
+    font: 400 11px/1.4 var(--font-mono); color: var(--color-neutral-dark); opacity: 0; translate: 0 -4px; transition: opacity 120ms ease-out, translate 120ms ease-out;
+  }
+  .gutter-spot--right .prop::after { left: auto; right: -10px; }
+  .gutter-spot .prop:hover::before, .gutter-spot .prop:focus-visible::before,
+  .gutter-spot .prop:hover::after, .gutter-spot .prop:focus-visible::after { opacity: 1; translate: 0 0; }
+  // the props lie on the canvas: short, close shadows, not a room's long cast
+  --cast-far: 6px 10px 12px rgba(46, 34, 20, 0.16);
+  --cast-far-lift: 10px 16px 18px rgba(46, 34, 20, 0.18);
+  @media (prefers-reduced-motion: reduce) { .gutter-spot .prop::before, .gutter-spot .prop::after { transition: none; } }
+}
+
+// ── the iPod's Now Playing screen (PhotographicArtifacts.tsx), as the 2004 mini drew it ──
+// Chicago was the mini's face; the nearest web face is a tight bold grotesk, so
+// the bar and the title are Hubot at small sizes, the rest Inter
+.about-desk {
+  .ipod-screen text { fill: #23292c; }
+  .ipod-screen__bar { font: 700 6.4px/1 var(--font-heading); }
+  .ipod-screen__count { font: 500 5.6px/1 var(--font-body); }
+  .ipod-screen__title { font: 800 8px/1 var(--font-heading); letter-spacing: -0.01em; }
+  .ipod-screen__artist { font: 500 6.6px/1 var(--font-body); }
+  // the song plays: the bar fills over a minute, from the left, and starts again with the next song
+  .ipod-screen__fill { transform-box: fill-box; transform-origin: 0 50%; animation: ipod-play 60s linear both; }
+  @keyframes ipod-play { from { transform: scaleX(0.02); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { .ipod-screen__fill { animation: none; transform: scaleX(0.3); } }
+}
+
+// ── In other people's words, as channels (Channels.tsx) ──────────────────
+// the homepage's Slack, unfolded into the column: a channel card per strength,
+// a message from the person who saw it, the phrase marked as the homepage marks it
+// (every layout of the page, the phone's included)
+.about-desk {
+  .channels { display: grid; gap: $spacing-md; margin: $spacing-lg 0 $spacing-md; }
+  .channel { border: 1px solid var(--color-border-default); border-radius: 12px; overflow: hidden; background: $color-white; }
+  .channel__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; padding: 12px 18px; background: #fafbfc; border-bottom: 1px solid rgba(27, 27, 27, 0.08); }
+  .channel__name { margin: 0 !important; font: 700 var(--text-body)/1.3 var(--font-body) !important; letter-spacing: 0 !important; color: var(--color-neutral-dark); }
+  .channel__name span { color: var(--color-neutral-muted); }
+  .channel__topic { margin: 0 !important; font: 400 11px/1.4 var(--font-mono) !important; color: var(--color-neutral-muted) !important; }
+  .channel__body { position: relative; display: grid; gap: 18px; padding: 16px 18px 18px; }
+  .channel__avatar {
+    display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px;
+    background: var(--color-neutral-dark); color: $color-white; font: 700 13px/1 var(--font-body);
+  }
+  .channel__message { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
+  .channel__sender { margin: 0 !important; font-size: var(--text-body-sm) !important; line-height: 1.4 !important; color: var(--color-neutral-dark) !important; }
+  .channel__sender span { color: var(--color-neutral-muted); font-size: var(--text-caption); }
+  .channel__text { margin: 4px 0 0 !important; font: 400 var(--text-body)/1.55 var(--font-body) !important; color: var(--color-neutral-dark) !important; }
+  .channel__text mark, .thread__quote .testimonials__highlight {
+    padding: 0 1px; border-radius: 2px; color: inherit;
+    background: var(--color-primary-light); box-shadow: inset 0 -2px 0 var(--color-primary-muted);
+  }
+  .channel__thread {
+    margin-top: 6px; padding: 4px 0; border: 0; background: none; cursor: pointer;
+    font: 600 var(--text-body-sm)/1.3 var(--font-body); color: var(--color-primary-dark);
+    &:hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 4px; }
+  }
+  .channel__pinned { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--text-body-sm); }
+  .channel__pinned a { font-weight: 600; }
+  .channel__pin {
+    display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border: 1px solid rgba(240, 61, 1, 0.45); border-radius: $radius-full;
+    font: 400 11px/1.3 var(--font-mono); color: var(--color-primary-dark);
+    svg { width: 12px; height: 12px; fill: currentColor; }
+  }
+  .channel__path { font: 400 11px/1.3 var(--font-mono); color: var(--color-neutral-muted); }
+
+  // the typing beat: the sender's dots for a moment, then the message lands
+  .channel__typing { display: none; align-items: center; gap: 12px; }
+  .channel__dots { display: inline-flex; gap: 4px; padding: 9px 12px; border-radius: 10px; background: var(--color-secondary-light); }
+  .channel__dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary); animation: channel-dot 900ms ease-in-out infinite; }
+  .channel__dots i:nth-child(2) { animation-delay: 150ms; }
+  .channel__dots i:nth-child(3) { animation-delay: 300ms; }
+  @keyframes channel-dot { 0%, 60%, 100% { opacity: 0.35; translate: 0 0; } 30% { opacity: 1; translate: 0 -2px; } }
+  .channel__typing-text { font-size: var(--text-caption); color: var(--color-neutral-muted); }
+  // before it scrolls in, and while the dots run, the messages are there for a screen reader but not to the eye
+  .channel.is-before .channel__message, .channel.is-typing .channel__message { opacity: 0; translate: 0 6px; }
+  .channel.is-typing .channel__typing { display: flex; position: absolute; left: 18px; top: 16px; }
+  .channel.is-arrived .channel__message { transition: opacity 220ms var(--desk-out), translate 220ms var(--desk-out); }
+
+  // the thread, in the slide-out
+  .thread { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; margin-top: $spacing-lg; }
+  .thread__avatar { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--color-primary-dark); color: $color-white; font: 700 13px/1 var(--font-body); }
+  .thread__sender { margin: 0 !important; font-size: var(--text-body-sm) !important; color: var(--color-neutral-dark) !important; }
+  .thread__sender time { margin-left: 4px; color: var(--color-neutral-muted); font-size: var(--text-caption); }
+  .thread__quote { margin: 6px 0 0; padding: 0; border: 0; }
+  .thread__quote p { margin: 0 0 10px !important; font: 400 var(--text-body)/1.6 var(--font-body) !important; color: var(--color-neutral-dark) !important; }
+  .thread__tag { display: inline-block; margin-top: 4px; padding: 3px 9px; border: 1px solid rgba(27, 27, 27, 0.12); border-radius: $radius-full; font: 400 11px/1.3 var(--font-mono); color: var(--color-neutral-muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .channel__dots i { animation: none; }
+    .channel.is-arrived .channel__message { transition: none; }
+  }
+}
+
+// ── a phone: the wordmark and the Get in touch pill; the four links wait for the wider page ──
+.about-desk--compact {
+  .about-desk__links { display: none; }
+  .about-desk__cta {
+    font-size: $font-size-body-sm; font-weight: $font-weight-medium; color: $color-neutral-dark; text-decoration: none; white-space: nowrap;
+    padding: $spacing-sm $spacing-lg; border: 1px solid $color-neutral-light; border-radius: $radius-full;
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+  }
+}

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="s" viewBox="0 0 1000 640">
+      <defs>
+        <pattern id="mat-minor" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0V20M0 20H20" stroke="#fff" stroke-opacity=".2" fill="none"></path></pattern>
+        <pattern id="mat-major" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0V100M0 100H100" stroke="#fff" stroke-opacity=".55" stroke-width="1.4" fill="none"></path></pattern>
+        <radialGradient id="mat-wear" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#5fb48e" stop-opacity=".35"></stop><stop offset=".6" stop-color="#2a7d5a" stop-opacity="0"></stop><stop offset="1" stop-color="#000" stop-opacity=".22"></stop></radialGradient>
+        <linearGradient id="mat-bevel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"></stop><stop offset=".5" stop-color="#fff" stop-opacity="0"></stop><stop offset="1" stop-color="#000" stop-opacity=".3"></stop></linearGradient>
+      </defs>
+      <rect width="1000" height="640" rx="8" fill="#2a7d5a"></rect>
+      <rect width="1000" height="640" rx="8" fill="url(#mat-wear)"></rect>
+      <rect x="0" y="0" width="1000" height="640" fill="url(#mat-minor)"></rect>
+      <rect x="0" y="0" width="1000" height="640" fill="url(#mat-major)"></rect>
+      <g stroke="#fff" stroke-opacity=".32" stroke-width="1" fill="none">
+        <path d="M180.0 192.0l140 -96M560.0 396.8l220 -40M700.0 128.0l60 110M300.0 499.20000000000005l180 10M440.0 256.0l-90 70M840.0 460.79999999999995l40 -140"></path>
+      </g>
+      <g style="font: 700 11px var(--font-mono);" fill="#fff" fill-opacity=".7">
+        <text x="104" y="16">5</text><text x="204" y="16">10</text><text x="304" y="16">15</text><text x="404" y="16">20</text><text x="504" y="16">25</text><text x="604" y="16">30</text><text x="704" y="16">35</text><text x="804" y="16">40</text><text x="904" y="16">45</text>
+        <text x="6" y="110">5</text><text x="6" y="210">10</text><text x="6" y="310">15</text><text x="6" y="410">20</text><text x="6" y="510">25</text><text x="6" y="610">30</text>
+      </g>
+      <text x="982" y="626" text-anchor="end" style="font: 700 12px var(--font-mono); letter-spacing: 2px;" fill="#fff" fill-opacity=".7">SELF-HEALING · A2 · CM</text>
+      <rect x="1" y="1" width="998" height="638" rx="7" fill="none" stroke="url(#mat-bevel)" stroke-width="2"></rect>
+      <rect x=".5" y=".5" width="999" height="639" rx="7.5" fill="none" stroke="#000" stroke-opacity=".4"></rect>
+    </svg>

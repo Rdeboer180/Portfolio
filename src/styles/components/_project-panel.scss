@@ -31,7 +31,8 @@
   &[data-phase='open']::backdrop { opacity: 1; }
   &[data-phase='closing']::backdrop { transition-duration: 200ms; }
   &__article { min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); }
-  &::backdrop { background: rgba(0, 0, 0, .24); }
+  // twice the veil it had (31 Oct): the page behind reads as set aside
+  &::backdrop { background: rgba(0, 0, 0, .48); }
   --panel-header-height: 68px;
   &__header {
     position: relative;
@@ -150,7 +151,7 @@
 @media (hover: hover) and (min-width: 851px) {
   // Lighten the backdrop so the homepage behind reads as the destination.
   // Not motion, so it holds under reduced motion (it just changes instantly).
-  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover)::backdrop { background-color: rgba(0, 0, 0, .14); }
+  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover)::backdrop { background-color: rgba(0, 0, 0, .28); }
 }
 @media (hover: hover) and (min-width: 851px) and (prefers-reduced-motion: no-preference) {
   // Nudge the drawer aside, away from the pointer, on the dialog's own

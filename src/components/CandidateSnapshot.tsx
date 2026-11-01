@@ -13,13 +13,13 @@ interface CandidateSnapshotProps {
   variant?: 'full' | 'compact';
 }
 
-const FACTS = [
+export const FACTS = [
   { label: 'Location', value: 'South Bend, Indiana' },
   { label: 'Availability', value: 'Open to remote roles (US)' },
   { label: 'Experience', value: '16+ years' },
 ];
 
-const STACK = ['Adobe Experience Manager', 'Figma', 'Production Sass', 'Storybook', 'React systems', 'Agent-assisted React Native / Expo'];
+export const STACK = ['Adobe Experience Manager', 'Figma', 'Production Sass', 'Storybook', 'React systems', 'Agent-assisted React Native / Expo'];
 
 const Facts: React.FC = () => (
   <dl className="candidate-snapshot__facts">

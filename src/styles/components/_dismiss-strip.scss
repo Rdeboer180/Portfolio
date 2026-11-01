@@ -1,0 +1,80 @@
+@import '../variables';
+// ── Dismiss strip ────────────────────────────────────────────────────────────
+// The page left beside an open slide-out, made a real exit (DismissStrip.tsx):
+// the homepage's case-study and notes drawer, and the about desk's notes and
+// get-in-touch fly-out. Hidden at 850px and below: the strip there is under 43px
+// of a phone or a narrow window, the existing backdrop tap still closes, and
+// the narrow layout stays exactly as it was. Whoever places it sets
+// --dismiss-width to the slide-out's width.
+.dismiss-strip { display: none; }
+
+@media (min-width: 851px) {
+  .dismiss-strip {
+    // Fixed against the viewport, which the drawer is not a containing block
+    // for while open (no transform; see _project-panel.scss). The strip ends
+    // where the slide-out begins.
+    position: fixed;
+    inset: 0 var(--dismiss-width, 0px) 0 0;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $color-text-primary;
+    cursor: pointer;
+    // The native cursor goes only once the custom one is actually drawn, so a
+    // visitor without JS, or before hydration, still sees a pointer.
+    &[data-cursor] { cursor: none; }
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: -6px; }
+  }
+  // a slide-out from the left: the strip is the page to its right
+  .dismiss-strip--left { inset: 0 0 0 var(--dismiss-width, 0px); }
+}
+
+// One mark for both states: following the pointer, and parked in the strip
+// on keyboard focus. White with an ink edge and a soft shadow, no disc: it
+// reads as a cursor, and it holds on the light homepage and the dimmed
+// backdrop alike. Ink, not orange: it marks an exit, not a state.
+.dismiss-strip__cursor,
+.dismiss-strip__mark {
+  display: block;
+  // the chevron's 57×94 box at 26px tall
+  width: 16px;
+  height: 26px;
+  pointer-events: none;
+  svg {
+    display: block; width: 100%; height: 100%; overflow: visible;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
+  }
+  // 1px on screen whatever the box's scale
+  path { fill: $color-white; stroke: $color-text-primary; stroke-width: 1px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+}
+// it points back to the page: to the left beside a drawer on the right, to the right beside one on the left
+.dismiss-strip--left .dismiss-strip__mark svg, .dismiss-strip__cursor--left svg { scale: -1 1; }
+
+.dismiss-strip__cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  // centred on the pointer, as the native cursor it replaces is aimed
+  margin: -13px 0 0 -8px;
+  will-change: transform;
+  // A quiet arrival: it fades in and settles from a touch smaller, on the
+  // inner mark, since the outer span's transform is the pointer's position.
+  // It starts already half there: the native cursor is gone the moment this
+  // one is drawn, and a fade from nothing left a beat with no cursor (24 Oct).
+  svg { animation: dismiss-strip-cursor-in 140ms cubic-bezier(.2, .7, .3, 1) both; }
+}
+@keyframes dismiss-strip-cursor-in { from { opacity: .55; transform: scale(.9); } to { opacity: 1; transform: none; } }
+
+.dismiss-strip__mark { opacity: 0; }
+.dismiss-strip:focus-visible .dismiss-strip__mark { opacity: 1; }
+
+// Hover-capable pointers only. The cursor is also never rendered for touch
+// (DismissStrip checks the pointer type), so this is belt and braces.
+@media (hover: none) { .dismiss-strip__cursor { display: none; } }
+@media (prefers-reduced-motion: reduce) { .dismiss-strip__cursor svg { animation-name: dismiss-strip-cursor-fade; } }
+@keyframes dismiss-strip-cursor-fade { from { opacity: .55; } to { opacity: 1; } }

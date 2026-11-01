@@ -22,7 +22,7 @@ const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
 );
 
-interface Testimonial {
+export interface Testimonial {
   title: string;
   quote: React.ReactNode;
   name: string;
@@ -33,7 +33,8 @@ interface Testimonial {
 }
 
 // Preserve the existing recommendations verbatim.
-const testimonials: Testimonial[] = [
+// exported for the about page's channels (about-desk/Channels.tsx), so the two never drift
+export const testimonials: Testimonial[] = [
   {
     title: 'Leadership & Delivery',
     quote: (
@@ -136,14 +137,14 @@ const testimonials: Testimonial[] = [
 // The home row, in reading order: manager, build partner, the operations
 // leader he runs the development program with, AEM partner, the UX manager
 // who oversaw design, then the two design peers.
-const FEATURED = ['Adam Payne', 'Cheryl Carpenter', 'Amanda Straup', 'Patrick Stines', 'Ryan Kokesh', 'Rob Oxley', 'Gina Saucedo'];
+export const FEATURED = ['Adam Payne', 'Cheryl Carpenter', 'Amanda Straup', 'Patrick Stines', 'Ryan Kokesh', 'Rob Oxley', 'Gina Saucedo'];
 const featured = FEATURED.map((name) => {
   const t = testimonials.find((item) => item.name === name);
   if (!t) throw new Error(`No testimonial for ${name}`);
   return t;
 });
 
-const initials = (name: string) => name.split(' ').map((part) => part[0]).join('');
+export const initials = (name: string) => name.split(' ').map((part) => part[0]).join('');
 // First names on a phone's row; a Ryan who isn't this Ryan gets his initial
 const shortName = (name: string) => {
   const [first, last] = name.split(' ');

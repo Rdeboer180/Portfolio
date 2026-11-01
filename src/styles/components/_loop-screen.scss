@@ -1,0 +1,115 @@
+// The phone on the About desk runs my own Loop build (LoopScreen.tsx), laid
+// out at iPhone size (393pt wide) and scaled into the drawing. iOS system
+// colors, in the order Loop uses them: glucose blue, insulin orange, carbs green.
+.loop {
+  --ios-bg: #f2f2f7;
+  --ios-label: #000;
+  --ios-2: #8e8e93;
+  --ios-sep: rgba(60, 60, 67, 0.18);
+  --loop-green: #34c759;
+  --loop-blue: #3d8bfd;
+  --loop-orange: #ff9500;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  user-select: none;
+  -webkit-user-select: none;
+
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--loop-blue); outline-offset: 2px; border-radius: 10px; }
+
+  &__app { position: relative; transform-origin: 0 0; background: var(--ios-bg); font: 400 15px/1.3 -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; color: var(--ios-label); }
+  &__status { display: flex; justify-content: space-between; align-items: center; height: 54px; padding: 0 30px 0 44px; font-size: 17px; }
+  &__status b { font-weight: 600; }
+  &__island { position: absolute; left: 50%; top: 11px; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; }
+  &__bars { font-size: 12px; letter-spacing: 1px; }
+
+  // the HUD: the loop's ring, the reading, the pump
+  &__hud { display: grid; grid-template-columns: 70px 1fr 104px; align-items: center; gap: 8px; margin: 4px 16px 10px; padding: 12px 14px; background: #fff; border-radius: 14px; }
+  &__ring { display: grid; justify-items: center; gap: 4px; }
+  &__ring-mark { width: 36px; height: 36px; border-radius: 50%; border: 5px solid var(--loop-green); transform: rotate(var(--spin, 0deg)); transition: transform 700ms cubic-bezier(0.23, 1, 0.32, 1); position: relative; }
+  &__ring-mark::after { content: ''; position: absolute; top: -7px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: #fff; }
+  &__ring small { font-size: 12px; color: var(--ios-2); }
+  &__bg { display: flex; align-items: baseline; justify-content: center; gap: 6px; border-radius: 12px; padding: 4px 6px; transition: background 160ms ease; }
+  &__bg:hover, &__bg:focus-visible { background: rgba(61, 139, 253, 0.08); }
+  &__bg-value { font: 600 44px/1 -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; animation: loop-tick 260ms cubic-bezier(0.23, 1, 0.32, 1); }
+  @keyframes loop-tick { from { opacity: 0.35; transform: translateY(4px); } }
+  &__bg-unit { display: grid; font-size: 13px; color: var(--ios-2); }
+  &__bg-arrow { font-size: 22px; line-height: 1; color: var(--ios-label); }
+  &__pump { display: flex; align-items: center; gap: 8px; }
+  &__pump-res { position: relative; width: 16px; height: 30px; border: 2px solid var(--ios-2); border-radius: 4px; overflow: hidden; }
+  &__pump-res i { position: absolute; left: 0; right: 0; bottom: 0; background: var(--loop-orange); }
+  &__pump b { display: block; font-size: 15px; font-weight: 600; }
+  &__pump small { font-size: 12px; color: var(--ios-2); }
+  &__override { display: block; margin: -2px 16px 10px; padding: 8px 12px; border-radius: 10px; background: #fff0f3 !important; color: #c2185b !important; font-size: 14px !important; font-weight: 600 !important; text-align: left; }
+
+  // the charts
+  &__charts { display: grid; gap: 8px; margin: 0 16px; }
+  &__card { background: #fff; border-radius: 14px; padding: 10px 0 8px; }
+  &__card header { display: flex; justify-content: space-between; padding: 0 14px 6px; font-size: 15px; }
+  &__card header b { font-weight: 600; }
+  &__card header span { color: var(--ios-2); font-variant-numeric: tabular-nums; }
+  &__chart { display: block; width: 100%; height: auto; cursor: crosshair; touch-action: none; }
+  &__mini { display: block; width: 100%; height: auto; }
+  &__band { fill: rgba(61, 139, 253, 0.14); transition: y 300ms ease, height 300ms ease; }
+  &__grid { stroke: var(--ios-sep); stroke-width: 1; }
+  &__now { stroke: var(--ios-sep); stroke-dasharray: 3 3; }
+  &__predict { fill: none; stroke: var(--ios-2); stroke-width: 2; stroke-dasharray: 5 4; }
+  &__dot { fill: var(--loop-blue); }
+  &__dot--now { fill: #fff; stroke: var(--loop-blue); stroke-width: 2.5; }
+  &__scrub { stroke: var(--ios-label); stroke-opacity: 0.4; }
+  &__scrub-dot { fill: var(--loop-blue); stroke: #fff; stroke-width: 2; }
+  &__iob { fill: rgba(255, 149, 0, 0.35); stroke: var(--loop-orange); stroke-width: 2; }
+  &__cob { fill: rgba(52, 199, 89, 0.3); stroke: var(--loop-green); stroke-width: 2; transition: d 320ms ease; }
+  &__basal { fill: none; stroke: var(--loop-orange); stroke-width: 2.5; }
+
+  // the toolbar
+  &__bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-around; padding: 10px 12px 34px; background: rgba(249, 249, 249, 0.94); border-top: 1px solid var(--ios-sep); }
+  &__bar button { display: grid; place-items: center; width: 52px; height: 44px; border-radius: 12px; transition: background 160ms ease, transform 120ms ease; }
+  &__bar button:hover { background: rgba(0, 0, 0, 0.05); }
+  &__bar button:active { transform: scale(0.94); }
+  &__bar button.is-on { background: rgba(52, 199, 89, 0.16); }
+  &__ico { width: 28px; height: 28px; background: currentColor; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+  &__ico--carbs { color: var(--loop-green); --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 2v8a2 2 0 0 0 2 2v10h2V12a2 2 0 0 0 2-2V2h-1.5v7h-1V2h-1.5v7h-1V2zm10 0c-2 0-3.5 2.5-3.5 6s1.5 5 2.5 5v9h2V2z'/%3E%3C/svg%3E"); }
+  &__ico--premeal { color: var(--loop-green); --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10z'/%3E%3C/svg%3E"); }
+  &__ico--bolus { color: var(--loop-orange); --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2s-7 8.2-7 13a7 7 0 0 0 14 0c0-4.8-7-13-7-13z'/%3E%3C/svg%3E"); }
+  &__ico--heart { color: #ff2d55; --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z'/%3E%3C/svg%3E"); }
+  &__ico--gear { color: var(--ios-2); --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.3 2h3.4l.5 2.6 1.8.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.8 2.6.5v3.4l-2.6.5-.8 1.8 1.5 2.2-2.4 2.4-2.2-1.5-1.8.8-.5 2.6h-3.4l-.5-2.6-1.8-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.8L2 13.7v-3.4l2.6-.5.8-1.8-1.5-2.2 2.4-2.4 2.2 1.5 1.8-.8zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z'/%3E%3C/svg%3E"); }
+
+  // the sheets: carb entry, bolus, this build
+  &__sheet { position: absolute; left: 0; right: 0; bottom: 0; top: 64px; overflow-y: auto; background: var(--ios-bg); border-radius: 14px 14px 0 0; box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18); animation: loop-sheet 320ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+  @keyframes loop-sheet { from { transform: translateY(100%); } }
+  &__sheet header { position: sticky; top: 0; display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; height: 52px; padding: 0 12px; background: rgba(242, 242, 247, 0.96); font-size: 17px; }
+  &__sheet header b { text-align: center; font-weight: 600; }
+  &__sheet header button { color: var(--loop-blue); text-align: left; font-size: 17px; }
+  &__save { text-align: right !important; font-weight: 600 !important; }
+  &__form { padding: 6px 16px 40px; }
+  &__form h4 { margin: 18px 0 6px; font: 400 13px/1 -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; text-transform: uppercase; color: var(--ios-2); }
+  &__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 14px; background: #fff; border-radius: 12px; margin-bottom: 8px; }
+  &__row--stack { display: grid; }
+  &__row small { margin-left: 6px; color: var(--ios-2); }
+  &__stepper { display: flex; align-items: center; gap: 12px; }
+  &__stepper button { width: 34px; height: 30px; border-radius: 8px; background: var(--ios-bg); font-size: 20px; }
+  &__stepper b { min-width: 52px; text-align: center; font-variant-numeric: tabular-nums; }
+  &__curves { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+  &__curves button { position: relative; display: grid; justify-items: center; gap: 2px; padding: 8px 0 6px; border-radius: 10px; background: var(--ios-bg); transition: background 160ms ease, transform 120ms ease; }
+  &__curves button:active { transform: scale(0.95); }
+  &__curves button.is-on { background: rgba(52, 199, 89, 0.18); box-shadow: inset 0 0 0 2px var(--loop-green); }
+  &__curves span { font-size: 24px; line-height: 1; }
+  &__curves small { margin: 0; font-size: 12px; color: var(--ios-label); }
+  &__curves i { position: absolute; top: -6px; right: -2px; padding: 1px 4px; border-radius: 6px; background: #f03d01; color: #fff; font: 700 8px/1.4 'Inter', sans-serif; font-style: normal; text-transform: uppercase; }
+  &__preview { width: 100%; height: auto; margin-top: 10px; }
+  &__list { display: flex; justify-content: space-between; width: 100%; padding: 12px 14px; margin-bottom: 1px; background: #fff; font-size: 15px; text-align: left; }
+  button.loop__list:hover { background: #fafafa; }
+  &__fine { margin: 8px 2px 12px; font-size: 13px; color: var(--ios-2); }
+  &__big { display: block; width: 100%; height: 50px; border-radius: 14px; background: var(--loop-blue) !important; color: #fff !important; font-weight: 600 !important; }
+
+  &__toast { position: absolute; left: 16px; right: 16px; bottom: 104px; padding: 12px 14px; border-radius: 14px; background: rgba(28, 28, 30, 0.92); color: #fff; font-size: 14px; animation: loop-toast 240ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  @keyframes loop-toast { from { opacity: 0; transform: translateY(8px); } }
+  &__home { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: #000; }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__bg-value, &__sheet, &__toast { animation: none; }
+    &__ring-mark { transition: none; }
+  }
+}

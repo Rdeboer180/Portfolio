@@ -1,0 +1,9 @@
+// The about page's own styles, loaded with its lazy chunk (1 Nov) instead of in
+// the site-wide stylesheet, so no other page downloads them. Tokens and the
+// site's base still come from styles.scss; this adds the SCSS variables the
+// partials read, then the partials in their old order.
+@import '../../styles/variables';
+@import '../../styles/components/about-desk';
+@import '../../styles/components/loop-screen';
+@import '../../styles/components/about-desk-flavors';
+@import '../../styles/components/about-desk-site';

@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { getHomeHref } from '../utils/homeSession';
 import { useReveal } from '../hooks/useReveal';
 
-const TOOL_GROUPS = [
+export const TOOL_GROUPS = [
   { label: 'Visual design', tools: 'Figma, Illustrator, Photoshop' },
   { label: 'Web and CMS', tools: 'HTML, CSS/Sass, AEM and WordPress' },
   { label: 'Agent-assisted builds', tools: 'React, React Native, Expo and TypeScript' },

@@ -1,0 +1,184 @@
+// ============================================
+// The hybrid's three motion directions (FlavorEffects.tsx)
+// A · Tactile · B · Ink · C · Instrument. Same page, same tokens, same light;
+// each gives every element its own physics. Movement lives under
+// prefers-reduced-motion: no-preference; the information (spec labels, real
+// sizes, the dimension line) stays in every case.
+// ============================================
+
+// the pencil line under "through-line" exists in the markup for A only
+.front-line { position: relative; display: inline-block; }
+.front-underline { display: none; }
+.ch { display: inline-block; }
+// the availability sign's back is A's; everywhere else it stays out of sight
+.fact__back { display: none; }
+
+// ── A · Tactile ─────────────────────────────────────────────────────────────
+.about-desk--flavor-a {
+  .front-underline {
+    display: block; position: absolute; left: -1%; bottom: 0.02em; width: 102%; height: 0.3em; overflow: visible; pointer-events: none;
+    path { fill: none; stroke: #5a5d63; stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+    path + path { stroke: #7b7e85; stroke-width: 1.4; opacity: 0.6; }
+  }
+  // margin notes are paper: they lift a little when touched
+  .panel p.about-desk__aside { transition: rotate 260ms var(--desk-out), translate 260ms var(--desk-out); }
+  .panel p.about-desk__aside:hover { rotate: -6deg; translate: 0 -3px; }
+  // the loop's beats and the quotes are cards on the paper
+  .beat, .words > div { transition: translate 240ms var(--desk-out), box-shadow 240ms var(--desk-out); border-radius: var(--radius-sm); }
+  .beat:hover, .words > div:hover { translate: 0 -3px; box-shadow: 0 1px 1px rgba(46, 34, 20, 0.08), 8px 14px 20px -10px rgba(46, 34, 20, 0.22); }
+  .ftab:active { translate: 0 3px; }
+  // the headline's letters are keys: point at one and it presses down (after Julio Romero's hover type)
+  .about-desk__title .ch { transition: translate 140ms var(--desk-out), color 140ms ease; }
+  .about-desk__title .ch:hover { translate: 0 0.06em; color: var(--color-primary-dark); }
+  // the availability fact is a hanging sign: point at it and it flips to its other side
+  .fact--flip { perspective: 600px; }
+  .fact__sign { display: grid; transform-style: preserve-3d; transition: transform 520ms cubic-bezier(0.34, 1.4, 0.64, 1); }
+  .fact__front, .fact__back { grid-area: 1 / 1; backface-visibility: hidden; }
+  .fact__back { display: block; transform: rotateX(180deg); color: var(--color-primary-dark); font-weight: 800; text-decoration: none; }
+  .fact--flip:hover .fact__sign, .fact--flip:focus-within .fact__sign { transform: rotateX(180deg); }
+  // a pulled card tilts toward the pointer (FlavorEffects sets --tilt-x/-y)
+  .loose--card:hover .loose__body { transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)); transition: transform 90ms linear; }
+  // the notebook's page corner curls up when the book is pointed at: turn me
+  .book::after {
+    content: ''; position: absolute; right: 2%; bottom: 3.6%; width: 0; height: 0; pointer-events: none;
+    background: linear-gradient(315deg, transparent 49%, #d9d2bf 50%, #f7f4ea 78%);
+    box-shadow: -4px -4px 10px -4px rgba(46, 34, 20, 0.25);
+    transition: width 280ms var(--desk-out), height 280ms var(--desk-out);
+  }
+  .loose--book:hover .book::after { width: 54px; height: 54px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .front-underline path { stroke-dashoffset: 1; animation: flavor-a-draw 720ms cubic-bezier(0.65, 0, 0.35, 1) 1000ms forwards; }
+    .front-underline path + path { animation-delay: 1120ms; }
+    // the props lean with the speed of the scroll, alternate ones the other way
+    .gutter-spot .prop__body { rotate: var(--sway, 0deg); transform-origin: 50% 85%; }
+    .gutter-spot:nth-child(even) .prop__body { rotate: calc(var(--sway, 0deg) * -0.8); }
+    // the tabs shuffle like paper: the new page slides up out of the stack
+    .panel:not(.is-away) { animation: flavor-a-shuffle 460ms var(--desk-out); }
+  }
+}
+@keyframes flavor-a-draw { to { stroke-dashoffset: 0; } }
+@keyframes flavor-a-shuffle { from { opacity: 0; transform: translateY(16px) rotate(-0.35deg); } }
+
+// ── B · Ink ─────────────────────────────────────────────────────────────────
+.about-desk--flavor-b {
+  .panel h2 { width: fit-content; background: linear-gradient(rgba(249, 196, 176, 0.7), rgba(249, 196, 176, 0.7)) no-repeat 0 88% / 100% 0.36em; }
+  a.wl { background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1.5px; }
+  a.wl:hover, a.wl:focus-visible { background-size: 100% 1.5px; }
+  .steps li::after { content: ''; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--color-primary); transform-origin: top; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    // the headline settles like wet ink: out of a blur, its letters drawing together
+    .about-desk__hero .reveal-mask__inner { transform: none; filter: blur(10px); letter-spacing: 0.05em;
+      transition: filter 900ms ease var(--reveal-delay, 0ms), opacity 700ms ease var(--reveal-delay, 0ms), letter-spacing 1200ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms); }
+    .about-desk__hero.is-visible .reveal-mask__inner { filter: blur(0); letter-spacing: -0.03em; }
+    // margin notes write themselves on, left to right, when they come into view
+    // only once the effects layer is running: if the script fails, the notes stay on the page
+    &.is-ink-ready .panel p.about-desk__aside { clip-path: inset(0 100% 0 0); transition: clip-path 1100ms cubic-bezier(0.65, 0, 0.35, 1) 150ms; }
+    &.is-ink-ready .panel p.about-desk__aside.is-in { clip-path: inset(0 0 0 0); }
+    // headings take a highlighter swipe as they arrive
+    .panel h2 { background-size: 0% 0.36em; transition: background-size 700ms cubic-bezier(0.65, 0, 0.35, 1) 120ms; }
+    .panel h2.is-in { background-size: 100% 0.36em; }
+    a.wl { transition: background-size 320ms cubic-bezier(0.23, 1, 0.32, 1); }
+    // the opening quote mark is stamped
+    .words q::before { display: inline-block; }
+    .words q.is-in::before { animation: flavor-b-stamp 420ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+    // the timeline inks itself down, step by step
+    .steps li::after { transform: scaleY(0); transition: transform 900ms cubic-bezier(0.65, 0, 0.35, 1); }
+    .steps li.is-in::after { transform: scaleY(1); }
+    // a tab is printed onto the page, top to bottom (or bottom up going back)
+    .panel:not(.is-away) { animation: flavor-b-print 560ms cubic-bezier(0.65, 0, 0.35, 1); }
+    &[data-turn='back'] .panel:not(.is-away) { animation-name: flavor-b-print-back; }
+    // a pulled card comes off the press out of register, then snaps in
+    .loose--card:hover { animation: flavor-b-register 420ms cubic-bezier(0.23, 1, 0.32, 1); }
+  }
+}
+@keyframes flavor-b-stamp { from { opacity: 0; transform: scale(1.8) rotate(-8deg); } }
+@keyframes flavor-b-print { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes flavor-b-print-back { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes flavor-b-register {
+  from { filter: drop-shadow(6px 0 0 rgba(0, 174, 239, 0.55)) drop-shadow(-6px 0 0 rgba(236, 0, 140, 0.5)) drop-shadow(0 3px 3px rgba(46, 34, 20, 0.3)); }
+  to { filter: drop-shadow(0 3px 3px rgba(46, 34, 20, 0.30)) drop-shadow(12px 32px 22px rgba(46, 34, 20, 0.36)) drop-shadow(34px 84px 56px rgba(46, 34, 20, 0.50)); }
+}
+
+// ── C · Instrument ──────────────────────────────────────────────────────────
+.about-desk__inspect {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid var(--color-border-light); border-radius: var(--radius-sm);
+  background: #fff; font: 600 var(--text-body-sm)/1 var(--font-body); color: var(--color-neutral-standard); cursor: pointer;
+  &.is-on { color: var(--desk-ink); border-color: var(--color-primary); }
+  &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+}
+.about-desk__inspect-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-neutral-light); }
+.about-desk__inspect.is-on .about-desk__inspect-dot { background: var(--color-primary); }
+// the selection frame: the site's own vernacular, one orange outline and four handles
+.inspect {
+  position: fixed; z-index: 750; pointer-events: none; box-sizing: border-box; border: 1px solid var(--color-primary);
+  &::before { content: ''; position: absolute; inset: -4px; pointer-events: none;
+    background:
+      linear-gradient(var(--color-primary), var(--color-primary)) 0 0 / 7px 7px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) 100% 0 / 7px 7px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) 0 100% / 7px 7px no-repeat,
+      linear-gradient(var(--color-primary), var(--color-primary)) 100% 100% / 7px 7px no-repeat; }
+}
+.inspect__label, .inspect__size {
+  position: absolute; padding: 5px 7px; border-radius: 3px; white-space: nowrap;
+  font: 600 11px/1 var(--font-mono); letter-spacing: 0.02em; color: #fff;
+}
+.inspect__label { left: -1px; bottom: calc(100% + 8px); background: var(--color-primary-dark); }
+.inspect__size { right: -1px; top: calc(100% + 8px); background: var(--desk-ink, #1b1b1b); }
+.about-desk--flavor-c {
+  // the headline sits on its baselines, drawn in the accent, like guides on a canvas (after Matt Silva)
+  .about-desk__title .reveal-mask { background: linear-gradient(var(--color-primary), var(--color-primary)) no-repeat 0 calc(100% - 0.17em) / 100% 1px; }
+  // the crosshair only over what Inspect can measure; between elements, the ordinary pointer
+  &.about-desk--inspecting .about-desk__folder :is(h1, h3, h4, p, li > b, dt, dd, q, cite, time, .glance__chip) { cursor: crosshair; }
+  .about-desk__folder a, .about-desk__folder button { cursor: pointer; }
+  // the studio stops are card teasers: each one a block of its own on the paper, framed whole by Inspect
+  .stops { gap: var(--space-lg); }
+  .stops > li {
+    padding: var(--space-xl) var(--space-xl) var(--space-lg); border-radius: var(--radius-md);
+    background: var(--color-secondary-light, #f4f6f7); border: 1px solid var(--color-border-light);
+    transition: translate 220ms var(--desk-out), box-shadow 220ms var(--desk-out);
+  }
+  .stops > li:hover { translate: 0 -2px; box-shadow: 0 1px 1px rgba(46, 34, 20, 0.06), 6px 12px 20px -12px rgba(46, 34, 20, 0.22); }
+  .stops > li > .n { margin-bottom: 2px; }
+  .stops .proof { padding-left: var(--space-md); }
+  &.about-desk--inspecting .about-desk__folder .stops > li, &.about-desk--inspecting .about-desk__folder .stops > li * { cursor: crosshair; }
+  &.about-desk--inspecting .about-desk__folder .stops > li a { cursor: pointer; }
+  @media (prefers-reduced-motion: reduce) { .stops > li, .stops > li:hover { transition: none; translate: none; } }
+  // B's highlighter behind the section headings, swiped in as each one arrives
+  .panel h2 { width: fit-content; background: linear-gradient(rgba(249, 196, 176, 0.7), rgba(249, 196, 176, 0.7)) no-repeat 0 88% / 100% 0.36em; }
+  // the [[link]] line is a dimension line, with its real length
+  .shelf__line--dim .dim__line { stroke: var(--color-primary); stroke-width: 1.25; stroke-dasharray: 5 4; }
+  .shelf__line--dim .dim__end { fill: var(--color-primary); }
+  .shelf__line--dim .dim__chip { fill: #1b1b1b; }
+  .shelf__line--dim .dim__text { fill: #fff; font: 600 12px var(--font-mono); }
+  @media (prefers-reduced-motion: no-preference) {
+    .inspect { transition: left 90ms ease-out, top 90ms ease-out, width 90ms ease-out, height 90ms ease-out; }
+    .panel h2 { background-size: 0% 0.36em; transition: background-size 700ms cubic-bezier(0.65, 0, 0.35, 1) 120ms; }
+    .panel h2.is-in { background-size: 100% 0.36em; }
+    // the tabs are artboards: the next one slides in from the side it lies on
+    .panel:not(.is-away) { animation: flavor-c-next 340ms cubic-bezier(0.16, 1, 0.3, 1); }
+    &[data-turn='back'] .panel:not(.is-away) { animation-name: flavor-c-back; }
+  }
+}
+.free-pencil__readout {
+  position: absolute; left: 50%; top: -40px; translate: -50% 0; padding: 5px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none;
+  background: #1b1b1b; color: #fff; font: 600 12px/1 var(--font-mono);
+}
+@keyframes flavor-c-next { from { opacity: 0; transform: translateX(32px); } }
+@keyframes flavor-c-back { from { opacity: 0; transform: translateX(-32px); } }
+
+// reduced motion: A's sign still turns to its other side, without the swing
+@media (prefers-reduced-motion: reduce) {
+  .about-desk--flavor-a .fact__sign, .about-desk--flavor-a .about-desk__title .ch { transition: none; }
+}
+
+// ── C, after the audit (28 Oct) ────────────────────────────────────────────
+.about-desk--flavor-c {
+  // the invitation above the folder, on the wood, in the margin notes' hand
+  .desk-invite {
+    position: absolute; right: 8px; top: -70px; margin: 0; max-width: 360px; pointer-events: none;
+    font: 700 24px/1.1 'Caveat', 'Hubot Sans', cursive; color: var(--color-primary-dark); rotate: -2deg; text-align: right;
+  }
+}
+
