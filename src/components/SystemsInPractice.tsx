@@ -213,9 +213,10 @@ export const SystemNode: React.FC<{ node: SystemNodeData; lit?: boolean }> = ({ 
 );
 
 // ── The loop ─────────────────────────────────────────────────────────────────
-// Four beats, in Ryan's words, beneath the board. Each beat claims the nodes
-// it works on; the center and working pair recur as the loop closes — that is what makes the
-// two halves one section. Hovering or focusing a beat lights its nodes and
+// Four beats, in Ryan's words, beneath the board. The titles are the About
+// page's loop (src/data/about.tsx, process), so the loop has one set of
+// names. Each beat claims the nodes it works on; the center and working pair
+// recur as the loop closes — that is what makes the two halves one section. Hovering or focusing a beat lights its nodes and
 // recedes the rest; with nothing active the whole board is lit, which is what
 // the first paint, a thumbnail and a crawler get. The claim is also written
 // into each beat's copy, so the meaning never depends on the interaction, a
@@ -234,7 +235,7 @@ export interface BeatData {
 export const BEATS: BeatData[] = [
   {
     n: 1,
-    title: 'Start with shared context',
+    title: 'Define the rules',
     body: (
       <>
         Define intent, states, props, tokens, reuse, and what each surface needs to express.
@@ -246,7 +247,7 @@ export const BEATS: BeatData[] = [
   },
   {
     n: 2,
-    title: 'Build from the same plan',
+    title: 'Explore across surfaces',
     body: (
       <>
         <strong>Figma / Canvas</strong> and <strong>Codebase + Storybook</strong> express the same
@@ -258,7 +259,7 @@ export const BEATS: BeatData[] = [
   },
   {
     n: 3,
-    title: 'Test what becomes real',
+    title: 'Learn from what becomes real',
     body: (
       <>
         <strong>QA</strong> and the <strong>Team</strong> report back: edge cases, accessibility gaps,
@@ -269,7 +270,7 @@ export const BEATS: BeatData[] = [
   },
   {
     n: 4,
-    title: 'Map it back to the center',
+    title: 'Feed it back into the system',
     body: (
       // No `{' '}` anywhere in these bodies: text either side of an expression
       // is two text nodes, and the prerender flattens them into one — the
@@ -749,14 +750,10 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
       {/* ── The loop ── */}
       <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
         {/* The seam: a hairline with a mono label, the quieter cousin of the
-            section rule above. The note says the return in words before any
-            wire draws it. */}
+            section rule above. The wires say the return. */}
         <div className="sip__seam reveal-fade" style={delay(0)}>
           <h3 className="sip__seam-label">The loop</h3>
           <span className="sip__seam-line" aria-hidden="true" />
-          <p className="sip__seam-note">
-            Shared context → design + code → validation → context for the next change.
-          </p>
         </div>
 
         <div className="sip__track" ref={trackRef}>
@@ -794,17 +791,16 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
                 )}
                 {/* One template string, not text around an expression: the
                     prerender serialises adjacent text nodes as one, and
-                    hydration would then find "[ 01 ]" where React expects
-                    "[ 0" — the #418 the header describes. */}
-                <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
+                    hydration would then find "01" where React expects
+                    "0" — the #418 the header describes. */}
+                <span className="sip__beat-num bracketed">{`0${beat.n}`}</span>
                 <h4 className="sip__beat-title">{beat.title}</h4>
                 <p className="sip__beat-body">{beat.body}</p>
               </li>
             ))}
           </ol>
 
-          {/* The loop's linework — supplemental to the seam note and each
-              beat's own copy. */}
+          {/* The loop's linework — supplemental to each beat's own copy. */}
           <svg className="sip__wires sip__wires--loop" aria-hidden="true" focusable="false">
             {LOOP_LINKS.map((link) => (
               <g
@@ -906,7 +902,7 @@ const SystemsInPractice: React.FC = () => {
       <div className="sip__container">
         {/* "How I work", not "Systems": the section is the process, and the
             note is how the process is drawn. */}
-        <SectionBadge icon={<NetworkIcon />} label="How I work" index="03" />
+        <SectionBadge icon={<NetworkIcon />} label="How I work" ruled />
         <div className={`sip__intro${introVisible ? ' is-visible' : ''}`} ref={introRef}>
           <h2 className="sip__title">
             <span className="reveal-mask">
@@ -923,21 +919,18 @@ const SystemsInPractice: React.FC = () => {
           </p>
         </div>
 
-        {/* The loop, in one line and four titles. Each beat is the title the
+        {/* The loop, in four titles. Each beat is the title the
             note gives it, in the note's order; the note holds the bodies and
             the board they light. */}
         <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
           <div className="sip__seam reveal-fade" style={delay(0)}>
             <h3 className="sip__seam-label">The loop</h3>
             <span className="sip__seam-line" aria-hidden="true" />
-            <p className="sip__seam-note">
-              Shared context → design + code → validation → context for the next change.
-            </p>
           </div>
           <ol className="sip__steps" aria-label="The loop, in four beats">
             {BEATS.map((beat, i) => (
               <li key={beat.n} className="sip__step reveal-fade" style={delay(80 + i * 80)}>
-                <span className="sip__beat-num">{`[ 0${beat.n} ]`}</span>
+                <span className="sip__beat-num bracketed">{`0${beat.n}`}</span>
                 <span className="sip__step-title">{beat.title}</span>
               </li>
             ))}

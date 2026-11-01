@@ -107,19 +107,6 @@
     max-width: $container-text-width;
   }
 
-  &__eyebrow {
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    font-weight: $font-weight-medium;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    // Orange Deep, not Signal Orange: at 12px this is text, and #f03d01
-    // measures 3.9:1 on paper against a 4.5:1 AA floor. The deeper end of the
-    // same accent clears it at 5.6:1 without introducing a second hue.
-    color: $color-primary-dark;
-    margin: 0 0 $spacing-md;
-  }
-
   &__title {
     font-family: $font-family-heading;
     font-size: $font-size-h2;
@@ -130,7 +117,6 @@
     letter-spacing: -0.02em;
   }
 
-  &__lede,
   &__dek {
     font-size: $font-size-body-lg;
     line-height: $line-height-body-lg;
@@ -300,36 +286,26 @@
     }
   }
 
-  &__jump-index { color: $color-secondary-dark; }
   &__jump-count { color: $color-neutral-muted; }
 
   // ── Stream rail ────────────────────────────────────────────────────────────
   // The rail replaces the thin horizontal rule that used to open each stream.
-  // A number at display scale against a vertical edge delineates far harder
-  // than a hairline, and it gives the stream name, the count and the aside one
+  // The stream's name at display scale against a vertical edge delineates far
+  // harder than a hairline, and it gives the name, the count and the aside one
   // column to live in instead of three separate places.
   //
-  // Only stream 01 takes the accent, per the section-rule rule in DESIGN.md:
-  // one section carries orange at a time. The others run steel, which keeps
-  // the page from turning into three competing accents.
-  &__stream-index {
-    font-family: $font-family-heading;
-    font-size: 64px;
-    font-weight: $font-weight-extrabold;
-    line-height: 0.85;
-    letter-spacing: -0.04em;
-    color: $color-secondary;
-  }
-
+  // Only the first stream takes the accent, per the section-rule rule in
+  // DESIGN.md: one section carries orange at a time. The others run steel,
+  // which keeps the page from turning into three competing accents.
   &__stream-label {
-    margin: $spacing-sm 0 0;
-    font-family: $font-family-mono;
-    font-size: 11px;
-    font-weight: $font-weight-medium;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: $color-neutral-dark;
-    max-width: 12ch;
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: 32px;
+    font-weight: $font-weight-extrabold;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: $color-secondary;
+    max-width: 8ch;
   }
 
   // ReadMe-style split: identity rail left, entries right
@@ -352,7 +328,7 @@
 
   // One stream at a time wears the accent.
   &__section--accent &__section-rail { border-right-color: $color-primary; }
-  &__section--accent &__stream-index { color: $color-primary; }
+  &__section--accent &__stream-label { color: $color-primary; }
 
   &__section-count {
     margin-top: $spacing-sm;
@@ -361,14 +337,6 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: $color-secondary-dark;
-  }
-
-  &__stream-sub {
-    font-size: $font-size-body-sm;
-    line-height: $line-height-body-sm;
-    color: $color-neutral-standard;
-    max-width: 34ch;
-    margin: $spacing-lg 0 0;
   }
 
   // The first row used to drop its top padding so its text lined up with the
@@ -1133,12 +1101,9 @@
 
     &__section--accent &__section-rail { border-bottom-color: $color-primary; }
 
-    &__stream-index { font-size: 44px; }
-    &__stream-label { margin-top: 0; max-width: none; }
+    &__stream-label { font-size: 26px; max-width: none; }
     &__section-count { grid-column: 2; margin-top: 2px; }
 
-
-    &__stream-sub { grid-column: 1 / -1; max-width: $container-text-width; }
 
     // Meta rail stacks above the title once the row is a single column.
     &__row {

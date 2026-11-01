@@ -650,8 +650,8 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
           <span className="cs__eyebrow">
             Case Study
             {project.stream && (
-              <span className={`cs__stream-chip cs__stream-chip--${project.stream}`}>
-                {project.stream === 'professional' ? '[ Shipped ]' : '[ Self-Built ]'}
+              <span className={`cs__stream-chip cs__stream-chip--${project.stream} bracketed`}>
+                {project.stream === 'professional' ? 'Shipped' : 'Self-Built'}
               </span>
             )}
             {project.stream && (
@@ -1138,7 +1138,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
 
         {/* ==================== Continue — quiet close rail (every layout) ==================== */}
         <aside className="cs__continue">
-          <span className="cs__continue-label">{project.compactStory ? 'Ongoing notes' : '[ In Progress ]'}</span>
+          <span className={`cs__continue-label${project.compactStory ? '' : ' bracketed'}`}>{project.compactStory ? 'Ongoing notes' : 'In Progress'}</span>
           <p className="cs__continue-body">
             Case studies show the resolved work. The thinking behind it lands on LinkedIn first.
           </p>

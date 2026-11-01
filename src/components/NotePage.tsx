@@ -61,7 +61,7 @@ const NotePage: React.FC = () => {
       <header className="notes__header notes__header--article">
         <p className="notes__meta">
           <Link to="/about/" rel="author">By Ryan DeBoer</Link>
-          <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
+          <span className={`notes__row-kind notes__row-kind--${note.kind} bracketed`}>
             {KIND_LABEL[note.kind]}
           </span>
           <time dateTime={note.dateISO}>{note.date}</time>
@@ -90,7 +90,7 @@ const NotePage: React.FC = () => {
           and contact lives in the shared footer below. Build logs get their own
           close, because the LinkedIn-rough-cut line isn't true of them. */}
       {note.status !== 'draft' && <aside className="notes__close">
-        <span className="notes__close-label">{note.inProgress ? '[ In Progress ]' : KIND_LABEL[note.kind]}</span>
+        <span className="notes__close-label bracketed">{note.inProgress ? 'In Progress' : KIND_LABEL[note.kind]}</span>
         <p className="notes__close-body">
           {note.origin === 'portfolio' ? (
             <>These captures document a recent exploration. The working site is where I keep testing what earns its place.</>

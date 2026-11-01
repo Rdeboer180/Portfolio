@@ -98,7 +98,7 @@ const TechnicalAbilities: React.FC = () => {
     <section id="technical" className="technical">
       <div className="technical__container">
         <div className="technical__header">
-          <SectionBadge icon={<CodeIcon />} label="Technical" index="05" />
+          <SectionBadge icon={<CodeIcon />} label="Technical" ruled />
           <h2 className="technical__title">Tools &amp; Technologies</h2>
           <p className="technical__subtitle">
             Tools I have used to design the system, inspect the build, and stay close to what ships.

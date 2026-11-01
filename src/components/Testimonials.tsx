@@ -175,7 +175,6 @@ const Thread: React.FC<{ t: Testimonial; sizer?: boolean }> = ({ t, sizer }) => 
       <blockquote className="testimonials__thread">{t.quote}</blockquote>
     </div>
     <div className="testimonials__foot">
-      <span className="testimonials__tag">{t.title}</span>
       <a href={SITE.linkedinRecommendationsUrl} className="testimonials__more" target="_blank" rel="noopener noreferrer">
         On LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> {t.name}&rsquo;s recommendation (opens in a new tab)</span>
       </a>
@@ -229,15 +228,14 @@ const Testimonials: React.FC = () => {
       aria-labelledby="testimonials-heading"
     >
       <div className="testimonials__container">
-        <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" index="04" />
+        <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" ruled />
         <div className="testimonials__nav">
           <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
         </div>
 
         <div className="testimonials__app">
           <div className="testimonials__people">
-            <span className="testimonials__people-head" id="testimonials-people">Direct messages</span>
-            <div className="testimonials__list" role="tablist" aria-orientation={across ? 'horizontal' : 'vertical'} aria-labelledby="testimonials-people">
+            <div className="testimonials__list" role="tablist" aria-orientation={across ? 'horizontal' : 'vertical'} aria-label="Recommendations">
               {featured.map((p, i) => (
                 <button
                   key={p.name}

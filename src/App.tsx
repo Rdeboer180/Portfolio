@@ -142,7 +142,7 @@ function HomeRoute() {
             the author chrome can name, select and annotate. The specs live in
             src/data/authorChrome.ts so the Asset Panel reads the same list. */}
         {/* The work as the collectible binder, right under the hero, under the
-            section's "01 / Case studies" header; the endorsement that led the
+            section's "Case studies" header; the endorsement that led the
             old section is gone. The old section is parked, not deleted: put
             <CaseStudyPlayground /> back here (and its import) to return to the
             cards (tag parked/case-study-cards, 21 October 2026). */}

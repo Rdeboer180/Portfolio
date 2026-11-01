@@ -137,7 +137,7 @@ $sm-label: 12px/1.5 $font-family-mono;
     p { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
   }
   &__step-n { font: $sm-label; letter-spacing: .08em; color: $color-secondary-dark; }
-  &__step-mode { display: flex; align-items: center; gap: 10px; margin-top: 4px; font: $sm-label; color: $color-secondary-dark; }
+  &__step-mode { display: flex; align-items: center; margin-top: 4px; color: $color-secondary-dark; }
 
   // ── The Forge ──────────────────────────────────────────────────────────────
   &__forge {
@@ -226,15 +226,6 @@ $sm-label: 12px/1.5 $font-family-mono;
     > span[aria-hidden] { width: 7px; height: 7px; box-sizing: border-box; border: 1px solid $color-secondary; }
     > span.is-on { border-color: $color-neutral-dark; background: $color-neutral-dark; }
     &--max > span.is-on { border-color: $color-primary; background: $color-primary; }
-  }
-
-  &__lanes-note {
-    margin: 14px 0 0;
-    padding: 12px 20px 14px;
-    border-top: 1px solid $color-neutral-light;
-    font-size: 14px;
-    line-height: 1.5;
-    color: $color-neutral-standard;
   }
 
   a:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 4px; }

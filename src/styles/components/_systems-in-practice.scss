@@ -624,15 +624,6 @@
     background: $color-neutral-light;
   }
 
-  &__seam-note {
-    flex: 0 1 auto;
-    margin: 0;
-    font-family: $font-family-primary;
-    font-size: $font-size-body-sm;
-    line-height: 1.5;
-    color: $color-neutral-muted;
-  }
-
   // The rail band under the row is reserved here; the label sits in it and
   // the rail is measured from the label, so the two agree by construction.
   &__track {
@@ -1011,10 +1002,6 @@
 
     &__note-arrow {
       display: none;
-    }
-
-    &__seam-note {
-      flex-basis: 100%;
     }
 
     &__beats {

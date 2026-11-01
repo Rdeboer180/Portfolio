@@ -79,7 +79,7 @@ const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
     <section id="about" className="about about--integrated" aria-labelledby="about-differentiator-title">
       <div className="about__differentiator ink-ground" ref={introRef}>
         <div className="about__container">
-          <SectionBadge icon={<UserIcon />} label="Why me?" index="02" />
+          <SectionBadge icon={<UserIcon />} label="Why me?" ruled />
           <div className="about__differentiator-grid" data-proving={proof?.value}>
             <h2 id="about-differentiator-title" ref={signatureRef} className={`about__signature about__signature--specimen${signatureVisible ? ' is-visible' : ''}`}>
               {VALUES.map(({ word, value }) => (

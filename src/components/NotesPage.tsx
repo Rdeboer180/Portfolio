@@ -25,12 +25,9 @@ const NotesPage: React.FC = () => {
   // The three streams, in reading order. The jump row and the sections both
   // read this list, so a stream's name and count can't disagree between them.
   const streams = [
-    { id: 'field-notes', index: '01', label: 'Field Notes', ariaLabel: 'Field notes', notes: fieldNotes,
-      sub: 'Observations, experiments, and plans from the work. Some start on LinkedIn; others begin here.' },
-    { id: 'in-progress', index: '02', label: 'In Progress', ariaLabel: 'Explorations in progress', notes: logs,
-      sub: "Work that isn't settled. Published while the decisions are still moving, discarded directions included." },
-    { id: 'resolved', index: '03', label: 'Resolved', ariaLabel: 'Systems and skills', notes: resolved,
-      sub: 'The settled artifacts: how things work, and the skills that encode the judgment.' },
+    { id: 'field-notes', label: 'Field Notes', ariaLabel: 'Field notes', notes: fieldNotes },
+    { id: 'in-progress', label: 'In Progress', ariaLabel: 'Explorations in progress', notes: logs },
+    { id: 'resolved', label: 'Resolved', ariaLabel: 'Systems and skills', notes: resolved },
   ];
   // NOTES_BY_DATE is sorted newest first, so the head of it is the one entry
   // that gets the tint and the selection frame.
@@ -58,28 +55,23 @@ const NotesPage: React.FC = () => {
           column at the same breakpoint the stream rails do, header first. */}
       <div className="notes__intro">
       <ScrollReveal className="notes__header"><header>
-        <p className="notes__eyebrow">[ Notes ]</p>
         <h1 className="notes__title">Writing from the work</h1>
-        <p className="notes__lede">
-          Reflections, explorations, and practice notes capture what I’m learning and how I work.
-          Skill and system entries share the tools and rules behind it.
-        </p>
       </header></ScrollReveal>
 
       <ScrollReveal className="notes__pinned-wrap"><section aria-label="Start here">
         <div className="notes__pinned">
-          <span className="notes__pinned-label">[ Start Here ]</span>
+          <span className="notes__pinned-label bracketed">Start Here</span>
           <div className="notes__pinned-links">
           <Link to="/notes/how-this-site-works" className="notes__pinned-link">
-            <span className="notes__pinned-kind">{KIND_LABEL.system}</span>
+            <span className="notes__pinned-kind bracketed">{KIND_LABEL.system}</span>
             <span className="notes__pinned-title">How this site works</span>
           </Link>
           <Link to="/design-system" className="notes__pinned-link">
-            <span className="notes__pinned-kind">{KIND_LABEL.system}</span>
+            <span className="notes__pinned-kind bracketed">{KIND_LABEL.system}</span>
             <span className="notes__pinned-title">The design system it runs on</span>
           </Link>
           <Link to="/notes/ryan-design-taste-skill" className="notes__pinned-link">
-            <span className="notes__pinned-kind">{KIND_LABEL.skill}</span>
+            <span className="notes__pinned-kind bracketed">{KIND_LABEL.skill}</span>
             <span className="notes__pinned-title">The taste skill my agents load</span>
           </Link>
           </div>
@@ -93,7 +85,6 @@ const NotesPage: React.FC = () => {
       <nav className="notes__jump" aria-label="Note streams">
         {streams.map((stream) => (
           <a key={stream.id} href={`#${stream.id}`} className="notes__jump-link">
-            <span className="notes__jump-index" aria-hidden="true">{stream.index}</span>
             {stream.label}
             <span className="notes__jump-count">{stream.notes.length}</span>
           </a>
@@ -102,18 +93,16 @@ const NotesPage: React.FC = () => {
 
       <ScrollReveal className="notes__release notes__release--index"><PlayDraftLaunch context="index" /></ScrollReveal>
 
-      {/* Each stream is a rail plus its rows: the rail carries the number at
-          display scale, the name, the count and a one-line description; the
-          rows stay hairline-separated with a read-time and sketch-arrow.
-          Stream 01 alone takes the accent, so orange still means one thing. */}
+      {/* Each stream is a rail plus its rows: the rail carries the name at
+          display scale and the count; the rows stay hairline-separated with a
+          read-time and sketch-arrow. The first stream alone takes the accent,
+          so orange still means one thing. */}
       {streams.map((stream, i) => (
         <NoteStream
           key={stream.id}
           id={stream.id}
-          index={stream.index}
           label={stream.label}
           ariaLabel={stream.ariaLabel}
-          sub={stream.sub}
           count={stream.notes.length}
           notes={stream.notes}
           accent={i === 0}
@@ -127,13 +116,11 @@ const NotesPage: React.FC = () => {
   );
 };
 
-// ── Stream section — numbered rule + identity rail + entry rows ─────────────
+// ── Stream section — identity rail + entry rows ─────────────────────────────
 const NoteStream: React.FC<{
   id: string;
-  index: string;
   label: string;
   ariaLabel: string;
-  sub: string;
   count: number;
   notes: typeof NOTES_BY_DATE;
   rail?: React.ReactNode;
@@ -141,23 +128,21 @@ const NoteStream: React.FC<{
   accent?: boolean;
   /** Slug of the newest note on the page; that row wears the selection frame. */
   newestSlug?: string;
-}> = ({ id, index, label, ariaLabel, sub, count, notes, rail, accent, newestSlug }) => (
+}> = ({ id, label, ariaLabel, count, notes, rail, accent, newestSlug }) => (
   <section
     id={id}
     className={`notes__section${accent ? ' notes__section--accent' : ''}`}
     aria-label={ariaLabel}
   >
-    {/* The rail delineates the stream: a stream number at display scale, its
-        name, its count and one line on what belongs in it, against a vertical
-        edge. Only the first stream takes the accent, one section at a time. */}
+    {/* The rail delineates the stream: its name at display scale and its
+        count, against a vertical edge. Only the first stream takes the accent,
+        one section at a time. */}
     <div className="notes__section-grid">
       <ScrollReveal className="notes__section-rail">
-        <span className="notes__stream-index" aria-hidden="true">{index}</span>
         <h2 className="notes__stream-label">{label}</h2>
         <span className="notes__section-count">
           {count} {count === 1 ? 'entry' : 'entries'}
         </span>
-        <p className="notes__stream-sub">{sub}</p>
         {rail}
       </ScrollReveal>
       <div className="notes__section-rows">
@@ -169,7 +154,7 @@ const NoteStream: React.FC<{
             <div className="notes__row-meta">
               <time className="notes__row-date" dateTime={note.dateISO}>{note.date}</time>
               <span className={`notes__row-kind notes__row-kind--${note.kind}`}>
-                {KIND_LABEL[note.kind]}{note.status === 'draft' ? ' · Draft' : ''}
+                <span className="bracketed">{KIND_LABEL[note.kind]}</span>{note.status === 'draft' ? ' · Draft' : ''}
               </span>
             </div>
             <div className="notes__row-main">

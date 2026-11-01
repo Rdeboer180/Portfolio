@@ -4,27 +4,28 @@ interface SectionBadgeProps {
   icon: React.ReactNode;
   label: string;
   className?: string;
+  /** Seats the badge on a full-width hairline with selection handles at both ends. */
+  ruled?: boolean;
   /**
-   * Position on the page ("01"…) — when set, the badge seats on a full-width
-   * hairline with selection handles at both ends and the label becomes
-   * "NN / LABEL". Numbering encodes where the reader is on a long page.
+   * @deprecated Numbered sections ("02 / LABEL") were cut from the site in
+   * November 2026; use `ruled`. Kept, still rendering its number, only so the
+   * About desk draft builds unchanged until its own cleanup pass removes it.
    */
   index?: string;
   /** 'accent' reserves the orange rule for exactly one section (current work). */
   tone?: 'default' | 'accent';
 }
 
-const SectionBadge: React.FC<SectionBadgeProps> = ({ icon, label, className, index, tone }) => {
+const SectionBadge: React.FC<SectionBadgeProps> = ({ icon, label, className, ruled: ruledProp = false, index, tone }) => {
+  const ruled = ruledProp || Boolean(index);
   const badge = (
-    <div className={`section-badge ${index ? '' : className ?? ''}`}>
+    <div className={`section-badge ${ruled ? '' : className ?? ''}`}>
       <span className="section-badge__icon" aria-hidden="true">{icon}</span>
-      <span className="section-badge__label">
-        {index ? `${index} / ${label}` : label}
-      </span>
+      <span className="section-badge__label">{index ? `${index} / ${label}` : label}</span>
     </div>
   );
 
-  if (!index) return badge;
+  if (!ruled) return badge;
 
   return (
     <div

@@ -102,7 +102,7 @@ const Umbrella: React.FC<{ parent: string; children: React.ReactNode }> = ({
   <div className="notes__umbrella">
     <p className="notes__umbrella-head">
       <span className="notes__umbrella-parent">{parent}</span>
-      <span className="notes__umbrella-kind">[ Parent ]</span>
+      <span className="notes__umbrella-kind bracketed">Parent</span>
     </p>
     <ul className="notes__stack">{children}</ul>
   </div>

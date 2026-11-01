@@ -33,12 +33,13 @@ export interface Note {
   artifact?: { label: string; href: string };
 }
 
+// Plain names; where a label wears brackets, the .bracketed utility draws them.
 export const KIND_LABEL: Record<NoteKind, string> = {
-  reflection: '[ Reflection ]',
-  exploration: '[ Exploration ]',
-  practice: '[ Practice ]',
-  skill: '[ Agent Skill ]',
-  system: '[ System ]',
+  reflection: 'Reflection',
+  exploration: 'Exploration',
+  practice: 'Practice',
+  skill: 'Agent Skill',
+  system: 'System',
 };
 
 export const NOTES: Note[] = [

@@ -146,7 +146,7 @@ const Hero: React.FC = () => {
             <a href={EMAIL_HREF} className="hero-intro__status hero-intro__status--portrait">
               <span className="hero-intro__status-dot" aria-hidden="true" />Open to new work
             </a>
-            <div className="hero-intro__token-map" aria-label="Portrait border radius token">
+            <div className="hero-intro__token-map" aria-hidden="true">
               <code>borderRadius: tokens.radius.full</code>
             </div>
             {/* ── Intro-only overlay elements — aria-hidden + pointer-events:none ── */}

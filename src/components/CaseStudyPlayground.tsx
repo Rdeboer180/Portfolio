@@ -570,7 +570,7 @@ const CaseStudyPlayground: React.FC = () => {
       <div className="case-playground__container">
         {/* ── Intro ── */}
         <div className="case-playground__intro">
-          <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" index="01" tone="accent" />
+          <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" ruled tone="accent" />
           <h2 className="case-playground__title">Systems, products, and tools I&rsquo;ve shipped</h2>
           {/* The unlock affordance lives here now — beside the locked objects —
               instead of as a site-wide bar above every page's nav. Same prompt,

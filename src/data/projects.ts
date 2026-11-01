@@ -206,7 +206,7 @@ export interface Project {
   /** A brand drawn in over the reel before it plays (BrandIntro). */
   reelIntro?: 't1d-hub';
   // Two-stream taxonomy: employer/client shipped work vs self-initiated builds.
-  // Drives the [ SHIPPED ] / [ SELF-BUILT ] chips on cards + case-study heroes.
+  // Drives the Shipped / Self-Built chips on cards + case-study heroes.
   stream?: 'professional' | 'passion';
   metrics: ProjectMetric[];
   /** See ProjectBeat — at most one per study, by design. */
@@ -411,7 +411,7 @@ const projects: Project[] = [
     tools: ['Figma', 'Claude', 'Workfront'],
     tags: ['Design Governance', 'Figma Plugins', 'UX Workflows', 'Agent-Assisted Build'],
     timeline: 'Ongoing internal initiative',
-    cardStatus: '[ Internal tools published ]',
+    cardStatus: 'Internal tools published',
     featured: '/images/work/figma-template-governance/plugin-suite.png',
     publicPreview: { src: '/images/work/figma-template-governance/plugin-suite.png', alt: 'Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup', layout: 'half', maxWidth: 360, caption: 'The four tools, published to the team’s Figma workspace.' },
     featuredVideo: '/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4',
@@ -859,7 +859,7 @@ const projects: Project[] = [
     title: 'T1D Hub & Bolus Binder: A clinic brand system, carried into a companion app',
     cardTitle: 'T1D Hub: Brand system to Bolus Binder',
     cardHook: 'I built the T1D Hub brand with Dr. Brian Huber’s practice, then carried its system into Bolus Binder, a React Native companion app that keeps portions, nutrition and estimated absorption close to the food.',
-    cardStatus: '[ In TestFlight ]',
+    cardStatus: 'In TestFlight',
     seoTitle: 'T1D Hub brand identity and design system, carried into Bolus Binder, a React Native companion app',
     summary:
       'This study has two parts. The first is T1D Hub, the brand identity and design system I built with Dr. Brian Huber for his Type 1 practice, from the logo to the site his marketing team runs. The second is Bolus Binder, a React Native companion app on the same system, where scaling a recipe moves its nutrition and estimated absorption with it. A controlled diabetic already reads a CGM trace every day, so both use the trace and the colors they already know.',

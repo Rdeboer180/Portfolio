@@ -307,6 +307,21 @@ svg {
 // ACCESSIBILITY
 // ============================================
 
+// The bracket frame on kind and status labels: "[ Practice ]". Drawn here
+// rather than typed into the copy, so the look changes (or goes) in one
+// place. The alt text after the slash keeps screen readers from reading the
+// brackets aloud; the line before it is the fallback where that isn't
+// supported.
+.bracketed::before {
+  content: '[\00a0';
+  content: '[\00a0' / '';
+}
+
+.bracketed::after {
+  content: '\00a0]';
+  content: '\00a0]' / '';
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

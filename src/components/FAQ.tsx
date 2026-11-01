@@ -65,9 +65,6 @@ const FAQ: React.FC = () => {
             </svg>{' '}
             questions?
           </h2>
-          <p className="faq__intro">
-            The questions that usually come up before the work starts.
-          </p>
         </div>
 
         <div className="faq__right">

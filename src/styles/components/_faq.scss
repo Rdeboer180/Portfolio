@@ -73,15 +73,6 @@
     dominant-baseline: central;
   }
 
-  &__intro {
-    font-family: $font-family-primary;
-    font-size: 15px;
-    font-weight: $font-weight-regular;
-    color: $color-neutral-muted;
-    line-height: 1.6;
-    max-width: 320px;
-  }
-
   // ==========================================
   // Right column — accordion grouped in a card
   // ==========================================
@@ -224,10 +215,6 @@
 
     &__left {
       position: static;
-    }
-
-    &__intro {
-      max-width: none;
     }
 
     &__right {

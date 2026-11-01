@@ -8,7 +8,7 @@ import { RYAN_ATLAS } from '../data/talent/atlasState';
 import { resolveMastery } from '../data/talent/mastery';
 
 // ============================================
-// 05 / Capabilities (concept 11, Ryan's pick, 22 October; simplified after
+// Capabilities (concept 11, Ryan's pick, 22 October; simplified after
 // the audit the same day). One key says how the work was done: solid is
 // hands-on, dashed is directed (agents built it; Ryan reviewed, tested and
 // released), double is partnered (an engineer built it). It is drawn only
@@ -112,12 +112,13 @@ const capabilities: Capability[] = [
   },
 ];
 
-// How a prototype becomes a rule. Only the agent-built step carries the key.
+// How a prototype becomes a rule, told as the same loop as How I work and the
+// About page (src/data/about.tsx, process). Only the agent-built step carries the key.
 const workflow: Array<{ title: string; text: string; mode?: Mode }> = [
-  { title: 'Shape it in Figma', text: 'Components, variants and tokens, kept in step with code.' },
-  { title: 'Prototype it in code', text: 'When a static comp can’t answer the question, Figma MCP carries it into a working prototype.', mode: 'directed' },
-  { title: 'Write down what it settled', text: 'One HTML file shows the rule and every state it has to handle.' },
-  { title: 'Build and check against it', text: 'Engineers and agents build from that file, and QA checks against it.' },
+  { title: 'Define the rules', text: 'Components, variants and tokens in Figma, kept in step with code.' },
+  { title: 'Explore across surfaces', text: 'When a static comp can’t answer the question, Figma MCP carries it into a working prototype.', mode: 'directed' },
+  { title: 'Learn from what becomes real', text: 'The prototype shows the states a static frame could not.' },
+  { title: 'Feed it back into the system', text: 'One HTML file holds the rule and every state. Engineers and agents build from it, and QA checks against it.' },
 ];
 
 // The Forge, drawn: each lane's top talents. Directed talents keep a dashed ring.
@@ -149,7 +150,7 @@ const SkillMastery: React.FC = () => (
     <div className="sm__container">
       <ScrollReveal>
       <div className="sm__rule">
-        <SectionBadge index="05" label="Capabilities" icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13" /></svg>} />
+        <SectionBadge ruled label="Capabilities" icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13" /></svg>} />
       </div>
       <h2 id="capabilities-title" className="sm__title">What I bring to a product team.</h2>
       <p className="sm__intro">Visual craft and design systems are my strongest ground. I carry that work into products through hands-on web implementation and agent-assisted React and React Native builds.</p>
@@ -191,13 +192,13 @@ const SkillMastery: React.FC = () => (
 
       {/* How a prototype becomes a rule: a true sequence, so it keeps its numerals. */}
       <ScrollReveal><section className="sm__workflow" aria-labelledby="workflow-title">
-        <h3 id="workflow-title">How I prototype: from a Figma comp to a rule the team can build from.</h3>
+        <h3 id="workflow-title">How I prototype</h3>
         <ol>
           {workflow.map((step, i) => <li key={step.title}>
             <span className="sm__step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <h4>{step.title}</h4>
             <p>{step.text}</p>
-            {step.mode && <span className="sm__step-mode"><KeyLine mode={step.mode} />agents build it, I review it</span>}
+            {step.mode && <span className="sm__step-mode"><KeyLine mode={step.mode} /><span className="sr-only">({step.mode})</span></span>}
           </li>)}
         </ol>
       </section></ScrollReveal>
@@ -233,7 +234,6 @@ const SkillMastery: React.FC = () => (
               </ul>
             </div>)}
           </div>
-          <p className="sm__lanes-note">Orange is 5 of 5. Points come from years of practice; where they go is my call.</p>
         </figure>
       </section></ScrollReveal>
     </div>

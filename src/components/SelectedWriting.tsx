@@ -13,7 +13,6 @@ import { NOTES_BY_DATE, KIND_LABEL, NoteKind } from '../data/notes';
 
 const SHOWN = 3;
 const KIND_ORDER: NoteKind[] = ['practice', 'exploration', 'reflection', 'system', 'skill'];
-const kindName = (kind: NoteKind) => KIND_LABEL[kind].replace(/[[\]]/g, '').trim();
 const countOf = (kind: NoteKind) => NOTES_BY_DATE.filter((note) => note.kind === kind).length;
 
 const SelectedWriting: React.FC = () => {
@@ -25,7 +24,7 @@ const SelectedWriting: React.FC = () => {
 
   const matching = kind === 'all' ? NOTES_BY_DATE : NOTES_BY_DATE.filter((note) => note.kind === kind);
   const notes = matching.slice(0, SHOWN);
-  const noun = `${kind === 'all' ? '' : `${kindName(kind)} `}note${matching.length === 1 ? '' : 's'}`;
+  const noun = `${kind === 'all' ? '' : `${KIND_LABEL[kind]} `}note${matching.length === 1 ? '' : 's'}`;
   const countLine = matching.length > SHOWN
     ? `Newest ${notes.length} of ${matching.length} ${noun}`
     : `${matching.length === 1 ? 'The only' : `All ${matching.length}`} ${noun}`;
@@ -73,7 +72,7 @@ const SelectedWriting: React.FC = () => {
                 >
                   <option value="all">All kinds · {NOTES_BY_DATE.length}</option>
                   {KIND_ORDER.filter(countOf).map((k) => (
-                    <option key={k} value={k}>{kindName(k)} · {countOf(k)}</option>
+                    <option key={k} value={k}>{KIND_LABEL[k]} · {countOf(k)}</option>
                   ))}
                 </select>
                 <svg aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M3 4.5 6 7.5 9 4.5" /></svg>
@@ -113,7 +112,7 @@ const SelectedWriting: React.FC = () => {
                   >
                     <span className="selected-writing__kind">
                       <span className={`selected-writing__dot selected-writing__dot--${note.kind}`} aria-hidden="true" />
-                      {KIND_LABEL[note.kind]}
+                      <span className="bracketed">{KIND_LABEL[note.kind]}</span>
                     </span>
                     <span className="selected-writing__name">
                       <span className="selected-writing__title">{note.title}</span>
@@ -142,9 +141,8 @@ const SelectedWriting: React.FC = () => {
           </ul>
         </div>
 
-        <div className="selected-writing__foot">
-          <span aria-live="polite">{countLine}</span>
-        </div>
+        {/* Announces what a kind filter left, for screen readers only. */}
+        <p className="sr-only" aria-live="polite">{countLine}</p>
       </div>
     </section>
   );

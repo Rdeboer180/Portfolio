@@ -165,7 +165,7 @@ const CaseStudyBinder: React.FC = () => {
   return (
     <section id="projects" className="case-binder" aria-labelledby="case-binder-title">
       <div className="case-binder__intro">
-        <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" index="01" tone="accent" />
+        <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" ruled tone="accent" />
         <h2 id="case-binder-title" className="case-binder__title">Systems, products, and tools I&rsquo;ve shipped</h2>
       </div>
       <div ref={slot} className="case-binder__slot" />
