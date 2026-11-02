@@ -1,105 +1,1334 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Experience Systems Lab</title>
-<meta name="rd-teardown" content="2027-01-31">
+<title>Conversation blueprint · Experience Systems Lab</title>
 <link rel="icon" href="data:,">
-<script>if (location.protocol === 'http:' && !['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) location.replace('https://' + location.host + location.pathname + location.search + location.hash);</script>
 <style>
-:root{color-scheme:light;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;--hair:#e5e5e5;--orange:#f03d01;--orange-deep:#c23001;--cool:#f4f6f7}
+/* Shared styles for the three prototype tabs. Pages link this with ../shared.css. */
+@font-face{font-family:'Hubot Sans';font-style:normal;font-weight:400 800;font-stretch:100%;font-display:swap;src:url(a/0.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(a/1.woff2) format('woff2')}
+:root{
+  color-scheme:light;
+  --orange:#f03d01;--orange-deep:#c23001;--orange-tint:#fdede9;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;
+  --hair:#e5e5e5;--mist:#f5f5f5;--paper:#fff;--cool:#f4f6f7;--steel:#8f9daf;--steel-light:#d6dce4;
+  --int:#2563c9;--state:#7048c8;--a11y:#c2185b;--content:#d9480f;--token:#0e8a82;--data:#b8860b;--dev:#2e8540;--never:#b3261e;--proposed:#a16207;
+  --font-h:'Hubot Sans','Inter',-apple-system,BlinkMacSystemFont,sans-serif;--font-b:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:Menlo,Monaco,Consolas,monospace;
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:var(--cool);color:var(--ink);font:400 16px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;-webkit-font-smoothing:antialiased}
-.gate{width:100%;max-width:400px;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:28px 26px}
-.gate[hidden],.load[hidden]{display:none}
-.mark{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:7px;background:var(--ink);color:#fff;font:800 12px/1 -apple-system,sans-serif}
-h1{font-size:24px;line-height:1.2;letter-spacing:-.01em;margin:16px 0 6px}
-p{margin:0;color:var(--slate)}
-label{display:block;font-weight:600;font-size:14px;margin:20px 0 6px}
-input{width:100%;font:inherit;padding:11px 12px;border:1px solid #c9ced3;border-radius:9px;background:#fff;color:var(--ink)}
-input:focus-visible,button:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
-button{margin-top:12px;width:100%;font:600 15px/1 inherit;font-family:inherit;color:#fff;background:var(--ink);border:0;border-radius:9px;padding:13px 14px;cursor:pointer}
-button[disabled]{opacity:.6;cursor:progress}
-.err{min-height:22px;margin-top:10px;font-size:14px;color:#b3261e}
-.load{font-size:14px;color:var(--graphite)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--font-b);-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:var(--orange-deep);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+code{font:12.5px/1.4 var(--mono);background:var(--mist);border-radius:4px;padding:1px 5px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.label{font:700 13px/1.25 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin:0}
+.label em{font-style:normal;color:var(--orange-deep)}
+h1{font:800 clamp(34px,4.6vw,54px)/1.06 var(--font-h);letter-spacing:-.035em;margin:14px 0 18px;max-width:22ch}
+h2{font:800 clamp(26px,3vw,36px)/1.12 var(--font-h);letter-spacing:-.025em;margin:10px 0 14px}
+h3{font:700 19px/1.3 var(--font-h);margin:10px 0 6px}
+.lede{font-size:19px;line-height:1.55;color:var(--slate);max-width:64ch;margin:0}
+.hero{padding:64px 0 48px}
+.sec{padding:72px 0;border-top:1px solid var(--hair)}
+.sec--band{background:var(--cool)}
+.pts{list-style:none;margin:0;padding:0}
+.pts li{position:relative;padding-left:20px;margin:0 0 12px;font-size:16px;line-height:1.5;color:var(--slate)}
+.pts li::before{content:'';position:absolute;left:2px;top:.6em;width:7px;height:7px;background:var(--steel)}
+.pts strong{color:var(--ink);font-weight:600}
+.callout{border-left:3px solid var(--orange);padding:4px 0 4px 20px}
+.callout p{font:700 22px/1.4 var(--font-h);letter-spacing:-.01em;margin:0}
+.callout small{display:block;margin-top:10px;font-size:14px;color:var(--graphite)}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;margin-top:24px;align-items:start}
+.open{display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font-b);color:#fff;background:var(--ink);border-radius:10px;padding:11px 14px;text-decoration:none;white-space:nowrap}
+.open:hover{background:#000}
+.open--ghost{background:var(--paper);color:var(--ink);border:1px solid var(--hair)}
+.open--ghost:hover{background:var(--paper);border-color:var(--steel)}
+.chip{display:inline-block;font:700 10.5px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;border-radius:4px;padding:4px 6px;color:#fff}
+.c-int{background:var(--int)}.c-state{background:var(--state)}.c-a11y{background:var(--a11y)}.c-content{background:var(--content)}.c-data{background:var(--data)}.c-dev{background:var(--dev)}.c-never{background:var(--never)}.c-token{background:var(--token)}.c-proposed{background:var(--proposed)}.c-rule{background:var(--ink)}
+/* thumbnails that open the zoom viewer */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.thumb{margin:0}
+.thumb button{position:relative;display:block;width:100%;height:var(--h,180px);padding:0;border:1px solid var(--hair);border-radius:8px;background:var(--mist);cursor:zoom-in;overflow:hidden}
+.thumb button img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,top center)}
+.thumb--natural button{height:auto}
+.thumb--natural button img{height:auto}
+.thumb button::after{content:'';position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 2px transparent;pointer-events:none}
+.thumb button:hover::after,.thumb button:focus-visible::after{box-shadow:inset 0 0 0 2px var(--orange)}
+.thumb figcaption{font-size:13px;line-height:1.4;color:var(--graphite);margin-top:7px}
+.thumb figcaption strong{color:var(--ink);font-weight:600}
+.tag{position:absolute;top:10px;left:10px;z-index:1;font:700 11px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:4px;background:var(--ink);color:#fff;pointer-events:none}
+.tag--after{background:var(--orange-deep)}
+/* embedded live prototype */
+.embed{border:1px solid var(--hair);border-radius:12px;background:var(--paper);overflow:hidden}
+.embed__head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+.embed__head .label{color:var(--ink)}
+.embed__frame{position:relative;overflow:hidden;background:#fff}
+.embed__frame iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0}
+.foot{padding:36px 0 60px;font-size:13px;color:var(--graphite);border-top:1px solid var(--hair)}
+.foot p{margin:0 0 6px}
+@media (max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.wrap{padding:0 16px}.grid,.grid--3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.grid,.grid--3,.grid--2{grid-template-columns:minmax(0,1fr)}}
+/* project header: the project name, one line, and its case study */
+.proj{padding:48px 0 32px}
+.proj h1{margin:0 0 10px}
+.proj__line{font-size:19px;line-height:1.55;color:var(--slate);max-width:62ch;margin:0}
+.proj__link{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font:600 15px/1 var(--font-b);color:var(--orange-deep);text-decoration:none}
+.proj__link:hover{text-decoration:underline}
+/* what I did, and talking points */
+.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 48px;margin-top:32px}
+.notes h3{font:700 13px/1.25 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin:0 0 14px}
+.notes .pts li{font-size:15.5px}
+.more{margin-top:20px}
+.more summary{display:inline-flex;align-items:center;gap:10px;cursor:pointer;list-style:none;font:600 15px/1 var(--font-b);color:var(--ink);border:1px solid var(--hair);border-radius:10px;padding:12px 16px;background:var(--paper)}
+.more summary::-webkit-details-marker{display:none}
+.more summary::after{content:'+';font:700 18px/1 var(--font-h);color:var(--orange-deep)}
+.more[open] summary::after{content:'\2212'}
+.more summary:hover{border-color:var(--steel)}
+.more__body{padding-top:20px}
+@media (max-width:820px){.notes{grid-template-columns:minmax(0,1fr)}.proj{padding:36px 0 24px}}
+
+/* the code behind a prototype, collapsed by default */
+.code{margin-top:28px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper)}
+.code summary{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;padding:14px 18px;cursor:pointer;list-style:none}
+.code summary::-webkit-details-marker{display:none}
+.code summary::before{content:'+';display:grid;place-items:center;width:22px;height:22px;border-radius:6px;border:1px solid rgba(27,27,27,.1);font:700 15px/1 var(--font-h);color:var(--orange-deep)}
+.code[open] summary::before{content:'\2212'}
+.code summary:hover{background:var(--mist);border-radius:12px}
+.code__t{font:700 16px/1.3 var(--font-h);color:var(--ink)}
+.code__meta{font:400 12.5px/1.4 var(--mono);color:#5e6c7c}
+.code__body{padding:0 18px 18px;border-top:1px solid rgba(27,27,27,.1)}
+.code__note{margin:14px 0 12px;font-size:14.5px;line-height:1.55;color:var(--slate);max-width:80ch}
+.code pre{margin:0;padding:16px 18px;max-height:520px;overflow:auto;background:var(--cool);border:1px solid rgba(27,27,27,.1);border-radius:8px;font:400 12.5px/1.6 var(--mono);color:var(--slate);tab-size:2}
+.code pre:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.code pre .c{color:#707070;font-style:italic}
+.code pre .k{color:var(--ink);font-weight:700}
+.code pre .s{color:#5e6c7c}
+.code__note--tests{margin-top:18px}
+.code__tests{margin:0;padding-left:20px;font:400 13px/1.7 var(--mono);color:var(--slate)}
+/* three-column notes: what I did, tradeoffs, worth asking about */
+.notes--3{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 36px}
+@media (max-width:1100px){.notes--3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){.notes--3{grid-template-columns:minmax(0,1fr)}}
+
+</style>
+<style>
+/* The lab's demo-page anatomy, on top of shared.css. Every demo page reads the same way:
+   who it's for → how I planned it → the working demo → state matrix → decisions → boundary. */
+
+/* who it's for */
+.for{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}
+.for__co{font:800 13px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--orange-deep)}
+.for__role{font:400 13px/1.4 var(--mono);color:#5e6c7c}
+.proj .lede{margin-top:6px}
+.read{margin:22px 0 0;padding:16px 18px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--cool);max-width:860px}
+.read__t{font:700 12px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin:0 0 8px}
+.read p{margin:0;font-size:15.5px;line-height:1.55;color:var(--slate)}
+.read q{color:var(--ink);font-weight:600}
+
+/* how I planned it: five steps, the same five on every page */
+.plan{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper);counter-reset:s}
+.plan li{padding:16px 18px 18px;counter-increment:s}
+.plan li + li{border-left:1px solid rgba(27,27,27,.1)}
+.plan .t{display:flex;align-items:center;gap:9px;font:700 11.5px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.plan .t::before{content:counter(s);display:grid;place-items:center;width:21px;height:21px;border-radius:6px;background:var(--ink);color:#fff;font:800 11px/1 var(--font-h);letter-spacing:0}
+.plan p{margin:10px 0 0;font-size:14.5px;line-height:1.5;color:var(--slate)}
+.plan strong{color:var(--ink);font-weight:600}
+@media (max-width:1024px){.plan{grid-template-columns:repeat(2,minmax(0,1fr))}.plan li + li{border-left:0}.plan li{border-top:1px solid rgba(27,27,27,.1)}.plan li:nth-child(-n+2){border-top:0}.plan li:nth-child(even){border-left:1px solid rgba(27,27,27,.1)}}
+@media (max-width:560px){.plan{grid-template-columns:minmax(0,1fr)}.plan li:nth-child(even){border-left:0}.plan li:nth-child(2){border-top:1px solid rgba(27,27,27,.1)}}
+
+/* the working demo */
+.demo{margin-top:24px;border:1px solid rgba(27,27,27,.14);border-radius:12px;background:var(--paper);overflow:hidden}
+.demo__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--hair);background:var(--paper)}
+.demo__head .label{color:var(--ink)}
+.demo__hint{font:400 12.5px/1.4 var(--mono);color:#5e6c7c}
+.demo__body{padding:20px}
+@media (max-width:620px){.demo__body{padding:14px}}
+
+/* segmented control used across demos */
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:3px;border:1px solid var(--hair);border-radius:9px;background:var(--mist)}
+.seg button{font:600 13px/1 var(--font-b);color:var(--slate);background:none;border:0;border-radius:7px;padding:8px 11px;cursor:pointer;min-height:32px}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;font:600 14px/1 var(--font-b);color:#fff;background:var(--ink);border:1px solid var(--ink);border-radius:9px;padding:9px 14px;cursor:pointer}
+.btn:hover{background:#000}
+.btn--ghost{background:var(--paper);color:var(--ink);border-color:var(--hair)}
+.btn--ghost:hover{background:var(--paper);border-color:var(--steel)}
+.btn--go{background:var(--orange);border-color:var(--orange)}
+.btn--go:hover{background:var(--orange-deep);border-color:var(--orange-deep)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed}
+
+/* status: always a label plus a shape, never color alone */
+.st{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 var(--font-b);color:var(--ink);white-space:nowrap}
+.st::before{content:'';width:9px;height:9px;flex:none;background:var(--steel)}
+.st--ok::before{background:var(--dev);border-radius:50%}
+.st--run::before{background:var(--int);border-radius:50%;animation:labpulse 1.2s ease-in-out infinite}
+.st--wait::before{background:var(--proposed);transform:rotate(45deg)}
+.st--fail::before{background:var(--never)}
+.st--part::before{background:linear-gradient(90deg,var(--dev) 50%,var(--never) 50%);border-radius:50%}
+.st--idle::before{background:transparent;border:1.5px solid var(--steel);border-radius:50%}
+.st--time::before{background:var(--graphite);clip-path:polygon(0 0,100% 0,50% 50%,100% 100%,0 100%,50% 50%)}
+@keyframes labpulse{50%{opacity:.35}}
+
+/* state matrix */
+.matrix{width:100%;border-collapse:collapse;margin-top:20px;font-size:14.5px}
+.matrix th,.matrix td{text-align:left;vertical-align:top;padding:11px 12px;border-top:1px solid var(--hair)}
+.matrix thead th{font:700 11.5px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);border-top:0}
+.matrix td{color:var(--slate);line-height:1.5}
+.matrix td:first-child{white-space:nowrap}
+.matrix-wrap{overflow-x:auto}
+@media (max-width:720px){.matrix,.matrix tbody,.matrix tr,.matrix td{display:block}.matrix thead{display:none}.matrix tr{padding:10px 0;border-top:1px solid var(--hair)}.matrix td{border:0;padding:3px 0}.matrix td[data-h]::before{content:attr(data-h) ': ';font-weight:600;color:var(--ink)}}
+
+/* decision log */
+.dlog{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--hair)}
+.dlog li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:8px 32px;padding:16px 0;border-bottom:1px solid var(--hair)}
+.dlog h3{margin:0;font:700 16.5px/1.35 var(--font-h)}
+.dlog p{margin:0;font-size:15px;line-height:1.55;color:var(--slate)}
+.dlog .alt{display:block;margin-top:6px;font-size:13.5px;color:var(--graphite)}
+@media (max-width:760px){.dlog li{grid-template-columns:minmax(0,1fr)}}
+
+/* boundary note */
+.boundary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:20px}
+.boundary div{padding:16px 18px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper)}
+.boundary h3{margin:0 0 8px;font:700 12px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.boundary p{margin:0;font-size:14.5px;line-height:1.55;color:var(--slate)}
+@media (max-width:900px){.boundary{grid-template-columns:minmax(0,1fr)}}
+
+/* next demo */
+.nextdemo{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:28px 0}
+.nextdemo a{display:inline-flex;align-items:center;min-height:40px;font:600 15px/1 var(--font-b);color:var(--orange-deep);text-decoration:none}
+.nextdemo a:hover{text-decoration:underline}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){.st--run::before{animation:none}}
+
+/* ── The handoff packet: what engineering receives with the prototype ──
+   Numbered pins sit on the live demo; each matches a dev note below it. */
+.pin{display:inline-grid;place-items:center;width:22px;height:22px;flex:none;border-radius:50%;background:var(--orange);color:#fff;font:800 11px/1 var(--font-h);border:2px solid var(--paper);box-shadow:0 0 0 1px var(--orange);cursor:help;vertical-align:middle}
+button.pin{padding:0;position:relative}
+/* 22px to look at, 38px to tap */
+button.pin::after{content:'';position:absolute;inset:-8px;border-radius:50%}
+.pin:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.pinned{position:relative}
+.pinned > .pin{position:absolute;top:-11px;left:-11px;z-index:2}
+body.no-pins .pin{display:none}
+.pins-toggle{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--font-b);color:var(--slate);background:none;border:1px solid var(--hair);border-radius:9px;padding:8px 11px;cursor:pointer;min-height:36px}
+.pins-toggle[aria-pressed="true"]{border-color:var(--orange);color:var(--ink)}
+.handoff{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;margin-top:22px}
+.handoff__col{border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper);padding:18px 20px}
+.handoff__col h3{margin:0 0 12px;font:700 12px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.devnotes{list-style:none;margin:0;padding:0}
+.devnotes li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--hair)}
+.devnotes li:first-child{border-top:0;padding-top:0}
+.devnotes h4{margin:0 0 4px;font:700 15px/1.35 var(--font-h)}
+.devnotes p{margin:0;font-size:14.5px;line-height:1.55;color:var(--slate)}
+.devnotes .owner{display:block;margin-top:6px;font:400 12.5px/1.45 var(--mono);color:#5e6c7c}
+.devnotes li.is-active{background:var(--orange-tint);border-radius:8px;box-shadow:-8px 0 0 var(--orange-tint),8px 0 0 var(--orange-tint)}
+.accept{list-style:none;margin:0;padding:0;font-size:14.5px}
+.accept li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:8px 0;border-top:1px solid var(--hair);color:var(--slate);line-height:1.5}
+.accept li:first-child{border-top:0;padding-top:0}
+.accept code{white-space:normal}
+.decides{margin-top:16px;padding:12px 14px;border-left:3px solid var(--ink);background:var(--cool);border-radius:0 8px 8px 0;font-size:14.5px;line-height:1.55;color:var(--slate)}
+.decides strong{color:var(--ink)}
+.parity{margin-top:16px}
+.parity p{margin:0 0 8px;font:700 14px/1.4 var(--font-h);color:var(--ink)}
+.parity ul{margin:0;padding-left:18px;font-size:14px;line-height:1.6;color:var(--slate)}
+@media (max-width:900px){.handoff{grid-template-columns:minmax(0,1fr)}}
+
+/* rows, not cards: method lists on the How I work page and the hub */
+.core{list-style:none;margin:24px 0 0;padding:0;border-top:1px solid var(--hair)}
+.core li{display:grid;grid-template-columns:220px minmax(0,1fr) minmax(0,1fr);gap:8px 32px;padding:16px 0;border-bottom:1px solid var(--hair)}
+.core h3{margin:0;font:700 16.5px/1.35 var(--font-h)}
+.core p{margin:0;font-size:15px;line-height:1.55;color:var(--slate)}
+.core .where{font:400 13px/1.5 var(--mono);color:#5e6c7c}
+@media (max-width:900px){.core li{grid-template-columns:minmax(0,1fr)}}
+
+/* the link from a demo to the shared How I work page */
+.method-link{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin-top:22px;padding:16px 18px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper);color:inherit;text-decoration:none;max-width:860px;transition:border-color .15s ease-in-out}
+.method-link:hover,.method-link:focus-visible{border-color:rgba(240,61,1,.45)}
+.method-link strong{display:block;font:700 16px/1.3 var(--font-h);color:var(--ink)}
+.method-link span{font-size:14.5px;line-height:1.5;color:var(--slate)}
+.method-link em{font:600 14px/1 var(--font-b);font-style:normal;color:var(--orange-deep);white-space:nowrap}
+.close{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;margin-top:20px}
+.close > div{padding:16px 18px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper)}
+.close h3{margin:0 0 8px;font:700 12px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.close p{margin:0;font-size:14.5px;line-height:1.55;color:var(--slate)}
+@media (max-width:900px){.close{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.method-link{transition:none}}
+
+</style>
+<style>
+[hidden]{display:none!important}
+button,select{font:inherit}
+.wrap--wide{max-width:1520px}
+.seg button{min-height:36px}
+.btn--sm{min-height:36px;padding:8px 12px;font-size:13px}
+.why-p{margin:0;font-size:16px;line-height:1.6;color:var(--slate);max-width:62ch}
+.why-p q{color:var(--ink);font-weight:600}
+.ctl-l{margin:0 0 6px;font:700 11px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.asof{font:400 12px/1.45 var(--mono);color:#5e6c7c}
+
+/* demo frame: sticky side panel needs visible overflow */
+.demo--bp{overflow:visible}
+.demo--bp .demo__head{border-radius:12px 12px 0 0}
+.demo__tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.bp-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:16px}
+.lg{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0;list-style:none;font-size:12.5px;line-height:1.4;color:var(--slate)}
+.lg li{display:inline-flex;align-items:center;gap:7px}
+.lg .dm{width:4px;height:16px;background:var(--int);border-radius:1px}
+.bp{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start}
+.bp-main{min-width:0}
+@media (min-width:1200px){.bp{grid-template-columns:minmax(0,1fr) 400px}.bp-side{position:sticky;top:12px}}
+.bp-hint{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:0 0 8px;font:400 12.5px/1.4 var(--mono);color:#5e6c7c}
+.bp-frame{position:relative}
+.bp-frame.has-more::after{content:'';position:absolute;top:1px;right:1px;bottom:1px;width:36px;border-radius:0 10px 10px 0;background:linear-gradient(90deg,rgba(255,255,255,0),#fff);pointer-events:none}
+.bp-scroll{position:relative;overflow-x:auto;border:1px solid rgba(27,27,27,.14);border-radius:10px;background:var(--paper);overscroll-behavior-x:contain}
+.bp-note{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--graphite);max-width:90ch}
+
+/* the blueprint table */
+.bpt{border-collapse:separate;border-spacing:0;width:100%;min-width:1060px;table-layout:fixed}
+.bpt col.c-lane{width:124px}
+.bpt th,.bpt td{text-align:left;vertical-align:top;font-weight:400}
+.lh{position:sticky;left:0;z-index:2;background:var(--paper);padding:10px 12px;border-right:1px solid var(--hair);font-size:12px;line-height:1.35;color:var(--graphite)}
+.lh b{display:block;font:700 13px/1.25 var(--font-h);color:var(--ink)}
+.lh small{display:block;margin-top:3px;font:400 11px/1.35 var(--mono);color:#5e6c7c}
+.lh--corner{vertical-align:bottom}
+.bpt tr.lane td{padding:10px 10px 12px;border-left:1px solid var(--hair);font-size:13px;line-height:1.42;color:var(--slate);cursor:pointer}
+.bpt tr.lane td:nth-child(2){border-left:0}
+.bpt tr.lane + tr.lane > *{border-top:1px solid var(--hair)}
+.bpt td.is-diff{box-shadow:inset 3px 0 0 var(--int)}
+.bpt .is-sel{background:#f2f4f7}
+.bpt .none{color:#8a8a8a;font-style:italic}
+.ln td{position:relative;height:20px;padding:0;border:0}
+.ln td::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--ink)}
+.ln--team td::before{border-top-style:dashed}
+.ln--sys td::before{border-top:1.5px dotted var(--graphite)}
+.ln span{position:sticky;left:10px;z-index:1;display:inline-block;margin-top:3px;padding:0 6px;background:var(--paper);font:700 10.5px/14px var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.cf td{position:relative;height:66px;padding:0;border-bottom:1px solid var(--hair)}
+.cf .lh{border-bottom:1px solid var(--hair)}
+.cf__plot{position:absolute;left:0;right:0;top:8px;height:34px}
+.cf__plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cf__plot polyline{fill:none;stroke:var(--ink);stroke-width:1.75}
+.cf__plot polygon{fill:var(--steel-light);opacity:.55}
+.cf__plot i{position:absolute;left:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.cf__v{position:absolute;left:0;right:0;bottom:6px;text-align:center;font:600 11.5px/1 var(--mono);color:var(--ink)}
+.cf__v span{font-weight:400;color:var(--graphite)}
+.sh th{padding:0;border-bottom:1px solid rgba(27,27,27,.22)}
+.sb{display:block;width:100%;min-height:104px;padding:10px 10px 12px;border:0;background:none;text-align:left;cursor:pointer;color:var(--ink)}
+.sb:hover{background:var(--mist)}
+.sb:focus-visible{outline:2px solid var(--orange);outline-offset:-3px}
+.sb[aria-expanded="true"]{box-shadow:inset 0 3px 0 var(--ink)}
+.sb__n{font:400 11px/1 var(--mono);color:#5e6c7c}
+.sb__t{display:block;margin-top:5px;font:700 14px/1.25 var(--font-h)}
+.sb__s{display:block;margin-top:3px;font-size:12px;line-height:1.35;color:var(--graphite)}
+.tm{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font:700 10.5px/1 var(--font-h);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.tm svg{width:12px;height:14px;flex:none}
+.tm__s{fill:var(--ink)}
+.tm__k{fill:none;stroke:#fff;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* mobile: stage-by-stage stepper */
+.steps{display:none;list-style:none;margin:0;padding:0}
+@media (max-width:760px){.bp-frame,.bp-hint,.bp-side,.bp-note--wide{display:none!important}.steps{display:block}}
+.step{position:relative;margin:0 0 14px;border:1px solid rgba(27,27,27,.14);border-radius:12px;background:var(--paper)}
+.step + .step::before{content:'';position:absolute;left:26px;top:-15px;height:14px;border-left:2px solid var(--hair)}
+.step h3{margin:0}
+.stp{display:flex;align-items:flex-start;gap:10px;width:100%;min-height:44px;padding:12px;border:0;border-radius:12px;background:none;text-align:left;cursor:pointer;color:var(--ink)}
+.stp:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+.stp__n{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;border:2px solid var(--ink);font:800 12px/1 var(--font-h)}
+.step.is-sel .stp__n{background:var(--ink);color:#fff}
+.stp__t{flex:1;min-width:0;font:700 16px/1.25 var(--font-h)}
+.stp__t small{display:block;margin-top:2px;font:400 12.5px/1.35 var(--font-b);color:var(--graphite)}
+.stp__o{flex:none;font:600 12.5px/30px var(--font-b);color:var(--orange-deep)}
+.step__meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:-4px 12px 8px 52px;font:600 12px/1.3 var(--mono);color:var(--ink)}
+.step__meta .tm{margin-top:0}
+.cfm{display:inline-block;width:56px;height:6px;margin-right:6px;border-radius:3px;background:var(--steel-light);vertical-align:1px;overflow:hidden}
+.cfm i{display:block;height:100%;background:var(--ink)}
+.lanes{list-style:none;margin:0;padding:0 12px 12px}
+.lanes li{position:relative;display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;padding:7px 0;border-top:1px solid var(--hair);font-size:13.5px;line-height:1.45;color:var(--slate)}
+.lanes li.is-diff{box-shadow:inset 3px 0 0 var(--int);padding-left:9px}
+.lanes .lane{font:700 10.5px/1.35 var(--font-h);letter-spacing:.04em;text-transform:uppercase;color:var(--graphite)}
+.lanes li.lnm{display:block;padding:3px 0 0;border-top:1.5px solid var(--ink);font:700 10px/1.4 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.lanes li.lnm--team{border-top-style:dashed}
+.lanes li.lnm--sys{border-top:1.5px dotted var(--graphite)}
+.lanes li.lnm + li{border-top:0}
+@media (max-width:400px){.lanes li{grid-template-columns:minmax(0,1fr);gap:1px}}
+.step__slot:empty{display:none}
+.step__slot .mo{border-width:1px 0 0;border-radius:0 0 12px 12px}
+
+/* the working moment */
+.mo{border:1px solid rgba(27,27,27,.14);border-radius:12px;background:var(--paper)}
+.mo__empty{padding:20px;font-size:14.5px;color:var(--graphite)}
+.mo__head{padding:14px 16px 12px;border-bottom:1px solid var(--hair)}
+.mo__k{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:0;font:400 12px/1.3 var(--mono);color:#5e6c7c}
+.mo__k .tm{margin-top:0}
+.mo__head h3{margin:5px 0 0;font:800 20px/1.2 var(--font-h);letter-spacing:-.01em}
+.mo__head h3:focus{outline:none}
+.mo__head h3:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.mo__try{padding:12px 16px;background:var(--cool);border-bottom:1px solid var(--hair)}
+.mo__try > * + *{margin-top:10px}
+.mo__try p:not(.ctl-l){margin:0;font-size:13.5px;line-height:1.5;color:var(--slate)}
+.mo__try .seg{display:flex}
+.mo__body{padding:16px}
+.mo__body h4{margin:0 0 4px;font:700 12px/1.2 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.mo__static p + h4{margin-top:16px}
+.mo__static > p{margin:0;font-size:14.5px;line-height:1.55;color:var(--slate)}
+.msg{margin:0 0 10px;padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.5}
+.msg--guest{width:fit-content;max-width:88%;margin-left:auto;background:var(--ink);color:#fff;border-bottom-right-radius:4px}
+.agent{padding:12px;border:1px solid var(--hair);border-radius:12px;border-bottom-left-radius:4px;background:var(--paper)}
+.who{display:block;margin:0 0 4px;font:700 11px/1.3 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite)}
+.agent > p{margin:0 0 8px;font-size:14px;line-height:1.5;color:var(--ink)}
+.rl{margin:0 0 8px;font-size:13.5px;line-height:1.5;color:var(--slate)}
+.rule-pill{display:inline-block;max-width:100%;padding:1px 6px;line-height:1.35;border:1px solid var(--ink);border-radius:4px;font-weight:600;color:var(--ink);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.asm{margin:12px 0 4px}
+.asm__row{display:flex;flex-wrap:wrap;gap:6px}
+.chip-ed{display:inline-flex;align-items:center;gap:2px;max-width:100%;min-height:36px;padding:0 2px 0 11px;border:1px solid rgba(27,27,27,.22);border-radius:999px;background:var(--paper);font:600 12px/1 var(--font-b);color:var(--graphite)}
+.chip-ed select{min-width:0;max-width:100%;min-height:34px;padding:0 6px;border:0;border-radius:999px;background:transparent;font:600 13px/1 var(--font-b);color:var(--ink);cursor:pointer}
+.chip-ed select:focus-visible{outline:none}
+.chip-ed:focus-within{outline:2px solid var(--orange);outline-offset:2px}
+.bk{list-style:none;margin:10px 0 0;padding:0}
+.bk li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:9px 0;border-top:1px solid var(--hair)}
+.bk .nm{font:600 14px/1.35 var(--font-b);color:var(--ink)}
+.bk .q{font-weight:400;color:var(--graphite)}
+.bk .pr{font:600 13px/1.35 var(--mono);color:var(--ink);text-align:right;white-space:nowrap}
+.bk .why,.bk .meta,.bk .ask{grid-column:1/-1}
+.bk .why{font-size:13px;line-height:1.45;color:var(--slate)}
+.bk .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:3px}
+.bk .st{font-size:12px;white-space:normal}
+.bk li.is-quiet{padding:6px 0}
+.bk li.is-quiet .nm{font-weight:400;font-size:13.5px}
+.bk li.is-removed .nm,.bk li.is-removed .pr{text-decoration:line-through;color:var(--graphite)}
+.bk li.is-out .pr{color:var(--graphite)}
+.left{margin:8px 0 0;font-size:13px;line-height:1.45;color:var(--graphite)}
+.tot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;margin-top:2px;padding-top:10px;border-top:1px solid rgba(27,27,27,.28)}
+.tot b{font:800 16px/1.3 var(--font-h)}
+.agent > p.ready{margin:8px 0 0;font-size:13.5px;color:var(--slate)}
+.chg{display:inline-block;padding:4px 6px;border-radius:4px;background:var(--ink);color:#fff;font:700 10.5px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;vertical-align:1px}
+.flash{animation:flash 1.1s ease-out}
+@keyframes flash{from{background:#e6eefb}to{background:transparent}}
+.delta{font:600 12.5px/1 var(--mono);color:var(--ink)}
+.ask{margin-top:8px;padding:10px 12px;border:1px solid rgba(161,98,7,.5);border-radius:8px;background:#fffbf2}
+.ask p{margin:0 0 8px;font-size:13.5px;line-height:1.5;color:var(--ink)}
+.acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pin--in{margin:-3px 7px 0 0}
+.mnote{margin:10px 0 0;padding:8px 10px;border-left:3px solid var(--ink);border-radius:0 6px 6px 0;background:var(--cool);font-size:13px;line-height:1.5;color:var(--slate)}
+
+/* store team handheld */
+.hh{max-width:340px;margin:0 auto;border:7px solid #23262c;border-radius:20px;background:var(--paper)}
+.hh__bar{display:flex;justify-content:space-between;gap:8px;padding:9px 12px;border-radius:12px 12px 0 0;background:#23262c;color:#fff;font:600 12px/1.3 var(--font-b)}
+.hh__meta{padding:9px 12px;border-bottom:1px solid var(--hair);font:400 12px/1.5 var(--mono);color:var(--slate)}
+.hh__meta p{margin:0}
+.hh__rule{margin-top:4px!important;color:var(--ink)}
+.hh__list{list-style:none;margin:0;padding:0}
+.hh__list li{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:2px 8px;align-items:start;padding:8px 12px;border-top:1px solid var(--hair);font-size:13px;line-height:1.35;color:var(--ink)}
+.hh__list li:first-child{border-top:0}
+.hh__list .st{font-size:11.5px}
+.bin{font:600 11.5px/1.35 var(--mono);color:#5e6c7c}
+.hh__list li.swap{background:#f6f7f9}
+.swap__d{grid-column:1/-1;margin-top:6px;padding:9px 10px;border:1px solid rgba(27,27,27,.16);border-radius:8px;background:var(--paper);font-size:12.5px;line-height:1.45;color:var(--slate)}
+.swap__d dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;margin:0}
+.swap__d dt{font-weight:600;color:var(--ink)}
+.swap__d dd{margin:0;min-width:0}
+.swap__now{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--hair)}
+.swap__now .st{white-space:normal;line-height:1.35}
+.cd{font:700 13px/1 var(--mono);color:var(--ink)}
+@media (max-width:400px){.hh{border-width:5px}.swap__d dl{grid-template-columns:minmax(0,1fr);gap:1px}.swap__d dd{margin-bottom:5px}}
+.hh__foot{padding:9px 12px;border-top:1px solid var(--hair);font-size:12px;color:var(--graphite);border-radius:0 0 12px 12px}
+
+/* hand off */
+.ho__arrow{margin:6px 0 8px;font:400 12px/1.3 var(--mono);color:#5e6c7c;text-align:center}
+.app{padding:12px;border:1px solid rgba(27,27,27,.2);border-radius:12px;background:var(--paper)}
+.cart{list-style:none;margin:6px 0 0;padding:0}
+.cart li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:7px 0;border-top:1px solid var(--hair);font-size:13px;line-height:1.4;color:var(--ink)}
+.cart .pr{font:600 12.5px/1.4 var(--mono)}
+.cart .why{grid-column:1/-1;font-size:12.5px;color:var(--graphite)}
+.cart .st{grid-column:1/-1;font-size:12px}
+.app__pk{margin:8px 0 0;padding-top:8px;border-top:1px solid var(--hair);font-size:13px;line-height:1.45;color:var(--slate)}
+.carry{margin-top:16px}
+.carry h4{margin:0 0 6px;font:700 15px/1.3 var(--font-h);letter-spacing:0;text-transform:none;color:var(--ink)}
+.carry ul{list-style:none;margin:0;padding:0}
+.carry li{display:grid;grid-template-columns:88px 78px minmax(0,1fr);gap:4px 10px;align-items:start;padding:8px 0;border-top:1px solid var(--hair);font-size:13px;line-height:1.45;color:var(--slate)}
+.carry li b{font-weight:600;color:var(--ink)}
+.carry li.is-lost,.carry li.is-lost b,.carry li.is-lost .st{color:var(--never)}
+@media (max-width:420px){.carry li{grid-template-columns:minmax(0,1fr) auto}.carry li > span:last-child{grid-column:1/-1}}
+
+/* handoff packet extras */
+.show{display:inline-flex;align-items:center;min-height:36px;margin-top:4px;padding:0;border:0;background:none;font:600 13px/1.3 var(--font-b);color:var(--orange-deep);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.acc-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 0 10px}
+.acc-note{margin:0 0 14px;font-size:13.5px;line-height:1.5;color:var(--graphite)}
+.matrix td strong{color:var(--ink);font-weight:600}
+.matrix--beyond td:first-child{white-space:normal;width:26%}
+.matrix--beyond td:nth-child(2){width:40%}
+@media (max-width:720px){.matrix--beyond td:first-child{width:auto}}
+.matrix .proof{font-size:13.5px;color:var(--graphite)}
+.matrix tr.honest td{background:var(--cool)}
+.close ol{margin:0;padding-left:20px;font-size:14.5px;line-height:1.55;color:var(--slate)}
+.close li + li{margin-top:6px}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}.bp-scroll{scroll-behavior:auto}}
+@media (max-width:620px){.mo__body{padding:14px 12px}.mo__try{padding:12px}.mo__head{padding:12px}}
 </style>
 </head>
 <body>
-<p class="load" id="load" hidden>Opening…</p>
-<main class="gate" id="gate" hidden>
-  <span class="mark" aria-hidden="true">RD</span>
-  <h1>Experience Systems Lab</h1>
-  <p id="lede">Ryan DeBoer's working demos. Use the portfolio password.</p>
-  <form id="form">
-    <label for="pw">Password</label>
-    <input id="pw" type="password" autocomplete="current-password" required>
-    <button id="go" type="submit">Open</button>
-    <p class="err" id="err" role="alert"></p>
-  </form>
+<script>window.RD_HOSTED = true;</script><script data-current="blueprint">
+/* One nav for every page in the lab. Each page loads this file with
+   <script src="../nav.js" data-current="runs"><\/script>. Links resolve from this
+   file's own location, so the nav works from any page in the folder. */
+(() => {
+  if (window.self !== window.top) return;              // no nav inside embeds
+  const me = document.currentScript;
+  // Hosted copies inline this script, so fall back to the page's parent folder
+  // (the hub sits one level up, so it passes data-base="./")
+  const base = me.src ? new URL('.', me.src) : new URL(me.dataset.base || '../', location.href);
+  const current = me.dataset.current || '';
+  // Each company's link is scoped: its own demo, the shared work, and the homepage. Never
+  // another company's demo or the hub that lists them all. The scope comes from ?for=,
+  // else from the demo page itself, else from earlier in this visit.
+  const DEMO_FOR = { chess: 'runs', livekit: 'motion', clickhouse: 'guardian', clipboard: 'harness', alteryx: 'adoption', zapier: 'experiments', target: 'blueprint', airbnb: 'readiness' };
+  const COMPANIES = [...Object.keys(DEMO_FOR), 'linear', 'grainger'];
+  const PAGE_FOR = Object.fromEntries(Object.entries(DEMO_FOR).map(([co, id]) => [id, co]));
+  const FOLDER = { runs: 'agent-run-console', motion: 'brand-motion-kit', guardian: 'ui-guardian', harness: 'skills-harness', adoption: 'adoption-kit', experiments: 'growth-experiment-kit', blueprint: 'conversation-blueprint', readiness: 'readiness-console', fit: 'fitment-confidence' };
+  const SCOPE_KEY = 'rd-lab-for';
+  const session = { get() { try { return sessionStorage.getItem(SCOPE_KEY); } catch { return null; } }, set(v) { try { sessionStorage.setItem(SCOPE_KEY, v); } catch {} } };
+  const forParam = (new URLSearchParams(location.search).get('for') || '').toLowerCase();
+  // ?for=all is Ryan's own view: every demo and every study, unscoped, for the rest of the visit
+  const ALL = forParam === 'all' || (!forParam && session.get() === 'all');
+  const scope = ALL ? '' : [forParam, PAGE_FOR[current], session.get()].find(c => COMPANIES.includes(c)) || '';
+  if (ALL) session.set('all'); else if (scope) session.set(scope);
+  window.RD_LAB_ALL = ALL;
+  window.RD_LAB_SCOPE = scope;
+  const q = scope ? `?for=${scope}` : ALL ? '?for=all' : '';
+  const ownDemo = DEMO_FOR[scope];
+  // A bare link, with no company and not Ryan's view, gets the generic view: the shared pages only
+  const generic = !ALL && !scope;
+  const all = [
+    { id: 'hub', label: 'Lab', href: new URL('./', base).href + q },
+    { id: 'runs', label: 'Agent runs', href: new URL('agent-run-console/', base).href + q, group: 'demo' },
+    { id: 'motion', label: 'Motion kit', href: new URL('brand-motion-kit/', base).href + q, group: 'demo' },
+    { id: 'guardian', label: 'UI Guardian', href: new URL('ui-guardian/', base).href + q, group: 'demo' },
+    { id: 'harness', label: 'Skills harness', href: new URL('skills-harness/', base).href + q, group: 'demo' },
+    { id: 'adoption', label: 'Adoption kit', href: new URL('adoption-kit/', base).href + q, group: 'demo' },
+    { id: 'experiments', label: 'Experiment kit', href: new URL('growth-experiment-kit/', base).href + q, group: 'demo' },
+    { id: 'blueprint', label: 'Service blueprint', href: new URL('conversation-blueprint/', base).href + q, group: 'demo' },
+    { id: 'readiness', label: 'Readiness console', href: new URL('readiness-console/', base).href + q, group: 'demo' },
+    { id: 'method', label: 'How I work', href: new URL('how-i-work/', base).href + q, group: 'method' },
+    { id: 'fit', label: 'Demo', href: new URL('fitment-confidence/', base).href + q, group: 'method' },
+    { id: 'playground', label: 'Playground', href: new URL('playground/', base).href + q, group: 'work', first: true },
+    { id: 'handoff', label: 'WheelRack', href: new URL('wheelrack-handoff/', base).href + q, group: 'work' },
+    { id: 'aem', label: 'AEM', href: new URL('aem/', base).href + q, group: 'work' },
+    { id: 'binder', label: 'Binder', href: new URL('binder/', base).href + q, group: 'work' },
+    { id: 'statelens', label: 'StateLens', href: new URL('statelens/', base).href + q, group: 'work' },
+    // Continued lives at /prototypes/ under its own password; only Ryan's ?for=all view links to it
+    { id: 'continued', label: 'Continued ↗', href: 'https://www.rdeboerdesigns.com/prototypes/', group: 'work', onlyAll: true },
+  ];
+  // StateLens is Linear's pitch, so it only ever appears on Linear's path
+  const shown = all.filter(i => (i.id !== 'statelens' || scope === 'linear' || ALL) && (!i.onlyAll || ALL));
+  const items = scope || generic
+    ? shown.filter(i => i.group === 'work' || i.group === 'method' || i.id === ownDemo).map(i => ({ ...i, first: i.id === 'playground' }))
+    : shown;
+  // The tile and edge-case prototypes live inside the WheelRack tab
+  const tab = { tile: 'handoff', edge: 'handoff' }[current] ?? current;
+  const css = `
+  .pnav{position:relative;z-index:50;background:#1b1b1b;color:#fff;font:500 13px/1 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  .pnav__in{display:flex;align-items:center;gap:16px;max-width:1600px;margin:0 auto;padding:0 20px;height:46px}
+  .pnav__home{display:flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+  .pnav__home b{display:grid;place-items:center;width:24px;height:24px;border-radius:5px;background:#fff;color:#1b1b1b;font:800 10.5px/1 'Inter',sans-serif}
+  .pnav__home:hover span{text-decoration:underline;text-underline-offset:3px}
+  .pnav__list{display:flex;gap:2px;margin:0 auto;padding:0;list-style:none;overflow-x:auto;scrollbar-width:none}
+  .pnav__list::-webkit-scrollbar{display:none}
+  .pnav__list a{position:relative;display:block;padding:16px 11px;color:#c9ccd3;text-decoration:none;white-space:nowrap}
+  .pnav__list a:hover{color:#fff}
+  .pnav__list a[aria-current="page"]{color:#fff}
+  .pnav__list a[aria-current="page"]::after{content:'';position:absolute;left:11px;right:11px;bottom:0;height:3px;background:#f03d01;border-radius:2px 2px 0 0}
+  .pnav__first{margin-left:10px;padding-left:10px;border-left:1px solid #3a3d46}
+  .pnav a:focus-visible{outline:2px solid #f03d01;outline-offset:-2px;border-radius:4px}
+  @media (max-width:760px){.pnav__home span{display:none}.pnav__in{gap:8px;padding:0 10px}.pnav__list a{padding:16px 9px}}
+  `;
+  const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
+  const nav = document.createElement('nav');
+  nav.className = 'pnav'; nav.setAttribute('aria-label', 'Experience Systems Lab');
+  nav.innerHTML = `<div class="pnav__in"><a class="pnav__home" href="https://www.rdeboerdesigns.com/"><b>RD</b><span>Ryan DeBoer</span></a><ul class="pnav__list">${items.map(i =>
+    `<li${i.first ? ' class="pnav__first"' : ''}><a href="${i.href}"${i.id === tab ? ' aria-current="page"' : ''}>${i.label}</a></li>`).join('')}</ul></div>`;
+  document.body.prepend(nav);
+
+  // In-page links follow the same scope: the hub and other companies' demos are never offered
+  const ALLOWED = new Set(['how-i-work', 'fitment-confidence', 'playground', 'wheelrack-handoff', 'wheelrack-tile', 'wheelrack-edge-case', 'aem', 'binder', scope === 'linear' && 'statelens', FOLDER[ownDemo]].filter(Boolean));
+  const SCOPED_FOLDERS = [...Object.values(FOLDER), 'statelens', 'how-i-work', 'playground'];
+  function scopeLinks() {
+    document.querySelectorAll('a[href]').forEach(a => {
+      if (a.closest('.pnav')) return;
+      const url = new URL(a.getAttribute('href'), location.href);
+      if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname)) return;
+      const folder = url.pathname.slice(base.pathname.length).split('/')[0];
+      if (ALLOWED.has(folder)) { if (!url.search) { url.search = q; a.href = url.href; } return; }
+      if (folder && !SCOPED_FOLDERS.includes(folder)) return;  // fonts, images, other files
+      if (a.closest('.nextdemo')) {
+        if (a.textContent.trim().startsWith('←')) { a.href = 'https://www.rdeboerdesigns.com/'; a.textContent = '← Ryan DeBoer'; }
+        else { a.href = new URL('wheelrack-handoff/', base).href + q; a.textContent = 'Next: WheelRack, shipped work →'; }
+        return;
+      }
+      const span = document.createElement('span'); span.textContent = a.textContent; a.replaceWith(span);
+    });
+  }
+  if (scope || generic) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scopeLinks); else scopeLinks(); }
+
+  // Dev-note pins: a numbered pin on the live demo jumps to its note in the handoff packet
+  document.addEventListener('click', e => {
+    const pin = e.target.closest('button.pin[aria-describedby]');
+    if (!pin) return;
+    const note = document.getElementById(pin.getAttribute('aria-describedby'));
+    if (!note) return;
+    document.querySelectorAll('.devnotes li.is-active').forEach(li => li.classList.remove('is-active'));
+    note.classList.add('is-active');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    note.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    note.setAttribute('tabindex', '-1'); note.focus({ preventScroll: true });
+  });
+})();
+
+</script>
+<main>
+<header class="proj"><div class="wrap">
+  <p class="for"><span class="for__co">Built for Target · Emerging Experiences</span><span class="for__role">Senior UX Product Designer</span></p>
+  <h1>A service blueprint that runs</h1>
+  <p class="proj__line">A guest journey that starts in a conversation, mapped across the guest, the agent, the app and the store team. Every step opens the working moment.</p>
+  <a class="method-link" href="../how-i-work/"><div><strong>How I think, prototype and build</strong><span>The method behind this prototype, on one page.</span></div><em>How I work →</em></a>
+</div></header>
+
+<section class="sec sec--band" aria-labelledby="probTitle"><div class="wrap">
+  <div class="cols" style="margin-top:0">
+    <div>
+      <p class="label">The problem I found</p>
+      <h2 id="probTitle">When the agent changes the basket, who sees it?</h2>
+      <p class="why-p">In conversational shopping, decisions move into a conversation, and the guest can't see how the agent made them. When an agent builds a basket of several products, swaps an item or hands off to pickup, the guest is trusting choices made on their behalf, and the store team inherits those choices. A journey map shows the steps. It can't show what the guest sees when the agent changes something, or what the team member sees when that change lands on their pick list.</p>
+    </div>
+    <div>
+      <p class="label">How I found it</p>
+      <h2 id="foundTitle">The team's framing, a problem I've solved before, and the map</h2>
+      <ul class="pts">
+        <li><strong>The team's own framing.</strong> Its public posts say the guest's journey increasingly <q>starts with a conversation</q>, and list <q>Prototypes &gt; slide decks</q> among the traits it hires for. Target has also announced a shopping app inside ChatGPT that builds baskets of several products (November 2025) and a partnership with Google (January 2026).</li>
+        <li><strong>I've designed this trust problem before.</strong> In WheelRack, Tire Rack's dealer platform, when a dealer picks a finish their size isn't made in, the system changes the order for them and has to say so. The static frame showed the result, not the change. I rebuilt it in code: the rule became testable (diameter, then width, then offset), the change stays visible, Undo is offered, and with reduced motion a static Changed tag stays.</li>
+        <li><strong>Mapping it as a blueprint showed the backstage cost.</strong> A substitution the guest never saw becomes a pickup the team member has to explain.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" aria-labelledby="demoTitle"><div class="wrap wrap--wide">
+  <p class="label">Try it</p>
+  <h2 id="demoTitle">Pick a scenario, then open a stage</h2>
+  <p class="lede">Seven stages across five lanes, from a chat to the car. Four stages are trust moments with working states; the other three open a short note.</p>
+  <div class="demo demo--bp" style="margin-top:22px">
+    <div class="demo__head"><p class="label">Running blueprint · conversation to pickup</p>
+      <div class="demo__tools"><span class="demo__hint">Synthetic data · keyboard works</span><button type="button" class="pins-toggle" id="pinsBtn" aria-pressed="true">Dev-note pins</button><button type="button" class="btn btn--ghost btn--sm" data-act="reset">Reset</button></div></div>
+    <div class="demo__body">
+      <div class="bp-top">
+        <div><p class="ctl-l" id="scnL">Scenario</p><div id="scn"></div></div>
+        <ul class="lg" aria-label="Legend">
+          <li><span class="tm" style="margin:0"><svg viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path class="tm__s" d="M6 .7 11.3 2.6v4.2c0 3.2-2.2 5.5-5.3 6.6C2.9 12.3.7 10 .7 6.8V2.6z"/><path class="tm__k" d="m3.5 7 1.8 1.8L8.7 5.3"/></svg>Trust moment</span></li>
+          <li><span class="dm" aria-hidden="true"></span>Differs from “Everything in stock”</li>
+        </ul>
+      </div>
+      <div class="bp">
+        <div class="bp-main">
+          <p class="bp-hint" id="bpHint" hidden><svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true"><path d="M1 5h13M10 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Scroll the blueprint sideways for all 7 stages</p>
+          <div class="bp-frame" id="bpFrame"><div class="bp-scroll" id="bpScroll"><table class="bpt" id="bpt"></table></div></div>
+          <ol class="steps" id="steps" aria-label="Blueprint stages"></ol>
+          <p class="bp-note">Guest confidence is my hypothesis for each stage, scored 0 to 100, for research to replace. Select a stage heading or any cell in its column to open the working moment.</p>
+        </div>
+        <div class="bp-side" id="side"><section class="mo" id="moment" aria-label="Working moment"></section></div>
+      </div>
+      <p class="sr-only" id="live" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec sec--band" aria-labelledby="handoffTitle"><div class="wrap">
+  <p class="label">The handoff</p>
+  <h2 id="handoffTitle">What engineering gets with this prototype</h2>
+  <p class="lede">The prototype is the spec. Each numbered pin in a working moment matches a note here, and the checks run against the same state engine the blueprint uses.</p>
+  <div class="handoff">
+    <div class="handoff__col"><h3>Dev notes</h3>
+      <ol class="devnotes">
+        <li id="note-1"><span class="pin" aria-hidden="true">1</span><div><h4>The agent never substitutes outside the guest's rule</h4><p>A swap applies on its own only when it's the same type and within the guest's price limit. Anything else is proposed and waits for the guest. With “Ask me before any swap”, nothing changes without an answer. The rule is checked in code, outside the model.</p><span class="owner">Owned by: swapStatus() and RULES; in production, the order service, not the agent's prompt</span><button type="button" class="show" data-act="show" data-v="check" data-scn="oos">Open Check and change</button></div></li>
+        <li id="note-2"><span class="pin" aria-hidden="true">2</span><div><h4>Every change stays visible and undoable until picking starts</h4><p>A swapped item keeps its Changed tag, its reason and the price difference in the chat, the cart and the pick list. Undo shows until the store starts picking. After that the change stays visible without Undo, and any further change goes through the store.</p><span class="owner">Owned by: canUndo() and pick.picking</span><button type="button" class="show" data-act="show" data-v="check" data-scn="oos">Open Check and change</button></div></li>
+        <li id="note-3"><span class="pin" aria-hidden="true">3</span><div><h4>Prices are the chosen store's, with an as-of time</h4><p>Every price names its store and the time it was read. If a price differs from the one in the chat, the line shows both and the total keeps the old price until the guest says OK. Moving to a new store re-quotes every line.</p><span class="owner">Owned by: ITEMS[].price[store], line.was and line.needsOk</span><button type="button" class="show" data-act="show" data-v="build">Open Build the basket</button></div></li>
+        <li id="note-4"><span class="pin" aria-hidden="true">4</span><div><h4>The team member sees the guest's rule, not just the item</h4><p>The pick list carries the guest's swap rule on every order. A swap line shows what to pick, what it replaces, the rule and who approved it. If the guest doesn't answer within 10 minutes, the line says what the rule allows, so nobody guesses or calls.</p><span class="owner">Owned by: pickView().swap.rule, read from the order's swapRule field</span><button type="button" class="show" data-act="show" data-v="pick" data-scn="oos">Open Pick and prep</button></div></li>
+        <li id="note-5"><span class="pin" aria-hidden="true">5</span><div><h4>The handoff keeps each item's reason</h4><p>The payload from the conversation to the app carries items, reasons, the swap rule, the store and the pickup time. The checklist compares what arrived with what was sent, and anything missing shows as Lost.</p><span class="owner">Owned by: carried() and the handoff payload</span><button type="button" class="show" data-act="show" data-v="handoff">Open Hand off</button></div></li>
+      </ol>
+    </div>
+    <div class="handoff__col"><h3>Acceptance checks · also agent eval cases</h3>
+      <div class="acc-top"><div><p class="ctl-l" id="polL">Run against</p><div id="pol"></div></div><span id="accSum"></span></div>
+      <p class="acc-note" id="accNote"></p>
+      <ul class="accept" id="accept"></ul>
+      <div class="parity"><p>Parity check: does the branch match the prototype?</p><ul>
+        <li>The same swap states and labels: in stock, changed within your rule, needs your OK, outside your rule, removed, found after all.</li>
+        <li>The swap rule travels with the order and shows on the pick list, with or without a swap.</li>
+        <li>Undo shows until picking starts; after that the Changed tag stays without it.</li>
+        <li>Every price carries a store and an as-of time, and a changed price waits for the guest.</li>
+        <li>The handoff payload has items, reasons, swap rule, store and pickup time; a missing field shows as Lost.</li>
+        <li>The same aria-live text on each change, and a static Changed tag under reduced motion.</li>
+      </ul></div>
+      <p class="decides"><strong>Engineering decides:</strong> the agent model and what each partner platform allows (what can be sent, shown or confirmed inside someone else's chat); the inventory and pricing services, and how fresh an as-of time can be; the channels for reaching the guest during picking; and how real stores run picking and pickup. I'd ask store teams before treating any of my pick states as right.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" aria-labelledby="beyondTitle"><div class="wrap">
+  <p class="label">How I'd go beyond the role</p>
+  <h2 id="beyondTitle">What the posting asks for, and what I'd bring</h2>
+  <div class="matrix-wrap"><table class="matrix matrix--beyond">
+    <thead><tr><th scope="col">The posting asks for</th><th scope="col">What I'd bring</th><th scope="col">Proof</th></tr></thead>
+    <tbody>
+      <tr><td data-h="Asks for"><strong>Journey maps and service blueprints</strong></td><td data-h="I'd bring">Blueprints that run, where each step can be clicked and tested.</td><td data-h="Proof" class="proof">The blueprint above: 7 stages, 5 lanes, 4 scenarios.</td></tr>
+      <tr><td data-h="Asks for"><strong>Early concepts to mid-fi flows</strong></td><td data-h="I'd bring">Coded states with a handoff engineers can build from.</td><td data-h="Proof" class="proof">WheelRack: an end-to-end dealer journey from vehicle selection to checkout, with 200+ tokens and 50+ Storybook components built with a senior React engineer.</td></tr>
+      <tr><td data-h="Asks for"><strong>Design sprints and co-creation</strong></td><td data-h="I'd bring">Partners click the working thing in the session.</td><td data-h="Proof" class="proof">Here: the scenario switch and the assumption chips, so partners can change the inputs live in the session.</td></tr>
+      <tr><td data-h="Asks for"><strong>Craft: accessibility, IA, interaction patterns</strong></td><td data-h="I'd bring">Checks that run on the page.</td><td data-h="Proof" class="proof">8 acceptance checks above. Keyboard, reduced motion and a 320px stepper on this page.</td></tr>
+      <tr><td data-h="Asks for"><strong>Supporting senior designers in framing</strong></td><td data-h="I'd bring">Turning their framing into working evidence within days.</td><td data-h="Proof" class="proof">This page started from the team's public framing of conversational shopping.</td></tr>
+      <tr><td data-h="Asks for"><strong>Qual and quant data</strong></td><td data-h="I'd bring">A defined measure for each trust moment: baskets sent to the app with no item removed; swaps kept, not undone; carts that arrive with every reason; substitutions accepted without a call.</td><td data-h="Proof" class="proof">Tire category pages: up to +50% conversion in the first month against the month before. A seasonal AEM journey with A/B tests and geo-targeted Experience Fragments.</td></tr>
+      <tr class="honest"><td data-h="Honestly"><strong>What I'd learn from the team</strong></td><td data-h="I'd learn">Conversational AI at Target's scale, and how stores actually run pickup.</td><td data-h="Why" class="proof">I haven't shipped a conversational product or designed for store operations.</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="sec sec--band" aria-labelledby="bTitle"><div class="wrap">
+  <p class="label">Scope</p>
+  <h2 id="bTitle">What this is, and what I'd ask</h2>
+  <div class="close">
+    <div><h3>What it isn't</h3><p>It isn't Target's experience, and it uses no internal knowledge. It explores public announcements only. Products, prices, stores, times and confidence scores are synthetic, and the page is unbranded.</p></div>
+    <div><h3>What I'd ask the team</h3><ol>
+      <li>Where do guests lose trust today between the conversation and pickup?</li>
+      <li>When a guest doesn't answer during picking, what do store teams do now, and what would they want the guest to have decided up front?</li>
+      <li>Which choices should an agent never make for a guest, even inside a rule the guest set?</li>
+    </ol></div>
+  </div>
+  <div class="nextdemo"><a href="https://www.rdeboerdesigns.com/">← Ryan DeBoer</a><a href="../wheelrack-handoff/">Next: WheelRack, shipped work →</a></div>
+</div></section>
 </main>
+
+<footer class="foot"><div class="wrap">
+  <p>Ryan DeBoer, October 2026. An independent exploration from public information; not affiliated with or endorsed by Target. Synthetic data throughout.</p>
+</div></footer>
+
 <script>
 (() => {
-  const SALT = 'RGF9xJIXobQID+HH3YTFwg==', ITER = 250000, BIN = 'index.bin', STORE = 'rd-lab-key';
-  const RETIRED = Date.now() > new Date('2027-01-31T23:59:59-05:00').getTime();
+  'use strict';
   const $ = id => document.getElementById(id);
-  const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-  const toB64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
-  const store = { get() { try { return localStorage.getItem(STORE); } catch { return null; } }, set(v) { try { localStorage.setItem(STORE, v); } catch {} }, clear() { try { localStorage.removeItem(STORE); } catch {} } };
-  let payload = null;
-  // A web page in place of the file (a fallback route, a work network's block page) is a load failure, not a wrong password
-  const getPayload = () => payload || (payload = fetch(BIN, { cache: 'no-cache' }).then(r => { if (!r.ok || /html/i.test(r.headers.get('content-type') || '')) throw new Error('missing'); return r.arrayBuffer(); }).catch(e => { payload = null; throw e; }));
-  const core = pw => pw.normalize('NFKC').trim()
-  .replace(/^[\s"'`“”‘’([{<]+|[\s"'`“”‘’)\]}>.,;:!?]+$/g, '')
-  .replace(/^pass(?:word)?\s*[:=-]?\s*/i, '')
-  .replace(/^[\s"'`“”‘’]*#+/, '').toLowerCase();
-  async function open(rawKey) {
-    const key = await crypto.subtle.importKey('raw', rawKey, 'AES-GCM', false, ['decrypt']);
-    const buf = new Uint8Array(await getPayload());
-    const plain = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.subarray(0, 12) }, key, buf.subarray(12)));
-    const n = new DataView(plain.buffer).getUint32(0);
-    const man = JSON.parse(new TextDecoder().decode(plain.subarray(4, 4 + n)));
-    let html = man.html; const base = 4 + n;
-    for (const a of man.assets) {
-      const url = URL.createObjectURL(new Blob([plain.subarray(base + a.off, base + a.off + a.len)], { type: a.type }));
-      html = html.split('__RDA_' + a.k + '__').join(url);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = c => '$' + (c / 100).toFixed(2);
+  const signed = c => (c < 0 ? '−' : '+') + money(Math.abs(c));
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Synthetic data. Prices in cents. Nothing here comes from a real catalog. ──
+  const CHAT_AT = '2:10 pm', CHECK_AT = '2:24 pm', OK_AT = '2:25 pm', PICK_AT = '3:05 pm';
+  const STORES = { grr: 'Grand Rapids–28th St', walker: 'Walker–Alpine Ave' };
+  const READY = { grr: { today: 'today, ready by 4:00 pm', tomorrow: 'tomorrow, ready by 10:00 am' }, walker: { today: 'today, ready by 5:30 pm', tomorrow: 'tomorrow, ready by 11:00 am' } };
+  const other = st => (st === 'grr' ? 'walker' : 'grr');
+  // Planner priority is array order: an item goes in only if the running total stays under budget.
+  const ITEMS = [
+    { id: 'plates', name: 'Party plates, 24 ct', type: 'Tableware', price: { grr: 499, walker: 479 }, per: 0, bin: 'A12', why: k => `Fall leaf print; one per kid with ${24 - k} to spare.` },
+    { id: 'cupcake', name: 'Cupcake kit, makes 24', type: 'Treats', price: { grr: 649, walker: 649 }, per: 0, bin: 'G04', why: k => `Makes 24, so ${Math.floor(24 / k)} per kid.` },
+    { id: 'candle', name: 'Number 7 candle', type: 'Candles', price: { grr: 299, walker: 299 }, per: 0, bin: 'G06', why: () => "It's a 7th birthday." },
+    { id: 'craft', name: "Kids' craft kit, 8 pk", type: 'Craft kit', price: { grr: 1299, walker: 1299 }, per: 8, bin: 'E11', why: (k, q) => `A sit-down activity; ${q === 1 ? 'one pack covers' : q + ' packs cover'} ${k} kids.` },
+    { id: 'favors', name: 'Favor bags, 8 pk', type: 'Favors', price: { grr: 899, walker: 899 }, per: 8, bin: 'A14', why: (k, q) => `A take-home bag for each kid${q > 1 ? `, ${q} packs` : ''}.` },
+    { id: 'juice', name: 'Juice boxes, 10 pk', type: 'Drinks', price: { grr: 449, walker: 449 }, per: 10, bin: 'D02', why: (k, q) => `One per kid${q * 10 - k ? `, ${q * 10 - k} spare` : ''}.` },
+    { id: 'balloons', name: 'Balloon kit, 12 pc', type: 'Decor', price: { grr: 799, walker: 799 }, per: 0, bin: 'A15', why: () => 'Orange and gold, to match the fall theme.' },
+    { id: 'garland', name: 'Fall leaf garland', type: 'Decor', price: { grr: 599, walker: 599 }, per: 0, bin: 'A16', why: () => 'Matches the plates; hangs over the cake table.' },
+  ];
+  const ITEM = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+  const ALTS = {
+    close: { id: 'felt', name: 'Felt animal craft kit, 8 pk', type: 'Craft kit', unit: 1399, bin: 'E12' },
+    far: { id: 'deluxe', name: 'Deluxe craft kit, 8 pk', type: 'Craft kit', unit: 1649, bin: 'E14' },
+  };
+  const RULES = { within2: { label: 'OK to swap same type, within $2', short: 'Same type, within $2', max: 200 }, ask: { label: 'Ask me before any swap', short: 'Ask me first', max: -1 } };
+  const OOS_ID = 'craft', PRICE_ID = 'cupcake', PRICE_BUMP = 80;
+  const SCENARIOS = [['stock', 'Everything in stock'], ['oos', 'Out of stock at pickup store'], ['price', 'Price changed since the chat'], ['store', 'Guest changes store']];
+  const SCN = Object.fromEntries(SCENARIOS);
+  const STAGES = [
+    { id: 'spark', n: '01', name: 'Spark', sub: 'Inspired in a chat assistant' },
+    { id: 'explore', n: '02', name: 'Explore', sub: 'The agent suggests options' },
+    { id: 'build', n: '03', name: 'Build the basket', sub: 'Several products from one request', trust: true },
+    { id: 'check', n: '04', name: 'Check and change', sub: 'Availability, substitution, price', trust: true },
+    { id: 'handoff', n: '05', name: 'Hand off', sub: "To the retailer's app; choose pickup", trust: true },
+    { id: 'pick', n: '06', name: 'Pick and prep', sub: 'Store team member, backstage', trust: true },
+    { id: 'pickup', n: '07', name: 'Pickup', sub: 'Drive-up arrival' },
+  ];
+  const STAGE = Object.fromEntries(STAGES.map(g => [g.id, g]));
+  const LANES = [
+    { id: 'guest', name: 'Guest', zone: 'Guest actions' },
+    { id: 'agent', name: 'Agent', zone: 'Frontstage · in the chat' },
+    { id: 'app', name: 'App and owned surfaces', zone: 'Frontstage · owned' },
+    { id: 'team', name: 'Store team member', zone: 'Backstage' },
+    { id: 'sys', name: 'Systems and data', zone: 'Inventory, price, policy' },
+  ];
+  const LINES = { agent: 'Line of interaction', team: 'Line of visibility', sys: 'Line of internal interaction' };
+
+  // Cell text. {store} is the pickup store, {chat} the store from the chat.
+  const BASE = {
+    spark: { guest: 'Asks a chat assistant for fall party ideas for a 7-year-old.', agent: "Asks who it's for, how many kids, budget and timing.", app: 'Not in view. Catalog data reaches the chat through a partner app.', team: '', sys: 'Partner-app connection and product catalog.' },
+    explore: { guest: 'Picks a fall leaf theme; {kids} kids, under {budget}.', agent: 'Shows three themes with real products and store prices.', app: 'Serves product data and images to the chat.', team: '', sys: 'Search, product data, prices at {chat}.' },
+    build: { guest: 'Reads the basket; can edit any assumption.', agent: 'Builds the basket ({n} items) with a reason for each item.', app: 'Holds a draft cart tied to the chat.', team: '', sys: 'Stock and price at {chat}, as of 2:10 pm.' },
+    check: { guest: 'Sees “All {n} items still in stock.”', agent: 'Re-checks stock and price before the handoff.', app: 'Nothing changed, so nothing to show.', team: '', sys: 'Stock and price re-checked at 2:24 pm.' },
+    handoff: { guest: 'Opens the app and confirms pickup.', agent: 'Sends items, reasons, swap rule, store and time.', app: 'Opens the cart with reasons and the swap rule.', team: 'The order joins the pick queue at {store}.', sys: 'Order created; stock held at {store}.' },
+    pick: { guest: 'Gets “We’re getting your order ready.”', agent: 'Can answer “Is it ready?” from order status.', app: 'Shows picking progress.', team: 'Picks {n} items on the handheld.', sys: 'Pick list, bin locations, order status.' },
+    pickup: { guest: 'Taps “I’m here” from a parking spot.', agent: 'Not needed at the car.', app: 'Check-in, spot number, time to the car.', team: 'Walks the order out: the one step the guest sees them.', sys: 'Check-in alert; order closed; receipt.' },
+  };
+  const OVR = {
+    oos: {
+      check: { guest: 'Sees a Changed tag on the craft kit, with Undo.', agent: "Swaps within the guest's rule and says why.", app: 'Shows the swap, the price change and Undo.', sys: 'Craft kit out of stock at {store}, 2:24 pm.' },
+      handoff: { agent: 'Sends the swap rule with the swapped item.', app: 'The cart keeps the Changed tag and the reason.' },
+      pick: { guest: 'Is told Undo closes when picking starts.', team: "Sees the guest's rule beside the swapped kit.", sys: 'The swap and the rule travel on the pick list.' },
+      pickup: { guest: 'Sees the swapped kit at the car; no surprise.', team: 'Hands it over; no swap to explain.' },
+    },
+    price: {
+      check: { guest: 'Sees the cupcake kit at {pwas} then, {pnow} now.', agent: 'Calls out the new price and waits for an OK.', app: 'Shows both prices and “as of 2:24 pm.”', sys: 'Store price changed after the chat.' },
+      handoff: { app: 'The cart carries the price the guest approved.' },
+      pickup: { guest: 'The receipt matches the price they approved.' },
+    },
+    store: {
+      check: { guest: 'Moves pickup to {store}.', agent: 'Re-checks all {n} items at {store}.', app: 'Shows new prices and a new ready time.', sys: 'Stock and price re-quoted at {store}.' },
+      handoff: { agent: 'Sends the new store and ready time.', team: 'The order joins the queue at {store}, not {chat}.' },
+      pick: { team: 'The {store} team picks; {chat} never sees it.' },
+      pickup: { guest: 'Drives to {store}; check-in finds the order.' },
+    },
+  };
+  const CONF = { stock: [60, 70, 78, 84, 82, 84, 92], oos: [60, 70, 78, 64, 72, 76, 86], price: [60, 70, 78, 58, 70, 78, 84], store: [60, 70, 78, 66, 64, 72, 82] };
+  const word = v => (v >= 80 ? 'sure' : v >= 65 ? 'steady' : v >= 50 ? 'unsure' : 'doubtful');
+
+  // ── State engine: pure functions over plain data, so the checks below can run against it ──
+  const clone = s => JSON.parse(JSON.stringify(s));
+  const freshPick = () => ({ picking: false, found: false, timedOut: false, left: 10 });
+  function initial() {
+    return { scenario: 'stock', stage: 'build', assume: { budget: 60, store: 'grr', when: 'today', kids: 8 }, rule: 'within2', alt: 'close', sub: null, price: null, storeOk: false, pick: freshPick(), handoff: 'full', policy: 'guarded' };
+  }
+  const careless = s => s.policy === 'careless';
+  const pickupStore = s => (s.scenario === 'store' ? other(s.assume.store) : s.assume.store);
+
+  // Deterministic planner: same assumptions, same basket.
+  function plan(a) {
+    const lines = [], left = []; let total = 0;
+    for (const it of ITEMS) {
+      const qty = it.per ? Math.ceil(a.kids / it.per) : 1, unit = it.price[a.store];
+      const line = { id: it.id, name: it.name, type: it.type, bin: it.bin, qty, unit, sum: unit * qty, reason: it.why(a.kids, qty) };
+      if (total + line.sum <= a.budget * 100) { lines.push(line); total += line.sum; } else left.push(line);
     }
-    return html;
+    return { lines, left, total, store: a.store, asOf: CHAT_AT, ready: READY[a.store][a.when] };
   }
-  function show(html) { document.open(); document.write(html); document.close(); }
-  async function derive(pw) {
-    const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(core(pw)), 'PBKDF2', false, ['deriveBits']);
-    return crypto.subtle.deriveBits({ name: 'PBKDF2', salt: b64(SALT), iterations: ITER, hash: 'SHA-256' }, k, 256);
+
+  function withinRule(s) {
+    const alt = ALTS[s.alt], orig = ITEM[OOS_ID];
+    return s.rule === 'within2' && alt.type === orig.type && alt.unit - orig.price[pickupStore(s)] <= RULES.within2.max;
   }
-  function ask() { $('load').hidden = true; $('gate').hidden = false; $('pw').focus(); }
-  $('form').addEventListener('submit', async e => {
-    e.preventDefault(); $('err').textContent = ''; $('go').disabled = true; $('go').textContent = 'Opening…';
-    try {
-      const raw = await derive($('pw').value);
-      const html = await open(raw);
-      store.set(toB64(raw)); show(html);
-    } catch (err) {
-      $('go').disabled = false; $('go').textContent = 'Open';
-      $('err').textContent = err && err.message === 'missing' ? "This page didn't load. Try again in a moment." : "That password didn't work.";
-      $('pw').select();
+  // none · auto (changed within the rule) · proposed (needs OK) · blocked (outside the rule) · accepted · declined · found
+  function swapStatus(s) {
+    if (s.scenario !== 'oos') return 'none';
+    if (careless(s)) return s.sub === 'declined' ? 'declined' : 'auto';   // the careless agent swaps whatever is close
+    if (s.pick.found) return 'found';
+    if (s.sub === 'declined') return 'declined';
+    if (s.sub === 'accepted') return 'accepted';
+    if (s.rule === 'ask' || s.sub === 'undone') return 'proposed';
+    return withinRule(s) ? 'auto' : 'blocked';
+  }
+  const canUndo = s => !careless(s) && !s.pick.picking && ['auto', 'accepted', 'declined'].includes(swapStatus(s));
+
+  function swapLine(s, o, status) {
+    const alt = ALTS[s.alt], perUnit = alt.unit - o.unit;
+    const base = { status, orig: { name: o.name, unit: o.unit, bin: o.bin }, alt, perUnit, delta: perUnit * o.qty };
+    if (status === 'auto' || status === 'accepted') return { ...base, id: alt.id, name: alt.name, unit: alt.unit, bin: alt.bin, swappedFrom: o.name, changed: !careless(s), by: status === 'auto' ? 'rule' : 'you' };
+    if (status === 'found') return base;
+    if (status === 'declined') return { ...base, removed: true };
+    return { ...base, pending: true };
+  }
+
+  function checkView(s) {
+    const chat = plan(s.assume), store = pickupStore(s), cl = careless(s), status = swapStatus(s);
+    const lines = chat.lines.map(l => {
+      const o = { ...l, store, asOf: CHECK_AT, was: null, needsOk: false, removed: false, pending: false, changed: false };
+      o.unit = ITEM[l.id].price[store];
+      if (s.scenario === 'price' && l.id === PRICE_ID) o.unit = l.unit + PRICE_BUMP;
+      if (o.unit !== l.unit && !cl) {
+        o.was = l.unit;
+        if (s.scenario === 'price') { o.removed = s.price === 'remove'; o.needsOk = s.price == null; }
+        if (s.scenario === 'store') o.needsOk = !s.storeOk;
+      }
+      if (s.scenario === 'oos' && l.id === OOS_ID) Object.assign(o, swapLine(s, o, status));
+      // A changed price is never applied before the guest's OK: the total keeps the old one
+      o.sum = o.removed || o.pending ? 0 : (o.needsOk ? o.was : o.unit) * o.qty;
+      o.sumIfOk = o.removed || o.pending ? 0 : o.unit * o.qty;
+      return o;
+    });
+    const total = lines.reduce((t, l) => t + l.sum, 0), totalIfOk = lines.reduce((t, l) => t + l.sumIfOk, 0);
+    const open = lines.filter(l => l.pending).length + (lines.some(l => l.needsOk) ? 1 : 0);
+    return { lines, total, totalIfOk, store, status, open, needsOk: open > 0, chat, ready: READY[store][s.assume.when], chatReady: READY[s.assume.store][s.assume.when] };
+  }
+
+  function pickView(s) {
+    const c = checkView(s), st = c.status, p = s.pick;
+    let phase = 'none';
+    if (p.picking) phase = st === 'found' ? 'found' : st === 'declined' ? 'removed' : (st === 'proposed' || st === 'blocked') ? (p.timedOut ? 'unreachable' : 'waiting') : (st === 'auto' || st === 'accepted') ? 'approved' : 'plain';
+    const line = c.lines.find(l => l.status);
+    const rule = careless(s) || s.handoff === 'items' ? null : RULES[s.rule].label;   // an items-only handoff never delivers the rule
+    let action = null;
+    if (phase === 'unreachable' && !rule) action = { kind: 'call', text: 'No swap rule came with this order. Call the guest again, or guess.' };
+    else if (phase === 'unreachable') {
+      const refund = money(line.orig.unit * line.qty);
+      const why = s.sub === 'undone' ? 'The guest undid this swap earlier.' : s.rule === 'ask' ? 'Their rule says ask before any swap.' : `Their rule allows swaps within $2; this one is ${signed(line.perUnit)}.`;
+      action = { kind: 'leave', text: `${why} Leave it out and refund ${refund}.` };
+    }
+    return { phase, lines: c.lines, swap: line ? { ...line, rule } : null, rule, action, store: c.store, ready: c.ready, left: p.left, picking: p.picking };
+  }
+
+  function carried(s) {
+    const c = checkView(s), full = s.handoff === 'full' && !careless(s), st = STORES[c.store];
+    const live = c.lines.filter(l => !l.removed), swapped = c.lines.find(l => l.swappedFrom);
+    const rows = [
+      { k: 'items', label: 'Items', st: c.open ? 'wait' : 'kept', note: c.open ? `${live.length} items; ${c.open} still need${c.open > 1 ? '' : 's'} the guest's answer.` : `${live.length} items at ${st} prices, as of ${CHECK_AT}${swapped && full ? '; the swap keeps its Changed tag' : ''}.` },
+      full ? { k: 'reasons', label: 'Reasons', st: 'kept', note: "Each item keeps its one-line reason in the cart." } : { k: 'reasons', label: 'Reasons', st: 'lost', note: 'The cart shows items without reasons.' },
+      full ? { k: 'rule', label: 'Swap rule', st: 'kept', note: `“${RULES[s.rule].label}” goes to the store with the order.` } : { k: 'rule', label: 'Swap rule', st: 'lost', note: 'Without it, the store team has to call the guest.' },
+      !full ? { k: 'store', label: 'Store', st: 'lost', note: "The app falls back to the guest's saved store." } : s.scenario === 'store' ? (s.storeOk ? { k: 'store', label: 'Store', st: 'kept', note: `${st}, changed in the chat and confirmed.` } : { k: 'store', label: 'Store', st: 'wait', note: `${st} still needs the guest's OK.` }) : { k: 'store', label: 'Store', st: 'kept', note: st },
+      full ? { k: 'time', label: 'Pickup time', st: 'kept', note: cap(c.ready) + '.' } : { k: 'time', label: 'Pickup time', st: 'lost', note: 'The guest has to choose a time again.' },
+    ];
+    const cart = live.map(l => ({ name: l.name, qty: l.qty, sum: l.pending ? 0 : l.sum, reason: full ? l.reason : null, changed: full && !!l.changed, pending: l.pending || l.needsOk }));
+    return { rows, cart, full, total: c.total, store: c.store, ready: c.ready };
+  }
+
+  function confidence(s) {
+    const c = CONF[s.scenario].slice(), st = swapStatus(s), ph = pickView(s).phase;
+    if (st === 'blocked' || st === 'proposed') c[3] -= 6;
+    if (ph === 'waiting') c[5] -= 8;
+    if (ph === 'unreachable') { c[5] -= 12; c[6] -= 10; }
+    if (ph === 'found') c[6] += 4;
+    if (s.handoff === 'items') { c[4] -= 18; c[5] -= 10; c[6] -= 14; }
+    return c.map(v => Math.max(20, Math.min(98, v)));
+  }
+
+  function cells(s) {
+    const c = checkView(s), st = c.status, ph = pickView(s).phase, chatPrice = ITEM[PRICE_ID].price[s.assume.store];
+    const vars = { store: STORES[c.store], chat: STORES[s.assume.store], n: c.chat.lines.length, kids: s.assume.kids, budget: '$' + s.assume.budget, pwas: money(chatPrice), pnow: money(chatPrice + PRICE_BUMP) };
+    const fill = t => t.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+    const out = {}, base = {};
+    for (const g of STAGES) {
+      out[g.id] = {}; base[g.id] = {};
+      for (const l of LANES) {
+        base[g.id][l.id] = fill(BASE[g.id][l.id]);
+        const o = OVR[s.scenario] && OVR[s.scenario][g.id] && OVR[s.scenario][g.id][l.id];
+        out[g.id][l.id] = fill(o ?? BASE[g.id][l.id]);
+      }
+    }
+    const set = (g, l, t) => { out[g][l] = fill(t); };
+    if (s.scenario === 'oos') {
+      if (st === 'proposed') { set('check', 'guest', 'Is asked to OK a swap for the craft kit.'); set('check', 'agent', 'Proposes a swap and waits for an answer.'); }
+      if (st === 'blocked') { set('check', 'guest', 'Is asked: the only kit is outside the rule.'); set('check', 'agent', "Doesn't swap outside the rule; asks instead."); }
+      if (st === 'declined') { set('check', 'guest', 'Removes the kit; the total drops.'); set('check', 'app', 'Shows the kit removed and the new total.'); }
+      if (ph === 'waiting') set('pick', 'team', 'Messages the guest and waits up to 10 minutes.');
+      if (ph === 'unreachable') set('pick', 'team', "No answer, so follows the guest's rule.");
+      if (ph === 'found') set('pick', 'team', 'Finds the original in backstock; cancels the swap.');
+    }
+    if (s.scenario === 'price' && s.price === 'remove') set('check', 'guest', 'Removes the cupcake kit instead.');
+    if (s.handoff === 'items') {
+      set('handoff', 'app', 'Opens a cart with items only: no reasons, no rule.');
+      set('handoff', 'team', 'Gets items with no swap rule attached.');
+      if (s.scenario === 'oos') set('pick', 'team', 'No rule on the list, so calls the guest.');
+    }
+    return { out, base };
+  }
+
+  function setPick(n, v) {
+    n.pick = { picking: v !== 'none', found: v === 'found', timedOut: v === 'unreachable', left: v === 'unreachable' ? 0 : 10 };
+    const st = swapStatus(n);
+    if (v === 'approved' && st !== 'auto' && st !== 'accepted') n.sub = 'accepted';
+    if ((v === 'waiting' || v === 'unreachable') && ['auto', 'accepted', 'declined'].includes(st)) { n.sub = null; if (n.rule === 'within2') n.alt = 'far'; }
+  }
+  function reset(n) { n.rule = 'within2'; n.alt = 'close'; n.sub = null; n.price = null; n.storeOk = false; n.pick = freshPick(); n.handoff = 'full'; }
+
+  function reduce(s, a) {
+    const n = clone(s);
+    switch (a.type) {
+      case 'scenario': n.scenario = a.v; reset(n); break;
+      case 'stage': n.stage = a.v; break;
+      case 'assume': n.assume[a.k] = a.v; reset(n); break;
+      case 'rule': n.rule = a.v; n.sub = null; break;
+      case 'alt': n.alt = a.v; n.sub = null; break;
+      case 'swap': if (a.v !== 'undone' || canUndo(s)) n.sub = a.v; break;
+      case 'undo': if (canUndo(s)) n.sub = 'undone'; break;
+      case 'price': if (a.v || !s.pick.picking) n.price = a.v || null; break;
+      case 'storeOk': if (a.v || !s.pick.picking) n.storeOk = !!a.v; break;
+      case 'pick': setPick(n, a.v); break;
+      case 'tick': {
+        const st = swapStatus(n);
+        if (n.pick.picking && !n.pick.timedOut && (st === 'proposed' || st === 'blocked')) { n.pick.left = Math.max(0, n.pick.left - 1); if (!n.pick.left) n.pick.timedOut = true; }
+        break;
+      }
+      case 'skip': n.pick.left = 0; n.pick.timedOut = true; break;
+      case 'handoff': n.handoff = a.v; break;
+      case 'reset': return { ...initial(), stage: s.stage, policy: s.policy };
+    }
+    return n;
+  }
+
+  // ── Acceptance checks: given / when / then, run against the engine. Also agent eval cases. ──
+  const sc = (t, v) => reduce({ ...initial(), policy: t.policy }, { type: 'scenario', v });
+  const CHECKS = [
+    ['Given the out-of-stock scenario and the rule “same type, within $2”, when the store has a kit $1.00 more, then the agent swaps it, tags it Changed and offers Undo.',
+      t => { const s = sc(t, 'oos'), l = checkView(s).lines.find(x => x.swappedFrom); return swapStatus(s) === 'auto' && !!l && l.changed && l.delta === 100 && canUndo(s); }],
+    ['Given the only kit left is $3.50 more, when the basket is re-checked, then nothing is swapped and the guest is asked.',
+      t => { const s = reduce(sc(t, 'oos'), { type: 'alt', v: 'far' }), v = checkView(s); return swapStatus(s) === 'blocked' && !v.lines.some(x => x.swappedFrom) && v.needsOk; }],
+    ['Given an automatic swap, when picking starts, then Undo is gone and the Changed tag stays.',
+      t => { const s = reduce(sc(t, 'oos'), { type: 'pick', v: 'approved' }); return !canUndo(s) && checkView(s).lines.some(x => x.changed); }],
+    ['Given the price changed since the chat, when the basket is re-checked, then the line shows both prices and an as-of time, and the total keeps the old price until the guest says OK.',
+      t => { const v = checkView(sc(t, 'price')), l = v.lines.find(x => x.id === PRICE_ID); return !!l && l.was === 649 && l.unit === 729 && !!l.asOf && l.needsOk && v.total < v.totalIfOk; }],
+    ["Given a swap outside the rule is waiting for the guest, when the 10-minute countdown runs out, then the pick line shows the guest's rule and leaves the item out.",
+      t => { let s = reduce(reduce(sc(t, 'oos'), { type: 'alt', v: 'far' }), { type: 'pick', v: 'waiting' }); for (let i = 0; i < 10; i++) s = reduce(s, { type: 'tick' }); const p = pickView(s); return p.phase === 'unreachable' && !!p.swap && p.swap.rule === RULES.within2.label && !!p.action && p.action.kind === 'leave'; }],
+    ['Given the full handoff, when the basket reaches the app, then every item keeps its reason; given items only, the checklist marks reasons and the swap rule Lost.',
+      t => { const s = sc(t, 'oos'), f = carried(s), lite = carried(reduce(s, { type: 'handoff', v: 'items' })); return f.cart.every(x => x.reason) && f.rows.every(r => r.st !== 'lost') && ['reasons', 'rule'].every(k => lite.rows.find(r => r.k === k).st === 'lost'); }],
+    ['Given a $50 budget and 12 kids, when the basket is planned twice, then both plans match, stay under $50 and list what was left out.',
+      () => { const a = { budget: 50, store: 'grr', when: 'today', kids: 12 }, p1 = plan(a), p2 = plan(a); return JSON.stringify(p1) === JSON.stringify(p2) && p1.total <= 5000 && p1.left.length > 0; }],
+    ["Given the state on screen now, when the engine evaluates it, then every swap is tagged Changed and sits inside the guest's rule unless the guest approved it.",
+      t => { const s = { ...S, policy: t.policy }; return checkView(s).lines.every(l => !l.swappedFrom || (l.changed && (l.by === 'you' || (s.rule === 'within2' && l.perUnit <= RULES.within2.max)))); }],
+  ];
+
+  // ── View ──
+  let S = initial();
+  const ui = { flash: false, policy: 'guarded', focus: null };
+  const mq = matchMedia('(max-width: 760px)');
+  const TRUST = '<span class="tm"><svg viewBox="0 0 12 14" aria-hidden="true" focusable="false"><path class="tm__s" d="M6 .7 11.3 2.6v4.2c0 3.2-2.2 5.5-5.3 6.6C2.9 12.3.7 10 .7 6.8V2.6z"/><path class="tm__k" d="m3.5 7 1.8 1.8L8.7 5.3"/></svg>Trust moment</span>';
+  const PIN_LABEL = { 1: "the agent never substitutes outside the guest's rule", 2: 'changes stay visible and undoable until picking', 3: 'store prices with an as-of time', 4: "the team member sees the guest's rule", 5: 'the handoff keeps each reason' };
+  const pin = n => `<button type="button" class="pin pin--in" aria-describedby="note-${n}" aria-label="Dev note ${n}: ${PIN_LABEL[n]}">${n}</button>`;
+  const seg = (act, opts, cur, lab) => `<div class="seg" role="group" aria-labelledby="${lab}">${opts.map(([v, t]) => `<button type="button" data-act="${act}" data-v="${v}" data-k="${act}-${v}" aria-pressed="${String(v) === String(cur)}">${esc(t)}</button>`).join('')}</div>`;
+  const stl = (cls, t) => `<span class="st st--${cls}">${t}</span>`;
+  const qty = l => (l.qty > 1 ? ` <span class="q">×${l.qty}</span>` : '');
+  const CHIPS = [
+    { k: 'budget', label: 'Budget', opts: [[50, '$50'], [60, '$60'], [80, '$80']] },
+    { k: 'store', label: 'Store', opts: [['grr', STORES.grr], ['walker', STORES.walker]] },
+    { k: 'when', label: 'Pickup', opts: [['today', 'Today'], ['tomorrow', 'Tomorrow']] },
+    { k: 'kids', label: 'Kids', opts: [[6, '6'], [8, '8'], [12, '12']] },
+  ];
+
+  function confCell(conf, i, sel) {
+    const Y = v => Math.max(0, Math.min(100, ((100 - v) / 70) * 100));
+    const v = conf[i], yc = Y(v), pts = [];
+    if (i > 0) pts.push([0, Y((conf[i - 1] + v) / 2)]);
+    pts.push([50, yc]);
+    if (i < conf.length - 1) pts.push([100, Y((conf[i + 1] + v) / 2)]);
+    const line = pts.map(p => p.join(',')).join(' ');
+    const area = `${pts[0][0]},100 ${line} ${pts[pts.length - 1][0]},100`;
+    return `<td class="${sel}"><div class="cf__plot" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false"><polygon points="${area}"/><polyline points="${line}" vector-effect="non-scaling-stroke"/></svg><i style="top:${yc.toFixed(1)}%"></i></div><span class="cf__v">${v} <span>${word(v)}</span></span></td>`;
+  }
+
+  function renderTable() {
+    const conf = confidence(S), { out, base } = cells(S), sel = id => (id === S.stage ? 'is-sel' : '');
+    let h = `<caption class="sr-only">Service blueprint, scenario “${esc(SCN[S.scenario])}”: 7 stages across 5 lanes. The line of interaction separates the guest from the agent, the line of visibility separates what the guest sees from the store team, and the line of internal interaction separates the store team from systems.</caption>`;
+    h += `<colgroup><col class="c-lane">${STAGES.map(() => '<col>').join('')}</colgroup>`;
+    h += `<thead><tr class="cf"><th scope="row" class="lh"><b>Guest confidence</b><small>Hypothesis, 0 to 100</small></th>${STAGES.map((g, i) => confCell(conf, i, sel(g.id))).join('')}</tr>`;
+    h += `<tr class="sh"><td class="lh lh--corner"><small>Lanes ↓<br>Stages →</small></td>${STAGES.map(g => `<th scope="col" data-col="${g.id}" class="${sel(g.id)}"><button type="button" class="sb" data-act="stage" data-v="${g.id}" data-k="sb-${g.id}" aria-expanded="${g.id === S.stage}" aria-controls="moment"><span class="sb__n">${g.n}</span><span class="sb__t">${esc(g.name)}</span><span class="sb__s">${esc(g.sub)}</span>${g.trust ? TRUST : ''}</button></th>`).join('')}</tr></thead><tbody>`;
+    for (const l of LANES) {
+      if (LINES[l.id]) h += `<tr class="ln ln--${l.id}" aria-hidden="true"><td colspan="8"><span>${LINES[l.id]}</span></td></tr>`;
+      h += `<tr class="lane"><th scope="row" class="lh"><b>${esc(l.name)}</b><small>${esc(l.zone)}</small></th>${STAGES.map(g => {
+        const t = out[g.id][l.id], d = t !== base[g.id][l.id];
+        return `<td data-stage="${g.id}" class="${[sel(g.id), d ? 'is-diff' : ''].join(' ').trim()}">${t ? esc(t) : '<span class="none">No action</span>'}${d ? '<span class="sr-only"> (differs from the in-stock baseline)</span>' : ''}</td>`;
+      }).join('')}</tr>`;
+    }
+    $('bpt').innerHTML = h + '</tbody>';
+  }
+
+  function renderSteps() {
+    const conf = confidence(S), { out, base } = cells(S);
+    $('steps').innerHTML = STAGES.map((g, i) => {
+      const open = g.id === S.stage;
+      const lanes = LANES.map(l => {
+        const t = out[g.id][l.id], d = t !== base[g.id][l.id];
+        return `${LINES[l.id] ? `<li class="lnm lnm--${l.id}" aria-hidden="true">${LINES[l.id]}</li>` : ''}<li${d ? ' class="is-diff"' : ''}><span class="lane">${esc(l.name)}</span><span>${t ? esc(t) : '<span class="none">No action</span>'}${d ? '<span class="sr-only"> (differs from the in-stock baseline)</span>' : ''}</span></li>`;
+      }).join('');
+      return `<li class="step${open ? ' is-sel' : ''}"><h3><button type="button" class="stp" data-act="stage" data-v="${g.id}" data-k="ms-${g.id}" aria-expanded="${open}" aria-controls="moment"><span class="stp__n" aria-hidden="true">${i + 1}</span><span class="stp__t"><span class="sr-only">Stage ${i + 1} of 7: </span>${esc(g.name)}<small>${esc(g.sub)}</small></span><span class="stp__o" aria-hidden="true">${open ? 'Close' : 'Open'}</span></button></h3>
+        <p class="step__meta"><span><span class="cfm" aria-hidden="true"><i style="width:${conf[i]}%"></i></span>Confidence ${conf[i]} · ${word(conf[i])}</span>${g.trust ? TRUST : ''}</p>
+        <ul class="lanes">${lanes}</ul><div class="step__slot" data-slot="${g.id}"></div></li>`;
+    }).join('');
+  }
+
+  // ── Working moments ──
+  function mBuild(s) {
+    const a = s.assume, p = plan(a), st = STORES[a.store];
+    const chips = CHIPS.map(c => `<label class="chip-ed"><span>${c.label}</span><select data-act="assume" data-key="${c.k}" data-k="as-${c.k}">${c.opts.map(([v, t]) => `<option value="${v}"${String(a[c.k]) === String(v) ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></label>`).join('');
+    const lines = p.lines.map(l => `<li><span class="nm">${esc(l.name)}${qty(l)}</span><span class="pr">${money(l.sum)}</span><span class="why">${esc(l.reason)}</span><span class="meta">${stl('ok', 'In stock at ' + esc(st))}</span></li>`).join('');
+    const left = p.left.length ? `<p class="left">Left out to stay under $${a.budget}: ${p.left.map(l => `${esc(l.name)}${l.qty > 1 ? ' ×' + l.qty : ''} (${money(l.sum)})`).join(', ')}.</p>` : '';
+    return `<div class="mo__try"><p>Edit any assumption. The basket re-plans by fixed rules: items go in by priority while the total stays under budget, and pack counts follow the number of kids.</p></div>
+      <div class="mo__body"><p class="msg msg--guest"><span class="sr-only">Guest: </span>Fall birthday party for a 7-year-old, under $60, pickup today</p>
+      <div class="agent"><span class="who">Agent</span><p>Here's a basket for ${a.kids} kids at ${esc(st)}: ${p.lines.length} items, ${money(p.total)} before tax.</p>
+        <div class="asm" role="group" aria-labelledby="asmL"><p class="ctl-l" id="asmL">What I assumed</p><div class="asm__row">${chips}</div></div>
+        <ul class="bk" aria-label="Basket">${lines}</ul>${left}
+        <div class="tot"><b>${pin(3)}Total ${money(p.total)}</b><span class="asof">${esc(st)} prices, as of ${CHAT_AT}</span></div>
+        <p class="ready">Pickup: ${esc(cap(p.ready))}.</p></div></div>`;
+  }
+
+  function swapHtml(l, s, v) {
+    const o = l.orig, alt = l.alt, st = esc(STORES[v.store]), each = l.qty > 1 ? ' each' : '';
+    const undo = canUndo(s) ? `<button type="button" class="btn btn--ghost btn--sm" data-act="undo" data-k="undo">Undo</button><span class="asof">Undo works until the store starts picking.</span>` : s.pick.picking ? `<span class="asof">Undo closed when picking started at ${PICK_AT}.</span>` : '';
+    if (l.status === 'auto' || l.status === 'accepted') {
+      const why = l.status === 'auto' ? `Same type, ${signed(l.perUnit)}${each}: within your $2 rule.` : `You approved this swap at ${OK_AT}.`;
+      return `<li class="${ui.flash ? 'flash' : ''}"><span class="nm"><span class="chg">Changed</span> ${esc(alt.name)}${qty(l)}</span><span class="pr">${money(l.sum)}</span><span class="why">Was ${esc(o.name)}, out of stock at ${st} at ${CHECK_AT}. ${why}</span><span class="meta"><span class="delta">${signed(l.delta)}</span>${undo}</span></li>`;
+    }
+    if (l.status === 'proposed' || l.status === 'blocked') {
+      const blocked = l.status === 'blocked';
+      const ask = blocked ? `The only kit here is ${alt.name} at ${money(alt.unit)}, ${signed(l.perUnit)}${each}. That's outside your $2 rule, so I didn't swap it.` : s.sub === 'undone' ? `You undid the swap. Swap it back for ${alt.name} (${signed(l.perUnit)}${each}), or remove the kit?` : `Your rule says to ask first. Swap for ${alt.name} at ${money(alt.unit)} (${signed(l.perUnit)}${each})?`;
+      return `<li class="is-out"><span class="nm">${esc(o.name)}${qty(l)}</span><span class="pr">${money(o.unit * l.qty)}</span><span class="meta">${stl('fail', 'Out of stock at ' + st)}${stl('wait', blocked ? 'Outside your rule' : 'Needs your OK')}</span>
+        <div class="ask"><p>${esc(ask)}</p><div class="acts"><button type="button" class="btn btn--sm" data-act="swap" data-v="accepted" data-k="sw-yes">${blocked ? `Swap anyway, ${signed(l.perUnit)}${each}` : 'Swap it'}</button><button type="button" class="btn btn--ghost btn--sm" data-act="swap" data-v="declined" data-k="sw-no">Remove it</button></div></div></li>`;
+    }
+    if (l.status === 'declined') return `<li class="is-removed"><span class="nm">${esc(o.name)}${qty(l)}</span><span class="pr">${money(o.unit * l.qty)}</span><span class="meta">${stl('fail', 'Removed by you; total updated')}${undo}</span></li>`;
+    return `<li><span class="nm">${esc(o.name)}${qty(l)}</span><span class="pr">${money(l.sum)}</span><span class="meta">${stl('ok', 'Found at the store during picking. No swap.')}</span></li>`;
+  }
+
+  function lineHtml(l, s, v) {
+    if (l.status) return swapHtml(l, s, v);
+    if (l.was == null) return `<li class="is-quiet"><span class="nm">${esc(l.name)}${qty(l)}</span><span class="pr">${money(l.sum)}</span></li>`;
+    const st = esc(STORES[v.store]), price = s.scenario === 'price';
+    const what = price ? `${money(l.was)} in the chat at ${CHAT_AT}; ${money(l.unit)} now at ${st}, as of ${CHECK_AT}.` : `${money(l.was)} at ${esc(STORES[s.assume.store])}; ${money(l.unit)} at ${st}, as of ${CHECK_AT}.`;
+    let state = '';
+    if (price) {
+      state = l.removed ? stl('fail', 'Removed by you') : s.price === 'keep' ? stl('ok', `You approved ${money(l.unit)} at ${OK_AT}`) : stl('wait', 'Needs your OK');
+      state += s.price == null ? `<span class="acts"><button type="button" class="btn btn--sm" data-act="price" data-v="keep" data-k="pr-keep">Keep at ${money(l.unit)}</button><button type="button" class="btn btn--ghost btn--sm" data-act="price" data-v="remove" data-k="pr-rm">Remove it</button></span>` : `<button type="button" class="btn btn--ghost btn--sm" data-act="price" data-v="" data-k="pr-undo">Change my answer</button>`;
+    } else state = s.storeOk ? stl('ok', 'Confirmed with the new store') : stl('wait', 'Needs your OK');
+    return `<li${l.removed ? ' class="is-removed"' : ''}><span class="nm">${esc(l.name)}${qty(l)}</span><span class="pr">${money(l.unit * l.qty)}</span><span class="why">Price changed: ${what}</span><span class="meta">${state}</span></li>`;
+  }
+
+  function mCheck(s) {
+    const v = checkView(s), st = esc(STORES[v.store]), cs = esc(STORES[s.assume.store]), n = v.lines.length;
+    let tryBar;
+    if (s.scenario === 'oos') tryBar = `<div class="mo__try"><div><p class="ctl-l" id="ruleL">Guest's swap rule, set in the chat</p>${seg('rule', [['within2', 'Same type, within $2'], ['ask', 'Ask me first']], s.rule, 'ruleL')}</div><div><p class="ctl-l" id="altL">What the store has instead</p>${seg('alt', [['close', 'Felt kit, +$1.00 each'], ['far', 'Only a deluxe kit, +$3.50 each']], s.alt, 'altL')}</div></div>`;
+    else if (s.scenario === 'stock') tryBar = `<div class="mo__try"><p>Everything is in stock in this scenario, so nothing changes here.</p><button type="button" class="btn btn--ghost btn--sm" data-act="scenario" data-v="oos" data-k="go-oos">Show: out of stock at pickup store</button></div>`;
+    else if (s.scenario === 'price') tryBar = `<div class="mo__try"><p>The cupcake kit's store price went up after the chat.</p></div>`;
+    else tryBar = `<div class="mo__try"><p>After the chat, the guest moved pickup from ${cs} to ${st}.</p></div>`;
+    const sum = {
+      none: s.scenario === 'price' ? (s.price == null ? "One price changed since the chat. I haven't applied it." : s.price === 'keep' ? 'You approved the new price.' : 'You removed the item with the new price.')
+        : s.scenario === 'store' ? `You moved pickup to ${st}. I re-checked all ${n} items there: all in stock, ${v.lines.filter(l => l.was != null).length} price changed, and the ready time moves.`
+        : `All ${n} items are still in stock at ${st}, and prices match the chat.`,
+      auto: `I made 1 change, within your rule.${canUndo(s) ? ' You can undo it.' : ''}`,
+      accepted: '1 change, approved by you.',
+      proposed: '1 item needs your answer before I send the basket.',
+      blocked: '1 item needs your answer before I send the basket.',
+      declined: 'You removed 1 item. Everything else is in stock.',
+      found: 'Everything is in stock.',
+    }[v.status];
+    const storeBox = s.scenario === 'store' ? `<div class="ask"><p>Ready time: ${esc(v.chatReady)} at ${cs}; ${esc(v.ready)} at ${st}.</p><div class="acts">${s.storeOk ? stl('ok', `Confirmed at ${OK_AT}`) + (s.pick.picking ? '' : '<button type="button" class="btn btn--ghost btn--sm" data-act="storeOk" data-v="" data-k="so-undo">Change my answer</button>') : `<button type="button" class="btn btn--sm" data-act="storeOk" data-v="1" data-k="so-yes">Pick up at ${st}</button>`}</div></div>` : '';
+    const ifOk = v.totalIfOk !== v.total && v.lines.some(l => l.needsOk) ? `<span class="asof">${money(v.totalIfOk)} after your OK</span>` : '';
+    const pend = v.lines.some(l => l.pending) ? '<span class="asof">The craft kit is left out of the total until you answer.</span>' : '';
+    const picking = s.pick.picking ? `<p class="mnote">Picking started at ${PICK_AT}. Undo is closed, and the change stays visible to you and the store.</p>` : '';
+    return `${tryBar}<div class="mo__body"><div class="agent"><span class="who">Agent · basket check at ${st}, ${CHECK_AT}</span>
+      <p class="rl">${pin(1)}Your swap rule: <span class="rule-pill">${esc(RULES[s.rule].label)}</span></p>
+      <p>${pin(2)}${sum}</p>
+      <ul class="bk" aria-label="Basket after the check">${v.lines.map(l => lineHtml(l, s, v)).join('')}</ul>
+      <div class="tot"><b>Total ${money(v.total)}</b><span class="asof">${st} prices, as of ${CHECK_AT}</span>${ifOk}${pend}</div>${storeBox}${picking}</div></div>`;
+  }
+
+  const PICK_OPTS = [['none', 'Not started'], ['approved', 'Approved swap'], ['waiting', 'Waiting for guest'], ['unreachable', 'Guest unreachable'], ['found', 'Found after all']];
+  function swapRow(l, pv) {
+    const o = l.orig, alt = l.alt, ph = pv.phase, swapped = l.status === 'auto' || l.status === 'accepted';
+    const pickWhat = swapped ? `${alt.name} · ${alt.bin}` : l.status === 'found' ? `${o.name} · ${o.bin}` : l.status === 'declined' ? 'Nothing' : `Hold. ${o.name} is out.`;
+    const approved = l.status === 'auto' ? `By the guest's rule, ${CHECK_AT}` : l.status === 'accepted' ? `By the guest, ${OK_AT}` : l.status === 'found' ? 'Not needed' : l.status === 'declined' ? 'Guest removed it' : 'Not yet';
+    let now;
+    if (ph === 'approved') now = stl('ok', 'Approved swap: pick it');
+    else if (ph === 'waiting') now = `${stl('wait', 'Waiting for guest')}<b class="cd">${pv.left} min left</b><span class="asof">Messaged at ${PICK_AT}. Demo time: 1 second per minute.</span><button type="button" class="btn btn--ghost btn--sm" data-act="skip" data-k="skip">Skip the wait</button>`;
+    else if (ph === 'unreachable') now = `${stl('time', 'No answer in 10 min')}<span>${esc(pv.action.text)}</span>`;
+    else if (ph === 'found') now = `${stl('ok', 'Found the original in backstock')}<span>Pick it. The swap is cancelled and the guest is told.</span>`;
+    else if (ph === 'removed') now = stl('fail', "Removed by the guest. Don't pick.");
+    else if (l.status === 'declined') now = stl('idle', "Picking not started. The guest removed this item.");
+    else now = stl('idle', swapped ? 'Picking not started. The guest can still undo.' : "Picking not started. The guest hasn't answered yet.");
+    const nm = swapped ? `<span class="chg">Swap</span> ${esc(alt.name)}` : esc(o.name);
+    return `<li class="swap"><span class="bin">${swapped ? alt.bin : o.bin}</span><span>${nm}${l.qty > 1 ? ' ×' + l.qty : ''}</span><span></span>
+      <div class="swap__d"><dl><dt>Pick</dt><dd>${esc(pickWhat)}</dd>${swapped ? `<dt>Instead of</dt><dd>${esc(o.name)}</dd>` : l.status === 'found' ? '<dt>Swap</dt><dd>Cancelled</dd>' : ''}<dt>Guest's rule</dt><dd>${pv.rule ? `<span class="rule-pill">${esc(pv.rule)}</span>` : 'Not sent'}</dd><dt>Approved</dt><dd>${approved}</dd></dl><div class="swap__now">${now}</div></div></li>`;
+  }
+
+  function mPick(s) {
+    const pv = pickView(s), st = esc(STORES[pv.store]), oos = s.scenario === 'oos';
+    const key = { none: 'none', plain: 'none', approved: 'approved', waiting: 'waiting', unreachable: 'unreachable', found: 'found', removed: '' }[pv.phase];
+    const tryBar = oos ? `<div class="mo__try"><p class="ctl-l" id="pkL">At the shelf</p>${seg('pick', PICK_OPTS, key, 'pkL')}</div>` : `<div class="mo__try"><p>No swaps on this order in this scenario, so the pick line has nothing to explain.</p><button type="button" class="btn btn--ghost btn--sm" data-act="scenario" data-v="oos" data-k="go-oos2">Show: out of stock at pickup store</button></div>`;
+    const live = pv.lines.filter(l => l.status || !l.removed);
+    const rows = live.map(l => (l.status ? swapRow(l, pv) : `<li><span class="bin">${l.bin}</span><span>${esc(l.name)}${l.qty > 1 ? ' ×' + l.qty : ''}</span>${pv.picking ? stl('ok', 'Picked') : stl('idle', 'To pick')}</li>`)).join('');
+    return `${tryBar}<div class="mo__body"><div class="hh" role="region" aria-label="Store team member's handheld"><div class="hh__bar"><span>Pick list</span><span>Order 4471 · Drive-up</span></div>
+      <div class="hh__meta"><p>${st} · ${esc(cap(pv.ready))} · ${live.filter(l => !l.removed).length} items</p><p class="hh__rule">${pin(4)}Swap rule: ${pv.rule ? esc(RULES[s.rule].short) : 'not sent with this order'}</p></div>
+      <ol class="hh__list">${rows}</ol><p class="hh__foot">${pv.picking ? `Picking started ${PICK_AT}.` : 'Queued. Picking starts about 3:05 pm.'}</p></div></div>`;
+  }
+
+  function mHandoff(s) {
+    const c = carried(s), st = esc(STORES[c.store]), n = c.cart.length;
+    const lab = { kept: ['ok', 'Kept'], wait: ['wait', 'Waiting'], lost: ['fail', 'Lost'] };
+    const cart = c.cart.map(l => `<li><span>${l.changed ? '<span class="chg">Changed</span> ' : ''}${esc(l.name)}${l.qty > 1 ? ' ×' + l.qty : ''}</span><span class="pr">${l.pending && !l.sum ? 'Pending' : money(l.sum)}</span>${l.reason ? `<span class="why">Why: ${esc(l.reason)}</span>` : ''}${l.pending ? stl('wait', 'Needs the guest’s OK') : ''}</li>`).join('');
+    const rows = c.rows.map(r => `<li${r.st === 'lost' ? ' class="is-lost"' : ''}><b>${r.label}</b>${stl(lab[r.st][0], lab[r.st][1])}<span>${esc(r.note)}</span></li>`).join('');
+    return `<div class="mo__try"><p class="ctl-l" id="hoL">What the conversation sends</p>${seg('handoff', [['full', 'Full handoff'], ['items', 'Items only']], s.handoff, 'hoL')}</div>
+      <div class="mo__body"><div class="agent"><span class="who">Agent</span><p>Sending your basket to the app: ${n} items, ${money(c.total)}, pickup at ${st}. Your swap rule goes with it.</p></div>
+      <p class="ho__arrow" aria-hidden="true">↓ to the app</p>
+      <div class="app"><span class="who">App · cart</span><ul class="cart">${cart}</ul><p class="app__pk">${c.full ? `Drive-up pickup at ${st}, ${esc(c.ready)}.` : 'Pickup: choose a store and a time.'}</p></div>
+      <div class="carry"><h4>${pin(5)}What carried over</h4><ul>${rows}</ul></div></div>`;
+  }
+
+  const NOTES = {
+    spark: { what: 'The guest starts in a chat assistant. The retailer joins through a partner app, so its catalog can answer inside the conversation.', test: 'Whether guests give who, how many, budget and timing up front, or wait to be asked. That sets how many questions the agent asks before it shows a product.' },
+    explore: { what: "The agent offers three themes, each with real products and the chosen store's prices.", test: 'Whether three options beat one confident pick, and whether a store price this early builds trust or slows the guest down.' },
+    pickup: { what: 'The guest taps “I’m here” and a team member walks the order out. It is the only step where the two meet, so anything left unexplained earlier gets explained here.', test: 'Whether a swap explained in the app before arrival lands better than one explained at the car, measured by questions asked at handover.' },
+  };
+  function mStatic(s, g) {
+    const t = NOTES[g.id], c = cells(s).out[g.id];
+    const now = g.id === 'pickup' ? `<h4>In this scenario</h4><p>Guest: ${esc(c.guest)} Team member: ${esc(c.team)}</p>` : '';
+    return `<div class="mo__body mo__static"><h4>What happens</h4><p>${esc(t.what)}</p><h4>What I'd test</h4><p>${esc(t.test)}</p>${now}</div>`;
+  }
+
+  const MOMENT = $('moment');
+  function renderMoment() {
+    const g = STAGE[S.stage], m = MOMENT;
+    if (!g) { m.innerHTML = '<p class="mo__empty">Select a stage to open its working moment.</p>'; return; }
+    const body = { build: mBuild, check: mCheck, pick: mPick, handoff: mHandoff }[g.id] || mStatic;
+    m.setAttribute('aria-label', `Working moment: ${g.name}`);
+    m.innerHTML = `<div class="mo__head"><p class="mo__k">Working moment · ${g.n}${g.trust ? TRUST : ''}</p><h3 id="moTitle" tabindex="-1">${esc(g.name)}</h3></div>${body(S, g)}`;
+  }
+  function placeMoment() {
+    const m = MOMENT, slot = mq.matches ? document.querySelector(`#steps [data-slot="${S.stage}"]`) : $('side');
+    const target = slot || $('side');
+    if (m.parentNode !== target) target.appendChild(m);
+  }
+
+  function renderChecks() {
+    const t = { policy: ui.policy };
+    const res = CHECKS.map(([text, fn]) => { let ok = false; try { ok = !!fn(t); } catch (err) { ok = false; } return [text, ok]; });
+    const pass = res.filter(r => r[1]).length;
+    $('pol').innerHTML = seg('policy', [['guarded', "This prototype's rules"], ['careless', 'A careless agent']], ui.policy, 'polL');
+    $('accSum').innerHTML = stl(pass === res.length ? 'ok' : 'fail', `${pass} of ${res.length} pass`);
+    $('accNote').textContent = ui.policy === 'careless' ? 'The careless agent swaps whatever is close, applies new prices without asking, drops Undo and the Changed tag, and sends items only. The same checks catch it.' : 'Each check builds its own state and runs the engine. The last one checks whatever is on screen in the blueprint now.';
+    $('accept').innerHTML = res.map(([text, ok]) => `<li>${ok ? stl('ok', 'Pass') : stl('fail', 'Fail')}<span>${esc(text)}</span></li>`).join('');
+    return pass;
+  }
+
+  function renderScenario() { $('scn').innerHTML = seg('scenario', SCENARIOS, S.scenario, 'scnL'); }
+
+  function updateHint() {
+    const sc = $('bpScroll'), more = sc.scrollWidth > sc.clientWidth + 2;
+    $('bpHint').hidden = !more || mq.matches;
+    $('bpFrame').classList.toggle('has-more', more && sc.scrollLeft + sc.clientWidth < sc.scrollWidth - 2);
+  }
+  function scrollToCol(id) {
+    const sc = $('bpScroll'), th = $('bpt').querySelector(`th[data-col="${id}"]`), lane = $('bpt').querySelector('.lh');
+    if (!th || !lane) return;
+    const behavior = reduceMotion() ? 'auto' : 'smooth', left = th.offsetLeft - lane.offsetWidth - 8, right = Math.min(sc.scrollWidth, th.offsetLeft + th.offsetWidth + 40);   // clear the sticky lane column and the edge fade
+    if (left < sc.scrollLeft) sc.scrollTo({ left, behavior });
+    else if (right > sc.scrollLeft + sc.clientWidth) sc.scrollTo({ left: right - sc.clientWidth, behavior });
+  }
+
+  let timer = null;
+  function syncTimer() {
+    const need = S.stage === 'pick' && pickView(S).phase === 'waiting';
+    if (need && !timer) timer = setInterval(() => {
+      S = reduce(S, { type: 'tick' });
+      if (S.pick.timedOut) { const pv = pickView(S); announce(`The guest didn't answer. ${pv.action ? pv.action.text : ''}`); }
+      render();
+    }, 1000);
+    if (!need && timer) { clearInterval(timer); timer = null; }
+  }
+
+  function render() {
+    const ae = document.activeElement, k = ae && ae.dataset ? ae.dataset.k : null, inMo = !!(ae && MOMENT.contains(ae) && ae !== document.body);
+    if (MOMENT.parentNode !== $('side')) $('side').appendChild(MOMENT);   // keep it out of #steps while that re-renders
+    renderScenario(); renderTable(); renderSteps(); renderMoment(); placeMoment(); renderChecks();
+    const want = ui.focus || k; ui.focus = null;
+    if (want && document.activeElement !== ae) {
+      const el = [...document.querySelectorAll(`[data-k="${want}"]`)].find(x => x.offsetParent !== null);
+      if (el) el.focus({ preventScroll: true });
+      else if (inMo && $('moTitle')) $('moTitle').focus({ preventScroll: true });
+    }
+    updateHint(); syncTimer();
+  }
+
+  const live = $('live');
+  function announce(msg) { live.textContent = ''; setTimeout(() => { live.textContent = msg; }, 60); }
+
+  function swapSentence(s) {
+    const v = checkView(s), l = v.lines.find(x => x.status), t = money(v.total);
+    if (!l) return `All items in stock. Total ${t}.`;
+    const each = l.qty > 1 ? ' each' : '';
+    return {
+      auto: `Changed: ${l.orig.name} swapped for ${l.alt.name}, ${signed(l.delta)}, within your $2 rule. Undo is available. Total ${t}.`,
+      accepted: `Swap approved: ${l.alt.name}. Total ${t}.`,
+      proposed: `${l.orig.name} is out of stock. Swap for ${l.alt.name}, ${signed(l.perUnit)}${each}? Needs your OK.`,
+      blocked: `Not swapped: ${l.alt.name} is ${signed(l.perUnit)}${each}, outside your $2 rule. Asking you.`,
+      declined: `Removed ${l.orig.name}. Total ${t}.`,
+      found: 'The original kit was found at the store. No swap.',
+    }[l.status];
+  }
+  const PICK_SAY = { none: 'Picking not started.', plain: 'Picking started.', approved: 'Approved swap: pick it.', waiting: 'Waiting for the guest. 10 minutes on the clock.', found: 'Original found in backstock. Swap cancelled.', removed: "Removed by the guest. Don't pick." };
+
+  function act(a, say, focusKey) {
+    const before = swapStatus(S);
+    if (focusKey) ui.focus = focusKey;
+    S = reduce(S, a);
+    const after = swapStatus(S);
+    ui.flash = (after === 'auto' || after === 'accepted') && before !== after && !reduceMotion();
+    render();
+    ui.flash = false;
+    if (say) announce(say());
+  }
+  function openStage(id, toggle) {
+    const v = toggle && S.stage === id ? null : id;
+    S = reduce(S, { type: 'stage', v });
+    render();
+    if (v && !mq.matches) scrollToCol(v);
+    announce(v ? `Working moment open: ${STAGE[v].name}.` : 'Working moment closed.');
+  }
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) { const td = e.target.closest('#bpt td[data-stage]'); if (td) openStage(td.dataset.stage, false); return; }
+    const a = b.dataset.act, v = b.dataset.v;
+    switch (a) {
+      case 'stage': openStage(v, !!b.closest('#steps')); break;
+      case 'scenario': act({ type: 'scenario', v }, () => { const c = confidence(S); return `Scenario: ${SCN[v]}. Guest confidence at Check and change: ${c[3]}, ${word(c[3])}.`; }); break;
+      case 'rule': case 'alt': act({ type: a, v }, () => swapSentence(S)); break;
+      case 'swap': act({ type: a, v }, () => swapSentence(S), 'undo'); break;
+      case 'undo': act({ type: a, v }, () => swapSentence(S), 'sw-yes'); break;
+      case 'price': act({ type: 'price', v: v || null }, () => (S.price === 'keep' ? 'New price approved.' : S.price === 'remove' ? 'Item removed. Total updated.' : 'Answer cleared. The new price needs your OK.'), v ? 'pr-undo' : 'pr-keep'); break;
+      case 'storeOk': act({ type: 'storeOk', v: !!v }, () => (S.storeOk ? `Pickup confirmed at ${STORES[pickupStore(S)]}.` : 'Answer cleared. The new store needs your OK.'), v ? 'so-undo' : 'so-yes'); break;
+      case 'pick': act({ type: 'pick', v }, () => { const pv = pickView(S); return pv.phase === 'unreachable' ? `The guest didn't answer. ${pv.action.text}` : PICK_SAY[pv.phase]; }); break;
+      case 'skip': act({ type: 'skip' }, () => { const pv = pickView(S); return `The guest didn't answer. ${pv.action ? pv.action.text : ''}`; }, 'pick-unreachable'); break;
+      case 'handoff': act({ type: 'handoff', v }, () => { const lost = carried(S).rows.filter(r => r.st === 'lost').map(r => r.label.toLowerCase()); return lost.length ? `Items only: lost ${lost.join(', ')}.` : 'Full handoff: everything carried over.'; }); break;
+      case 'reset': act({ type: 'reset' }, () => 'Blueprint reset.'); break;
+      case 'policy': { ui.policy = v; const pass = renderChecks(); announce(`${pass} of ${CHECKS.length} checks pass against ${v === 'careless' ? 'a careless agent' : "this prototype's rules"}.`); break; }
+      case 'show': {
+        if (b.dataset.scn && S.scenario !== b.dataset.scn) S = reduce(S, { type: 'scenario', v: b.dataset.scn });
+        S = reduce(S, { type: 'stage', v });
+        render();
+        if (!mq.matches) scrollToCol(v);
+        MOMENT.scrollIntoView({ block: 'start', behavior: reduceMotion() ? 'auto' : 'smooth' });
+        if ($('moTitle')) $('moTitle').focus({ preventScroll: true });
+        break;
+      }
     }
   });
-  if (RETIRED) {
-    store.clear(); $('load').hidden = true; $('gate').hidden = false;
-    $('lede').innerHTML = 'This page was retired on 2027-01-31. The current work is at <a href="https://www.rdeboerdesigns.com/">rdeboerdesigns.com</a>.';
-    $('form').hidden = true; return;
-  }
-  // A link that carries the password, …/lab/playground/#showWork, opens straight through
-  async function fromLink() {
-    const raw = await derive(decodeURIComponent(location.hash));
-    const html = await open(raw);
-    store.set(toB64(raw)); history.replaceState(null, '', location.pathname + location.search); show(html);
-  }
-  const saved = store.get();
-  if (saved) { $('load').hidden = false; open(b64(saved)).then(show, () => { store.clear(); location.hash.length > 1 ? fromLink().catch(ask) : ask(); }); }
-  else if (location.hash.length > 1) { $('load').hidden = false; fromLink().catch(ask); }
-  else ask();
+  document.addEventListener('change', e => {
+    const sel = e.target.closest('select[data-act="assume"]');
+    if (!sel) return;
+    const k = sel.dataset.key, raw = sel.value, v = k === 'budget' || k === 'kids' ? Number(raw) : raw;
+    act({ type: 'assume', k, v }, () => { const p = plan(S.assume); return `Re-planned: ${p.lines.length} items, ${money(p.total)}${p.left.length ? `. Left out: ${p.left.map(l => l.name).join(', ')}` : ''}.`; });
+  });
+  $('bpt').addEventListener('keydown', e => {
+    const b = e.target.closest('.sb'); if (!b) return;
+    const all = [...$('bpt').querySelectorAll('.sb')], i = all.indexOf(b);
+    const j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: all.length - 1 }[e.key];
+    if (j == null) return;
+    e.preventDefault();
+    const t = all[Math.max(0, Math.min(all.length - 1, j))];
+    t.focus(); scrollToCol(t.dataset.v);
+  });
+  $('pinsBtn').addEventListener('click', e => {
+    const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+    e.currentTarget.setAttribute('aria-pressed', String(on));
+    document.body.classList.toggle('no-pins', !on);
+  });
+  $('bpScroll').addEventListener('scroll', updateHint, { passive: true });
+  addEventListener('resize', updateHint);
+  mq.addEventListener('change', render);
+
+  // For debugging and for the checks: the engine is plain functions
+  window.blueprint = { initial, reduce, plan, checkView, pickView, carried, swapStatus, canUndo, confidence, cells, CHECKS, get state() { return S; } };
+  render();
 })();
 </script>
 </body>
