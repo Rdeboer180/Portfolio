@@ -93,7 +93,7 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
       <h3>Four stars</h3>
       <h2 id="desk-note-title">My favorite TV series of all time</h2>
       <PlayDraftIntro topic="TV series" />
-      <p>Of the seven, the four-star ball is the one Goku keeps from his grandfather, so it is the one on my desk. Dragon Ball made my list twice.</p>
+      <p>Of the seven, the four-star ball is the one Goku keeps from his grandfather, so it is the one on my desk. Dragon Ball Z and Super share one spot on my list.</p>
       <p>Drafted from All TV, the series pack I am building for PlayDraft now.</p>
       <DraftRoom spec={DRAFTS.tv} />
       <FromPlayDraft />

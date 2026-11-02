@@ -99,7 +99,7 @@ export const DRAFTS: Record<string, DraftSpec> = {
   tv: {
     title: 'Favorite TV series of all time',
     pack: 'all-tv',
-    picks: ['Breaking Bad', 'Dragon Ball Super', 'Survivor', 'The Office', 'Friends', 'The Pitt', 'Prison Break', 'Dragon Ball Z', 'The Traitors', 'Stranger Things'].map((title) => ({ title })),
+    picks: ['Breaking Bad', 'Survivor', 'Dragon Ball Z / Super', 'The Pitt', 'The Office', 'The Traitors', 'From', 'Friends', 'Stranger Things', 'Prison Break'].map((title) => ({ title })),
   },
   // Grays Sports Almanac: PlayDraft's Movies pack. Ryan's list (the one the
   // desk's ticket stubs carried before, 31 Oct); the line under each is its year.
