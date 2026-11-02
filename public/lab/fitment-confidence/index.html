@@ -600,10 +600,10 @@ button,select,input{font:inherit}
   // Each company's link is scoped: its own demo, the shared work, and the homepage. Never
   // another company's demo or the hub that lists them all. The scope comes from ?for=,
   // else from the demo page itself, else from earlier in this visit.
-  const DEMO_FOR = { chess: 'runs', livekit: 'motion', clickhouse: 'guardian', clipboard: 'harness', alteryx: 'adoption', zapier: 'experiments', target: 'blueprint' };
+  const DEMO_FOR = { chess: 'runs', livekit: 'motion', clickhouse: 'guardian', clipboard: 'harness', alteryx: 'adoption', zapier: 'experiments', target: 'blueprint', airbnb: 'readiness' };
   const COMPANIES = [...Object.keys(DEMO_FOR), 'linear', 'grainger'];
   const PAGE_FOR = Object.fromEntries(Object.entries(DEMO_FOR).map(([co, id]) => [id, co]));
-  const FOLDER = { runs: 'agent-run-console', motion: 'brand-motion-kit', guardian: 'ui-guardian', harness: 'skills-harness', adoption: 'adoption-kit', experiments: 'growth-experiment-kit', blueprint: 'conversation-blueprint', fit: 'fitment-confidence' };
+  const FOLDER = { runs: 'agent-run-console', motion: 'brand-motion-kit', guardian: 'ui-guardian', harness: 'skills-harness', adoption: 'adoption-kit', experiments: 'growth-experiment-kit', blueprint: 'conversation-blueprint', readiness: 'readiness-console', fit: 'fitment-confidence' };
   const SCOPE_KEY = 'rd-lab-for';
   const session = { get() { try { return sessionStorage.getItem(SCOPE_KEY); } catch { return null; } }, set(v) { try { sessionStorage.setItem(SCOPE_KEY, v); } catch {} } };
   const forParam = (new URLSearchParams(location.search).get('for') || '').toLowerCase();
@@ -626,6 +626,7 @@ button,select,input{font:inherit}
     { id: 'adoption', label: 'Adoption kit', href: new URL('adoption-kit/', base).href + q, group: 'demo' },
     { id: 'experiments', label: 'Experiment kit', href: new URL('growth-experiment-kit/', base).href + q, group: 'demo' },
     { id: 'blueprint', label: 'Service blueprint', href: new URL('conversation-blueprint/', base).href + q, group: 'demo' },
+    { id: 'readiness', label: 'Readiness console', href: new URL('readiness-console/', base).href + q, group: 'demo' },
     { id: 'method', label: 'How I work', href: new URL('how-i-work/', base).href + q, group: 'method' },
     { id: 'fit', label: 'Demo', href: new URL('fitment-confidence/', base).href + q, group: 'method' },
     { id: 'playground', label: 'Playground', href: new URL('playground/', base).href + q, group: 'work', first: true },
