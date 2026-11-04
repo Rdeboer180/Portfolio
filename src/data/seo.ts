@@ -5,16 +5,16 @@ export const AUTHOR = { '@id': PERSON_ID, '@type': 'Person', name: SITE.name, ur
 
 export const SEARCH_META = {
   home: {
-    title: 'Ryan DeBoer | Design Systems & AEM | Product Designer',
-    description: 'Design systems and Adobe Experience Manager (AEM). 12+ years at Tire Rack, connecting Figma, production Sass and authoring governance. Open to remote US roles.',
+    title: 'Ryan DeBoer | Design Engineer · Agentic Prototyping · AEM',
+    description: 'Design engineer and senior product designer. I prototype in code with agents (Claude Code, Figma MCP), then carry what works into design systems and AEM.',
   },
   about: {
     title: 'About Ryan DeBoer | Design Systems & AEM',
-    description: '12+ years at Tire Rack building AEM components and authoring guardrails. Figma, production Sass, product design and UX/UI. Based in Indiana, open to remote US roles.',
+    description: 'Product design engineer: design systems carried from Figma into production code and AEM, plus agentic prototyping with Claude Code. 12+ years at Tire Rack.',
   },
   resume: {
     title: 'Ryan DeBoer Resume | Design Systems, AEM & Product Design',
-    description: 'Experience in design systems, Adobe Experience Manager, Figma and production Sass, with product design and UX/UI work. Open to remote US roles.',
+    description: 'Design engineering, agentic prototyping, design systems and Adobe Experience Manager (AEM), with product design and UX/UI work. 12+ years at Tire Rack.',
   },
 } as const;
 
@@ -27,7 +27,7 @@ export const PERSON_JSON_LD = {
   url: `${SITE.portfolioUrl}/about/`,
   image: `${SITE.portfolioUrl}/images/hero/ryan-deboer-2026.jpeg`,
   jobTitle: 'Product Designer',
-  description: 'Design systems and AEM practitioner with 12+ years at Tire Rack, connecting Figma, production Sass and governed content authoring. Product design and UX/UI. Based in South Bend, Indiana, and open to remote US roles.',
+  description: 'Design engineer and senior product designer who prototypes in code with agents and carries the results into design systems and AEM. 12+ years at Tire Rack. Based in South Bend, Indiana.',
   email: `mailto:${SITE.email}`,
   address: {
     '@type': 'PostalAddress',
