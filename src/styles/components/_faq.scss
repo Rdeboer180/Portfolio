@@ -139,7 +139,7 @@
     justify-content: center;
     border-radius: $radius-full;
     background: $color-primary-light;
-    color: $color-primary;
+    color: $color-primary-text;
     font-size: 22px;
     font-weight: $font-weight-regular;
     line-height: 0;
@@ -189,7 +189,7 @@
     }
 
     a {
-      color: $color-primary;
+      color: $color-primary-text;
       text-decoration: underline;
       text-underline-offset: 2px;
       transition: color $transition-fast;
