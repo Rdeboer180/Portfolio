@@ -896,6 +896,17 @@ const SystemsInPractice: React.FC = () => {
   const [introRef, introVisible] = useReveal<HTMLDivElement>(0.3);
   const [loopRef, loopVisible] = useReveal<HTMLDivElement>(0.2);
   const delay = (ms: number) => ({ '--reveal-delay': `${ms}ms` } as React.CSSProperties);
+  const videoDialog = useRef<HTMLDialogElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  const openVideo = () => {
+    videoDialog.current?.showModal();
+    video.current?.play().catch(() => {});
+  };
+  // Pause first, then close: the dialog's close event (Esc) pauses too, but late.
+  const closeVideo = () => {
+    video.current?.pause();
+    videoDialog.current?.close();
+  };
 
   return (
     <section id="systems" className="sip sip--strip" ref={sweepRef}>
@@ -939,6 +950,11 @@ const SystemsInPractice: React.FC = () => {
             <Link to="/notes/shared-language-better-product-decisions/" className="btn btn--secondary btn--md sip__btn">
               Read how the loop works &rarr;
             </Link>
+            {/* The About desk plays this video on its iPad; here it is just
+                the video, in a plain dialog. */}
+            <button type="button" className="sip__link sip__link--button" onClick={openVideo} aria-haspopup="dialog">
+              Watch how I work, 1:37 &rarr;
+            </button>
             {/* PlayDraft is the public study where the whole loop is visible:
                 Figma, a token-governed build, Maestro QA, and the live
                 /design-system screen. */}
@@ -951,6 +967,28 @@ const SystemsInPractice: React.FC = () => {
           </div>
         </div>
       </div>
+      <dialog
+        ref={videoDialog}
+        className="sip-video"
+        aria-label="How I work, video"
+        onClose={() => video.current?.pause()}
+        onClick={(event) => { if (event.target === videoDialog.current) closeVideo(); }}
+      >
+        <video
+          ref={video}
+          className="sip-video__player"
+          src="/videos/about/how-i-work.mp4"
+          poster="/videos/about/how-i-work-poster.jpg"
+          controls
+          playsInline
+          preload="none"
+        />
+        <button type="button" className="sip-video__close" onClick={closeVideo} aria-label="Close video">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+      </dialog>
     </section>
   );
 };
