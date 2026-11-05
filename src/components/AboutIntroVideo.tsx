@@ -6,6 +6,7 @@
 // of the iPad allows. Play flips the iPad edge-on, then the player tumbles to
 // the middle of the screen and turns landscape, the video filling it; closing
 // runs that backwards. Reduced motion skips the tumble and just fades.
+// /about/#video opens it on arrival, for a link sent on its own.
 // ============================================
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -14,6 +15,11 @@ import { createPortal } from 'react-dom';
 const SRC = '/videos/about/how-i-work.mp4';
 const POSTER = '/videos/about/how-i-work-poster.jpg';
 const LENGTH = '1:37';
+const DEEP_LINK = '#video';
+
+// The phone, rail and gutter iPads swap as the page measures itself, so the link is spent
+// once per page load, by whichever iPad is on the page when the layout has settled.
+let deepLinkPending = typeof window !== 'undefined' && window.location.hash === DEEP_LINK;
 
 // flipping: the desk iPad turns edge-on · opening: the player tumbles in · open
 // closing: the player tumbles back, edge-on · returning: the desk iPad turns back
@@ -160,10 +166,39 @@ const AboutIntroVideo: React.FC<Props> = ({ turn = 0, reach, fit = false }) => {
     });
   }, [phase, turn]);
 
+  // A linked visitor gets the same flip and tumble, once the page has settled. With no click
+  // behind it the browser may refuse sound; the player then waits on its own play button.
+  const openRef = useRef(open);
+  openRef.current = open;
+  useEffect(() => {
+    let timer = 0;
+    const arrive = () => {
+      if (!deepLinkPending) return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        deepLinkPending = false;
+        openRef.current();
+      }, 700);
+    };
+    const onHash = () => {
+      if (window.location.hash !== DEEP_LINK) return;
+      deepLinkPending = true;
+      arrive();
+    };
+    arrive();
+    window.addEventListener('hashchange', onHash);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('hashchange', onHash);
+    };
+  }, []);
+
   // 3. back: the player tumbles to the desk and arrives edge-on; the desk iPad turns flat again
   const close = useCallback(() => {
     if (phase !== 'open' || !stage.current || !desk.current) return;
     video.current?.pause();
+    // closed, the link is done with: a refresh shouldn't bring the player back
+    if (window.location.hash === DEEP_LINK) window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
     setPhase('closing');
     const reduce = prefersReducedMotion();
     const ms = reduce ? 180 : 560;
