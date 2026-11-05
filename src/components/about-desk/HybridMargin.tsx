@@ -18,6 +18,7 @@ import { ReactComponent as Sketch } from '../../assets/desk/objects/sketch.svg';
 import { ReactComponent as Pencil } from '../../assets/desk/objects/pencil.svg';
 import { ReactComponent as Disc } from '../../assets/desk/objects/disc.svg';
 import { ReactComponent as Phone } from '../../assets/desk/objects/phone.svg';
+import AboutIntroVideo from '../AboutIntroVideo';
 
 const BY_ID = Object.fromEntries(DESK_THINGS.map((t) => [t.id, t]));
 // the iPod's screen starts on Babe I’m Gonna Leave You, Ryan's first pick; every press shuffles to another song
@@ -128,7 +129,7 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
     drawing = (
       <>
         <Phone className="s" style={{ width: thing.width, height: thing.height }} aria-hidden="true" focusable="false" />
-        <div className="loose__screen" style={{ left: thing.width * (16 / 180), top: thing.height * (14 / 360), width: thing.width * (148 / 180), height: thing.height * (332 / 360), borderRadius: thing.width * (27 / 180) }}>
+        <div className="loose__screen device-glass" style={{ left: thing.width * (16 / 180), top: thing.height * (14 / 360), width: thing.width * (148 / 180), height: thing.height * (332 / 360), borderRadius: thing.width * (27 / 180) }}>
           <LoopScreen width={thing.width * (148 / 180)} height={thing.height * (332 / 360)} />
         </div>
       </>
@@ -159,6 +160,10 @@ const Prop: React.FC<PropProps> = ({ prop, onNote }) => {
   return <button type="button" id={id} className={`prop prop--${prop.id}${over}`} aria-label={thing.tag ? `${thing.tag}. ${label}` : label} data-chip={PROP_NAMES[prop.id] ?? thing.tag} onClick={play} onPointerLeave={lift} onBlur={lift}>{inner}</button>;
 };
 
+/** where the video iPad lies: from the folder's top (above the ball), its turn, and how far it leans onto the paper's empty margin (short of the Layers rail).
+ *  kiss pairs with the margin-left in _about-ipad.scss (.gutter-spot--ipad .about-ipad). */
+const IPAD = { y: 140, turn: -6, kiss: 20 };
+
 /** a gutter narrower than this shows too little of a prop to read: the props leave the page */
 export const GUTTER_MIN = 48;
 
@@ -167,6 +172,11 @@ export const HybridMargin: React.FC<{ gutter: number; onNote: (note: string, id:
   if (gutter < GUTTER_MIN) return null;
   return (
     <div className="gutters" role="group" aria-label="Things on the desk">
+      {/* the iPad mini with the "How I work" video, at the desk's scale: first down the right gutter, above
+          the ball (which moved down to make room), touching nothing */}
+      <div className="gutter-spot gutter-spot--right gutter-spot--ipad" style={{ top: IPAD.y, rotate: `${IPAD.turn}deg` }}>
+        <AboutIntroVideo turn={IPAD.turn} reach={gutter + IPAD.kiss} />
+      </div>
       {GUTTER_PROPS.map((p) => (
         <div key={p.id} className={`gutter-spot gutter-spot--${p.side}`} style={{ top: p.y, rotate: p.turn ? `${p.turn}deg` : undefined }}>
           <Prop prop={p} onNote={onNote} />

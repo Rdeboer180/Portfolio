@@ -206,8 +206,10 @@ const L = (id: string, side: 'left' | 'right', y: number, more: Partial<GutterPr
  * Pokémon Red and the Game Boy Color at the top, the phone running my Loop
  * build at the bottom. Ryan chose this Timeline over nine other layouts (30
  * Oct); on 31 Oct the cartridges, the stubs and the buff gave way to the
- * Game Boy Color, Pokémon Red, the Almanac and the iPod mini.
+ * Game Boy Color, Pokémon Red, the Almanac and the iPod mini. On 4 Nov the
+ * How I work iPad took the top of the right gutter (HybridMargin), and the ball
+ * and the rest of the right side moved down to clear it.
  */
 export const GUTTER_PROPS: GutterProp[] = [
-  L('pkred', 'left', -24, { turn: -6 }), L('ball', 'right', 300), L('gbc', 'left', 320, { turn: 4 }), L('cd', 'left', 880, { turn: 45 }), L('ipod', 'right', 1000, { over: 'kiss', turn: 9 }),
-  L('almanac', 'left', 1460, { over: 'lean', turn: -4 }), L('ndball', 'right', 1620, { over: 'touch' }), L('pad', 'left', 2320, { turn: -7 }), L('pods', 'right', 1380, { turn: -11 }), L('phone', 'right', 2700, { over: 'kiss', turn: 7 })];
+  L('pkred', 'left', -24, { turn: -6 }), L('ball', 'right', 730), L('gbc', 'left', 320, { turn: 4 }), L('cd', 'left', 880, { turn: 45 }), L('ipod', 'right', 1090, { over: 'kiss', turn: 9 }),
+  L('almanac', 'left', 1460, { over: 'lean', turn: -4 }), L('ndball', 'right', 1760, { over: 'touch' }), L('pad', 'left', 2320, { turn: -7 }), L('pods', 'right', 1500, { turn: -11 }), L('phone', 'right', 2700, { over: 'kiss', turn: 7 })];

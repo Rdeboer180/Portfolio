@@ -1,0 +1,58 @@
+// ============================================
+// Device glass — the display under the cover glass, shared by every screen on the
+// desk (the How I work iPad and the iPhone running Loop) so they read as the same
+// kind of object under the same light.
+//
+//   ::before  under the glass: the display sits a hair below it, so its edge goes
+//             dark and its light falls off toward the bezel
+//   ::after   the glass itself: the room's window caught top right and one long
+//             glare streak, lit from the desk's key light (top left)
+//
+// Both ride the desk's light variables (--win-x / --win-y, --streak-x / --streak-y,
+// set by useDesk where the pointer moves the light), so the reflection drifts with
+// the same light that moves the iPhone's own frame streak. No filters or blend
+// modes: the iPad's player screen turns in 3D, and either would be re-rasterised
+// every frame of the tumble.
+// ============================================
+
+.device-glass {
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  // the display, a hair under the glass
+  &::before {
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+    background: radial-gradient(150% 110% at 46% 40%, transparent 58%, rgba(0, 0, 0, 0.16) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 1px rgba(0, 0, 0, 0.22),
+      inset 0 0 14px rgba(0, 0, 0, 0.22);
+  }
+
+  // the cover glass: the window (two panes and their mullion), the streak, the sheen
+  &::after {
+    inset: -25%;
+    z-index: 4;
+    background:
+      // the glare streak, the long diagonal the iPhone's frame carries too
+      linear-gradient(112deg, transparent 41%, rgba(255, 255, 255, 0.1) 47%, rgba(255, 255, 255, 0.03) 52%, transparent 58%),
+      // the window, caught top right, soft at its edges like a reflection a few feet off
+      radial-gradient(9% 15% at calc(66% + var(--win-x, 0px)) calc(27% + var(--win-y, 0px)), rgba(255, 252, 245, 0.15), transparent 72%),
+      radial-gradient(9% 15% at calc(76% + var(--win-x, 0px)) calc(27% + var(--win-y, 0px)), rgba(255, 252, 245, 0.12), transparent 72%),
+      // the key light across the top of the glass
+      linear-gradient(168deg, rgba(255, 255, 255, 0.07), transparent 30%);
+    transform: translate(var(--streak-x, 0px), var(--streak-y, 0px));
+  }
+}
+
+@media (prefers-contrast: more) {
+  .device-glass::after { display: none; }
+}

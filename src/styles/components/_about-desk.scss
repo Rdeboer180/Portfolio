@@ -793,6 +793,11 @@
   &--hybrid .prop { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far)); }
   &--hybrid .prop:hover { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far-lift)); }
   &--hybrid .prop:active, &--hybrid .prop.is-down { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far)); }
+  // the iPhone lies on the desk like the iPad beside it: its frame's lower edge shows its
+  // thickness, then the desk's warm contact, near and far casts (the same as the iPad's)
+  &--hybrid .prop--phone { filter: drop-shadow(0 1.5px 0 #6f7177) drop-shadow(0 1.5px 0 #4a4c51) drop-shadow(0 1px 1.5px rgba(46, 34, 20, 0.22)) drop-shadow(2px 5px 6px rgba(46, 34, 20, 0.16)) drop-shadow(var(--cast-far)); }
+  &--hybrid .prop--phone:hover { filter: drop-shadow(0 1.5px 0 #6f7177) drop-shadow(0 1.5px 0 #4a4c51) drop-shadow(0 1px 1.5px rgba(46, 34, 20, 0.2)) drop-shadow(var(--cast-far-lift)); }
+  &--hybrid .prop--phone:active, &--hybrid .prop--phone.is-down { filter: drop-shadow(0 1.5px 0 #6f7177) drop-shadow(0 1.5px 0 #4a4c51) drop-shadow(0 1px 1.5px rgba(46, 34, 20, 0.22)) drop-shadow(var(--cast-far)); }
   &--hybrid .prop.prop--ndball, &--hybrid .prop.prop--ball { filter: none; }
   &--hybrid .loose { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-near)) drop-shadow(var(--cast-far)); }
   &--hybrid .loose:hover { filter: drop-shadow(var(--cast-contact)) drop-shadow(var(--cast-far-lift)); }

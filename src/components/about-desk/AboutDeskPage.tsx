@@ -31,7 +31,8 @@ import { GameBoyColor, GraysAlmanac, IpodMini, PokemonRedCart } from './PropDraw
 import { LoopScreen } from './LoopScreen';
 import { DeskNote } from './DeskNotes';
 import DismissStrip, { ReturnArrow } from '../DismissStrip';
-import { HybridMargin } from './HybridMargin';
+import { HybridMargin, GUTTER_MIN } from './HybridMargin';
+import AboutIntroVideo from '../AboutIntroVideo';
 import { NoteOpener } from './noteOpener';
 import LayersPanel from '../LayersPanel';
 import SectionBadge from '../SectionBadge';
@@ -99,7 +100,7 @@ const Thing = React.memo<ThingProps>(({ thing, left, top, turn, z, held, picked,
     drawing = (
       <>
         <Phone className="s" style={size} aria-hidden="true" focusable="false" />
-        <div className="loose__screen" style={{ left: thing.width * (16 / 180), top: thing.height * (14 / 360), width: thing.width * (148 / 180), height: thing.height * (332 / 360), borderRadius: thing.width * (27 / 180) }}>
+        <div className="loose__screen device-glass" style={{ left: thing.width * (16 / 180), top: thing.height * (14 / 360), width: thing.width * (148 / 180), height: thing.height * (332 / 360), borderRadius: thing.width * (27 / 180) }}>
           <LoopScreen width={thing.width * (148 / 180)} height={thing.height * (332 / 360)} />
         </div>
       </>
@@ -475,6 +476,8 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
 
       {compact ? (
         <div className="about-desk__compact">
+          {/* no gutters on a phone: the "How I work" iPad leads the folder instead */}
+          <div className="about-desk__intro-video"><AboutIntroVideo fit turn={-2} /></div>
           {folderMarkup}
           <section className="about-desk__deck" aria-label="The archive, first edition">
             <ul className="archive-deck__hand">
@@ -503,6 +506,8 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
                 controlsId={`about-desk-panel-${tab}`}
               />
               <p className="site-rail__meta">layer / {DESK_TABS.find((t) => t.key === tab)?.index} {DESK_TABS.find((t) => t.key === tab)?.label}</p>
+              {/* gutters too narrow for the props: the "How I work" iPad comes into the rail instead */}
+              {shelf.gutter < GUTTER_MIN && <AboutIntroVideo fit turn={-3} />}
             </aside>
             <HybridMargin gutter={shelf.gutter} onNote={onNote} />
           </div>

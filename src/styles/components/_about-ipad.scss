@@ -1,0 +1,481 @@
+// ============================================
+// About iPad — the "How I work" video on an iPad mini lying on the About desk,
+// at the props' real scale (3.175px a mm: 134.8 × 195.4mm → 428 × 620, a
+// 9.4mm bezel → 30px). The video waits on its home screen as
+// picture-in-picture, bottom left, as large as the visible part allows.
+// Play turns it into a landscape player in the middle of the screen.
+// ============================================
+
+@import '../variables';
+
+$ipad-ratio: 1.449;      // 195.4 / 134.8
+$ipad-ink: #161618;
+// The aluminium band round the front, lit by the room: the key light (top left) puts a bright
+// glint on the band's top-left curve, a fainter rim light catches the bottom-right corner, and
+// the sides away from the light fall to dark space grey. Shared by the desk iPad and the player.
+$ipad-band: conic-gradient(#9da0a6 0deg, #5a5c62 40deg, #3b3d42 90deg, #7d8086 124deg, #c9cbcf 136deg, #6a6d73 150deg, #36383d 190deg, #2f3135 235deg, #6d7076 272deg, #dfe1e4 300deg, #ffffff 314deg, #d4d6d9 326deg, #9da0a6 360deg);
+$ipad-glass: linear-gradient(158deg, #202024 0%, #0c0c0e 38%, #101013 70%, #19191c 100%);
+
+.about-ipad {
+  // how much of the iPad shows before the window's edge (set from the gutter)
+  --reach: 428px;
+  // the iPad mini's width on the desk
+  --mini: 428px;
+
+  &__trigger {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    perspective: 1400px;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 6px;
+      border-radius: 30px;
+    }
+  }
+
+  // The desk iPad: lifts on hover like the other props
+  &__desk {
+    width: var(--mini);
+    transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: 50% 50%;
+
+    // While the player stands in for it
+    &.is-away { visibility: hidden; }
+  }
+
+  &__trigger:hover &__desk,
+  &__trigger:focus-visible &__desk {
+    translate: -3px -6px;
+  }
+
+  // Shadows are box-shadows on the faces, not filters on the moving layers: a filter
+  // on a layer that turns in 3D is re-rasterised every frame and flattens the 3D,
+  // which made the tumble heavy enough to stall the page at large sizes.
+  // On the desk it's a slab: black cover glass inside a space-grey aluminium band, the
+  // band's lower edge showing its thickness (stacked like the trackpad's, lit from the
+  // desk's top-left key), then the desk's own warm contact, near and far casts.
+  &__mini &__face--front {
+    border: 2.5px solid transparent;
+    background: $ipad-glass padding-box, $ipad-band border-box;
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, 0.14),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.55),
+      0 1.5px 0 #55575c,
+      0 3px 0 #6c6e73,
+      0 4.5px 0 #47494e,
+      0 5.5px 0 rgba(28, 28, 32, 0.75),
+      var(--cast-contact, 0 1px 1.5px rgba(46, 34, 20, 0.16)),
+      var(--cast-near, 2px 4px 6px rgba(46, 34, 20, 0.12)),
+      var(--cast-far, 6px 10px 12px rgba(46, 34, 20, 0.16)),
+      14px 26px 34px -6px rgba(46, 34, 20, 0.2);
+    transition: box-shadow 0.35s ease;
+  }
+
+  &__trigger:hover &__mini &__face--front,
+  &__trigger:focus-visible &__mini &__face--front {
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, 0.16),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.55),
+      0 1.5px 0 #55575c,
+      0 3px 0 #6c6e73,
+      0 4.5px 0 #47494e,
+      0 5.5px 0 rgba(28, 28, 32, 0.75),
+      var(--cast-contact, 0 1px 1.5px rgba(46, 34, 20, 0.16)),
+      var(--cast-far-lift, 10px 16px 18px rgba(46, 34, 20, 0.18)),
+      22px 38px 44px -6px rgba(46, 34, 20, 0.22);
+  }
+
+  &__device &__face {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 0 1.5px #3a3a3e, 0 40px 70px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  // the player wears the same band and glass as the desk iPad, so the glint rides the tumble
+  &__device &__face--front {
+    border: 3px solid transparent;
+    background: $ipad-glass padding-box, $ipad-band border-box;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.14), inset -1px -1px 0 rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(30, 30, 34, 0.8), 0 40px 70px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  // the cover glass over the bezel: the key light's sheen, on the desk and in the player alike
+  &__mini &__face--front::after,
+  &__device &__face--front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(158deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 18%, transparent 34%);
+  }
+
+  // ── Devices ─────────────────────────────────────────────────────────────
+  // portrait, on the desk
+  &__mini {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / #{$ipad-ratio};
+  }
+
+  // landscape, the player
+  &__device {
+    position: relative;
+    width: 100%;
+    aspect-ratio: #{$ipad-ratio};
+    transform-style: preserve-3d;
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    &--front {
+      background: $ipad-ink;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 0 1.5px #3a3a3e;
+    }
+
+    // The back: silver anodised aluminium, bead-blasted, so it's a soft satin rather than a
+    // mirror. A slow cool-to-warm gradient for the room's light, a fine grain over it, the
+    // rounded edge catching light all the way round, and the sheen (below) for the key light.
+    &--back {
+      transform: rotateX(180deg);
+      overflow: hidden;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.52 0 0 0 0.11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),
+        radial-gradient(120% 90% at 18% 12%, rgba(255, 255, 255, 0.75), transparent 55%),
+        linear-gradient(128deg, #eef0f2 0%, #d7dadf 30%, #e6e8eb 52%, #c4c8ce 78%, #d9dce0 100%);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.85),
+        inset 0 0 0 2.5px rgba(160, 165, 172, 0.35),
+        inset 0 0 18px rgba(120, 126, 134, 0.22),
+        0 0 0 1px rgba(110, 114, 120, 0.55);
+    }
+  }
+
+  // bezel and corners: 30px of 428 across, 50px corners, as a fraction of the width
+  // the bezel of a modern iPad mini, about 6.5mm all round: 5% of its width on the desk, 3.4% of
+  // the player's long side
+  &__mini &__face {
+    border-radius: 11.7% / 8.1%;
+    padding: 5%;
+  }
+
+  &__device &__face {
+    border-radius: 8.1% / 11.7%;
+    padding: 3.4%;
+  }
+
+  // front camera: top centre on the portrait iPad, the long edge's centre on the player
+  &__camera {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    width: 1.6%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    // a lens, not a dot: dark glass with a blue-violet coating and one pin of light
+    background:
+      radial-gradient(circle at 34% 32%, rgba(255, 255, 255, 0.55) 0 7%, transparent 9%),
+      radial-gradient(circle at 50% 50%, #3b4566 0 22%, #151823 46%, #060709 72%);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 0 2px rgba(0, 0, 0, 0.6);
+    transform: translate(-50%, -50%);
+  }
+
+  &__device &__camera { top: 2.45%; width: 0.9%; }
+
+  // the rear camera, top corner: one lens in a slightly raised aluminium ring (about 11mm on
+  // a 195mm-wide iPad mini), and the flash beside it
+  &__lens {
+    position: absolute;
+    top: 7%;
+    left: 4.2%;
+    width: 5.6%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 36% 34%, rgba(255, 255, 255, 0.7) 0 5%, transparent 7%),
+      radial-gradient(circle, #2c3550 0 24%, #0d0f16 42%, #050608 56%, #9ea3aa 58%, #e4e6e9 66%, #b9bdc3 80%, #8d9198 100%);
+    box-shadow: 0 1px 1.5px rgba(40, 44, 50, 0.45), 0 0 0 0.5px rgba(80, 84, 90, 0.5);
+  }
+
+  &__flash {
+    position: absolute;
+    top: 8.6%;
+    left: 11.2%;
+    width: 1.7%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 38%, #fffaf0 0 18%, #e7dcc4 46%, #b7ad97 100%);
+    box-shadow: 0 0 0 0.5px rgba(80, 84, 90, 0.45);
+  }
+
+  // the key light on the aluminium: a soft diagonal band, swept across by the tumble (WAAPI)
+  &__sheen {
+    position: absolute;
+    inset: -40% -60%;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0.18) 45%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.18) 55%, transparent 62%);
+    transform: translate(-70%, -18%) rotate(-12deg);
+  }
+
+  &__screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    // the outer corner less the bezel, so screen and body corners stay concentric
+    border-radius: 6.9% / 4.6%;
+    background: #000;
+  }
+
+  &__device &__screen { border-radius: 5% / 7.6%; }
+
+  &__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  // ── Home screen ─────────────────────────────────────────────────────────
+  &__home {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    background:
+      radial-gradient(120% 70% at 20% 10%, rgba(240, 118, 84, 0.55), transparent 60%),
+      radial-gradient(90% 60% at 90% 80%, rgba(56, 120, 220, 0.5), transparent 65%),
+      linear-gradient(170deg, #2a1f3d 0%, #182540 55%, #0f1a2e 100%);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  }
+
+  &__status {
+    display: flex;
+    justify-content: space-between;
+    padding: 3cqw 5cqw 0;
+    font-size: 3.4cqw;
+    font-weight: 600;
+  }
+
+  &__battery {
+    width: 6.5cqw;
+    height: 3cqw;
+    border: 0.4cqw solid rgba(255, 255, 255, 0.85);
+    border-radius: 0.9cqw;
+    background: linear-gradient(90deg, #fff 70%, transparent 70%) content-box;
+    padding: 0.4cqw;
+  }
+
+  &__apps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6cqw 0;
+    margin: 0;
+    padding: 9cqw 4cqw 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.6cqw;
+    }
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    width: 14cqw;
+    aspect-ratio: 1;
+    border-radius: 3.4cqw;
+    overflow: hidden;
+    // lit from above like everything else on the desk: a hairline of light along the
+    // top, a contact shade under it
+    box-shadow: inset 0 0.25cqw 0 rgba(255, 255, 255, 0.22), 0 0.3cqw 0.5cqw rgba(0, 0, 0, 0.22), 0 1cqw 2.2cqw rgba(0, 0, 0, 0.22);
+
+    img,
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  &__app-name {
+    font-size: 2.5cqw;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  &__dock-bar {
+    position: absolute;
+    left: 50%;
+    bottom: 3cqw;
+    display: flex;
+    gap: 3.5cqw;
+    padding: 2.6cqw 3.5cqw;
+    border-radius: 6cqw;
+    // a flat tint, not a backdrop blur: it sits inside a layer that turns in 3D
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.18));
+    box-shadow: inset 0 0.25cqw 0 rgba(255, 255, 255, 0.35), inset 0 0 0 0.2cqw rgba(255, 255, 255, 0.12);
+    transform: translateX(-50%);
+
+    .about-ipad__icon { width: 11cqw; border-radius: 2.8cqw; }
+  }
+
+  // ── Picture-in-picture ──────────────────────────────────────────────────
+  // bottom left, above the dock, as wide as the part of the iPad that shows
+  &__pip {
+    position: absolute;
+    // percentages of the screen: the PiP sits outside the home screen's container
+    left: 4%;
+    bottom: 15%;
+    // the screen starts about 24px in, the PiP 4% further; keep it clear of the window's edge
+    width: clamp(118px, calc(var(--reach) - 80px), 78%);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 9px;
+    background: #000;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.14), 0 3px 6px rgba(0, 0, 0, 0.35), 0 12px 28px rgba(0, 0, 0, 0.45);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__pip-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: $color-neutral-dark;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, background 0.25s ease;
+
+    svg { margin-left: 2px; }
+  }
+
+  &__trigger:hover &__pip-play {
+    transform: translate(-50%, -50%) scale(1.08);
+    background: #fff;
+  }
+
+  &__pip-label {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-family: $font-family-mono;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+
+    span { color: $color-primary-md; }
+  }
+}
+
+// In the gutter: lean onto the paper's empty margin, short of the Layers rail
+// (pairs with IPAD.kiss in HybridMargin.tsx)
+.gutter-spot--ipad .about-ipad { margin-left: -20px; }
+
+// Gutters too narrow for props: the iPad stands in its column (the rail on a
+// laptop, the top of the folder on a phone), all of it in view
+.about-ipad--fit {
+  --mini: 100%;
+  --reach: 1000px;
+  margin-top: $spacing-md;
+
+  .about-ipad__trigger { width: 100%; }
+  .about-ipad__desk { rotate: -3deg; }
+  .about-ipad__pip { width: 78%; }
+}
+
+.about-desk__intro-video {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-lg $spacing-xl $spacing-2xl;
+
+  .about-ipad--fit { width: min(100%, 280px); margin-top: 0; }
+  .about-ipad__desk { rotate: -2deg; }
+}
+
+// ── The player ─────────────────────────────────────────────────────────────
+
+.about-ipad-modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-index-modal;
+  display: grid;
+  place-items: center;
+  perspective: 1800px;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 18, 20, 0.58);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  &__stage {
+    position: relative;
+    width: min(92vw, calc((100vh - 140px) * #{$ipad-ratio}), 1180px);
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  &__close {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    color: $color-neutral-dark;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 3px;
+    }
+  }
+
+  // The close button waits for the player to land
+  &__stage:not(.is-open) &__close { opacity: 0; pointer-events: none; }
+}
+
+@media (max-width: $breakpoint-md) {
+  .about-ipad-modal__close {
+    top: -52px;
+    right: 0;
+  }
+}
