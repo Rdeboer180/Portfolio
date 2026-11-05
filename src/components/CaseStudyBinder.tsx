@@ -83,11 +83,17 @@ const loadScript = () => {
   return scriptLoad;
 };
 
-const build = (el: HTMLDivElement) => {
-  const root = el.attachShadow({ mode: 'open' });
+// A missing file is an error, not markup: a 404 page never lands in the binder.
+const fetchText = (file: string) => fetch(`${BASE}/${file}${VERSION}`).then((r) => {
+  if (!r.ok) throw new Error(`${file} answered ${r.status}`);
+  return r.text();
+});
+
+const build = (el: HTMLDivElement, attempt = 0) => {
+  const root = el.shadowRoot ?? el.attachShadow({ mode: 'open' });
   Promise.all([
-    fetch(`${BASE}/binder.css${VERSION}`).then((r) => r.text()),
-    fetch(`${BASE}/binder.html${VERSION}`).then((r) => r.text()),
+    fetchText('binder.css'),
+    fetchText('binder.html'),
     loadScript(),
   ]).then(([css, markup]) => {
     root.innerHTML = `<style>${css}</style>${markup}`;
@@ -112,7 +118,12 @@ const build = (el: HTMLDivElement) => {
     new MutationObserver(() => {
       document.documentElement.style.overflow = el.classList.contains('is-reading') ? 'hidden' : '';
     }).observe(el, { attributes: true, attributeFilter: ['class'] });
-  }).catch((err) => console.error('CaseStudyBinder:', err));
+  }).catch((err) => {
+    console.error('CaseStudyBinder:', err);
+    // One more try: a connection dropped on a slow, far network (the server is
+    // in Virginia) shouldn't leave the binder empty for the rest of the visit.
+    if (attempt < 1) window.setTimeout(() => build(el, attempt + 1), 2000);
+  });
 };
 
 const CaseStudyBinder: React.FC = () => {

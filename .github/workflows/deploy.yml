@@ -81,17 +81,67 @@ jobs:
       # deployed stayed forever: two confidentiality-pipeline JSON files and a
       # renamed case study's assets were still being served long after they were
       # removed from the repo. Deleting from git has to mean deleting from prod.
+      #
+      # Except static/, the hashed bundles: a page cached before this deploy
+      # (by Varnish, a browser, a proxy) still loads the bundle it names. On
+      # 5 Nov 2026 a deploy deleted the 4 Nov bundles while Varnish, unpurged,
+      # kept serving the 4 Nov pages, and every first visit got unstyled HTML
+      # with no script, the binder blank, through an interview. So static/
+      # goes up first, before any page that names it, and is never deleted
+      # here; the next step prunes bundles no build has shipped for 14 days.
+      # -t keeps each file's build time, which is what that prune goes by.
       - name: Deploy via rsync with sshpass
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlvzO --delete \
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlvzOt \
+            --no-perms --no-owner --no-group \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./build/static/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET }}/static/
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlvzOt --delete \
+            --filter='P /static/***' \
             --no-perms --no-owner --no-group \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./build/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET }}
 
+      - name: Prune bundles no deploy has shipped for 14 days
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+            -o StrictHostKeyChecking=no \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "find '${{ secrets.SSH_TARGET }}/static' -type f -mtime +14 -print -delete | wc -l | xargs echo 'pruned:'"
+
+      # /etc/varnish/secret has been root-only since 4 Nov 2026, so varnishadm
+      # can't run as this account; the purge failed on the 4 and 5 Nov deploys
+      # and nothing noticed. Varnish takes a BAN over HTTP from the server
+      # itself, which cleared every page on 5 Nov; the PURGE makes sure of the
+      # homepage.
       - name: Purge Varnish cache
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
             -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 'ban req.url ~ .'"
+            "for host in www.rdeboerdesigns.com rdeboerdesigns.com; do
+               curl -sf -o /dev/null -X BAN -H \"Host: \$host\" http://127.0.0.1/ &&
+               curl -sf -o /dev/null -X PURGE -H \"Host: \$host\" http://127.0.0.1/ || exit 1
+             done"
+
+      # A visitor's view, after the purge: every prerendered page has to name
+      # bundles that load, and the homepage has to be this build's. Either
+      # failing means first visits are broken or stale, so the run goes red.
+      - name: Verify the live pages load their bundles
+        run: |
+          fresh=$(grep -oE '/static/js/main\.[0-9a-f]+\.js' build/index.html | head -1)
+          fail=0; checked=""
+          for file in $(cd build && find . -name index.html | sed 's#^\./##; s#index\.html$##' | sort); do
+            html=$(curl -s --compressed -H 'Accept-Encoding: gzip, br' "https://www.rdeboerdesigns.com/$file")
+            [ -z "$file" ] && ! printf '%s' "$html" | grep -q "$fresh" && { echo "::error::the homepage is not this build's (wants $fresh): the purge did not take"; fail=1; }
+            for asset in $(printf '%s' "$html" | grep -oE '/static/(js|css)/main\.[0-9a-f]+\.(js|css)' | sort -u); do
+              case " $checked " in *" $asset "*) continue ;; esac
+              checked="$checked $asset"
+              code=$(curl -s -o /dev/null -w '%{http_code}' "https://www.rdeboerdesigns.com$asset")
+              echo "/$file -> $asset $code"
+              [ "$code" = 200 ] || { echo "::error::/$file loads $asset, which returns $code"; fail=1; }
+            done
+          done
+          exit $fail
