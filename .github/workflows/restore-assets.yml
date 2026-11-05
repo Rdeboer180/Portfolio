@@ -1,0 +1,89 @@
+name: Restore assets (one-off, 5 Nov 2026)
+
+# Varnish kept serving the pages it cached on 4 Nov after the 5 Nov deploy
+# deleted the bundles they load (the purge step can no longer read the
+# Varnish secret), so a first visit got unstyled HTML and no script. This
+# rebuilds the 4 Nov commit and adds its static/ files back without
+# overwriting or deleting anything, so those cached pages load again.
+on:
+  push:
+    branches:
+      - ops/restore-assets-2026-11-05
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SSHPASS: ${{ secrets.SSH_PASSWORD }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_TARGET: ${{ secrets.SSH_TARGET }}
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          ref: f6bb8094f15a9ebce86e7ef1a4786ec59ce38fff
+
+      - uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - run: npm install
+
+      - run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      # Only static/ goes up, so the prerender is skipped.
+      - name: Build the 4 Nov commit
+        env:
+          REACT_APP_PROJECT_PASSWORD_HASH: 18a45c7fec0bb00024f3c06a777a56e3917031c18bb58a04ea078f58512e18c8
+        run: node scripts/write-build-stamp.mjs && npx react-scripts build
+
+      - name: Add the 4 Nov static files back, overwriting and deleting nothing
+        run: |
+          ls build/static/js/main.*.js build/static/css/main.*.css
+          remote() { sshpass -e ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "$@"; }
+          if [ -f build/static/js/main.1991f072.js ] && [ -f build/static/css/main.e4e083a7.css ]; then
+            echo "the rebuild reproduced main.1991f072.js and main.e4e083a7.css"
+            sshpass -e rsync -rlzO --ignore-existing --no-perms --no-owner --no-group \
+              -e "ssh -o StrictHostKeyChecking=no" \
+              ./build/static/ "$SSH_USER@$SSH_HOST:$SSH_TARGET/static/"
+          else
+            echo "::warning::the rebuild did not reproduce the 4 Nov names; pointing them at the current bundle"
+            remote "cd '$SSH_TARGET' && js=\$(grep -o 'static/js/main\.[0-9a-f]*\.js' index.html | head -1) && css=\$(grep -o 'static/css/main\.[0-9a-f]*\.css' index.html | head -1) && cp -n \"\$js\" static/js/main.1991f072.js && cp -n \"\$css\" static/css/main.e4e083a7.css"
+          fi
+
+      # Read-only apart from the purge itself: which way of clearing Varnish
+      # this account still has, for the deploy workflow's fix.
+      - name: Try to clear Varnish through its local HTTP port
+        continue-on-error: true
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" 'bash -s' <<'EOF'
+          echo "secret file: $(stat -c '%A %U:%G' /etc/varnish/secret 2>&1)"
+          echo "varnishadm on PATH: $(command -v varnishadm >/dev/null && echo yes || echo no)"
+          for port in 6081 6082 80 8080; do
+            for method in PURGE BAN; do
+              code=$(curl -s -o /dev/null -m 5 -w '%{http_code}' -X "$method" -H 'Host: www.rdeboerdesigns.com' "http://127.0.0.1:$port/")
+              echo "$method 127.0.0.1:$port/ -> $code"
+            done
+          done
+          EOF
+
+      - name: Check every cached page's bundle loads from outside
+        run: |
+          fail=0
+          for path in / /about/ /notes/ /work/playdraft/ /work/wheelrack/ /resume/; do
+            html=$(curl -s -H 'Accept-Encoding: gzip, deflate, br, zstd' --compressed "https://www.rdeboerdesigns.com$path")
+            for asset in $(printf '%s' "$html" | grep -oE '/static/(js|css)/main\.[0-9a-f]+\.(js|css)' | sort -u); do
+              code=$(curl -s -o /dev/null -w '%{http_code}' "https://www.rdeboerdesigns.com$asset")
+              echo "$path -> $asset $code"
+              [ "$code" = 200 ] || fail=1
+            done
+          done
+          exit $fail
