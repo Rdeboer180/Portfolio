@@ -68,8 +68,10 @@ $reveal-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   stroke-dashoffset: 0;
 }
 
-// ── Reduced motion: render everything final, no movement/draw ─────────────────
-@media (prefers-reduced-motion: reduce) {
+// ── Reduced motion, or no script to add `is-visible`: render everything final ─
+// Without JS nothing ever toggles `is-visible`, so the prerendered HTML would
+// keep these sections invisible for good.
+@media (prefers-reduced-motion: reduce), (scripting: none) {
   .reveal-mask__inner,
   .reveal-fade {
     transition: none;
