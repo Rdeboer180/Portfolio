@@ -7,7 +7,7 @@ import SectionBadge from './SectionBadge';
 import PageHeader from './PageHeader';
 import TestimonialCard from './TestimonialCard';
 import CaseStudyCard from './CaseStudyCard';
-import { SystemNode, SYSTEM_NODES } from './SystemsInPractice';
+import { SystemsBoard } from './SystemsInPractice';
 import '../styles/styles.scss';
 
 // ============================================
@@ -704,17 +704,12 @@ const CardsContent: React.FC = () => (
 
     {/* ======================== ECOSYSTEM NODE ======================== */}
     <section className="ds__section">
-      <h2 className="ds__section-title">Ecosystem Node</h2>
+      <h2 className="ds__section-title">Ecosystem Board</h2>
       <div className="ds__component-showcase">
-        {/* .sip__stage.is-visible so the hub's corner handles show at rest,
-            the way they do once the homepage board has revealed. */}
-        <div className="ds__component-preview sip__stage is-visible">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px', width: '100%' }}>
-            {(['system', 'figma', 'docs'] as const).map((id) => {
-              const node = SYSTEM_NODES.find((n) => n.id === id);
-              return node ? <SystemNode key={id} node={node} /> : null;
-            })}
-          </div>
+        {/* The grown board, drawn settled: the same eight nodes plus the
+            playground and the production listener that isn't built yet. */}
+        <div className="ds__component-preview sip sip--note">
+          <SystemsBoard grown boardOnly revealed />
         </div>
         <div className="ds__component-meta">
           <h4 className="ds__subsection-title">Specs</h4>
@@ -736,6 +731,10 @@ const CardsContent: React.FC = () => (
               <code className="ds__spec-value">paper · Border Hairline · identical to one another by design</code>
             </div>
             <div className="ds__spec-row">
+              <span className="ds__spec-label">Planned</span>
+              <code className="ds__spec-value">no fill · 1px dashed Steel #8f9daf · meta says it isn’t built</code>
+            </div>
+            <div className="ds__spec-row">
               <span className="ds__spec-label">Title</span>
               <code className="ds__spec-value">Hubot Sans Bold · 17px (hub 19px) · #1b1b1b</code>
             </div>
@@ -752,9 +751,10 @@ const CardsContent: React.FC = () => (
         <div className="ds__component-usage">
           <h4 className="ds__subsection-title">Usage</h4>
           <pre className="ds__code-block">
-{`import { SystemNode, SYSTEM_NODES } from './components/SystemsInPractice';
+{`import { SystemsBoard, SystemNode, SYSTEM_NODES } from './components/SystemsInPractice';
 
-<SystemNode node={SYSTEM_NODES[0]} />  // tier: 'center' | 'pair' | 'surface'`}
+<SystemsBoard grown boardOnly revealed />  // the board above
+<SystemNode node={SYSTEM_NODES[0]} />      // one node · tier: 'center' | 'pair' | 'surface'`}
           </pre>
         </div>
       </div>

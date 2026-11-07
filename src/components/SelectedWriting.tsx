@@ -22,7 +22,9 @@ const SelectedWriting: React.FC = () => {
   const listRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  const matching = kind === 'all' ? NOTES_BY_DATE : NOTES_BY_DATE.filter((note) => note.kind === kind);
+  // The featured note leads, so the highlighted first row is the one Ryan picked.
+  const byFeature = [...NOTES_BY_DATE].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+  const matching = kind === 'all' ? byFeature : byFeature.filter((note) => note.kind === kind);
   const notes = matching.slice(0, SHOWN);
   const noun = `${kind === 'all' ? '' : `${KIND_LABEL[kind]} `}note${matching.length === 1 ? '' : 's'}`;
   const countLine = matching.length > SHOWN

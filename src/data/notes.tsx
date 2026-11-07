@@ -18,6 +18,8 @@ export interface Note {
   kind: NoteKind;
   /** Explorations published while decisions are still moving. */
   inProgress?: boolean;
+  /** Pinned first on the homepage's writing list, ahead of newer notes. */
+  featured?: boolean;
   date: string;      // display date, e.g. 'July 2026'
   dateISO: string;   // for <time> + sorting, e.g. '2026-07'
   title: string;
@@ -43,6 +45,17 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 };
 
 export const NOTES: Note[] = [
+  {
+    slug: 'a-design-system-in-more-than-one-size',
+    kind: 'exploration',
+    featured: true,
+    origin: 'portfolio',
+    date: 'November 7, 2026',
+    dateISO: '2026-11-07',
+    title: 'A design system should come in more than one size',
+    dek: 'Where I think design systems are going: three sizes anyone on the team can use, and why AI finally makes the drift affordable.',
+    read: '4 min',
+  },
   {
     slug: 'building-the-binder',
     kind: 'practice',

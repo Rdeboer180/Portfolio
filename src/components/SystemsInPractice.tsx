@@ -79,6 +79,8 @@ const ICON = {
     <Glyph d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
   ),
   governance: <Glyph d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+  playground: <Glyph d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM16.5 13v7M13 16.5h7" />,
+  listener: <Glyph d="M5 12a7 7 0 0 1 14 0M8 12a4 4 0 0 1 8 0M12 12v8" />,
 };
 
 // ── Nodes ────────────────────────────────────────────────────────────────────
@@ -87,7 +89,8 @@ const ICON = {
 // the visual board and the narrative order never have to agree.
 
 export type NodeId =
-  | 'system' | 'figma' | 'code' | 'docs' | 'prompts' | 'qa' | 'people' | 'governance';
+  | 'system' | 'figma' | 'code' | 'docs' | 'prompts' | 'qa' | 'people' | 'governance'
+  | 'playground' | 'listener';
 
 export interface SystemNodeData {
   id: NodeId;
@@ -109,6 +112,8 @@ export interface SystemNodeData {
    */
   relation: string;
   icon: React.ReactNode;
+  /** Drawn on the board but not built yet: a dashed card, said in the meta too. */
+  planned?: boolean;
 }
 
 export const SYSTEM_NODES: SystemNodeData[] = [
@@ -196,7 +201,7 @@ export const SYSTEM_NODES: SystemNodeData[] = [
  */
 export const SystemNode: React.FC<{ node: SystemNodeData; lit?: boolean }> = ({ node, lit }) => (
   <article
-    className={`sip__node sip__node--${node.tier} sip__node--${node.id}${lit ? ' is-lit' : ''}`}
+    className={`sip__node sip__node--${node.tier} sip__node--${node.id}${node.planned ? ' sip__node--planned' : ''}${lit ? ' is-lit' : ''}`}
   >
     <span className="sip__node-icon" aria-hidden="true">{node.icon}</span>
     <h3 className="sip__node-title">{node.title}</h3>
@@ -310,6 +315,7 @@ type LinkId =
   | 'pair-a' | 'pair-b'
   | 'figma-system' | 'code-system'
   | 'docs-system' | 'prompts-system' | 'qa-system' | 'people-system' | 'governance-system'
+  | 'playground-system' | 'listener-system'
   | 'trunk';
 
 interface LinkDef {
@@ -334,6 +340,42 @@ const LINKS: LinkDef[] = [
 ];
 
 const SURFACES: NodeId[] = ['docs', 'prompts', 'qa', 'people', 'governance'];
+
+// ── The board, grown ─────────────────────────────────────────────────────────
+// The November version ("A design system should come in more than one size"):
+// the same eight nodes plus the playground anyone on the team can build in,
+// and the production listener that isn't built yet. On the network board each
+// hangs under the node it works through, the Team and Governance, so neither
+// wire crosses a card; in tree mode they join the trunk like any surface.
+
+export const GROWN_NODES: SystemNodeData[] = [
+  {
+    id: 'playground',
+    tier: 'surface',
+    title: 'Playground',
+    meta: 'Anyone on the team',
+    body: 'Real components, no production. Present an idea with enough fidelity to hand off.',
+    relation: 'Two-way with the Team, and through it the Shared Product Context.',
+    icon: ICON.playground,
+  },
+  {
+    id: 'listener',
+    tier: 'surface',
+    title: 'Production listener',
+    meta: 'Not built yet',
+    body: 'Notices what ships, changes, or disappears, and proposes the update to Governance.',
+    relation: 'Reports to Governance. Not built on this site yet.',
+    icon: ICON.listener,
+    planned: true,
+  },
+];
+
+const GROWN_LINKS: LinkDef[] = [
+  { id: 'playground-system', nodes: ['playground', 'people'], delay: 1120 },
+  { id: 'listener-system', nodes: ['listener', 'governance'], delay: 1180 },
+];
+
+const GROWN_ANCHOR: Partial<Record<NodeId, NodeId>> = { playground: 'people', listener: 'governance' };
 
 // The loop's connectors: 1 → 2 ⇄ 3 → 4, and 4 back to 1. The 2 ⇄ 3 pair is two
 // one-way shafts, the same shape as the board's thesis wire but in steel —
@@ -489,7 +531,16 @@ function returnRail(from: Box, to: Box, railY: number): Wire {
  * paint, for pages that are not scrolled into like the homepage is; the
  * reveal classes still gate the wire draw-in where it is not set.
  */
-export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = false }) => {
+export const SystemsBoard: React.FC<{
+  revealed?: boolean;
+  /** Add the playground and the production listener (GROWN_NODES). */
+  grown?: boolean;
+  /** The board alone, for pages that state the loop themselves. */
+  boardOnly?: boolean;
+}> = ({ revealed = false, grown = false, boardOnly = false }) => {
+  const nodes = grown ? [...SYSTEM_NODES, ...GROWN_NODES] : SYSTEM_NODES;
+  const links = grown ? [...LINKS, ...GROWN_LINKS] : LINKS;
+  const surfaces: NodeId[] = grown ? [...SURFACES, 'playground', 'listener'] : SURFACES;
   const [stageRef, stageSeen] = useReveal<HTMLDivElement>(0.2);
   const [loopRef, loopSeen] = useReveal<HTMLDivElement>(0.2);
   const stageVisible = revealed || stageSeen;
@@ -551,12 +602,12 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
 
           if (mode === 'tree') {
             // One trunk down from the hub, a stub across to each surface.
-            const cards = SURFACES.map((id) => box[id]).filter((b): b is Box => !!b);
+            const cards = surfaces.map((id) => box[id]).filter((b): b is Box => !!b);
             const lowest = Math.max(...cards.map((c) => c.cy));
             const tx = s.cx;
             const ty = s.b + GAP;
             wires.trunk = { d: `M${r1(tx)} ${r1(ty)}L${r1(tx)} ${r1(lowest)}`, headA: tick(tx, ty, 0, -1), headB: '' };
-            SURFACES.forEach((id) => {
+            surfaces.forEach((id) => {
               const c = box[id];
               if (!c) return;
               const toLeft = c.cx < tx;
@@ -568,21 +619,24 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
               };
             });
           } else {
-            SURFACES.forEach((id) => {
+            surfaces.forEach((id) => {
               const c = box[id];
-              if (c) wires[`${id}-system` as LinkId] = connect(c, s);
+              const anchor = GROWN_ANCHOR[id];
+              const to = anchor ? box[anchor] : s;
+              if (c && to) wires[`${id}-system` as LinkId] = connect(c, to);
             });
           }
         }
       }
 
-      LINKS.forEach((link) => write(link.id, wires[link.id] ?? EMPTY));
+      links.forEach((link) => write(link.id, wires[link.id] ?? EMPTY));
     };
 
     draw();
 
     return observeLayout([board, ...Object.values(cellRefs.current).filter((el): el is HTMLLIElement => Boolean(el))], draw);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [grown]);
 
   // The loop's wires: same mechanism as the board's, measured from the track.
   useLayoutEffect(() => {
@@ -662,10 +716,10 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
     <>
       <div className={`sip__stage${stageVisible ? ' is-visible' : ''}`} ref={stageRef}>
         {/* The margin note above the board, set in the system's type: no hand lettering, no drawn arrow. */}
-        <p className="sip__note reveal-fade" style={delay(300)}>Start here. Return with more context.</p>
+        {!boardOnly && <p className="sip__note reveal-fade" style={delay(300)}>Start here. Return with more context.</p>}
 
         <ol className="sip__board" ref={boardRef}>
-          {SYSTEM_NODES.map((node, i) => (
+          {nodes.map((node, i) => (
             <React.Fragment key={node.id}>
               <li
                 className={`sip__cell sip__cell--${node.id} reveal-fade`}
@@ -706,7 +760,7 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
 
           {/* Connective linework — supplemental to the relation text inside each node. */}
           <svg className="sip__wires" aria-hidden="true" focusable="false">
-            {LINKS.map((link) => (
+            {links.map((link) => (
               <g
                 key={link.id}
                 className={`sip__link${link.pair ? ' sip__link--pair' : ''}${
@@ -748,6 +802,7 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
       </div>
 
       {/* ── The loop ── */}
+      {!boardOnly && (
       <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
         {/* The seam: a hairline with a mono label, the quieter cousin of the
             section rule above. The wires say the return. */}
@@ -869,6 +924,7 @@ export const SystemsBoard: React.FC<{ revealed?: boolean }> = ({ revealed = fals
           As the system grows, so does the shared context.
         </p>
       </div>
+      )}
     </>
   );
 };
@@ -918,15 +974,13 @@ const SystemsInPractice: React.FC = () => {
           <h2 className="sip__title">
             <span className="reveal-mask">
               <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
-                Shared language. Better product decisions.
+                One system, every size of idea.
               </span>
             </span>
           </h2>
           <p className="sip__body reveal-fade" style={delay(240)}>
-            For a new or changed system component, I start with a shared language: what it needs to do,
-            what already exists, and what design and code each need to express.
-            <span className="animated-bold"> Shared Product Context is both the starting point and the return point.
-            </span>
+            Anyone can sketch, the team can build in a playground, and production gets the full review.
+            <span className="animated-bold"> All three read from the same source.</span>
           </p>
         </div>
 
@@ -946,23 +1000,24 @@ const SystemsInPractice: React.FC = () => {
               </li>
             ))}
           </ol>
+          {/* The grown board, without its own loop: the four titles above
+              already state it. Hidden on phones, where the section stays a
+              statement and the note carries the board. */}
+          <SystemsBoard grown boardOnly />
           <div className="sip__actions reveal-fade" style={delay(420)}>
-            <Link to="/notes/shared-language-better-product-decisions/" className="btn btn--secondary btn--md sip__btn">
-              Read how the loop works &rarr;
+            <Link to="/notes/a-design-system-in-more-than-one-size/" className="btn btn--secondary btn--md sip__btn">
+              Read the note
             </Link>
             {/* The About desk plays this video on its iPad; here it is just
                 the video, in a plain dialog. */}
             <button type="button" className="sip__link sip__link--button" onClick={openVideo} aria-haspopup="dialog">
-              Watch how I work, 1:37 &rarr;
+              Watch how I work, 1:37
             </button>
-            {/* PlayDraft is the public study where the whole loop is visible:
-                Figma, a token-governed build, Maestro QA, and the live
-                /design-system screen. */}
-            <Link to="/work/playdraft/" className="sip__link">
-              See this in the work &rarr;
+            <Link to="/notes/shared-language-better-product-decisions/" className="sip__link">
+              How I drew it in October
             </Link>
             <Link to="/design-system" className="sip__link">
-              Explore the live system &rarr;
+              The live system
             </Link>
           </div>
         </div>

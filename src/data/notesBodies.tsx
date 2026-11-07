@@ -6,6 +6,7 @@ import playdraft from './playdraft.json';
 import { SystemsBoard } from '../components/SystemsInPractice';
 import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
 import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
+import { SizesLadder, SizesReaders, DriftLoop } from '../components/SystemSizes';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
 // dates and the rest live in notes.tsx, which the homepage and the index read
@@ -277,6 +278,41 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <h2>What Claude did, and what I decided</h2>
       <p>Claude researched the reference, proposed most of the AEM mapping, built the components, tested them at desktop and phone widths, and ran the deploys. I set the rules, chose AEM over another canvas, and made the calls that shaped how it feels: Publisher instead of Preview, Asset Panel instead of Side Panel, a docked panel instead of an overlay, cards that run white to their bottom edge, and WheelRack filed under Product Design, where it belongs as a full design system and a 0 to 1 product.</p>
       <p>I do not know yet how many people will find the switch. The ones I hope find it have authored in AEM themselves, and I suspect they will recognize the locked component before they read a word of it. If that is you, switch to Author in the bottom corner of the <Link to="/">homepage</Link> and tell me what I got wrong.</p>
+    </>
+  ),
+  'a-design-system-in-more-than-one-size': (
+    <>
+      <p>For most of my career the system lived in a component library, and the people who could use it well were designers. Everyone else brought ideas to a meeting as a sentence, and most of those ideas stayed sentences.</p>
+      <p>I don&rsquo;t think that holds anymore. <strong>If you care about the product, you should be able to show your idea at a fidelity someone can hand off, and the design system should be what makes that possible.</strong></p>
+
+      <h2>A system needs three sizes, each with its own rules</h2>
+      <p>I think of it as three sizes reading from one source. What changes between them is how much gets checked.</p>
+      <SizesLadder />
+      <ul>
+        <li><strong>Sketch</strong> is for anyone with an idea. The tokens are fixed and the layout is loose. Nobody reviews a sketch.</li>
+        <li><strong>Playground</strong> is for the team: real components, no production. It&rsquo;s where an idea gets enough fidelity to hand off. Lance Barrera&rsquo;s team at GoFundMe runs one with their system, Heart, for designers and PMs.</li>
+        <li><strong>Production</strong> gets the full review of states, accessibility and intent.</li>
+      </ul>
+      <p>Governing a sketch like production is how a system ends up with one audience.</p>
+
+      <h2>Drift is the price of letting everyone in, and AI makes it affordable</h2>
+      <p>More people making things means more one-offs. The old answer was a person reviewing every change, which doesn&rsquo;t scale and turns the system into a gate. My answer now is ongoing care: agents watch what ships and propose changes, and a person decides.</p>
+      <p>Most of my own ideas start in Claude now, so an agent is already the first reader of my system. I&rsquo;m not alone there: on <a href="https://www.youtube.com/watch?v=ZE3vh1zGq3I" target="_blank" rel="noopener noreferrer">Dive Radio</a> (6 November), Tommy Geoco read Figma&rsquo;s Q3 numbers as about a million people using its MCP each week. I&rsquo;d rather write for that reader on purpose.</p>
+      <SizesReaders />
+
+      <h2>How I&rsquo;d tighten the drift</h2>
+      <ol>
+        <li><strong>Production is the vote.</strong> A pattern that ships has earned a look from the system, and one removed everywhere should leave it. Tommy&rsquo;s team runs theirs this way.</li>
+        <li><strong>Write the rule when the agent gets it wrong.</strong> A mistake without a rule comes back. I took this one from <a href="https://x.com/_heyrico/status/2116953958279479760" target="_blank" rel="noopener noreferrer">rico&rsquo;s piece on systems agents can follow</a>.</li>
+        <li><strong>Agents propose, a person decides.</strong> Spotting drift is cheap now. Judging what belongs in the system still isn&rsquo;t.</li>
+        <li><strong>Write the docs for the reader that reads every time.</strong> People skim a gallery. An agent reads AGENTS.md before every build.</li>
+      </ol>
+      <DriftLoop />
+
+      <h2>What I run, and what I don&rsquo;t yet</h2>
+      <p><Link to="/notes/governance-in-markdown/">DESIGN.md and PRODUCT.md</Link> are the source on this site. A design-system reviewer agent finds drift and proposes fixes without making them, and I decide what changes. Nothing watches production on a schedule yet, so I run the checks by hand, and the <Link to="/design-system">live system</Link> draws that listener dashed.</p>
+      <p>A playground makes wrong things fast. An idea from it isn&rsquo;t a contribution until it passes the same review as everything else.</p>
+      <p>I haven&rsquo;t settled who promotes a playground idea into the system. Today it&rsquo;s me. I&rsquo;d like it to be whoever shipped it.</p>
     </>
   ),
   'shared-language-better-product-decisions': (
