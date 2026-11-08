@@ -302,15 +302,20 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
 
       <h2>How I&rsquo;d tighten the drift</h2>
       <ol>
-        <li><strong>Production is the vote.</strong> A pattern that ships has earned a look from the system, and one removed everywhere should leave it. Tommy&rsquo;s team runs theirs this way.</li>
+        <li><strong>Production is the vote.</strong> A pattern that ships has earned a look from the system, and one removed everywhere should leave it.</li>
         <li><strong>Write the rule when the agent gets it wrong.</strong> A mistake without a rule comes back. I took this one from <a href="https://x.com/_heyrico/status/2116953958279479760" target="_blank" rel="noopener noreferrer">rico&rsquo;s piece on systems agents can follow</a>.</li>
         <li><strong>Agents propose, a person decides.</strong> Spotting drift is cheap now. Judging what belongs in the system still isn&rsquo;t.</li>
         <li><strong>Write the docs for the reader that reads every time.</strong> People skim a gallery. An agent reads AGENTS.md before every build.</li>
       </ol>
       <DriftLoop />
 
-      <h2>What I run, and what I don&rsquo;t yet</h2>
-      <p><Link to="/notes/governance-in-markdown/">DESIGN.md and PRODUCT.md</Link> are the source on this site. A design-system reviewer agent finds drift and proposes fixes without making them, and I decide what changes. Nothing watches production on a schedule yet, so I run the checks by hand, and the <Link to="/design-system">live system</Link> draws that listener dashed.</p>
+      <h2>Every pull request now gets a system review</h2>
+      <p><Link to="/notes/governance-in-markdown/">DESIGN.md and PRODUCT.md</Link> are the source on this site. Since 8 November, every pull request also runs a review: a script inventories every component, the style blocks it uses and any raw colour, compares the PR with main, and leaves one comment. It names the existing components a new one resembles, the docs a removed one should leave, and the token a new hex value should have been.</p>
+      <p>It suggests and I decide. It reads code, not intent, so it can say a new card looks like an existing one, but not whether the difference matters.</p>
+
+      <h2>At a larger company, the system has to be findable first</h2>
+      <p>On a site I run alone, a comment on my own PR is enough. In a larger organization those tools have to reach everyone: anyone should be able to see what exists, reference it accurately, and build inside it, on a canvas or in the browser. A component nobody can find gets rebuilt, and every rebuild is drift.</p>
+      <p>That&rsquo;s why the inventory here is public. The <a href="/system/catalog.json">system catalog</a> is the same list the review reads, and the <Link to="/design-system">live system</Link> draws the reviewer on the board.</p>
       <p>A playground makes wrong things fast. An idea from it isn&rsquo;t a contribution until it passes the same review as everything else.</p>
       <p>I haven&rsquo;t settled who promotes a playground idea into the system. Today it&rsquo;s me. I&rsquo;d like it to be whoever shipped it.</p>
     </>

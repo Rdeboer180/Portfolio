@@ -54,7 +54,7 @@ export const NOTES: Note[] = [
     dateISO: '2026-11-07',
     title: 'A design system should come in more than one size',
     dek: 'Where I think design systems are going: three sizes anyone on the team can use, and why AI finally makes the drift affordable.',
-    read: '4 min',
+    read: '5 min',
   },
   {
     slug: 'building-the-binder',
