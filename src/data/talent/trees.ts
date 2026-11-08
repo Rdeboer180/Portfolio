@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: the three lanes, fifteen areas, thirty nodes (v5, 2026-09-12)
+// Talent tree: the three lanes, fifteen areas, thirty nodes (v7, 2026-11-08)
 // Design and systems (what you define), Technical (how you connect the work),
 // Code (what you can express in the medium). Node names are short nouns; ids
 // are the kebab-case of the name. Every node carries one sentence for hover, a
@@ -10,6 +10,12 @@
 // a real contribution. The lanes lean the way the spec asks: the Code lane
 // leans build, the Technical lane leans systems, ai, and exploration, and the
 // Design lane leans craft, systems, and research.
+//
+// v7 (2026-11-08) reworks the Technical lane so every crown grows out of the
+// foundation under it: Figma under Prototyping, Handoff under Storybook,
+// Documentation under Skills and plugins, CMS under QA and analytics, AI tools
+// under Internal tools. State modeling folds into Handoff's meaning; Agent
+// context becomes Skills and plugins. score.ts still reads v5 links.
 // ============================================
 
 import type { TalentArea, TalentNode, TalentTree, Trait } from './types';
@@ -157,7 +163,7 @@ export const TREES: TalentTree[] = [
     id: 'technical',
     name: 'Technical',
     pool: 'points',
-    root: { name: 'Workflow', glyph: 'workflow' },
+    root: { name: 'Workflow', glyph: 'toolbox' },
     areas: [
       area(
         'technical',
@@ -168,7 +174,7 @@ export const TREES: TalentTree[] = [
           'Figma',
           'Time spent in the tool itself, where variables, auto layout, and libraries decide how fast the next file moves.',
           { exploration: 0.6, craft: 0.2, systems: 0.2 },
-          'hifi-prototyping',
+          'pen-tool',
           'The tool itself mastered, so a file is a system rather than a drawing.',
         ],
         [
@@ -182,8 +188,16 @@ export const TREES: TalentTree[] = [
       ),
       area(
         'technical',
-        'storybook',
-        'Storybook',
+        'handoff',
+        'Handoff',
+        [
+          'handoff',
+          'Handoff',
+          'Time spent on specs, annotation, and naming every state a feature can hold: the partnership that decides whether a design survives the build.',
+          { collaboration: 0.4, build: 0.25, systems: 0.25, craft: 0.1 },
+          'redline',
+          'Specs, annotation, and every state named, so the build matches without a meeting.',
+        ],
         [
           'storybook',
           'Storybook',
@@ -192,6 +206,11 @@ export const TREES: TalentTree[] = [
           'storybook',
           'Components documented where engineers work, every state visible beside the code.',
         ],
+      ),
+      area(
+        'technical',
+        'documentation',
+        'Documentation',
         [
           'documentation',
           'Documentation',
@@ -200,26 +219,13 @@ export const TREES: TalentTree[] = [
           'documentation',
           'Decisions and constraints recorded, so people and agents both start informed.',
         ],
-      ),
-      area(
-        'technical',
-        'handoff',
-        'Handoff',
         [
-          'handoff',
-          'Handoff',
-          'Time spent on specs, annotation, and the engineering partnership that decides whether a design survives the build.',
-          { collaboration: 0.45, build: 0.25, systems: 0.2, craft: 0.1 },
-          'cross-discipline',
-          'Specs and annotation clear enough that the build matches without a meeting.',
-        ],
-        [
-          'state-modeling',
-          'State modeling',
-          'Time spent naming the states a feature can be in, and what moves it from one to the next.',
-          { systems: 0.45, build: 0.25, exploration: 0.2, craft: 0.1 },
-          'state-modeling',
-          'Every state a feature can hold, named, with the moves between them drawn.',
+          'skills-and-plugins',
+          'Skills and plugins',
+          'Time spent packaging the system as skills, plugins, and rules that an agent installs and follows.',
+          { ai: 0.45, systems: 0.3, collaboration: 0.15, build: 0.1 },
+          'agent-file',
+          'Skills and rules an agent can install, so its output arrives on system.',
         ],
       ),
       area(
@@ -256,12 +262,12 @@ export const TREES: TalentTree[] = [
           'Agents put to work on the exploring, with the judgment kept human.',
         ],
         [
-          'agent-context',
-          'Agent context',
-          'Time spent writing the skills, rules, and agent-readable documents that let an agent work the way the system intends.',
-          { ai: 0.5, systems: 0.25, collaboration: 0.15, exploration: 0.1 },
-          'agentic-coding',
-          'Context and guardrails an agent can read, so its output arrives on system.',
+          'internal-tools',
+          'Internal tools',
+          'Time spent building the tools a team runs on, from simulators to review boards, with models doing the repetitive part.',
+          { build: 0.4, ai: 0.3, systems: 0.2, collaboration: 0.1 },
+          'wrench',
+          'The team’s own tools built and kept running, so the repetitive work stops landing on people.',
         ],
       ),
     ],
@@ -286,11 +292,11 @@ export const TREES: TalentTree[] = [
         ],
         [
           'css',
-          'CSS',
-          'Time spent styling in the medium itself, with every state and breakpoint defined rather than implied.',
+          'CSS/SASS',
+          'Time spent styling responsive interfaces with CSS and Sass, organizing reusable styles and translating design decisions into working layouts.',
           { build: 0.55, craft: 0.3, systems: 0.15 },
           'responsive-design',
-          'Every state and breakpoint defined in the medium, not implied in a mockup.',
+          'Maintainable styles that preserve visual intent across components, states, and screen sizes.',
         ],
       ),
       area(

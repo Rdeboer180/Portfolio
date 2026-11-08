@@ -9,6 +9,7 @@ import DismissStrip from '../DismissStrip';
 import { ARCHIVE_CARDS } from '../../data/archiveCards';
 import ArchiveCard from '../ArchiveCard';
 import { KIND_LABEL, NOTES_BY_DATE } from '../../data/notes';
+import { RYAN_CLASS_SHORT } from '../../data/talent/ryan';
 import { DRAFTS } from './deskDrafts';
 import { DraftRoom } from './DraftRoom';
 import playdraft from '../../data/playdraft.json';
@@ -158,10 +159,9 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
     <>
       <h3>The sketch under the pencil</h3>
       <h2 id="desk-note-title">The Forge</h2>
-      <p>My talent tree, drawn out: where my points are in visual craft, systems thinking and implementation, and the strategy skills I am putting points into next. You can build your own.</p>
+      <p>My talent tree, drawn out: where my points sit across design, the technical work that connects it, and code. The class it computes is {RYAN_CLASS_SHORT}.</p>
       <div className="note__links">
         <Link className="btn btn--primary btn--md" to="/talent-tree/">Open the Forge</Link>
-        <Link className="btn btn--secondary btn--md" to="/talent-tree/build/">Build your own tree</Link>
       </div>
     </>
   ),

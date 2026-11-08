@@ -2,10 +2,8 @@ import React from 'react';
 import ScrollReveal from './ScrollReveal';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
-import { ClassificationEmblem } from './talent/ForgeEmblem';
-import { evaluateAtlas, atlasPoints } from '../data/talent/atlas';
-import { RYAN_ATLAS } from '../data/talent/atlasState';
-import { resolveMastery } from '../data/talent/mastery';
+import Glyph from './talent/Glyph';
+import { RYAN_ALLOCATION, RYAN_CLASS_LABEL } from '../data/talent/ryan';
 
 // ============================================
 // Capabilities (concept 11, Ryan's pick, 22 October; simplified after
@@ -14,7 +12,7 @@ import { resolveMastery } from '../data/talent/mastery';
 // released), double is partnered (an engineer built it). It is drawn only
 // where it carries information: after each project link (and on the one
 // agent-built workflow step). The Forge numbers live in the
-// lanes alone and are read from RYAN_ATLAS, never typed here.
+// lanes alone and are read from RYAN_ALLOCATION, never typed here.
 // ============================================
 
 type Mode = 'hands-on' | 'directed' | 'partnered';
@@ -36,8 +34,7 @@ const ICONS: Record<string, React.ReactNode> = {
   agentic: <path d="M12 3.5c0 4.7 3.8 8.5 8.5 8.5-4.7 0-8.5 3.8-8.5 8.5 0-4.7-3.8-8.5-8.5-8.5 4.7 0 8.5-3.8 8.5-8.5z" />,
 };
 
-const points = (id: string) => atlasPoints(RYAN_ATLAS.allocation, id);
-const mastery = resolveMastery(evaluateAtlas(RYAN_ATLAS.allocation));
+const points = (id: string) => RYAN_ALLOCATION[id] || 0;
 
 interface Use { title: string; href: string; mode?: Mode }
 interface Capability {
@@ -121,18 +118,19 @@ const workflow: Array<{ title: string; text: string; mode?: Mode }> = [
   { title: 'Feed it back into the system', text: 'One HTML file holds the rule and every state. Engineers and agents build from it, and QA checks against it.' },
 ];
 
-// The Forge, drawn: each lane's top talents. Directed talents keep a dashed ring.
+// The Forge, drawn: each lane's top talents. Directed talents keep a dashed
+// ring and hold no points: the agents wrote that code, so it shows as directed.
 const lanes: Array<{ name: string; talents: Array<{ id: string; name: string; directed?: boolean }> }> = [
   { name: 'Design', talents: [
     { id: 'typography', name: 'Typography' }, { id: 'tokens', name: 'Tokens' },
-    { id: 'vector-design', name: 'Vector Design' }, { id: 'governance', name: 'Governance' },
+    { id: 'accessibility', name: 'Accessibility' }, { id: 'components', name: 'Components' },
   ] },
   { name: 'Technical', talents: [
-    { id: 'figma', name: 'Figma' }, { id: 'handoff', name: 'Handoff' },
-    { id: 'ai-tools', name: 'AI tools' }, { id: 'agent-context', name: 'Agent context' },
+    { id: 'figma', name: 'Figma' }, { id: 'prototyping', name: 'Prototyping' },
+    { id: 'storybook', name: 'Storybook' }, { id: 'skills-and-plugins', name: 'Skills and plugins' },
   ] },
   { name: 'Code', talents: [
-    { id: 'css', name: 'CSS/SASS' }, { id: 'html', name: 'HTML' },
+    { id: 'html', name: 'HTML' }, { id: 'css', name: 'CSS/SASS' },
     { id: 'typescript', name: 'TypeScript', directed: true }, { id: 'react-native', name: 'React Native', directed: true },
   ] },
 ];
@@ -206,19 +204,18 @@ const SkillMastery: React.FC = () => (
       <ScrollReveal><section className="sm__forge" aria-labelledby="forge-teaser-title">
         <div className="sm__forge-copy">
           <div className="sm__class">
-            <ClassificationEmblem domain={mastery.primary?.id} level={mastery.primary?.level || 1} />
-            <strong>{mastery.title}</strong>
+            <span className="sm__class-mark" aria-hidden="true"><Glyph name="branch" size={26} /></span>
+            <strong>{RYAN_CLASS_LABEL}</strong>
           </div>
           <h3 id="forge-teaser-title">How these skills connect.</h3>
-          <p>I built the Forge to map the mix behind my work. Explore my talent tree, or build your own.</p>
+          <p>I built the Forge to map the mix behind my work: sixteen years of points, and where they actually went.</p>
           <p className="sm__forge-links">
-            <Link to="/talent-tree/">Explore the Forge <span aria-hidden="true">↗</span></Link>
-            <Link to="/talent-tree/build/">Build your own <span aria-hidden="true">↗</span></Link>
+            <Link to="/talent-tree/">See my talent tree <span aria-hidden="true">↗</span></Link>
           </p>
         </div>
         {/* Phones get the class, the line and the links; the lanes are desktop's. */}
         <figure className="sm__lanes" aria-labelledby="lanes-title">
-          <figcaption id="lanes-title" className="sm__lanes-head">Top talents in my build, points of 5</figcaption>
+          <figcaption id="lanes-title" className="sm__lanes-head">Top talents in my build, points of 5. Directed code holds none.</figcaption>
           <div className="sm__lanes-body">
             {lanes.map((lane) => <div className="sm__lane" key={lane.name}>
               <p className="sm__lane-name">{lane.name}</p>

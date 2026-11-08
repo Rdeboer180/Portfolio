@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: scoring, archetype pairing, the result, and the share link
+// Talent tree: scoring, archetype pairing, and the result
 // Stats are computed for everyone by the same rules, never hand-set, so the
 // numbers on the card are defensible (BRIEF-v3, "Traits and titles").
 // ============================================
@@ -9,19 +9,15 @@ import type {
   AbilityState,
   Allocation,
   Archetype,
-  Degree,
-  HoursBand,
   Intake,
-  Major,
-  Minor,
   TalentNode,
   TalentResult,
   TalentTree,
   Trait,
 } from './types';
 import { TRAITS } from './types';
-import { NODE_LIST, TREES } from './trees';
-import { computePools, normalizeAllocation, sanitizeHours, sanitizeSplit, sanitizeYears, splitOf, withinPools } from './economy';
+import { TREES } from './trees';
+import { computePools, normalizeAllocation, sanitizeHours, sanitizeYears, splitOf } from './economy';
 import { ABILITIES, evaluateAbilities, pickClass } from './forge';
 
 // ── Trait scores ────────────────────────────────────────────────────────────
@@ -285,101 +281,3 @@ export function buildResult(
 }
 
 export type { AbilityState };
-
-// ── Share link ──────────────────────────────────────────────────────────────
-//
-// Layout: "v5" + <degree letter><major letter><minor letter><years>[d<split>].<hours
-// band>.<one base-6 digit per node, in TREES order>.<name, URL-encoded>.
-// Everything before the name is fixed-shape, so the name may contain any
-// character. Example:
-//   v5bgw16.5.533130205255545243425434302000.Ryan%20DeBoer
-// The split token is optional and sits on the years: "16d70" is 16 years, 70
-// percent design. A string without it decodes to an intake with no split
-// (years free), so links made before the split rule still open.
-//   v5bgw16d70.5.533130205255545243425434302000.Ryan%20DeBoer
-// Every format before v5 (no prefix, and a different set of thirty nodes)
-// decodes to null: the taxonomy changed, so an old link cannot be read.
-
-const DEGREE_LETTER: Record<Degree, string> = {
-  none: 'n',
-  'self-taught': 's',
-  associate: 'a',
-  bachelors: 'b',
-  masters: 'm',
-};
-const LETTER_DEGREE: Record<string, Degree> = { n: 'none', s: 'self-taught', a: 'associate', b: 'bachelors', m: 'masters' };
-const MAJOR_LETTER: Record<Major, string> = { graphic: 'g', web: 'w', other: 'o' };
-const LETTER_MAJOR: Record<string, Major> = { g: 'graphic', w: 'web', o: 'other' };
-const MINOR_LETTER: Record<Minor, string> = { none: 'n', graphic: 'g', web: 'w' };
-const LETTER_MINOR: Record<string, Minor> = { n: 'none', g: 'graphic', w: 'web' };
-const NAME_MAX = 60;
-/** Bumped whenever the node set changes, so links from an older tree decode to null. */
-export const STATE_VERSION = 'v5';
-
-export function encodeState(intake: Intake, allocation: Allocation): string {
-  const degree = DEGREE_LETTER[intake.degree] || 'n';
-  const major = MAJOR_LETTER[intake.major] || 'o';
-  const minor = MINOR_LETTER[intake.minor] || 'n';
-  const years = Math.min(99, sanitizeYears(intake.years));
-  const split = splitOf(intake);
-  const splitToken = split === undefined ? '' : `d${split}`;
-  const hours = sanitizeHours(intake.hours);
-  const digits = NODE_LIST.map((n) => String(pointsAt(allocation, n.id))).join('');
-  const name = encodeURIComponent((intake.name || '').trim().slice(0, NAME_MAX));
-  return `${STATE_VERSION}${degree}${major}${minor}${years}${splitToken}.${hours}.${digits}.${name}`;
-}
-
-/**
- * Inverse of encodeState. Returns null for anything that is not a state the
- * tree could have produced: wrong shape (including the pre-degree-rule
- * format), unknown degree, major, or minor letter, a split that is not a
- * step the intake offers (0..100 by tens), a crown lit under a foundation
- * below 3, or more points than the intake earns where they were spent.
- * A string without the split token decodes to an intake with no `split` key.
- */
-export function decodeState(value: string): { intake: Intake; allocation: Allocation } | null {
-  if (typeof value !== 'string') return null;
-  const re = new RegExp(`^${STATE_VERSION}([nsabm])([gwo])([ngw])(\\d{1,2})(?:d(\\d{1,3}))?\\.([0-5])\\.([0-5]{${NODE_LIST.length}})\\.([\\s\\S]*)$`);
-  const m = re.exec(value.trim());
-  if (!m) return null;
-
-  const degree = LETTER_DEGREE[m[1]];
-  const major = LETTER_MAJOR[m[2]];
-  const minor = LETTER_MINOR[m[3]];
-  if (!degree || !major || !minor) return null;
-  const years = parseInt(m[4], 10);
-  let split: number | undefined;
-  if (m[5] !== undefined) {
-    split = parseInt(m[5], 10);
-    // Only a split the intake can produce: 0..100 in steps of ten.
-    if (sanitizeSplit(split) !== split) return null;
-  }
-  const hours = parseInt(m[6], 10) as HoursBand;
-
-  let name = '';
-  try {
-    name = decodeURIComponent(m[8]).trim().slice(0, NAME_MAX);
-  } catch (e) {
-    return null;
-  }
-
-  const allocation: Allocation = {};
-  const digits = m[7];
-  NODE_LIST.forEach((n, i) => {
-    const p = parseInt(digits.charAt(i), 10);
-    if (p > 0) allocation[n.id] = p;
-  });
-
-  // A lit crown over a foundation below the unlock line is not a reachable state.
-  const clean = normalizeAllocation(allocation);
-  const sameShape =
-    Object.keys(allocation).length === Object.keys(clean).length &&
-    Object.keys(allocation).every((id) => clean[id] === allocation[id]);
-  if (!sameShape) return null;
-
-  const intake: Intake = { name, degree, major, minor, years, hours };
-  if (split !== undefined) intake.split = split;
-  if (!withinPools(clean, computePools(intake))) return null;
-
-  return { intake, allocation: clean };
-}

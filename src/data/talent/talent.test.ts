@@ -21,7 +21,7 @@ import {
 } from './economy';
 import { GLYPHS } from './glyphs';
 import { AREAS, NODES, NODE_LIST, TREES, crownOf, foundationOf, treeOf } from './trees';
-import { analyzeTraits, buildResult, decodeState, encodeState } from './score';
+import { analyzeTraits, buildResult } from './score';
 import type { Allocation, Intake, TreeId } from './types';
 import { TRAITS } from './types';
 
@@ -40,9 +40,9 @@ describe('the three lanes', () => {
     expect(names).toEqual([
       'Typography', 'Layout', 'Interaction', 'Motion', 'Tokens', 'Components',
       'Accessibility', 'Governance', 'Research', 'Information architecture',
-      'Figma', 'Prototyping', 'Storybook', 'Documentation', 'Handoff', 'State modeling',
-      'CMS', 'QA and analytics', 'AI tools', 'Agent context',
-      'HTML', 'CSS', 'Git', 'Automation', 'JavaScript', 'Performance',
+      'Figma', 'Prototyping', 'Handoff', 'Storybook', 'Documentation', 'Skills and plugins',
+      'CMS', 'QA and analytics', 'AI tools', 'Internal tools',
+      'HTML', 'CSS/SASS', 'Git', 'Automation', 'JavaScript', 'Performance',
       'TypeScript', 'React', 'React Native', 'Production ownership',
     ]);
     NODE_LIST.forEach((n) => {
@@ -204,44 +204,6 @@ describe('normalizing and clamping', () => {
     expect(spentAfter).toBeLessThan(spentBefore);
     expect(freeUsedBefore).toBeGreaterThan(0);
     expect(clampToPools(clamped, small)).toBe(clamped);
-  });
-});
-
-describe('the share link', () => {
-  const allocation: Allocation = { typography: 5, tokens: 5, figma: 5, html: 5, css: 4, storybook: 3, documentation: 3 };
-
-  it('round-trips an intake and an allocation under the v5 prefix', () => {
-    const encoded = encodeState(INTAKE, allocation);
-    expect(encoded.startsWith('v5')).toBe(true);
-    expect(encoded.split('.')[2].length).toBe(30);
-    const back = decodeState(encoded);
-    expect(back).not.toBeNull();
-    expect(back!.intake).toEqual(INTAKE);
-    expect(back!.allocation).toEqual(allocation);
-  });
-
-  it('carries the split when the intake answers it', () => {
-    const withSplit: Intake = { ...INTAKE, split: 70 };
-    const back = decodeState(encodeState(withSplit, { typography: 5 }));
-    expect(back!.intake.split).toBe(70);
-    expect(decodeState(encodeState(INTAKE, {}))!.intake.split).toBeUndefined();
-  });
-
-  it('refuses every older format', () => {
-    expect(decodeState('bgw16.5.533130205255545243425434302000.Ryan%20DeBoer')).toBeNull();
-    expect(decodeState('b16.5.533130205255545243425434302000.Ryan')).toBeNull();
-    expect(decodeState('v4bgw16.5.533130205255545243425434302000.Ryan')).toBeNull();
-    expect(decodeState('v5bgw16.5.5331.Ryan')).toBeNull();
-    expect(decodeState('')).toBeNull();
-  });
-
-  it('refuses a state the tree could not have produced', () => {
-    const lit = encodeState(INTAKE, { components: 3 });
-    expect(lit.split('.')[2]).toContain('3');
-    expect(decodeState(lit)).toBeNull();
-    const over: Allocation = {};
-    NODE_LIST.filter((n) => n.tier === 'foundation').forEach((n) => { over[n.id] = 5; });
-    expect(decodeState(encodeState({ ...INTAKE, years: 0, hours: 0 }, over))).toBeNull();
   });
 });
 

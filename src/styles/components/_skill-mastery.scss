@@ -164,7 +164,8 @@ $sm-label: 12px/1.5 $font-family-mono;
     align-items: center;
     gap: 16px;
 
-    .forge-crest { display: block; width: 56px; height: 62px; flex: 0 0 56px; filter: drop-shadow(0 3px 3px rgba(27, 27, 27, .1)); }
+    // The Forge's root tile: the branch mark on ink, as the console's class chip draws it.
+    .sm__class-mark { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: 0 0 56px; border-radius: 14px; background: $color-neutral-dark; color: #ffffff; }
     strong { font: 700 19px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
   }
 

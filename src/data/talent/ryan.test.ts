@@ -6,7 +6,7 @@ import { ARCHETYPES } from './archetypes';
 import { computePools, feasible, remaining, treeSpend } from './economy';
 import { evaluateAbilities, pickClass } from './forge';
 import { RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_CLASS_SHORT, RYAN_INTAKE, RYAN_OVERRIDES } from './ryan';
-import { buildResult, decodeState, encodeState } from './score';
+import { buildResult } from './score';
 import { NODES, TREES } from './trees';
 
 const POOLS = computePools(RYAN_INTAKE);
@@ -33,26 +33,33 @@ describe('ryan pools and allocation', () => {
     expect(Object.keys(RYAN_ALLOCATION).every((id) => !!NODES[id])).toBe(true);
   });
 
-  it('keeps the must-have levels, holds React Native and TypeScript at 2, and keeps production ownership and React at zero', () => {
+  it('keeps the v7 levels: the Technical asks, and directed code at zero', () => {
     expect(RYAN_ALLOCATION.typography).toBe(5);
     expect(RYAN_ALLOCATION.tokens).toBe(5);
     expect(RYAN_ALLOCATION.figma).toBe(5);
-    expect(RYAN_ALLOCATION.html).toBe(5);
-    expect(RYAN_ALLOCATION['ai-tools']).toBe(4);
-    expect(RYAN_ALLOCATION.handoff).toBe(3);
+    expect(RYAN_ALLOCATION.prototyping).toBe(4);
+    expect(RYAN_ALLOCATION.components).toBe(4);
     expect(RYAN_ALLOCATION.accessibility).toBe(4);
-    expect(RYAN_ALLOCATION.css).toBe(3);
-    expect(RYAN_ALLOCATION.storybook).toBe(3);
-    expect(RYAN_ALLOCATION.documentation).toBe(3);
+    expect(RYAN_ALLOCATION['qa-and-analytics']).toBe(2);
+    expect(RYAN_ALLOCATION['internal-tools']).toBe(3);
+    expect(RYAN_ALLOCATION['skills-and-plugins']).toBe(3);
+    expect(RYAN_ALLOCATION['ai-tools']).toBe(3);
+    expect(RYAN_ALLOCATION.handoff).toBe(3);
+    expect(RYAN_ALLOCATION.html).toBe(4);
+    expect(RYAN_ALLOCATION.css).toBe(2);
     expect(RYAN_ALLOCATION['production-ownership']).toBe(0);
     expect(RYAN_ALLOCATION.react).toBe(0);
-    expect(RYAN_ALLOCATION['react-native']).toBe(2);
-    expect(RYAN_ALLOCATION.typescript).toBe(2);
+    expect(RYAN_ALLOCATION['react-native']).toBe(0);
+    expect(RYAN_ALLOCATION.typescript).toBe(0);
     expect(RYAN_ALLOCATION.javascript).toBe(0);
   });
 
-  it('masters four nodes: Typography, Tokens, Figma, HTML', () => {
-    expect(RESULT.mastered).toEqual(['typography', 'tokens', 'figma', 'html']);
+  it('lands the lanes at 25 / 32 / 6', () => {
+    expect(treeSpend(RYAN_ALLOCATION)).toEqual({ design: 25, technical: 32, code: 6 });
+  });
+
+  it('masters three nodes: Typography, Tokens, Figma', () => {
+    expect(RESULT.mastered).toEqual(['typography', 'tokens', 'figma']);
   });
 });
 
@@ -60,8 +67,14 @@ describe('ryan abilities and class', () => {
   const states = evaluateAbilities(RYAN_ALLOCATION);
   const unlocked = states.filter((s) => s.unlocked).map((s) => s.ability.id);
 
-  it('unlocks exactly the four the spec names', () => {
-    expect(unlocked).toEqual(['guardrail-architect', 'prototype-alchemist', 'lossless-handoff', 'system-memory']);
+  it('unlocks the six v7 abilities, strongest first', () => {
+    expect(unlocked).toEqual(['visual-problem-solver', 'system-memory', 'guardrail-architect', 'systemsmith', 'lossless-handoff', 'agent-wrangler']);
+  });
+
+  it('leaves Pixel Sculptor and Design Diplomat two points away', () => {
+    const away = (id: string) => states.find((s) => s.ability.id === id)!.missing;
+    expect(away('pixel-sculptor')).toBe(2);
+    expect(away('design-diplomat')).toBe(2);
   });
 
   it('pairs React Native and TypeScript as foundations, so neither waits on a React gate', () => {
@@ -78,10 +91,10 @@ describe('ryan abilities and class', () => {
     expect(RESULT.abilities.some((s) => s.ability.id === 'cross-platform-builder' && !s.unlocked)).toBe(true);
   });
 
-  it('picks Guardrail Architect and Prototype Alchemist, and is not provisional', () => {
+  it('picks Visual Problem Solver and System Memory, and is not provisional', () => {
     const picked = pickClass(states);
-    expect(picked.primary.ability.id).toBe('guardrail-architect');
-    expect(picked.secondary.ability.id).toBe('prototype-alchemist');
+    expect(picked.primary.ability.id).toBe('visual-problem-solver');
+    expect(picked.secondary.ability.id).toBe('system-memory');
     expect(picked.provisional).toBe(false);
     expect(RESULT.provisional).toBe(false);
   });
@@ -105,16 +118,7 @@ describe('ryan abilities and class', () => {
   });
 });
 
-describe('ryan on the share link', () => {
-  it('round-trips through the v5 link', () => {
-    const link = encodeState(RYAN_INTAKE, RYAN_ALLOCATION);
-    expect(link.startsWith('v5bgw16.5.')).toBe(true);
-    const back = decodeState(link);
-    expect(back).not.toBeNull();
-    expect(back!.allocation).toEqual(RESULT.allocation);
-    expect(back!.intake).toEqual(RYAN_INTAKE);
-  });
-
+describe('ryan on the page', () => {
   it('the level the hero chip prints is the level the economy computes', () => {
     expect(POOLS.level).toBe(RYAN_INTAKE.years);
     expect(RESULT.pools.level).toBe(POOLS.level);
