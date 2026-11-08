@@ -159,6 +159,20 @@ describe('the code lane, in Ryan\'s words', () => {
 });
 
 describe('the phone', () => {
+  it('shows the Design / Dev toggle in the list itself, not only in the sheet', () => {
+    phone = true;
+    mount();
+    expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
+    expect(screen.queryByText('internal-tools')).toBeNull();
+    expect(screen.queryByLabelText('ryan.ts diff')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dev' }));
+    expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
+    expect(screen.getByText('internal-tools')).toBeTruthy();
+    expect(screen.getByText('crown · gate ai-tools ≥ 3')).toBeTruthy();
+    expect(within(screen.getByLabelText('ryan.ts diff')).getByText("+ 'internal-tools': 3,")).toBeTruthy();
+  });
+
   it('lists a lane, opens a skill in a sheet, and closes on Escape with focus returned', async () => {
     phone = true;
     mount();

@@ -447,24 +447,44 @@ const ForgeCanvas: React.FC = () => {
             </button>
           ))}
         </div>
+        {/* The toggle has to change the list itself on a phone: the sheet only
+            shows after a tap, so Dev prints ids, gates and ryan.ts here too. */}
+        <p className="fc-phone__sub">{subline}</p>
         <div id={panelId} role="tabpanel" aria-labelledby={tabId(lane)} className="fc-phone__panel">
           {lane === 'abilities' ? abilityRows : (
             <ul className="fc-list" aria-label={`${LANE_NAME[lane]} skills`}>
               {treeById(lane).areas.map((area) => area.nodes.map((node) => {
                 const level = pointsAt(allocation, node.id);
                 const agent = !!RYAN_NODE_NOTES[node.id]?.agent;
+                const delta = view === 'dev' ? deltaFromV5(node.id, level, RYAN_V5_ALLOCATION) : null;
                 return (
                   <li key={node.id} className={`fc-list__item fc-list__item--${node.tier}`}>
                     <button type="button" className="fc-list__btn" aria-label={`${nodeAria(node, level)}${agent ? ', agent-built' : ''}`} aria-haspopup="dialog" onClick={(e) => onNodeClick(node.id, e)}>
                       <Heat level={level} />
                       <span className="fc-list__glyph" aria-hidden="true"><Glyph name={node.glyph} size={16} /></span>
-                      <span className="fc-list__name">{node.name}{agent && <span className="fc-node__agent">agent-built</span>}</span>
+                      <span className="fc-list__name">
+                        {node.name}
+                        {agent && <span className="fc-node__agent">agent-built</span>}
+                        {view === 'dev' && <span className="fc-node__id">{node.id}</span>}
+                        {view === 'dev' && <span className="fc-node__id">{gateLine(node)}</span>}
+                        {delta && <span className={`fc-node__delta${delta.startsWith('↓') ? ' is-down' : ''}`}>{delta}</span>}
+                      </span>
                       <span className="fc-list__level">{`${level} / ${MAX_POINTS_PER_NODE}`}</span>
                     </button>
                   </li>
                 );
               }))}
             </ul>
+          )}
+          {view === 'dev' && treeLane && (
+            <div className="fc-phone__code">
+              <span className="fc-label">ryan.ts · v5 → v7</span>
+              <pre className="fc-code" aria-label="ryan.ts diff">
+                {ryanDiff(treeById(treeLane), allocation, RYAN_V5_ALLOCATION, null).map((l) => (
+                  <span key={l.key} className={`fc-code__line fc-code__line--${l.kind}`}>{l.text}</span>
+                ))}
+              </pre>
+            </div>
           )}
         </div>
         <div className="fc-phone__play">{playground}</div>
