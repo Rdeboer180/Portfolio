@@ -420,6 +420,23 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
     &.is-down { color: $color-secondary-dark; }
   }
+
+  // Agent-built code: the homepage's directed key, a dashed ring.
+  &.is-agent .fc-node__btn::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border: 1.5px dashed $color-secondary-dark;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  &__agent {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    white-space: nowrap;
+    color: $color-secondary-dark;
+  }
 }
 
 .fc-root {
@@ -566,6 +583,20 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 }
 
 .fc-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+// Ryan's own word on a skill: the first thing the panel says about it.
+.fc-mine {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: $radius-sm;
+  background: $color-secondary-lightest;
+  font-size: 13px;
+  line-height: 19px;
+  color: $color-neutral-dark;
+
+  .fc-label { margin-bottom: 4px; }
+  &.is-agent { border: 1.5px dashed $color-secondary-dark; background: #ffffff; }
+}
 
 .fc-chip {
   padding: 1px 6px;
@@ -850,7 +881,7 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
   .fc-heat { width: 18px; height: 18px; border-radius: 5px; }
   &__glyph { display: inline-flex; color: $color-secondary-dark; }
-  &__name { flex: 1 1 auto; font-size: 14px; }
+  &__name { flex: 1 1 auto; font-size: 14px; display: flex; flex-direction: column; }
   &__level { font-family: $font-family-mono; font-size: 12px; color: $color-neutral-standard; }
 }
 

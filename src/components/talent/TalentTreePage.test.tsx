@@ -57,8 +57,8 @@ describe('the Forge, /talent-tree/', () => {
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
     expect(screen.getByText(STORY)).toBeTruthy();
-    expect(screen.getByText('Visual Problem Solver / Context Carrier')).toBeTruthy();
-    expect(screen.getByText('Level 16 · 63 points over sixteen years · three skills at 5 · 6 of 12 abilities')).toBeTruthy();
+    expect(screen.getByText('Visual Problem Solver / Component Crafter')).toBeTruthy();
+    expect(screen.getByText('Level 16 · 89 points over sixteen years · five skills at 5 · 8 of 12 abilities')).toBeTruthy();
 
     expect(screen.getByRole('heading', { level: 2, name: 'How I connect the work' })).toBeTruthy();
     expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
@@ -66,7 +66,7 @@ describe('the Forge, /talent-tree/', () => {
 
     // The Layers panel: three lanes and the abilities, Technical selected.
     const tabs = within(screen.getByRole('tablist', { name: 'Layers' })).getAllByRole('tab');
-    expect(tabs.map((t) => t.textContent)).toEqual(['Design and systems25', 'Technical32', 'Code6', 'Abilities6/12']);
+    expect(tabs.map((t) => t.textContent)).toEqual(['Design and systems28', 'Technical34', 'Code27', 'Abilities8/12']);
     expect(tab(/^Technical/).getAttribute('aria-selected')).toBe('true');
 
     // Ten skills and the root; the strongest is open in words.
@@ -99,17 +99,17 @@ describe('the Forge, /talent-tree/', () => {
 
     fireEvent.click(tab(/^Code/));
     expect(screen.getByRole('heading', { level: 2, name: 'What I can express in the medium' })).toBeTruthy();
-    expect(nodeButton(/^HTML, foundation, 4 of 5 points$/)).toBeTruthy();
+    expect(nodeButton(/^HTML, foundation, 5 of 5 points$/)).toBeTruthy();
 
     fireEvent.click(tab(/^Abilities/));
     expect(screen.getByRole('heading', { level: 2, name: 'What the points unlock' })).toBeTruthy();
     const rows = within(screen.getByRole('list', { name: 'Abilities' })).getAllByRole('button');
     expect(rows.length).toBe(12);
-    expect(rows.filter((r) => r.textContent!.endsWith('forged')).length).toBe(6);
+    expect(rows.filter((r) => r.textContent!.endsWith('forged')).length).toBe(8);
     expect(rows[0].textContent).toContain('Visual Problem Solver');
     expect(within(screen.getByLabelText('Recipe')).getByText('5 / 5 ✓')).toBeTruthy();
-    fireEvent.click(rows[6]);
-    expect(screen.getByRole('heading', { level: 3, name: 'Pixel Sculptor' })).toBeTruthy();
+    fireEvent.click(rows[8]);
+    expect(screen.getByRole('heading', { level: 3, name: 'Design Diplomat' })).toBeTruthy();
     expect(screen.getByText('2 points away')).toBeTruthy();
   });
 
@@ -136,12 +136,34 @@ describe('the Forge, /talent-tree/', () => {
   });
 });
 
+describe('the code lane, in Ryan\'s words', () => {
+  it('marks TypeScript and React Native as agent-built and explains them on hover', () => {
+    mount();
+    fireEvent.click(tab(/^Code/));
+    const ts = nodeButton(/^TypeScript, foundation, 3 of 5 points, agent-built$/);
+    expect(nodeButton(/^React Native, foundation, 3 of 5 points, agent-built$/)).toBeTruthy();
+    expect(nodeButton(/^React, crown, 3 of 5 points$/)).toBeTruthy();
+    expect(screen.getAllByText('agent-built').length).toBe(2);
+
+    // Hover reads the skill in the panel; leaving goes back to the pick.
+    fireEvent.mouseEnter(ts);
+    const note = screen.getByLabelText('Skill');
+    expect(within(note).getByRole('heading', { level: 3, name: 'TypeScript' })).toBeTruthy();
+    expect(within(note).getByText('Agents write the TypeScript while I direct them, and I have learned to read the output.')).toBeTruthy();
+    fireEvent.mouseLeave(ts);
+    expect(within(screen.getByLabelText('Skill')).getByRole('heading', { level: 3, name: 'HTML' })).toBeTruthy();
+
+    fireEvent.mouseEnter(nodeButton(/^React, crown/));
+    expect(screen.getByText(/React was the foundation of WheelRack/)).toBeTruthy();
+  });
+});
+
 describe('the phone', () => {
   it('lists a lane, opens a skill in a sheet, and closes on Escape with focus returned', async () => {
     phone = true;
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
-    expect(screen.getByText('Visual Problem Solver / Context Carrier')).toBeTruthy();
+    expect(screen.getByText('Visual Problem Solver / Component Crafter')).toBeTruthy();
     expect(screen.queryByText(/build your own/i)).toBeNull();
 
     fireEvent.click(screen.getByRole('tab', { name: /^Design/ }));

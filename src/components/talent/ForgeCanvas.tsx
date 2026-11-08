@@ -24,7 +24,7 @@ import { NODES, TREES, foundationOf } from '../../data/talent/trees';
 import { ARCHETYPES } from '../../data/talent/archetypes';
 import { MAX_POINTS_PER_NODE, computePools } from '../../data/talent/economy';
 import { pickClass } from '../../data/talent/forge';
-import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
+import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
 import { buildResult } from '../../data/talent/score';
 import Glyph from './Glyph';
 import { countWord, pointsAt, treeStats } from './consoleData';
@@ -93,6 +93,8 @@ const ForgeCanvas: React.FC = () => {
   const [lane, setLane] = useState<Lane>('technical');
   const [view, setView] = useState<View>('design');
   const [picked, setPicked] = useState<Partial<Record<TreeId, string>>>({});
+  // Hovering a skill reads it in the panel; leaving falls back to the pick.
+  const [hoverId, setHoverId] = useState<string | null>(null);
   const [abilityId, setAbilityId] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const lastTrigger = useRef<HTMLElement | null>(null);
@@ -111,7 +113,8 @@ const ForgeCanvas: React.FC = () => {
 
   const treeLane: TreeId | null = lane === 'abilities' ? null : lane;
   const selectedId: string | null = treeLane ? picked[treeLane] || strongestIn(treeLane) : null;
-  const selectedNode = selectedId ? NODES[selectedId] : null;
+  const shownId = hoverId && treeLane && laneOf(hoverId) === treeLane ? hoverId : selectedId;
+  const selectedNode = shownId ? NODES[shownId] : null;
   const selectedAbility: AbilityState | null = lane === 'abilities'
     ? result.abilities.find((a) => a.ability.id === abilityId) || klass.primary
     : null;
@@ -152,6 +155,7 @@ const ForgeCanvas: React.FC = () => {
   // ── Lanes ──────────────────────────────────────────────────────────────
   const chooseLane = useCallback((next: Lane) => {
     setLane(next);
+    setHoverId(null);
     setSheetOpen(false);
   }, []);
 
@@ -178,6 +182,18 @@ const ForgeCanvas: React.FC = () => {
   else subline = 'Pick a skill to read what a point here means.';
 
   // ── Panels ─────────────────────────────────────────────────────────────
+  // Ryan's own word on a skill, where he has one (RYAN_NODE_NOTES).
+  const personalNote = (node: TalentNode) => {
+    const n = RYAN_NODE_NOTES[node.id];
+    if (!n) return null;
+    return (
+      <p className={`fc-mine${n.agent ? ' is-agent' : ''}`}>
+        <span className="fc-label">{n.agent ? 'Agent-built · how I work with it' : 'How I use it'}</span>
+        {n.note}
+      </p>
+    );
+  };
+
   const nodePanel = (node: TalentNode) => {
     const level = pointsAt(allocation, node.id);
     const recipes = recipesReading(node.id, allocation);
@@ -197,6 +213,7 @@ const ForgeCanvas: React.FC = () => {
               <span className="fc-chip">{`${level} / ${MAX_POINTS_PER_NODE}`}</span>
             </span>
           </div>
+          {personalNote(node)}
           <dl className="fc-props">
             <div><dt>tier</dt><dd>{gateLine(node)}</dd></div>
             <div><dt>level</dt><dd>{levelLine}</dd></div>
@@ -241,6 +258,7 @@ const ForgeCanvas: React.FC = () => {
         <span className="fc-note__layer">{`layer / ${node.id}`}</span>
         <h3 className="fc-note__name">{node.name}</h3>
         <span className="fc-note__level">{`${level} of ${MAX_POINTS_PER_NODE} · ${node.tier === 'crown' ? `crown over ${foundationOf(node.id)?.name || 'its foundation'}` : 'foundation'}`}</span>
+        {personalNote(node)}
         <p className="fc-note__meaning">{node.meaning}</p>
         {level >= MAX_POINTS_PER_NODE && <p className="fc-note__mastery">{node.masteryLine}</p>}
         <span className="fc-label">Feeds</span>
@@ -328,21 +346,25 @@ const ForgeCanvas: React.FC = () => {
         {nodes.map((n) => {
           const delta = view === 'dev' ? deltaFromV5(n.node.id, n.level, RYAN_V5_ALLOCATION) : null;
           const on = n.node.id === selectedId;
+          const agent = !!RYAN_NODE_NOTES[n.node.id]?.agent;
           return (
-            <div key={n.node.id} className={`fc-node fc-node--l${n.level}${n.locked ? ' is-locked' : ''}${on ? ' is-selected' : ''}`} style={{ left: n.x - 60, top: n.y - 24 }}>
+            <div key={n.node.id} className={`fc-node fc-node--l${n.level}${n.locked ? ' is-locked' : ''}${on ? ' is-selected' : ''}${agent ? ' is-agent' : ''}`} style={{ left: n.x - 60, top: n.y - 24 }}>
               <button
                 type="button"
                 className="fc-node__btn"
-                aria-label={nodeAria(n.node, n.level)}
+                aria-label={`${nodeAria(n.node, n.level)}${agent ? ', agent-built' : ''}`}
                 aria-pressed={on}
                 onClick={(e) => onNodeClick(n.node.id, e)}
                 onFocus={() => pick(n.node.id)}
+                onMouseEnter={() => setHoverId(n.node.id)}
+                onMouseLeave={() => setHoverId(null)}
               >
                 <Glyph name={n.node.glyph} size={22} />
                 <span className="fc-node__badge" aria-hidden="true">{n.level}</span>
               </button>
               <span className="fc-node__label">
                 <span className="fc-node__name">{n.node.name}</span>
+                {agent && <span className="fc-node__agent">agent-built</span>}
                 {view === 'dev' && <span className="fc-node__id">{n.node.id}</span>}
                 {delta && <span className={`fc-node__delta${delta.startsWith('↓') ? ' is-down' : ''}`}>{delta}</span>}
               </span>
@@ -430,12 +452,13 @@ const ForgeCanvas: React.FC = () => {
             <ul className="fc-list" aria-label={`${LANE_NAME[lane]} skills`}>
               {treeById(lane).areas.map((area) => area.nodes.map((node) => {
                 const level = pointsAt(allocation, node.id);
+                const agent = !!RYAN_NODE_NOTES[node.id]?.agent;
                 return (
                   <li key={node.id} className={`fc-list__item fc-list__item--${node.tier}`}>
-                    <button type="button" className="fc-list__btn" aria-label={nodeAria(node, level)} aria-haspopup="dialog" onClick={(e) => onNodeClick(node.id, e)}>
+                    <button type="button" className="fc-list__btn" aria-label={`${nodeAria(node, level)}${agent ? ', agent-built' : ''}`} aria-haspopup="dialog" onClick={(e) => onNodeClick(node.id, e)}>
                       <Heat level={level} />
                       <span className="fc-list__glyph" aria-hidden="true"><Glyph name={node.glyph} size={16} /></span>
-                      <span className="fc-list__name">{node.name}</span>
+                      <span className="fc-list__name">{node.name}{agent && <span className="fc-node__agent">agent-built</span>}</span>
                       <span className="fc-list__level">{`${level} / ${MAX_POINTS_PER_NODE}`}</span>
                     </button>
                   </li>

@@ -84,12 +84,12 @@ describe('the three lanes', () => {
 });
 
 describe('the economy: one pool, two locked parts', () => {
-  it('counts Ryan\'s intake as 63 = 16 design-locked, 4 code-locked, 43 free', () => {
+  it('counts Ryan\'s intake as 89 = 16 design-locked, 4 code-locked, 69 free', () => {
     const pools = computePools(INTAKE);
-    expect(pools.total).toBe(63);
+    expect(pools.total).toBe(89);
     expect(pools.designLocked).toBe(16);
     expect(pools.codeLocked).toBe(4);
-    expect(pools.free).toBe(43);
+    expect(pools.free).toBe(69);
     expect(pools.level).toBe(16);
   });
 
@@ -100,20 +100,20 @@ describe('the economy: one pool, two locked parts', () => {
   });
 
   it('treats a degree in another field, and self-taught, as free points', () => {
-    expect(computePools({ ...INTAKE, major: 'other', minor: 'none' }).free).toBe(8 + 38 + 5);
+    expect(computePools({ ...INTAKE, major: 'other', minor: 'none' }).free).toBe(8 + 64 + 5);
     const self = computePools({ ...INTAKE, degree: 'self-taught', minor: 'none' });
     expect(self.designLocked + self.codeLocked).toBe(0);
-    expect(self.total).toBe(8 + 38 + 5);
+    expect(self.total).toBe(8 + 64 + 5);
   });
 
   it('locks the years across the two lanes when the intake splits them', () => {
-    expect(yearsPoints(16)).toBe(38);
-    expect(yearsSplit(16, 70)).toEqual({ design: 27, code: 11 });
+    expect(yearsPoints(16)).toBe(64);
+    expect(yearsSplit(16, 70)).toEqual({ design: 45, code: 19 });
     const pools = computePools({ ...INTAKE, split: 70 });
-    expect(pools.designLocked).toBe(16 + 27);
-    expect(pools.codeLocked).toBe(4 + 11);
+    expect(pools.designLocked).toBe(16 + 45);
+    expect(pools.codeLocked).toBe(4 + 19);
     expect(pools.free).toBe(5);
-    expect(pools.total).toBe(63);
+    expect(pools.total).toBe(89);
   });
 
   it('writes the receipt in the v5 wording, with the lock on the line', () => {
@@ -124,7 +124,7 @@ describe('the economy: one pool, two locked parts', () => {
     expect(pools.receipt[1].lockedTo).toBe('code');
     expect(pools.receipt.every((l) => l.pool === 'points')).toBe(true);
     expect(pools.receipt.some((l) => /core/i.test(l.label))).toBe(false);
-    expect(pools.receipt.reduce((s, l) => s + l.points, 0)).toBe(63);
+    expect(pools.receipt.reduce((s, l) => s + l.points, 0)).toBe(89);
   });
 
   it('has retired the core pool', () => {
@@ -181,7 +181,7 @@ describe('spending', () => {
     const left = remaining(a, pools);
     expect(left.designLocked).toBe(11);
     expect(left.codeLocked).toBe(0);
-    expect(left.free).toBe(43 - 5 - 1);
+    expect(left.free).toBe(69 - 5 - 1);
   });
 });
 
@@ -221,7 +221,7 @@ describe('traits and the result', () => {
   it('builds a result with abilities, a class, and the masteries', () => {
     const allocation: Allocation = { tokens: 5, accessibility: 4, governance: 3, storybook: 3, documentation: 3 };
     const r = buildResult(INTAKE, allocation, TREES, ARCHETYPES);
-    expect(r.pools.total).toBe(63);
+    expect(r.pools.total).toBe(89);
     expect(r.abilities.length).toBe(12);
     expect(r.abilities.some((a) => a.unlocked)).toBe(true);
     expect(r.mastered).toEqual(['tokens']);

@@ -119,7 +119,7 @@ const workflow: Array<{ title: string; text: string; mode?: Mode }> = [
 ];
 
 // The Forge, drawn: each lane's top talents. Directed talents keep a dashed
-// ring and hold no points: the agents wrote that code, so it shows as directed.
+// ring: agents wrote that code while Ryan directed it and read the output.
 const lanes: Array<{ name: string; talents: Array<{ id: string; name: string; directed?: boolean }> }> = [
   { name: 'Design', talents: [
     { id: 'typography', name: 'Typography' }, { id: 'tokens', name: 'Tokens' },
@@ -130,8 +130,8 @@ const lanes: Array<{ name: string; talents: Array<{ id: string; name: string; di
     { id: 'storybook', name: 'Storybook' }, { id: 'skills-and-plugins', name: 'Skills and plugins' },
   ] },
   { name: 'Code', talents: [
-    { id: 'html', name: 'HTML' }, { id: 'css', name: 'CSS/SASS' },
-    { id: 'typescript', name: 'TypeScript', directed: true }, { id: 'react-native', name: 'React Native', directed: true },
+    { id: 'html', name: 'HTML' }, { id: 'git', name: 'Git' },
+    { id: 'react', name: 'React' }, { id: 'typescript', name: 'TypeScript', directed: true },
   ] },
 ];
 
@@ -215,7 +215,7 @@ const SkillMastery: React.FC = () => (
         </div>
         {/* Phones get the class, the line and the links; the lanes are desktop's. */}
         <figure className="sm__lanes" aria-labelledby="lanes-title">
-          <figcaption id="lanes-title" className="sm__lanes-head">Top talents in my build, points of 5. Directed code holds none.</figcaption>
+          <figcaption id="lanes-title" className="sm__lanes-head">Top talents in my build, points of 5. Dashed is agent-built.</figcaption>
           <div className="sm__lanes-body">
             {lanes.map((lane) => <div className="sm__lane" key={lane.name}>
               <p className="sm__lane-name">{lane.name}</p>
