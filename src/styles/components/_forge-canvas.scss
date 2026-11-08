@@ -840,6 +840,15 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
   &__tabmeta { font-family: $font-family-mono; font-size: 10px; font-weight: 400; color: $color-neutral-standard; }
 
+  &__sub { margin: 0; font-size: 13px; line-height: 18px; color: $color-neutral-standard; }
+
+  &__code {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 4px 4px;
+  }
+
   &__panel {
     @include fc-card;
     border-radius: $radius-xl;
@@ -881,8 +890,9 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
   .fc-heat { width: 18px; height: 18px; border-radius: 5px; }
   &__glyph { display: inline-flex; color: $color-secondary-dark; }
-  &__name { flex: 1 1 auto; font-size: 14px; display: flex; flex-direction: column; }
-  &__level { font-family: $font-family-mono; font-size: 12px; color: $color-neutral-standard; }
+  &__name { flex: 1 1 auto; min-width: 0; font-size: 14px; display: flex; flex-direction: column; gap: 1px; }
+  &__name .fc-node__id { white-space: normal; overflow-wrap: anywhere; }
+  &__level { flex: 0 0 auto; font-family: $font-family-mono; font-size: 12px; white-space: nowrap; color: $color-neutral-standard; }
 }
 
 .fc-sheet {
