@@ -42,3 +42,6 @@ scripts/aem-component-system/redact.local.json
 # Frame captures of the live WheelRack session; regenerate with
 # scripts/wheelrack-reel/capture-session.cjs (18MB, not worth versioning).
 scripts/wheelrack-reel/session/
+
+# The system catalog, rewritten before every start and build (scripts/system-catalog.mjs).
+/public/system/

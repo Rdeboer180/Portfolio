@@ -813,6 +813,13 @@ const DesignSystem: React.FC = () => {
           Documented for people and agents in two files at the repo root.{' '}
           <Link to="/notes/governance-in-markdown">Why the brand lives in PRODUCT.md and DESIGN.md &rarr;</Link>
         </p>
+        {/* The catalog is generated before every build; every pull request is
+            reviewed against it (scripts/system-review.mjs). A plain <a>: it is
+            a file, not a route. */}
+        <p className="ds__subtitle">
+          Every component, block and raw colour, as JSON for people and agents:{' '}
+          <a href="/system/catalog.json">the system catalog</a>. Each pull request is checked against it.
+        </p>
       </header>
 
       <div className="ds__nav">
