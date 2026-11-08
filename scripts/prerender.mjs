@@ -202,6 +202,9 @@ async function main() {
       // ScrollReveals of its own whose static state it keeps.
       clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline, #systems .sip__intro, #systems .sip__stage, #systems .sip__loop, #mastery .reveal-fade')
         .forEach((el) => el.classList.remove('is-visible'));
+      // SystemDoors arms itself (first frame) only after mount; the static
+      // file keeps its end frame, which is also React's first render.
+      clone.querySelectorAll('#systems .sip-doors').forEach((el) => el.classList.remove('is-visible', 'is-armed'));
       clone.querySelector('#projects.case-playground')?.classList.remove('case-playground--revealed');
       // `.case-playground__unlock` is the same thing wearing its current
       // clothes: the standing unlock offer moved out of the site chrome and

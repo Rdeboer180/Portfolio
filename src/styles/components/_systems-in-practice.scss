@@ -1143,48 +1143,8 @@
     padding-bottom: 0;
   }
 
-  .sip__loop { margin-top: $spacing-2xl; }
-
-  .sip__steps {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: $spacing-3xl;
-    row-gap: $spacing-lg;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .sip__step {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-  }
-
-  .sip__step-title {
-    font-family: $font-family-heading;
-    font-size: $font-size-body-lg;
-    font-weight: $font-weight-bold;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    color: $color-neutral-dark;
-  }
 
   .sip__actions { margin-top: $spacing-2xl; }
-
-  // The grown board under the four titles. On phones the section stays a
-  // statement; the board's list form lives in the note.
-  .sip__stage { margin-top: $spacing-xl; }
-
-  @media (max-width: #{$breakpoint-md - 1}) {
-    .sip__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: $spacing-xl; }
-    .sip__stage { display: none; }
-  }
-
-  @media (max-width: #{$breakpoint-xs - 1}) {
-    .sip__steps { grid-template-columns: minmax(0, 1fr); }
-  }
 }
 
 .sip--note {

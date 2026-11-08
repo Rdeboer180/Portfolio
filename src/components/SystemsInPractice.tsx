@@ -26,6 +26,7 @@ import { observeLayout } from '../utils/observeLayout';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
+import SystemDoors from './SystemDoors';
 import { useReveal } from '../hooks/useReveal';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
 
@@ -344,7 +345,8 @@ const SURFACES: NodeId[] = ['docs', 'prompts', 'qa', 'people', 'governance'];
 // ── The board, grown ─────────────────────────────────────────────────────────
 // The November version ("A design system should come in more than one size"):
 // the same eight nodes plus the playground anyone on the team can build in,
-// and the production listener that isn't built yet. On the network board each
+// and the PR reviewer (id 'listener': it listens to every pull request,
+// scripts/system-review.mjs). On the network board each
 // hangs under the node it works through, the Team and Governance, so neither
 // wire crosses a card; in tree mode they join the trunk like any surface.
 
@@ -361,12 +363,11 @@ export const GROWN_NODES: SystemNodeData[] = [
   {
     id: 'listener',
     tier: 'surface',
-    title: 'Production listener',
-    meta: 'Not built yet',
-    body: 'Notices what ships, changes, or disappears, and proposes the update to Governance.',
-    relation: 'Reports to Governance. Not built on this site yet.',
+    title: 'PR reviewer',
+    meta: 'Every pull request',
+    body: 'Inventories the system on each PR and suggests reuse, retirement, or the nearest token.',
+    relation: 'Reports to Governance. Suggests; a person decides.',
     icon: ICON.listener,
-    planned: true,
   },
 ];
 
@@ -533,7 +534,7 @@ function returnRail(from: Box, to: Box, railY: number): Wire {
  */
 export const SystemsBoard: React.FC<{
   revealed?: boolean;
-  /** Add the playground and the production listener (GROWN_NODES). */
+  /** Add the playground and the PR reviewer (GROWN_NODES). */
   grown?: boolean;
   /** The board alone, for pages that state the loop themselves. */
   boardOnly?: boolean;
@@ -984,26 +985,11 @@ const SystemsInPractice: React.FC = () => {
           </p>
         </div>
 
-        {/* The loop, in four titles. Each beat is the title the
-            note gives it, in the note's order; the note holds the bodies and
-            the board they light. */}
+        {/* The graphic: the four beats as a rail, three sizes standing on one
+            source, and the PR review under production. The board and the
+            beats' bodies live in the note. */}
         <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
-          <div className="sip__seam reveal-fade" style={delay(0)}>
-            <h3 className="sip__seam-label">The loop</h3>
-            <span className="sip__seam-line" aria-hidden="true" />
-          </div>
-          <ol className="sip__steps" aria-label="The loop, in four beats">
-            {BEATS.map((beat, i) => (
-              <li key={beat.n} className="sip__step reveal-fade" style={delay(80 + i * 80)}>
-                <span className="sip__beat-num bracketed">{`0${beat.n}`}</span>
-                <span className="sip__step-title">{beat.title}</span>
-              </li>
-            ))}
-          </ol>
-          {/* The grown board, without its own loop: the four titles above
-              already state it. Hidden on phones, where the section stays a
-              statement and the note carries the board. */}
-          <SystemsBoard grown boardOnly />
+          <SystemDoors beats={BEATS} />
           <div className="sip__actions reveal-fade" style={delay(420)}>
             <Link to="/notes/a-design-system-in-more-than-one-size/" className="btn btn--secondary btn--md sip__btn">
               Read the note
@@ -1013,9 +999,6 @@ const SystemsInPractice: React.FC = () => {
             <button type="button" className="sip__link sip__link--button" onClick={openVideo} aria-haspopup="dialog">
               Watch how I work, 1:37
             </button>
-            <Link to="/notes/shared-language-better-product-decisions/" className="sip__link">
-              How I drew it in October
-            </Link>
             <Link to="/design-system" className="sip__link">
               The live system
             </Link>
