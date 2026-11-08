@@ -21,7 +21,7 @@ import {
 } from './economy';
 import { GLYPHS } from './glyphs';
 import { AREAS, NODES, NODE_LIST, TREES, crownOf, foundationOf, treeOf } from './trees';
-import { analyzeTraits, buildResult, decodeState, encodeState } from './score';
+import { analyzeTraits, buildResult } from './score';
 import type { Allocation, Intake, TreeId } from './types';
 import { TRAITS } from './types';
 
@@ -40,9 +40,9 @@ describe('the three lanes', () => {
     expect(names).toEqual([
       'Typography', 'Layout', 'Interaction', 'Motion', 'Tokens', 'Components',
       'Accessibility', 'Governance', 'Research', 'Information architecture',
-      'Figma', 'Prototyping', 'Storybook', 'Documentation', 'Handoff', 'State modeling',
-      'CMS', 'QA and analytics', 'AI tools', 'Agent context',
-      'HTML', 'CSS', 'Git', 'Automation', 'JavaScript', 'Performance',
+      'Figma', 'Prototyping', 'Handoff', 'Storybook', 'Documentation', 'Skills and plugins',
+      'CMS', 'QA and analytics', 'AI tools', 'Internal tools',
+      'HTML', 'CSS/SASS', 'Git', 'Automation', 'JavaScript', 'Performance',
       'TypeScript', 'React', 'React Native', 'Production ownership',
     ]);
     NODE_LIST.forEach((n) => {
@@ -84,12 +84,12 @@ describe('the three lanes', () => {
 });
 
 describe('the economy: one pool, two locked parts', () => {
-  it('counts Ryan\'s intake as 63 = 16 design-locked, 4 code-locked, 43 free', () => {
+  it('counts Ryan\'s intake as 89 = 16 design-locked, 4 code-locked, 69 free', () => {
     const pools = computePools(INTAKE);
-    expect(pools.total).toBe(63);
+    expect(pools.total).toBe(89);
     expect(pools.designLocked).toBe(16);
     expect(pools.codeLocked).toBe(4);
-    expect(pools.free).toBe(43);
+    expect(pools.free).toBe(69);
     expect(pools.level).toBe(16);
   });
 
@@ -100,20 +100,20 @@ describe('the economy: one pool, two locked parts', () => {
   });
 
   it('treats a degree in another field, and self-taught, as free points', () => {
-    expect(computePools({ ...INTAKE, major: 'other', minor: 'none' }).free).toBe(8 + 38 + 5);
+    expect(computePools({ ...INTAKE, major: 'other', minor: 'none' }).free).toBe(8 + 64 + 5);
     const self = computePools({ ...INTAKE, degree: 'self-taught', minor: 'none' });
     expect(self.designLocked + self.codeLocked).toBe(0);
-    expect(self.total).toBe(8 + 38 + 5);
+    expect(self.total).toBe(8 + 64 + 5);
   });
 
   it('locks the years across the two lanes when the intake splits them', () => {
-    expect(yearsPoints(16)).toBe(38);
-    expect(yearsSplit(16, 70)).toEqual({ design: 27, code: 11 });
+    expect(yearsPoints(16)).toBe(64);
+    expect(yearsSplit(16, 70)).toEqual({ design: 45, code: 19 });
     const pools = computePools({ ...INTAKE, split: 70 });
-    expect(pools.designLocked).toBe(16 + 27);
-    expect(pools.codeLocked).toBe(4 + 11);
+    expect(pools.designLocked).toBe(16 + 45);
+    expect(pools.codeLocked).toBe(4 + 19);
     expect(pools.free).toBe(5);
-    expect(pools.total).toBe(63);
+    expect(pools.total).toBe(89);
   });
 
   it('writes the receipt in the v5 wording, with the lock on the line', () => {
@@ -124,7 +124,7 @@ describe('the economy: one pool, two locked parts', () => {
     expect(pools.receipt[1].lockedTo).toBe('code');
     expect(pools.receipt.every((l) => l.pool === 'points')).toBe(true);
     expect(pools.receipt.some((l) => /core/i.test(l.label))).toBe(false);
-    expect(pools.receipt.reduce((s, l) => s + l.points, 0)).toBe(63);
+    expect(pools.receipt.reduce((s, l) => s + l.points, 0)).toBe(89);
   });
 
   it('has retired the core pool', () => {
@@ -181,7 +181,7 @@ describe('spending', () => {
     const left = remaining(a, pools);
     expect(left.designLocked).toBe(11);
     expect(left.codeLocked).toBe(0);
-    expect(left.free).toBe(43 - 5 - 1);
+    expect(left.free).toBe(69 - 5 - 1);
   });
 });
 
@@ -207,44 +207,6 @@ describe('normalizing and clamping', () => {
   });
 });
 
-describe('the share link', () => {
-  const allocation: Allocation = { typography: 5, tokens: 5, figma: 5, html: 5, css: 4, storybook: 3, documentation: 3 };
-
-  it('round-trips an intake and an allocation under the v5 prefix', () => {
-    const encoded = encodeState(INTAKE, allocation);
-    expect(encoded.startsWith('v5')).toBe(true);
-    expect(encoded.split('.')[2].length).toBe(30);
-    const back = decodeState(encoded);
-    expect(back).not.toBeNull();
-    expect(back!.intake).toEqual(INTAKE);
-    expect(back!.allocation).toEqual(allocation);
-  });
-
-  it('carries the split when the intake answers it', () => {
-    const withSplit: Intake = { ...INTAKE, split: 70 };
-    const back = decodeState(encodeState(withSplit, { typography: 5 }));
-    expect(back!.intake.split).toBe(70);
-    expect(decodeState(encodeState(INTAKE, {}))!.intake.split).toBeUndefined();
-  });
-
-  it('refuses every older format', () => {
-    expect(decodeState('bgw16.5.533130205255545243425434302000.Ryan%20DeBoer')).toBeNull();
-    expect(decodeState('b16.5.533130205255545243425434302000.Ryan')).toBeNull();
-    expect(decodeState('v4bgw16.5.533130205255545243425434302000.Ryan')).toBeNull();
-    expect(decodeState('v5bgw16.5.5331.Ryan')).toBeNull();
-    expect(decodeState('')).toBeNull();
-  });
-
-  it('refuses a state the tree could not have produced', () => {
-    const lit = encodeState(INTAKE, { components: 3 });
-    expect(lit.split('.')[2]).toContain('3');
-    expect(decodeState(lit)).toBeNull();
-    const over: Allocation = {};
-    NODE_LIST.filter((n) => n.tier === 'foundation').forEach((n) => { over[n.id] = 5; });
-    expect(decodeState(encodeState({ ...INTAKE, years: 0, hours: 0 }, over))).toBeNull();
-  });
-});
-
 describe('traits and the result', () => {
   it('scores every trait from the node weights, never by hand', () => {
     const analysis = analyzeTraits({ typography: 5, layout: 5 });
@@ -259,7 +221,7 @@ describe('traits and the result', () => {
   it('builds a result with abilities, a class, and the masteries', () => {
     const allocation: Allocation = { tokens: 5, accessibility: 4, governance: 3, storybook: 3, documentation: 3 };
     const r = buildResult(INTAKE, allocation, TREES, ARCHETYPES);
-    expect(r.pools.total).toBe(63);
+    expect(r.pools.total).toBe(89);
     expect(r.abilities.length).toBe(12);
     expect(r.abilities.some((a) => a.unlocked)).toBe(true);
     expect(r.mastered).toEqual(['tokens']);

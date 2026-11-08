@@ -145,9 +145,9 @@ describe('copy', () => {
 });
 
 describe('composition', () => {
-  it('reproduces the brief\'s Guardrail Architect / Prototype Alchemist sentence exactly', () => {
+  it('reproduces the brief\'s sentence for Guardrail Architect / Visual Problem Solver (named Prototype Alchemist there)', () => {
     const primary = byId('guardrail-architect');
-    const secondary = byId('prototype-alchemist');
+    const secondary = byId('visual-problem-solver');
     expect(compose(primary, secondary)).toBe(
       'You build enough structure for experimentation to move fast without becoming chaos. ' +
         'You care about the system underneath the work, but you\'re happiest when you\'re turning ' +

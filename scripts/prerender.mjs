@@ -34,9 +34,9 @@ function reviewHead(html) {
 const HIDDEN_WORK_ROUTES = [...readFileSync(new URL('../src/data/projects.ts', import.meta.url), 'utf8')
   .matchAll(/slug: '([^']+)'[\s\S]{0,4000}?hidden: true/g)]
   .map((m) => `/work/${m[1]}`);
-// /talent-tree/build is linked from the front door, so the crawler reaches it
-// anyway; listing it means the build path prerenders even if that link moves.
-const EXTRA_ROUTES = ['/design-system', '/sitemap', '/demo/tire-fitment', '/talent-tree', '/talent-tree/build', ...new Set(HIDDEN_WORK_ROUTES)];
+// /talent-tree/build was retired on 8 November 2026; public/talent-tree/build/
+// is a static redirect to the Forge, so it is not rendered or listed here.
+const EXTRA_ROUTES = ['/design-system', '/sitemap', '/demo/tire-fitment', '/talent-tree', ...new Set(HIDDEN_WORK_ROUTES)];
 
 // Rendered so a direct link resolves, but kept out of the sitemap and marked
 // noindex. Rendering a route and publishing it are two decisions, and hidden

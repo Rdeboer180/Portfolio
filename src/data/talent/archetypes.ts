@@ -113,8 +113,8 @@ export const ARCHETYPES: Archetype[] = [
 
   // ---------- Exploration / invention ----------
   {
-    id: 'prototype-alchemist',
-    name: 'Prototype Alchemist',
+    id: 'visual-problem-solver',
+    name: 'Visual Problem Solver',
     family: 'exploration',
     line: 'Ambiguity turned into tangible experiments',
     signature: { exploration: 0.6, build: 0.25, systems: 0.15 },

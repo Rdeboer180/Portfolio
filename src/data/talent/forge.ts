@@ -1,5 +1,5 @@
 // ============================================
-// The Ability Forge (v5, 2026-09-12)
+// The Ability Forge (v7, 2026-11-08)
 // Abilities are unlocked by RECIPES over node levels, never spent: the points
 // stay on the nodes and an ability reads them. Each ability points at an
 // archetype id, so the copy (name, line, you, cares, happiest, passive, quest)
@@ -9,10 +9,12 @@
 // Ties break by family order (systems, exploration, craft, build, product, ai,
 // research, collaboration), then by the order the abilities are authored in.
 //
-// Thresholds are the tuning surface. The four Ryan unlocks (Guardrail
-// Architect, Prototype Alchemist, Lossless Handoff, System Memory) were tuned
-// against his allocation in ryan.ts; every change from the spec's starting
-// numbers is noted on the recipe.
+// Thresholds are the tuning surface. Ryan's six unlocks (Visual Problem
+// Solver, System Memory, Guardrail Architect, Systemsmith, Lossless Handoff,
+// Agent Wrangler) were checked against his allocation in ryan.ts; every change
+// from the spec's starting numbers is noted on the recipe. v7 renamed
+// Prototype Alchemist to Visual Problem Solver and moved three recipes onto
+// the reworked Technical lane.
 // ============================================
 
 import type { Ability, AbilityState, Allocation, Family, TalentTree } from './types';
@@ -39,17 +41,17 @@ export const ABILITIES: Ability[] = [
     line: 'Standards, accessibility, and governance that hold when you leave the room',
   },
   {
-    id: 'prototype-alchemist',
-    archetypeId: 'prototype-alchemist',
-    name: 'Prototype Alchemist',
+    id: 'visual-problem-solver',
+    archetypeId: 'visual-problem-solver',
+    name: 'Visual Problem Solver',
     family: 'exploration',
-    // Tuned: Prototyping 3 to 1, AI tools 3 to 4, HTML 3 to 5. The alchemy is
-    // the tool mastery, not the hours in the prototype file.
+    // v7: back to the spec's recipe. The v5 tuning (Prototyping 1, AI tools 4,
+    // HTML 5) read the tools, not the prototypes; this one reads both.
     formula: [
       { nodeId: 'figma', min: 5 },
-      { nodeId: 'prototyping', min: 1 },
-      { nodeId: 'ai-tools', min: 4 },
-      { nodeId: 'html', min: 5 },
+      { nodeId: 'prototyping', min: 3 },
+      { nodeId: 'ai-tools', min: 3 },
+      { nodeId: 'html', min: 3 },
     ],
     line: 'Ideas made real enough to argue with, in whichever medium answers fastest',
   },
@@ -58,12 +60,12 @@ export const ABILITIES: Ability[] = [
     archetypeId: 'front-end-translator',
     name: 'Lossless Handoff',
     family: 'build',
-    // Tuned: State modeling 3 to 1. The handoff is carried by the component
-    // contract and the QA pass; the state map only has to exist.
+    // v7: Handoff 3 in place of State modeling, which folded into Handoff.
+    // The handoff is carried by the component contract and the QA pass.
     formula: [
       { nodeId: 'components', min: 3 },
       { nodeId: 'storybook', min: 3 },
-      { nodeId: 'state-modeling', min: 1 },
+      { nodeId: 'handoff', min: 3 },
       { nodeId: 'qa-and-analytics', min: 2 },
     ],
     line: 'What was designed is what gets built, states and all',
@@ -73,12 +75,13 @@ export const ABILITIES: Ability[] = [
     archetypeId: 'context-carrier',
     name: 'System Memory',
     family: 'collaboration',
-    // Tuned: Agent context 3 to 1. The memory lives in the documents and the
-    // governance; the agent-readable layer is the smaller half.
+    // Tuned: the agent-readable layer at 1 (Agent context in v5, Skills and
+    // plugins in v7). The memory lives in the documents and the governance;
+    // the agent-readable layer is the smaller half.
     formula: [
       { nodeId: 'documentation', min: 3 },
       { nodeId: 'governance', min: 3 },
-      { nodeId: 'agent-context', min: 1 },
+      { nodeId: 'skills-and-plugins', min: 1 },
     ],
     line: 'The reasoning outlives the project, for the next person and the next agent',
   },
@@ -124,10 +127,13 @@ export const ABILITIES: Ability[] = [
     archetypeId: 'agent-wrangler',
     name: 'Agent Wrangler',
     family: 'ai',
+    // v7: reads the agent work the Technical lane now names (AI tools,
+    // Internal tools, Skills and plugins) in place of Agent context and Code's
+    // Automation.
     formula: [
-      { nodeId: 'ai-tools', min: 4 },
-      { nodeId: 'agent-context', min: 3 },
-      { nodeId: 'automation', min: 2 },
+      { nodeId: 'ai-tools', min: 3 },
+      { nodeId: 'internal-tools', min: 3 },
+      { nodeId: 'skills-and-plugins', min: 3 },
     ],
     line: 'Agents pointed at the work with enough context to be useful',
   },
@@ -272,7 +278,7 @@ export function pickClass(states: AbilityState[]): ForgeClass {
   return { primary, secondary: other, provisional: unlocked.length < 2 };
 }
 
-/** "4 unlocked of 12 · Guardrail Architect, Prototype Alchemist, Lossless Handoff, System Memory". */
+/** "6 unlocked of 12 · Visual Problem Solver, System Memory, Guardrail Architect, …". */
 export function abilityReceiptLine(states: AbilityState[]): string {
   const unlocked = states.filter((s) => s.unlocked);
   const head = `${unlocked.length} unlocked of ${states.length}`;

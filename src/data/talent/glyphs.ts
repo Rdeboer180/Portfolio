@@ -7,7 +7,7 @@
 // stroke-linecap="round" stroke-linejoin="round"> and sets size and color.
 // Keys are the node glyph keys in trees.ts, the three roots, and "branch" for
 // the hero chip and the homepage section badge. Do not redraw here; the sheet
-// is the source.
+// is the source, and for the v7 marks the Forge canvas is.
 // ============================================
 
 export const GLYPHS: Record<string, string> = {
@@ -81,7 +81,18 @@ export const GLYPHS: Record<string, string> = {
   workflow:
     '<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><rect x="9" y="8.5" width="6" height="7" rx="1.5"/><path d="M7.5 12h1.5M15 12h1.5"/>',
 
-  // Roots
+  // Added for v7 (2026-11-08), drawn on the Forge canvas (boards 25 and 27)
+  // in the same hand and flattened to one path each.
+  'pen-tool': '<path d="M12 20.5 6.5 11.5 9 4h6l2.5 7.5z M12 20.5v-7 M10.3 11.8a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0z"/>',
+  redline:
+    '<path d="M4.5 9H14.5A1.5 1.5 0 0 1 16 10.5V19.5A1.5 1.5 0 0 1 14.5 21H4.5A1.5 1.5 0 0 1 3 19.5V10.5A1.5 1.5 0 0 1 4.5 9z M3 3.5v3M16 3.5v3M3 5h13 M18.5 9h3M18.5 21h3M20 9v12"/>',
+  'agent-file':
+    '<path d="M13 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21H11 M13 3l4 4v4 M13 3v4h4 M8.5 9.5h2.5M8.5 13h4 M17.5 13.5c0 2.2 1.8 4 4 4-2.2 0-4 1.8-4 4 0-2.2-1.8-4-4-4 2.2 0 4-1.8 4-4z"/>',
+  wrench: '<path d="M20.04 7.21A4.6 4.6 0 1 1 16.79 3.96 M20.04 7.21L16.8 7.2L16.79 3.96 M12.35 11.65L4.5 19.5"/>',
+
+  // Roots. Workflow takes the toolbox in v7.
+  toolbox:
+    '<path d="M5 9H19A2 2 0 0 1 21 11V18A2 2 0 0 1 19 20H5A2 2 0 0 1 3 18V11A2 2 0 0 1 5 9z M3 13.5h18 M8.5 9V6.5A1.5 1.5 0 0 1 10 5h4a1.5 1.5 0 0 1 1.5 1.5V9 M12 12v3"/>',
   'visual-craft': '<path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M13.5 7.5l3 3"/>',
   build: '<path d="M12 4.9l7.1 7.1-3.1 3.1-7.1-7.1z"/><path d="M12.4 11.6L3.5 20.5"/>',
   judgment: '<path d="M12 3.5v17M8.5 20.5h7M5.5 7h13"/><path d="M5.5 7 3 13h5z"/><path d="M18.5 7 16 13h5z"/>',

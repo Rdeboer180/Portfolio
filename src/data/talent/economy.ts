@@ -14,7 +14,8 @@
 // Minor: a quarter of the degree's points, ADDED on top and locked to the
 // minor's lane (bachelor's in graphic design with a minor in web: 16 design
 // AND 4 code, 20 from the degree).
-// Years: 4 per year for the first three, then 2 per year. 16 years = 38.
+// Years: 4 per year (from 8 November 2026, the rate the Talent Atlas used;
+// it was 4 for the first three years, then 2). 16 years = 64.
 // Split (optional): the share of the years that went to design rather than
 // code, in steps of ten. When answered, the years points lock across the two
 // lanes by that share; unanswered, they stay free on any lane.
@@ -24,8 +25,8 @@
 //
 // So the pool has three parts: designLocked, codeLocked, and free. The Design
 // and Code lanes draw from their locked part first, then from free; the
-// Technical lane draws from free only. Ryan: 63 = 16 design-locked + 4
-// code-locked + 43 free, level 16.
+// Technical lane draws from free only. Ryan: 89 = 16 design-locked + 4
+// code-locked + 69 free, level 16.
 // ============================================
 
 import type {
@@ -127,7 +128,7 @@ export const SPLIT_OPTIONS: SplitOption[] = Array.from({ length: 100 / SPLIT_STE
   return { value: design, label: `${design} design · ${100 - design} code`, short: `${design} / ${100 - design}` };
 });
 
-export const YEARS_NOTE = '4 per year for the first three years, then 2 per year';
+export const YEARS_NOTE = '4 per year of professional experience';
 export const HOURS_NOTE = '1 per 40 hours outside the day job in the last 12 months';
 export const OTHER_FIELD_NOTE = 'A degree outside a design craft counts as self-taught, spend on any lane';
 export const SPLIT_NOTE = 'The years points lock to the two lanes by this share: the design share to Design and systems, the rest to Code';
@@ -181,7 +182,7 @@ export function minorPoints(degree: Degree, minor: Minor): number {
 /** 4 per year for the first three years, then 2 per year. */
 export function yearsPoints(years: number, annualRate?: number): number {
   const y = sanitizeYears(years);
-  return annualRate === undefined ? Math.min(y, 3) * 4 + Math.max(y - 3, 0) * 2 : y * annualRate;
+  return y * (annualRate === undefined ? 4 : annualRate);
 }
 
 /**

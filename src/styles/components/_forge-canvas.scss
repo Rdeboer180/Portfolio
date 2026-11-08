@@ -1,0 +1,950 @@
+@import '../variables';
+
+// ============================================
+// The Forge on the canvas (ForgeCanvas.tsx)
+// Board 25 of the Forge canvas, built: the /about canvas vernacular (dot
+// grid, a light Layers panel, one white artboard with a frame label, props in
+// the gutters) on the site's own tokens. Heat runs secondary-muted → primary:
+// a light ramp in the one accent, never a second hue. Motion is what the
+// motion plan cleared for a read-only page: the colour step on the lit chain
+// from the root to the picked skill, the mode toggle, and the phone's sheet.
+// Everything else is instant.
+// ============================================
+
+$fc-line: rgba(27, 27, 27, 0.1);
+$fc-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+$fc-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+$fc-step: 150ms;
+// The two paper props: the card stock the class card is printed on, and a
+// sticky note. Local to the canvas, like the /about desk's paper.
+$fc-cardstock: #ece7db;
+$fc-sticky: #fff3b0;
+$fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 1, 0.35);
+
+// The heat ramp, by level, for nodes, squares and dots.
+@mixin fc-heat($level) {
+  @if $level == 0 {
+    background: #ffffff;
+    box-shadow: inset 0 0 0 1.5px rgba(27, 27, 27, 0.18);
+  } @else if $level == 1 {
+    background: $color-secondary-light;
+  } @else if $level == 2 {
+    background: $color-primary-md;
+  } @else if $level == 3 {
+    background: $color-primary-muted;
+  } @else if $level == 4 {
+    background: $color-primary;
+  } @else {
+    background: $color-primary;
+    box-shadow: $fc-glow;
+  }
+}
+
+@mixin fc-label {
+  font-family: $font-family-mono;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-secondary-dark;
+}
+
+@mixin fc-card {
+  background: #ffffff;
+  border: 1px solid $fc-line;
+  border-radius: $radius-md;
+  box-shadow: var(--shadow-room);
+}
+
+// ── The page around the canvas ──────────────────────────────────────────────
+
+.fc-page {
+  background: #ffffff;
+  color: $color-neutral-dark;
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 28px;
+    border-bottom: 1px solid $fc-line;
+    background: #ffffff;
+  }
+
+  &__logo {
+    font-family: $font-family-heading;
+    font-size: 17px;
+    font-weight: 700;
+    color: $color-neutral-dark;
+    text-decoration: none;
+  }
+
+  &__back {
+    font-size: 14px;
+    color: $color-neutral-standard;
+    text-decoration: none;
+
+    &:hover { color: $color-neutral-dark; text-decoration: underline; text-underline-offset: 4px; }
+  }
+
+  &__body {
+    padding: 28px 24px 56px;
+    background-color: $color-secondary-lightest;
+    background-image: radial-gradient(rgba(143, 157, 175, 0.45) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+.fc {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: $font-family-primary;
+  color: $color-neutral-dark;
+
+  button { font-family: inherit; }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline: 2px solid $color-primary-dark;
+    outline-offset: 2px;
+  }
+
+  &__canvas {
+    display: grid;
+    grid-template-columns: 216px 632px 252px;
+    grid-template-areas: 'left stage right';
+    gap: 24px 28px;
+    justify-content: center;
+    align-items: start;
+  }
+
+  &__gutter--left { grid-area: left; display: flex; flex-direction: column; gap: 24px; }
+  &__stage { grid-area: stage; min-width: 0; }
+  &__gutter--right { grid-area: right; display: flex; flex-direction: column; gap: 8px; }
+
+  &__frame {
+    display: block;
+    margin: -18px 0 6px;
+    font-size: 11px;
+    color: $color-neutral-muted;
+  }
+}
+
+.fc-label {
+  @include fc-label;
+  display: block;
+}
+
+// ── The intro: what the page is, in Ryan's words ────────────────────────────
+
+.fc-intro {
+  max-width: 1148px;
+  margin: 0 auto 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 40px;
+  align-items: end;
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    h1 { margin: 0; font-family: $font-family-heading; font-size: 40px; font-weight: 700; line-height: 46px; letter-spacing: -0.02em; }
+  }
+
+  &__class { margin: 4px 0 0; font-family: $font-family-heading; font-size: 18px; font-weight: 600; line-height: 24px; }
+  &__facts { margin: 0; font-family: $font-family-mono; font-size: 12px; line-height: 18px; color: $color-neutral-standard; }
+  &__story { margin: 0; max-width: 62ch; font-size: 16px; line-height: 26px; color: $color-neutral-standard; }
+}
+
+// ── Layers ──────────────────────────────────────────────────────────────────
+
+.fc-layers {
+  @include fc-card;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  &__title { padding: 6px 8px; font-size: 11px; font-weight: 600; color: $color-neutral-standard; }
+  &__list { display: flex; flex-direction: column; gap: 2px; }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: $color-neutral-dark;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+
+    svg { flex: 0 0 auto; color: $color-secondary-dark; }
+    &:hover { background: $color-secondary-lightest; }
+
+    &[aria-selected='true'] {
+      background: $color-secondary-lightest;
+      font-weight: 600;
+    }
+  }
+
+  &__name { flex: 1 1 auto; }
+
+  &__meta {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+}
+
+// ── Gutter props: the class card and the next quest ─────────────────────────
+
+.fc-classcard {
+  width: 186px;
+  margin-left: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
+  background: $fc-cardstock;
+  box-shadow: 0 10px 22px rgba(27, 27, 27, 0.16);
+  transform: rotate(-2.5deg);
+
+  &__face {
+    height: 92px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: $color-primary-md;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+  }
+
+  &__eyebrow {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: $color-neutral-dark;
+  }
+
+  &__name {
+    font-family: $font-family-heading;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  &__line { margin: 8px 2px 2px; font-size: 11px; line-height: 15px; color: #2a2620; }
+
+  &__with {
+    margin: 4px 2px 0;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: $color-neutral-standard;
+  }
+}
+
+.fc-sticky {
+  width: 164px;
+  margin-left: 24px;
+  box-sizing: border-box;
+  padding: 12px;
+  background: $fc-sticky;
+  box-shadow: 0 6px 14px rgba(27, 27, 27, 0.14);
+  transform: rotate(2deg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__eyebrow { font-family: $font-family-mono; font-size: 10px; text-transform: uppercase; color: $color-neutral-standard; }
+  &__text { font-size: 13px; font-weight: 600; line-height: 18px; color: $color-neutral-dark; }
+}
+
+// ── The artboard ────────────────────────────────────────────────────────────
+
+.fc-artboard {
+  position: relative;
+  width: 632px;
+  // The board's 682, plus room for the playground note under the tree.
+  min-height: 712px;
+  background: #ffffff;
+  box-shadow: var(--shadow-room);
+
+  &__head {
+    position: relative;
+    z-index: 2;
+    padding: 26px 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  &__eyebrow {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $color-secondary-dark;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font-family-heading;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 36px;
+  }
+
+  &__sub { font-size: 14px; line-height: 20px; color: $color-neutral-standard; }
+}
+
+// ── The tree ────────────────────────────────────────────────────────────────
+
+.fc-tree {
+  position: absolute;
+  inset: 0;
+
+  &__wires { position: absolute; left: 0; top: 0; }
+}
+
+.fc-wire {
+  stroke: rgba(27, 27, 27, 0.16);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+  transition: stroke $fc-step ease;
+
+  &.is-lit { stroke: $color-primary-muted; stroke-width: 2; stroke-dasharray: none; }
+  &.is-chain { stroke: $color-primary-dark; stroke-width: 2.5; }
+}
+
+.fc-gate {
+  rect { fill: #ffffff; stroke: $color-secondary-dark; stroke-width: 1; }
+  text { fill: $color-secondary-dark; font-family: $font-family-mono; font-size: 10px; }
+  &.is-open text { fill: $color-neutral-dark; }
+}
+
+.fc-node {
+  position: absolute;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+
+  &__btn {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $color-neutral-dark;
+    outline-offset: 4px;
+    transition: background-color $fc-step ease, box-shadow $fc-step ease, transform $fc-step $fc-ease;
+  }
+
+  @for $l from 0 through 5 {
+    &--l#{$l} .fc-node__btn { @include fc-heat($l); }
+  }
+
+  &--l0 .fc-node__btn { color: $color-secondary-dark; }
+  &--l4 .fc-node__btn,
+  &--l5 .fc-node__btn { color: #ffffff; }
+
+  &.is-selected .fc-node__btn { outline: 1.5px solid $color-secondary-dark; }
+
+  &__badge {
+    position: absolute;
+    left: 31px;
+    top: -5px;
+    min-width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: $color-neutral-dark;
+    box-shadow: 0 0 0 2px #ffffff;
+    color: #ffffff;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &--l0 &__badge {
+    background: #ffffff;
+    color: $color-neutral-muted;
+    box-shadow: inset 0 0 0 1px rgba(27, 27, 27, 0.22), 0 0 0 2px #ffffff;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    background: #ffffff;
+  }
+
+  &__name { font-size: 12px; font-weight: 500; line-height: 15px; text-align: center; }
+  &--l0 &__name { color: $color-neutral-muted; }
+
+  &__id {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    white-space: nowrap;
+    color: $color-secondary-dark;
+  }
+
+  &__delta {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: 700;
+    color: $color-primary-dark;
+
+    &.is-down { color: $color-secondary-dark; }
+  }
+
+  // Agent-built code: the homepage's directed key, a dashed ring.
+  &.is-agent .fc-node__btn::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border: 1.5px dashed $color-secondary-dark;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  &__agent {
+    font-family: $font-family-mono;
+    font-size: 10px;
+    white-space: nowrap;
+    color: $color-secondary-dark;
+  }
+}
+
+.fc-root {
+  position: absolute;
+  width: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  &__tile {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-xl;
+    background: $color-neutral-dark;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__badge {
+    position: absolute;
+    left: 38px;
+    top: -8px;
+    min-width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: $color-neutral-dark;
+    box-shadow: 0 0 0 2px #ffffff;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  &__name { font-size: 12px; font-weight: 600; }
+}
+
+.fc-playground {
+  position: absolute;
+  z-index: 2;
+  left: 32px;
+  top: 560px;
+  width: 214px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  .btn { height: $button-height-sm; padding: 0 12px; font-size: 14px; }
+  &__note { font-size: 12px; line-height: 16px; color: $color-neutral-standard; }
+}
+
+// ── Abilities layer ─────────────────────────────────────────────────────────
+
+.fc-abilities {
+  position: relative;
+  z-index: 2;
+  margin: 20px 32px 32px;
+  padding: 0;
+  list-style: none;
+
+  &__row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    min-height: 48px;
+    padding: 4px 8px;
+    border: 0;
+    border-bottom: 1px solid $fc-line;
+    background: transparent;
+    color: $color-neutral-dark;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover,
+    &.is-selected { background: $color-secondary-lightest; }
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    background: #ffffff;
+    border: 1.5px solid rgba(27, 27, 27, 0.22);
+  }
+
+  .is-forged &__dot { background: $color-primary; border-color: $color-primary; box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px $color-primary; }
+  .is-near &__dot { background: $color-primary-md; border-color: $color-primary-md; }
+
+  &__text { display: flex; flex-direction: column; min-width: 0; }
+  &__name { font-size: 14px; }
+  .is-forged &__name { font-weight: 600; }
+  &__recipe { font-size: 11px; line-height: 15px; color: $color-neutral-standard; }
+
+  &__tag { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; }
+  .is-forged &__tag { color: $color-primary-dark; }
+}
+
+// ── The right gutter: mode, Inspect, the note ───────────────────────────────
+
+.fc-mode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 3px;
+  border-radius: $button-radius;
+  background: $color-secondary-light;
+
+  button {
+    height: 40px;
+    border: 0;
+    border-radius: $radius-md;
+    background: transparent;
+    color: $color-neutral-dark;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background-color $fc-step ease;
+
+    &[aria-pressed='true'] { background: #ffffff; box-shadow: 0 1px 2px rgba(27, 27, 27, 0.12); }
+  }
+}
+
+.fc-inspect,
+.fc-note {
+  @include fc-card;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fc-inspect {
+  &__id { display: flex; flex-direction: column; gap: 6px; }
+  &__key { font-family: $font-family-mono; font-size: 15px; font-weight: 700; }
+}
+
+.fc-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+// Ryan's own word on a skill: the first thing the panel says about it.
+.fc-mine {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: $radius-sm;
+  background: $color-secondary-lightest;
+  font-size: 13px;
+  line-height: 19px;
+  color: $color-neutral-dark;
+
+  .fc-label { margin-bottom: 4px; }
+  &.is-agent { border: 1.5px dashed $color-secondary-dark; background: #ffffff; }
+}
+
+.fc-chip {
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: $color-secondary-lightest;
+  font-family: $font-family-mono;
+  font-size: 10px;
+  line-height: 15px;
+  color: $color-neutral-standard;
+}
+
+.fc-props {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid $fc-line;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  div { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; font-family: $font-family-mono; font-size: 11px; line-height: 16px; }
+  dt { color: $color-secondary-dark; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+}
+
+.fc-weights {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid $fc-line;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 30px;
+    gap: 8px;
+    align-items: center;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 14px;
+
+    span:last-child { text-align: right; }
+  }
+
+  &__bar {
+    height: 4px;
+    border-radius: 2px;
+    background: $color-secondary-light;
+
+    span { display: block; height: 4px; border-radius: 2px; background: $color-secondary-dark; }
+  }
+}
+
+.fc-block { display: flex; flex-direction: column; gap: 4px; }
+
+.fc-code {
+  margin: 0;
+  padding: 8px 0;
+  border-radius: $radius-sm;
+  background: $color-neutral-dark;
+  color: $color-secondary-lightest;
+  font-family: $font-family-mono;
+  font-size: 10px;
+  line-height: 14px;
+  overflow-x: auto;
+
+  &__line {
+    display: block;
+    padding: 0 10px;
+    white-space: pre;
+
+    &--comment,
+    &--remove { color: $color-secondary; }
+    &--add { color: $color-primary-md; }
+    &--same { color: $color-secondary-light; }
+    &.is-selected { background: rgba(143, 157, 175, 0.22); font-weight: 700; }
+  }
+}
+
+.fc-note {
+  padding: 16px;
+  gap: 8px;
+
+  &__layer {
+    align-self: flex-start;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: $color-secondary-dark;
+    color: #ffffff;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  &__name { margin: 0; font-family: $font-family-heading; font-size: 20px; font-weight: 700; line-height: 24px; }
+  &__level { font-family: $font-family-mono; font-size: 12px; color: $color-neutral-standard; }
+  &__meaning,
+  &__mastery,
+  &__none { margin: 0; font-size: 13px; line-height: 19px; color: $color-neutral-standard; }
+  &__mastery { color: $color-neutral-dark; font-weight: 500; }
+  .fc-label { margin-top: 4px; }
+}
+
+.fc-feeds {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; line-height: 20px; }
+}
+
+.fc-feeds__state {
+  font-family: $font-family-mono;
+  color: $color-secondary-dark;
+
+  &.is-forged { color: $color-primary-dark; }
+}
+
+.fc-reqs {
+  margin: 0;
+  padding: 6px 0 0;
+  border-top: 1px solid $fc-line;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    min-height: 30px;
+    font-size: 13px;
+  }
+
+  &__n { font-family: $font-family-mono; font-size: 12px; color: $color-secondary-dark; }
+  .is-met .fc-reqs__n { color: $color-primary-dark; }
+}
+
+.fc-heat {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  @for $l from 0 through 5 {
+    &--#{$l} { @include fc-heat($l); }
+  }
+
+  &--5 { box-shadow: 0 0 0 1.5px #ffffff, 0 0 0 2.5px $color-primary; }
+}
+
+// ── Tablet: the gutters fold around the artboard ────────────────────────────
+
+@media (max-width: 1179px) {
+  .fc__canvas {
+    grid-template-columns: 632px 252px;
+    grid-template-areas:
+      'left left'
+      'stage right';
+  }
+
+  .fc__gutter--left {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .fc-layers { width: 216px; box-sizing: border-box; }
+  .fc-classcard,
+  .fc-sticky { margin-left: 0; }
+}
+
+@media (max-width: 979px) {
+  .fc__canvas {
+    grid-template-columns: 632px;
+    grid-template-areas:
+      'left'
+      'stage'
+      'right';
+  }
+
+  .fc-intro { grid-template-columns: 1fr; gap: 12px; }
+}
+
+// ── Phone: a list per lane and a sheet per skill (ForgeMobile) ──────────────
+
+@media (max-width: 767px) {
+  .fc-page__nav { padding: 0 16px; }
+  .fc-page__body { padding: 16px 16px 0; }
+  .fc__stage { overflow-x: auto; }
+}
+
+.fc--phone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .fc-sticky { width: auto; margin: 4px 0 0; transform: none; }
+  .fc-mode { margin-top: 8px; }
+}
+
+.fc-phone {
+  &__head {
+    @include fc-card;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title { margin: 0; font-family: $font-family-heading; font-size: 26px; font-weight: 700; line-height: 31px; }
+  &__meta { font-size: 13px; line-height: 18px; color: $color-neutral-standard; }
+  &__class { font-family: $font-family-heading; font-size: 16px; font-weight: 600; line-height: 20px; }
+  &__story { margin: 4px 0 8px; font-size: 14px; line-height: 21px; color: $color-neutral-standard; }
+
+  &__tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 3px;
+    border-radius: $button-radius;
+    background: $color-secondary-light;
+
+    button {
+      min-height: 48px;
+      border: 0;
+      border-radius: $radius-md;
+      background: transparent;
+      color: $color-neutral-dark;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+
+      &[aria-selected='true'] { background: #ffffff; box-shadow: 0 1px 2px rgba(27, 27, 27, 0.12); }
+    }
+  }
+
+  &__tabmeta { font-family: $font-family-mono; font-size: 10px; font-weight: 400; color: $color-neutral-standard; }
+
+  &__panel {
+    @include fc-card;
+    border-radius: $radius-xl;
+    padding: 6px;
+
+    .fc-abilities { margin: 0; }
+  }
+
+  // The playground block, out of the artboard and into the page's flow.
+  &__play .fc-playground { position: static; width: auto; padding: 4px 4px 24px; }
+}
+
+.fc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  &__item--crown .fc-list__btn { padding-left: 30px; }
+
+  &__btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: $radius-md;
+    background: transparent;
+    color: $color-neutral-dark;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    cursor: pointer;
+
+    &:active { background: $color-secondary-lightest; }
+  }
+
+  .fc-heat { width: 18px; height: 18px; border-radius: 5px; }
+  &__glyph { display: inline-flex; color: $color-secondary-dark; }
+  &__name { flex: 1 1 auto; font-size: 14px; display: flex; flex-direction: column; }
+  &__level { font-family: $font-family-mono; font-size: 12px; color: $color-neutral-standard; }
+}
+
+.fc-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(27, 27, 27, 0.4);
+    animation: fc-fade 200ms ease-out both;
+  }
+
+  &__panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 8px 16px 24px;
+    border-radius: $radius-2xl $radius-2xl 0 0;
+    background: #ffffff;
+    box-shadow: 0 -8px 24px rgba(27, 27, 27, 0.18);
+    animation: fc-sheet-in 260ms $fc-drawer both;
+
+    .fc-inspect,
+    .fc-note { padding: 8px 0 0; border: 0; box-shadow: none; }
+  }
+
+  &__handle { width: 36px; height: 4px; margin: 0 auto 4px; border-radius: 2px; background: $color-secondary-light; }
+
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: $color-neutral-dark;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
+
+@keyframes fc-sheet-in {
+  from { transform: translateY(100%); }
+}
+
+@keyframes fc-fade {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-node__btn,
+  .fc-wire,
+  .fc-mode button { transition: none; }
+
+  .fc-sheet__panel { animation: fc-fade 150ms ease-out both; }
+}

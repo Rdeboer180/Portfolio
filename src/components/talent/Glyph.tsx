@@ -5,15 +5,16 @@
 // the prerendered markup and the client's first render are byte-for-byte the
 // same tree (React does not reconcile injected HTML on hydration, and a
 // serialised <path/> comes back as <path></path>). The markup is hand-authored
-// and only ever holds path, rect, and circle elements with plain attributes.
+// and only ever holds path, rect, circle, and ellipse elements with plain
+// attributes (React's atom is the one that needs ellipse).
 // ============================================
 
 import React from 'react';
 import { glyph as glyphMarkup } from '../../data/talent/glyphs';
 
-type Shape = { tag: 'path' | 'rect' | 'circle'; attrs: Record<string, string> };
+type Shape = { tag: 'path' | 'rect' | 'circle' | 'ellipse'; attrs: Record<string, string> };
 
-const ELEMENT = /<(path|rect|circle)\b([^>]*?)\/?>/g;
+const ELEMENT = /<(path|rect|circle|ellipse)\b([^>]*?)\/?>/g;
 const ATTR = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)="([^"]*)"/g;
 
 const cache: Record<string, Shape[]> = {};

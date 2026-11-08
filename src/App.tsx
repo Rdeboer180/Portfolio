@@ -43,7 +43,7 @@ const ResumePage = lazy(() => import('./components/ResumePage'));
 const HomepageTargeted = lazy(() => import('./components/HomepageTargeted'));
 const SitemapPage = lazy(() => import('./components/SitemapPage'));
 const LabDemoPage = lazy(() => import('./components/LabDemoPage'));
-const TalentAtlasPage = lazy(() => import('./components/TalentAtlasPage'));
+const TalentTreePage = lazy(() => import('./components/TalentTreePage'));
 const NotesPage = lazy(() => import('./components/NotesPage'));
 const NotePage = lazy(() => import('./components/NotePage'));
 // The author panel (its finder, the work navigator, the project data and
@@ -303,10 +303,11 @@ function AppRoutes() {
         <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
         {/* the Tire Fitment Prototype under the site's own nav and footer; the trackpad on /about opens it */}
         <Route path="/demo/tire-fitment" element={<PageShell><LabDemoPage /></PageShell>} />
-        <Route path="/talent-tree" element={<PageShell><TalentAtlasPage /></PageShell>} />
-        <Route path="/talent-tree/build" element={<PageShell><TalentAtlasPage own /></PageShell>} />
+        <Route path="/talent-tree" element={<PageShell><TalentTreePage /></PageShell>} />
+        {/* The build-your-own path was retired on 8 November 2026; its links land on Ryan's tree. */}
+        <Route path="/talent-tree/build" element={<Navigate to="/talent-tree/" replace />} />
         <Route path="/talent-tree/atlas" element={<Navigate to="/talent-tree/" replace />} />
-        <Route path="/talent-tree/atlas/build" element={<Navigate to="/talent-tree/build/" replace />} />
+        <Route path="/talent-tree/atlas/build" element={<Navigate to="/talent-tree/" replace />} />
         {/* The name Ryan used in the brief; the site's routes are kebab-case with a
             trailing slash, so this is a client-side alias, not the canonical. */}
         <Route path="/talentTree" element={<Navigate to="/talent-tree/" replace />} />
