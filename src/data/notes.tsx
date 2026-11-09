@@ -46,6 +46,16 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'visual-problem-solver',
+    kind: 'reflection',
+    origin: 'portfolio',
+    date: 'November 8, 2026',
+    dateISO: '2026-11-08',
+    title: 'The first layout is the average. Better is still a design decision.',
+    dek: 'Why years of craft and code put designers in the best position to direct what AI builds, and to lead what better looks like on the web.',
+    read: '3 min',
+  },
+  {
     slug: 'a-design-system-in-more-than-one-size',
     kind: 'exploration',
     featured: true,

@@ -1,0 +1,291 @@
+// ============================================
+// VisualProblemSolver — the "Visual Problem Solver" note's figures. Paper
+// panels on hairlines, Menlo tags, Signal Orange only on the directed side.
+// ============================================
+
+.notes__body .vps {
+  margin: $spacing-2xl 0;
+
+  figcaption {
+    margin-top: $spacing-md;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.vps {
+  &__tag {
+    display: block;
+    margin-bottom: $spacing-sm;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+
+  &__tag--mine { color: $color-primary-text; }
+
+  // ── 1. First suggestion vs directed ──────────────────────────────────────
+  &__pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: $spacing-lg;
+    align-items: start;
+  }
+
+  &__arrow {
+    align-self: center;
+    font-size: 22px;
+    color: $color-secondary;
+  }
+
+  &__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 200px;
+    box-sizing: border-box;
+    padding: $spacing-lg;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+
+    span { display: block; }
+  }
+
+  &__frame--directed { border: 1.5px solid $color-primary; }
+
+  &__bar { height: 10px; border-radius: 3px; background: $color-secondary-light; }
+  &__bar--title { width: 70%; height: 14px; background: $color-secondary; }
+  &__bar--short { width: 45%; }
+
+  &__cards {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    flex: 1;
+
+    > span { border: 1px solid $color-border-default; border-radius: 8px; background: $color-secondary-lightest; }
+  }
+
+  &__btn {
+    width: 72px;
+    height: 20px;
+    border-radius: 6px;
+    background: $color-secondary-light;
+  }
+
+  &__btn--primary { background: $color-primary; }
+
+  &__lead {
+    display: flex !important;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__lead-media { width: 44%; border-radius: 8px; background: $color-secondary; }
+
+  &__lead-copy {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+
+    > span:first-child { height: 14px; width: 90%; border-radius: 3px; background: $color-neutral-dark; }
+    > span:nth-child(2) { height: 9px; width: 70%; border-radius: 3px; background: $color-secondary-light; }
+    > .vps__btn { margin-top: auto; }
+  }
+
+  &__rows {
+    display: flex !important;
+    flex-direction: column;
+    gap: 6px;
+
+    > span { height: 18px; border-top: 1px solid $color-border-default; }
+  }
+
+  &__pin {
+    position: absolute;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: $color-neutral-dark;
+    color: $color-white;
+    font: 700 11px/1 $font-family-mono;
+  }
+
+  &__pin--1 { top: 10px; left: 10px; }
+  &__pin--2 { top: 118px; right: 12px; }
+  &__pin--3 { bottom: 10px; right: 12px; }
+
+  &__caption {
+    margin: $spacing-sm 0 0;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-muted;
+  }
+
+  &__notes {
+    margin-top: $spacing-sm !important;
+    counter-reset: vps;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      counter-increment: vps;
+      font-size: $font-size-body-sm;
+      line-height: 1.45;
+      color: $color-neutral-standard;
+
+      &::before {
+        content: counter(vps) '  ';
+        font: 700 11px $font-family-mono;
+        color: $color-neutral-dark;
+      }
+    }
+  }
+
+  // ── 2. Inputs → direction ───────────────────────────────────────────────
+  &__inputs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    align-items: center;
+  }
+
+  &__sources {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: $spacing-md $spacing-lg;
+      background: $color-white;
+      border: 1px solid $color-border-default;
+      border-radius: $card-border-radius;
+    }
+
+    b { font-family: $font-family-heading; font-size: $font-size-body; }
+    span { font: 12px $font-family-mono; color: $color-secondary-dark; }
+  }
+
+  &__join {
+    align-self: stretch;
+    margin: 28px 0;
+    border: 1.5px solid $color-secondary;
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 40px;
+      border-top: 1.5px solid $color-secondary;
+    }
+  }
+
+  &__out {
+    margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: $spacing-xl;
+    background: $color-white;
+    border: 1.5px solid $color-primary;
+    border-radius: $card-border-radius;
+
+    b { font-family: $font-family-heading; font-size: $font-size-body-lg; }
+    span { font: 12px $font-family-mono; color: $color-secondary-dark; }
+  }
+
+  // ── 3. Ease demo ────────────────────────────────────────────────────────
+  &__ease {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    padding: $spacing-xl;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+  }
+
+  &__track {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__track-label {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+
+    code { font: 12px $font-family-mono; }
+  }
+
+  &__rail {
+    position: relative;
+    height: 16px;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: $color-neutral-dark;
+  }
+
+  &__dot--soft { background: $color-primary; }
+
+  // Ends where it lands; before it runs, both sit at the start.
+  &__ease.is-run &__dot { left: calc(100% - 16px); }
+  &__ease.is-run &__dot--default { animation: vps-slide 200ms ease both; }
+  &__ease.is-run &__dot--soft { animation: vps-slide 400ms cubic-bezier(0.2, 0.8, 0, 1) both; }
+
+  &__replay {
+    margin-top: $spacing-md;
+    height: 36px;
+    padding: 0 $spacing-lg;
+    border: 1px solid rgba($color-neutral-dark, 0.2);
+    border-radius: 8px;
+    background: $color-white;
+    font: 12px $font-family-mono;
+    color: $color-neutral-standard;
+    cursor: pointer;
+
+    &:hover { border-color: $color-neutral-dark; color: $color-neutral-dark; }
+  }
+
+  @media (max-width: #{$breakpoint-md - 1}) {
+    &__pair,
+    &__inputs { grid-template-columns: minmax(0, 1fr); }
+    &__arrow { transform: rotate(90deg); justify-self: center; }
+    &__join { display: none; }
+    &__out { margin: $spacing-md 0 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__ease.is-run &__dot { animation: none; }
+  }
+}
+
+@keyframes vps-slide { from { left: 0; } }

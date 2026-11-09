@@ -7,6 +7,7 @@ import { SystemsBoard } from '../components/SystemsInPractice';
 import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
 import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
 import { SizesLadder, SizesReaders, DriftLoop } from '../components/SystemSizes';
+import { FirstDraft, Inputs, EaseDemo } from '../components/VisualProblemSolver';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
 // dates and the rest live in notes.tsx, which the homepage and the index read
@@ -278,6 +279,31 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <h2>What Claude did, and what I decided</h2>
       <p>Claude researched the reference, proposed most of the AEM mapping, built the components, tested them at desktop and phone widths, and ran the deploys. I set the rules, chose AEM over another canvas, and made the calls that shaped how it feels: Publisher instead of Preview, Asset Panel instead of Side Panel, a docked panel instead of an overlay, cards that run white to their bottom edge, and WheelRack filed under Product Design, where it belongs as a full design system and a 0 to 1 product.</p>
       <p>I do not know yet how many people will find the switch. The ones I hope find it have authored in AEM themselves, and I suspect they will recognize the locked component before they read a word of it. If that is you, switch to Author in the bottom corner of the <Link to="/">homepage</Link> and tell me what I got wrong.</p>
+    </>
+  ),
+  'visual-problem-solver': (
+    <>
+      <p>My <Link to="/talent-tree/">talent tree</Link> calls me a Visual Problem Solver. I first heard it described by Rhiannon Bell, from Google&rsquo;s design leadership, on <a href="https://www.youtube.com/watch?v=owVbQwM2Zfc" target="_blank" rel="noopener noreferrer">Dive Club</a>: solving a problem through what the person will experience, down to the pixel, and seeing a path through the system that makes the answer portable. It fit sixteen years of work better than any title I&rsquo;ve held.</p>
+
+      <h2>The first layout is the average</h2>
+      <p>Ask a model for a screen and you get a sensible one. It learned from what already shipped, so its first answer sits in the middle of what already shipped. That makes it a good starting point and a poor finish line.</p>
+      <FirstDraft />
+
+      <h2>Craft and code are how I know what else is possible</h2>
+      <p>Photoshop, Figma, HTML and Sass taught me what a browser can do that a first draft won&rsquo;t reach for. That knowledge is what directing an LLM actually takes: the prompt, the review, and the rule I write down afterward.</p>
+      <Inputs />
+      <p>Derek Briggs, a principal designer at Shopify, said it plainly on <a href="https://www.youtube.com/watch?v=r4IW73e6tE4" target="_blank" rel="noopener noreferrer">Dive Club</a>: saying something could be better is one thing; you have to show the artifact. He used an SVG filter instead of an image to keep a carousel smooth. A model will write that filter if you ask for it. It won&rsquo;t ask for you.</p>
+
+      <h2>Show it, then write it down</h2>
+      <p>Some details you feel before you can name them. Derek&rsquo;s ease-out is one.</p>
+      <EaseDemo />
+      <p>Once I&rsquo;ve shown it, I write it down so the next teammate and the next agent start there: my <Link to="/notes/ryan-design-taste-skill/">design-taste skill</Link>, the site&rsquo;s DESIGN.md, and the <Link to="/notes/a-design-system-in-more-than-one-size/">review that checks every pull request</Link>.</p>
+
+      <h2>Designers are in a good position to lead this</h2>
+      <p><strong>AI made the first draft cheap. Knowing what better looks like, and showing it, is the job now.</strong></p>
+      <p>Rhiannon named the combination: a technical foundation, a feel for the user&rsquo;s experience, and real visual craft on top. Derek&rsquo;s test for it is whether AI makes you ten times better or only lets you do ten times more.</p>
+      <p>Knowing what&rsquo;s possible has a cost. On PlayDraft I built nearly everything I could think of, and then <Link to="/notes/simplifying-playdraft-without-losing-the-game/">had to cut it back to the game</Link>. Better isn&rsquo;t more. It&rsquo;s the version someone chose on purpose.</p>
+      <p>I don&rsquo;t know yet how far a designer can take this. Maybe the title fits because it never belonged to one discipline.</p>
     </>
   ),
   'a-design-system-in-more-than-one-size': (

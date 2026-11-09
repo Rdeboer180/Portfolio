@@ -3,7 +3,8 @@ import ScrollReveal from './ScrollReveal';
 import { Link } from 'react-router-dom';
 import SectionBadge from './SectionBadge';
 import Glyph from './talent/Glyph';
-import { RYAN_ALLOCATION, RYAN_CLASS_LABEL } from '../data/talent/ryan';
+import { RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_CLASS_SHORT } from '../data/talent/ryan';
+import { ClassLabel } from './talent/ClassName';
 
 // ============================================
 // Capabilities (concept 11, Ryan's pick, 22 October; simplified after
@@ -205,7 +206,7 @@ const SkillMastery: React.FC = () => (
         <div className="sm__forge-copy">
           <div className="sm__class">
             <span className="sm__class-mark" aria-hidden="true"><Glyph name="branch" size={26} /></span>
-            <strong>{RYAN_CLASS_LABEL}</strong>
+            <strong><ClassLabel primary={RYAN_CLASS_SHORT} secondary={RYAN_CLASS_LABEL.slice(RYAN_CLASS_SHORT.length + 3)} /></strong>
           </div>
           <h3 id="forge-teaser-title">How these skills connect.</h3>
           <p>I built the Forge to map the mix behind my work: sixteen years of points, and where they actually went.</p>

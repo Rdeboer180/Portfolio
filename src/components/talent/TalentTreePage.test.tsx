@@ -57,7 +57,9 @@ describe('the Forge, /talent-tree/', () => {
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
     expect(screen.getByText(STORY)).toBeTruthy();
-    expect(screen.getByText('Visual Problem Solver / Context Carrier')).toBeTruthy();
+    // The class reads as one line; its first half links to the note behind the title.
+    expect(screen.getByText((_, el) => el?.textContent === 'Visual Problem Solver / Context Carrier' && !!el.querySelector('a'))).toBeTruthy();
+    expect(screen.getAllByRole('link', { name: 'Visual Problem Solver' })[0].getAttribute('href')).toBe('/notes/visual-problem-solver/');
     expect(screen.getByText('Level 16 · 89 points over sixteen years · six skills at 5 · 4 of 12 abilities')).toBeTruthy();
 
     expect(screen.getByRole('heading', { level: 2, name: 'How I connect the work' })).toBeTruthy();
@@ -77,7 +79,7 @@ describe('the Forge, /talent-tree/', () => {
     expect(within(note).getByText('Visual Problem Solver')).toBeTruthy();
 
     // The gutter props: the class card and Ryan's own next quest.
-    expect(screen.getByText('Visual Problem Solver', { selector: '.fc-classcard__name' })).toBeTruthy();
+    expect(document.querySelector('.fc-classcard__name a')?.textContent).toBe('Visual Problem Solver');
     expect(screen.getByText(RYAN_OVERRIDES.quest)).toBeTruthy();
 
     // The playground, without a password. No builder, no state in the URL.
@@ -177,7 +179,9 @@ describe('the phone', () => {
     phone = true;
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
-    expect(screen.getByText('Visual Problem Solver / Context Carrier')).toBeTruthy();
+    // The class reads as one line; its first half links to the note behind the title.
+    expect(screen.getByText((_, el) => el?.textContent === 'Visual Problem Solver / Context Carrier' && !!el.querySelector('a'))).toBeTruthy();
+    expect(screen.getAllByRole('link', { name: 'Visual Problem Solver' })[0].getAttribute('href')).toBe('/notes/visual-problem-solver/');
     expect(screen.queryByText(/build your own/i)).toBeNull();
 
     fireEvent.click(screen.getByRole('tab', { name: /^Design/ }));

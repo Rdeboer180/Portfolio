@@ -26,6 +26,7 @@ import { MAX_POINTS_PER_NODE, computePools } from '../../data/talent/economy';
 import { pickClass } from '../../data/talent/forge';
 import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
 import { buildResult } from '../../data/talent/score';
+import ClassName, { ClassLabel } from './ClassName';
 import Glyph from './Glyph';
 import { countWord, pointsAt, treeStats } from './consoleData';
 import {
@@ -109,7 +110,6 @@ const ForgeCanvas: React.FC = () => {
   const result = useMemo(() => buildResult(RYAN_INTAKE, allocation, TREES, ARCHETYPES, RYAN_OVERRIDES), [allocation]);
   const klass = useMemo(() => pickClass(result.abilities), [result.abilities]);
   const unlockedCount = result.abilities.filter((a) => a.unlocked).length;
-  const classLabel = `${result.primary.name} / ${result.secondary.name}`;
 
   const treeLane: TreeId | null = lane === 'abilities' ? null : lane;
   const selectedId: string | null = treeLane ? picked[treeLane] || strongestIn(treeLane) : null;
@@ -310,7 +310,7 @@ const ForgeCanvas: React.FC = () => {
     <div className="fc-classcard">
       <div className="fc-classcard__face">
         <span className="fc-classcard__eyebrow">{`${klass.primary.ability.family} · class lead`}</span>
-        <span className="fc-classcard__name">{result.primary.name}</span>
+        <span className="fc-classcard__name"><ClassName name={result.primary.name} /></span>
       </div>
       <p className="fc-classcard__line">{`${klass.primary.ability.line}.`}</p>
       <p className="fc-classcard__with">{`With ${result.secondary.name}`}</p>
@@ -434,7 +434,7 @@ const ForgeCanvas: React.FC = () => {
           <h1 className="fc-phone__title">My talent tree</h1>
           <p className="fc-phone__story">{STORY}</p>
           <span className="fc-label">Class</span>
-          <span className="fc-phone__class">{classLabel}</span>
+          <span className="fc-phone__class"><ClassLabel primary={result.primary.name} secondary={result.secondary.name} /></span>
           <span className="fc-phone__meta">{facts}</span>
           {questSticky}
           {modeToggle}
@@ -511,7 +511,7 @@ const ForgeCanvas: React.FC = () => {
         <div className="fc-intro__title">
           <span className="fc-label">The Forge</span>
           <h1>My talent tree</h1>
-          <p className="fc-intro__class">{classLabel}</p>
+          <p className="fc-intro__class"><ClassLabel primary={result.primary.name} secondary={result.secondary.name} /></p>
           <p className="fc-intro__facts">{facts}</p>
         </div>
         <p className="fc-intro__story">{STORY}</p>
