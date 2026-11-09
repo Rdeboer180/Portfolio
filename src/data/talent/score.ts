@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: scoring, archetype pairing, and the result
+// Skill tree: scoring, archetype pairing, and the result
 // Stats are computed for everyone by the same rules, never hand-set, so the
 // numbers on the card are defensible (BRIEF-v3, "Traits and titles").
 // ============================================
@@ -18,7 +18,7 @@ import type {
 import { TRAITS } from './types';
 import { TREES } from './trees';
 import { computePools, normalizeAllocation, sanitizeHours, sanitizeYears, splitOf } from './economy';
-import { ABILITIES, evaluateAbilities, pickClass } from './forge';
+import { ABILITIES, evaluateAbilities, pickClass } from './abilities';
 
 // ── Trait scores ────────────────────────────────────────────────────────────
 //
@@ -244,7 +244,7 @@ export function buildResult(
   const analysis = analyzeTraits(clean, trees);
   const traits = analysis.scores;
 
-  // The class comes from the Forge now: the two strongest unlocked abilities
+  // The class comes from the skill tree now: the two strongest unlocked abilities
   // from different families. The traits stay for the card's stat bars.
   const states = evaluateAbilities(clean, abilities, trees);
   const { primary: primaryState, secondary: secondaryState, provisional } = pickClass(states);

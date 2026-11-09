@@ -249,7 +249,7 @@ export const WorkPanel: React.FC<{ wiki: Wiki }> = ({ wiki }) => (
         {TOOL_GROUPS.map((g) => <div key={g.label}><dt>{g.label}</dt><dd>{g.tools}</dd></div>)}
       </dl>
       <a className="more" href={`${getHomeHref()}#mastery`}>Explore my capabilities and project evidence →</a>
-      <p className="about-desk__onthedesk">Open <NoteLink note="forge" id="forge-tools">my skill tree</NoteLink></p>
+      <p className="about-desk__onthedesk">Open <NoteLink note="tree" id="tree-tools">my skill tree</NoteLink></p>
     </section>
     <section aria-labelledby="about-desk-words">
       <p className="label">[ Strengths ]</p>
@@ -269,7 +269,7 @@ export const PathPanel: React.FC<{ wiki: Wiki }> = ({ wiki }) => (
     <Story num="01" desk={<><NoteLink note="card:grand-lan" id="kendall">my Grand LAN identity, from Kendall</NoteLink> · <NoteLink note="archive" id="archive">the early-work archive</NoteLink></>} />
     <Story num="02" />
     <Story num="03" />
-    <Story num="04" desk={<><NoteLink note="loop" id="loop-path">my Loop build</NoteLink> · <NoteLink note="forge" id="forge-path">my skill tree</NoteLink></>} />
+    <Story num="04" desk={<><NoteLink note="loop" id="loop-path">my Loop build</NoteLink> · <NoteLink note="tree" id="tree-path">my skill tree</NoteLink></>} />
     <section aria-labelledby="about-desk-steps">
       <h2 id="about-desk-steps">The craft came first. The responsibility kept growing.</h2>
       <p>Each step brought me closer to the product, the implementation, and the people building it.</p>

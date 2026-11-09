@@ -1,4 +1,4 @@
-// The Forge, rendered on the canvas (board 25: all three lanes through the
+// The skill tree, rendered on the canvas (board 25: all three lanes through the
 // Layers panel, plus Abilities, with the Design / Dev toggle).
 // Run: CI=true npx react-scripts test --watchAll=false src/components/talent
 // (jest, for the DOM: the vitest in use has no jsdom of its own.)
@@ -15,7 +15,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import TalentTreePage from '../TalentTreePage';
 import { RYAN_OVERRIDES } from '../../data/talent/ryan';
-import { STORY } from './ForgeCanvas';
+import { STORY } from './SkillTreeCanvas';
 
 let phone = false;
 
@@ -107,7 +107,7 @@ describe('the skill tree, /talent-tree/', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'What the points unlock' })).toBeTruthy();
     const rows = within(screen.getByRole('list', { name: 'Abilities' })).getAllByRole('button');
     expect(rows.length).toBe(12);
-    expect(rows.filter((r) => r.textContent!.endsWith('forged')).length).toBe(4);
+    expect(rows.filter((r) => r.textContent!.endsWith('unlocked')).length).toBe(4);
     expect(rows[0].textContent).toContain('Visual Problem Solver');
     expect(within(screen.getByLabelText('Recipe')).getByText('5 / 5 ✓')).toBeTruthy();
     fireEvent.click(rows[7]);

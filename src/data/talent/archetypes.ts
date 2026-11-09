@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree — the 64 archetypes
+// Skill tree — the 64 archetypes
 // Eight families, eight each, in the brief's order. The result page composes
 // the pair description from these fields and never rewrites them:
 //   "{primary.you} You care about {primary.cares}, but you're happiest {secondary.happiest}."

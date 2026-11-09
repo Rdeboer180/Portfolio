@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree — shared contract
+// Skill tree — shared contract
 // The one file the data module, the archetype copy, the scoring, the page,
 // and the homepage section all import. Nothing here renders; it names the
 // shapes so the four can be written apart and still agree.
@@ -178,11 +178,11 @@ export interface Archetype {
  * stay on the nodes and the ability reads them.
  */
 export interface Ability {
-  /** kebab-case id, unique across the forge. */
+  /** kebab-case id, unique across the abilities. */
   id: string;
   /** The archetype the copy comes from (name, line, passive, quest live there). */
   archetypeId: string;
-  /** The forge name, which may differ from the archetype name ("Lossless Handoff"). */
+  /** The ability name, which may differ from the archetype name ("Lossless Handoff"). */
   name: string;
   family: Family;
   /** Every node that has to hold at least `min` points. */

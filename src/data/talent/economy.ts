@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: the points economy (v5, one pool)
+// Skill tree: the points economy (v5, one pool)
 // Points are earned by time, not self-rated. The intake answers produce ONE
 // pool, spent across all three lanes, with two locked parts inside it:
 //

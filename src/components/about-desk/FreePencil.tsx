@@ -1,5 +1,5 @@
 // The hybrid's drawing pencil: a free layer over the whole page. It starts
-// resting across the Forge sketch on the mat. Pick it up anywhere and it lifts
+// resting across the skill tree sketch on the mat. Pick it up anywhere and it lifts
 // toward the light, leans into the way it is carried, and goes wherever the
 // pointer goes; let go and it falls the last few millimetres, lands with a
 // small bounce, and rolls on with the speed it was let go at, flickering over

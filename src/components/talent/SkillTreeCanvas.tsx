@@ -1,6 +1,6 @@
 // ============================================
-// ForgeCanvas — /talent-tree/
-// Ryan's talent tree on the canvas: board 25 of the Forge canvas ("Technical ·
+// SkillTreeCanvas — /talent-tree/
+// Ryan's skill tree on the canvas: board 25 of the skill tree design canvas ("Technical ·
 // Dev mode"), carried to every lane. A short story says what the page is,
 // then a dot-grid canvas with a Layers panel on the left (Design and systems,
 // Technical, Code, Abilities), one lane at a time on a white artboard, and a
@@ -12,7 +12,7 @@
 // It is Ryan's tree only and read only: the build-your-own path was retired
 // on 8 November 2026, so nothing here spends a point or writes the URL. Under
 // 768 the canvas becomes a list per lane with a sheet per skill, the
-// ForgeMobile board's pattern.
+// design canvas's phone board.
 //
 // Everything shown is computed by src/data/talent; this file holds page state.
 // ============================================
@@ -23,7 +23,7 @@ import type { AbilityState, TalentNode, TreeId } from '../../data/talent/types';
 import { NODES, TREES, foundationOf } from '../../data/talent/trees';
 import { ARCHETYPES } from '../../data/talent/archetypes';
 import { MAX_POINTS_PER_NODE, computePools } from '../../data/talent/economy';
-import { pickClass } from '../../data/talent/forge';
+import { pickClass } from '../../data/talent/abilities';
 import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
 import { buildResult } from '../../data/talent/score';
 import ClassName, { ClassLabel } from './ClassName';
@@ -49,8 +49,8 @@ import {
   ryanDiff,
   treeById,
   weightRows,
-} from './forgeCanvasData';
-import type { Lane } from './forgeCanvasData';
+} from './skillTreeData';
+import type { Lane } from './skillTreeData';
 import { useMediaQuery } from './useMediaQuery';
 
 type View = 'design' | 'dev';
@@ -89,7 +89,7 @@ const Heat: React.FC<{ level: number }> = ({ level }) => (
   <span className={`fc-heat fc-heat--${Math.max(0, Math.min(5, level))}`} aria-hidden="true" />
 );
 
-const ForgeCanvas: React.FC = () => {
+const SkillTreeCanvas: React.FC = () => {
   const allocation = RYAN_ALLOCATION;
   const [lane, setLane] = useState<Lane>('technical');
   // Dev first, as board 25 drew it; Design is one click away.
@@ -176,7 +176,7 @@ const ForgeCanvas: React.FC = () => {
   const layerMeta = (l: Lane) => (l === 'abilities' ? `${unlockedCount}/${result.abilities.length}` : String(stats[l].spent));
   const eyebrow = treeLane
     ? `${LANE_NAME[treeLane]} · ${stats[treeLane].spent} points · ${stats[treeLane].mastered} mastered`
-    : `Abilities · ${unlockedCount} of ${result.abilities.length} forged`;
+    : `Abilities · ${unlockedCount} of ${result.abilities.length} unlocked`;
   let subline: string;
   if (lane === 'abilities') subline = 'Abilities are never spent: each one reads the points already on the skills.';
   else if (view === 'dev') subline = 'Dev mode: ids, gates, and the data behind every number.';
@@ -232,7 +232,7 @@ const ForgeCanvas: React.FC = () => {
             ))}
           </div>
           <div className="fc-block">
-            <span className="fc-label">forge.ts · recipes reading it</span>
+            <span className="fc-label">abilities.ts · recipes reading it</span>
             <pre className="fc-code" aria-label="Recipes">
               {recipes.length ? recipes.map((r) => (
                 <React.Fragment key={r.ability.id}>
@@ -270,7 +270,7 @@ const ForgeCanvas: React.FC = () => {
               return (
                 <li key={r.ability.id}>
                   <span>{r.ability.name}</span>
-                  <span className={`fc-feeds__state${state && state.unlocked ? ' is-forged' : ''}`}>{state ? abilityTag(state) : ''}</span>
+                  <span className={`fc-feeds__state${state && state.unlocked ? ' is-unlocked' : ''}`}>{state ? abilityTag(state) : ''}</span>
                 </li>
               );
             })}
@@ -284,7 +284,7 @@ const ForgeCanvas: React.FC = () => {
     <div className="fc-note fc-note--ability" aria-label="Ability">
       <span className="fc-note__layer">{`ability / ${state.ability.id}`}</span>
       <h3 className="fc-note__name">{state.ability.name}</h3>
-      <span className="fc-note__level">{state.unlocked ? `forged · strength ${state.strength}` : `${state.missing} ${state.missing === 1 ? 'point' : 'points'} away`}</span>
+      <span className="fc-note__level">{state.unlocked ? `unlocked · strength ${state.strength}` : `${state.missing} ${state.missing === 1 ? 'point' : 'points'} away`}</span>
       <p className="fc-note__meaning">{`${state.ability.line}.`}</p>
       <ul className="fc-reqs" aria-label="Recipe">
         {state.levels.map((l) => (
@@ -296,8 +296,8 @@ const ForgeCanvas: React.FC = () => {
         ))}
       </ul>
       {view === 'dev' && (
-        <pre className="fc-code" aria-label="forge.ts recipe">
-          <span className="fc-code__line fc-code__line--comment">{`// forge.ts · ${state.ability.family}`}</span>
+        <pre className="fc-code" aria-label="abilities.ts recipe">
+          <span className="fc-code__line fc-code__line--comment">{`// abilities.ts · ${state.ability.family}`}</span>
           {state.ability.formula.map((s) => (
             <span key={s.nodeId} className="fc-code__line">{`{ nodeId: '${s.nodeId}', min: ${s.min} },`}</span>
           ))}
@@ -570,4 +570,4 @@ const ForgeCanvas: React.FC = () => {
   );
 };
 
-export default ForgeCanvas;
+export default SkillTreeCanvas;

@@ -1,8 +1,8 @@
-// The Ability Forge: the twelve recipes, the class picker, and the receipt.
-// Run: CI=true npx vitest run --globals src/data/talent/forge.test.ts
+// The skill tree's abilities: the twelve recipes, the class picker, and the receipt.
+// Run: CI=true npx vitest run --globals src/data/talent/abilities.test.ts
 
 import { ARCHETYPES } from './archetypes';
-import { ABILITIES, FAMILY_ORDER, abilityReceiptLine, evaluateAbilities, formulaLine, pickClass } from './forge';
+import { ABILITIES, FAMILY_ORDER, abilityReceiptLine, evaluateAbilities, formulaLine, pickClass } from './abilities';
 import { NODES, crownOf, foundationOf } from './trees';
 import type { Ability, Allocation } from './types';
 
@@ -119,7 +119,7 @@ describe('sorting and the class', () => {
   });
 });
 
-describe('the shapes the forge is meant to read', () => {
+describe('the shapes the abilities are meant to read', () => {
   it('a researcher lands Sensemaker', () => {
     const researcher: Allocation = {
       research: 5, 'information-architecture': 4, cms: 3, 'qa-and-analytics': 3, handoff: 3, documentation: 2, storybook: 3,

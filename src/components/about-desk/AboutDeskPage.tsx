@@ -396,7 +396,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
           );
         })}
         <div className="about-desk__backlinks">
-          <b>3 backlinks</b><span>the binder</span><span aria-hidden="true">·</span>{wiki('forge', 'the skill tree')}<span aria-hidden="true">·</span>{wiki('notes', 'notes')}
+          <b>3 backlinks</b><span>the binder</span><span aria-hidden="true">·</span>{wiki('tree', 'the skill tree')}<span aria-hidden="true">·</span>{wiki('notes', 'notes')}
           <span className="about-desk__count">{DESK_THINGS.length} things on this desk{contained ? '' : ', all of them movable'}</span>
         </div>
       </div>

@@ -202,7 +202,7 @@ export function useDesk(root: React.RefObject<HTMLElement | null>, { folderHeigh
     commit();
   };
 
-  // the pencil rests across the Forge sketch; move the sketch and it rolls off
+  // the pencil rests across the skill tree sketch; move the sketch and it rolls off
   const pencilOn = useRef(true);
   const rollPencilOff = () => {
     if (!pencilOn.current) return;

@@ -139,8 +139,8 @@ $sm-label: 12px/1.5 $font-family-mono;
   &__step-n { font: $sm-label; letter-spacing: .08em; color: $color-secondary-dark; }
   &__step-mode { display: flex; align-items: center; margin-top: 4px; color: $color-secondary-dark; }
 
-  // ── The Forge ──────────────────────────────────────────────────────────────
-  &__forge {
+  // ── The skill tree ──────────────────────────────────────────────────────────────
+  &__tree {
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 56px;
@@ -150,7 +150,7 @@ $sm-label: 12px/1.5 $font-family-mono;
     border-top: 1px solid $color-neutral-light;
   }
 
-  &__forge-copy {
+  &__tree-copy {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -164,12 +164,12 @@ $sm-label: 12px/1.5 $font-family-mono;
     align-items: center;
     gap: 16px;
 
-    // The Forge's root tile: the branch mark on ink, as the console's class chip draws it.
+    // The skill tree's root tile: the branch mark on ink, as the console's class chip draws it.
     .sm__class-mark { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: 0 0 56px; border-radius: 14px; background: $color-neutral-dark; color: #ffffff; }
     strong { font: 700 19px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
   }
 
-  &__forge-links {
+  &__tree-links {
     display: flex;
     flex-wrap: wrap;
     gap: 4px 22px;
@@ -239,7 +239,7 @@ $sm-label: 12px/1.5 $font-family-mono;
     &__capability { grid-template-columns: 300px minmax(0, 1fr); }
     &__practice { grid-column: 2; }
     &__workflow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
-    &__forge { grid-template-columns: minmax(0, 1fr); gap: $spacing-2xl; }
+    &__tree { grid-template-columns: minmax(0, 1fr); gap: $spacing-2xl; }
   }
 }
 
@@ -260,7 +260,7 @@ $sm-label: 12px/1.5 $font-family-mono;
       li > * { grid-column: 2; }
       .sm__step-n { grid-column: 1; grid-row: 1; padding-top: 3px; }
     }
-    // The class, the line and the links carry the Forge on a phone.
+    // The class, the line and the links carry the skill tree on a phone.
     &__lanes { display: none; }
   }
 }

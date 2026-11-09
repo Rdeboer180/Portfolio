@@ -1,5 +1,5 @@
 // ============================================
-// The Ability Forge (v7, 2026-11-08)
+// The skill tree's abilities (v7, 2026-11-08)
 // Abilities are unlocked by RECIPES over node levels, never spent: the points
 // stay on the nodes and an ability reads them. Each ability points at an
 // archetype id, so the copy (name, line, you, cares, happiest, passive, quest)
@@ -252,7 +252,7 @@ function nodeExists(nodeId: string, trees: TalentTree[]): boolean {
   return trees.some((t) => t.areas.some((a) => a.nodes.some((n) => n.id === nodeId)));
 }
 
-export interface ForgeClass {
+export interface SkillClass {
   primary: AbilityState;
   secondary: AbilityState;
   /** True when fewer than two abilities are unlocked and the pair is filled from the nearest. */
@@ -264,7 +264,7 @@ export interface ForgeClass {
  * With fewer than two of those, the nearest locked abilities fill in and the
  * pair is provisional.
  */
-export function pickClass(states: AbilityState[]): ForgeClass {
+export function pickClass(states: AbilityState[]): SkillClass {
   if (!states.length) throw new Error('pickClass: the ability list is empty');
 
   const unlocked = states.filter((s) => s.unlocked);

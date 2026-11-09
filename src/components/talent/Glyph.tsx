@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: a node glyph, as React elements
+// Skill tree: a node glyph, as React elements
 // glyphs.ts holds each mark as inner SVG markup on a 24 grid. It is parsed
 // into elements here rather than injected with dangerouslySetInnerHTML, so
 // the prerendered markup and the client's first render are byte-for-byte the

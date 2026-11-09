@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: node glyphs
+// Skill tree: node glyphs
 // Inner SVG markup on a 24 grid, hand-authored in the icon sheet
 // (scratchpad icons-gen.mjs and tt-intro-tree-gen.mjs). Stroke-based; the
 // only fills are the dots the source drew. The renderer wraps each entry in
@@ -7,7 +7,7 @@
 // stroke-linecap="round" stroke-linejoin="round"> and sets size and color.
 // Keys are the node glyph keys in trees.ts, the three roots, and "branch" for
 // the hero chip and the homepage section badge. Do not redraw here; the sheet
-// is the source, and for the v7 marks the Forge canvas is.
+// is the source, and for the v7 marks the skill tree design canvas is.
 // ============================================
 
 export const GLYPHS: Record<string, string> = {
@@ -81,7 +81,7 @@ export const GLYPHS: Record<string, string> = {
   workflow:
     '<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><rect x="9" y="8.5" width="6" height="7" rx="1.5"/><path d="M7.5 12h1.5M15 12h1.5"/>',
 
-  // Added for v7 (2026-11-08), drawn on the Forge canvas (boards 25 and 27)
+  // Added for v7 (2026-11-08), drawn on the skill tree design canvas (boards 25 and 27)
   // in the same hand and flattened to one path each.
   'pen-tool': '<path d="M12 20.5 6.5 11.5 9 4h6l2.5 7.5z M12 20.5v-7 M10.3 11.8a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0z"/>',
   redline:
