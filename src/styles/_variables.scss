@@ -216,7 +216,7 @@ $transition-fast: 150ms ease-in-out;
 $transition-base: 250ms ease-in-out;
 $transition-slow: 350ms ease-in-out;
 // The site's motion curve (also --ease-out). New motion uses this, not a local copy.
-$ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+$ease-out: cubic-bezier(0.2, 0.8, 0, 1);
 
 // ============================================
 // SHADOWS

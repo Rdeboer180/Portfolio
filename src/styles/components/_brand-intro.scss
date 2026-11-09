@@ -3,7 +3,7 @@
 // passes, the letterforms wipe in along it (0.9 to 1.9s), the trace settles
 // into the art (1.7 to 2.1s), the plate holds, then lifts (2.6 to 3.1s). The
 // lift's animationend is the component's hand-off to the reel.
-$bi-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$bi-ease: var(--ease-out);
 
 .brand-intro {
   position: absolute;

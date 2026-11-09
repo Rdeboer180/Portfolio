@@ -45,6 +45,7 @@
       { "name": "transition-fast", "value": "150ms ease-in-out", "purpose": "Buttons, links, small hover/color changes." },
       { "name": "transition-base", "value": "250ms ease-in-out", "purpose": "Card border/shadow state, toggles." },
       { "name": "transition-slow", "value": "350ms ease-in-out", "purpose": "Larger reveals and expansions." },
+      { "name": "ease-out", "value": "cubic-bezier(0.2, 0.8, 0, 1)", "purpose": "Derek Briggs's soft close. Entrances and things moving into place: drawers, sheets, fly-outs, reveals. Not for hovers." },
       { "name": "marquee-trace", "value": "1300ms linear", "purpose": "One-time Signal Orange comet that traces a card perimeter on scroll-into-view, staggered across a grid, then settles to the hairline." }
     ],
     "breakpoints": [

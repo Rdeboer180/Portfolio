@@ -201,7 +201,7 @@
     border-bottom: 1.5px solid #8ab8e8;
     border-radius: 2px 0 0 2px;
     pointer-events: none;
-    animation: layersGroupBracket 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: layersGroupBracket 240ms var(--ease-out) both;
   }
 
   &__layer {
@@ -236,7 +236,7 @@
 
     // Subtle per-action accents on the active layer
     &--nudge {
-      animation: layerNudge 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      animation: layerNudge 360ms var(--ease-out) both;
     }
 
     &--align {

@@ -24,10 +24,10 @@
   // transform on the dialog makes it the containing block for its fixed
   // children, so the strip button and the custom cursor would be pulled into
   // the dialog's box and clipped by its `overflow: clip`.
-  transition: transform 250ms cubic-bezier(.32, .72, 0, 1), right 250ms cubic-bezier(.32, .72, 0, 1);
+  transition: transform 250ms $ease-out, right 250ms $ease-out;
   &[data-phase='open'] { transform: none; }
   &[data-phase='closing'] { transition-duration: 200ms; }
-  &::backdrop { opacity: 0; transition: opacity 250ms cubic-bezier(.32, .72, 0, 1), background-color 250ms cubic-bezier(.32, .72, 0, 1); }
+  &::backdrop { opacity: 0; transition: opacity 250ms $ease-out, background-color 250ms $ease-out; }
   &[data-phase='open']::backdrop { opacity: 1; }
   &[data-phase='closing']::backdrop { transition-duration: 200ms; }
   &__article { min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); }

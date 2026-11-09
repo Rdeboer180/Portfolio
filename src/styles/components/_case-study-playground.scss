@@ -21,7 +21,7 @@
   --case-study-tray-h: 92px;
   --case-study-motion-fast: var(--transition-fast);
   --case-study-motion-medium: var(--transition-base);
-  --case-study-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --case-study-ease-out: var(--ease-out);
 
   // Cool paper, not the page's white. With Strengths and My Process gone the
   // homepage would otherwise open on four paper sections in a row — hero,

@@ -3,7 +3,7 @@
 // WheelRackFitmentPrototype. Every duration is multiplied by --fp-k: 1 at
 // normal speed, 4 in slow motion, 0 under reduced motion, so the inspector's
 // toggles change the real timings rather than a copy of them.
-$fp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$fp-ease: $ease-out;
 $fp-ink: #1b1b1b;
 $fp-line: #d9dde2;
 $fp-action: #1f6a8f;

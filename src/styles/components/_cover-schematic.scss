@@ -175,7 +175,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  animation: csOpenerResolve 500ms var(--case-study-ease-out, cubic-bezier(0.2, 0.8, 0.2, 1)) 200ms both;
+  animation: csOpenerResolve 500ms var(--case-study-ease-out, var(--ease-out)) 200ms both;
 
   .cover-schematic { opacity: 1; }
 }

@@ -13,7 +13,7 @@ $pd-red: #f87171;
 $pd-text: #e8edf6;
 $pd-muted: #9aa8bf;
 $pd-line: rgba(255, 255, 255, 0.08);
-$pd-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+$pd-ease: $ease-out;
 
 .pdp {
   --pd-k: 1;
