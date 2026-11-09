@@ -53,7 +53,7 @@ const nodeButton = (name: RegExp) => screen.getByRole('button', { name });
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
 describe('the Forge, /talent-tree/', () => {
-  it("opens on Ryan's story, then the Technical lane in Design mode", () => {
+  it("opens on Ryan's story, then the Technical lane in Dev mode", () => {
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
     expect(screen.getByText(STORY)).toBeTruthy();
@@ -63,20 +63,20 @@ describe('the Forge, /talent-tree/', () => {
     expect(screen.getByText('Level 16 · 89 points over sixteen years · six skills at 5 · 4 of 12 abilities')).toBeTruthy();
 
     expect(screen.getByRole('heading', { level: 2, name: 'How I connect the work' })).toBeTruthy();
-    expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Design' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Dev' }).getAttribute('aria-pressed')).toBe('true');
 
     // The Layers panel: three lanes and the abilities, Technical selected.
     const tabs = within(screen.getByRole('tablist', { name: 'Layers' })).getAllByRole('tab');
     expect(tabs.map((t) => t.textContent)).toEqual(['Design and systems33', 'Technical37', 'Code19', 'Abilities4/12']);
     expect(tab(/^Technical/).getAttribute('aria-selected')).toBe('true');
 
-    // Ten skills and the root; the strongest is open in words.
+    // Ten skills and the root; the strongest is open in Inspect.
     expect(screen.getAllByRole('button', { name: /, (foundation|crown), \d of 5 points$/ }).length).toBe(10);
     expect(screen.getByText('Workflow')).toBeTruthy();
-    const note = screen.getByLabelText('Skill');
-    expect(within(note).getByRole('heading', { level: 3, name: 'Figma' })).toBeTruthy();
-    expect(within(note).getByText('Visual Problem Solver')).toBeTruthy();
+    const inspect = screen.getByLabelText('Inspect');
+    expect(within(inspect).getByText('figma')).toBeTruthy();
+    expect(within(inspect).getByText('// Visual Problem Solver · met')).toBeTruthy();
 
     // The gutter props: the class card and Ryan's own next quest.
     expect(document.querySelector('.fc-classcard__name a')?.textContent).toBe('Visual Problem Solver');
@@ -115,25 +115,26 @@ describe('the Forge, /talent-tree/', () => {
     expect(screen.getByText('1 point away')).toBeTruthy();
   });
 
-  it('reads a picked skill, never spends it, and toggles Dev for the data behind it', () => {
+  it('reads a picked skill, never spends it, and toggles Design for the words behind it', () => {
     mount();
     fireEvent.click(nodeButton(/^Internal tools, crown/));
     expect(nodeButton(/^Internal tools, crown, 4 of 5 points$/).getAttribute('aria-pressed')).toBe('true');
-    const note = screen.getByLabelText('Skill');
-    expect(within(note).getByRole('heading', { level: 3, name: 'Internal tools' })).toBeTruthy();
-    expect(within(note).getByText('4 of 5 · crown over AI tools')).toBeTruthy();
-    expect(within(note).getByText('Agent Wrangler')).toBeTruthy();
-    expect(document.querySelectorAll('.fc-wire.is-chain').length).toBe(2);
-    expect(screen.queryByText('internal-tools')).toBeNull();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Dev' }));
     const inspect = screen.getByLabelText('Inspect');
     expect(within(inspect).getByText('internal-tools')).toBeTruthy();
     expect(within(inspect).getByText('4 · new in v7')).toBeTruthy();
     expect(within(inspect).getByText('// Agent Wrangler · met')).toBeTruthy();
     expect(within(inspect).getByText("+ 'internal-tools': 4,")).toBeTruthy();
     expect(within(inspect).getByText("− 'agent-context': 1,")).toBeTruthy();
-    expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
+    expect(document.querySelectorAll('.fc-wire.is-chain').length).toBe(2);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Design' }));
+    expect(screen.queryByLabelText('Inspect')).toBeNull();
+    const note = screen.getByLabelText('Skill');
+    expect(within(note).getByRole('heading', { level: 3, name: 'Internal tools' })).toBeTruthy();
+    expect(within(note).getByText('4 of 5 · crown over AI tools')).toBeTruthy();
+    expect(within(note).getByText('Agent Wrangler')).toBeTruthy();
+    expect(screen.queryByText('internal-tools')).toBeNull();
+    expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
     expect(nodeButton(/^Internal tools, crown, 4 of 5 points$/)).toBeTruthy();
   });
 });
@@ -141,6 +142,7 @@ describe('the Forge, /talent-tree/', () => {
 describe('the code lane, in Ryan\'s words', () => {
   it('marks TypeScript and React Native as agent-built and explains them on hover', () => {
     mount();
+    fireEvent.click(screen.getByRole('button', { name: 'Design' }));
     fireEvent.click(tab(/^Code/));
     const ts = nodeButton(/^TypeScript, foundation, 3 of 5 points, agent-built$/);
     expect(nodeButton(/^React Native, foundation, 3 of 5 points, agent-built$/)).toBeTruthy();
@@ -164,15 +166,15 @@ describe('the phone', () => {
   it('shows the Design / Dev toggle in the list itself, not only in the sheet', () => {
     phone = true;
     mount();
-    expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
-    expect(screen.queryByText('internal-tools')).toBeNull();
-    expect(screen.queryByLabelText('ryan.ts diff')).toBeNull();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Dev' }));
     expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
     expect(screen.getByText('internal-tools')).toBeTruthy();
     expect(screen.getByText('crown · gate ai-tools ≥ 3')).toBeTruthy();
     expect(within(screen.getByLabelText('ryan.ts diff')).getByText("+ 'internal-tools': 4,")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Design' }));
+    expect(screen.getByText('Pick a skill to read what a point here means.')).toBeTruthy();
+    expect(screen.queryByText('internal-tools')).toBeNull();
+    expect(screen.queryByLabelText('ryan.ts diff')).toBeNull();
   });
 
   it('lists a lane, opens a skill in a sheet, and closes on Escape with focus returned', async () => {
@@ -189,7 +191,7 @@ describe('the phone', () => {
     fireEvent.click(tokens());
     const dialog = await screen.findByRole('dialog');
     expect(dialog.getAttribute('aria-label')).toBe('Tokens');
-    expect(within(dialog).getByRole('heading', { level: 3, name: 'Tokens' })).toBeTruthy();
+    expect(within(within(dialog).getByLabelText('Inspect')).getByText('tokens')).toBeTruthy();
 
     fireEvent.keyDown(dialog, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).toBeNull();
