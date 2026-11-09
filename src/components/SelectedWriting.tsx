@@ -2,8 +2,9 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NOTES_BY_DATE, KIND_LABEL, NoteKind } from '../data/notes';
 
-// Homepage writing as a quick-open list: the three newest notes, one of
-// them highlighted with its dek open, arrows to move and Enter to open. The
+// Homepage writing as a quick-open list: the three notes Ryan features by
+// default (the ones he'd hand a hiring manager), or the newest three of any
+// kind from the same menu, one of them highlighted with its dek open, arrows to move and Enter to open. The
 // keys work without a legend under the list (Ryan, 22 October: the legend
 // read as confusing); the active row's Enter key is the only key shown.
 // It stays a plain list of links (never a listbox), so every row reads and
@@ -14,22 +15,27 @@ import { NOTES_BY_DATE, KIND_LABEL, NoteKind } from '../data/notes';
 const SHOWN = 3;
 const KIND_ORDER: NoteKind[] = ['practice', 'exploration', 'reflection', 'system', 'skill'];
 const countOf = (kind: NoteKind) => NOTES_BY_DATE.filter((note) => note.kind === kind).length;
+const FEATURED = NOTES_BY_DATE.filter((note) => note.featured);
+type Show = NoteKind | 'all' | 'featured';
 
 const SelectedWriting: React.FC = () => {
-  const [kind, setKind] = useState<NoteKind | 'all'>('all');
+  // Featured by default, so the prerendered page and a first visit open on the picks.
+  const [kind, setKind] = useState<Show>(FEATURED.length ? 'featured' : 'all');
   const [active, setActive] = useState(0);
   const [mark, setMark] = useState<{ y: number; h: number } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  // The featured note leads, so the highlighted first row is the one Ryan picked.
-  const byFeature = [...NOTES_BY_DATE].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
-  const matching = kind === 'all' ? byFeature : byFeature.filter((note) => note.kind === kind);
+  const matching = kind === 'featured' ? FEATURED
+    : kind === 'all' ? NOTES_BY_DATE
+      : NOTES_BY_DATE.filter((note) => note.kind === kind);
   const notes = matching.slice(0, SHOWN);
-  const noun = `${kind === 'all' ? '' : `${KIND_LABEL[kind]} `}note${matching.length === 1 ? '' : 's'}`;
-  const countLine = matching.length > SHOWN
-    ? `Newest ${notes.length} of ${matching.length} ${noun}`
-    : `${matching.length === 1 ? 'The only' : `All ${matching.length}`} ${noun}`;
+  const noun = `${kind === 'all' || kind === 'featured' ? '' : `${KIND_LABEL[kind]} `}note${matching.length === 1 ? '' : 's'}`;
+  const countLine = kind === 'featured'
+    ? `${notes.length} featured ${noun}`
+    : matching.length > SHOWN
+      ? `Newest ${notes.length} of ${matching.length} ${noun}`
+      : `${matching.length === 1 ? 'The only' : `All ${matching.length}`} ${noun}`;
 
   // One shared highlight slides to the active row. Until it has measured,
   // the active row paints its own tint, so the prerendered page is right.
@@ -66,13 +72,14 @@ const SelectedWriting: React.FC = () => {
           <h2 id="selected-writing-title">Writing from the work</h2>
           <div className="selected-writing__tools">
             <label className="selected-writing__filter">
-              Kind
+              Show
               <span className="selected-writing__select">
                 <select
                   value={kind}
-                  onChange={(event) => { setKind(event.target.value as NoteKind | 'all'); setActive(0); }}
+                  onChange={(event) => { setKind(event.target.value as Show); setActive(0); }}
                 >
-                  <option value="all">All kinds · {NOTES_BY_DATE.length}</option>
+                  {FEATURED.length > 0 && <option value="featured">Featured · {Math.min(FEATURED.length, SHOWN)}</option>}
+                  <option value="all">Newest · {NOTES_BY_DATE.length}</option>
                   {KIND_ORDER.filter(countOf).map((k) => (
                     <option key={k} value={k}>{KIND_LABEL[k]} · {countOf(k)}</option>
                   ))}
@@ -90,7 +97,7 @@ const SelectedWriting: React.FC = () => {
             aria-hidden="true"
             style={mark ? { transform: `translateY(${mark.y}px)`, height: mark.h } : undefined}
           />
-          <ul className="selected-writing__list" aria-label="Newest notes">
+          <ul className="selected-writing__list" aria-label={kind === 'featured' ? 'Featured notes' : 'Newest notes'}>
             {notes.map((note, index) => {
               const isActive = index === active;
               const status = note.status === 'draft' ? 'draft' : note.inProgress ? 'in progress' : null;
