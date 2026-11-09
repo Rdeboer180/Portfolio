@@ -324,6 +324,8 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <h2>Drift is the price of letting everyone in, and AI makes it affordable</h2>
       <p>More people making things means more one-offs. The old answer was a person reviewing every change, which doesn&rsquo;t scale and turns the system into a gate. My answer now is ongoing care: agents watch what ships and propose changes, and a person decides.</p>
       <p>Most of my own ideas start in Claude now, so an agent is already the first reader of my system. I&rsquo;m not alone there: on <a href="https://www.youtube.com/watch?v=ZE3vh1zGq3I" target="_blank" rel="noopener noreferrer">Dive Radio</a> (6 November), Tommy Geoco read Figma&rsquo;s Q3 numbers as about a million people using its MCP each week. I&rsquo;d rather write for that reader on purpose.</p>
+      <p>The systems that are furthest along already do. Kaelig Deloumeau-Prigent&rsquo;s <a href="https://state-of-ai-in-design-systems.netlify.app/" target="_blank" rel="noopener noreferrer">State of AI in Design Systems</a> (July 2026) found that 18 of the 21 public systems it studied ship an official MCP server, and nearly all expose the same three things: search the docs, get a component with its examples, list the tokens. <strong>An MCP server is the foundation now. Rules files and skills sit on top of it.</strong></p>
+      <p>This site doesn&rsquo;t have one yet. Its catalog is a JSON file an agent can read, not a server it can ask, and Brad Frost calls rules files like my DESIGN.md &ldquo;weak sauce&rdquo; next to the real thing. He&rsquo;s right about that.</p>
       <SizesReaders />
 
       <h2>How I&rsquo;d tighten the drift</h2>
@@ -343,7 +345,14 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <p>On a site I run alone, a comment on my own PR is enough. In a larger organization those tools have to reach everyone: anyone should be able to see what exists, reference it accurately, and build inside it, on a canvas or in the browser. A component nobody can find gets rebuilt, and every rebuild is drift.</p>
       <p>That&rsquo;s why the inventory here is public. The <a href="/system/catalog.json">system catalog</a> is the same list the review reads, and the <Link to="/design-system">live system</Link> draws the reviewer on the board.</p>
       <p>A playground makes wrong things fast. An idea from it isn&rsquo;t a contribution until it passes the same review as everything else.</p>
-      <p>I haven&rsquo;t settled who promotes a playground idea into the system. Today it&rsquo;s me. I&rsquo;d like it to be whoever shipped it.</p>
+
+      <h2>One level deeper: a last gate nothing talks its way past</h2>
+      <p>What I&rsquo;ve described is a system that learns from what ships. For a larger organization, Brad Frost goes one step further. In <a href="https://courses.bradfrost.com/courses/ai-design-systems-course" target="_blank" rel="noopener noreferrer">AI &amp; Design Systems</a>, the course he&rsquo;s building with his brother Ian and TJ Pitre of Southleft, the last step before production is what they call the steel curtain: CI gates with deterministic tests for accessibility, performance, responsive layout and visual regression, then AI evals that check the work against the feature spec it started from. His newsletter links the name to the 1970s Steelers defense. Brad lives in Pittsburgh.</p>
+      <p>The system and the curtain do different jobs. The MCP, the skills and the rules shape what gets built and how it looks. The curtain is the person at the Costco exit checking your receipt against your cart. They don&rsquo;t care how you shopped, only that what&rsquo;s leaving is what was paid for.</p>
+      <p><strong>The system decides what&rsquo;s easy to build. The curtain decides what&rsquo;s allowed to ship.</strong></p>
+      <p>Where I&rsquo;d push it: keep the AI out of the part that blocks. The State of AI report found Astryx already works this way. Its AI reviewer only advises, and the check that blocks a merge is deterministic. Brad puts evals inside the curtain, and I would too, but reporting next to the build until they&rsquo;ve earned the right to fail it. A gate people can&rsquo;t read or rerun is just another opinion.</p>
+      <p>This site has no curtain. Two checks can stop a deploy, hydration and the Dive page, and neither looks at accessibility. The PR review only suggests.</p>
+      <p>I haven&rsquo;t settled who promotes a playground idea into the system. Today it&rsquo;s me. I&rsquo;d like it to be whoever shipped it, as long as it came through the curtain.</p>
     </>
   ),
   'shared-language-better-product-decisions': (
