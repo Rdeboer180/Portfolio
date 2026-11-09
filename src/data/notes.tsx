@@ -59,6 +59,7 @@ export const NOTES: Note[] = [
   {
     slug: 'a-design-system-in-more-than-one-size',
     kind: 'exploration',
+    featured: true,
     origin: 'portfolio',
     date: 'November 7, 2026',
     dateISO: '2026-11-07',
