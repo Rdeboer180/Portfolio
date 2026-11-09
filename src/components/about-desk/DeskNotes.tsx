@@ -155,7 +155,7 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
       <p className="note__fine">My own setup, shared as a design story. Nothing here is medical advice.</p>
     </>
   ),
-  forge: () => (
+  tree: () => (
     <>
       <h3>The sketch under the pencil</h3>
       <h2 id="desk-note-title">The skill tree</h2>

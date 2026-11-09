@@ -1,6 +1,6 @@
 // ============================================
-// The Forge, on the canvas: the numbers behind every panel
-// Pure helpers for ForgeCanvas (board 25 of the Forge canvas, "Technical ·
+// The skill tree, on the canvas: the numbers behind every panel
+// Pure helpers for SkillTreeCanvas (board 25 of the skill tree design canvas, "Technical ·
 // Dev mode", carried to all three lanes). Geometry for one lane on the 632 ×
 // 682 artboard, the wires, the Inspect panel's data, the v5 to v7 diff, and
 // the ability rows. Everything is read from src/data/talent;
@@ -10,7 +10,7 @@
 import type { Ability, AbilityState, Allocation, TalentNode, TalentTree, Trait, TreeId } from '../../data/talent/types';
 import { TRAIT_LABEL } from '../../data/talent/types';
 import { TREES, crownOf, foundationOf, treeOf } from '../../data/talent/trees';
-import { ABILITIES, formulaLine } from '../../data/talent/forge';
+import { ABILITIES, formulaLine } from '../../data/talent/abilities';
 import { CROWN_UNLOCK_AT, MAX_POINTS_PER_NODE, isLocked } from '../../data/talent/economy';
 import { pointsAt } from './consoleData';
 
@@ -220,15 +220,15 @@ export function ryanDiff(tree: TalentTree, allocation: Allocation, v5: Allocatio
 
 // ── Abilities ───────────────────────────────────────────────────────────────
 
-export type AbilityTone = 'forged' | 'near' | 'locked';
+export type AbilityTone = 'unlocked' | 'near' | 'locked';
 
 export function abilityTone(state: AbilityState): AbilityTone {
-  if (state.unlocked) return 'forged';
+  if (state.unlocked) return 'unlocked';
   return state.missing <= 3 ? 'near' : 'locked';
 }
 
 export function abilityTag(state: AbilityState): string {
-  if (state.unlocked) return 'forged';
+  if (state.unlocked) return 'unlocked';
   return `${state.missing} away`;
 }
 

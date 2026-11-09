@@ -2,6 +2,7 @@ import ProjectLink from './ProjectLink';
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
+import { RYAN_CLASS_SHORT } from '../data/talent/ryan';
 import LayersPanel from './LayersPanel';
 import AuthoredSection from './AuthoredSection';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
@@ -136,6 +137,12 @@ const Hero: React.FC = () => {
                 <span className="hero-intro__byline-name">Ryan DeBoer</span>
                 <span className="hero-intro__byline-place">South Bend, IN / Remote US, Eastern Time</span>
               </p>
+              {/* The one claim the skill tree computes, made where hiring teams start reading. */}
+              <Link to="/talent-tree/" className="hero-intro__edge">
+                <span className="hero-intro__edge-label">What I’m uniquely good at</span>
+                <span className="hero-intro__edge-title">{RYAN_CLASS_SHORT}</span>
+                <span className="hero-intro__edge-cta">Sixteen years, by skill: see my skill tree <span aria-hidden="true">→</span></span>
+              </Link>
               <a href={EMAIL_HREF} className="hero-intro__status hero-intro__status--stacked">
                 <span className="hero-intro__status-dot" aria-hidden="true" />Open to new work
               </a>

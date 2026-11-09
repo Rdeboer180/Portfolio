@@ -3,27 +3,27 @@
   "components": {
     "SectionBadge": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Navigation)"
+      "documented": "/design-system (Components › Navigation)"
     },
     "PageHeader": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Navigation)"
+      "documented": "/design-system (Components › Navigation)"
     },
     "Tabs": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Navigation)"
+      "documented": "/design-system (Components › Navigation)"
     },
     "TestimonialCard": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Cards)"
+      "documented": "/design-system (Components › Cards)"
     },
     "CaseStudyCard": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Cards)"
+      "documented": "/design-system (Components › Cards)"
     },
     "SystemsInPractice": {
       "size": "production",
-      "documented": "/design-system (Components \u203a Cards, Ecosystem Board)"
+      "documented": "/design-system (Components › Cards, Ecosystem Board)"
     },
     "SystemOverview": {
       "size": "production",
@@ -36,6 +36,52 @@
     "PrFlow": {
       "size": "production",
       "documented": "/design-system (How it works, the PR flow)"
+    },
+    "SkillTreeCanvas": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #17",
+      "path": "src/components/talent/SkillTreeCanvas.tsx",
+      "blocks": [
+        "btn",
+        "fc",
+        "fc-abilities",
+        "fc-artboard",
+        "fc-block",
+        "fc-chip",
+        "fc-chips",
+        "fc-classcard",
+        "fc-code",
+        "fc-feeds",
+        "fc-gate",
+        "fc-heat",
+        "fc-inspect",
+        "fc-intro",
+        "fc-label",
+        "fc-layers",
+        "fc-list",
+        "fc-mine",
+        "fc-mode",
+        "fc-node",
+        "fc-note",
+        "fc-phone",
+        "fc-playground",
+        "fc-props",
+        "fc-reqs",
+        "fc-root",
+        "fc-sheet",
+        "fc-sticky",
+        "fc-tree",
+        "fc-weights",
+        "fc-wire",
+        "sr-only"
+      ],
+      "relatives": [
+        "ForgeCanvas",
+        "SkillMastery",
+        "TalentTreePage"
+      ]
     }
   },
   "patterns": {

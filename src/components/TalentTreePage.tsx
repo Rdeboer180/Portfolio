@@ -1,10 +1,10 @@
 // ============================================
 // TalentTreePage — /talent-tree/
-// Ryan's talent tree, read only, in board 25's look (ForgeCanvas). The
+// Ryan's skill tree, read only, in board 25's look (SkillTreeCanvas). The
 // build-your-own route was retired on 8 November 2026: /talent-tree/build/ and
 // every older share link now land here, on Ryan's tree, with no state.
 //
-// Everything shown is computed by src/data/talent; ForgeCanvas holds the page
+// Everything shown is computed by src/data/talent; SkillTreeCanvas holds the page
 // state. This file owns the route: the head metadata, the nav and the footer.
 // ============================================
 
@@ -15,10 +15,10 @@ import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { RYAN_CLASS_LABEL } from '../data/talent/ryan';
-import ForgeCanvas, { FRONT_ROUTE } from './talent/ForgeCanvas';
+import SkillTreeCanvas, { FRONT_ROUTE } from './talent/SkillTreeCanvas';
 import '../styles/styles.scss';
-// the Forge's own styles, loaded with its page rather than with every page
-import '../styles/components/_forge-canvas.scss';
+// the skill tree's own styles, loaded with its page rather than with every page
+import '../styles/components/_skill-tree.scss';
 
 const TalentTreePage: React.FC = () => {
   usePageMeta({
@@ -35,7 +35,7 @@ const TalentTreePage: React.FC = () => {
         <Link to={getHomeHref()} className="fc-page__back">&larr; Back to Home</Link>
       </nav>
       <div className="fc-page__body">
-        <ForgeCanvas />
+        <SkillTreeCanvas />
       </div>
       <Footer />
     </article>

@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: Ryan's own tree (v7.2, 2026-11-08)
+// Skill tree: Ryan's own tree (v7.2, 2026-11-08)
 // 89 points: 4 per year for sixteen years, the bachelor's in graphic design
 // (16, locked to Design and systems), the web minor (4, locked to Code), and
 // 5 for the hours outside the day job. Scored by the same rules the tree has
@@ -82,7 +82,7 @@ export const RYAN_ALLOCATION: Allocation = {
 };
 
 /**
- * Ryan's own word on a skill, printed in the Forge's panel when the skill is
+ * Ryan's own word on a skill, printed in the skill tree's panel when the skill is
  * hovered or picked. `agent` marks code agents write while he directs and
  * reads it; the node draws a dashed ring for it, the homepage's directed key.
  */
@@ -98,7 +98,7 @@ export const RYAN_NODE_NOTES: Record<string, { note: string; agent?: boolean }> 
 };
 
 /**
- * The v5 allocation (2026-09-12), kept as history: the Forge's Dev mode prints
+ * The v5 allocation (2026-09-12), kept as history: the skill tree's Dev mode prints
  * the v5 to v7 diff beside each node. It names the two nodes v7 retired, so
  * read it with that in mind; it is never scored.
  */

@@ -12,7 +12,7 @@ import { ClassLabel } from './talent/ClassName';
 // hands-on, dashed is directed (agents built it; Ryan reviewed, tested and
 // released), double is partnered (an engineer built it). It is drawn only
 // where it carries information: after each project link (and on the one
-// agent-built workflow step). The Forge numbers live in the
+// agent-built workflow step). The skill tree numbers live in the
 // lanes alone and are read from RYAN_ALLOCATION, never typed here.
 // ============================================
 
@@ -119,7 +119,7 @@ const workflow: Array<{ title: string; text: string; mode?: Mode }> = [
   { title: 'Feed it back into the system', text: 'One HTML file holds the rule and every state. Engineers and agents build from it, and QA checks against it.' },
 ];
 
-// The Forge, drawn: each lane's top talents. Directed talents keep a dashed
+// The skill tree, drawn: each lane's top talents. Directed talents keep a dashed
 // ring: agents wrote that code while Ryan directed it and read the output.
 const lanes: Array<{ name: string; talents: Array<{ id: string; name: string; directed?: boolean }> }> = [
   { name: 'Design', talents: [
@@ -202,15 +202,15 @@ const SkillMastery: React.FC = () => (
         </ol>
       </section></ScrollReveal>
 
-      <ScrollReveal><section className="sm__forge" aria-labelledby="forge-teaser-title">
-        <div className="sm__forge-copy">
+      <ScrollReveal><section className="sm__tree" aria-labelledby="tree-teaser-title">
+        <div className="sm__tree-copy">
           <div className="sm__class">
             <span className="sm__class-mark" aria-hidden="true"><Glyph name="branch" size={26} /></span>
             <strong><ClassLabel primary={RYAN_CLASS_SHORT} secondary={RYAN_CLASS_LABEL.slice(RYAN_CLASS_SHORT.length + 3)} /></strong>
           </div>
-          <h3 id="forge-teaser-title">How these skills connect.</h3>
+          <h3 id="tree-teaser-title">How these skills connect.</h3>
           <p>I built a skill tree to map the mix behind my work: sixteen years of points, and where they actually went.</p>
-          <p className="sm__forge-links">
+          <p className="sm__tree-links">
             <Link to="/talent-tree/">See my skill tree <span aria-hidden="true">↗</span></Link>
           </p>
         </div>

@@ -1,8 +1,8 @@
 @import '../variables';
 
 // ============================================
-// The Forge on the canvas (ForgeCanvas.tsx)
-// Board 25 of the Forge canvas, built: the /about canvas vernacular (dot
+// The skill tree on the canvas (SkillTreeCanvas.tsx)
+// Board 25 of the skill tree design canvas, built: the /about canvas vernacular (dot
 // grid, a light Layers panel, one white artboard with a frame label, props in
 // the gutters) on the site's own tokens. Heat runs secondary-muted → primary:
 // a light ramp in the one accent, never a second hue. Motion is what the
@@ -532,16 +532,16 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
     border: 1.5px solid rgba(27, 27, 27, 0.22);
   }
 
-  .is-forged &__dot { background: $color-primary; border-color: $color-primary; box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px $color-primary; }
+  .is-unlocked &__dot { background: $color-primary; border-color: $color-primary; box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px $color-primary; }
   .is-near &__dot { background: $color-primary-md; border-color: $color-primary-md; }
 
   &__text { display: flex; flex-direction: column; min-width: 0; }
   &__name { font-size: 14px; }
-  .is-forged &__name { font-weight: 600; }
+  .is-unlocked &__name { font-weight: 600; }
   &__recipe { font-size: 11px; line-height: 15px; color: $color-neutral-standard; }
 
   &__tag { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; }
-  .is-forged &__tag { color: $color-primary-dark; }
+  .is-unlocked &__tag { color: $color-primary-dark; }
 }
 
 // ── The right gutter: mode, Inspect, the note ───────────────────────────────
@@ -711,7 +711,7 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   font-family: $font-family-mono;
   color: $color-secondary-dark;
 
-  &.is-forged { color: $color-primary-dark; }
+  &.is-unlocked { color: $color-primary-dark; }
 }
 
 .fc-reqs {
@@ -781,7 +781,7 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   .fc-intro { grid-template-columns: 1fr; gap: 12px; }
 }
 
-// ── Phone: a list per lane and a sheet per skill (ForgeMobile) ──────────────
+// ── Phone: a list per lane and a sheet per skill (the phone board) ──────────────
 
 @media (max-width: 767px) {
   .fc-page__nav { padding: 0 16px; }

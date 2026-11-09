@@ -1,5 +1,5 @@
 // ============================================
-// The Forge: the derived numbers the page prints
+// The skill tree: the derived numbers the page prints
 // Points per node, spend and masteries per lane, and number words, computed
 // from an allocation so the Layers panel, the artboard and the intro never
 // disagree about a number. Pure functions, no DOM.

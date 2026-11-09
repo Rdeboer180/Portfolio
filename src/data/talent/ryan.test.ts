@@ -4,7 +4,7 @@
 
 import { ARCHETYPES } from './archetypes';
 import { computePools, feasible, remaining, treeSpend } from './economy';
-import { evaluateAbilities, pickClass } from './forge';
+import { evaluateAbilities, pickClass } from './abilities';
 import { RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_CLASS_SHORT, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES } from './ryan';
 import { buildResult } from './score';
 import { NODES, TREES } from './trees';

@@ -287,7 +287,7 @@ How Ryan's own prompts appear anywhere the site or a prototype shows the convers
 
 ### Motion
 - Purposeful and reduced-motion-safe. The vocabulary: a highlight-sweep that "selects" then bolds key phrases, masked reveal-ins, the one-time card reveal, a hero typing/selection intro, and hand-drawn underline draws. Motion marks state or reveals once; it does not loop for attention.
-- **Ease out:** `--ease-out` / `$ease-out` is `cubic-bezier(0.2, 0.8, 0, 1)`, Derek Briggs's soft close. It leaves at once and lands long, so it is the curve for anything entering or moving into place: the project drawer, the about-desk fly-out, the Forge sheet, reveals, the lightbox. Local curve names (`$fp-ease`, `--case-study-ease-out` and the rest) point at it rather than copying it. Hovers and colour changes stay on the `--transition-*` ease-in-out; springs, line draws, the hero intro and the iOS mock's sheet keep their own curves.
+- **Ease out:** `--ease-out` / `$ease-out` is `cubic-bezier(0.2, 0.8, 0, 1)`, Derek Briggs's soft close. It leaves at once and lands long, so it is the curve for anything entering or moving into place: the project drawer, the about-desk fly-out, the skill tree sheet, reveals, the lightbox. Local curve names (`$fp-ease`, `--case-study-ease-out` and the rest) point at it rather than copying it. Hovers and colour changes stay on the `--transition-*` ease-in-out; springs, line draws, the hero intro and the iOS mock's sheet keep their own curves.
 
 ## Do's and Don'ts
 
@@ -308,7 +308,7 @@ How Ryan's own prompts appear anywhere the site or a prototype shows the convers
 
 ### Talent Atlas v2 — retired (November 8, 2026)
 
-The Atlas's scoped territory exception (muted blue, orange and sage, September 14) is retired with the Atlas. `/talent-tree/` is the three-lane Forge again, on the v7 tree, and the `--talent-design-*`, `--talent-technical-*` and `--talent-code-*` families are gone from `_tokens.scss` and `/design-system/`. The no-categorical-palette rule applies to the Forge again. The build-your-own path went with it (also 8 November): `/talent-tree/build/` and every older share link now land on Ryan's tree, which is read only. `references/core-ui-elements/patterns/talent-atlas.md` is history, not a spec.
+The Atlas's scoped territory exception (muted blue, orange and sage, September 14) is retired with the Atlas. `/talent-tree/` is the three-lane skill tree again, on the v7 tree, and the `--talent-design-*`, `--talent-technical-*` and `--talent-code-*` families are gone from `_tokens.scss` and `/design-system/`. The no-categorical-palette rule applies to the skill tree again. The build-your-own path went with it (also 8 November): `/talent-tree/build/` and every older share link now land on Ryan's tree, which is read only. `references/core-ui-elements/patterns/talent-atlas.md` is history, not a spec.
 
 ### Homepage spacing study — September 2026
 

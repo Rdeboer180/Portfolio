@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: the three lanes, fifteen areas, thirty nodes (v7, 2026-11-08)
+// Skill tree: the three lanes, fifteen areas, thirty nodes (v7, 2026-11-08)
 // Design and systems (what you define), Technical (how you connect the work),
 // Code (what you can express in the medium). Node names are short nouns; ids
 // are the kebab-case of the name. Every node carries one sentence for hover, a

@@ -42,7 +42,7 @@ export function spinDisc(part: SVGElement) {
 }
 
 /**
- * The pencil on the Forge sketch, rolled off it: it rolls 215px across its own
+ * The pencil on the skill tree sketch, rolled off it: it rolls 215px across its own
  * length (it lies at -18°, so that is down and a little right), slowing at a
  * constant rate, its eraser end lagging so it swings 4°, and flashing over its
  * facets as it goes: fast and blurred at first, slower and distinct as it stops.

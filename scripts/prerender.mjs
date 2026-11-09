@@ -35,7 +35,7 @@ const HIDDEN_WORK_ROUTES = [...readFileSync(new URL('../src/data/projects.ts', i
   .matchAll(/slug: '([^']+)'[\s\S]{0,4000}?hidden: true/g)]
   .map((m) => `/work/${m[1]}`);
 // /talent-tree/build was retired on 8 November 2026; public/talent-tree/build/
-// is a static redirect to the Forge, so it is not rendered or listed here.
+// is a static redirect to the skill tree, so it is not rendered or listed here.
 const EXTRA_ROUTES = ['/design-system', '/sitemap', '/demo/tire-fitment', '/talent-tree', ...new Set(HIDDEN_WORK_ROUTES)];
 
 // Rendered so a direct link resolves, but kept out of the sitemap and marked

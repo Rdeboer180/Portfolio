@@ -82,7 +82,7 @@ export const DESK_THINGS: DeskThing[] = [
   // the desk below the folder: the archive, on the cutting mat
   { id: 'envelope', label: 'The foil pack the archive cards came in, torn open: 1st Edition, The Early Work, Ryan DeBoer Project Archive, 7 original project cards. Drag to move, or use the arrow keys.', tag: 'before any of this · 2009–14', draw: 'pack', kind: 'pack', note: 'archive', width: 222, height: 340, start: [236, 296, 12, 1], group: 'lower', bare: true },
   ...cards,
-  { id: 'sketch', label: 'A pencil sketch of my skill tree. Drag to move, or open it for the full tree.', draw: 'sketch', kind: 'sketch', note: 'forge', width: 470, height: 400, start: [1050, 390, -3, 3], group: 'lower' },
+  { id: 'sketch', label: 'A pencil sketch of my skill tree. Drag to move, or open it for the full tree.', draw: 'sketch', kind: 'sketch', note: 'tree', width: 470, height: 400, start: [1050, 390, -3, 3], group: 'lower' },
   { id: 'pencil', label: 'Drawing pencil, 8H. Drag to move, or use the arrow keys.', draw: 'pencil', kind: 'pencil', width: 556, height: 31, start: [944, 598, -18, 5], group: 'lower' },
   { id: 'book', label: 'My notebook, open. Click to turn the page to more notes.', tag: 'opens the notes', draw: 'notebook-open', kind: 'book', note: 'notes', width: 984, height: 685, start: [-120, 796, 2, 3], group: 'lower' },
 ];
@@ -94,7 +94,7 @@ export const LINK_TO: Record<string, [id: string, dx: number, dy: number]> = {
   kendall: ['card-grand-lan', 110, 150],
   round2: ['card-baxter-building', 110, 150],
   loop: ['phone', 120, 240],
-  forge: ['sketch', 235, 200],
+  tree: ['sketch', 235, 200],
   notes: ['book', 460, 100],
   archive: ['envelope', 111, 40],
   survivor: ['ball', 120, 120],
@@ -114,7 +114,7 @@ export const DESK_TABS: { key: DeskTab; index: string; label: string }[] = [
 // The page sits in the homepage's container (1186px). The folder keeps its
 // 740px; the things that lay beside it move into a tray beside the folder,
 // drawn at real size and shown zoomed out to the tray's width, and the mat,
-// the archive, the Forge sketch and the notebook sit below the folder.
+// the archive, the skill tree sketch and the notebook sit below the folder.
 export const CONTAINER = 1186;
 export const TRAY = { width: 760, height: 1480 } as const;
 export const SHELF_LOWER = { width: CONTAINER, height: 1560 } as const;
@@ -138,7 +138,7 @@ export const CONTAINED_STARTS: Record<string, [number, number, number, number]> 
     if (t.group === 'side') return [t.id, TRAY_SPOTS[t.id] ?? [...t.start]];
     // the notebook comes all the way into the container, in full view
     if (t.id === 'book') return [t.id, [40, 820, 1, 3]];
-    // the Forge sketch and the pencil on it come in from the edge, so the whole sheet shows
+    // the skill tree sketch and the pencil on it come in from the edge, so the whole sheet shows
     if (t.id === 'sketch') return [t.id, [t.start[0] - OFFSET - 110, t.start[1], t.start[2], t.start[3]]];
     if (t.id === 'pencil') return [t.id, [t.start[0] - OFFSET - 110, t.start[1], t.start[2], t.start[3]]];
     return [t.id, [t.start[0] - OFFSET, t.start[1], t.start[2], t.start[3]]];
@@ -151,7 +151,7 @@ export const CONTAINED_MAT = { left: CUTTING_MAT.left - OFFSET, top: CUTTING_MAT
 // container; the props sit small in the wood margin beside the section they
 // belong to, and scroll with it. Nothing is cropped and nothing sticks. Below
 // the folder, the cutting mat at the container's width holds the archive, the
-// Forge sketch and the notebook.
+// skill tree sketch and the notebook.
 /** the mat's own proportions; on the hybrid it is drawn at least this tall and runs off the window's right edge */
 export const MAT_RATIO = CUTTING_MAT.height / CUTTING_MAT.width;
 export const HYBRID_MAT_MIN_WIDTH = 1345;
@@ -161,7 +161,7 @@ export const HYBRID_LOWER_MIN = 1010;
 // 28 Oct). The notebook leads: it lies open in front, on top. The seven archive
 // cards fan from beneath its top edge like a hand tucked under it, so their
 // title strips read and a pointer pulls one out; the torn pack lies where they
-// spilled from. The Forge sketch sits on the mat to the right with the pencil
+// spilled from. The skill tree sketch sits on the mat to the right with the pencil
 // across it, its corner under the notebook. Nothing here drags.
 const HAND = ['baxter-building', 'veggietales-toys', 'grandville-gremlins', 'dc-lawncare', 'grand-lan', 'fusion', 'vitamin-giant'];
 const HYBRID_SPOTS: Record<string, [number, number, number, number]> = {
