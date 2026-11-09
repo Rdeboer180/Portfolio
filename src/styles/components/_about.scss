@@ -469,6 +469,12 @@ $select-b: blue($color-primary-light);
     margin-top: var(--space-2xl);
     .about__read-more { margin: 0; }
   }
+  // The skill tree's one claim: a card-sized link under the Why me copy.
+  .about__edge { display: flex; flex-direction: column; gap: 2px; max-width: 360px; box-sizing: border-box; margin: var(--space-xl) 0 var(--space-lg); padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); background: var(--color-bg-primary); box-shadow: var(--shadow-room); color: var(--color-text-primary); text-decoration: none; transition: border-color var(--transition-fast); }
+  .about__edge:hover, .about__edge:focus-visible { border-color: var(--color-primary); }
+  .about__edge-label { font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .about__edge-title { font: 700 20px/1.25 var(--font-heading); letter-spacing: -0.01em; }
+  .about__edge-cta { font: var(--weight-semibold) var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-primary-dark); }
   .about__read-more { color: var(--color-primary-dark); }
   .about__background { padding: var(--space-4xl) 0; }
   .about__background .about__title { margin-top: 0; }
