@@ -98,6 +98,59 @@ export const RYAN_NODE_NOTES: Record<string, { note: string; agent?: boolean }> 
 };
 
 /**
+ * Where a skill shipped: the work a visitor can open from the skill's panel,
+ * with one fact from that study's own copy. Drafted from projects.ts on
+ * 9 November 2026 for Ryan to confirm; ryan.test.ts holds every link to a
+ * real, visible page. A skill with nothing here prints nothing.
+ */
+export interface Proof {
+  to: string;
+  label: string;
+  detail: string;
+}
+
+export const RYAN_NODE_PROOF: Record<string, Proof[]> = {
+  typography: [{ to: '/work/heatherwood/', label: 'Heatherwood', detail: 'Logo, color and typography rules carried from the site to the roadside sign.' }],
+  layout: [{ to: '/work/tire-categories/', label: 'Tire Categories', detail: 'A redesigned layout and template across 30+ category pages.' }],
+  interaction: [{ to: '/work/wheelrack/', label: 'WheelRack', detail: 'Front and rear sets, finishes and availability as explicit variants of one purchase component.' }],
+  motion: [{ to: '/work/overscroll-tactics/', label: 'Overscroll Tactics', detail: 'A launch ident that obeys the game’s rules. Reduced motion goes straight to the finished mark.' }],
+  tokens: [{ to: '/work/wheelrack/', label: 'WheelRack', detail: '200+ tokens in Tokens Studio, built before the components.' }],
+  components: [{ to: '/work/wheelrack/', label: 'WheelRack', detail: '50+ components, each in every state the React build had to support.' }],
+  accessibility: [{ to: '/work/tire-categories/', label: 'Tire Categories', detail: 'A CSS chart with reduced-motion behavior, a text fallback and screen-reader labels.' }],
+  governance: [
+    { to: '/work/figma-template-governance/', label: 'Figma Template Governance', detail: 'A checklist that saves progress and exports completion notes for senior review.' },
+    { to: '/work/landing-pages/', label: 'Landing Page System', detail: 'Review matched to risk: senior, SEO, analytics and QA on high-impact pages.' },
+  ],
+  research: [{ to: '/work/aem-component-system/', label: 'AEM Components', detail: 'Each homepage concept carries a hypothesis, the data to request and a fifteen-topic customer survey.' }],
+  figma: [{ to: '/work/figma-template-governance/', label: 'Figma Template Governance', detail: 'A starter template that keeps the cover, proofs, layer names and handoff checklist current.' }],
+  prototyping: [
+    { to: '/demo/tire-fitment/', label: 'Tire fitment prototype', detail: 'An idea taken past the canvas, in code you can use.' },
+    { to: '/notes/prototyping-wheelrack-fitment/', label: 'WheelRack fitment note', detail: 'The state a spec frame could not show, rebuilt in code.' },
+  ],
+  handoff: [{ to: '/work/wheelrack/', label: 'WheelRack', detail: '40+ hours checking the React build against Figma, screen by screen.' }],
+  storybook: [{ to: '/work/wheelrack/', label: 'WheelRack', detail: '50+ components in Storybook, named the way Figma names them.' }],
+  documentation: [{ to: '/work/aem-component-system/', label: 'AEM Components', detail: 'A read-me page and a status legend for every rule: in the branch, local only, or still pasted in.' }],
+  'skills-and-plugins': [{ to: '/work/figma-template-governance/', label: 'Figma Template Governance', detail: 'Title Card Generator, Layer Cleanup and Project Checklist, built as Figma plugins.' }],
+  cms: [
+    { to: '/work/seasonal-content-system/', label: 'Seasonal Content', detail: 'Five fragment types, each traced from Figma to its AEM Experience Fragment and Target experience.' },
+    { to: '/work/landing-pages/', label: 'Landing Page System', detail: 'Governed AEM templates: permissions define what authors can edit.' },
+  ],
+  'qa-and-analytics': [{ to: '/work/seasonal-content-system/', label: 'Seasonal Content', detail: 'The regional audience split, coordinated with Analytics.' }],
+  'ai-tools': [{ to: '/work/design-enablement/', label: 'Internal tools', detail: 'Product design with an AI-assisted build.' }],
+  'internal-tools': [{ to: '/work/design-enablement/', label: 'Internal tools', detail: 'On test 363: 12 saves, 115 ratings, 13 charts and 0 High findings.' }],
+  css: [{ to: '/work/aem-component-system/', label: 'AEM Components', detail: 'Production Sass in the branch, including hero buttons that overflowed 375px phones.' }],
+  'react-native': [{ to: '/work/playdraft/', label: 'PlayDraft', detail: 'A social drafting game, from brand to App Store.' }],
+};
+
+/** The one thing to open for an unlocked ability: the claim, then the work. */
+export const RYAN_ABILITY_PROOF: Record<string, { to: string; label: string }> = {
+  'visual-problem-solver': { to: '/demo/tire-fitment/', label: 'Try the tire fitment prototype' },
+  'guardrail-architect': { to: '/work/landing-pages/', label: 'See the governed AEM templates' },
+  'system-memory': { to: '/work/figma-template-governance/', label: 'See the Figma starter kit' },
+  'agent-wrangler': { to: '/work/design-enablement/', label: 'See the internal tools' },
+};
+
+/**
  * The v5 allocation (2026-09-12), kept as history: the skill tree's Dev mode prints
  * the v5 to v7 diff beside each node. It names the two nodes v7 retired, so
  * read it with that in mind; it is never scored.

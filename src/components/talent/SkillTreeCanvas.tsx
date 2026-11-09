@@ -6,7 +6,9 @@
 // Technical, Code, Abilities), one lane at a time on a white artboard, and a
 // Design / Dev toggle on the right. Design reads a skill in words; Dev prints
 // its id, gate, weights, the recipes that read it, and the ryan.ts lines
-// behind the number. The class card and the next quest sit in the gutter as
+// behind the number. The page opens on Abilities, where the three lanes stack
+// as sheets and a thread runs through the skills the class reads (LayerStack);
+// a skill's panel links the work it shipped in (RYAN_NODE_PROOF). The class card and the next quest sit in the gutter as
 // props, the way the /about canvas keeps its things.
 //
 // It is Ryan's tree only and read only: the build-your-own path was retired
@@ -24,13 +26,17 @@ import { NODES, TREES, foundationOf } from '../../data/talent/trees';
 import { ARCHETYPES } from '../../data/talent/archetypes';
 import { MAX_POINTS_PER_NODE, computePools } from '../../data/talent/economy';
 import { pickClass } from '../../data/talent/abilities';
-import { RYAN_ALLOCATION, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
+import { RYAN_ABILITY_PROOF, RYAN_ALLOCATION, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_NODE_PROOF, RYAN_OVERRIDES, RYAN_V5_ALLOCATION } from '../../data/talent/ryan';
+import { PROTECTED_WORK } from '../../data/protectedWork';
+import ProjectLink from '../ProjectLink';
 import { buildResult } from '../../data/talent/score';
 import ClassName, { ClassLabel } from './ClassName';
 import Glyph from './Glyph';
+import LayerStack from './LayerStack';
 import { countWord, pointsAt, treeStats } from './consoleData';
 import {
   ARTBOARD,
+  DESK_LANES,
   LANES,
   LANE_HEADING,
   LANE_NAME,
@@ -45,6 +51,7 @@ import {
   laneOf,
   laneWires,
   nodeAria,
+  recipeLanes,
   recipesReading,
   ryanDiff,
   treeById,
@@ -57,18 +64,31 @@ type View = 'design' | 'dev';
 
 export const FRONT_ROUTE = '/talent-tree/';
 
-/** Ryan's own words for what the page is; it opens the page and the phone header. */
-export const STORY = [
+/**
+ * Ryan's own words for what the page is. On a desktop the first line is the
+ * cover's headline (LANE_HEADING.cover) and the rest is its body; the phone
+ * header prints it whole.
+ */
+const STORY_LINES = [
   "I've never been sure what to call myself.",
   'Product Designer, Design Engineer, UX Engineer, Systems Designer: the job descriptions overlap and none of them agree on what the title means.',
   'So instead of picking one, I built a skill tree and put sixteen years of points where they actually went.',
   'A node at zero means no points landed there, not that I have never touched it.',
   "Here's where my strengths lie.",
-].join(' ');
+];
+export const STORY = STORY_LINES.join(' ');
+const STORY_BODY = STORY_LINES.slice(1).join(' ');
 
 const PLAYGROUND_URL = `${SITE.portfolioUrl}/lab/playground/`;
 const LAYER_ICON = 'M8 3v18M16 3v18M3 8h18M3 16h18';
+// A Figma page icon: the cover is a page, the lanes are layers.
+const COVER_ICON = 'M6 2h9l5 5v15H6zM15 2v5h5';
 const ABILITY_ICON = 'M12 2l4 4-4 4-4-4zM6 8l4 4-4 4-4-4zM18 8l4 4-4 4-4-4zM12 14l4 4-4 4-4-4z';
+
+function layerIcon(l: Lane): string {
+  if (l === 'cover') return COVER_ICON;
+  return l === 'abilities' ? ABILITY_ICON : LAYER_ICON;
+}
 
 /** The strongest node in a lane: what the panel opens on. */
 function strongestIn(lane: TreeId): string {
@@ -91,19 +111,26 @@ const Heat: React.FC<{ level: number }> = ({ level }) => (
 
 const SkillTreeCanvas: React.FC = () => {
   const allocation = RYAN_ALLOCATION;
-  const [lane, setLane] = useState<Lane>('technical');
+  // A desktop opens on the cover, the story the header used to float beside;
+  // its one button goes to the thread (9 November 2026). The phone has no
+  // cover, so there the same state opens on the thread.
+  const [rawLane, setLane] = useState<Lane>('cover');
   // Dev first, as board 25 drew it; Design is one click away.
   const [view, setView] = useState<View>('dev');
   const [picked, setPicked] = useState<Partial<Record<TreeId, string>>>({});
   // Hovering a skill reads it in the panel; leaving falls back to the pick.
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [abilityId, setAbilityId] = useState<string | null>(null);
+  // Hovering or focusing an ability row previews its thread; the pick stays.
+  const [previewId, setPreviewId] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const lastTrigger = useRef<HTMLElement | null>(null);
   const sheetClose = useRef<HTMLButtonElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const isPhone = useMediaQuery('(max-width: 767px)');
+  const lane: Lane = isPhone && rawLane === 'cover' ? 'abilities' : rawLane;
+  const tabLanes = isPhone ? LANES : DESK_LANES;
 
   // ── Derived ────────────────────────────────────────────────────────────
   const pools = useMemo(() => computePools(RYAN_INTAKE), []);
@@ -112,12 +139,15 @@ const SkillTreeCanvas: React.FC = () => {
   const klass = useMemo(() => pickClass(result.abilities), [result.abilities]);
   const unlockedCount = result.abilities.filter((a) => a.unlocked).length;
 
-  const treeLane: TreeId | null = lane === 'abilities' ? null : lane;
+  const treeLane: TreeId | null = lane === 'abilities' || lane === 'cover' ? null : lane;
   const selectedId: string | null = treeLane ? picked[treeLane] || strongestIn(treeLane) : null;
   const shownId = hoverId && treeLane && laneOf(hoverId) === treeLane ? hoverId : selectedId;
   const selectedNode = shownId ? NODES[shownId] : null;
   const selectedAbility: AbilityState | null = lane === 'abilities'
     ? result.abilities.find((a) => a.ability.id === abilityId) || klass.primary
+    : null;
+  const threadAbility: AbilityState | null = lane === 'abilities'
+    ? result.abilities.find((a) => a.ability.id === previewId) || selectedAbility
     : null;
 
   // ── Selection ──────────────────────────────────────────────────────────
@@ -157,28 +187,34 @@ const SkillTreeCanvas: React.FC = () => {
   const chooseLane = useCallback((next: Lane) => {
     setLane(next);
     setHoverId(null);
+    setPreviewId(null);
     setSheetOpen(false);
   }, []);
 
   const onTabKey = (e: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
     let next = i;
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (i + 1) % LANES.length;
-    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (i - 1 + LANES.length) % LANES.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (i + 1) % tabLanes.length;
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (i - 1 + tabLanes.length) % tabLanes.length;
     else if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = LANES.length - 1;
+    else if (e.key === 'End') next = tabLanes.length - 1;
     else return;
     e.preventDefault();
-    chooseLane(LANES[next]);
+    chooseLane(tabLanes[next]);
     tabRefs.current[next]?.focus();
   };
 
   // ── Strings ────────────────────────────────────────────────────────────
-  const layerMeta = (l: Lane) => (l === 'abilities' ? `${unlockedCount}/${result.abilities.length}` : String(stats[l].spent));
-  const eyebrow = treeLane
-    ? `${LANE_NAME[treeLane]} · ${stats[treeLane].spent} points · ${stats[treeLane].mastered} mastered`
-    : `Abilities · ${unlockedCount} of ${result.abilities.length} unlocked`;
-  let subline: string;
-  if (lane === 'abilities') subline = 'Abilities are never spent: each one reads the points already on the skills.';
+  const layerMeta = (l: Lane) => {
+    if (l === 'cover') return '';
+    return l === 'abilities' ? `${unlockedCount}/${result.abilities.length}` : String(stats[l].spent);
+  };
+  let eyebrow: string;
+  if (treeLane) eyebrow = `${LANE_NAME[treeLane]} · ${stats[treeLane].spent} points · ${stats[treeLane].mastered} mastered`;
+  else if (lane === 'cover') eyebrow = 'Cover · read me first';
+  else eyebrow = `Abilities · ${unlockedCount} of ${result.abilities.length} unlocked`;
+  let subline: string | null;
+  if (lane === 'cover') subline = null;
+  else if (lane === 'abilities') subline = 'An ability is never spent. It is a thread through skills that already hold the points.';
   else if (view === 'dev') subline = 'Dev mode: ids, gates, and the data behind every number.';
   else subline = 'Pick a skill to read what a point here means.';
 
@@ -195,6 +231,33 @@ const SkillTreeCanvas: React.FC = () => {
     );
   };
 
+  // Where the skill shipped: the claim, then the work (RYAN_NODE_PROOF).
+  const workLink = (to: string, label: string, detail?: string) => {
+    const slug = to.startsWith('/work/') ? to.split('/')[2] : '';
+    return (
+      <ProjectLink to={to} className="fc-proof__link">
+        <span className="fc-proof__name">
+          {label}
+          {PROTECTED_WORK.has(slug) && <span className="fc-proof__lock">password</span>}
+        </span>
+        {detail && <span className="fc-proof__detail">{detail}</span>}
+      </ProjectLink>
+    );
+  };
+
+  const proofBlock = (node: TalentNode) => {
+    const rows = RYAN_NODE_PROOF[node.id];
+    if (!rows) return null;
+    return (
+      <div className="fc-proof">
+        <span className="fc-label">Used in</span>
+        <ul>
+          {rows.map((r) => <li key={r.to}>{workLink(r.to, r.label, r.detail)}</li>)}
+        </ul>
+      </div>
+    );
+  };
+
   const nodePanel = (node: TalentNode) => {
     const level = pointsAt(allocation, node.id);
     const recipes = recipesReading(node.id, allocation);
@@ -207,6 +270,7 @@ const SkillTreeCanvas: React.FC = () => {
       return (
         <div className="fc-inspect" aria-label="Inspect">
           <div className="fc-inspect__id">
+            <span className="fc-inspect__name">{node.name}</span>
             <span className="fc-inspect__key">{node.id}</span>
             <span className="fc-chips">
               <span className="fc-chip">{tree.id}</span>
@@ -215,11 +279,10 @@ const SkillTreeCanvas: React.FC = () => {
             </span>
           </div>
           {personalNote(node)}
+          {proofBlock(node)}
           <dl className="fc-props">
             <div><dt>tier</dt><dd>{gateLine(node)}</dd></div>
             <div><dt>level</dt><dd>{levelLine}</dd></div>
-            <div><dt>glyph</dt><dd>{node.glyph}</dd></div>
-            <div><dt>max</dt><dd>5 · mastery at 5</dd></div>
           </dl>
           <div className="fc-weights">
             <span className="fc-label">Weights · sum 1.00</span>
@@ -261,6 +324,7 @@ const SkillTreeCanvas: React.FC = () => {
         <span className="fc-note__level">{`${level} of ${MAX_POINTS_PER_NODE} · ${node.tier === 'crown' ? `crown over ${foundationOf(node.id)?.name || 'its foundation'}` : 'foundation'}`}</span>
         {personalNote(node)}
         <p className="fc-note__meaning">{node.meaning}</p>
+        {proofBlock(node)}
         {level >= MAX_POINTS_PER_NODE && <p className="fc-note__mastery">{node.masteryLine}</p>}
         <span className="fc-label">Feeds</span>
         {recipes.length ? (
@@ -295,6 +359,9 @@ const SkillTreeCanvas: React.FC = () => {
           </li>
         ))}
       </ul>
+      {isPhone && RYAN_ABILITY_PROOF[state.ability.id] && (
+        <div className="fc-proof">{workLink(RYAN_ABILITY_PROOF[state.ability.id].to, RYAN_ABILITY_PROOF[state.ability.id].label)}</div>
+      )}
       {view === 'dev' && (
         <pre className="fc-code" aria-label="abilities.ts recipe">
           <span className="fc-code__line fc-code__line--comment">{`// abilities.ts · ${state.ability.family}`}</span>
@@ -383,13 +450,44 @@ const SkillTreeCanvas: React.FC = () => {
     );
   };
 
+  // The thread: the lanes as sheets, the picked ability stitched through them.
+  const threadStack = (flat: boolean) => {
+    if (!threadAbility) return null;
+    const { ability } = threadAbility;
+    const lanes = recipeLanes(ability).map((l) => LANE_SHORT[l]);
+    const through = lanes.length > 2 ? `${lanes.slice(0, -1).join(', ')} and ${lanes[lanes.length - 1]}` : lanes.join(' and ');
+    const proof = RYAN_ABILITY_PROOF[ability.id];
+    return (
+      <div className="fc-threadwrap">
+        <LayerStack flat={flat} allocation={allocation} stats={stats} state={threadAbility} onOpenLane={chooseLane} />
+        <p className="fc-threadcap" aria-live="polite">
+          <span>
+            <strong>{ability.name}</strong>
+            {threadAbility.unlocked
+              ? ` runs through ${through}.`
+              : ` is ${threadAbility.missing} ${threadAbility.missing === 1 ? 'point' : 'points'} short. The open knots are where.`}
+          </span>
+          {proof && !flat && <ProjectLink to={proof.to} className="fc-threadcap__link">{proof.label}</ProjectLink>}
+        </p>
+      </div>
+    );
+  };
+
   const abilityRows = (
-    <ul className="fc-abilities" aria-label="Abilities">
+    // The preview clears when the pointer or focus leaves the whole list, not
+    // each row, so crossing the hairline between two rows never snaps the
+    // thread back to the pick for a frame.
+    <ul
+      className="fc-abilities"
+      aria-label="Abilities"
+      onMouseLeave={() => setPreviewId(null)}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPreviewId(null); }}
+    >
       {result.abilities.map((state) => {
         const on = selectedAbility ? selectedAbility.ability.id === state.ability.id : false;
         return (
           <li key={state.ability.id}>
-            <button type="button" className={`fc-abilities__row is-${abilityTone(state)}${on ? ' is-selected' : ''}`} aria-pressed={on} onClick={(e) => openAbility(state.ability.id, e)}>
+            <button type="button" className={`fc-abilities__row is-${abilityTone(state)}${on ? ' is-selected' : ''}`} aria-pressed={on} onClick={(e) => openAbility(state.ability.id, e)} onMouseEnter={() => setPreviewId(state.ability.id)} onFocus={() => setPreviewId(state.ability.id)}>
               <span className="fc-abilities__dot" aria-hidden="true" />
               <span className="fc-abilities__text">
                 <span className="fc-abilities__name">{state.ability.name}</span>
@@ -451,9 +549,9 @@ const SkillTreeCanvas: React.FC = () => {
             shows after a tap, so Dev prints ids, gates and ryan.ts here too. */}
         <p className="fc-phone__sub">{subline}</p>
         <div id={panelId} role="tabpanel" aria-labelledby={tabId(lane)} className="fc-phone__panel">
-          {lane === 'abilities' ? abilityRows : (
-            <ul className="fc-list" aria-label={`${LANE_NAME[lane]} skills`}>
-              {treeById(lane).areas.map((area) => area.nodes.map((node) => {
+          {!treeLane ? <>{threadStack(true)}{abilityRows}</> : (
+            <ul className="fc-list" aria-label={`${LANE_NAME[treeLane]} skills`}>
+              {treeById(treeLane).areas.map((area) => area.nodes.map((node) => {
                 const level = pointsAt(allocation, node.id);
                 const agent = !!RYAN_NODE_NOTES[node.id]?.agent;
                 const delta = view === 'dev' ? deltaFromV5(node.id, level, RYAN_V5_ALLOCATION) : null;
@@ -513,7 +611,6 @@ const SkillTreeCanvas: React.FC = () => {
           <p className="fc-intro__class"><ClassLabel primary={result.primary.name} secondary={result.secondary.name} /></p>
           <p className="fc-intro__facts">{facts}</p>
         </div>
-        <p className="fc-intro__story">{STORY}</p>
       </header>
 
       <div className="fc__canvas">
@@ -521,7 +618,7 @@ const SkillTreeCanvas: React.FC = () => {
           <div className="fc-layers">
             <span className="fc-layers__title" id="fc-layers-title">Layers</span>
             <div role="tablist" aria-labelledby="fc-layers-title" aria-orientation="vertical" className="fc-layers__list">
-              {LANES.map((l, i) => (
+              {DESK_LANES.map((l, i) => (
                 <button
                   key={l}
                   id={tabId(l)}
@@ -535,7 +632,7 @@ const SkillTreeCanvas: React.FC = () => {
                   onClick={() => chooseLane(l)}
                   onKeyDown={(e) => onTabKey(e, i)}
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d={l === 'abilities' ? ABILITY_ICON : LAYER_ICON} /></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d={layerIcon(l)} /></svg>
                   <span className="fc-layers__name">{LANE_NAME[l]}</span>
                   <span className="fc-layers__meta">{layerMeta(l)}</span>
                 </button>
@@ -548,19 +645,31 @@ const SkillTreeCanvas: React.FC = () => {
 
         <div className="fc__stage">
           <span className="fc__frame">{`Skill tree / ${LANE_SHORT[lane]}`}</span>
-          <div className="fc-artboard" id={panelId} role="tabpanel" aria-labelledby={tabId(lane)}>
+          <div className={`fc-artboard${lane === 'cover' ? ' fc-artboard--cover' : ''}`} id={panelId} role="tabpanel" aria-labelledby={tabId(lane)}>
             <header className="fc-artboard__head">
               <span className="fc-artboard__eyebrow">{eyebrow}</span>
               <h2 className="fc-artboard__title">{LANE_HEADING[lane]}</h2>
-              <span className="fc-artboard__sub">{subline}</span>
+              {subline && <span className="fc-artboard__sub">{subline}</span>}
             </header>
-            {treeLane ? renderTree(treeLane) : abilityRows}
+            {lane === 'cover' && (
+              <div className="fc-cover">
+                <p className="fc-cover__story">{STORY_BODY}</p>
+                <button type="button" className="fc-cover__go" onClick={() => chooseLane('abilities')}>
+                  See what the points unlock
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            )}
+            {treeLane && renderTree(treeLane)}
+            {lane === 'abilities' && <>{threadStack(false)}{abilityRows}</>}
             {treeLane && playground}
           </div>
         </div>
 
         <div className="fc__gutter fc__gutter--right">
           {modeToggle}
+          {/* The cover's question gets its answer beside it: the class. */}
+          {lane === 'cover' && abilityPanel(klass.primary)}
           {lane === 'abilities'
             ? (selectedAbility ? abilityPanel(selectedAbility) : null)
             : (selectedNode ? nodePanel(selectedNode) : null)}
