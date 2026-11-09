@@ -283,7 +283,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
   ),
   'visual-problem-solver': (
     <>
-      <p>My <Link to="/talent-tree/">talent tree</Link> calls me a Visual Problem Solver. I first heard it described by Rhiannon Bell, from Google&rsquo;s design leadership, on <a href="https://www.youtube.com/watch?v=owVbQwM2Zfc" target="_blank" rel="noopener noreferrer">Dive Club</a>: solving a problem through what the person will experience, down to the pixel, and seeing a path through the system that makes the answer portable. It fit sixteen years of work better than any title I&rsquo;ve held.</p>
+      <p>My <Link to="/talent-tree/">talent tree</Link> calls me a Visual Problem Solver. I first heard it described by Rhiannon Bell, from Google&rsquo;s design leadership, on Dive Club: solving a problem through what the person will experience, down to the pixel, and seeing a path through the system that makes the answer portable. It fit sixteen years of work better than any title I&rsquo;ve held.</p>
 
       <h2>The first layout is the average</h2>
       <p>Ask a model for a screen and you get a sensible one. It learned from what already shipped, so its first answer sits in the middle of what already shipped. That makes it a good starting point and a poor finish line.</p>
@@ -292,7 +292,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <h2>Craft and code are how I know what else is possible</h2>
       <p>Photoshop, Figma, HTML and Sass taught me what a browser can do that a first draft won&rsquo;t reach for. That knowledge is what directing an LLM actually takes: the prompt, the review, and the rule I write down afterward.</p>
       <Inputs />
-      <p>Derek Briggs, a principal designer at Shopify, said it plainly on <a href="https://www.youtube.com/watch?v=r4IW73e6tE4" target="_blank" rel="noopener noreferrer">Dive Club</a>: saying something could be better is one thing; you have to show the artifact. He used an SVG filter instead of an image to keep a carousel smooth. A model will write that filter if you ask for it. It won&rsquo;t ask for you.</p>
+      <p>Derek Briggs, a principal designer at Shopify, said it plainly on Dive Club: saying something could be better is one thing; you have to show the artifact. He used an SVG filter instead of an image to keep a carousel smooth. A model will write that filter if you ask for it. It won&rsquo;t ask for you.</p>
 
       <h2>Show it, then write it down</h2>
       <p>Some details you feel before you can name them. Derek&rsquo;s ease-out is one.</p>
