@@ -4,6 +4,7 @@ import SectionBadge from './SectionBadge';
 import UserIcon from './icons/UserIcon';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
 import { useReveal } from '../hooks/useReveal';
+import { RYAN_CLASS_SHORT } from '../data/talent/ryan';
 
 // Dates follow the résumé and project histories; early roles are Ryan's account.
 export const progression = [
@@ -90,8 +91,14 @@ const About: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
               {compact ? (
                 <>
                   <span className={`about__proof-rule${proof ? ' is-on' : ''}`} style={proof ? { transform: `translateY(${proof.y}px)` } : undefined} aria-hidden="true"><span /></span>
-                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and <Link to="/work/playdraft/" {...proofProps('curiosity')}>building products of my own<span className="sr-only"> (PlayDraft case study)</span></Link>. <Link to="/talent-tree/" className="about__strong-link">My skill tree</Link> maps 16 years of growth: the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
+                  <p className="about__body">Visual craft and design systems are my foundation. Curiosity takes me into unfamiliar problems and <Link to="/work/playdraft/" {...proofProps('curiosity')}>building products of my own<span className="sr-only"> (PlayDraft case study)</span></Link>. My skill tree maps 16 years of growth: the skills I’ve sharpened and the strategic perspective I bring to product design.</p>
                   <p className="about__body">My work connects UX, product design, brand, and implementation through shared components for the web and React Native. At Tire Rack, I bring 12+ years of AEM experience and <Link to="/work/aem-component-system/" {...proofProps('collaboration')}>partner with engineers on our CMS framework<span className="sr-only"> (AEM Component System case study)</span></Link>. I also build <Link to="/work/design-enablement/" {...proofProps('care')}>internal agentic tools and skills<span className="sr-only"> (Tools that scale design case study)</span></Link> to reduce repetitive work for my team and the teams we work with. <Link to="/notes/aem-meeting-authors-where-they-work/" className="about__strong-link">My plans for agentic AEM authoring</Link> build on that same goal.</p>
+                  {/* The one claim the skill tree computes, made where the page answers "why me". */}
+                  <Link to="/talent-tree/" className="about__edge">
+                    <span className="about__edge-label">What I’m uniquely good at</span>
+                    <span className="about__edge-title">{RYAN_CLASS_SHORT}</span>
+                    <span className="about__edge-cta">Sixteen years, by skill: see my skill tree <span aria-hidden="true">→</span></span>
+                  </Link>
                   <Link to="/about" className="about__read-more">The fuller story behind the work →</Link>
                 </>
               ) : (

@@ -23,12 +23,6 @@
   .hero-intro__status { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 36px; box-sizing: border-box; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-full); background: var(--color-bg-primary); font: var(--weight-medium) var(--text-body-sm)/1 var(--font-body); color: var(--color-text-primary); text-decoration: none; transition: border-color $transition-base, color $transition-base; }
   .hero-intro__status:hover, .hero-intro__status:focus-visible { border-color: var(--color-primary); color: var(--color-primary-dark); }
   .hero-intro__status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); flex: 0 0 8px; }
-  // The skill tree's one claim: a card-sized link under the byline.
-  .hero-intro__edge { display: flex; flex-direction: column; gap: 2px; max-width: 360px; box-sizing: border-box; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); background: var(--color-bg-primary); box-shadow: var(--shadow-room); color: var(--color-text-primary); text-decoration: none; transition: border-color var(--transition-fast); }
-  .hero-intro__edge:hover, .hero-intro__edge:focus-visible { border-color: var(--color-primary); }
-  .hero-intro__edge-label { font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
-  .hero-intro__edge-title { font: 700 20px/1.25 var(--font-heading); letter-spacing: -0.01em; }
-  .hero-intro__edge-cta { font: var(--weight-semibold) var(--text-body-sm)/var(--leading-body-sm) var(--font-body); color: var(--color-primary-dark); }
   .hero-intro__portrait .hero-intro__status--portrait { position: absolute; top: 0; right: 0; z-index: 6; }
   .hero-intro__status--stacked { display: none; }
   .hero-intro__portrait-slot { min-width: 0; }
