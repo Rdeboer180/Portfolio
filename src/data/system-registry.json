@@ -82,6 +82,18 @@
         "SkillMastery",
         "TalentTreePage"
       ]
+    },
+    "LayerStack": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #19",
+      "path": "src/components/talent/LayerStack.tsx",
+      "blocks": [
+        "fc-stack",
+        "fc-thread"
+      ],
+      "relatives": []
     }
   },
   "patterns": {
@@ -92,6 +104,36 @@
     "prflow": {
       "stylesheet": "src/styles/components/_pr-flow.scss",
       "documented": "/design-system (How it works, the PR flow)"
+    },
+    "fc-cover": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "fc-proof": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "fc-stack": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "fc-thread": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "fc-threadcap": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "fc-threadwrap": {
+      "status": "proposed",
+      "introduced": "PR #19",
+      "stylesheet": "src/styles/components/_skill-tree.scss"
     }
   }
 }

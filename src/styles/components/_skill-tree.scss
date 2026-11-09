@@ -143,9 +143,6 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   max-width: 1148px;
   margin: 0 auto 40px;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 40px;
-  align-items: end;
 
   &__title {
     display: flex;
@@ -157,7 +154,6 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
   &__class { margin: 4px 0 0; font-family: $font-family-heading; font-size: 18px; font-weight: 600; line-height: 24px; }
   &__facts { margin: 0; font-family: $font-family-mono; font-size: 12px; line-height: 18px; color: $color-neutral-standard; }
-  &__story { margin: 0; max-width: 62ch; font-size: 16px; line-height: 26px; color: $color-neutral-standard; }
 }
 
 // ── Layers ──────────────────────────────────────────────────────────────────
@@ -306,6 +302,49 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   }
 
   &__sub { font-size: 14px; line-height: 20px; color: $color-neutral-standard; }
+}
+
+// ── The cover: the first page of the file ──────────────────────────────────
+// Ryan's story, the way a Figma file opens on its cover: the question as the
+// headline, the answer (the class panel) in the gutter beside it, and one way
+// on into the thread. It sizes to its words rather than the tree's board.
+
+.fc-artboard--cover {
+  min-height: 0;
+
+  .fc-artboard__title { max-width: 15em; font-size: 40px; line-height: 46px; letter-spacing: -0.02em; }
+}
+
+.fc-cover {
+  padding: 20px 32px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+
+  &__story { margin: 0; max-width: 34em; font-size: 18px; line-height: 30px; color: $color-neutral-standard; }
+
+  &__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 8px;
+    background: $color-neutral-dark;
+    color: $color-white;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    span { transition: transform 400ms $ease-out; }
+    &:hover { background: $color-primary-dark; }
+    &:hover span { transform: translateX(3px); }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 3px; }
+  }
 }
 
 // ── The tree ────────────────────────────────────────────────────────────────
@@ -544,6 +583,286 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   .is-unlocked &__tag { color: $color-primary-dark; }
 }
 
+// ── The thread: three sheets and one stitched line (LayerStack.tsx) ─────────
+// The sheets are placed by one affine matrix (--m), so the thread's knots are
+// computed, not measured. The thread is ink: the accent stays with the heat.
+
+$fc-thread: $color-neutral-dark;
+
+// How far a tile in the picked ability stands off its sheet, the lip a
+// pressed tile keeps, and each heat's side colour.
+$fc-rise: 4.5px;
+$fc-rise-flat: 1.5px;
+$fc-lip: 1.5px;
+$fc-sides: (
+  0: $color-secondary-light,
+  1: $color-secondary,
+  2: darken($color-primary-md, 14%),
+  3: $color-primary-soft,
+  4: $color-primary-dark,
+  5: $color-primary-dark,
+);
+
+// A tile's side wall: the tile's own shape swept $h straight down the screen.
+// Always twelve shadows, so a pressed wall and a raised one interpolate.
+@function fc-wall($h, $color) {
+  $out: ();
+  @for $i from 1 through 12 {
+    $d: $h * $i / 12;
+    $out: append($out, (-1.15 * $d) (2.58 * $d) 0 $color, comma);
+  }
+  @return $out;
+}
+
+.fc-threadwrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fc-stack {
+  position: relative;
+  flex: 0 0 auto;
+
+  &__sheet {
+    position: absolute;
+    padding: 0;
+    border: 1px solid rgba(27, 27, 27, 0.14);
+    border-radius: 12px;
+    background: $color-white;
+    box-shadow: 0 18px 28px rgba(27, 27, 27, 0.1);
+    cursor: pointer;
+    transform: translate(-50%, -50%) translateY(calc(var(--dy) + var(--lift, 0px))) var(--m);
+    transition: transform 200ms $ease-out, border-color $fc-step ease;
+    animation: fc-sheet-lift 520ms $ease-out backwards;
+
+    &:hover { --lift: -6px; border-color: $color-secondary-dark; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 3px; }
+  }
+
+  // An app tile, drawn as a button. The glyph is one tone off the tile (brand
+  // 300 on brand 500), quieter than the tree's own icons. A skill the picked
+  // ability reads stands up off its sheet on a side wall; every other tile is
+  // pressed down to a thin lip. The wall is the sheet matrix run backwards:
+  // sheet-local (-1.15, 2.58) is one pixel straight down on screen.
+  &__chip {
+    position: absolute;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    opacity: 0.5;
+    // Rising and pressing move into place, so they take the site's soft close.
+    transition: opacity $fc-step ease, transform 400ms $ease-out, box-shadow 400ms $ease-out;
+
+    svg { display: block; }
+    &.is-on {
+      opacity: 1;
+      transform: translate(1.15 * $fc-rise, -2.58 * $fc-rise);
+    }
+
+    &.fc-heat--0 { color: rgba(27, 27, 27, 0.2); }
+    &.fc-heat--1 { color: $color-secondary; }
+    &.fc-heat--2 { color: $color-primary-muted; }
+    &.fc-heat--3 { color: $color-primary-light; }
+    &.fc-heat--4,
+    &.fc-heat--5 { color: $color-primary-md; }
+
+    @each $level, $side in $fc-sides {
+      &.fc-heat--#{$level} { box-shadow: fc-wall($fc-lip, $side); }
+      &.fc-heat--#{$level}.is-on { box-shadow: fc-wall($fc-rise + $fc-lip, $side); }
+    }
+  }
+
+  &__lane {
+    @include fc-label;
+    position: absolute;
+    right: 20px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  // Phone: flat bands, the lane's name where the sheet's margin is.
+  &--flat &__sheet { border-radius: $radius-md; box-shadow: none; }
+  &--flat &__chip { border-radius: 5px; }
+  // On a phone the sheets are flat, so a tile rises straight up the screen.
+  &--flat &__chip.is-on { transform: translateY(-$fc-rise-flat); }
+  @each $level, $side in $fc-sides {
+    &--flat &__chip.fc-heat--#{$level} { box-shadow: 0 0 0 $side; }
+    &--flat &__chip.fc-heat--#{$level}.is-on { box-shadow: 0 $fc-rise-flat 0 $side; }
+  }
+
+  &__band {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    color: $color-neutral-dark;
+
+    span:last-child { font-family: $font-family-mono; font-size: 11px; font-weight: 400; color: $color-neutral-standard; }
+  }
+}
+
+.fc-thread {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  // The thread runs across the raised tiles, not the sheet under them.
+  transform: translateY(-$fc-rise);
+  .fc-stack--flat & { transform: translateY(-$fc-rise-flat); }
+
+  &__edge {
+    position: absolute;
+    height: 2.5px;
+    margin-top: -1.25px;
+    border-radius: 2px;
+    background: $fc-thread;
+    transform-origin: 0 50%;
+    transform: rotate(var(--a));
+    animation: fc-thread-draw 260ms $ease-out backwards;
+  }
+
+  &__knot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2.5px solid $fc-thread;
+    background: $color-white;
+    animation: fc-knot-in 200ms $ease-out backwards;
+
+    &.is-short { border-style: dashed; border-width: 2px; }
+  }
+
+  &__tag {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: $fc-thread;
+    color: $color-white;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+  }
+
+  &__n { margin-left: 6px; color: $color-primary-md; }
+  .is-short &__tag { background: $color-white; color: $color-neutral-dark; box-shadow: inset 0 0 0 1px $color-secondary-dark; }
+  .is-short &__n { color: $color-secondary-dark; }
+}
+
+// A locked ability's thread is basted, not sewn.
+.fc-stack.is-locked .fc-thread__edge {
+  background: repeating-linear-gradient(90deg, $color-secondary-dark 0 6px, transparent 6px 10px);
+}
+
+.fc-threadcap {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 40px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  // Held at its tallest (two lines beside the proof link), so hovering down
+  // the ability list never moves the rows under the pointer.
+  min-height: 52px;
+  font-size: 14px;
+  line-height: 20px;
+  color: $color-neutral-standard;
+
+  strong { color: $color-neutral-dark; font-weight: 700; }
+
+  &__link {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: $color-primary-dark;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+@keyframes fc-sheet-lift {
+  from { transform: translate(-50%, -50%) translateY(0) var(--m); }
+}
+
+@keyframes fc-thread-draw {
+  from { transform: rotate(var(--a)) scaleX(0); }
+}
+
+@keyframes fc-knot-in {
+  from { opacity: 0; transform: scale(0.4); }
+}
+
+// ── Used in: the work a skill shipped in ────────────────────────────────────
+
+.fc-proof {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  ul { margin: 0; padding: 0; list-style: none; }
+  li + li { border-top: 1px solid $fc-line; }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 48px;
+    padding: 6px 0;
+    color: $color-neutral-dark;
+    text-decoration: none;
+
+    &:hover .fc-proof__name,
+    &:focus-visible .fc-proof__name { text-decoration: underline; text-underline-offset: 3px; }
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: $color-primary-dark;
+
+    &::after { content: '→'; font-weight: 400; }
+  }
+
+  &__lock {
+    order: 2;
+    padding: 0 5px;
+    border-radius: 3px;
+    background: $color-secondary-lightest;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 15px;
+    color: $color-secondary-dark;
+  }
+
+  &__detail { font-size: 12px; line-height: 17px; color: $color-neutral-standard; }
+}
+
 // ── The right gutter: mode, Inspect, the note ───────────────────────────────
 
 .fc-mode {
@@ -579,7 +898,8 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
 
 .fc-inspect {
   &__id { display: flex; flex-direction: column; gap: 6px; }
-  &__key { font-family: $font-family-mono; font-size: 15px; font-weight: 700; }
+  &__name { font-family: $font-family-heading; font-size: 20px; font-weight: 700; line-height: 24px; }
+  &__key { font-family: $font-family-mono; font-size: 12px; color: $color-neutral-standard; }
 }
 
 .fc-chips { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -658,8 +978,8 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   background: $color-neutral-dark;
   color: $color-secondary-lightest;
   font-family: $font-family-mono;
-  font-size: 10px;
-  line-height: 14px;
+  font-size: 11px;
+  line-height: 15px;
   overflow-x: auto;
 
   &__line {
@@ -778,7 +1098,6 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
       'right';
   }
 
-  .fc-intro { grid-template-columns: 1fr; gap: 12px; }
 }
 
 // ── Phone: a list per lane and a sheet per skill (the phone board) ──────────────
@@ -855,6 +1174,8 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
     padding: 6px;
 
     .fc-abilities { margin: 0; }
+    .fc-threadwrap { padding: 10px 0 6px; }
+    .fc-threadcap { padding: 10px 8px 4px; font-size: 13px; }
   }
 
   // The playground block, out of the artboard and into the page's flow.
@@ -955,6 +1276,13 @@ $fc-glow: 0 0 0 2px #ffffff, 0 0 0 3.5px $color-primary, 0 0 14px rgba(240, 61, 
   .fc-node__btn,
   .fc-wire,
   .fc-mode button { transition: none; }
+  .fc-cover__go span { transition: none; }
 
   .fc-sheet__panel { animation: fc-fade 150ms ease-out both; }
+
+  // The stack and its thread show finished: apart, sewn, labelled.
+  .fc-stack__sheet,
+  .fc-thread__edge,
+  .fc-thread__knot { animation: none; transition: none; }
+  .fc-stack__chip { transition: none; }
 }

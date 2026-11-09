@@ -5,7 +5,9 @@
 import { ARCHETYPES } from './archetypes';
 import { computePools, feasible, remaining, treeSpend } from './economy';
 import { evaluateAbilities, pickClass } from './abilities';
-import { RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_CLASS_SHORT, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_OVERRIDES } from './ryan';
+import { RYAN_ABILITY_PROOF, RYAN_ALLOCATION, RYAN_CLASS_LABEL, RYAN_CLASS_SHORT, RYAN_INTAKE, RYAN_NODE_NOTES, RYAN_NODE_PROOF, RYAN_OVERRIDES } from './ryan';
+import projects from '../projects';
+import { getNote } from '../notes';
 import { buildResult } from './score';
 import { NODES, TREES } from './trees';
 
@@ -120,5 +122,35 @@ describe('ryan on the page', () => {
     expect(RYAN_CLASS_LABEL).not.toContain('—');
     expect(RYAN_CLASS_SHORT).not.toContain('—');
     expect(`${RYAN_OVERRIDES.passive} ${RYAN_OVERRIDES.quest}`).not.toContain('—');
+  });
+});
+
+describe('where the work shipped', () => {
+  // Every proof link opens a real page a visitor can reach.
+  const resolves = (to: string): boolean => {
+    const work = to.match(/^\/work\/([^/]+)\/$/);
+    if (work) return projects.some((p) => p.slug === work[1] && !p.hidden);
+    const note = to.match(/^\/notes\/([^/]+)\/$/);
+    if (note) return !!getNote(note[1]);
+    return to === '/demo/tire-fitment/';
+  };
+
+  it('names only real skills, each holding points, with links that resolve', () => {
+    Object.entries(RYAN_NODE_PROOF).forEach(([id, proofs]) => {
+      expect(NODES[id]).toBeTruthy();
+      expect(RYAN_ALLOCATION[id]).toBeGreaterThan(0);
+      expect(proofs.length).toBeGreaterThan(0);
+      proofs.forEach((p) => {
+        expect(resolves(p.to)).toBe(true);
+        expect(p.label.length).toBeGreaterThan(0);
+        expect(p.detail.endsWith('.')).toBe(true);
+      });
+    });
+  });
+
+  it('gives each unlocked ability, and only those, one thing to open', () => {
+    const unlocked = RESULT.abilities.filter((a) => a.unlocked).map((a) => a.ability.id).sort();
+    expect(Object.keys(RYAN_ABILITY_PROOF).sort()).toEqual(unlocked);
+    Object.values(RYAN_ABILITY_PROOF).forEach((p) => expect(resolves(p.to)).toBe(true));
   });
 });

@@ -5,8 +5,8 @@
 //
 // Guards the contracts the page is built around: it is Ryan's tree only and
 // read only (no builder, no intake, nothing written to the URL); it opens on
-// his story and the Technical lane in Design mode (what the prerender
-// serialises and a crawler reads); the Layers panel switches lanes and the
+// his story and the Abilities layer with the thread drawn, in Dev mode (what
+// the prerender serialises and a crawler reads); the Layers panel switches lanes and the
 // toggle switches the right panel; picking a skill reads it; and on a phone
 // each lane is a list with a sheet per skill.
 
@@ -14,7 +14,7 @@ import React from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import TalentTreePage from '../TalentTreePage';
-import { RYAN_OVERRIDES } from '../../data/talent/ryan';
+import { RYAN_ABILITY_PROOF, RYAN_OVERRIDES } from '../../data/talent/ryan';
 import { STORY } from './SkillTreeCanvas';
 
 let phone = false;
@@ -39,7 +39,13 @@ afterEach(() => {
   window.history.replaceState(null, '', '/');
 });
 
-function mount() {
+function mount(lane?: RegExp) {
+  const view = renderPage();
+  if (lane) fireEvent.click(screen.getByRole('tab', { name: lane }));
+  return view;
+}
+
+function renderPage() {
   return render(
     <MemoryRouter initialEntries={['/talent-tree/']}>
       <Routes>
@@ -53,10 +59,61 @@ const nodeButton = (name: RegExp) => screen.getByRole('button', { name });
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
 describe('the skill tree, /talent-tree/', () => {
-  it("opens on Ryan's story, then the Technical lane in Dev mode", () => {
+  it("opens on Ryan's story, then the Abilities layer with the thread drawn", () => {
     mount();
     expect(screen.getByRole('heading', { level: 1, name: 'My skill tree' })).toBeTruthy();
-    expect(screen.getByText(STORY)).toBeTruthy();
+    // The cover: the story's first line is its headline, the rest its body,
+    // and the class panel answers it in the gutter.
+    expect(tab(/^Cover/).getAttribute('aria-selected')).toBe('true');
+    const [first, ...rest] = STORY.split(/(?<=\.) /);
+    expect(screen.getByRole('heading', { level: 2, name: first })).toBeTruthy();
+    expect(screen.getByText(rest.join(' '))).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Visual Problem Solver' })).toBeTruthy();
+
+    // Its one button opens the thread.
+    fireEvent.click(screen.getByRole('button', { name: /See what the points unlock/ }));
+    expect(screen.getByRole('heading', { level: 2, name: 'What the points unlock' })).toBeTruthy();
+    expect(tab(/^Abilities/).getAttribute('aria-selected')).toBe('true');
+
+    // Three sheets, one per lane, each a way into that lane.
+    const sheets = screen.getAllByRole('button', { name: /^Open .+, \d+ points$/ });
+    expect(sheets.map((s) => s.getAttribute('aria-label'))).toEqual([
+      'Open Design and systems, 33 points', 'Open Technical, 37 points', 'Open Code, 19 points',
+    ]);
+    // The class lead's thread: four knots, three edges, all met.
+    expect(document.querySelectorAll('.fc-thread__knot').length).toBe(4);
+    expect(document.querySelectorAll('.fc-thread__edge').length).toBe(3);
+    expect(document.querySelectorAll('.fc-thread__knot.is-short').length).toBe(0);
+    expect(document.querySelectorAll('.fc-stack__chip.is-on').length).toBe(4);
+    const cap = document.querySelector('.fc-threadcap')!;
+    expect(cap.textContent).toContain('Visual Problem Solver runs through Technical and Code.');
+    // The claim, then the work: one link out, to the prototype.
+    const proof = within(cap as HTMLElement).getByRole('link');
+    expect(proof.getAttribute('href')).toBe(RYAN_ABILITY_PROOF['visual-problem-solver'].to);
+
+    // Hovering a row previews its thread; a locked one shows the open knot.
+    const list = screen.getByRole('list', { name: 'Abilities' });
+    const rows = within(list).getAllByRole('button');
+    const locked = rows.find((r) => r.textContent!.includes('Lossless Handoff'))!;
+    fireEvent.mouseEnter(locked);
+    expect(document.querySelector('.fc-stack')!.classList.contains('is-locked')).toBe(true);
+    expect(document.querySelectorAll('.fc-thread__knot.is-short').length).toBe(1);
+    expect(document.querySelector('.fc-threadcap')!.textContent).toContain('Lossless Handoff is 1 point short.');
+    // Crossing into the next row hands the preview over without falling back
+    // to the pick; only leaving the list restores it.
+    const next = rows[rows.indexOf(locked) + 1];
+    fireEvent.mouseOut(locked, { relatedTarget: next });
+    expect(document.querySelector('.fc-threadcap')!.textContent).not.toContain('Visual Problem Solver');
+    fireEvent.mouseOut(locked, { relatedTarget: document.body });
+    expect(document.querySelector('.fc-threadcap')!.textContent).toContain('Visual Problem Solver');
+
+    // A sheet opens its lane.
+    fireEvent.click(sheets[1]);
+    expect(tab(/^Technical/).getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('reads the Technical lane in Dev mode, with where a skill shipped', () => {
+    mount(/^Technical/);
     // The class reads as one line; its first half links to the note behind the title.
     expect(screen.getByText((_, el) => el?.textContent === 'Visual Problem Solver / Context Carrier' && !!el.querySelector('a'))).toBeTruthy();
     expect(screen.getAllByRole('link', { name: 'Visual Problem Solver' })[0].getAttribute('href')).toBe('/notes/visual-problem-solver/');
@@ -66,9 +123,9 @@ describe('the skill tree, /talent-tree/', () => {
     expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Dev' }).getAttribute('aria-pressed')).toBe('true');
 
-    // The Layers panel: three lanes and the abilities, Technical selected.
+    // The Layers panel: the cover, the abilities, then three lanes, Technical selected.
     const tabs = within(screen.getByRole('tablist', { name: 'Layers' })).getAllByRole('tab');
-    expect(tabs.map((t) => t.textContent)).toEqual(['Design and systems33', 'Technical37', 'Code19', 'Abilities4/12']);
+    expect(tabs.map((t) => t.textContent)).toEqual(['Cover', 'Abilities4/12', 'Design and systems33', 'Technical37', 'Code19']);
     expect(tab(/^Technical/).getAttribute('aria-selected')).toBe('true');
 
     // Ten skills and the root; the strongest is open in Inspect.
@@ -77,6 +134,8 @@ describe('the skill tree, /talent-tree/', () => {
     const inspect = screen.getByLabelText('Inspect');
     expect(within(inspect).getByText('figma')).toBeTruthy();
     expect(within(inspect).getByText('// Visual Problem Solver · met')).toBeTruthy();
+    expect(within(inspect).getByText('Used in')).toBeTruthy();
+    expect(within(inspect).getByRole('link', { name: /Figma Template Governance/ }).getAttribute('href')).toBe('/work/figma-template-governance/');
 
     // The gutter props: the class card and Ryan's own next quest.
     expect(document.querySelector('.fc-classcard__name a')?.textContent).toBe('Visual Problem Solver');
@@ -116,7 +175,7 @@ describe('the skill tree, /talent-tree/', () => {
   });
 
   it('reads a picked skill, never spends it, and toggles Design for the words behind it', () => {
-    mount();
+    mount(/^Technical/);
     fireEvent.click(nodeButton(/^Internal tools, crown/));
     expect(nodeButton(/^Internal tools, crown, 4 of 5 points$/).getAttribute('aria-pressed')).toBe('true');
     const inspect = screen.getByLabelText('Inspect');
@@ -165,7 +224,7 @@ describe('the code lane, in Ryan\'s words', () => {
 describe('the phone', () => {
   it('shows the Design / Dev toggle in the list itself, not only in the sheet', () => {
     phone = true;
-    mount();
+    mount(/^Technical/);
     expect(screen.getByText('Dev mode: ids, gates, and the data behind every number.')).toBeTruthy();
     expect(screen.getByText('internal-tools')).toBeTruthy();
     expect(screen.getByText('crown · gate ai-tools ≥ 3')).toBeTruthy();
