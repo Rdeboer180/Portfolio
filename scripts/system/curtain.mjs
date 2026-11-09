@@ -124,7 +124,7 @@ export function runCurtain({ root, base = 'origin/main', pr = null }) {
     registry,
     registryPath,
     registryChanged,
-    review: reviewCatalogs(baseCatalog, head),
+    review: reviewCatalogs(baseCatalog, head, registry),
   };
 }
 

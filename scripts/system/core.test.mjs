@@ -43,6 +43,9 @@ test('reviewCatalogs reports what a PR adds and stays quiet when nothing changed
   assert.match(report, /\*\*QuoteCard\*\*/);
   assert.match(report, /`quote-card` in QuoteCard isn't defined/);
   assert.match(report, /`#ff0000`/);
+  const known = reviewCatalogs(catalog, head, { components: { QuoteCard: { size: 'production', documented: '/design-system' } } });
+  assert.match(known, /In the registry at production size, documented on \/design-system/);
+  assert.doesNotMatch(known, /If it is genuinely new/);
 });
 
 test('rules split into named sections and colours join their tokens', () => {

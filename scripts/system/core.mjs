@@ -117,8 +117,12 @@ export const checkSource = (code, catalog) => {
   return findings.map((f) => ({ ...f, rule: CODES[f.code] }));
 };
 
-/** Two catalogs in, the pull-request comment out. Suggestions, never a gate. */
-export const reviewCatalogs = (base, head) => {
+/**
+ * Two catalogs in, the pull-request comment out. Suggestions, never a gate.
+ * With the registry, a new component already documented there says where,
+ * instead of asking for what's done.
+ */
+export const reviewCatalogs = (base, head, registry = null) => {
   const byPath = (list) => new Map(list.map((item) => [item.path, item]));
   const baseComponents = byPath(base.components);
   const headComponents = byPath(head.components);
@@ -146,8 +150,13 @@ export const reviewCatalogs = (base, head) => {
   if (added.length) {
     lines.push('### New components', '');
     for (const c of added) {
-      const rel = relatives(c, base.components);
+      const entry = registry && registry.components[c.name];
       lines.push(`- **${c.name}** \`${c.path}\``);
+      if (entry && entry.documented) {
+        lines.push(`  - In the registry at ${entry.size} size, documented on ${entry.documented}.`);
+        continue;
+      }
+      const rel = relatives(c, base.components);
       if (rel.length) {
         const list = rel.map((r) => `${r.name}${r.sharedBlocks.length ? ` (shares ${r.sharedBlocks.map((b) => `\`${b}\``).join(', ')})` : ''}`).join(', ');
         lines.push(`  - Looks related to ${list}. Reuse or extend one of those if it covers the job.`);
