@@ -22,8 +22,8 @@ import '../styles/components/_forge-canvas.scss';
 
 const TalentTreePage: React.FC = () => {
   usePageMeta({
-    title: 'The Forge | Ryan DeBoer',
-    description: `I could never pick one title, so I built a talent tree and put sixteen years of points where they went. ${RYAN_CLASS_LABEL}, Lv 16.`,
+    title: 'Skill tree | Ryan DeBoer',
+    description: `I could never pick one title, so I built a skill tree and put sixteen years of points where they went. ${RYAN_CLASS_LABEL}, Lv 16.`,
     canonical: `${SITE.portfolioUrl}${FRONT_ROUTE}`,
     ogType: 'website',
   });

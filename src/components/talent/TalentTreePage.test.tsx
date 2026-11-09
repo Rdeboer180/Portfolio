@@ -52,10 +52,10 @@ function mount() {
 const nodeButton = (name: RegExp) => screen.getByRole('button', { name });
 const tab = (name: RegExp) => screen.getByRole('tab', { name });
 
-describe('the Forge, /talent-tree/', () => {
+describe('the skill tree, /talent-tree/', () => {
   it("opens on Ryan's story, then the Technical lane in Dev mode", () => {
     mount();
-    expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'My skill tree' })).toBeTruthy();
     expect(screen.getByText(STORY)).toBeTruthy();
     // The class reads as one line; its first half links to the note behind the title.
     expect(screen.getByText((_, el) => el?.textContent === 'Visual Problem Solver / Context Carrier' && !!el.querySelector('a'))).toBeTruthy();
@@ -94,7 +94,7 @@ describe('the Forge, /talent-tree/', () => {
     fireEvent.click(tab(/^Design and systems/));
     expect(screen.getByRole('heading', { level: 2, name: 'What I define' })).toBeTruthy();
     expect(nodeButton(/^Typography, foundation, 5 of 5 points$/)).toBeTruthy();
-    expect(screen.getByText('Forge / Design')).toBeTruthy();
+    expect(screen.getByText('Skill tree / Design')).toBeTruthy();
 
     fireEvent.keyDown(tab(/^Design and systems/), { key: 'ArrowDown' });
     expect(screen.getByRole('heading', { level: 2, name: 'How I connect the work' })).toBeTruthy();
@@ -180,7 +180,7 @@ describe('the phone', () => {
   it('lists a lane, opens a skill in a sheet, and closes on Escape with focus returned', async () => {
     phone = true;
     mount();
-    expect(screen.getByRole('heading', { level: 1, name: 'My talent tree' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'My skill tree' })).toBeTruthy();
     // The class reads as one line; its first half links to the note behind the title.
     expect(screen.getByText((_, el) => el?.textContent === 'Visual Problem Solver / Context Carrier' && !!el.querySelector('a'))).toBeTruthy();
     expect(screen.getAllByRole('link', { name: 'Visual Problem Solver' })[0].getAttribute('href')).toBe('/notes/visual-problem-solver/');

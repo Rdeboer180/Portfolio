@@ -209,9 +209,9 @@ const SkillMastery: React.FC = () => (
             <strong><ClassLabel primary={RYAN_CLASS_SHORT} secondary={RYAN_CLASS_LABEL.slice(RYAN_CLASS_SHORT.length + 3)} /></strong>
           </div>
           <h3 id="forge-teaser-title">How these skills connect.</h3>
-          <p>I built the Forge to map the mix behind my work: sixteen years of points, and where they actually went.</p>
+          <p>I built a skill tree to map the mix behind my work: sixteen years of points, and where they actually went.</p>
           <p className="sm__forge-links">
-            <Link to="/talent-tree/">See my talent tree <span aria-hidden="true">↗</span></Link>
+            <Link to="/talent-tree/">See my skill tree <span aria-hidden="true">↗</span></Link>
           </p>
         </div>
         {/* Phones get the class, the line and the links; the lanes are desktop's. */}

@@ -1070,6 +1070,16 @@
     line-height: $line-height-body-sm;
   }
 
+  // The tools, read back against the skill tree.
+  &__meta-link {
+    font-size: $font-size-caption;
+    font-weight: $font-weight-bold;
+    color: $color-primary-dark;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; text-underline-offset: 3px; }
+  }
+
   // LEGACY: Approach
   &__approach {
     max-width: $container-text-width;

@@ -61,7 +61,7 @@ export const FRONT_ROUTE = '/talent-tree/';
 export const STORY = [
   "I've never been sure what to call myself.",
   'Product Designer, Design Engineer, UX Engineer, Systems Designer: the job descriptions overlap and none of them agree on what the title means.',
-  'So instead of picking one, I built a talent tree and put sixteen years of points where they actually went.',
+  'So instead of picking one, I built a skill tree and put sixteen years of points where they actually went.',
   'A node at zero means no points landed there, not that I have never touched it.',
   "Here's where my strengths lie.",
 ].join(' ');
@@ -429,10 +429,9 @@ const ForgeCanvas: React.FC = () => {
       ? (selectedAbility ? abilityPanel(selectedAbility) : null)
       : (selectedNode ? nodePanel(selectedNode) : null);
     return (
-      <section className={`fc fc--phone fc--${view}`} aria-label="Ryan's talent tree">
+      <section className={`fc fc--phone fc--${view}`} aria-label="Ryan's skill tree">
         <header className="fc-phone__head">
-          <span className="fc-label">The Forge</span>
-          <h1 className="fc-phone__title">My talent tree</h1>
+          <h1 className="fc-phone__title">My skill tree</h1>
           <p className="fc-phone__story">{STORY}</p>
           <span className="fc-label">Class</span>
           <span className="fc-phone__class"><ClassLabel primary={result.primary.name} secondary={result.secondary.name} /></span>
@@ -507,11 +506,10 @@ const ForgeCanvas: React.FC = () => {
 
   // ── Desktop and tablet ─────────────────────────────────────────────────
   return (
-    <section className={`fc fc--${view}`} aria-label="Ryan's talent tree">
+    <section className={`fc fc--${view}`} aria-label="Ryan's skill tree">
       <header className="fc-intro">
         <div className="fc-intro__title">
-          <span className="fc-label">The Forge</span>
-          <h1>My talent tree</h1>
+          <h1>My skill tree</h1>
           <p className="fc-intro__class"><ClassLabel primary={result.primary.name} secondary={result.secondary.name} /></p>
           <p className="fc-intro__facts">{facts}</p>
         </div>
@@ -549,7 +547,7 @@ const ForgeCanvas: React.FC = () => {
         </div>
 
         <div className="fc__stage">
-          <span className="fc__frame">{`Forge / ${LANE_SHORT[lane]}`}</span>
+          <span className="fc__frame">{`Skill tree / ${LANE_SHORT[lane]}`}</span>
           <div className="fc-artboard" id={panelId} role="tabpanel" aria-labelledby={tabId(lane)}>
             <header className="fc-artboard__head">
               <span className="fc-artboard__eyebrow">{eyebrow}</span>

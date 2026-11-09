@@ -122,7 +122,7 @@ export const AUTHORED_COMPONENTS = {
     component: 'rdeboer/components/capability-list',
     label: 'Capabilities',
     anchor: 'mastery',
-    related: { label: 'Open the Forge', href: '/talent-tree/' },
+    related: { label: 'Open the skill tree', href: '/talent-tree/' },
     annotation: {
       text: 'Product implementation separates Direct from Agent-assisted on purpose. HTML, Sass and AEM are hands-on. React and React Native builds are directed, reviewed, tested and released by me.',
       source: 'SkillMastery.tsx, the capability data',

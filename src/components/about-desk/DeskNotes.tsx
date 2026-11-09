@@ -158,10 +158,10 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
   forge: () => (
     <>
       <h3>The sketch under the pencil</h3>
-      <h2 id="desk-note-title">The Forge</h2>
-      <p>My talent tree, drawn out: where my points sit across design, the technical work that connects it, and code. The class it computes is {RYAN_CLASS_SHORT}.</p>
+      <h2 id="desk-note-title">The skill tree</h2>
+      <p>My skill tree, drawn out: where my points sit across design, the technical work that connects it, and code. The class it computes is {RYAN_CLASS_SHORT}.</p>
       <div className="note__links">
-        <Link className="btn btn--primary btn--md" to="/talent-tree/">Open the Forge</Link>
+        <Link className="btn btn--primary btn--md" to="/talent-tree/">Open the skill tree</Link>
       </div>
     </>
   ),
