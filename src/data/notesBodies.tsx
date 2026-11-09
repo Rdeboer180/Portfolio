@@ -351,7 +351,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <p>The system and the curtain do different jobs. The MCP, the skills and the rules shape what gets built and how it looks. The curtain is the person at the Costco exit checking your receipt against your cart. They don&rsquo;t care how you shopped, only that what&rsquo;s leaving is what was paid for.</p>
       <p><strong>The system decides what&rsquo;s easy to build. The curtain decides what&rsquo;s allowed to ship.</strong></p>
       <p>Where I&rsquo;d push it: keep the AI out of the part that blocks. The State of AI report found Astryx already works this way. Its AI reviewer only advises, and the check that blocks a merge is deterministic. Brad puts evals inside the curtain, and I would too, but reporting next to the build until they&rsquo;ve earned the right to fail it. A gate people can&rsquo;t read or rerun is just another opinion.</p>
-      <p>This site has no curtain. Two checks can stop a deploy, hydration and the Dive page, and neither looks at accessibility. The PR review only suggests.</p>
+      <p>This site&rsquo;s curtain is new and thin. Every pull request now runs one: a raw colour that has a token, a class with no stylesheet, an image without alt text or a positive tabIndex stops the merge, and the build has to prerender and hydrate on every route first. Copy is checked against my own voice rules and reported, never blocked. A full accessibility audit isn&rsquo;t in it yet.</p>
       <p>I haven&rsquo;t settled who promotes a playground idea into the system. Today it&rsquo;s me. I&rsquo;d like it to be whoever shipped it, as long as it came through the curtain.</p>
     </>
   ),

@@ -1,0 +1,43 @@
+{
+  "_comment": "What the system has taken on, and at what size. The steel curtain (scripts/system/curtain.mjs) adds a 'proposed' entry for every component or style block a pull request introduces and commits it to the PR, so the change to the system is reviewed in the same diff as the code. A person promotes it: set size, add where it's documented, drop 'status'. Components that predate the registry aren't listed; the catalog still has them.",
+  "components": {
+    "SectionBadge": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Navigation)"
+    },
+    "PageHeader": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Navigation)"
+    },
+    "Tabs": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Navigation)"
+    },
+    "TestimonialCard": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Cards)"
+    },
+    "CaseStudyCard": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Cards)"
+    },
+    "SystemsInPractice": {
+      "size": "production",
+      "documented": "/design-system (Components \u203a Cards, Ecosystem Board)"
+    },
+    "SystemOverview": {
+      "size": "production",
+      "documented": "/design-system (How it works)"
+    },
+    "SystemCatalogExplorer": {
+      "size": "production",
+      "documented": "/design-system (Catalog)"
+    }
+  },
+  "patterns": {
+    "sysx": {
+      "stylesheet": "src/styles/components/_system-overview.scss",
+      "documented": "/design-system (How it works, Catalog)"
+    }
+  }
+}

@@ -56,3 +56,22 @@ test('rules split into named sections and colours join their tokens', () => {
   const hits = searchSystem('orange', { catalog, sections, colors: designColors(md, tokens) });
   assert.equal(hits[0].kind, 'token');
 });
+
+test('voice rules come from the ryan-taste skill and catch the never list', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { checkCopy, parseVoice } = await import('./core.mjs');
+  const voice = parseVoice(readFileSync(new URL('../../.claude/skills/ryan-taste/SKILL.md', import.meta.url), 'utf8'));
+  assert.equal(voice.invariants.length, 10);
+  assert.equal(voice.registers.length, 7);
+  assert.deepEqual(voice.labelHeadings, ['Approach', 'Results', 'Takeaways']);
+  const codes = checkCopy("<h2>Takeaways</h2>\nI'm humbled to share it.\nIt’s not just a library — it’s a habit.\nTen times better, not 10x more.", voice).map((f) => `${f.code}:${f.found}`);
+  assert.deepEqual(codes, ['COPY002:takeaways', 'COPY001:humbled to share', 'COPY001:It’s not just a library — it’s ', 'COPY001:10x']);
+  assert.equal(checkCopy('Show the decision, name the artifact.', voice).length, 0);
+});
+
+test('accessibility basics read whole elements, not lines, and skip comments', async () => {
+  const { checkA11y, blocksMerge } = await import('./core.mjs');
+  const found = checkA11y('// <img src="x">\n<a href="https://x.com"\n  target="_blank">x</a>\n<img src="y" />\n<div onClick={() => go(a > b)}>\n<span tabIndex={3} />');
+  assert.deepEqual(found.map((f) => `${f.code}@${f.line}`), ['A11Y002@2', 'A11Y001@4', 'A11Y004@5', 'A11Y003@6']);
+  assert.deepEqual(found.map(blocksMerge), [false, true, false, true]);
+});

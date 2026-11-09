@@ -5,6 +5,8 @@
 //   public/system/catalog.json   components, blocks, stylesheets, tokens, raw colours
 //   public/system/rules.json     DESIGN.md + PRODUCT.md as named sections, colour roles
 //   public/system/agents.json    the three sizes, the MCP tools, the gates
+//   public/system/registry.json  what the system has taken on, and at what size
+//   (rules.json also carries the voice, parsed from the ryan-taste skill)
 //   public/system/design.md      markdown twins of the two source files
 //   public/system/product.md
 //   public/system/drift.json     every raw colour, where it is, and the token it should be
@@ -22,7 +24,7 @@ import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildCatalog } from './system/catalog.mjs';
-import { designColors, nearestToken, splitSections } from './system/core.mjs';
+import { designColors, nearestToken, parseVoice, splitSections } from './system/core.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(process.argv[2] || join(here, '..'));
@@ -45,11 +47,14 @@ const pub = join(root, 'public/system');
 const design = readFileSync(join(root, 'DESIGN.md'), 'utf8');
 const product = readFileSync(join(root, 'PRODUCT.md'), 'utf8');
 const agents = JSON.parse(readFileSync(join(root, 'src/data/system-agents.json'), 'utf8'));
+const registry = JSON.parse(readFileSync(join(root, 'src/data/system-registry.json'), 'utf8'));
+const voice = parseVoice(readFileSync(join(root, '.claude/skills/ryan-taste/SKILL.md'), 'utf8'));
 const colors = designColors(design, catalog.tokens);
 const sections = [...splitSections(design, 'DESIGN.md'), ...splitSections(product, 'PRODUCT.md')];
 
 write(join(pub, 'catalog.json'), json(catalog));
-write(join(pub, 'rules.json'), json({ commit: catalog.commit, colors, sections }));
+write(join(pub, 'rules.json'), json({ commit: catalog.commit, colors, sections, voice }));
+write(join(pub, 'registry.json'), json(registry));
 write(join(pub, 'agents.json'), json(agents));
 copyFileSync(join(root, 'DESIGN.md'), join(pub, 'design.md'));
 copyFileSync(join(root, 'PRODUCT.md'), join(pub, 'product.md'));
@@ -87,6 +92,9 @@ const snapshot = {
   drift: drift.slice(0, 5).map((c) => ({ name: c.name, count: c.hex.length })),
   colors,
   sections: sections.length,
+  registered: Object.keys(registry.components).length,
+  proposed: Object.values(registry.components).filter((c) => c.status === 'proposed').length,
+  voice: { thesis: voice.thesis, iAm: voice.iAm, iAmNot: voice.iAmNot, registers: voice.registers, bans: voice.bans.map((b) => b.phrase), labelHeadings: voice.labelHeadings },
 };
 write(join(root, 'src/data/system-snapshot.json'), json(snapshot));
 
@@ -104,6 +112,8 @@ Snapshot: commit ${catalog.commit}, ${catalog.components.length} components, ${O
 - [Catalog](${site}/system/catalog.json): every component, class block, stylesheet, token and raw colour (JSON)
 - [Rules](${site}/system/rules.json): DESIGN.md and PRODUCT.md as named sections, plus colour roles (JSON)
 - [Sizes, tools and gates](${site}/system/agents.json): what gets checked at sketch, playground and production (JSON)
+- [Registry](${site}/system/registry.json): which components and patterns the system has taken on, at what size, and where they're documented (JSON)
+- Voice: how copy reads comes from Ryan's taste skill; it's in rules.json under \`voice\` and in the MCP's get_voice
 
 ## MCP
 - [rdeboer-system](${site}/system/mcp.mjs): a zero-dependency stdio MCP server over the files above. Tools: ${agents.tools.map((t) => t.name).join(', ')}.

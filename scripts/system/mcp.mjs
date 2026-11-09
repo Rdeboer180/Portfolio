@@ -16,7 +16,7 @@
 // Every answer comes from the same generated files the /design-system page and
 // the pull-request review read, through the same functions (core.mjs). Nothing
 // is sent anywhere except the GET requests for those files.
-import { CODES, checkSource, designColors, nearestToken, relatives, reviewCatalogs, searchSystem, splitSections } from './core.mjs';
+import { CODES, blocksMerge, checkA11y, checkCopy, checkSource, designColors, nearestToken, parseVoice, relatives, searchSystem, splitSections } from './core.mjs';
 
 const VERSION = '1.0.0';
 const ORIGIN = process.env.RDEBOER_SYSTEM_URL || 'https://www.rdeboerdesigns.com';
@@ -55,6 +55,8 @@ async function loadSystem() {
       sections: [...splitSections(design, 'DESIGN.md'), ...splitSections(read('PRODUCT.md'), 'PRODUCT.md')],
       colors: designColors(design, catalog.tokens),
       agents: JSON.parse(read('src/data/system-agents.json')),
+      registry: JSON.parse(read('src/data/system-registry.json')),
+      voice: parseVoice(read('.claude/skills/ryan-taste/SKILL.md')),
     };
   }
   const get = async (file) => {
@@ -62,8 +64,8 @@ async function loadSystem() {
     if (!res.ok) throw new Error(`${ORIGIN}/system/${file} returned ${res.status}`);
     return res.json();
   };
-  const [catalog, rules, agents] = await Promise.all([get('catalog.json'), get('rules.json'), get('agents.json')]);
-  return { source: `${ORIGIN}/system/ (commit ${catalog.commit})`, catalog, sections: rules.sections, colors: rules.colors, agents };
+  const [catalog, rules, agents, registry] = await Promise.all([get('catalog.json'), get('rules.json'), get('agents.json'), get('registry.json')]);
+  return { source: `${ORIGIN}/system/ (commit ${catalog.commit})`, catalog, sections: rules.sections, colors: rules.colors, voice: rules.voice, agents, registry };
 }
 
 // Re-read on every call in a checkout (it changes as you work); cache the
@@ -84,6 +86,8 @@ const SCHEMAS = {
   get_component: { type: 'object', properties: { name: str('Component name, e.g. "TestimonialCard"') }, required: ['name'] },
   find_tokens: { type: 'object', properties: { hex: str('Optional raw colour, e.g. "#f04a00", to match to a token') } },
   get_rules: { type: 'object', properties: { topic: str('Optional section heading, e.g. "Colors", "Motion", "Do\'s and Don\'ts"') } },
+  get_voice: { type: 'object', properties: { register: str('Optional register: Note, Rough cut (LinkedIn), Case study, Positioning, System doc, Correspondence, Product copy') } },
+  check_copy: { type: 'object', properties: { text: str('Copy to check: TSX, markdown or plain text') }, required: ['text'] },
   get_checklist: { type: 'object', properties: { size: { type: 'string', enum: ['sketch', 'playground', 'production'], description: 'Which size the work is at' } }, required: ['size'] },
   check_source: { type: 'object', properties: { code: str('TSX or SCSS to check'), file: str('Optional file name, for the report') }, required: ['code'] },
   review_change: { type: 'object', properties: { base: str('Git ref to compare with (default origin/main)') } },
@@ -107,6 +111,7 @@ const HANDLERS = {
       stylesheets: styles,
       rawColours: c.hex.map((hex) => ({ hex, token: nearestToken(hex, s.catalog.tokens) })),
       relatives: relatives(c, s.catalog.components),
+      registry: s.registry.components[c.name] || 'Not in the registry: it predates it, or nobody has proposed it yet.',
     };
   },
 
@@ -136,25 +141,52 @@ const HANDLERS = {
   },
 
   async check_source({ code, file }, s) {
-    const findings = checkSource(String(code), s.catalog);
-    if (!findings.length) return `No findings${file ? ` in ${file}` : ''}: every colour is a token and every block has a stylesheet.`;
-    return { file: file || null, findings, note: 'Advisory. The same rules run on the pull request; a person decides what the system takes.' };
+    const text = String(code);
+    const findings = [...checkSource(text, s.catalog), ...(/<[a-z]/.test(text) ? checkA11y(text) : [])]
+      .map((f) => ({ ...f, curtain: blocks(f) ? 'blocks' : 'reported' }));
+    if (!findings.length) return `No findings${file ? ` in ${file}` : ''}: colours are tokens, blocks have stylesheets, and the accessibility basics hold.`;
+    return { file: file || null, findings, note: '"blocks" means the steel curtain will stop the pull request on it. Fix those; answer the rest.' };
   },
 
-  async review_change({ base = 'origin/main' }, s) {
-    if (!local) return 'review_change needs a checkout of the repo. From the published copy, use check_source on the code instead.';
-    const { execFileSync } = await import('node:child_process');
-    const { mkdtempSync, rmSync } = await import('node:fs');
-    const { tmpdir } = await import('node:os');
-    const { join } = await import('node:path');
-    const dir = mkdtempSync(join(tmpdir(), 'rdeboer-system-'));
-    try {
-      execFileSync('git', ['-C', local.root, 'worktree', 'add', '--detach', dir, base], { stdio: 'ignore' });
-      const report = reviewCatalogs(local.buildCatalog(dir), s.catalog);
-      return report.replace('<!-- system-review -->\n', '');
-    } finally {
-      try { execFileSync('git', ['-C', local.root, 'worktree', 'remove', '--force', dir], { stdio: 'ignore' }); } catch { rmSync(dir, { recursive: true, force: true }); }
-    }
+  async check_copy({ text }, s) {
+    const findings = checkCopy(String(text), s.voice);
+    if (!findings.length) return `Nothing on the never list. The rest is judgment: call get_voice for the register and the moves. ${s.voice.thesis}`;
+    return { findings, note: 'Advisory: the steel curtain reports these and does not block on them.' };
+  },
+
+  async get_voice({ register }, s) {
+    const v = s.voice;
+    const r = register ? v.registers.find((x) => x.register.toLowerCase().startsWith(String(register).toLowerCase())) : null;
+    return [
+      r ? `# ${r.register}: ${r.rule}\n` : '',
+      `**${v.thesis}**`,
+      '',
+      `I am: ${v.iAm.join(', ')}.`,
+      `I am not: ${v.iAmNot.join(', ')}.`,
+      '',
+      '## Registers',
+      ...v.registers.map((x) => `- ${x.register}: ${x.rule}`),
+      '',
+      '## Moves (use three or four, never all)',
+      ...v.moves.map((m, i) => `${i + 1}. ${m}`),
+      '',
+      '## Invariants',
+      ...v.invariants.map((x) => `- ${x.rule} ${x.detail}`),
+      '',
+      '## Never',
+      ...v.bans.map((b) => `- "${b.phrase}"`),
+      ...v.alsoNever.map((x) => `- ${x}`),
+      `- Headings like ${v.labelHeadings.map((h) => `"${h}"`).join(', ')}: headings are claims`,
+      '',
+      `(from ${v.source})`,
+    ].filter((line, i) => i > 0 || line).join('\n');
+  },
+
+  async review_change({ base = 'origin/main' }) {
+    if (!local) return 'review_change needs a checkout of the repo. From the published copy, use check_source and check_copy on the code instead.';
+    const { runCurtain, curtainReport } = await import('./curtain.mjs');
+    const result = runCurtain({ root: local.root, base });
+    return curtainReport(result).replace('<!-- steel-curtain -->\n', '').replace('The curtain committed', 'On the pull request, the curtain will commit');
   },
 };
 
@@ -164,9 +196,12 @@ const INSTRUCTIONS = [
   "This is the design system behind Ryan DeBoer's portfolio (rdeboerdesigns.com).",
   'Before building UI for it: search_system for what exists, get_component before adding a component, find_tokens for colours.',
   'Work comes in three sizes; get_checklist says how much to check at each.',
-  'Before finishing a change to styles or className, run check_source on it. It uses the same rules as the pull-request review and only advises.',
+  'Before finishing a change to styles, className or JSX, run check_source on it; for copy, check_copy, and get_voice for how it should read.',
+  'Every pull request passes the steel curtain: deterministic findings block, the rest are reported. Inside the repo, review_change runs it before the pull request.',
   `Finding codes are stable: ${Object.entries(CODES).map(([k, v]) => `${k} ${v}`).join('; ')}.`,
 ].join(' ');
+
+const blocks = blocksMerge;
 
 const send = (msg) => process.stdout.write(`${JSON.stringify(msg)}\n`);
 

@@ -110,7 +110,7 @@ const SystemOverview: React.FC<{ onOpenCatalog: () => void }> = ({ onOpenCatalog
       <h2 className="ds__section-title">Agents propose, checks block, I decide</h2>
       <p className="sysx__lede">
         The same rules run three times: while an agent builds, on the pull request, and at deploy. Only the
-        deterministic ones block. No model sits in the step that can stop a release.
+        deterministic ones block. No model sits in a step that can stop a release.
       </p>
       <ol className="sysx__gates">
         {agents.gates.map((g) => (
@@ -125,10 +125,56 @@ const SystemOverview: React.FC<{ onOpenCatalog: () => void }> = ({ onOpenCatalog
         ))}
       </ol>
       <p className="sysx__note">
-        Brad Frost calls that last line the steel curtain. Mine is half-built: the deploy gates block, but
-        nothing automated checks accessibility yet.{' '}
+        Every pull request passes what Brad Frost calls the steel curtain. Mine checks what the change adds,
+        not the debt it inherits, and leaves one comment: what blocks, what to answer, and the registry entries
+        it committed for any new component or style block, so the MCP&rsquo;s rules change in the same diff I
+        review. It catches the accessibility basics, not a full audit yet.{' '}
         <Link to="/notes/a-design-system-in-more-than-one-size/">Why it works this way &rarr;</Link>
       </p>
+      <p className="sysx__status">
+        <span className="sysx__tag">[ registry ]</span>
+        <span>{snapshot.registered} components taken on</span>
+        <span>{snapshot.proposed} proposed, waiting on a person</span>
+        <a href="/system/registry.json">registry.json</a>
+      </p>
+    </section>
+
+    <section className="ds__section">
+      <h2 className="ds__section-title">Copy has rules too</h2>
+      <p className="sysx__lede">
+        How copy reads is part of the system, not a pass at the end. The rules come from my taste skill, and the
+        MCP serves them as <code>get_voice</code> and <code>check_copy</code>. <strong>{snapshot.voice.thesis}</strong>
+      </p>
+      <div className="sysx__voice">
+        <dl className="sysx__voice-cols">
+          <div>
+            <dt>I am</dt>
+            <dd>{snapshot.voice.iAm.join(' · ')}</dd>
+          </div>
+          <div>
+            <dt>I am not</dt>
+            <dd>{snapshot.voice.iAmNot.join(' · ')}</dd>
+          </div>
+        </dl>
+        <h3 className="ds__subsection-title">One register per piece</h3>
+        <dl className="sysx__tools">
+          {snapshot.voice.registers.map((r) => (
+            <div key={r.register} className="sysx__tool">
+              <dt>{r.register}</dt>
+              <dd>{r.rule}</dd>
+            </div>
+          ))}
+        </dl>
+        <h3 className="ds__subsection-title">What the curtain flags</h3>
+        <ul className="sysx__bans" aria-label="Phrases and headings the steel curtain flags in new copy">
+          {snapshot.voice.bans.map((b) => <li key={b}><s>{b}</s></li>)}
+          {snapshot.voice.labelHeadings.map((h) => <li key={h}><s>{h}</s> as a heading</li>)}
+        </ul>
+        <p className="sysx__note">
+          Those are the only parts a script can check. Whether a piece names its artifact, admits its cost and
+          ends open is still a read, mine or an agent&rsquo;s with <code>get_voice</code> in hand.
+        </p>
+      </div>
     </section>
 
     <section className="ds__section">

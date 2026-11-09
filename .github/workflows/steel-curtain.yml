@@ -1,0 +1,113 @@
+# The steel curtain: what every pull request passes before it can merge.
+# (The name is Brad Frost's, from AI & Design Systems.)
+#
+#   governance  System, accessibility and copy rules on what the PR adds
+#               (scripts/steel-curtain.mjs; the rules live in
+#               scripts/system/core.mjs, the voice in the ryan-taste skill).
+#               Deterministic findings block; the rest are reported to answer.
+#               New components and style blocks are proposed into
+#               src/data/system-registry.json and committed to the PR, so the
+#               MCP server's rules change in the same diff a person reviews.
+#   build       The deploy's own gates, run before merge instead of after:
+#               build, prerender, hydration on every route, Dive Club checks.
+#
+# One comment per PR, edited in place. No model sits in either job.
+name: Steel curtain
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: steel-curtain-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    outputs:
+      blocking: ${{ steps.curtain.outputs.blocking }}
+    steps:
+      - name: Check out the PR branch
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+          # The branch itself (not the merge commit), so the registry update
+          # can be committed back to it. Forks get their own head, read-only.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run the curtain
+        id: curtain
+        run: |
+          node scripts/steel-curtain.mjs \
+            --base "${{ github.event.pull_request.base.sha }}" \
+            --pr "${{ github.event.pull_request.number }}" \
+            --report "$RUNNER_TEMP/curtain.md" \
+            --json "$RUNNER_TEMP/curtain.json" \
+            --update-registry > /dev/null
+          echo "blocking=$(node -p "require('$RUNNER_TEMP/curtain.json').blocking")" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/curtain.md" >> "$GITHUB_STEP_SUMMARY"
+
+      # The registry change is a proposal in the PR's own diff: a person
+      # reviews it with the code and merges both or neither. GITHUB_TOKEN
+      # pushes don't start new workflow runs, so this can't loop.
+      - name: Commit the registry update to the PR
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- src/data/system-registry.json; then exit 0; fi
+          git config user.name "steel-curtain[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/system-registry.json
+          git commit -m "System registry: propose what PR #${{ github.event.pull_request.number }} introduces"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+
+      - name: Post or update the comment
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          id=$(gh api "repos/${{ github.repository }}/issues/$PR/comments" --paginate \
+            --jq '.[] | select(.body | startswith("<!-- steel-curtain -->")) | .id' | tail -1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$id" -F body=@"$RUNNER_TEMP/curtain.md" > /dev/null
+          else
+            gh pr comment "$PR" --repo "${{ github.repository }}" --body-file "$RUNNER_TEMP/curtain.md"
+          fi
+
+      - name: Hold the line
+        if: steps.curtain.outputs.blocking != '0'
+        run: |
+          echo "::error::The steel curtain found ${{ steps.curtain.outputs.blocking }} blocking finding(s). See the PR comment."
+          exit 1
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Build and prerender
+        env:
+          REACT_APP_PROJECT_PASSWORD_HASH: 18a45c7fec0bb00024f3c06a777a56e3917031c18bb58a04ea078f58512e18c8
+        run: npm run build
+      - name: Hydration on every route
+        timeout-minutes: 20
+        run: node scripts/verify-hydration.cjs
+      - name: Dive Club isolation and navigation
+        run: node scripts/verify-dive.cjs

@@ -12,7 +12,20 @@ export const CODES = {
   SYS001: 'Raw colour outside the token files',
   SYS002: 'Class block with no stylesheet',
   SYS003: 'Inline style colour',
+  COPY001: 'Phrase on the never list (ryan-taste)',
+  COPY002: 'Heading is a label, not a claim (ryan-taste)',
+  A11Y001: 'Image without alt',
+  A11Y002: 'New tab without rel',
+  A11Y003: 'Positive tabIndex',
+  A11Y004: 'Click handler on a non-interactive element',
+  REG001: 'New component not in the registry',
+  REG002: 'Production component not documented',
 };
+
+/** What the steel curtain stops a merge on: deterministic and unambiguous. Everything else is reported. */
+export const blocksMerge = (f) =>
+  ((f.code === 'SYS001' || f.code === 'SYS003') && f.verdict !== 'none') ||
+  f.code === 'SYS002' || f.code === 'A11Y001' || f.code === 'A11Y003';
 
 export const COMMON_BLOCKS = new Set(['reveal-fade', 'reveal-mask', 'sr-only', 'btn', 'animated-bold']);
 
@@ -88,6 +101,7 @@ export const checkSource = (code, catalog) => {
         code: inStyle ? 'SYS003' : 'SYS001',
         line: i + 1,
         found: hex,
+        verdict: t ? t.verdict : 'none',
         suggestion: t ? `$${t.name} (${t.value}), ${t.verdict === 'exact' ? 'an exact match' : t.verdict === 'close' ? 'a close match' : `the nearest, ${t.d} away`}` : null,
       });
     }
@@ -204,4 +218,106 @@ export const searchSystem = (query, { catalog, sections, colors }, limit = 8) =>
     ...sections.map((s) => ({ kind: 'rule', name: s.heading, file: s.file, excerpt: s.text.slice(0, 160), s: score(`${s.heading.toLowerCase()} ${s.text.toLowerCase()}`, terms) })),
   ];
   return hits.filter((h) => h.s > 0).sort((a, b) => b.s - a.s).slice(0, limit).map(({ s, ...h }) => h);
+};
+
+// ---------------------------------------------------------------- voice
+// How copy reads comes from Ryan's taste skill (.claude/skills/ryan-taste/
+// SKILL.md), parsed at build time. The skill stays the one source: change a
+// line there and the MCP, the page and the steel curtain all follow.
+
+const unwrap = (text) => text.replace(/\s*\n\s*/g, ' ').trim();
+const section = (md, title) => (md.match(new RegExp(`## \\d+\\. ${title}\\n([\\s\\S]*?)(?=\\n## |$)`)) || [])[1] || '';
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Turn a quoted ban from the skill into a pattern: "thrilled/humbled to share" → two alternatives, "X"/"Y" → wildcards. */
+const banPattern = (phrase) => {
+  const p = phrase.replace(/[’']/g, "'");
+  if (/\bX\b.*\bY\b/.test(p)) {
+    return escapeRe(p).replace(/\\?'/g, "['’]?").replace(/\bX\b/, '.{1,60}?').replace(/\s*—\s*/, '\\s*[—–-]+\\s*').replace(/\bY\b/, '');
+  }
+  const slash = p.match(/^(\S+)\/(\S+)(.*)$/);
+  const alts = slash ? [`${slash[1]}${slash[3]}`, `${slash[2]}${slash[3]}`] : [p];
+  return alts.map((a) => escapeRe(a).replace(/'/g, "['’]")).map((a) => (/^\w/.test(a) ? `\\b${a}` : a)).map((a) => (/\w$/.test(a) ? `${a}\\b` : a)).join('|');
+};
+
+export const parseVoice = (skill) => {
+  const never = section(skill, 'NEVER');
+  const writing = unwrap((never.match(/\*\*In writing\*\* — ([\s\S]*?)(?=\n\n)/) || [])[1] || '');
+  const bans = [...writing.matchAll(/"([^"]+?),?"/g)].map((m) => m[1].replace(/,$/, ''));
+  const voice = section(skill, 'VOICE CONSTANTS');
+  const list = (label) => unwrap((voice.match(new RegExp(`\\*\\*${label}\\*\\* ([\\s\\S]*?)\\.\\n`)) || [])[1] || '')
+    .replace(/, or /, ', ').replace(/, and /, ', ').split(/,\s*/).filter(Boolean);
+  const moves = [...voice.matchAll(/^\d+\.\s+([\s\S]*?)(?=\n\d+\.|\n*$)/gm)].map((m) => unwrap(m[1]));
+  const invariants = [...section(skill, 'THE INVARIANTS').matchAll(/^\d+\.\s+\*\*(.+?)\*\*[ \t]*([\s\S]*?)(?=\n\d+\.|\n---|\n*$)/gm)].map((m) => ({ rule: m[1], detail: unwrap(m[2]) }));
+  const labelHeadings = ((voice.match(/Never ((?:"[^"]+"\s*)+)/) || [])[1] || '').match(/"([^"]+?)[,.]?"/g)?.map((q) => q.replace(/[",.]/g, '')) || [];
+  const registers = [...skill.matchAll(/^\| (Note|Rough cut \(LinkedIn\)|Case study|Positioning|System doc|Correspondence|Product copy) \|[^|]+\|[^|]+\|[^|]+\| ([^|]+) \|/gm)].map((m) => ({ register: m[1], rule: m[2].trim() }));
+  return {
+    source: '.claude/skills/ryan-taste/SKILL.md',
+    thesis: unwrap((skill.match(/^> \*\*(.+?)\*\*/m) || [])[1] || ''),
+    iAm: list('I am'),
+    iAmNot: list('I am not'),
+    moves,
+    invariants,
+    registers,
+    bans: bans.map((phrase) => ({ phrase, pattern: banPattern(phrase) })),
+    labelHeadings,
+    alsoNever: writing.replace(/"[^"]+",?\s*/g, '').replace(/^,\s*/, '').split(/,\s*(?:or\s+)?/).map((s) => s.trim().replace(/\.$/, '')).filter(Boolean),
+  };
+};
+
+/** Deterministic copy checks: the skill's banned phrases and label headings. */
+export const checkCopy = (text, voice) => {
+  const findings = [];
+  const bans = voice.bans.map((b) => ({ ...b, re: new RegExp(b.pattern, 'i') }));
+  const labels = new Set(voice.labelHeadings.map((l) => l.toLowerCase()));
+  text.split('\n').forEach((line, i) => {
+    if (/^\s*(?:\/\/|\*|\/\*|import\s)/.test(line)) return;
+    for (const b of bans) {
+      const m = line.match(b.re);
+      if (m) findings.push({ code: 'COPY001', line: i + 1, found: m[0], suggestion: `"${b.phrase}" is on the never list in ryan-taste. Say the specific thing instead.` });
+    }
+    const h = line.match(/<h[1-6][^>]*>\s*([^<{]+?)\s*<\/h[1-6]>|^#{1,6}\s+(.+)$/);
+    const heading = h && (h[1] || h[2]).trim().toLowerCase();
+    if (heading && labels.has(heading)) findings.push({ code: 'COPY002', line: i + 1, found: heading, suggestion: 'Headings are claims, not labels. Say what the section concludes.' });
+  });
+  return findings.map((f) => ({ ...f, rule: CODES[f.code] }));
+};
+
+// ---------------------------------------------------------------- accessibility basics
+// The cheap, deterministic part of an accessibility gate: what a line of JSX
+// gets wrong on its face. Not an audit; the steel curtain says so.
+/** JSX opening tags with their full attribute text, however many lines they span. */
+export const jsxTags = (source, names) => {
+  // Comments blanked to spaces (newlines kept) so line numbers still match.
+  const text = source.replace(/\/\*[\s\S]*?\*\/|^[ \t]*\/\/[^\n]*/gm, (c) => c.replace(/[^\n]/g, ' '));
+  const tags = [];
+  const re = new RegExp(`<(${names.join('|')})\\b`, 'g');
+  for (const m of text.matchAll(re)) {
+    let i = m.index + m[0].length;
+    let depth = 0;
+    let quote = null;
+    for (; i < text.length; i += 1) {
+      const ch = text[i];
+      if (quote) { if (ch === quote) quote = null; continue; }
+      if (ch === '"' || ch === "'" || ch === '`') quote = ch;
+      else if (ch === '{') depth += 1;
+      else if (ch === '}') depth -= 1;
+      else if (ch === '>' && depth === 0) break;
+    }
+    tags.push({ tag: m[1], attrs: text.slice(m.index + m[0].length, i), line: text.slice(0, m.index).split('\n').length });
+  }
+  return tags;
+};
+
+export const checkA11y = (text) => {
+  const findings = [];
+  const add = (code, line, found, suggestion) => findings.push({ code, line, found, suggestion, rule: CODES[code] });
+  for (const { tag, attrs, line } of jsxTags(text, ['img', 'a', 'div', 'span', 'button', 'section', 'li'])) {
+    if (tag === 'img' && !/\balt=/.test(attrs)) add('A11Y001', line, '<img> without alt', 'Add alt text, or alt="" if the image is decorative.');
+    if (/target=["'{]?_blank/.test(attrs) && !/\brel=/.test(attrs)) add('A11Y002', line, 'target="_blank" without rel', 'Add rel="noopener noreferrer".');
+    const tab = attrs.match(/tabIndex=\{?["']?([1-9]\d*)/);
+    if (tab) add('A11Y003', line, `tabIndex=${tab[1]}`, 'Positive tabIndex breaks the reading order. Use 0 or -1.');
+    if ((tag === 'div' || tag === 'span') && /\bonClick=/.test(attrs) && !/\brole=/.test(attrs)) add('A11Y004', line, `onClick on a ${tag}`, 'Use a <button>, or give it a role, tabIndex and key handling.');
+  }
+  return findings;
 };

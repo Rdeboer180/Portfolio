@@ -257,6 +257,42 @@
     &--todo { border-style: dashed; color: $color-neutral-muted; }
   }
 
+  // ---------------------------------------- voice
+  &__voice-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xl;
+    max-width: 960px;
+    margin: 0 0 $spacing-2xl;
+
+    dt { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; margin-bottom: $spacing-xs; }
+    dd { margin: 0; font-size: $font-size-body; line-height: 1.6; color: $color-neutral-dark; }
+  }
+
+  &__tool dt:not(:has(code)) { font-weight: $font-weight-semibold; font-size: $font-size-body-sm; color: $color-neutral-dark; }
+
+  &__bans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 960px;
+
+    li {
+      padding: 2px 10px;
+      border: 1px dashed $color-neutral-light;
+      border-radius: $radius-sm;
+      font-size: $font-size-body-sm;
+      color: $color-neutral-muted;
+    }
+
+    s { text-decoration-color: $color-primary; text-decoration-thickness: 1.5px; color: $color-neutral-standard; }
+  }
+
+  &__lede code, &__note code { font-family: $font-family-mono; font-size: 0.9em; }
+
   // ---------------------------------------- drift
   &__drift {
     list-style: none;
@@ -421,6 +457,7 @@
   .sysx {
     &__sizes { grid-template-columns: 1fr; }
     &__tools { grid-template-columns: 1fr; }
+    &__voice-cols { grid-template-columns: 1fr; gap: $spacing-lg; }
     &__layer { grid-template-columns: 1fr auto; }
     &__layer-body { grid-column: 1 / -1; }
     &__gate { grid-template-columns: 1fr auto; gap: $spacing-xs $spacing-md; }

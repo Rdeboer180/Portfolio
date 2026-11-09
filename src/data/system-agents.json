@@ -20,7 +20,8 @@
       "checks": [
         "Colours come from the tokens",
         "Every class block has a stylesheet (no one-off blocks)",
-        "Reuse first: get_component names the nearest existing component"
+        "Reuse first: get_component names the nearest existing component",
+        "Copy avoids the never list (check_copy)"
       ]
     },
     {
@@ -32,12 +33,13 @@
       "checks": [
         "Colours come from the tokens",
         "Every class block has a stylesheet",
-        "Reuse first, and a new component goes on /design-system",
-        "States drawn: empty, long, loading, error",
+        "Reuse first, and the component is in the registry with where it's documented",
+        "Copy reads in the right register (get_voice) and passes check_copy",
+        "Images have alt, links that open a tab have rel, no positive tabIndex",
         "Keyboard, focus and reduced motion",
         "Contrast against the pairs on /design-system",
-        "The system review comment on the pull request is read and answered",
-        "The deploy gates pass: prerender, hydration, Dive Club isolation"
+        "States drawn: empty, long, loading, error",
+        "The steel curtain holds on the pull request"
       ]
     }
   ],
@@ -49,8 +51,8 @@
     },
     {
       "name": "get_component",
-      "summary": "One component: its blocks, stylesheets, raw colours and nearest relatives.",
-      "description": "Get one component by name: its file, the class blocks it draws with, the stylesheets that define them, any raw colours with the token each should be, and the existing components it most resembles. Reuse or extend before adding a new one."
+      "summary": "One component: blocks, stylesheets, raw colours, relatives, registry entry.",
+      "description": "Get one component by name: its file, the class blocks it draws with, the stylesheets that define them, any raw colours with the token each should be, the existing components it most resembles, and its registry entry (size, where it's documented, or 'proposed'). Reuse or extend before adding a new one."
     },
     {
       "name": "find_tokens",
@@ -63,43 +65,65 @@
       "description": "Read the written rules. With no topic, lists every section of DESIGN.md and PRODUCT.md; with a topic (\"Colors\", \"Motion\", \"Do's and Don'ts\", \"The Process, Stated Once\"), returns that section."
     },
     {
+      "name": "get_voice",
+      "summary": "How copy reads: the thesis, registers, moves and the never list.",
+      "description": "How copy on this site should read, from the ryan-taste skill: the one-line thesis, the voice constants (I am / I am not), the seven registers and the rule each one follows, the moves that make it sound like Ryan, the invariants, and the never list. Pass a register (\"Note\", \"Product copy\", \"Case study\", ...) to get that register's rule first."
+    },
+    {
       "name": "get_checklist",
       "summary": "What gets checked at sketch, playground or production size.",
       "description": "The checklist for one of the system's three sizes: sketch (anyone, loosely governed), playground (the team, real components) or production (everything). Use it to decide how much to check before handing work on."
     },
     {
       "name": "check_source",
-      "summary": "The pull-request rules, run on code before it is written.",
-      "description": "Check a TSX or SCSS snippet against the system with the same deterministic rules the pull-request review uses: raw colours (SYS001, SYS003 for inline styles) get the token they should be, and class blocks with no stylesheet (SYS002) are flagged. Run it on new styles or className changes before finishing. It advises; a person decides."
+      "summary": "The curtain's system and accessibility rules, run on code before it's written.",
+      "description": "Check a TSX or SCSS snippet with the same deterministic rules the steel curtain runs on a pull request: raw colours get the token they should be (SYS001, SYS003 inline), class blocks with no stylesheet (SYS002), and the accessibility basics (A11Y001 image without alt, A11Y002 new tab without rel, A11Y003 positive tabIndex, A11Y004 click handler on a div). Run it on new styles, className or JSX before finishing. Findings say whether the curtain would block."
+    },
+    {
+      "name": "check_copy",
+      "summary": "Copy against the never list and label headings in ryan-taste.",
+      "description": "Check copy (TSX, markdown or plain text) against Ryan's voice rules, parsed from the ryan-taste skill: phrases on the never list (COPY001) and headings that are labels instead of claims (COPY002). Deterministic and advisory. For how copy should read, call get_voice."
     },
     {
       "name": "review_change",
-      "summary": "The pull-request review for your working tree. Local only.",
-      "description": "Only inside a checkout of the repo: inventory the working tree and a base ref (default origin/main) and return the same system review the pull request will get: new components with their nearest relatives, removed ones, new raw colours, unstyled blocks."
+      "summary": "The full steel curtain on your branch, before the pull request. Local only.",
+      "description": "Only inside a checkout of the repo: run the steel curtain on the working tree against a base ref (default origin/main), exactly as the pull request will. Returns blocking findings, findings to address (system, accessibility, copy), registry proposals for new components and style blocks, and what the system should absorb."
     }
   ],
   "gates": [
     {
       "stage": "While building",
-      "check": "check_source and get_component over MCP",
+      "check": "check_source, check_copy and review_change over MCP",
       "kind": "advisory",
       "status": "live"
     },
     {
       "stage": "Pull request",
-      "check": "System review comment: reuse, removals, raw colours, unstyled blocks",
+      "check": "Steel curtain: raw colours with a token, unstyled blocks, images without alt, positive tabIndex",
+      "kind": "blocking",
+      "status": "live"
+    },
+    {
+      "stage": "Pull request",
+      "check": "Steel curtain: copy against ryan-taste, other accessibility and drift findings, registry proposals",
       "kind": "advisory",
       "status": "live"
     },
     {
-      "stage": "Deploy",
-      "check": "Prerender, hydration on every route, Dive Club isolation, live bundles load",
+      "stage": "Pull request",
+      "check": "Build, prerender, hydration on every route, Dive Club isolation",
       "kind": "blocking",
       "status": "live"
     },
     {
       "stage": "Deploy",
-      "check": "Automated accessibility and visual regression",
+      "check": "The same build gates again, then live bundles load",
+      "kind": "blocking",
+      "status": "live"
+    },
+    {
+      "stage": "Pull request",
+      "check": "Full accessibility audit (axe) and visual regression",
       "kind": "blocking",
       "status": "not built"
     }
