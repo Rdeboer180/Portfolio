@@ -156,6 +156,11 @@
   --transition-base: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
 
+  // The site's motion curve: a quick start that settles softly. Used by the
+  // reveals, the binder, the board and the notes under local names; this is
+  // the one to reach for in anything new.
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
   // ==========================================
   // LAYOUT
   // ==========================================

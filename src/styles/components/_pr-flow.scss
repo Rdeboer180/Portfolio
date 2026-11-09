@@ -1,0 +1,294 @@
+// ============================================
+// PR flow (.prflow) — the side-scrolling pull-request flow on /design-system.
+// Board vocabulary: paper frames, hairlines, Menlo tags, Signal Orange only
+// for what blocks and what was chosen. Every movement uses $ease-out.
+// ============================================
+
+@import '../variables';
+
+.prflow {
+  margin: $spacing-xl 0 0;
+  --prflow-progress: 0;
+
+  // ---------------------------------------- rail
+  &__top {
+    display: flex;
+    align-items: flex-end;
+    gap: $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__rail {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    --prflow-progress: 0;
+  }
+
+  &__rail-track {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    top: 5px;
+    height: 1px;
+    background: $color-neutral-light;
+  }
+
+  &__rail-fill {
+    position: absolute;
+    inset: 0;
+    background: $color-neutral-dark;
+    transform-origin: left center;
+    transform: scaleX(var(--prflow-progress));
+    transition: transform 320ms $ease-out;
+  }
+
+  &__steps {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 4px; border-radius: 2px; }
+  }
+
+  &__step-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid $color-secondary;
+    background: $color-white;
+    transition: background-color 240ms $ease-out, border-color 240ms $ease-out, transform 240ms $ease-out;
+  }
+
+  &__step-label {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-neutral-muted;
+    white-space: nowrap;
+    transition: color 240ms $ease-out;
+  }
+
+  &__step.is-past &__step-dot { background: $color-neutral-dark; border-color: $color-neutral-dark; }
+
+  &__step.is-active {
+    .prflow__step-dot { border-color: $color-primary; background: $color-primary; transform: scale(1.18); }
+    .prflow__step-label { color: $color-neutral-dark; }
+  }
+
+  &__step:hover:not(.is-active) .prflow__step-dot { border-color: $color-neutral-dark; }
+
+  &__nav { display: flex; gap: $spacing-xs; flex: none; }
+
+  &__arrow {
+    width: 36px;
+    height: 36px;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-md;
+    background: $color-white;
+    color: $color-neutral-dark;
+    font-size: $font-size-body;
+    cursor: pointer;
+    transition: border-color 200ms $ease-out, opacity 200ms $ease-out;
+
+    &:hover:not(:disabled) { border-color: $color-neutral-dark; }
+    &:disabled { opacity: 0.35; cursor: default; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+
+  // ---------------------------------------- strip
+  &__scroller {
+    display: flex;
+    gap: $spacing-lg;
+    overflow-x: auto;
+    padding: $spacing-xs $spacing-xs $spacing-lg;
+    margin: 0 (-$spacing-xs);
+    scrollbar-width: thin;
+    scrollbar-color: $color-neutral-light transparent;
+    overscroll-behavior-x: contain;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; border-radius: $radius-lg; }
+  }
+
+  &__frame {
+    flex: 0 0 min(340px, 82%);
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-xl;
+    background: $color-white;
+    transition: border-color 320ms $ease-out, transform 420ms $ease-out, box-shadow 420ms $ease-out;
+
+    &.is-active {
+      border-color: $color-neutral-dark;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba($color-neutral-dark, 0.06);
+    }
+  }
+
+  &__stage {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+
+  &__title {
+    margin: $spacing-xs 0 $spacing-sm;
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+    color: $color-neutral-dark;
+  }
+
+  &__body {
+    margin: 0 0 $spacing-lg;
+    font-size: $font-size-body-sm;
+    line-height: 1.55;
+    color: $color-neutral-standard;
+  }
+
+  &__detail {
+    margin-top: auto;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  // ---------------------------------------- frame art
+  &__art {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  &__line {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-sm;
+    min-width: 0;
+    font-size: $font-size-caption;
+    color: $color-neutral-standard;
+  }
+
+  &__code {
+    flex: none;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-neutral-dark;
+    background: $color-neutral-lightest;
+    padding: 1px 6px;
+    border-radius: $radius-sm;
+  }
+
+  &__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  &__tag {
+    flex: none;
+    font-family: $font-family-mono;
+    font-size: 10px;
+    padding: 0 6px;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-sm;
+
+    &--blocks { border-color: $color-primary; color: $color-primary-dark; }
+    &--answer { border-style: dashed; color: $color-neutral-muted; }
+    &--ok { color: $color-neutral-standard; }
+  }
+
+  &__em { color: $color-primary-dark; font-weight: $font-weight-semibold; }
+
+  &__choices .prflow__line:last-child .prflow__text { color: $color-neutral-muted; text-decoration: line-through; text-decoration-color: $color-neutral-light; }
+
+  &__diff {
+    margin: 0;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 1.7;
+    color: $color-neutral-standard;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  &__diff-line {
+    display: block;
+    border-radius: 2px;
+
+    &--add {
+      color: $color-neutral-dark;
+      background: linear-gradient(90deg, rgba($color-primary, 0.09) 0 100%) no-repeat left / 100% 100%;
+    }
+  }
+
+  &__comment {
+    display: grid;
+    gap: 4px;
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid $color-neutral-light;
+    border-left: 3px solid $color-primary;
+    border-radius: $radius-md;
+    font-size: $font-size-caption;
+    color: $color-neutral-standard;
+  }
+
+  &__comment-head { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; }
+  &__comment-verdict b { color: $color-neutral-dark; }
+  &__comment-meta { color: $color-neutral-muted; }
+
+  // ---------------------------------------- settle-in, once per frame
+  // Armed only on the client and never under reduced motion; a frame's detail
+  // settles the first time it reaches the middle and stays.
+  &.is-armed &__frame:not(.is-seen) {
+    .prflow__line, .prflow__diff-line, .prflow__comment { opacity: 0; transform: translateY(4px); }
+    .prflow__diff-line--add { background-size: 0% 100%; }
+  }
+
+  &.is-armed &__frame {
+    .prflow__line, .prflow__diff-line, .prflow__comment {
+      transition: opacity 360ms $ease-out, transform 420ms $ease-out, background-size 520ms $ease-out;
+    }
+
+    @for $i from 1 through 5 {
+      .prflow__line:nth-child(#{$i}), .prflow__diff-line:nth-child(#{$i}) { transition-delay: #{80 + $i * 70}ms; }
+    }
+
+    .prflow__comment { transition-delay: 120ms; }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .prflow {
+    &__top { flex-direction: column; align-items: stretch; }
+    &__nav { display: none; }
+    // One frame per screen on a phone: snap each to the middle.
+    &__scroller { scroll-snap-type: x mandatory; }
+    &__frame { scroll-snap-align: center; }
+    &__step { position: relative; }
+    &__step-label { display: none; }
+    &__step.is-active .prflow__step-label { display: block; position: absolute; top: 18px; }
+    &__steps { padding-bottom: 22px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prflow {
+    &__rail-fill, &__step-dot, &__frame, &__arrow { transition: none; }
+    &__frame.is-active { transform: none; }
+  }
+}

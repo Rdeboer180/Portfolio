@@ -1,0 +1,470 @@
+// ============================================
+// System overview (.sysx) — the How it works and Catalog tabs of
+// /design-system. The board's vocabulary: paper cards, hairlines, Menlo tags,
+// Signal Orange only where something is decided (the foundation layer, what
+// ships, what blocks). Chips say status honestly, "not built" included.
+// ============================================
+
+@import '../variables';
+
+.sysx {
+  &__lede {
+    max-width: $container-text-width;
+    font-size: $font-size-body-lg;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+    margin: 0 0 $spacing-xl;
+
+    strong { color: $color-neutral-dark; }
+  }
+
+  &__note {
+    max-width: $container-text-width;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+    margin: $spacing-lg 0 0;
+  }
+
+  &__tag {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 1.5;
+    color: $color-secondary-dark;
+  }
+
+  // Header status line: the build that made the page.
+  &__status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $spacing-xs $spacing-lg;
+    margin: $spacing-lg 0 0;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-standard;
+  }
+
+  // ---------------------------------------- sizes
+  &__sizes {
+    list-style: none;
+    margin: $spacing-xl 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+  }
+
+  &__size {
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-xl;
+    padding: $spacing-lg;
+    background: $color-white;
+
+    &--ships { border-color: $color-neutral-dark; }
+  }
+
+  &__size-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h5;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    margin: $spacing-xs 0 $spacing-md;
+  }
+
+  &__fixed {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px $spacing-md;
+    margin: 0 0 $spacing-md;
+    font-size: $font-size-body-sm;
+
+    dt { font-family: $font-family-mono; font-size: 11px; color: $color-neutral-muted; padding-top: 2px; }
+    dd { margin: 0; color: $color-neutral-standard; }
+  }
+
+  &__checks {
+    margin: 0;
+    padding: $spacing-md 0 0;
+    border-top: 1px solid $color-neutral-light;
+    list-style: none;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+    color: $color-neutral-dark;
+
+    li { position: relative; padding-left: 18px; margin-bottom: $spacing-xs; }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border: 1px solid $color-secondary;
+      border-radius: 2px;
+    }
+  }
+
+  // ---------------------------------------- layers
+  &__layers {
+    list-style: none;
+    margin: 0 0 $spacing-2xl;
+    padding: 0;
+    max-width: 760px;
+  }
+
+  &__layer {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    align-items: baseline;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    border: 1px solid $color-neutral-light;
+    border-bottom-width: 0;
+    background: $color-white;
+
+    &:first-child { border-radius: $radius-lg $radius-lg 0 0; }
+    &:last-child { border-bottom-width: 1px; border-radius: 0 0 $radius-lg $radius-lg; background: $color-secondary-lightest; }
+
+    &--foundation {
+      border: 1px solid $color-neutral-dark;
+      border-bottom-width: 1px;
+      position: relative;
+      z-index: 1;
+      box-shadow: inset 3px 0 0 $color-primary;
+
+      + .sysx__layer { border-top-width: 0; }
+    }
+  }
+
+  &__layer-name {
+    font-family: $font-family-heading;
+    font-weight: $font-weight-bold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__layer-body {
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+  }
+
+  // ---------------------------------------- tools
+  &__tools {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 $spacing-2xl;
+    margin: 0 0 $spacing-2xl;
+    max-width: 960px;
+  }
+
+  &__tool {
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    dt code { font-family: $font-family-mono; font-size: $font-size-body-sm; color: $color-neutral-dark; background: none; padding: 0; }
+    dd { margin: 2px 0 0; font-size: $font-size-body-sm; color: $color-neutral-muted; }
+  }
+
+  // ---------------------------------------- install
+  &__install {
+    position: relative;
+    max-width: 760px;
+  }
+
+  &__code {
+    margin: 0;
+    padding: $spacing-lg $spacing-xl;
+    padding-right: 88px;
+    background: $color-neutral-dark;
+    color: $color-neutral-light;
+    border-radius: $radius-lg;
+    font-family: $font-family-mono;
+    font-size: $font-size-body-sm;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+
+    code { background: none; color: inherit; padding: 0; font: inherit; }
+  }
+
+  &__copy {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    min-height: 32px;
+    padding: 0 $spacing-md;
+    border: 1px solid rgba($color-white, 0.25);
+    border-radius: $radius-md;
+    background: transparent;
+    color: $color-white;
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    cursor: pointer;
+
+    &:hover { border-color: $color-white; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+
+  // ---------------------------------------- gates
+  &__gates {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 960px;
+  }
+
+  &__gate {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    align-items: baseline;
+    gap: $spacing-lg;
+    padding: $spacing-md 0;
+    border-bottom: 1px solid $color-neutral-light;
+
+    &--todo .sysx__gate-check { color: $color-neutral-muted; }
+  }
+
+  &__gate-stage {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-secondary-dark;
+  }
+
+  &__gate-check {
+    font-size: $font-size-body;
+    color: $color-neutral-dark;
+  }
+
+  &__gate-chips { display: flex; gap: $spacing-xs; }
+
+  &__chip {
+    display: inline-block;
+    padding: 1px 8px;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-sm;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    line-height: 1.6;
+    color: $color-neutral-standard;
+    white-space: nowrap;
+
+    &--blocking { border-color: $color-neutral-dark; color: $color-neutral-dark; }
+    &--live { border-color: $color-primary; color: $color-primary-dark; }
+    &--todo { border-style: dashed; color: $color-neutral-muted; }
+  }
+
+  // ---------------------------------------- voice
+  &__voice-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xl;
+    max-width: 960px;
+    margin: 0 0 $spacing-2xl;
+
+    dt { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; margin-bottom: $spacing-xs; }
+    dd { margin: 0; font-size: $font-size-body; line-height: 1.6; color: $color-neutral-dark; }
+  }
+
+  &__tool dt:not(:has(code)) { font-weight: $font-weight-semibold; font-size: $font-size-body-sm; color: $color-neutral-dark; }
+
+  &__bans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 960px;
+
+    li {
+      padding: 2px 10px;
+      border: 1px dashed $color-neutral-light;
+      border-radius: $radius-sm;
+      font-size: $font-size-body-sm;
+      color: $color-neutral-muted;
+    }
+
+    s { text-decoration-color: $color-primary; text-decoration-thickness: 1.5px; color: $color-neutral-standard; }
+  }
+
+  &__lede code, &__note code { font-family: $font-family-mono; font-size: 0.9em; }
+
+  // ---------------------------------------- drift
+  &__drift {
+    list-style: none;
+    margin: 0 0 $spacing-lg;
+    padding: 0;
+    max-width: 640px;
+
+    li {
+      display: grid;
+      grid-template-columns: 180px 1fr 40px;
+      align-items: center;
+      gap: $spacing-md;
+      padding: 6px 0;
+    }
+
+    code { font-family: $font-family-mono; font-size: $font-size-caption; color: $color-neutral-dark; background: none; padding: 0; }
+  }
+
+  &__drift-bar {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: $color-secondary-light;
+  }
+
+  &__drift-count {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    text-align: right;
+  }
+
+  &__link-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: $font-size-body;
+    color: $color-primary-dark;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+
+  // ---------------------------------------- catalog
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-md $spacing-xl;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__search input {
+    width: 280px;
+    max-width: 100%;
+    min-height: 40px;
+    padding: 0 $spacing-md;
+    border: 1px solid $color-neutral-light;
+    border-radius: $radius-md;
+    font: inherit;
+    font-size: $font-size-body-sm;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 1px; border-color: transparent; }
+  }
+
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+
+    input { accent-color: $color-primary; }
+  }
+
+  &__count {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+  }
+
+  &__catalog {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid $color-neutral-light;
+  }
+
+  &__row { border-bottom: 1px solid $color-neutral-light; }
+
+  &__row-head {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    align-items: baseline;
+    gap: $spacing-md;
+    width: 100%;
+    padding: $spacing-sm $spacing-xs;
+    border: 0;
+    background: none;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover { background: $color-neutral-lightest; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: -2px; }
+  }
+
+  &__row-name { font-weight: $font-weight-semibold; color: $color-neutral-dark; }
+
+  &__row-path {
+    font-family: $font-family-mono;
+    font-size: $font-size-caption;
+    color: $color-neutral-muted;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__row-body { padding: 0 $spacing-xs $spacing-lg; }
+
+  &__row-label {
+    margin: $spacing-sm 0 $spacing-xs;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+
+  &__blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin: 0;
+
+    code { font-family: $font-family-mono; font-size: $font-size-caption; background: $color-neutral-lightest; padding: 1px 6px; border-radius: $radius-sm; }
+  }
+
+  &__swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2;
+    font-size: $font-size-body-sm;
+    color: $color-neutral-standard;
+
+    li { display: flex; align-items: center; gap: $spacing-sm; padding: 3px 0; break-inside: avoid; }
+    code { font-family: $font-family-mono; font-size: $font-size-caption; background: none; padding: 0; color: $color-neutral-dark; }
+  }
+
+  &__swatch {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba($color-neutral-dark, 0.15);
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .sysx {
+    &__sizes { grid-template-columns: 1fr; }
+    &__tools { grid-template-columns: 1fr; }
+    &__voice-cols { grid-template-columns: 1fr; gap: $spacing-lg; }
+    &__layer { grid-template-columns: 1fr auto; }
+    &__layer-body { grid-column: 1 / -1; }
+    &__gate { grid-template-columns: 1fr auto; gap: $spacing-xs $spacing-md; }
+    &__gate-check { grid-column: 1 / -1; grid-row: 2; }
+    &__drift li { grid-template-columns: 1fr 80px 32px; }
+    &__row-head { grid-template-columns: 1fr auto; }
+    &__row-path { grid-column: 1 / -1; grid-row: 2; }
+    &__swatches { columns: 1; }
+  }
+}

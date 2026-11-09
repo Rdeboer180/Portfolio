@@ -29,8 +29,9 @@
     "build": "react-scripts build",
     "postbuild": "node scripts/prerender.mjs",
     "prerender": "node scripts/prerender.mjs",
-    "pretest": "node scripts/write-build-stamp.mjs",
+    "pretest": "node scripts/write-build-stamp.mjs && node scripts/system-catalog.mjs",
     "test": "react-scripts test",
+    "mcp": "node scripts/system/mcp.mjs",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

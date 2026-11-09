@@ -18,7 +18,7 @@ export interface Note {
   kind: NoteKind;
   /** Explorations published while decisions are still moving. */
   inProgress?: boolean;
-  /** Pinned first on the homepage's writing list, ahead of newer notes. */
+  /** One of the three the homepage's writing list opens on (its default "Featured" view), newest first. */
   featured?: boolean;
   date: string;      // display date, e.g. 'July 2026'
   dateISO: string;   // for <time> + sorting, e.g. '2026-07'
@@ -59,6 +59,7 @@ export const NOTES: Note[] = [
   {
     slug: 'a-design-system-in-more-than-one-size',
     kind: 'exploration',
+    featured: true,
     origin: 'portfolio',
     date: 'November 7, 2026',
     dateISO: '2026-11-07',
@@ -233,6 +234,7 @@ export const NOTES: Note[] = [
   // ──────────────────────────────────────────────────────────────────────────
   {
     slug: 'eight-wrong-first-drafts',
+    featured: true,
     relatedProject: 'playdraft',
     read: '6 min',
     kind: 'exploration',
