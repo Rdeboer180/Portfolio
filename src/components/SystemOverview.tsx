@@ -10,6 +10,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SizesLadder } from './SystemSizes';
+import PrFlow from './PrFlow';
 import agents from '../data/system-agents.json';
 import snapshot from '../data/system-snapshot.json';
 
@@ -137,6 +138,14 @@ const SystemOverview: React.FC<{ onOpenCatalog: () => void }> = ({ onOpenCatalog
         <span>{snapshot.proposed} proposed, waiting on a person</span>
         <a href="/system/registry.json">registry.json</a>
       </p>
+    </section>
+
+    <section className="ds__section">
+      <h2 className="ds__section-title">A pull request changes the code and the rules together</h2>
+      <p className="sysx__lede">
+        Seven steps from a branch to the MCP serving what it added. Scroll sideways, or pick a step.
+      </p>
+      <PrFlow />
     </section>
 
     <section className="ds__section">

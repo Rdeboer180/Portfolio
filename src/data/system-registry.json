@@ -32,12 +32,20 @@
     "SystemCatalogExplorer": {
       "size": "production",
       "documented": "/design-system (Catalog)"
+    },
+    "PrFlow": {
+      "size": "production",
+      "documented": "/design-system (How it works, the PR flow)"
     }
   },
   "patterns": {
     "sysx": {
       "stylesheet": "src/styles/components/_system-overview.scss",
       "documented": "/design-system (How it works, Catalog)"
+    },
+    "prflow": {
+      "stylesheet": "src/styles/components/_pr-flow.scss",
+      "documented": "/design-system (How it works, the PR flow)"
     }
   }
 }
