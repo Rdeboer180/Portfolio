@@ -9,6 +9,7 @@ on:
     paths:
       - 'src/components/**'
       - 'src/styles/**'
+      - 'scripts/system/**'
 
 permissions:
   contents: read

@@ -1,0 +1,107 @@
+{
+  "_comment": "One source for the /design-system page and the MCP server (scripts/system/mcp.mjs): the three sizes, the tools agents call, and the gates work passes on the way out. Edit here and both change.",
+  "sizes": [
+    {
+      "id": "sketch",
+      "label": "Sketch",
+      "who": "Anyone with an idea",
+      "fixed": "Tokens and type",
+      "loose": "Layout, copy, states",
+      "checks": [
+        "Colours come from the tokens (check_source flags anything raw)"
+      ]
+    },
+    {
+      "id": "playground",
+      "label": "Playground",
+      "who": "The team",
+      "fixed": "Tokens, type and real components",
+      "loose": "Composition and content",
+      "checks": [
+        "Colours come from the tokens",
+        "Every class block has a stylesheet (no one-off blocks)",
+        "Reuse first: get_component names the nearest existing component"
+      ]
+    },
+    {
+      "id": "production",
+      "label": "Production",
+      "who": "What ships",
+      "fixed": "Everything in DESIGN.md and PRODUCT.md",
+      "loose": "Nothing without a reason written down",
+      "checks": [
+        "Colours come from the tokens",
+        "Every class block has a stylesheet",
+        "Reuse first, and a new component goes on /design-system",
+        "States drawn: empty, long, loading, error",
+        "Keyboard, focus and reduced motion",
+        "Contrast against the pairs on /design-system",
+        "The system review comment on the pull request is read and answered",
+        "The deploy gates pass: prerender, hydration, Dive Club isolation"
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "search_system",
+      "summary": "Search components, tokens and the written rules at once.",
+      "description": "Search the portfolio's design system: components (from the generated catalog), colour tokens (DESIGN.md names joined to the Sass tokens) and sections of DESIGN.md and PRODUCT.md. Use it before building anything, to find what already exists."
+    },
+    {
+      "name": "get_component",
+      "summary": "One component: its blocks, stylesheets, raw colours and nearest relatives.",
+      "description": "Get one component by name: its file, the class blocks it draws with, the stylesheets that define them, any raw colours with the token each should be, and the existing components it most resembles. Reuse or extend before adding a new one."
+    },
+    {
+      "name": "find_tokens",
+      "summary": "The colour tokens, or the token a raw hex should have been.",
+      "description": "List the colour tokens with their DESIGN.md role names, or pass a hex value to get the nearest token and whether it is an exact match, a close one, or nothing close."
+    },
+    {
+      "name": "get_rules",
+      "summary": "A section of DESIGN.md or PRODUCT.md by name.",
+      "description": "Read the written rules. With no topic, lists every section of DESIGN.md and PRODUCT.md; with a topic (\"Colors\", \"Motion\", \"Do's and Don'ts\", \"The Process, Stated Once\"), returns that section."
+    },
+    {
+      "name": "get_checklist",
+      "summary": "What gets checked at sketch, playground or production size.",
+      "description": "The checklist for one of the system's three sizes: sketch (anyone, loosely governed), playground (the team, real components) or production (everything). Use it to decide how much to check before handing work on."
+    },
+    {
+      "name": "check_source",
+      "summary": "The pull-request rules, run on code before it is written.",
+      "description": "Check a TSX or SCSS snippet against the system with the same deterministic rules the pull-request review uses: raw colours (SYS001, SYS003 for inline styles) get the token they should be, and class blocks with no stylesheet (SYS002) are flagged. Run it on new styles or className changes before finishing. It advises; a person decides."
+    },
+    {
+      "name": "review_change",
+      "summary": "The pull-request review for your working tree. Local only.",
+      "description": "Only inside a checkout of the repo: inventory the working tree and a base ref (default origin/main) and return the same system review the pull request will get: new components with their nearest relatives, removed ones, new raw colours, unstyled blocks."
+    }
+  ],
+  "gates": [
+    {
+      "stage": "While building",
+      "check": "check_source and get_component over MCP",
+      "kind": "advisory",
+      "status": "live"
+    },
+    {
+      "stage": "Pull request",
+      "check": "System review comment: reuse, removals, raw colours, unstyled blocks",
+      "kind": "advisory",
+      "status": "live"
+    },
+    {
+      "stage": "Deploy",
+      "check": "Prerender, hydration on every route, Dive Club isolation, live bundles load",
+      "kind": "blocking",
+      "status": "live"
+    },
+    {
+      "stage": "Deploy",
+      "check": "Automated accessibility and visual regression",
+      "kind": "blocking",
+      "status": "not built"
+    }
+  ]
+}

@@ -8,42 +8,29 @@ import PageHeader from './PageHeader';
 import TestimonialCard from './TestimonialCard';
 import CaseStudyCard from './CaseStudyCard';
 import { SystemsBoard } from './SystemsInPractice';
+import SystemOverview from './SystemOverview';
+import SystemCatalogExplorer from './SystemCatalogExplorer';
+import snapshot from '../data/system-snapshot.json';
 import '../styles/styles.scss';
 
 // ============================================
 // Data
 // ============================================
 
-const colorGroups = [
-  {
-    title: 'Primary (Orange)',
-    colors: [
-      { name: 'primary-light', value: '#fdede9', css: '--color-primary-light' },
-      { name: 'primary-muted', value: '#f07654', css: '--color-primary-muted' },
-      { name: 'primary', value: '#f03d01', css: '--color-primary', light: true },
-      { name: 'primary-dark', value: '#c23001', css: '--color-primary-dark', light: true },
-    ],
-  },
-  {
-    title: 'Neutral',
-    colors: [
-      { name: 'neutral-lightest', value: '#f5f5f5', css: '--color-neutral-lightest' },
-      { name: 'neutral-light', value: '#e5e5e5', css: '--color-neutral-light' },
-      { name: 'neutral-muted', value: '#707070', css: '--color-neutral-muted', light: true },
-      { name: 'neutral-standard', value: '#4a4a4a', css: '--color-neutral-standard', light: true },
-      { name: 'neutral-dark', value: '#1b1b1b', css: '--color-neutral-dark', light: true },
-    ],
-  },
-  {
-    title: 'Secondary (Blue-Gray)',
-    colors: [
-      { name: 'secondary-light', value: '#f4f6f7', css: '--color-secondary-light' },
-      { name: 'secondary-muted', value: '#d6dce4', css: '--color-secondary-muted' },
-      { name: 'secondary', value: '#8f9daf', css: '--color-secondary', light: true },
-      { name: 'secondary-dark', value: '#5e6c7c', css: '--color-secondary-dark', light: true },
-    ],
-  },
+// The colours come from DESIGN.md's front matter, joined to the Sass tokens by
+// value at build time (scripts/system-catalog.mjs), so this page shows the
+// roles the system names, not a copy of them.
+const GROUPS: { title: string; test: (name: string) => boolean }[] = [
+  { title: 'Signal Orange', test: (n) => n.includes('orange') },
+  { title: 'Ink and paper', test: (n) => !n.includes('orange') && !/steel|cool/.test(n) },
+  { title: 'Steel', test: (n) => /steel|cool/.test(n) },
 ];
+const colorGroups = GROUPS.map((g) => ({
+  title: g.title,
+  colors: snapshot.colors
+    .filter((c) => g.test(c.name))
+    .map((c) => ({ name: c.name, value: c.value, css: c.token ? `$${c.token}` : 'no Sass token', light: luminance(c.value) < 0.4 })),
+}));
 
 const typeScale = [
   { name: 'H1', size: '38px', leading: '45.6px', weight: 700, font: 'heading', sample: 'Product Design Engineer' },
@@ -87,8 +74,10 @@ const iconSizes = [
 ];
 
 const mainTabs = [
-  { label: 'Atoms', value: 'atoms' },
-  { label: 'Molecules', value: 'molecules' },
+  { label: 'How it works', value: 'how' },
+  { label: 'Foundations', value: 'atoms' },
+  { label: 'Components', value: 'molecules' },
+  { label: 'Catalog', value: 'catalog' },
 ];
 
 const demoTabs = [
@@ -795,30 +784,27 @@ const DesignSystem: React.FC = () => {
   usePageMeta({
     title: 'Design system | Ryan DeBoer',
     description:
-      'The tokens, type scale, colour roles, and components this site is actually built on.',
+      'The rules, tokens and components this site ships, how agents read them over MCP, and the checks every change passes.',
     canonical: 'https://www.rdeboerdesigns.com/design-system/',
   });
-  const [activeSection, setActiveSection] = useState('atoms');
+  const [activeSection, setActiveSection] = useState('how');
 
   return (
     <div className="ds">
       <header className="ds__header">
         <Link to={getHomeHref()} className="ds__back">&larr; Back to Portfolio</Link>
-        <h1 className="ds__title">Design System</h1>
+        <h1 className="ds__title">Design system</h1>
         <p className="ds__subtitle">
-          Every token, type role, and component pattern this site currently ships. Figma is the
-          source; this page is the check.
+          The rules, tokens and components this site ships. Written once in DESIGN.md and PRODUCT.md,
+          inventoried from the code on every build, and read here by people and over MCP by agents.
         </p>
-        <p className="ds__subtitle">
-          Documented for people and agents in two files at the repo root.{' '}
-          <Link to="/notes/governance-in-markdown">Why the brand lives in PRODUCT.md and DESIGN.md &rarr;</Link>
-        </p>
-        {/* The catalog is generated before every build; every pull request is
-            reviewed against it (scripts/system-review.mjs). A plain <a>: it is
-            a file, not a route. */}
-        <p className="ds__subtitle">
-          Every component, block and raw colour, as JSON for people and agents:{' '}
-          <a href="/system/catalog.json">the system catalog</a>. Each pull request is checked against it.
+        {/* Counts from the build that made this page (src/data/system-snapshot.json). */}
+        <p className="sysx__status" aria-label="This build of the system">
+          <span className="sysx__tag">[ build {snapshot.commit} ]</span>
+          <span>{snapshot.components} components</span>
+          <span>{snapshot.tokens} colour tokens</span>
+          <span>{snapshot.sections} rule sections</span>
+          <span>{snapshot.rawColours} raw colours to absorb</span>
         </p>
       </header>
 
@@ -826,7 +812,10 @@ const DesignSystem: React.FC = () => {
         <Tabs tabs={mainTabs} activeTab={activeSection} onChange={setActiveSection} />
       </div>
 
-      {activeSection === 'atoms' ? <AtomsContent /> : <MoleculesContent />}
+      {activeSection === 'how' && <SystemOverview onOpenCatalog={() => setActiveSection('catalog')} />}
+      {activeSection === 'atoms' && <AtomsContent />}
+      {activeSection === 'molecules' && <MoleculesContent />}
+      {activeSection === 'catalog' && <SystemCatalogExplorer />}
     </div>
   );
 };
