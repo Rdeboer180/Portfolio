@@ -309,7 +309,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
   'a-design-system-in-more-than-one-size': (
     <>
       <p>For most of my career the system lived in a component library, and the people who could use it well were designers. Everyone else brought ideas to a meeting as a sentence, and most of those ideas stayed sentences.</p>
-      <p>I don&rsquo;t think that holds anymore. <strong>If you care about the product, you should be able to show your idea at a fidelity someone can hand off, and the design system should be what makes that possible.</strong></p>
+      <p>I don&rsquo;t think that holds anymore. <strong>If you care about the product, today&rsquo;s tools should let you show the idea instead of describing it, at a size and fidelity someone can pick up and hand off. The design system is what makes that possible.</strong></p>
 
       <h2>A system needs three sizes, each with its own rules</h2>
       <p>I think of it as three sizes reading from one source. What changes between them is how much gets checked.</p>
