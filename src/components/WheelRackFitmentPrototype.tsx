@@ -51,9 +51,9 @@ const STATES: { key: StateKey; name: string; what: string }[] = [
 
 const MOTION: { change: string; property: string; ms: number; easing: string; reduced: string }[] = [
   { change: 'Changed row is marked', property: 'background', ms: 900, easing: 'ease-out', reduced: 'Static “Changed” tag' },
-  { change: 'Note appears', property: 'opacity, translateY 4px', ms: 220, easing: 'cubic-bezier(.2,.8,.2,1)', reduced: 'Appears at once' },
+  { change: 'Note appears', property: 'opacity, translateY 4px', ms: 220, easing: 'cubic-bezier(.2,.8,0,1)', reduced: 'Appears at once' },
   { change: 'Totals update', property: 'number tween', ms: 240, easing: 'ease-out', reduced: 'Updates at once' },
-  { change: 'Rear row folds away', property: 'grid rows 1fr → 0fr, opacity', ms: 280, easing: 'cubic-bezier(.2,.8,.2,1)', reduced: 'Removed at once' },
+  { change: 'Rear row folds away', property: 'grid rows 1fr → 0fr, opacity', ms: 280, easing: 'cubic-bezier(.2,.8,0,1)', reduced: 'Removed at once' },
   { change: 'Action label swaps', property: 'opacity crossfade', ms: 160, easing: 'linear', reduced: 'Swaps at once' },
 ];
 

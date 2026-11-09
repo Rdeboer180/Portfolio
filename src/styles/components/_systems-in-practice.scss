@@ -30,7 +30,7 @@
   --sip-wire: #{$color-secondary};
   --sip-wire-active: #{$color-neutral-dark};
   --sip-wire-pair: #{$color-primary};
-  --sip-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --sip-ease-out: var(--ease-out);
 
   background: $color-white;
   padding: $section-pad-y 0;

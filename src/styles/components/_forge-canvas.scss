@@ -13,7 +13,7 @@
 
 $fc-line: rgba(27, 27, 27, 0.1);
 $fc-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-$fc-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+$fc-drawer: $ease-out;
 $fc-step: 150ms;
 // The two paper props: the card stock the class card is printed on, and a
 // sticky note. Local to the canvas, like the /about desk's paper.

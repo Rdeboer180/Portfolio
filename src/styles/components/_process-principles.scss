@@ -28,7 +28,7 @@
 .process-principles {
   --pp-wire: #{$color-secondary};
   --pp-wire-pair: #{$color-primary};
-  --pp-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --pp-ease-out: var(--ease-out);
   --gx: 120px;
   --gy: 96px;
 
