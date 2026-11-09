@@ -51,7 +51,7 @@ export const NOTES: Note[] = [
     origin: 'portfolio',
     date: 'November 8, 2026',
     dateISO: '2026-11-08',
-    title: 'The first layout is the average. Better is still a design decision.',
+    title: 'It’s up to us to ask: what does better look like?',
     dek: 'Why years of craft and code put designers in the best position to direct what AI builds, and to lead what better looks like on the web.',
     read: '3 min',
   },

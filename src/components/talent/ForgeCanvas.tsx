@@ -92,7 +92,8 @@ const Heat: React.FC<{ level: number }> = ({ level }) => (
 const ForgeCanvas: React.FC = () => {
   const allocation = RYAN_ALLOCATION;
   const [lane, setLane] = useState<Lane>('technical');
-  const [view, setView] = useState<View>('design');
+  // Dev first, as board 25 drew it; Design is one click away.
+  const [view, setView] = useState<View>('dev');
   const [picked, setPicked] = useState<Partial<Record<TreeId, string>>>({});
   // Hovering a skill reads it in the panel; leaving falls back to the pick.
   const [hoverId, setHoverId] = useState<string | null>(null);
