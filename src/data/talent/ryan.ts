@@ -1,5 +1,5 @@
 // ============================================
-// Talent tree: Ryan's own tree (v7.1, 2026-11-08)
+// Talent tree: Ryan's own tree (v7.2, 2026-11-08)
 // 89 points: 4 per year for sixteen years, the bachelor's in graphic design
 // (16, locked to Design and systems), the web minor (4, locked to Code), and
 // 5 for the hours outside the day job. Scored by the same rules the tree has
@@ -14,6 +14,14 @@
 // A/B tests and user studies run with the research team. The budget moved from
 // 63 to 89 to hold it (economy.ts), and Prototyping, QA, Layout, HTML and CSS
 // went back up rather than paying for the code.
+//
+// v7.2 levels it out, Ryan's numbers: Handoff 4, Storybook 2, Skills and
+// plugins 4, CMS 5, QA and analytics 2, Internal tools 4, Governance 4,
+// Research 3, Interaction 3, Motion 1. That is 8 more than the 89 the intake
+// earns, so the code pays it back around its two gates (React needs
+// TypeScript at 3, Production ownership needs React Native at 3): React 1,
+// Production ownership 0, Git 3, Automation 1, JavaScript 1, CSS 2.
+// Storybook at 2 drops Lossless Handoff and Systemsmith.
 // ============================================
 
 import type { Allocation, Intake } from './types';
@@ -28,49 +36,49 @@ export const RYAN_INTAKE: Intake = {
 };
 
 /**
- * Design and systems (28): Typography 5 / Layout 4 · Interaction 1 / Motion 0 ·
- * Tokens 5 / Components 4 · Accessibility 4 / Governance 3 · Research 2 / IA 0
- * Technical (34): Figma 5 / Prototyping 5 · Handoff 3 / Storybook 3 ·
- * Documentation 3 / Skills and plugins 3 · CMS 3 / QA and analytics 3 ·
- * AI tools 3 / Internal tools 3
- * Code (27): HTML 5 / CSS 3 · Git 4 / Automation 2 · JavaScript 2 /
- * Performance 0 · TypeScript 3 / React 3 · React Native 3 / Production
- * ownership 2
+ * Design and systems (33): Typography 5 / Layout 4 · Interaction 3 / Motion 1 ·
+ * Tokens 5 / Components 4 · Accessibility 4 / Governance 4 · Research 3 / IA 0
+ * Technical (37): Figma 5 / Prototyping 5 · Handoff 4 / Storybook 2 ·
+ * Documentation 3 / Skills and plugins 4 · CMS 5 / QA and analytics 2 ·
+ * AI tools 3 / Internal tools 4
+ * Code (19): HTML 5 / CSS 2 · Git 3 / Automation 1 · JavaScript 1 /
+ * Performance 0 · TypeScript 3 / React 1 · React Native 3 / Production
+ * ownership 0
  */
 export const RYAN_ALLOCATION: Allocation = {
   // Design and systems
   typography: 5,
   layout: 4,
-  interaction: 1,
-  motion: 0,
+  interaction: 3,
+  motion: 1,
   tokens: 5,
   components: 4,
   accessibility: 4,
-  governance: 3,
-  research: 2,
+  governance: 4,
+  research: 3,
   'information-architecture': 0,
   // Technical
   figma: 5,
   prototyping: 5,
-  handoff: 3,
-  storybook: 3,
+  handoff: 4,
+  storybook: 2,
   documentation: 3,
-  'skills-and-plugins': 3,
-  cms: 3,
-  'qa-and-analytics': 3,
+  'skills-and-plugins': 4,
+  cms: 5,
+  'qa-and-analytics': 2,
   'ai-tools': 3,
-  'internal-tools': 3,
+  'internal-tools': 4,
   // Code
   html: 5,
-  css: 3,
-  git: 4,
-  automation: 2,
-  javascript: 2,
+  css: 2,
+  git: 3,
+  automation: 1,
+  javascript: 1,
   performance: 0,
   typescript: 3,
-  react: 3,
+  react: 1,
   'react-native': 3,
-  'production-ownership': 2,
+  'production-ownership': 0,
 };
 
 /**
@@ -114,5 +122,5 @@ export const RYAN_OVERRIDES = {
  * so the hero can print it without importing the scorer; ryan.test.ts holds
  * these equal to what buildResult computes from the allocation above.
  */
-export const RYAN_CLASS_LABEL = 'Visual Problem Solver / Component Crafter';
+export const RYAN_CLASS_LABEL = 'Visual Problem Solver / Context Carrier';
 export const RYAN_CLASS_SHORT = 'Visual Problem Solver';

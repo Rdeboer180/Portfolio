@@ -33,28 +33,24 @@ describe('ryan pools and allocation', () => {
     expect(Object.keys(RYAN_ALLOCATION).every((id) => !!NODES[id])).toBe(true);
   });
 
-  it('keeps the v7 Technical asks and gives the code its due (v7.1)', () => {
-    expect(RYAN_ALLOCATION.figma).toBe(5);
-    expect(RYAN_ALLOCATION.prototyping).toBe(5);
-    expect(RYAN_ALLOCATION['qa-and-analytics']).toBe(3);
-    expect(RYAN_ALLOCATION['internal-tools']).toBe(3);
-    expect(RYAN_ALLOCATION['skills-and-plugins']).toBe(3);
-    expect(RYAN_ALLOCATION.research).toBe(2);
-    expect(RYAN_ALLOCATION.git).toBe(4);
-    expect(RYAN_ALLOCATION.automation).toBe(2);
-    expect(RYAN_ALLOCATION.javascript).toBe(2);
-    expect(RYAN_ALLOCATION.typescript).toBe(3);
-    expect(RYAN_ALLOCATION.react).toBe(3);
-    expect(RYAN_ALLOCATION['react-native']).toBe(3);
-    expect(RYAN_ALLOCATION['production-ownership']).toBe(2);
+  it('holds Ryan\'s v7.2 levels, and the code pays for them around its gates', () => {
+    const want: Record<string, number> = {
+      figma: 5, prototyping: 5, handoff: 4, storybook: 2, 'skills-and-plugins': 4, cms: 5,
+      'qa-and-analytics': 2, 'internal-tools': 4, governance: 4, research: 3, interaction: 3, motion: 1,
+      git: 3, automation: 1, javascript: 1, css: 2, typescript: 3, react: 1, 'react-native': 3,
+      'production-ownership': 0,
+    };
+    Object.entries(want).forEach(([id, level]) => expect([id, RYAN_ALLOCATION[id]]).toEqual([id, level]));
+    // Nothing is gated out: every point counts.
+    expect(RESULT.allocation).toEqual(Object.fromEntries(Object.entries(RYAN_ALLOCATION).filter(([, v]) => v > 0)));
   });
 
-  it('lands the lanes at 28 / 34 / 27', () => {
-    expect(treeSpend(RYAN_ALLOCATION)).toEqual({ design: 28, technical: 34, code: 27 });
+  it('lands the lanes at 33 / 37 / 19', () => {
+    expect(treeSpend(RYAN_ALLOCATION)).toEqual({ design: 33, technical: 37, code: 19 });
   });
 
-  it('masters five nodes: Typography, Tokens, Figma, Prototyping, HTML', () => {
-    expect(RESULT.mastered).toEqual(['typography', 'tokens', 'figma', 'prototyping', 'html']);
+  it('masters six nodes: Typography, Tokens, Figma, Prototyping, CMS, HTML', () => {
+    expect(RESULT.mastered).toEqual(['typography', 'tokens', 'figma', 'prototyping', 'cms', 'html']);
   });
 
   it('marks TypeScript and React Native, and only those, as agent-built, with a note on every coded skill', () => {
@@ -70,11 +66,8 @@ describe('ryan abilities and class', () => {
   const states = evaluateAbilities(RYAN_ALLOCATION);
   const unlocked = states.filter((s) => s.unlocked).map((s) => s.ability.id);
 
-  it('unlocks eight abilities, strongest first', () => {
-    expect(unlocked).toEqual([
-      'visual-problem-solver', 'cross-platform-builder', 'lossless-handoff', 'system-memory',
-      'guardrail-architect', 'systemsmith', 'pixel-sculptor', 'agent-wrangler',
-    ]);
+  it('unlocks four abilities, strongest first', () => {
+    expect(unlocked).toEqual(['visual-problem-solver', 'system-memory', 'guardrail-architect', 'agent-wrangler']);
   });
 
   it('pairs React Native and TypeScript as foundations, so neither waits on a React gate', () => {
@@ -84,16 +77,16 @@ describe('ryan abilities and class', () => {
     expect(NODES['production-ownership'].tier).toBe('crown');
   });
 
-  it('leaves Design Diplomat and Shipwright as the next ones', () => {
+  it('leaves four abilities a point away: Systemsmith, Pixel Sculptor, Lossless Handoff, Design Diplomat', () => {
     const away = (id: string) => states.find((s) => s.ability.id === id)!.missing;
-    expect(away('design-diplomat')).toBe(2);
-    expect(away('shipwright')).toBe(3);
+    ['systemsmith', 'pixel-sculptor', 'lossless-handoff', 'design-diplomat'].forEach((id) => expect([id, away(id)]).toEqual([id, 1]));
+    expect(away('shipwright')).toBe(7);
   });
 
-  it('picks Visual Problem Solver and Cross-platform Builder, and is not provisional', () => {
+  it('picks Visual Problem Solver and System Memory, and is not provisional', () => {
     const picked = pickClass(states);
     expect(picked.primary.ability.id).toBe('visual-problem-solver');
-    expect(picked.secondary.ability.id).toBe('cross-platform-builder');
+    expect(picked.secondary.ability.id).toBe('system-memory');
     expect(picked.provisional).toBe(false);
     expect(RESULT.provisional).toBe(false);
   });
