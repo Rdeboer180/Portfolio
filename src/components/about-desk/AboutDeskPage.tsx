@@ -396,7 +396,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
           );
         })}
         <div className="about-desk__backlinks">
-          <b>3 backlinks</b><span>the binder</span><span aria-hidden="true">·</span>{wiki('forge', 'the Forge')}<span aria-hidden="true">·</span>{wiki('notes', 'notes')}
+          <b>3 backlinks</b><span>the binder</span><span aria-hidden="true">·</span>{wiki('forge', 'the skill tree')}<span aria-hidden="true">·</span>{wiki('notes', 'notes')}
           <span className="about-desk__count">{DESK_THINGS.length} things on this desk{contained ? '' : ', all of them movable'}</span>
         </div>
       </div>
@@ -513,9 +513,9 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
           </div>
           <div className="desk-band__head desk-band__head--lower">
             <SectionBadge ruled label="The archive" icon={<svg viewBox="0 0 24 24"><path d="M4 6h16v4H4zM6 10v9h12v-9M10 14h4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>} />
-            <h2>The early work, my notes, and the Forge</h2>
+            <h2>The early work, my notes, and the skill tree</h2>
           </div>
-          <section className="shelf__lower shelf__lower--hybrid" aria-label="My notes, the archive and the Forge">
+          <section className="shelf__lower shelf__lower--hybrid" aria-label="My notes, the archive and the skill tree">
             <div className="shelf__lower-desk" ref={lowerBox} style={{ width: matW, height: Math.max(HYBRID_LOWER_MIN, matH), zoom: shelf.lower }}>
               <div className="about-desk__mat" style={{ left: 0, top: 0 }} aria-hidden="true">
                 <CuttingMat className="s" style={{ width: matW, height: matH }} focusable="false" />
@@ -536,7 +536,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
               </div>
             </aside>
           </div>
-          <section className="shelf__lower" aria-label="The archive, the Forge and the notebook">
+          <section className="shelf__lower" aria-label="The archive, the skill tree and the notebook">
             <div className="shelf__lower-desk" ref={lowerBox} style={{ width: SHELF_LOWER.width, height: SHELF_LOWER.height, zoom: shelf.lower }}>
               <div className="about-desk__mat" style={{ left: CONTAINED_MAT.left, top: CONTAINED_MAT.top }} aria-hidden="true">
                 <CuttingMat className="s" style={{ width: CUTTING_MAT.width, height: CUTTING_MAT.height }} focusable="false" />
@@ -594,7 +594,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
             <h3>Elsewhere on the site</h3>
             <div className="about-desk__flyout-links">
               <Link to="/notes">Notes</Link>
-              <Link to="/talent-tree/">The Forge</Link>
+              <Link to="/talent-tree/">Skill tree</Link>
               <Link to="/design-system">Design system</Link>
               <Link to="/sitemap">Site index</Link>
               <Link to="/resume">Résumé</Link>

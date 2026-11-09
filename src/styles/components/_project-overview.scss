@@ -38,6 +38,8 @@
   &__home { font-weight: 700; text-decoration: none; }
   &__eyebrow { font-family: $font-family-mono !important; font-size: $font-size-caption; font-weight: 400; color: $color-text-secondary; }
   &__tools { padding-top: $spacing-2xl; border-top: 1px solid $color-border-default; ul { list-style: none; padding: 0; margin: 0; font-size: $font-size-caption; } }
+  // The tools, read back against the skill tree: one quiet link under the list.
+  &__tree { display: inline-block; margin-top: $spacing-md; font-size: $font-size-caption; font-weight: 600; color: $color-primary-dark; text-decoration: none; &:hover { text-decoration: underline; text-underline-offset: 3px; } }
   &__body { min-width: 0; }
   &__opening img { display: block; width: 100%; max-height: 620px; object-fit: contain; background: $color-neutral-lightest; }
   &__opening video, &__decision video { display: block; width: 100%; max-height: 620px; background: $color-neutral-dark; }

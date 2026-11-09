@@ -778,6 +778,7 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
           <div className="cs__meta-item">
             <span className="cs__meta-label">Tools</span>
             <span className="cs__meta-value">{project.tools.join(', ')}</span>
+            <Link to="/talent-tree/" className="cs__meta-link">Where these sit in my skill tree <span aria-hidden="true">→</span></Link>
           </div>
           <div className="cs__meta-item">
             <span className="cs__meta-label">Timeline</span>

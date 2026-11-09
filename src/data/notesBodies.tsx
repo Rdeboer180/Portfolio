@@ -283,7 +283,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
   ),
   'visual-problem-solver': (
     <>
-      <p>My <Link to="/talent-tree/">talent tree</Link> calls me a Visual Problem Solver. I first heard it described by Rhiannon Bell, from Google&rsquo;s design leadership, on Dive Club: solving a problem through what the person will experience, down to the pixel, and seeing a path through the system that makes the answer portable. It fit sixteen years of work better than any title I&rsquo;ve held.</p>
+      <p>My <Link to="/talent-tree/">skill tree</Link> calls me a Visual Problem Solver. I first heard it described by Rhiannon Bell, from Google&rsquo;s design leadership, on Dive Club: solving a problem through what the person will experience, down to the pixel, and seeing a path through the system that makes the answer portable. It fit sixteen years of work better than any title I&rsquo;ve held.</p>
 
       <h2>The first layout is the average</h2>
       <p>Ask a model for a screen and you get a sensible one. It learned from what already shipped, so its first answer sits in the middle of what already shipped. That makes it a good starting point and a poor finish line.</p>

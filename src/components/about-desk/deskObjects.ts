@@ -82,7 +82,7 @@ export const DESK_THINGS: DeskThing[] = [
   // the desk below the folder: the archive, on the cutting mat
   { id: 'envelope', label: 'The foil pack the archive cards came in, torn open: 1st Edition, The Early Work, Ryan DeBoer Project Archive, 7 original project cards. Drag to move, or use the arrow keys.', tag: 'before any of this · 2009–14', draw: 'pack', kind: 'pack', note: 'archive', width: 222, height: 340, start: [236, 296, 12, 1], group: 'lower', bare: true },
   ...cards,
-  { id: 'sketch', label: 'A pencil sketch of my talent tree. Drag to move, or open it for the Forge.', draw: 'sketch', kind: 'sketch', note: 'forge', width: 470, height: 400, start: [1050, 390, -3, 3], group: 'lower' },
+  { id: 'sketch', label: 'A pencil sketch of my skill tree. Drag to move, or open it for the full tree.', draw: 'sketch', kind: 'sketch', note: 'forge', width: 470, height: 400, start: [1050, 390, -3, 3], group: 'lower' },
   { id: 'pencil', label: 'Drawing pencil, 8H. Drag to move, or use the arrow keys.', draw: 'pencil', kind: 'pencil', width: 556, height: 31, start: [944, 598, -18, 5], group: 'lower' },
   { id: 'book', label: 'My notebook, open. Click to turn the page to more notes.', tag: 'opens the notes', draw: 'notebook-open', kind: 'book', note: 'notes', width: 984, height: 685, start: [-120, 796, 2, 3], group: 'lower' },
 ];

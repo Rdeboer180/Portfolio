@@ -145,6 +145,7 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
         <div className="project-overview__tools">
           <p className="project-overview__eyebrow">Tools used</p>
           <ToolBucket slug={project.slug} tools={project.tools} />
+          <Link to="/talent-tree/" className="project-overview__tree">Where these sit in my skill tree <span aria-hidden="true">→</span></Link>
         </div>
       </aside>
       <div className="project-overview__body">

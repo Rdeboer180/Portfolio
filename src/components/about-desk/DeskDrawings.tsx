@@ -746,7 +746,7 @@ type PageKey = 'intro' | 'graph' | number;
 // the graph of this page: what the note links to, re-laid inside the page
 const NODES: [label: string, x: number, y: number][] = [
   ['Kendall', 78, 128], ['Round 2', 172, 58], ['7 cards', 64, 40], ['Tire Rack', 284, 74], ['AEM', 350, 30],
-  ['WheelRack', 334, 170], ['PlayDraft', 326, 282], ['LoopStack', 252, 356], ['the Forge', 140, 356], ['notes', 68, 290], ['Gremlins', 54, 208],
+  ['WheelRack', 334, 170], ['PlayDraft', 326, 282], ['LoopStack', 252, 356], ['skill tree', 140, 356], ['notes', 68, 290], ['Gremlins', 54, 208],
 ];
 const HUB = { x: 200, y: 212 };
 const EDGES: [number, number][] = [[0, 1], [0, 2], [1, 2], [3, 4], [3, 5], [6, 7], [8, 9], [10, 0]];

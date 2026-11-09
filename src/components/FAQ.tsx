@@ -5,7 +5,15 @@ import { EMAIL_HREF } from '../data/site';
 const faqItems: { question: string; answer: string | React.ReactNode }[] = [
   {
     question: 'Do you work with developers or hand off files?',
-    answer: 'Both. I document tokens, states, and component behavior when engineering owns the build. On projects where I build with agents and stay in the code, the handoff may be a pull request instead of a file. At Tire Rack, I helped build and document the AEM templates and production styles the team now reuses.',
+    answer: (
+      <p>
+        Both. I document tokens, states, and component behavior when engineering owns the build. On
+        projects where I build with agents and stay in the code, the handoff may be a pull request
+        instead of a file. At Tire Rack, I helped build and document the AEM templates and production
+        styles the team now reuses. The Technical lane of{' '}
+        <Link to="/talent-tree/">my skill tree</Link> shows where that time went.
+      </p>
+    ),
   },
   {
     question: 'Can you work within an existing design system?',

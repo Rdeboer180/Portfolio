@@ -89,6 +89,7 @@ const ResumePage: React.FC = () => {
           <section className="resume-page__section">
             <h2 className="resume-page__section-title">Skills</h2>
             {RESUME.skills.map(skill => <p key={skill.label}><strong>{skill.label}:</strong> {skill.text}</p>)}
+            <p>The same skills, weighted by where sixteen years went: <Link to="/talent-tree/">my skill tree</Link>.</p>
           </section>
 
           <section className="resume-page__section">
