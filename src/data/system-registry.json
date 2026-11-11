@@ -120,6 +120,21 @@
         "CaseStudyPlayground",
         "FAQ"
       ]
+    },
+    "SiteNav": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #21",
+      "path": "src/components/SiteNav.tsx",
+      "blocks": [
+        "hero"
+      ],
+      "relatives": [
+        "Hero",
+        "HomepageTargeted",
+        "LabDemoPage"
+      ]
     }
   },
   "patterns": {
