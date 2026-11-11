@@ -25,8 +25,7 @@ import { observeLayout } from '../utils/observeLayout';
 
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SectionBadge from './SectionBadge';
-import SystemDoors from './SystemDoors';
+import { SystemSource } from './SystemSizes';
 import { useReveal } from '../hooks/useReveal';
 import { useHighlightSweep } from '../hooks/useHighlightSweep';
 
@@ -47,25 +46,6 @@ const Glyph: React.FC<{ d: string; children?: React.ReactNode }> = ({ d, childre
   >
     <path d={d} />
     {children}
-  </svg>
-);
-
-// Section-badge mark: a hub with three spokes — the board in miniature.
-const NetworkIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <circle cx="12" cy="5" r="2.4" />
-    <circle cx="5" cy="19" r="2.4" />
-    <circle cx="19" cy="19" r="2.4" />
-    <path d="M12 7.4v3.4M12 10.8l-5.4 6.2M12 10.8l5.4 6.2" />
   </svg>
 );
 
@@ -966,22 +946,20 @@ const SystemsInPractice: React.FC = () => {
   };
 
   return (
-    <section id="systems" className="sip sip--strip" ref={sweepRef}>
+    <section id="systems" className="sip sip--strip" ref={sweepRef} aria-labelledby="systems-title">
       <div className="sip__container">
         {/* "How I work", not "Systems": the section is the process, and the
             note is how the process is drawn. */}
-        <SectionBadge icon={<NetworkIcon />} label="How I work" ruled />
         <div className={`sip__intro${introVisible ? ' is-visible' : ''}`} ref={introRef}>
-          <h2 className="sip__title">
+          <h2 id="systems-title" className="sip__title">
             <span className="reveal-mask">
               <span className="sip__title-line reveal-mask__inner" style={delay(0)}>
-                One system, every size of idea.
+                How I’m approaching system conformity in the AI era
               </span>
             </span>
           </h2>
           <p className="sip__body reveal-fade" style={delay(240)}>
-            Anyone can sketch, the team can build in a playground, and production gets the full review.
-            <span className="animated-bold"> All three read from the same source.</span>
+            Everyone builds from the same rules. <span className="animated-bold">What ships teaches the rules something back.</span>
           </p>
         </div>
 
@@ -989,7 +967,7 @@ const SystemsInPractice: React.FC = () => {
             source, and the PR review under production. The board and the
             beats' bodies live in the note. */}
         <div className={`sip__loop${loopVisible ? ' is-visible' : ''}`} ref={loopRef}>
-          <SystemDoors beats={BEATS} />
+          <SystemSource embed={false} />
           <div className="sip__actions reveal-fade" style={delay(420)}>
             <Link to="/notes/a-design-system-in-more-than-one-size/" className="btn btn--secondary btn--md sip__btn">
               Read the note

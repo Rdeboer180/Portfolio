@@ -358,6 +358,20 @@
     padding: 0;
   }
 
+  &__sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: $spacing-xl $spacing-lg;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__sticker-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
   // ==========================================
   // Shadows
   // ==========================================
@@ -391,7 +405,8 @@
 
   &__btn-row {
     display: flex;
-    gap: $spacing-lg;
+    flex-wrap: wrap;
+    gap: $spacing-xl;
     align-items: center;
     margin-bottom: $spacing-md;
   }

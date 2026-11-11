@@ -1,22 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SectionBadge from './SectionBadge';
 import { useReveal } from '../hooks/useReveal';
 import { EMAIL_HREF, SITE } from '../data/site';
-
-const QuoteIcon = () => (
-  <svg viewBox="0 0 180 169.8" fill="currentColor" stroke="none">
-    {/* Back bubble */}
-    <path d="M19.09,125.13h-3.06c-8.82,0-16.03-7.22-16.03-16.03V40.25c0-12.58,10.27-22.85,22.85-22.85h.68V5.47c0-2.07,1.07-3.85,2.91-4.82,1.82-.96,3.89-.85,5.59.3l24.11,16.45h80.56c8.82,0,16.03,7.22,16.03,16.03v3.06H43.31c-13.33,0-24.21,10.88-24.21,24.21v64.42h0Z" opacity="0.4" />
-    {/* Middle bubble */}
-    <path d="M152.73,44.68v64.42c0,8.82-7.22,16.03-16.03,16.03H27.27V60.71c0-8.82,7.22-16.03,16.03-16.03h109.42Z" opacity="0.7" />
-    {/* Front bubble */}
-    <path d="M160.91,44.68h3.06c8.82,0,16.03,7.22,16.03,16.03v68.84c0,12.58-10.27,22.85-22.85,22.85h-.68v11.93c0,2.07-1.07,3.85-2.91,4.82-1.82.96-3.88.85-5.59-.3l-24.11-16.45H43.31c-8.82,0-16.03-7.22-16.03-16.03v-3.06h109.42c13.33,0,24.21-10.88,24.21-24.21V44.68h0Z" opacity="0.55" />
-    {/* Dots in middle bubble */}
-    <circle cx="57.6" cy="84.9" r="10.2" fill="#fff" />
-    <circle cx="90" cy="84.9" r="10.2" fill="#fff" />
-    <circle cx="122.4" cy="84.9" r="10.2" fill="#fff" />
-  </svg>
-);
 
 const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
@@ -158,41 +142,37 @@ export const FeaturedEndorsement: React.FC = () => (
   </figure>
 );
 
-// One recommendation as a conversation: the sender, each paragraph as its own
-// message, and the through-line tag. A sizer copy is hidden and inert; it only
-// holds the space (see the slot below).
-const Thread: React.FC<{ t: Testimonial; sizer?: boolean }> = ({ t, sizer }) => (
-  <figure
-    className={`testimonials__messages${sizer ? ' testimonials__messages--sizer' : ''}`}
-    aria-hidden={sizer || undefined}
-    inert={sizer || undefined}
-  >
-    <figcaption className="testimonials__sender">
-      <span className="testimonials__name">{t.name}</span> <time dateTime={t.year}>{t.year}</time>
-    </figcaption>
-    <div className="testimonials__stack">
-      <span className="testimonials__avatar testimonials__avatar--active" aria-hidden="true">{initials(t.name)}</span>
-      <blockquote className="testimonials__thread">{t.quote}</blockquote>
-    </div>
-    <div className="testimonials__foot">
-      <a href={SITE.linkedinRecommendationsUrl} className="testimonials__more" target="_blank" rel="noopener noreferrer">
-        On LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> {t.name}&rsquo;s recommendation (opens in a new tab)</span>
-      </a>
-    </div>
-  </figure>
-);
+// How many lines a recommendation marks: its highlighted phrases.
+const countMarks = (node: React.ReactNode): number => {
+  let n = 0;
+  React.Children.forEach(node, (child) => {
+    if (!React.isValidElement(child)) return;
+    const el = child as React.ReactElement<{ children?: React.ReactNode }>;
+    if (el.type === H) n += 1;
+    else n += countMarks(el.props.children);
+  });
+  return n;
+};
 
-// The recommendations as direct messages (concept D2, Ryan's pick, 21
-// October): the people down one side, and the open conversation beside them,
-// where each recommendation arrives as its own paragraphs, a message at a
-// time, with the lines that matter marked. The list is a tablist (arrow keys,
-// Home, End), the conversation its panel; on a phone the list runs across
-// the top. The message box at the foot is the way to reach Ryan.
+// The recommendations as direct messages, on an iPad lying on the table
+// (canvas F2's panel inside O2's tablet, Ryan, 11 Nov 2026). The wood band is
+// the tabletop; the tablet is an object drawn with its own material (rim, side
+// wall, black glass, a contact shadow and the binder's one light), so the app
+// on its screen can stay flat. The people are a tablist (arrow keys, Home,
+// End) with one selection frame that travels to the chosen person; each name
+// is unread until opened, and the meter at the foot counts what has been read.
+// The thread arrives a message at a time, each marked line is selected and
+// underlined in turn, and a receipt says how many lines were marked. Across the
+// top on a phone. The message box at the foot is the way to reach Ryan.
 const Testimonials: React.FC = () => {
   const [sectionRef, revealed] = useReveal<HTMLElement>(0.15);
   const [active, setActive] = useState(0);
+  const [read, setRead] = useState<ReadonlySet<number>>(() => new Set([0]));
   const tabs = useRef<Array<HTMLButtonElement | null>>([]);
+  const pane = useRef<HTMLElement | null>(null);
   const t = featured[active];
+  const last = featured.length - 1;
+  const marks = countMarks(t.quote);
   // The list runs down the side, and across the top on a phone: it says so,
   // so a screen reader names the arrow keys that match (both pairs work).
   const [across, setAcross] = useState(false);
@@ -203,9 +183,18 @@ const Testimonials: React.FC = () => {
     phone.addEventListener('change', sync);
     return () => phone.removeEventListener('change', sync);
   }, []);
+  // a new thread starts at its top
+  useEffect(() => { pane.current?.scrollTo?.({ top: 0 }); }, [active]);
 
+  const show = (i: number, focus = false) => {
+    setActive(i);
+    setRead((r) => (r.has(i) ? r : new Set(r).add(i)));
+    const tab = tabs.current[i];
+    if (focus) tab?.focus();
+    // on a phone the list scrolls sideways: bring the chosen person into view
+    tab?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  };
   const onKey = (event: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
-    const last = featured.length - 1;
     const keys: Record<string, number> = {
       ArrowDown: i === last ? 0 : i + 1,
       ArrowRight: i === last ? 0 : i + 1,
@@ -216,77 +205,114 @@ const Testimonials: React.FC = () => {
     };
     if (!(event.key in keys)) return;
     event.preventDefault();
-    setActive(keys[event.key]);
-    tabs.current[keys[event.key]]?.focus();
+    show(keys[event.key], true);
   };
 
   return (
     <section
       id="testimonials"
       ref={sectionRef}
-      className={`testimonials testimonials--concise ink-ground${revealed ? ' testimonials--revealed' : ''}`}
+      className={`testimonials testimonials--concise testimonials--tablet ink-ground${revealed ? ' testimonials--revealed' : ''}`}
       aria-labelledby="testimonials-heading"
     >
       <div className="testimonials__container">
-        <SectionBadge icon={<QuoteIcon />} label="Peer recommendations" ruled />
         <div className="testimonials__nav">
-          <h2 id="testimonials-heading" className="testimonials__lede">From the people I build with</h2>
+          <h2 id="testimonials-heading" className="testimonials__lede">In their words</h2>
+          <span className="testimonials__note" aria-hidden="true">
+            tap a name, it opens
+            <svg viewBox="0 0 64 64" fill="none"><path d="M6 6 C 30 4, 44 20, 34 54" /><path d="M26 46 L 34 55 L 41 45" /></svg>
+          </span>
+          <a href={SITE.linkedinRecommendationsUrl} className="testimonials__all" target="_blank" rel="noopener noreferrer">
+            All {featured.length} on LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
 
-        <div className="testimonials__app">
-          <div className="testimonials__people">
-            <div className="testimonials__list" role="tablist" aria-orientation={across ? 'horizontal' : 'vertical'} aria-label="Recommendations">
-              {featured.map((p, i) => (
-                <button
-                  key={p.name}
-                  ref={(el) => { tabs.current[i] = el; }}
-                  type="button"
-                  role="tab"
-                  id={`recommendation-tab-${i}`}
-                  aria-selected={i === active}
-                  aria-controls="recommendation-panel"
-                  tabIndex={i === active ? 0 : -1}
-                  className="testimonials__person"
-                  onClick={() => setActive(i)}
-                  onKeyDown={(event) => onKey(event, i)}
-                >
-                  <span className="testimonials__avatar" aria-hidden="true">{initials(p.name)}</span>
-                  <span className="testimonials__person-text">
-                    <span className="testimonials__person-top">
-                      <span className="testimonials__person-name">{p.name}</span>
-                      <span className="testimonials__person-first" aria-hidden="true">{shortName(p.name)}</span>
-                      <span className="testimonials__year" aria-hidden="true">{p.year}</span>
-                    </span>
-                    {/* The thread's through-line, the way the old cards named each
-                        recommendation's core value: Ryan's own label, so the
-                        quotes themselves stay verbatim. Desktop only. */}
-                    <span className="testimonials__preview" aria-hidden="true">{p.title}</span>
+        <div className="testimonials__tablet">
+          <span className="testimonials__buttons" aria-hidden="true"><i /><i /></span>
+          <div className="testimonials__rim">
+            <div className="testimonials__bezel">
+              <span className="testimonials__camera" aria-hidden="true" />
+              <div className="testimonials__screen">
+                <div className="testimonials__status" aria-hidden="true">
+                  <span>9:41</span>
+                  <span className="testimonials__status-end">
+                    <svg viewBox="0 0 16 12" width="16" height="12"><path d="M1.5 4.2a9.5 9.5 0 0 1 13 0M4 7a6 6 0 0 1 8 0M6.6 9.6a2.2 2.2 0 0 1 2.8 0" /></svg>
+                    <svg viewBox="0 0 26 12" width="26" height="12"><rect x="0.75" y="0.75" width="21.5" height="10.5" rx="3" /><rect x="2.5" y="2.5" width="18" height="7" rx="1.6" className="is-fill" /></svg>
                   </span>
-                </button>
-              ))}
-            </div>
-          </div>
+                </div>
 
-          <div className="testimonials__convo" role="tabpanel" id="recommendation-panel" aria-labelledby={`recommendation-tab-${active}`}>
-            <div className="testimonials__convo-head">
-              <span className="testimonials__avatar testimonials__avatar--sm" aria-hidden="true">{initials(t.name)}</span>
-              <span className="testimonials__who">
-                <span className="testimonials__name">{t.name}</span>
-                <span className="testimonials__role">{t.role}{t.relation ? ` · ${t.relation}` : ''}</span>
-              </span>
+                <div className="testimonials__app">
+                  <div className="testimonials__people">
+                    {/* one selection frame for the list; it travels to the chosen person */}
+                    <span className="testimonials__frame" aria-hidden="true" style={{ '--row': active } as React.CSSProperties}><i /><i /><i /><i /></span>
+                    <div className="testimonials__list" role="tablist" aria-orientation={across ? 'horizontal' : 'vertical'} aria-label="Recommendations">
+                      {featured.map((p, i) => (
+                        <button
+                          key={p.name}
+                          ref={(el) => { tabs.current[i] = el; }}
+                          type="button"
+                          role="tab"
+                          id={`recommendation-tab-${i}`}
+                          aria-selected={i === active}
+                          aria-controls="recommendation-panel"
+                          tabIndex={i === active ? 0 : -1}
+                          className={`testimonials__person${read.has(i) ? ' is-read' : ''}`}
+                          onClick={() => show(i)}
+                          onKeyDown={(event) => onKey(event, i)}
+                        >
+                          <span className="testimonials__avatar" aria-hidden="true">{initials(p.name)}</span>
+                          <span className="testimonials__person-text">
+                            <span className="testimonials__person-name">{p.name}</span>
+                            <span className="testimonials__person-first" aria-hidden="true">{shortName(p.name)}</span>
+                            <span className="testimonials__preview" aria-hidden="true">{p.relation ?? p.title}</span>
+                          </span>
+                          <span className="testimonials__unread" aria-hidden="true" />
+                          {!read.has(i) && <span className="sr-only">, unread</span>}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="testimonials__meter">
+                      <span className="testimonials__ticks" aria-hidden="true">
+                        {featured.map((p, i) => <i key={p.name} className={read.has(i) ? 'is-read' : undefined} />)}
+                      </span>
+                      <span>{read.size} of {featured.length} read</span>
+                    </div>
+                  </div>
+
+                  <div className="testimonials__convo" role="tabpanel" id="recommendation-panel" aria-labelledby={`recommendation-tab-${active}`}>
+                    <div className="testimonials__convo-head">
+                      <span className="testimonials__avatar testimonials__avatar--sm" aria-hidden="true">{initials(t.name)}</span>
+                      <span className="testimonials__who">
+                        <span className="testimonials__name">{t.name}</span>
+                        <span className="testimonials__role">{t.role}{t.relation ? ` · ${t.relation}` : ''}</span>
+                      </span>
+                    </div>
+                    {/* the thread scrolls inside the screen, so it takes focus; keyed,
+                        so a new person's thread arrives again */}
+                    <figure key={t.name} ref={pane} className="testimonials__messages" tabIndex={0} aria-label={`${t.name}'s recommendation`}>
+                      <figcaption className="testimonials__sender">
+                        <span className="testimonials__name">{t.name}</span> <time dateTime={t.year}>{t.year}</time>
+                      </figcaption>
+                      <div className="testimonials__stack">
+                        <span className="testimonials__avatar testimonials__avatar--active" aria-hidden="true">{initials(t.name)}</span>
+                        <div className="testimonials__bubbles">
+                          <blockquote className="testimonials__thread">{t.quote}</blockquote>
+                          <p className="testimonials__receipt" style={{ '--paras': React.Children.count((t.quote as React.ReactElement<{ children?: React.ReactNode }>).props?.children) } as React.CSSProperties}>
+                            <i aria-hidden="true" />{marks} {marks === 1 ? 'line' : 'lines'} marked
+                          </p>
+                        </div>
+                      </div>
+                    </figure>
+                    {/* Drawn as a message box, but it's a link: it says what it does */}
+                    <a href={EMAIL_HREF} className="testimonials__composer" aria-label="Get in touch: email Ryan about your team">
+                      <span className="testimonials__composer-hint" aria-hidden="true">Message Ryan about your team…</span>
+                      <span className="testimonials__send">Get in touch</span>
+                    </a>
+                  </div>
+                </div>
+                <span className="testimonials__shine" aria-hidden="true" />
+              </div>
             </div>
-            {/* Every thread is drawn once more in the same cell, unseen and
-                inert, so the cell is always as tall as the longest one and the
-                window holds its height from person to person on desktop. */}
-            <div className="testimonials__slot">
-              {featured.map((p) => <Thread key={p.name} t={p} sizer />)}
-              <Thread key={t.name} t={t} />
-            </div>
-            {/* Drawn as a message box, but it's a link: it says what it does */}
-            <a href={EMAIL_HREF} className="testimonials__composer" aria-label="Email Ryan about your team">
-              <span className="testimonials__composer-hint" aria-hidden="true">Message Ryan about your team…</span>
-              <span className="testimonials__send">Get in touch</span>
-            </a>
           </div>
         </div>
       </div>

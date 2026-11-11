@@ -24,7 +24,7 @@ $fp-mark: #fff1c9;
   line-height: 1.45;
   color: $fp-ink;
 
-  @media (max-width: 760px) {
+  @media (max-width: #{$breakpoint-md - 1}) {
     grid-template-columns: 1fr;
     padding: $spacing-md;
   }

@@ -60,7 +60,7 @@
     align-items: start;
     margin-bottom: $spacing-2xl;
     img { display: block; width: 100%; height: auto; }
-    @media (max-width: 1000px) {
+    @media (max-width: #{$breakpoint-lg - 1}) {
       grid-template-columns: 1fr;
       figure:last-child { max-width: 260px; margin-inline: auto; }
     }
@@ -86,7 +86,7 @@
     // A loop sits beside a still at the same column width and keeps its own ratio.
     video { display: block; width: 100%; height: auto; background: $color-white; }
     figure:last-child:nth-child(odd) { grid-column: 1 / -1; }
-    @media (max-width: 700px) { grid-template-columns: 1fr; }
+    @media (max-width: #{$breakpoint-md - 1}) { grid-template-columns: 1fr; }
   }
   // Decision media stops at MEDIA_MAX_HEIGHT (ProjectOverview.tsx): the 620px
   // the opening image and the loops already hold to. The component writes a
@@ -96,7 +96,7 @@
   // decision grid; phones and tablets keep filling the column exactly as
   // before. The cap sits on the figure rather than the image, so the caption
   // stays as wide as the artifact it describes.
-  @media (min-width: 1001px) {
+  @media (min-width: $breakpoint-lg) {
     &__decision > figure {
       width: 100%;
       max-width: var(--overview-media-cap, none);
@@ -122,8 +122,8 @@
   &__close { display: flex; flex-wrap: wrap; gap: $spacing-xl; padding: $spacing-2xl 0; font-size: $font-size-body-sm; }
   .cs--detail-only { min-height: 0; .cs__container { padding: 0; max-width: none; } .cs__continue, .cs__pager { display: none; } }
 
-  @media (max-width: 1000px) { gap: $spacing-2xl; padding: $spacing-2xl; grid-template-columns: 220px minmax(0, 1fr); &__decision { grid-template-columns: 1fr; } }
-  @media (max-width: 700px) {
+  @media (max-width: #{$breakpoint-lg - 1}) { gap: $spacing-2xl; padding: $spacing-2xl; grid-template-columns: 220px minmax(0, 1fr); &__decision { grid-template-columns: 1fr; } }
+  @media (max-width: #{$breakpoint-md - 1}) {
     display: block;
     padding: $spacing-xl;
     &__rail { position: static; max-height: none; overflow: visible; padding: 0; margin-bottom: $spacing-2xl; gap: $spacing-lg; nav { display: flex; flex-wrap: wrap; gap: $spacing-md; } nav a { min-height: 44px; } }
@@ -203,13 +203,13 @@
 .project-overview__artboards {
   display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: $spacing-xl; align-items: start;
   > figure { margin: 0; min-width: 0; }
-  @media (max-width: 900px) { grid-template-columns: 1fr; }
+  @media (max-width: #{$breakpoint-lg - 1}) { grid-template-columns: 1fr; }
 }
 
 // Beside the phone, the browser runs the phone's full height: the phone is
 // 300px wide with a 10px bezel, so its screen is 280 x (280 x 19.5 / 9) and
 // the device 20px taller; the browser gives back its 30px chrome and 2px border.
-@media (min-width: 901px) {
+@media (min-width: $breakpoint-lg) {
   .project-overview__artboards .framed--browser .framed__screen {
     aspect-ratio: auto;
     height: calc(280px * 19.5 / 9 + 20px - 32px);
@@ -224,7 +224,7 @@
   .project-overview__binder-top { grid-column: 2; grid-row: 1; min-width: 0; scroll-margin-top: $spacing-xl; }
   .project-overview__rail { grid-column: 1; grid-row: 1 / span 2; }
   .project-overview__body { grid-column: 2; grid-row: 2; }
-  @media (max-width: 700px) {
+  @media (max-width: #{$breakpoint-md - 1}) {
     .project-overview__binder-top { margin-bottom: $spacing-xl; }
   }
 }
@@ -253,7 +253,7 @@
   img { display: block; width: auto; max-width: 100%; height: auto; max-height: 420px; object-fit: contain; background: #fff; border: 1px solid $color-border-default; border-radius: $radius-md; }
   figcaption { margin-top: $spacing-xs; font-size: 13px; line-height: 1.45; color: $color-neutral-muted; }
 
-  @media (max-width: 700px) { grid-template-columns: 1fr; }
+  @media (max-width: #{$breakpoint-md - 1}) { grid-template-columns: 1fr; }
 }
 
 // A whole dev-note page under the gallery (decision.sheet): the full column,

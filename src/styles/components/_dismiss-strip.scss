@@ -8,7 +8,7 @@
 // --dismiss-width to the slide-out's width.
 .dismiss-strip { display: none; }
 
-@media (min-width: 851px) {
+@media (min-width: $breakpoint-lg) {
   .dismiss-strip {
     // Fixed against the viewport, which the drawer is not a containing block
     // for while open (no transform; see _project-panel.scss). The strip ends

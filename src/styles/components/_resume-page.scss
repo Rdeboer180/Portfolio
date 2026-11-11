@@ -105,7 +105,7 @@
   &__work-links { display: flex; flex-wrap: wrap; gap: $spacing-sm $spacing-xl; padding: 0; margin: 0 0 $spacing-md; list-style: none; }
   &__section .resume-page__note { color: $color-text-secondary; font-size: $font-size-body-sm; }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: #{$breakpoint-md - 1}) {
     padding-bottom: 0;
     &__nav { position: static; flex-wrap: wrap; gap: $spacing-md; padding: $spacing-lg $spacing-xl; }
     &__nav-actions { flex-wrap: wrap; justify-content: flex-start; gap: $spacing-md; }

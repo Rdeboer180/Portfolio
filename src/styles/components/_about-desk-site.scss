@@ -84,7 +84,7 @@
   }
 
   // ── the archive's heading, under its own section rule ─────────────────
-  .desk-band__head { position: relative; z-index: 2; max-width: 1186px; margin: 0 auto; box-sizing: border-box; padding: 0 var(--container-px, 32px); }
+  .desk-band__head { position: relative; z-index: 2; max-width: var(--container-max); margin: 0 auto; box-sizing: border-box; padding: 0 var(--container-px); }
   .desk-band__head h2 { margin: $spacing-lg 0 $spacing-sm; font: var(--weight-extrabold) var(--text-h2) / 1.2 var(--font-heading); letter-spacing: -0.02em; color: var(--color-neutral-dark); }
   .desk-band__head p { max-width: 900px; margin: 0; font: 400 var(--text-body-lg) / var(--leading-body-lg) var(--font-body); color: var(--color-neutral-standard); }
   .desk-band__head--lower { margin-top: 96px; padding: 0; }

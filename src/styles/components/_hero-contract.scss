@@ -1,56 +1,57 @@
 // Homepage refinement: existing portrait, panel, badges, buttons, and token scale.
 .hero--contract {
   // + 5xl of negative space above the intro (Ryan, 24 Oct)
-  .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-4xl) * 2 + var(--space-5xl)) var(--container-px) var(--space-6xl); }
+  // the fixed nav is ~90px; the hero starts 2vw below it, and closes on 64px
+  // so the binder sits nearer the fold (10 Nov 2026)
+  .hero-intro { max-width: var(--container-max); width: 100%; margin: 0 auto; padding: calc(var(--space-6xl) + 2vw) var(--container-px) var(--space-4xl); }
   .hero-intro__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: var(--space-4xl); align-items: center; }
   .hero-intro__copy { min-width: 0; }
   .hero-intro__copy h1 { margin: 0 0 var(--space-xl); font-size: 44px; }
-  .hero-intro__copy h1 .hero__typed-final-gradient { animation: none; }
+  // The orange gradient sweeps into place as the line types in, then rests on Signal Orange → peach.
+  .hero-intro__copy h1 .hero__typed-final-gradient {
+    background-image: linear-gradient(90deg, var(--color-primary) 0%, #ff9a7a 50%, var(--color-primary) 100%);
+    background-size: 200% 100%;
+    background-position: 0% 0;
+    animation: none;
+  }
+  .hero-intro__copy h1.is-visible .hero__typed-final-gradient { animation: heroGradientSweep 1400ms var(--ease-out) 240ms both; }
   .hero-intro__copy p { font: var(--text-body-lg)/var(--leading-body-lg) var(--font-body); color: var(--color-text-secondary); margin: 0 0 var(--space-xl); }
   .hero-intro__actions { display: flex; flex-wrap: wrap; gap: var(--space-lg); }
-  .hero-intro__portrait { position: relative; min-width: 0; height: 560px; padding-top: var(--space-4xl); }
+  // 24px above the photo: the status chip that used to sit there moved to the byline
+  .hero-intro__portrait { position: relative; min-width: 0; height: 520px; padding-top: var(--space-xl); }
   .hero__image-container { width: 100%; height: 480px; }
   .hero__profile-shell { width: 100%; max-width: 480px; }
   .hero__profile-frame { border-radius: var(--radius-full); box-shadow: none; }
-  .hero__profile-label--layer { left: 0; bottom: 10%; }
   .hero-intro__roles { position: absolute; right: 0; top: auto; bottom: 0; z-index: 10; width: 224px; }
-  .hero-intro__token-map { position: absolute; top: var(--space-4xl); left: 0; z-index: 5; padding: var(--space-xs) var(--space-sm); background: var(--color-bg-primary); border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); font: var(--text-caption)/var(--leading-caption) var(--font-mono); color: var(--color-text-tertiary); }
-  .hero-intro__token-map code { font: inherit; padding: 0; background: transparent; }
   // Byline and status: the system's own type, no hand lettering.
   .hero-intro__byline-slot { margin-top: var(--space-2xl); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
   .hero-intro__copy .hero-intro__byline { display: flex; flex-direction: column; gap: var(--space-xs); margin: 0; font: var(--text-caption)/var(--leading-caption) var(--font-body); color: var(--color-text-tertiary); }
-  .hero-intro__byline-name { font: 700 17px/1.3 var(--font-heading); color: var(--color-text-primary); }
   .hero-intro__status { display: inline-flex; align-items: center; gap: var(--space-sm); min-height: 36px; box-sizing: border-box; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-border-default); border-radius: var(--radius-full); background: var(--color-bg-primary); font: var(--weight-medium) var(--text-body-sm)/1 var(--font-body); color: var(--color-text-primary); text-decoration: none; transition: border-color $transition-base, color $transition-base; }
   .hero-intro__status:hover, .hero-intro__status:focus-visible { border-color: var(--color-primary); color: var(--color-primary-dark); }
   .hero-intro__status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); flex: 0 0 8px; }
-  .hero-intro__portrait .hero-intro__status--portrait { position: absolute; top: 0; right: 0; z-index: 6; }
-  .hero-intro__status--stacked { display: none; }
   .hero-intro__portrait-slot { min-width: 0; }
   .layers-panel--roles { width: 100%; }
   .layers-panel--roles .layers-panel__top, .layers-panel--roles .layers-panel__toolbar, .layers-panel--roles .layers-panel__lockbar, .layers-panel--roles .layers-panel__footer { display: none; }
   .layers-panel--roles .layers-panel__layer { cursor: pointer; min-height: var(--space-2xl); }
   .layers-panel--roles .layers-panel__name { overflow: visible; text-overflow: clip; }
 }
-@media (max-width: 1100px) {
+@media (max-width: #{$breakpoint-xl - 1}) {
   .hero--contract { --profile-size: 320px; --profile-shell-size: 400px; }
   .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: var(--space-2xl); }
-  .hero--contract .hero-intro__portrait { height: 530px; }
+  .hero--contract .hero-intro__portrait { height: 490px; }
 }
-@media (max-width: 850px) {
-  .hero--contract .hero-intro__status--stacked { display: inline-flex; }
-  .hero--contract .hero-intro__portrait .hero-intro__status--portrait { display: none; }
+@media (max-width: #{$breakpoint-lg - 1}) {
   .hero--contract .hero-intro__grid { grid-template-columns: minmax(0, 1fr); }
-  .hero--contract .hero-intro__portrait { width: min(100%, 480px); margin: 0 auto; height: 520px; }
+  // stacked: the portrait keeps the room it had above it
+  .hero--contract .hero-intro__portrait { width: min(100%, 480px); margin: 0 auto; height: 520px; padding-top: var(--space-4xl); }
   .hero--contract .hero-intro__copy { max-width: var(--copy-max-width); }
   .hero--contract .hero-intro__actions .btn { white-space: normal; text-align: center; }
 }
-@media (max-width: 480px) {
+@media (max-width: $breakpoint-xs) {
   .hero--contract { --profile-size: 260px; --profile-shell-size: 300px; }
-  .hero--contract .hero-intro { padding-inline: var(--space-xl); }
   .hero--contract .hero-intro__portrait { height: 530px; }
   .hero--contract .hero__image-container { height: 350px; }
   .hero--contract .hero-intro__roles { width: 210px; }
-  .hero--contract .hero__profile-label--layer { bottom: 8%; }
   .hero--contract .hero-intro__actions { flex-direction: column; align-items: stretch; }
 }
 .hero--contract .layers-panel--roles {
@@ -69,17 +70,12 @@
   .layers-panel__layer--selected { background: var(--color-primary-light); color: var(--color-text-primary); }
   .layers-panel__thumb { color: inherit; border: 0; background: transparent; font-size: var(--text-caption); }
 }
-@media (max-width: 850px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .hero--contract .hero-intro__portrait-slot { grid-row: 1; }
   .hero--contract .hero-intro__copy { grid-row: 2; }
 }
 
 .hero--contract:is([data-intro-stage="scrawl"], [data-intro-stage="sketch"]) .hero__profile-frame { opacity: 0; }
-.hero--contract .hero-intro__token-map { transition: opacity 200ms ease; }
-.hero--contract:is([data-intro-stage="scrawl"], [data-intro-stage="sketch"], [data-intro-stage="lowfi"], [data-intro-stage="cursor"]) .hero-intro__token-map { opacity: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .hero--contract .hero-intro__token-map { transition: none; }
-}
 // Keep the construction circle aligned with the photo at every portrait size.
 .hero--contract .hero__intro-ring,
 .hero--contract .hero__intro-sketch {
@@ -111,7 +107,7 @@
   .layers-panel__layer:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: $breakpoint-xs) {
   .hero--contract .hero-intro__copy h1 { font-size: var(--text-h1); }
 }
 
@@ -186,7 +182,7 @@
 .hero--contract .hero-intro__mobile-role { display: none; }
 
 // Paper's compact, portrait-first direction, using the site's spacing scale.
-@media (max-width: 850px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .hero--contract {
     --profile-shell-size: calc(var(--profile-size) + var(--space-2xl));
     .hero-intro { padding-top: calc(var(--space-4xl) + var(--space-3xl)); padding-bottom: var(--space-3xl); }
@@ -219,10 +215,10 @@
     .hero-intro__mobile-role { display: block; }
   }
 }
-@media (max-width: 767px) {
+@media (max-width: #{$breakpoint-md - 1}) {
   .hero--contract .hero-intro { padding-top: calc(var(--space-4xl) + var(--space-lg)); }
 }
-@media (max-width: 480px) {
+@media (max-width: $breakpoint-xs) {
   .hero--contract { --profile-size: min(260px, calc(100vw - var(--space-4xl) - var(--space-lg))); }
 }
 
@@ -248,16 +244,16 @@
   .layers-panel__footer-icon { cursor: default; }
   .layers-panel__footer-icon:hover { transform: none; color: inherit; }
 }
-@media (min-width: 851px) {
+@media (min-width: $breakpoint-lg) {
   .hero--contract .hero-intro__roles {
     // Follow the portrait size, keeping the panel beside the face as it narrows.
     width: clamp(176px, calc(var(--profile-size) * 0.54), 216px);
-    // Sits higher than the portrait's edge now that it no longer overlaps it, to ease the tension at the corner.
-    bottom: calc(50px - var(--space-lg));
+    // Staggered low off the portrait (Ryan, 10 Nov 2026): it hangs past the circle's lower edge.
+    bottom: calc(20px - var(--space-lg));
     right: calc(-1 * var(--space-xl));
   }
 }
-@media (min-width: 851px) and (max-width: 1100px) {
+@media (min-width: $breakpoint-lg) and (max-width: #{$breakpoint-xl - 1}) {
   .hero--contract .layers-panel--roles {
     // Compact the decorative chrome and row spacing, not the role labels.
     .layers-panel__toolbar,
@@ -335,6 +331,10 @@
     .hero-intro__headline-line:nth-child(2)::after { animation-delay: 160ms; }
   }
 }
+@keyframes heroGradientSweep {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
 @keyframes heroTypeGuide {
   0% { opacity: 0; transform: scaleX(0); }
   20%, 65% { opacity: 0.45; transform: scaleX(1); }
@@ -347,9 +347,10 @@
     .hero-intro__headline-line::before,
     .hero-intro__headline-line::after { display: none; animation: none; }
   }
+  .hero--contract .hero-intro__copy h1.is-visible .hero__typed-final-gradient { animation: none; }
 }
 
-@media (min-width: 851px) {
+@media (min-width: $breakpoint-lg) {
   .hero--contract .hero-intro__portrait { z-index: 1; }
   .hero--contract + .about--integrated,
   .hero--contract + .case-playground {
@@ -448,3 +449,337 @@
 // The cast lives on a wrapper because the panel clips its own children.
 .hero--contract .hero-intro__roles-cast { @include room-light-cast; }
 .hero--contract .layers-panel--roles { box-shadow: var(--shadow-room); }
+
+// ── Homepage simplification (10 Nov 2026, canvas R2): the hero goes quiet
+// around the portrait. The role paragraph hangs on one orange rule, the Roles
+// panel is its header and five rows, and the career can run along the bottom
+// as a dated rule.
+.hero--contract {
+  // The portrait keeps its orange stroke and dashed orbit, and the intro
+  // still draws it in: pencil sketch, grid, crop marks, then the ring (Ryan,
+  // 10 Nov 2026). The paste step, its cursor and its menu are gone from
+  // Hero.tsx.
+  .layers-panel--roles {
+    .layers-panel__toolbar,
+    .layers-panel__modebar,
+    .layers-panel__lockbar,
+    .layers-panel__footer { display: none; }
+  }
+  // The rule hangs on the paragraph on show, so it is as long as the role's
+  // own words; the sizer takes the same inset so the measure matches.
+  .hero-intro__role-paragraph,
+  .hero-intro__role-sizer {
+    padding-left: var(--space-md);
+  }
+  .hero-intro__role-paragraph { border-left: 2px solid var(--color-primary); }
+}
+
+.hero-history {
+  position: relative;
+  list-style: none;
+  margin: var(--space-4xl) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: var(--space-md);
+
+  // the rule runs on past today, ending in a steel point
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: calc(var(--space-xl) - 3px);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-secondary);
+  }
+}
+
+// date, then the rule with a mark at the date, then the year's title and what
+// happened. Past years carry a hollow steel mark; today is filled orange.
+// Hovering a past year warms it to a soft orange on the site's soft close.
+.hero-history__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: calc(var(--space-xl) + var(--space-lg));
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: calc(var(--space-md) * -1);
+    top: var(--space-xl);
+    height: 1px;
+    background: var(--color-border-default);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: calc(var(--space-xl) - 4px);
+    width: 9px;
+    height: 9px;
+    box-sizing: border-box;
+    border: 1.5px solid var(--color-secondary);
+    background: var(--color-bg-primary);
+    transition: border-color 400ms var(--ease-out), background-color 400ms var(--ease-out);
+  }
+}
+
+.hero-history__date {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font: var(--text-caption)/var(--leading-caption) var(--font-mono);
+  color: var(--color-text-tertiary);
+  transition: color 400ms var(--ease-out);
+}
+
+.hero-history__title {
+  font: 700 var(--text-body)/1.3 var(--font-heading);
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.hero-history__label {
+  font: var(--text-body-sm)/var(--leading-body-sm) var(--font-body);
+  color: var(--color-text-secondary);
+}
+
+.hero-history__more {
+  margin-top: var(--space-sm);
+  font: 700 var(--text-body-sm)/1.4 var(--font-heading);
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  &:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+.hero-history__step--now {
+  &::before { border-color: var(--color-primary); background: var(--color-primary); }
+  .hero-history__date { color: var(--color-primary-dark); }
+}
+
+.hero-history__step:not(.hero-history__step--now):hover {
+  &::before { border-color: var(--color-primary-muted); background: var(--color-primary-light); }
+  .hero-history__date { color: var(--color-primary-dark); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-history__step::before,
+  .hero-history__date { transition: none; }
+}
+
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .hero-history {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-md);
+    margin-top: var(--space-2xl);
+    &::after { display: none; }
+  }
+  .hero-history__step {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    column-gap: var(--space-md);
+    padding-top: 0;
+    &::before, &::after { display: none; }
+    > :not(.hero-history__date) { grid-column: 2; }
+  }
+  .hero-history__date {
+    position: static;
+    grid-row: 1 / span 3;
+  }
+}
+
+// Status and place on one line under the intro (canvas L4, 10 Nov 2026).
+.hero--contract .hero-intro__copy .hero-intro__byline--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-lg);
+  font: var(--text-body)/var(--leading-body) var(--font-body);
+  color: var(--color-text-secondary);
+}
+
+// "Giving a damn does not." starts its own line on desktop, so the line that
+// lands the intro never splits; on a phone it runs on with the sentence.
+.hero-intro__break { display: none; }
+@media (min-width: $breakpoint-lg) {
+  .hero--contract .hero-intro__break { display: inline; }
+}
+
+// ============================================
+// The fidelity pass (F1, from the Hero motion canvas; 11 November 2026)
+// The portrait goes through a design file's stages inside the two-second
+// intro: a pencil sketch, then a wireframe placeholder, then the photo wiped
+// down in greyscale, then colour as the orange ring draws; the Roles panel
+// enters last. The end state is plain. Stages are set by Hero.tsx
+// (sketch → lowfi → grey → final → panel → done); these rules sit over the
+// older stage CSS in _hero.scss. Reduced motion lands on 'done' at once.
+// ============================================
+@keyframes heroF1Wipe { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes heroF1Push { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+@keyframes heroF1Snap { from { opacity: 0; transform: scale(1.6); } to { opacity: 1; transform: none; } }
+
+.hero--contract {
+  .hero__profile-frame { background: $color-secondary-lightest; }
+  .hero__profile-img { position: relative; z-index: 1; }
+
+  // the wireframe's image placeholder: a hairline circle, its two diagonals, the word
+  .hero__profile-wire {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: $color-secondary-lightest;
+    box-shadow: inset 0 0 0 1px $color-secondary;
+    opacity: 0;
+    svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    path { fill: none; stroke: $color-secondary; stroke-width: 1; vector-effect: non-scaling-stroke; }
+    span {
+      position: relative;
+      padding: 3px 8px;
+      background: $color-secondary-lightest;
+      font-family: $font-family-mono;
+      font-size: 11px;
+      color: $color-secondary-dark;
+    }
+  }
+
+  // the pencil: every line waits undrawn, the second pass lighter
+  .hero__intro-sketch__line {
+    fill: none;
+    stroke: rgba(27, 27, 27, 0.34);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    &--ghost { stroke: rgba(27, 27, 27, 0.18); stroke-width: 1; }
+  }
+
+  // ── sketch: the pencil draws, the crop marks snap in one after another ──
+  &[data-intro-stage="sketch"] {
+    .hero__intro-sketch__line {
+      &--h1 { animation: heroLineDraw 380ms var(--ease-out) 60ms forwards; }
+      &--h2 { animation: heroLineDraw 340ms var(--ease-out) 160ms forwards; }
+      &--v1 { animation: heroLineDraw 380ms var(--ease-out) 100ms forwards; }
+      &--v2 { animation: heroLineDraw 340ms var(--ease-out) 200ms forwards; }
+      &--c1 { animation: heroLineDraw 500ms var(--ease-out) 140ms forwards; }
+      &--c2 { animation: heroLineDraw 460ms var(--ease-out) 230ms forwards; }
+    }
+    .hero__intro-sketch__silhouette { animation: heroSilhouetteDraw 340ms var(--ease-out) 320ms forwards; }
+    .hero__intro-crop span {
+      opacity: 0;
+      transition: none;
+      animation: heroF1Snap 200ms var(--ease-out) both;
+    }
+    .hero__intro-crop__tl { animation-delay: 420ms; }
+    .hero__intro-crop__tr { animation-delay: 460ms; }
+    .hero__intro-crop__br { animation-delay: 500ms; }
+    .hero__intro-crop__bl { animation-delay: 540ms; }
+  }
+
+  // ── lowfi: the wireframe. The pencil fades; the placeholder takes its place ──
+  &[data-intro-stage="lowfi"] {
+    .hero__intro-sketch { opacity: 0; transition: opacity 260ms ease; }
+    .hero__intro-sketch__line { stroke-dashoffset: 0; }
+    .hero__intro-ring { animation: none; opacity: 0; }
+    .hero__profile-selection { animation: none; opacity: 0; }
+    .hero__profile-frame { animation: heroRingFadeIn 200ms ease both; }
+    .hero__profile-wire { opacity: 1; }
+  }
+
+  // ── grey: the photo wipes down over the placeholder, in greyscale ──
+  &[data-intro-stage="grey"] {
+    .hero__profile-wire { opacity: 1; }
+    .hero__intro-crop span { opacity: 1; }
+    .hero__profile-img {
+      transform: none;
+      filter: grayscale(1) contrast(0.9) brightness(1.05);
+      animation: heroF1Wipe 400ms var(--ease-out) both;
+    }
+  }
+
+  // ── final: colour arrives as the orange ring draws; then the orbit simply appears ──
+  &[data-intro-stage="final"] {
+    .hero__profile-wire { opacity: 1; }
+    .hero__profile-img {
+      animation: none;
+      clip-path: inset(0 0 0 0);
+      transform: none;
+      transition: filter 400ms var(--ease-out);
+    }
+    .hero__intro-ring {
+      opacity: 1;
+      transition: none;
+      animation: none;
+      // the stroke is the circle's: it starts at the top and runs clockwise
+      circle { animation: heroRingDraw 500ms var(--ease-out) both; transform: rotate(-90deg); transform-origin: 50% 50%; }
+    }
+    .hero__profile-frame { border-color: transparent; transition: none; }
+    .hero__profile-selection { opacity: 0; animation: heroRingFadeIn 300ms ease 420ms both; }
+    // the panel is dragged in now, while the ring is still drawing (half a
+    // second sooner than its own stage; Ryan, 11 November)
+    .hero__ui-element--layers { animation: heroF1Drag 520ms linear both; }
+    .hero-intro__grab { animation: heroF1Grab 680ms linear both; }
+    .hero-intro__grab-point { animation: heroF1Point 680ms step-end both; }
+    .hero-intro__grab-grip { animation: heroF1Grip 680ms step-end both; }
+  }
+
+  // ── panel: a hand drags the Roles panel in by its title bar ──
+  // As in Photoshop or Figma: the pointing finger lands on the title bar, grips,
+  // throws the panel into place from the upper right (tilted a touch by the
+  // pull) on the house curve, and lets go back to the pointer, which fades.
+  // (the same declarations as in 'final', so the drag carries on, not restarts)
+  &[data-intro-stage="panel"] {
+    .hero__profile-frame { transition: none; }
+    .hero__ui-element--layers { animation: heroF1Drag 520ms linear both; }
+    .hero-intro__grab { animation: heroF1Grab 680ms linear both; }
+    .hero-intro__grab-point { animation: heroF1Point 680ms step-end both; }
+    .hero-intro__grab-grip { animation: heroF1Grip 680ms step-end both; }
+  }
+}
+
+// the hand: cursor-sized, white with an ink outline, the macOS cursor's shadow
+.hero-intro__grab {
+  position: absolute;
+  top: 6px;
+  left: 62%;   // the empty stretch of title bar, clear of the label
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 1px 1.2px rgba(0, 0, 0, 0.45));
+  svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  path { fill: $color-white; stroke: $color-black; stroke-width: 1.3; stroke-linejoin: round; stroke-linecap: round; }
+  .hero-intro__grab-crease { fill: none; stroke-width: 1.1; }
+}
+.hero-intro__grab-grip { opacity: 0; }
+// held still for the press (0-18%), then thrown home on the house curve
+@keyframes heroF1Drag {
+  0% { opacity: 0; transform: translate(120px, -56px) rotate(2.5deg); }
+  10% { opacity: 1; transform: translate(120px, -56px) rotate(2.5deg); }
+  18% { opacity: 1; transform: translate(120px, -56px) rotate(2.5deg); animation-timing-function: cubic-bezier(0.2, 0.8, 0, 1); }
+  100% { opacity: 1; transform: none; }
+}
+// pointer 0-15% (lands, presses), grip 15-76% (the drag), pointer again, then fades
+@keyframes heroF1Grab {
+  0% { opacity: 0; transform: none; }
+  8% { opacity: 1; }
+  84% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translate(6px, 4px); }
+}
+@keyframes heroF1Point { 0% { opacity: 1; } 15% { opacity: 0; } 76% { opacity: 1; } }
+@keyframes heroF1Grip { 0% { opacity: 0; } 15% { opacity: 1; } 76% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro__grab { display: none; }
+}

@@ -1069,7 +1069,7 @@ $fc-sides: (
 
 // ── Tablet: the gutters fold around the artboard ────────────────────────────
 
-@media (max-width: 1179px) {
+@media (max-width: #{$breakpoint-xl - 1}) {
   .fc__canvas {
     grid-template-columns: 632px 252px;
     grid-template-areas:
@@ -1089,7 +1089,7 @@ $fc-sides: (
   .fc-sticky { margin-left: 0; }
 }
 
-@media (max-width: 979px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .fc__canvas {
     grid-template-columns: 632px;
     grid-template-areas:
@@ -1102,7 +1102,7 @@ $fc-sides: (
 
 // ── Phone: a list per lane and a sheet per skill (the phone board) ──────────────
 
-@media (max-width: 767px) {
+@media (max-width: #{$breakpoint-md - 1}) {
   .fc-page__nav { padding: 0 16px; }
   .fc-page__body { padding: 16px 16px 0; }
   .fc__stage { overflow-x: auto; }

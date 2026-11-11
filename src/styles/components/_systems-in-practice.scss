@@ -67,9 +67,9 @@
     font-size: $font-size-h2;
     font-weight: $font-weight-bold;
     letter-spacing: -0.02em;
-    line-height: 1.15;
+    line-height: $line-height-h2;
     color: $color-neutral-dark;
-    margin: $spacing-lg 0 $spacing-lg;
+    margin: 0 0 $spacing-lg;
   }
 
   // Each sentence is its own line; balance keeps a wrapped sentence from
@@ -1204,4 +1204,13 @@
       outline-offset: 3px;
     }
   }
+}
+
+// The homepage's action row (10 Nov 2026): its text links rest in ink like the
+// other section links and warm to Orange Deep on hover, so orange in this
+// section stays on what ships and on the person who decides.
+.sip--strip .sip__actions .sip__link {
+  min-height: 24px;
+  color: $color-neutral-dark;
+  &:hover { color: $color-primary-dark; }
 }

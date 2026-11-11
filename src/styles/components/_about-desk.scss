@@ -229,7 +229,7 @@
     &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 4px; }
   }
   .draft-lists__more { margin: var(--space-sm) 0 0 !important; padding-top: var(--space-sm); border-top: 1px solid var(--color-border-default); font-size: var(--text-body-sm) !important; color: var(--color-neutral-standard) !important; }
-  @media (max-width: 640px) { .draft-lists ul { grid-template-columns: minmax(0, 1fr); } .draft-lists { padding: var(--space-md); } }
+  @media (max-width: $breakpoint-sm) { .draft-lists ul { grid-template-columns: minmax(0, 1fr); } .draft-lists { padding: var(--space-md); } }
   @media (prefers-reduced-motion: reduce) { .draft-lists li button span { transition: none; } }
   // a link that names what it opens, in the site's link style: no brackets, an underline, the orange of a link
   .note-link {
@@ -776,11 +776,11 @@
   > .dismiss-strip { z-index: 902; }
   > .dismiss-strip__cursor { z-index: 903; }
   &--hybrid > .dismiss-strip, &--hybrid > .dismiss-strip__cursor { position: fixed; }
-  @media (hover: hover) and (min-width: 851px) {
+  @media (hover: hover) and (min-width: $breakpoint-lg) {
     // pointed at, the desk behind brightens: it is where the way back goes
     &:has(> .dismiss-strip:hover) > .about-desk__scrim { background-color: rgba(20, 18, 15, 0.2); }
   }
-  @media (hover: hover) and (min-width: 851px) and (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (min-width: $breakpoint-lg) and (prefers-reduced-motion: no-preference) {
     // and the slide-out steps 8px aside, away from the pointer; the gap it opens is
     // scrim, so moving onto it ends the hover and it settles back without flicker
     &:has(> .dismiss-strip:hover) > .about-desk__flyout { translate: 8px 0; }
@@ -882,3 +882,7 @@
     &__line-draw { animation: none; stroke-dashoffset: 0; }
   }
 }
+
+// Running text keeps the reading measure inside the page's wider column.
+.about-desk__intro p,
+.glance p { max-width: var(--measure); }

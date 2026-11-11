@@ -1,0 +1,145 @@
+// ============================================
+// Why me (WhyMe.tsx; canvas B4a, 11 Nov 2026). The three values as a type
+// specimen on one line, on steel cap-height and baseline guides, then the AI
+// point and the proof rows side by side.
+// ============================================
+
+@import '../variables';
+
+.why-me {
+  padding: $section-pad-y 0;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding-x;
+  }
+
+  // The specimen. Guide positions come from Hubot Sans's own metrics (the old
+  // section's, measured once): with line-height 1.15 the baseline sits 0.96em
+  // below the top of the line and the cap height 0.231em.
+  // The h2 at the page's h2 size, weight and ink (it ran at up to 80px in
+  // orange and outranked every other title, Ryan, 11 Nov 2026). The craft is
+  // in the guides and their labels, not the size; the full stops carry the
+  // one orange.
+  &__words {
+    --size: var(--text-h2);
+    position: relative;
+    isolation: isolate;
+    margin: 0;
+    padding-top: 6px;   // room for the cap-height label above the line
+    font: $font-weight-bold var(--size) / 1.15 var(--font-heading);
+    letter-spacing: -0.02em;
+    color: $color-neutral-dark;
+    white-space: nowrap;
+  }
+  &__stop { color: $color-primary; }
+
+  &__guide {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    height: 13px;
+    border-bottom: 1px solid $color-secondary;
+    font: 400 11px / 12px var(--font-mono);
+    letter-spacing: 0;
+    color: $color-text-secondary;
+    text-align: right;
+    white-space: nowrap;
+    pointer-events: none;
+
+    &--cap { top: calc(6px + var(--size) * 0.231 - 13px); }
+    &--base { top: calc(6px + var(--size) * 0.96 - 13px); }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+    gap: var(--space-4xl);
+    margin-top: var(--space-3xl);
+  }
+
+  &__ai {
+    margin: 0;
+    font: 700 24px / 1.3 var(--font-heading);
+    letter-spacing: -0.01em;
+    color: $color-neutral-dark;
+  }
+
+  &__mentor {
+    margin: var(--space-md) 0 0;
+    font: var(--text-body) / 1.55 var(--font-body);
+    color: $color-text-secondary;
+  }
+
+  // a secondary sticker button to /about, led by Ryan's face
+  &__more { gap: 10px; margin-top: var(--space-xl); padding-left: 10px; }
+  &__more-face {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 62% 30%;
+    box-shadow: 0 0 0 1.5px $color-white, 0 0 0 2.5px rgba($color-primary, 0.55);
+  }
+
+  &__link {
+    font-weight: $font-weight-semibold;
+    color: $color-primary-dark;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color $transition-fast;
+
+    &:hover { color: $color-primary; text-decoration: underline; text-underline-offset: 3px; }
+    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 3px; border-radius: 2px; }
+  }
+
+  &__proof {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: var(--space-lg);
+    padding: 12px 0;
+    border-top: 1px solid $color-border-default;
+  }
+
+  &__value {
+    font: 400 12px / 24px var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-primary-dark;
+  }
+
+  &__line {
+    font: var(--text-body) / 1.5 var(--font-body);
+    color: $color-neutral-dark;
+  }
+
+  // wide screens: the guide labels hang in the margin, as on a specimen sheet
+  @media (min-width: $breakpoint-2xl) {
+    &__guide { left: -104px; text-align: left; }
+  }
+
+  // below desktop the lead sits over the proof
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    &__grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-2xl); }
+  }
+
+  // phones: the h3 size, as every other section title steps down; the line
+  // still fits, so the guides stay
+  @media (max-width: #{$breakpoint-md - 1}) {
+    &__words { --size: var(--text-h3); }
+  }
+  @media (max-width: #{$breakpoint-sm - 1}) {
+    &__ai { font-size: 20px; }
+    &__row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  }
+}

@@ -1,10 +1,10 @@
 @import '../variables';
 
-// 05 / Capabilities (concept 11, simplified). One key says how the work was
-// done: solid hands-on, dashed directed, double partnered. Steel for
-// structure; the accent on the one highlighted capability and on mastered
-// talents. One label size (12px mono) for every small label.
-$sm-cols: 330px minmax(0, 360px) minmax(0, 1fr);
+// The skill tree on the homepage, as paper (canvas P1, 10 Nov 2026): where the
+// points went, each lane's top talents as rings, one way into the tree. White
+// ground, hairlines, steel structure. Orange marks only a 5 of 5 ring; a
+// directed talent is steel and says so in words. One label size (12px mono)
+// for every small label.
 $sm-label: 12px/1.5 $font-family-mono;
 
 .sm {
@@ -12,255 +12,290 @@ $sm-label: 12px/1.5 $font-family-mono;
   padding: $section-pad-y 0;
 
   &__container { max-width: $container-max-width; margin: 0 auto; padding: 0 $container-padding-x; }
-  &__label { margin: 0; font: $sm-label; text-transform: uppercase; letter-spacing: .08em; color: $color-neutral-muted; }
 
-  &__title { margin: 24px 0 12px; font: $font-weight-bold #{$font-size-h2}/1.25 $font-family-heading; letter-spacing: -.025em; color: $color-neutral-dark; }
-  &__intro { max-width: 640px; margin: 0; font-size: $font-size-body; line-height: 1.6; color: $color-neutral-standard; }
-
-  // The key, on one line under the intro
-  &__key {
+  &__head {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px 28px;
-    margin: 20px 0 0;
-    padding: 0;
-    list-style: none;
-
-    li { display: flex; align-items: center; gap: 10px; font-size: 14px; line-height: 1.4; color: $color-neutral-standard; }
-    strong { font-weight: $font-weight-semibold; color: $color-neutral-dark; }
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-2xl;
   }
 
-  // The key's three line styles
-  &__line {
-    display: block;
-    width: 28px;
-    height: 10px;
-    flex: none;
-    overflow: visible;
+  &__head-copy { display: flex; flex-direction: column; gap: $spacing-sm; }
 
-    path { fill: none; stroke: $color-neutral-dark; stroke-width: 1.5; }
-    &--accent path { stroke: $color-primary; }
-  }
-
-  // ── Rows ───────────────────────────────────────────────────────────────────
-  &__columns {
-    display: grid;
-    grid-template-columns: $sm-cols;
-    column-gap: 40px;
-    margin-top: 40px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid $color-neutral-dark;
-  }
-
-  &__capability {
-    display: grid;
-    grid-template-columns: $sm-cols;
-    column-gap: 40px;
-    row-gap: 12px;
-    padding: 22px 0;
-    border-bottom: 1px solid $color-neutral-light;
-  }
-
-  &__name {
-    display: grid;
-    grid-template-columns: 26px minmax(0, 1fr);
-    column-gap: 14px;
-    row-gap: 8px;
-    align-content: start;
-
-    h3 { margin: 1px 0 0; font: 700 18px/1.3 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
-  }
-
-  &__icon {
-    display: block;
-    width: 26px;
-    height: 26px;
-    fill: none;
-    stroke: $color-secondary;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-
-    &--accent { stroke: $color-primary; }
-  }
-
-  // Project links, each followed by its line in the key (none where the split
-  // isn't on record, which costs nothing because the line trails the link).
-  &__used {
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    li { display: flex; align-items: center; gap: 10px; min-height: 28px; font-size: 14px; }
-    a { color: $color-primary-dark; text-decoration: underline; text-underline-offset: 3px; }
-  }
-
-  // Properties panel: the same 112px label column in every row (the longest
-  // label, "Agent-assisted", fits it), so values align down the section.
-  &__props { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px 14px; margin: 0; align-items: baseline; align-content: start; }
-  &__prop {
-    display: contents;
-    dt { font: $sm-label; color: $color-neutral-muted; }
-    dd { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.5; color: $color-neutral-dark; }
-  }
-
-  &__practice { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
-
-  // ── How I prototype ────────────────────────────────────────────────────────
-  &__workflow {
-    margin-top: $spacing-4xl;
-
-    h3 { max-width: 760px; margin: 0; font: 700 24px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
-
-    ol {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 40px;
-      margin: 24px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    li {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-top: 14px;
-      border-top: 1px solid $color-neutral-dark;
-    }
-
-    h4 { margin: 0; font: 700 17px/1.3 $font-family-heading; letter-spacing: -.01em; color: $color-neutral-dark; }
-    p { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
-  }
-  &__step-n { font: $sm-label; letter-spacing: .08em; color: $color-secondary-dark; }
-  &__step-mode { display: flex; align-items: center; margin-top: 4px; color: $color-secondary-dark; }
-
-  // ── The skill tree ──────────────────────────────────────────────────────────────
-  &__tree {
-    display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    gap: 56px;
-    align-items: start;
-    margin-top: $spacing-4xl;
-    padding-top: $spacing-2xl;
-    border-top: 1px solid $color-neutral-light;
-  }
-
-  &__tree-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    h3 { margin: 8px 0 0; font: 700 24px/1.2 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
-    > p { margin: 0; font-size: 15px; line-height: 1.6; color: $color-neutral-standard; }
-  }
-
+  // The class, under its emblem: the skill tree's root tile, the branch mark
+  // on ink, as the tree's class chip draws it.
   &__class {
     display: flex;
     align-items: center;
     gap: 16px;
-
-    // The skill tree's root tile: the branch mark on ink, as the console's class chip draws it.
-    .sm__class-mark { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: 0 0 56px; border-radius: 14px; background: $color-neutral-dark; color: #ffffff; }
-    strong { font: 700 19px/1.25 $font-family-heading; letter-spacing: -.02em; color: $color-neutral-dark; }
+    margin: 0 0 $spacing-sm;
   }
 
-  &__tree-links {
+  &__class-mark {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px 22px;
-
-    a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 600; color: $color-primary-dark; text-decoration: none; }
-    a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    // the dark tile as a sticker (11 November 2026), in the buttons' recipe:
+    // a 1.5px foil line for its border, a 3px white die-cut and one flat shadow
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient($color-neutral-dark, $color-neutral-dark) padding-box,
+      var(--sticker-foil) border-box;
+    box-shadow:
+      0 0 0 3px var(--sticker-die-cut),
+      0 0 0 3.5px rgba(27, 27, 27, 0.12),
+      0 1px 2px rgba(27, 27, 27, 0.16);
+    color: $color-white;
   }
 
-  &__lanes {
+  &__class-name { font: 700 22px/1.25 $font-family-heading; letter-spacing: -0.02em; color: $color-neutral-dark; }
+
+  &__class-link {
+    color: $color-primary-dark;
+    text-decoration: none;
+    &:hover { text-decoration: underline; text-underline-offset: 3px; }
+  }
+
+  &__title { margin: 0; font: $font-weight-bold #{$font-size-h2}/1.25 $font-family-heading; letter-spacing: -0.02em; color: $color-neutral-dark; }
+
+  &__sub {
     margin: 0;
-    border: 1px solid $color-secondary-light;
-    border-radius: 10px;
-    overflow: hidden;
+    font-size: $font-size-body;
+    line-height: 1.5;
+    color: $color-neutral-standard;
   }
 
-  &__lanes-head {
-    padding: 12px 20px;
-    border-bottom: 1px solid $color-neutral-light;
-    background: $color-neutral-lightest;
-    font: $sm-label;
-    letter-spacing: .08em;
-    text-transform: uppercase;
+  &__explore {
+    flex-shrink: 0;
+    font-weight: $font-weight-semibold;
     color: $color-neutral-dark;
+    text-decoration: none;
+    white-space: nowrap;
+    &:hover { color: $color-primary-dark; }
   }
 
-  &__lanes-body { display: flex; flex-direction: column; gap: 22px; padding: 20px 24px 6px; }
+  &__lanes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: $spacing-xl;
+  }
 
   &__lane {
-    display: grid;
-    grid-template-columns: 110px minmax(0, 1fr);
-    gap: 16px;
-    align-items: start;
-
-    ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-  }
-  &__lane-name { margin: 0; font: 700 15px/1.3 $font-family-heading; color: $color-neutral-dark; }
-
-  &__node { display: flex; flex-direction: column; gap: 6px; }
-  &__node-ring {
-    width: 14px;
-    height: 14px;
-    box-sizing: border-box;
-    border: 2px solid $color-neutral-dark;
-    border-radius: 50%;
-    background: $color-white;
-  }
-  &__node--max &__node-ring { border-color: $color-primary; }
-  &__node--directed &__node-ring { border-style: dashed; }
-  &__node-name { font-size: 14px; font-weight: 600; color: $color-neutral-dark; }
-
-  &__pips {
     display: flex;
-    gap: 3px;
+    flex-direction: column;
+    gap: $spacing-md;
 
-    > span[aria-hidden] { width: 7px; height: 7px; box-sizing: border-box; border: 1px solid $color-secondary; }
-    > span.is-on { border-color: $color-neutral-dark; background: $color-neutral-dark; }
-    &--max > span.is-on { border-color: $color-primary; background: $color-primary; }
-  }
-
-  a:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 4px; }
-}
-
-// ── Narrower desktops: the rows fold to two columns ──────────────────────────
-@media (max-width: 1100px) {
-  .sm {
-    &__columns { display: none; }
-    &__capability { grid-template-columns: 300px minmax(0, 1fr); }
-    &__practice { grid-column: 2; }
-    &__workflow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
-    &__tree { grid-template-columns: minmax(0, 1fr); gap: $spacing-2xl; }
-  }
-}
-
-// ── Phones: one column, a tight workflow list, no lanes ──────────────────────
-@media (max-width: 639px) {
-  .sm {
-    &__title { font-size: 28px; }
-    &__key { flex-direction: column; gap: 6px; }
-    &__capability { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-    &__practice { grid-column: auto; }
-    // The property gutter costs more than it earns once the row is one column.
-    &__props { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-    &__prop + &__prop dt { margin-top: 8px; }
-    &__workflow {
-      h3 { font-size: 21px; }
-      ol { grid-template-columns: minmax(0, 1fr); gap: 0; }
-      li { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 10px; row-gap: 4px; padding: 14px 0; border-top: 1px solid $color-neutral-light; }
-      li > * { grid-column: 2; }
-      .sm__step-n { grid-column: 1; grid-row: 1; padding-top: 3px; }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: $spacing-sm;
     }
-    // The class, the line and the links carry the skill tree on a phone.
-    &__lanes { display: none; }
   }
+
+  // the lane's name and points, ruled to the end of the column
+  &__lane-name {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin: 0;
+    font: $sm-label;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: $color-secondary-dark;
+
+    &::after { content: ''; flex: 1; height: 1px; background: $color-neutral-light; }
+  }
+
+  &__talent { position: relative; }
+
+  // The talent is a button: it opens the card on hover, focus or tap.
+  &__talent-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    width: 100%;
+    padding: $spacing-xs 2px $spacing-sm;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color $transition-fast;
+
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
+  }
+
+  &__talent.is-open &__talent-btn,
+  &__talent-btn:hover { background: $color-neutral-lightest; }
+
+  &__talent-name { font-size: $font-size-body-sm; font-weight: $font-weight-medium; line-height: 1.2; color: $color-neutral-dark; }
+  &__talent-score { font: $sm-label; color: $color-neutral-muted; }
+
+  &__ring {
+    width: 48px;
+    height: 48px;
+    fill: none;
+  }
+
+  &__ring-track { stroke: $color-neutral-light; stroke-width: 3; }
+  &__ring-fill { stroke: $color-neutral-dark; stroke-width: 3; }
+  &__ring-core { fill: none; stroke: $color-neutral-dark; stroke-width: 1.5; }
+
+  &__ring--max {
+    .sm__ring-fill { stroke: $color-primary; }
+    .sm__ring-core { fill: $color-neutral-dark; stroke: none; }
+  }
+
+  &__ring--directed {
+    .sm__ring-fill { stroke: $color-secondary; }
+    .sm__ring-core { stroke: $color-secondary-dark; }
+  }
+}
+
+// Three lanes side by side need about 90px a talent, or the longer names
+// ("Accessibility", "Components") run into each other: stack below 1280.
+@media (max-width: #{$breakpoint-xl - 1}) {
+  .sm__lanes-grid { grid-template-columns: minmax(0, 1fr); gap: $spacing-2xl; }
+}
+
+@media (max-width: #{$breakpoint-md - 1}) {
+  .sm { padding: $spacing-3xl 0; }
+  .sm__title { font-size: $font-size-h3; }
+}
+
+@media (max-width: #{$breakpoint-sm - 1}) {
+  .sm__head { flex-direction: column; align-items: flex-start; gap: $spacing-md; }
+  .sm__lane ul { gap: $spacing-xs; }
+  .sm__ring { width: 40px; height: 40px; }
+  .sm__talent-name { font-size: $font-size-caption; }
+  .sm__talent-score { font-size: 11px; }
+}
+
+// On the smallest phones four names no longer fit a row.
+@media (max-width: #{$breakpoint-2xs - 1}) {
+  .sm__lane ul { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: $spacing-md; }
+}
+
+// ── The talent card: where the points came from. It reads like the hero's
+// career rule turned on its side, drawn as the system graph draws its loop:
+// a steel thread, a hollow steel mark per source, the newest in ink. Label left, tag (year, count or kind) right in mono.
+// It sits inside the talent, under the ring, so it never covers the
+// section's title; a clear bridge above it keeps the pointer inside the
+// talent on the way down (WCAG 1.4.13, hoverable).
+.sm__card {
+  $w: 236px;
+
+  position: absolute;
+  top: calc(100% + 10px);
+  z-index: 20;
+  width: $w;
+  max-width: calc(100vw - 32px);
+  padding: 14px 16px 12px;
+  background: $color-white;
+  border: 1px solid $color-border-default;
+  border-radius: $card-border-radius;
+  box-shadow: $shadow-md;
+  text-align: left;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 150ms var(--ease-out), transform 150ms var(--ease-out), visibility 0s linear 150ms;
+
+  &[data-open] {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+
+  // the bridge to the ring, and the notch that points at it
+  &::after { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: 12px; }
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    width: 10px;
+    height: 10px;
+    background: $color-white;
+    border-left: 1px solid $color-border-default;
+    border-top: 1px solid $color-border-default;
+    transform: rotate(45deg);
+  }
+
+  &--center { left: 50%; margin-left: -$w * 0.5; &::before { left: calc(50% - 5px); } }
+  &--start { left: 0; &::before { left: 34px; } }
+  &--end { right: 0; &::before { right: 34px; } }
+}
+
+.sm__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sm__card-name { font: 700 14px/1.3 $font-family-heading; color: $color-neutral-dark; }
+
+.sm__card-pips {
+  display: inline-flex;
+  gap: 3px;
+
+  span { width: 6px; height: 6px; background: $color-neutral-light; }
+  span.is-on { background: $color-neutral-dark; }
+  // 5 of 5 is orange here as it is on the ring
+  &--max span.is-on { background: $color-primary; }
+}
+
+.sm__card-thread {
+  position: relative;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0 0 0 18px;
+
+  // the thread
+  &::before { content: ''; position: absolute; left: 4px; top: 10px; bottom: 10px; width: 1.5px; background: $color-secondary-light; }
+
+  li {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 5px 0;   // rows 27px apart, so linked sources clear the 24px target spacing
+
+    // a mark per source, the newest in ink
+    &::before { content: ''; position: absolute; left: -18px; top: 10px; width: 9px; height: 9px; box-sizing: border-box; border: 1.5px solid $color-secondary; background: $color-white; }
+    &:last-child::before { border-color: $color-neutral-dark; background: $color-neutral-dark; }
+  }
+}
+
+.sm__card-label { font-size: $font-size-caption; line-height: 1.45; color: $color-neutral-dark; white-space: nowrap; }
+// a source with a page of its own: ink, underlined, warm on hover like the section's other links
+.sm__card-link {
+  color: $color-neutral-dark;
+  text-decoration: underline;
+  text-decoration-color: rgba(27, 27, 27, 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+
+  &:hover { color: $color-primary-dark; text-decoration-color: currentColor; }
+  &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; border-radius: 2px; }
+}
+.sm__card-tag { flex-shrink: 0; font: 11px/1.45 $font-family-mono; color: $color-neutral-muted; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sm__card { transform: none; transition: opacity 1ms linear, visibility 0s linear 1ms; }
 }

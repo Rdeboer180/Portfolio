@@ -110,6 +110,7 @@ window.mountBinder = function (document) {
           <div class="card__edge card__edge--l" aria-hidden="true"></div>
           <div class="card__edge card__edge--r" aria-hidden="true"></div>
         </div>
+        <div class="card__select" aria-hidden="true"><i></i><i></i><i></i><i></i><b>card / ${c.index}${c.locked ? ' · <span class="is-shut-label">locked</span><span class="is-open-label">open study</span>' : ' · open study'}</b></div>
       </div>
       <p class="sr-only" id="card-stats-${i}">${statsOf(c)}</p>
       <div class="card__shadow" aria-hidden="true"></div>
@@ -136,11 +137,13 @@ window.mountBinder = function (document) {
   const countOf = (id) => (id === 'all' ? CARDS.length : CARDS.filter((c) => c.groups.includes(id)).length);
   $('spineTabs').innerHTML = FILTERS.map((f) => `
     <li><button type="button" class="spine__tab" data-filter="${f.id}" aria-pressed="${f.id === 'all'}">
+      <svg class="spine__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3v18M17 3v18M3 7h18M3 17h18"/></svg>
       <span><span class="spine__long">${f.long}</span><span class="spine__short">${f.short}</span></span>
       <b aria-label="${countOf(f.id)} studies">${countOf(f.id)}</b>
     </button></li>`).join('');
   const spineFootText = () => { const n = CARDS.filter(shut).length; return `${CARDS.length} studies · ${n ? `${n} locked` : 'unlocked'}`; };
   $('spineFoot').textContent = spineFootText();
+  $('layerName').textContent = `frame / Binder · ${CARDS.length} studies`;
   const spineTabs = [...document.querySelectorAll('.spine__tab')];
   const parts = pockets.map((p) => ({
     pocket: p, card: p.querySelector('.card'), body: p.querySelector('.card__body'),
@@ -256,7 +259,13 @@ window.mountBinder = function (document) {
   const lifted = new Set();
   const MASK_STEP = 3;
   let drawn = '';
+  let drawnPage = '';
   const buildMasks = () => {
+    // The shader cuts its own sleeves and the raised card out of the light, every
+    // frame, so its sheet carries no mask: a new SVG mask takes the browser a frame
+    // to decode, and the glare blinked each time a card rose or sank (Ryan,
+    // 11 November: "when moving between cards"). It redraws here while it is still.
+    flair?.redraw();
     let d = '', sleeves = '';
     geo.faces.forEach((f) => { d += roundRect(f.x, f.y, f.w, f.h, 6) + roundRect(...f.art, 4); });
     // the glare keeps half a pixel inside each sleeve's welded edge, so its
@@ -285,9 +294,12 @@ window.mountBinder = function (document) {
     if (key === drawn) return;   // a card moving where it covers nothing changes nothing
     drawn = key;
     const onFoil = prismMask(geo.bw, geo.bh, d), onSleeves = prismMask(geo.bw, geo.bh, sleeves), onPage = prismMask(geo.bw, geo.bh, geo.page);
-    prism.style.webkitMaskImage = onFoil; prism.style.maskImage = onFoil;
-    for (const el of sheetsOn.sleeves) { el.style.webkitMaskImage = onSleeves; el.style.maskImage = onSleeves; }
-    for (const el of sheetsOn.page) { el.style.webkitMaskImage = onPage; el.style.maskImage = onPage; }
+    if (!flair) {
+      prism.style.webkitMaskImage = onFoil; prism.style.maskImage = onFoil;
+      for (const el of sheetsOn.sleeves) { el.style.webkitMaskImage = onSleeves; el.style.maskImage = onSleeves; }
+    } else for (const el of sheetsOn.sleeves) { el.style.webkitMaskImage = 'none'; el.style.maskImage = 'none'; }
+    // the page's own mask changes only with the layout; setting it again re-decodes it
+    if (onPage !== drawnPage) { drawnPage = onPage; for (const el of sheetsOn.page) { el.style.webkitMaskImage = onPage; el.style.maskImage = onPage; } }
   };
   // Open on the homepage: the inside cover shows OPEN_COVER of itself inside
   // the content column, then the flat spine, then the page's margin.
@@ -412,10 +424,12 @@ window.mountBinder = function (document) {
   let pointer = null;
   let lx = HOME[0], ly = HOME[1];
   let state = 'seated';      // seated | opening | open | closing | posed
-  // The reflection's slow sway, at 70% of its first speed (Ryan, 20 October):
-  // a cosine across the page and a sine down it, each on its own period.
-  const SWAY_X = 2 * Math.PI / .259, SWAY_Y = 2 * Math.PI / .203;   // seconds
-  const swayAt = (s) => [.5 + .42 * Math.cos(s * .259), .46 + .32 * Math.sin(s * .203)];
+  // The reflection's slow sway, at 70% of its first speed (Ryan, 20 October),
+  // and 70% of that again (10 November): a cosine across the page and a sine
+  // down it, each on its own period.
+  const SWAY_WX = .259 * .7, SWAY_WY = .203 * .7;   // radians a second
+  const SWAY_X = 2 * Math.PI / SWAY_WX, SWAY_Y = 2 * Math.PI / SWAY_WY;   // seconds
+  const swayAt = (s) => [.5 + .42 * Math.cos(s * SWAY_WX), .46 + .32 * Math.sin(s * SWAY_WY)];
   // The sheets that follow the reflection. The browser moves them itself:
   // each sheet rides two wrappers whose sway is a looping Web Animation of
   // `transform`, one across and one down, so the two periods never share a
@@ -436,6 +450,7 @@ window.mountBinder = function (document) {
     return { el, tilt, across, down };
   });
   let swayAnims = [], swaySize = '', swayVisible = false, lampClock = 0, tiltNow = [0, 0];
+  let flair = null;   // the light as a shader, when it runs (below)
   // The lamp sways only while a pointer is over the binder, and holds still
   // where it is the rest of the time: motion that starts on its own and runs
   // beside the content needs a way to stop it (WCAG 2.2.2), and a still lamp
@@ -451,11 +466,16 @@ window.mountBinder = function (document) {
   function syncSway() {
     const run = swayVisible && swayAsked && !document.hidden && state === 'seated' && !leaf && !swayHeld();
     swayAnims.forEach((a) => (run ? a.play() : a.pause()));
+    // the shader's lamp keeps its own slow drift whenever the binder is on
+    // screen and at rest, pointer or not (Ryan, 11 November: subtle by default)
+    flair?.sync(swayVisible && !document.hidden && state === 'seated' && !leaf && !swayHeld());
     // the bench's readout of where the lamp is (the specimen page only)
     if (run && !lampClock && !window.BINDER_SHARE) lampClock = setInterval(readLamp, 250);
     if (!run && lampClock) { clearInterval(lampClock); lampClock = 0; }
   }
   const buildSway = () => {
+    // the shader moves the lamp (and the steel) itself: no sheets to sway
+    if (flair) { swayAnims.forEach((a) => a.cancel()); swayAnims = []; swaySize = ''; syncSway(); return; }
     const key = `${size.w}x${size.h}`;
     if (key === swaySize && swayAnims.length) return;
     const at = swayAnims[0]?.currentTime ?? 0;   // a resize keeps the sway where it was
@@ -498,6 +518,7 @@ window.mountBinder = function (document) {
   // the pointer leans the page a little, so the glare drifts away from it
   const setTilt = (dx, dy) => {
     tiltNow = [dx, dy];
+    if (flair) return;
     for (const { tilt } of sheets) tilt.style.transform = `translate3d(${(dx * size.w).toFixed(1)}px, ${(dy * size.h).toFixed(1)}px, 0)`;
   };
   // The steel catches the same lamp: the plate's glint at its height, and each
@@ -511,7 +532,198 @@ window.mountBinder = function (document) {
     });
     ro.light.textContent = `${lx.toFixed(2)}, ${ly.toFixed(2)}`;
   };
+  // ---- the light as a shader (a trial) ----
+  // One lamp, centred over the binder (Ryan, 11 November): a filled sun glare
+  // with a soft lens flare. At rest it drifts a little on two slow sines;
+  // scrolling throws it, and a spring brings it home, so the light swings
+  // with the page and settles. The pointer still leans it a little. Its
+  // place is integrated in time (dt), not per frame, so a dropped frame or a
+  // pause never jumps it. The flare's ghosts lie on the line from the lamp
+  // through the middle of the window, as a lens's do, so they slide as the
+  // binder scrolls past. It draws at half the binder's size (the light is
+  // soft), only while the binder is on screen and at rest, and leaves one
+  // still frame otherwise. The steel's glint follows the same lamp.
+  const FLAIR_VS = 'attribute vec2 p; varying vec2 v; void main(){ v = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }';
+  const FLAIR_FS = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying vec2 v;
+uniform vec2 uRes; uniform vec2 uLight; uniform vec2 uOptic; uniform float uTime; uniform float uMove;
+uniform vec4 uSlot[12]; uniform float uSlotN; uniform vec4 uHole[3]; uniform float uHoleOwner[3]; uniform float uHoleN;
+float g(float x, float w){ return exp(-(x * x) / (w * w)); }
+float rrect(vec2 p, vec4 r, float rad){ vec2 q = abs(p - (r.xy + r.zw * .5)) - (r.zw * .5 - rad); return length(max(q, 0.)) + min(max(q.x, q.y), 0.) - rad; }
+void main(){
+  vec2 px = vec2(v.x, 1. - v.y) * uRes;
+  vec2 L = uLight * uRes;
+  vec2 d = px - L;
+  float r = length(d);
+  // the band: a soft beam through the lamp, leaning 22 degrees
+  vec2 n = vec2(cos(.384), sin(.384));
+  float across = dot(d, n);
+  vec3 tint = mix(vec3(1., .86, .96), vec3(.86, .96, 1.), smoothstep(-160., 160., across));
+  tint = mix(tint, vec3(.88, 1., .9), g(across - 120., 90.) * .5);
+  vec3 col = tint * (g(across, 190.) * .3 + g(across, 36.) * .16) * (.55 + .45 * g(r, 520.));
+  // the sun: a filled disc with a soft edge, a hot core, a halo and a wide falloff
+  float disc = smoothstep(165., 95., r);   // 2.5x the size, .7 the strength (Ryan, 11 November)
+  col += vec3(1., .985, .96) * (disc * .31 + g(r, 70.) * .31 + g(r, 375.) * .18 + exp(-r / 850.) * .056);
+  // a faint starburst and a horizontal streak, as a lens catches a bright light
+  float a = atan(d.y, d.x);
+  float rays = pow(abs(cos(a * 6. + .3)), 30.) * .6 + pow(abs(cos(a * 9. - .8)), 48.) * .4;
+  col += vec3(1.) * rays * g(r, 600.) * smoothstep(75., 200., r) * .07;
+  col += vec3(.92, .96, 1.) * g(d.y, 8.75) * g(d.x, 1300.) * .1;
+  // the ghosts: filled, soft discs with a coloured rim, along the lens's axis
+  vec2 axis = (uOptic - L) * .9 + vec2(.14, .2) * uRes;
+  float lift = 1. + uMove * 1.4;   // a little brighter while the light swings
+  for (int k = 0; k < 4; k++) {
+    float t = k == 0 ? .42 : (k == 1 ? .86 : (k == 2 ? 1.34 : 1.9));
+    float rad = k == 0 ? 50. : (k == 1 ? 120. : (k == 2 ? 75. : 175.));
+    vec3 hue = k == 0 ? vec3(1., .84, .95) : (k == 1 ? vec3(.84, .93, 1.) : (k == 2 ? vec3(.88, 1., .9) : vec3(1., .93, .84)));
+    float rg = length(px - (L + axis * t));
+    float fill = smoothstep(rad, rad * .55, rg);
+    float rim = g(rg - rad * .9, rad * .13);
+    col += hue * (fill * .056 + rim * .063) * lift;
+  }
+  // a fixed dither, half a step of 8-bit either way: these gradients are faint
+  // enough to fall into visible bands, and bands crawl (flicker) as the lamp moves
+  float dn = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - .5;
+  // the light falls on the sleeves only, less wherever a raised card stands over
+  // another pocket's plastic (it rides over its neighbours, under its own sleeve)
+  float m = 0.;
+  for (int k = 0; k < 12; k++) {
+    if (float(k) >= uSlotN) break;
+    float cov = clamp(.5 - rrect(px, uSlot[k], 5.5) * .5, 0., 1.);
+    for (int j = 0; j < 3; j++) {
+      if (float(j) >= uHoleN) break;
+      if (abs(uHoleOwner[j] - float(k)) > .5) {
+        vec4 h = uHole[j];
+        vec2 o = step(h.xy, px) * step(px, h.xy + h.zw);
+        cov *= 1. - o.x * o.y;
+      }
+    }
+    m = max(m, cov);
+  }
+  gl_FragColor = vec4((col * .5 + dn / 255.) * m, 1.);   // about the CSS band's strength (.49), so the cards' text keeps its contrast
+}`;
+  const makeFlair = () => {
+    const sheet = binder.querySelector('.binder__glare');
+    if (!sheet) return null;
+    const canvas = document.createElement('canvas');
+    canvas.className = 'binder__flair';
+    canvas.setAttribute('aria-hidden', 'true');
+    const gl = canvas.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'low-power', preserveDrawingBuffer: false });
+    if (!gl) return null;
+    const shader = (type, src) => { const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh); return gl.getShaderParameter(sh, gl.COMPILE_STATUS) ? sh : null; };
+    const vs = shader(gl.VERTEX_SHADER, FLAIR_VS), fs = shader(gl.FRAGMENT_SHADER, FLAIR_FS);
+    if (!vs || !fs) return null;
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+    gl.useProgram(prog);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = Object.fromEntries(['uRes', 'uLight', 'uOptic', 'uTime', 'uMove', 'uSlot', 'uSlotN', 'uHole', 'uHoleOwner', 'uHoleN'].map((k) => [k, gl.getUniformLocation(prog, k)]));
+    sheet.prepend(canvas);
+    stage.classList.add('stage--flair');
+    const SCALE = .5;
+    const LAMP = [.56, .21];                   // the one light, over the middle card's picture (the pockets' centre, not the binder's: that is a gutter)
+    const W = 6.2, ZETA = .62;                 // the spring home: about a second, one soft overshoot
+    let raf = 0, running = false, last = 0;
+    let pos = [...LAMP], vel = [0, 0], kick = [0, 0], steelY = -1, move = 0;
+    const slotArr = new Float32Array(48), holeArr = new Float32Array(12), ownArr = new Float32Array(3), owners = new Map();
+    // scrolling throws the light: down the page as the page goes up, a little across
+    let lastScroll = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY, dy = y - lastScroll;
+      lastScroll = y;
+      if (!running) return;
+      kick[1] = Math.max(-.34, Math.min(.34, kick[1] + dy * .0012));
+      kick[0] = Math.max(-.16, Math.min(.16, kick[0] - dy * .00045));
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // The homepage mounts a fresh binder each time it is visited: the last one's
+    // loop, listener and GL context go first, or each visit leaves a context
+    // alive (browsers keep about sixteen) and a listener holding the old binder.
+    window.__binderFlairDispose?.();
+    window.__binderFlairDispose = () => {
+      cancelAnimationFrame(raf); raf = 0; running = false;
+      window.removeEventListener('scroll', onScroll);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+    };
+    const frame = (now) => {
+      const w = Math.max(1, Math.round(size.w * SCALE)), h = Math.max(1, Math.round(size.h * SCALE));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+      const r = binder.getBoundingClientRect();   // read first, before this frame writes any style
+      const s = now / 1000;
+      if (running) {
+        const dt = last ? Math.min(.05, (now - last) / 1000) : 0;
+        last = now;
+        const fade = Math.exp(-dt / .42);
+        kick = [kick[0] * fade, kick[1] * fade];
+        // the drift at rest: two slow sines each way, a few percent of the binder
+        const drift = [.03 * Math.sin(s * .29) + .012 * Math.sin(s * .71 + 1.3), .022 * Math.cos(s * .23) + .01 * Math.sin(s * .57 + 2.1)];
+        const target = [0, 1].map((i) => LAMP[i] + drift[i] + kick[i] + tiltNow[i] * .45);
+        // a damped spring toward it, in small steps so a slow frame can't overshoot
+        const steps = Math.max(1, Math.ceil(dt / .012)), h2 = dt / steps;
+        for (let k = 0; k < steps; k++) for (const i of [0, 1]) {
+          vel[i] += (W * W * (target[i] - pos[i]) - 2 * ZETA * W * vel[i]) * h2;
+          pos[i] += vel[i] * h2;
+        }
+      } else if (swayHeld()) {
+        pos = [lx, ly]; vel = [0, 0];
+      }
+      lx = pos[0]; ly = pos[1];
+      // the lens's middle: the window's centre, in the binder's own pixels
+      const kx = size.w / (r.width || 1), ky = size.h / (r.height || 1);
+      // the sleeves, half a pixel and a bit in (the canvas is half size, so its
+      // edge is soft), and the raised cards where they are this frame, a pixel out
+      let n = 0;
+      owners.clear();
+      geo.slots.forEach((q, el) => { if (n < 12) { slotArr.set([q.x + 1.5, q.y + 1.5, q.w - 3, q.h - 3], n * 4); owners.set(el, n); n++; } });
+      let hn = 0;
+      lifted.forEach((p) => {
+        if (hn >= 3 || p.classList.contains('is-flying') || p.classList.contains('is-open')) return;
+        const cb = p.querySelector('.card').getBoundingClientRect();
+        holeArr.set([(cb.left - r.left) * kx - 1, (cb.top - r.top) * ky - 1, cb.width * kx + 2, cb.height * ky + 2], hn * 4);
+        ownArr[hn] = owners.get(p) ?? -1; hn++;
+      });
+      gl.uniform4fv(U.uSlot, slotArr); gl.uniform1f(U.uSlotN, n);
+      gl.uniform4fv(U.uHole, holeArr); gl.uniform1fv(U.uHoleOwner, ownArr); gl.uniform1f(U.uHoleN, hn);
+      gl.uniform2f(U.uRes, size.w, size.h);
+      gl.uniform2f(U.uLight, pos[0], pos[1]);
+      gl.uniform2f(U.uOptic, (innerWidth / 2 - r.left) * kx, (innerHeight / 2 - r.top) * ky);
+      gl.uniform1f(U.uTime, (s * .7) % (2 * Math.PI));   // wrapped, so the shimmer never loses precision
+      // the ghosts' lift eases too, so wheel steps don't pulse them
+      move += (Math.min(1, Math.hypot(vel[0], vel[1]) * 2.5) - move) * (running ? .08 : 1);
+      gl.uniform1f(U.uMove, move);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      // the steel's glint at the lamp's height, written last (after every read) and only when it has moved
+      if (Math.abs(ly - steelY) > .003) { steelY = ly; lampToSteel(); }
+    };
+    const loop = (now) => { frame(now); raf = requestAnimationFrame(loop); };
+    return {
+      redraw() { if (!running) frame(performance.now()); },
+      sync(run) {
+        if (run === running && (run ? raf : true)) { if (!run) requestAnimationFrame(frame); return; }
+        cancelAnimationFrame(raf); raf = 0;
+        running = run; last = 0;
+        if (run) raf = requestAnimationFrame(loop);
+        else { vel = [0, 0]; kick = [0, 0]; requestAnimationFrame(frame); }   // a still frame where the lamp now hangs
+      },
+    };
+  };
+  const flairWanted = (() => {
+    try { return (new URLSearchParams(window.location.search).get('light') ?? window.BINDER_LIGHT ?? 'shader') === 'shader'; } catch { return false; }
+  })();
+  if (flairWanted) { flair = makeFlair(); flair?.sync(false); }
+
   function readLamp() {
+    if (flair) { ro.light.textContent = `${lx.toFixed(2)}, ${ly.toFixed(2)}`; return; }
     const [sx, sy] = swayAt((swayAnims[0]?.currentTime ?? 0) / 1000);
     lx = sx + tiltNow[0]; ly = sy + tiltNow[1];
     if (!swayAnims.length) lampToSteel();
@@ -576,6 +788,24 @@ window.mountBinder = function (document) {
   const listed = () => CARDS.map((_, i) => i).filter(inFilter);
   const pageCount = () => Math.max(1, Math.ceil(listed().length / perPage()));
   const pageOf = (i) => Math.max(0, Math.floor(listed().indexOf(i) / perPage()));
+  const spinePages = $('spinePages');
+  const syncSpinePages = (still) => {
+    const per = perPage(), n = pageCount(), list = listed();
+    const two = (k) => String(k).padStart(2, '0');
+    if (spinePages.children.length !== n || spinePages.dataset.filter !== filter) {
+      spinePages.dataset.filter = filter;
+      spinePages.innerHTML = Array.from({ length: n }, (_, k) => {
+        const first = k * per + 1, last = Math.min(list.length, k * per + per);
+        return `<li><button type="button" class="spine__page" data-page="${k}">
+          <svg class="spine__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="3" width="14" height="18" rx="1.5"/></svg>
+          <span>Page ${k + 1}</span><b>${first === last ? two(first) : `${two(first)}–${two(last)}`}</b></button></li>`;
+      }).join('');
+    }
+    [...spinePages.querySelectorAll('.spine__page')].forEach((x, k) => {
+      if (k === page) x.setAttribute('aria-current', 'page'); else x.removeAttribute('aria-current');
+      x.setAttribute('aria-disabled', String(!still || k === page));
+    });
+  };
   const syncControls = () => {
     syncSway();   // the lamp sways only while the binder is at rest
     const still = state === 'seated';
@@ -584,6 +814,7 @@ window.mountBinder = function (document) {
     // the page, and Next on the last page would lose the reader's place
     pager.prev.setAttribute('aria-disabled', String(!still || page === 0));
     pager.next.setAttribute('aria-disabled', String(!still || page >= pageCount() - 1));
+    syncSpinePages(still);
     pick.disabled = !still && state !== 'posed';
     b.open.disabled = !(still || state === 'posed');
     layoutSel.disabled = !(still || state === 'posed');
@@ -1939,8 +2170,21 @@ window.mountBinder = function (document) {
   // still read the study's public overview, as the site's prompt offered.
   if (ON_HOME) {
     lock.note.textContent = 'Incorrect password. Try again.';
+    // Overview first (10 November): the door that works for everyone leads,
+    // the password is second, and the foot says how to ask for one. Seven of
+    // the twelve studies are locked, so most first clicks land here.
+    lock.overview = $('lockOverview');
+    lock.overview.textContent = 'Read the overview';
+    lock.overview.className = 'btn btn--primary';
+    lock.unlock.textContent = 'I have the password';
+    lock.unlock.classList.remove('btn--primary');
+    lock.ask.prepend(lock.overview);
+    const keep = $('lockKeep');
+    keep.className = '';
+    $('lockAlt').append(keep);
+    $('lockAlt').classList.add('lock-dialog__alt--foot');
     $('lockAlt').hidden = false;
-    $('lockOverview').addEventListener('click', () => {
+    lock.overview.addEventListener('click', () => {
       const c = CARDS[sel];
       dlg.close();
       window.__binderOverview?.(c.slug);
@@ -1959,19 +2203,151 @@ window.mountBinder = function (document) {
   const lockStep = (askFirst) => {
     lock.ask.hidden = !askFirst;
     lock.form.hidden = askFirst;
-    (askFirst ? lock.unlock : lock.input).focus();
+    (askFirst ? (lock.overview ?? lock.unlock) : lock.input).focus();
+  };
+  // ---- the card in the dialog (N1, drawn out) ----
+  const lockSleeve = $('lockSleeve');
+  let asking = null;    // the card in the dialog: its part, the copy and its flight
+  const LOCK_MS = { lift: 240, fly: 900, seat: 1110, spin: [300, 840], plastic: [870, 930], copy: [900, 1350], total: 1350 };
+  const BACK_MS = { lift: 140, home: 620, spin: [80, 560], total: 760 };
+  const fillSleeve = (p, c) => {
+    const cr = cardBox(p);
+    const small = window.matchMedia('(max-width: 599px)').matches;
+    const inner = small ? 84 : 126, pad = small ? 6 : 7;
+    lockSleeve.style.height = `${pad * 2 + (inner * cr.h) / cr.w}px`;
+    lockSleeve.innerHTML = `<div class="lock-card"><div class="card__body">${frontHTML(c, 0)}${c.back ? backHTML(c) : ''}</div></div><span class="lock-dialog__plastic"></span>`;
+    const holder = lockSleeve.firstElementChild;
+    const ps = getComputedStyle(p.pocket), ss = getComputedStyle(stage);
+    holder.classList.toggle('stage--holo', stage.classList.contains('stage--holo'));
+    Object.assign(holder.style, { width: `${cr.w}px`, height: `${cr.h}px` });
+    for (const v of ['--h', '--s', '--ox', '--oy']) holder.style.setProperty(v, ps.getPropertyValue(v));
+    for (const v of ['--BW', '--BH', '--blanket']) holder.style.setProperty(v, ss.getPropertyValue(v));
+    holder.style.setProperty('--cw', grid.style.getPropertyValue('--cw'));
+    holder.querySelectorAll('img[data-src]').forEach((img) => { img.src = img.dataset.src; });
+    const s = inner / cr.w;
+    holder.style.transform = tf(0, 0, s);
+    return {
+      p, holder, s, plastic: lockSleeve.querySelector('.lock-dialog__plastic'), anims: null,
+      turn: { body: holder.querySelector('.card__body'), front: holder.querySelector('.face--front'), back: holder.querySelector('.face--back') },
+    };
+  };
+  // where the card is now, as a translation of the copy from its seat in the sleeve
+  const fromSleeve = (a) => {
+    const slot = lockSleeve.getBoundingClientRect(), cr = cardBox(a.p);
+    return { cr, dx: cr.x - (slot.left + a.holder.offsetLeft), dy: cr.y - (slot.top + a.holder.offsetTop) };
+  };
+  const dialogFace = (on) => ({ backgroundColor: on ? 'rgb(255, 255, 255)' : 'rgba(255, 255, 255, 0)', borderColor: on ? 'rgb(229, 229, 229)' : 'rgba(229, 229, 229, 0)', boxShadow: on ? '0 30px 60px -20px rgba(0, 0, 0, .45)' : '0 30px 60px -20px rgba(0, 0, 0, 0)' });
+  const sleeveFace = (on) => ({ backgroundColor: on ? 'rgb(43, 46, 52)' : 'rgba(43, 46, 52, 0)', boxShadow: on ? 'inset 0 2px 5px rgba(0, 0, 0, .55)' : 'inset 0 2px 5px rgba(0, 0, 0, 0)' });
+  const copyOf = () => [...dlg.children].filter((el) => el !== lockSleeve && !el.hidden);
+  const flyIn = (a, fromY) => {
+    const { cr, dx, dy } = fromSleeve(a);
+    const { out, pick } = rise(cr, fromY);
+    const at = (t) => t / LOCK_MS.total, opts = { duration: LOCK_MS.total, fill: 'both', easing: 'linear' };
+    const tuck = 14;
+    const ease = 'cubic-bezier(.2,.8,0,1)';
+    return [
+      a.holder.animate([
+        { offset: 0, transform: tf(dx, dy + fromY, 1), easing: 'cubic-bezier(.3,.6,.2,1)' },
+        { offset: at(LOCK_MS.lift), transform: tf(dx, dy + out, pick), easing: 'cubic-bezier(.5,.05,.25,1)' },
+        { offset: at(LOCK_MS.fly), transform: tf(0, -tuck, a.s), easing: 'cubic-bezier(.3,.7,.25,1)' },
+        { offset: at(LOCK_MS.seat), transform: tf(0, 0, a.s) },
+        { offset: 1, transform: tf(0, 0, a.s) },
+      ], opts),
+      ...spin(a.turn, 0, 360, at(LOCK_MS.spin[0]), at(LOCK_MS.spin[1]), opts),
+      dlg.animate([
+        { offset: 0, ...dialogFace(false) }, { offset: at(LOCK_MS.lift), ...dialogFace(false), easing: ease },
+        { offset: at(860), ...dialogFace(true) }, { offset: 1, ...dialogFace(true) },
+      ], opts),
+      lockSleeve.animate([
+        { offset: 0, ...sleeveFace(false) }, { offset: at(LOCK_MS.lift), ...sleeveFace(false), easing: ease },
+        { offset: at(860), ...sleeveFace(true) }, { offset: 1, ...sleeveFace(true) },
+      ], opts),
+      a.plastic.animate([
+        { offset: 0, opacity: 0 }, { offset: at(LOCK_MS.plastic[0]), opacity: 0 }, { offset: at(LOCK_MS.plastic[1]), opacity: 1 }, { offset: 1, opacity: 1 },
+      ], opts),
+      ...copyOf().map((el) => fadeUp(el, at(LOCK_MS.copy[0]), 1, opts)),
+    ];
+  };
+  // "Keep it in the sleeve" and Escape send the card home the way it came:
+  // out of the dialog's sleeve, the turn run backwards, and into its pocket
+  let leaving = false;
+  const sendBack = () => {
+    if (!dlg.open || leaving) return;
+    if (!asking || reduced()) { dlg.close(); return; }
+    leaving = true;
+    asking.anims?.forEach((x) => x.cancel());
+    dlg.classList.remove('is-flying');
+    dlg.classList.add('is-leaving');
+    const a = asking;
+    const { dx, dy } = fromSleeve(a);
+    const at = (t) => t / BACK_MS.total, opts = { duration: BACK_MS.total, fill: 'both', easing: 'linear' };
+    const anims = [
+      a.holder.animate([
+        { offset: 0, transform: tf(0, 0, a.s), easing: 'cubic-bezier(.4,0,.6,1)' },
+        { offset: at(BACK_MS.lift), transform: tf(0, -14, a.s), easing: 'cubic-bezier(.45,.05,.3,1)' },
+        { offset: at(BACK_MS.home), transform: tf(dx, dy, 1) },
+        { offset: 1, transform: tf(dx, dy, 1) },
+      ], opts),
+      ...spin(a.turn, 360, 0, at(BACK_MS.spin[0]), at(BACK_MS.spin[1]), opts),
+      a.plastic.animate([{ offset: 0, opacity: 1 }, { offset: at(60), opacity: 0 }, { offset: 1, opacity: 0 }], opts),
+      ...copyOf().map((el) => fadeOut(el, at(200), opts)),
+      dlg.animate([{ offset: 0, ...dialogFace(true) }, { offset: at(140), ...dialogFace(true) }, { offset: at(460), ...dialogFace(false) }, { offset: 1, ...dialogFace(false) }], opts),
+      lockSleeve.animate([{ offset: 0, ...sleeveFace(true) }, { offset: at(140), ...sleeveFace(true) }, { offset: at(460), ...sleeveFace(false) }, { offset: 1, ...sleeveFace(false) }], opts),
+    ];
+    a.anims = anims;
+    settled(anims).then(() => { leaving = false; if (dlg.open) dlg.close(); });
+  };
+  dlg.addEventListener('cancel', (e) => {
+    if (!asking || reduced()) return;
+    e.preventDefault();
+    sendBack();
+  });
+  // however the dialog closes (back to its sleeve, the overview, the
+  // password), the card is home in its pocket and the copy is gone
+  const putBack = () => {
+    if (!asking) return;
+    asking.anims?.forEach((x) => x.cancel());
+    asking.p.pocket.classList.remove('is-asking');
+    asking = null;
+    lockSleeve.innerHTML = '';
+    dlg.classList.remove('lock-dialog--card', 'is-flying', 'is-leaving');
   };
   const challenge = () => {
     const p = parts[sel], c = CARDS[sel];
     dlgTitle.textContent = `${c.title} is password protected`;
+    if (ON_HOME) {
+      dlgTitle.textContent = c.title;
+      $('lockBody').textContent = 'The overview is open. Its screens include employer work, so they stay behind a password.';
+      // the site says where to write (CaseStudyBinder sets it); without it the line stays out
+      const mail = window.__binderEmail;
+      $('lockAskLine').hidden = !mail;
+      if (mail) $('lockAskRyan').href = `${mail}?subject=${encodeURIComponent(`Password for the ${c.title} case study`)}`;
+      $('lockMeta').textContent = `${c.index} · ${c.typeLabel} · ${c.year}`;
+      $('lockSub').textContent = c.subtitle || '';
+      $('lockSub').hidden = !c.subtitle;
+    }
     lock.input.value = '';
     wrong(false);
     lock.site.href = `https://www.rdeboerdesigns.com/work/${c.slug}/`;
+    const fromY = liftNow(p.card);
     p.card.classList.remove('card--nudge');
     void p.card.offsetWidth;
-    if (!reduced()) p.card.classList.add('card--nudge');
+    if (ON_HOME) {
+      dlg.classList.add('lock-dialog--card');
+      asking = fillSleeve(p, c);
+      p.pocket.classList.add('is-asking');
+    } else if (!reduced()) p.card.classList.add('card--nudge');
     live.textContent = `${c.title} is password protected.`;
     dlg.showModal();
+    if (asking && !reduced()) {
+      dlg.classList.add('is-flying');
+      const anims = flyIn(asking, fromY);
+      asking.anims = anims;
+      settled(anims).then(() => {
+        dlg.classList.remove('is-flying');
+        if (asking?.anims === anims) { anims.forEach((x) => x.cancel()); asking.anims = null; }
+      });
+    }
     // the page stays put under the dialog: Safari scrolled it behind the
     // backdrop (the real document's root, also on the homepage's shadow root)
     window.document.documentElement.style.overflow = 'hidden';
@@ -1979,7 +2355,7 @@ window.mountBinder = function (document) {
   };
   lock.unlock.addEventListener('click', () => lockStep(false));
   $('lockBack').addEventListener('click', () => { wrong(false); lockStep(true); });
-  $('lockKeep').addEventListener('click', () => dlg.close());
+  $('lockKeep').addEventListener('click', sendBack);
   let unlockedFromDialog = false;
   lock.form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1994,6 +2370,8 @@ window.mountBinder = function (document) {
     openStudy();
   });
   dlg.addEventListener('close', () => {
+    putBack();
+    leaving = false;
     window.document.documentElement.style.overflow = '';
     parts[sel].card.classList.remove('card--nudge');
     if (unlockedFromDialog) { unlockedFromDialog = false; return; }   // the card is on its way
@@ -2454,6 +2832,12 @@ window.mountBinder = function (document) {
     live.textContent = `${f.long}: ${countOf(f.id)} studies.`;
   });
   const off = (el) => el.getAttribute('aria-disabled') === 'true';
+  spinePages.addEventListener('click', (e) => {
+    const row = e.target.closest('.spine__page');
+    if (!row || off(row)) return;
+    if (state === 'posed') applyPose('live');
+    turnBy(Number(row.dataset.page) - page);
+  });
   pager.prev.addEventListener('click', () => { if (!off(pager.prev)) turnBy(-1); });
   pager.next.addEventListener('click', () => { if (!off(pager.next)) turnBy(1); });
   // On a touch screen the page turns under a finger. A sideways drag starts

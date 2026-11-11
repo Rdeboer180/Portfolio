@@ -2249,7 +2249,8 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
 @media (max-width: $breakpoint-md) {
   .hero {
     &__nav {
-      padding: $spacing-md $spacing-xl;
+      // the wordmark sits on the same fluid edge as the sections below it
+      padding: $spacing-md var(--gutter);
 
       &-links {
         gap: $spacing-lg;
@@ -2420,7 +2421,7 @@ $intro-easing:        cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 }
 
-@media (max-width: 1042px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .hero {
     &__actions {
       flex-direction: column;

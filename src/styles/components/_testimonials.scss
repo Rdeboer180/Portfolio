@@ -318,7 +318,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: $spacing-md $spacing-xl;
-    margin: $spacing-xl 0 $spacing-2xl;
+    margin: 0 0 $spacing-2xl;
   }
 
   &__pager {
@@ -448,7 +448,6 @@
     &[aria-selected='true'] {
       background: $color-primary-light;
       .testimonials__avatar { background: $color-primary-dark; }
-      .testimonials__year { color: $color-neutral-standard; }   // the muted grey is 4.3:1 on the tint
     }
   }
 
@@ -482,12 +481,6 @@
   }
 
   &__person-first { display: none; }
-
-  &__year {
-    font-family: $font-family-mono;
-    font-size: 11px;
-    color: $color-neutral-muted;
-  }
 
   // The thread's through-line, set the way the old recommendation cards set
   // their core value: small, tracked capitals under the name.
@@ -606,24 +599,6 @@
     box-shadow: inset 0 -2px 0 $color-primary-md;
   }
 
-  &__foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: $spacing-sm $spacing-lg;
-    margin: 10px 0 0 52px;
-  }
-
-  &__more {
-    font-size: 13px;
-    font-weight: $font-weight-semibold;
-    color: $color-primary-dark;
-    text-underline-offset: 3px;
-
-    &:hover { color: $color-neutral-dark; }
-    &:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: 2px; border-radius: 2px; }
-  }
-
   // The message box, as the way to reach Ryan
   &__composer {
     display: flex;
@@ -735,7 +710,9 @@
     &__list::-webkit-scrollbar { display: none; }
     &__person {
       flex: 0 0 auto;
-      width: 64px;   // the fifth peeks in, so the row reads as one that scrolls
+      // four and a half fit, so the fifth is always cut and the row reads as one that scrolls
+      width: calc((100% - 16px) / 4.5);
+      min-width: 60px;
       grid-template-columns: 1fr;
       justify-items: center;
       gap: 6px;
@@ -746,14 +723,13 @@
     // first names only, so the row reads at a glance; the full name stays the tab's name
     &__person-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     &__person-first { display: block; font-size: 12px; font-weight: $font-weight-semibold; text-align: center; }
-    &__year, &__preview { display: none; }
+    &__preview { display: none; }
     &__convo-head { padding: 12px $spacing-lg; }
     &__messages { padding: $spacing-lg; }
     &__sender { padding-left: 0; }
     &__stack { grid-template-columns: 1fr; }
     &__stack > .testimonials__avatar { display: none; }
     &__thread p { font-size: 15px; }
-    &__foot { margin-left: 0; }
     &__composer { flex-wrap: wrap; margin: 0 $spacing-lg $spacing-lg; padding: 12px; }
     &__send { height: 44px; }
   }
@@ -810,4 +786,353 @@
 @keyframes testimonials-message-in {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
+}
+
+// ── Canvas P1 (10 Nov 2026): the message window kept, its chrome calmed so
+// the binder stays the only loud object. Ink avatars, the open person on a
+// white row with an ink bar, how each person worked with Ryan in sentence
+// case, and the marked lines underlined rather than tinted. The LinkedIn
+// link sits on the header, once, instead of under every thread.
+.testimonials {
+  &__all {
+    flex-shrink: 0;
+    padding-bottom: 6px;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: none;
+    &:hover { color: $color-primary-dark; }
+    &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; border-radius: 2px; }
+  }
+
+  &__person[aria-selected='true'] {
+    background: $color-white;
+    .testimonials__avatar { background: $color-neutral-dark; }
+    // the ink bar belongs to the side list; the phone's row of initials has no left edge to mark
+    @media (min-width: #{$breakpoint-sm + 1}) { box-shadow: inset 2px 0 0 $color-neutral-dark; }
+  }
+
+  &__avatar--sm,
+  &__avatar--active { background: $color-neutral-dark; }
+
+  &__preview {
+    overflow: hidden;
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-regular;
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+  }
+
+  &__highlight {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-color: $color-primary-muted;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+}
+
+// ── The DMs on an iPad lying on the table (canvas O2's tablet around F2's
+// panel, 11 Nov 2026). The wood band is the tabletop. The tablet is an object
+// with its own material: an aluminium rim, the side wall the light catches
+// below it, black glass, a contact shadow and the binder's one light; the app
+// on its screen stays flat. On the app: white initials, ink for the person
+// open, one steel selection frame that travels down the list, an orange square
+// on every name not yet read, and each thread arriving a message at a time
+// with its marked lines selected and underlined in turn.
+@keyframes testimonials-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes testimonials-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes testimonials-sweep {
+  0% { background-size: 0% 100%; background-position: 0 0; text-decoration-color: transparent; }
+  50% { background-size: 100% 100%; background-position: 0 0; text-decoration-color: transparent; }
+  51% { background-size: 100% 100%; background-position: 100% 0; text-decoration-color: transparent; }
+  100% { background-size: 0% 100%; background-position: 100% 0; text-decoration-color: $color-primary; }
+}
+
+.testimonials--tablet {
+  $row: 62px;
+
+  .testimonials__nav { align-items: flex-end; flex-wrap: nowrap; }
+  .testimonials__note {
+    display: none;
+    @media (min-width: 1180px) and (hover: hover) {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-right: auto;
+      margin-left: var(--space-3xl);
+      font: 600 24px/1 'Caveat', var(--font-heading), cursive;
+      color: $color-neutral-standard;
+      transform: rotate(-3deg) translateY(10px);
+      svg { width: 56px; height: 56px; margin-top: 12px; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    }
+  }
+
+  // the tablet: a fixed height so the window never changes size, turned a
+  // touch off square on the table
+  .testimonials__tablet {
+    position: relative;
+    max-width: 1100px;
+    height: 790px;
+    margin: var(--space-2xl) 0 0 10px;
+    border-radius: 48px;
+    transform: rotate(-1.6deg);
+    // the contact shadow and the cast, under the one light
+    box-shadow:
+      0 2px 2px rgba(20, 22, 26, 0.28),
+      0 6px 10px rgba(20, 22, 26, 0.16),
+      0 26px 44px -10px rgba(20, 22, 26, 0.26),
+      0 64px 110px -28px rgba(20, 22, 26, 0.3);
+
+    // the side wall, the thickness the light catches below the rim
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 3px 0 -3px;
+      border-radius: inherit;
+      background: linear-gradient(180deg, #a6abb2 0%, #7d838b 60%, #5f646b 100%);
+    }
+  }
+  .testimonials__buttons {
+    position: absolute;
+    top: -3px;
+    right: 172px;
+    display: flex;
+    gap: 10px;
+    i { width: 44px; height: 8px; border-radius: 3px; background: linear-gradient(180deg, #d4d7db, #8d939b); }
+  }
+  .testimonials__rim {
+    position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 4px;
+    border-radius: 48px;
+    background: linear-gradient(140deg, #eef0f2 0%, #c3c8ce 22%, #e4e7ea 46%, #b2b8bf 70%, #d6dadf 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  }
+  .testimonials__bezel {
+    position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 24px;
+    border-radius: 44px;
+    background: #0c0d0f;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 0 0 2px rgba(0, 0, 0, 0.6);
+    // glare across the glass
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 22%, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.04) 100%);
+    }
+  }
+  .testimonials__camera {
+    position: absolute;
+    top: 8px;
+    left: calc(50% - 4px);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #3b4250 0%, #161a20 55%, #050608 100%);
+  }
+  .testimonials__screen {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    background: $color-white;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+  .testimonials__status {
+    flex: none;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    background: $color-secondary-lightest;
+    font: 600 12px/1 var(--font-body);
+    color: $color-neutral-dark;
+  }
+  .testimonials__status-end {
+    display: inline-flex;
+    gap: 8px;
+    svg { fill: none; stroke: $color-neutral-dark; stroke-width: 1.4; stroke-linecap: round; }
+    .is-fill { fill: $color-neutral-dark; stroke: none; }
+  }
+  .testimonials__shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 50% 34% at 46% -6%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 70%),
+      linear-gradient(116deg, rgba(255, 255, 255, 0) 34%, rgba(225, 232, 240, 0.1) 46%, rgba(255, 255, 255, 0) 58%);
+  }
+
+  // the app fills the screen: its own frame and cast belong to the tablet now
+  .testimonials__app {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  // ---- the people
+  .testimonials__people { position: relative; background: #fafbfb; }
+  .testimonials__list { position: relative; z-index: 1; padding-top: 12px; }
+  .testimonials__person {
+    position: relative;
+    grid-template-columns: 36px minmax(0, 1fr) 7px;
+    align-items: center;
+    gap: 12px;
+    height: $row;
+    padding: 0 28px;
+    background: transparent;
+    &:hover { background: transparent; .testimonials__avatar { border-color: rgba(27, 27, 27, 0.4); } }
+    &[aria-selected='true'] { background: transparent; box-shadow: none; }
+  }
+  .testimonials__avatar {
+    border-radius: 50%;
+    box-sizing: border-box;
+    background: $color-white;
+    color: $color-neutral-dark;
+    border: 1px solid rgba(27, 27, 27, 0.16);
+    // the ink lands on the name as the frame arrives: same curve, same 400ms
+    transition: background-color 400ms var(--ease-out), color 400ms var(--ease-out), border-color 400ms var(--ease-out);
+  }
+  .testimonials__person[aria-selected='true'] .testimonials__avatar,
+  .testimonials__avatar--sm,
+  .testimonials__avatar--active { background: $color-neutral-dark; color: $color-white; border-color: $color-neutral-dark; }
+  .testimonials__person-name { font-weight: $font-weight-bold; }
+  .testimonials__person.is-read .testimonials__person-name { font-weight: $font-weight-semibold; }
+  .testimonials__unread { width: 7px; height: 7px; background: $color-primary; transition: opacity $transition-fast; }
+  .testimonials__person.is-read .testimonials__unread { opacity: 0; }
+
+  // one selection frame, travelling to the person open
+  .testimonials__frame {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(15px + var(--row, 0) * #{$row});
+    height: 56px;
+    box-sizing: border-box;
+    background: $color-white;
+    border: 1px solid $color-secondary;
+    pointer-events: none;
+    // the house curve on the 400ms baseline: a sharp launch that settles long
+    transition: top 400ms var(--ease-out);
+    i { position: absolute; width: 7px; height: 7px; box-sizing: border-box; background: $color-white; border: 1px solid $color-secondary; }
+    i:nth-child(1) { left: -4px; top: -4px; }
+    i:nth-child(2) { right: -4px; top: -4px; }
+    i:nth-child(3) { left: -4px; bottom: -4px; }
+    i:nth-child(4) { right: -4px; bottom: -4px; }
+  }
+
+  .testimonials__meter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding: 0 28px 24px;
+    font: 400 11px/16px var(--font-mono);
+    color: $color-secondary-dark;
+  }
+  .testimonials__ticks {
+    display: inline-flex;
+    gap: 4px;
+    i { width: 7px; height: 7px; box-sizing: border-box; border: 1px solid $color-secondary; transition: background-color $transition-fast, border-color $transition-fast; }
+    i.is-read { background: $color-secondary-dark; border-color: $color-secondary-dark; }
+  }
+
+  // ---- the thread
+  .testimonials__convo { min-height: 0; }   // so the thread, not the screen, scrolls
+  .testimonials__messages { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 22px 24px; }
+  .testimonials__messages:focus-visible { outline: 2px solid $color-primary-dark; outline-offset: -2px; }
+  .testimonials__bubbles { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+  .testimonials__thread p {
+    max-width: 660px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: $color-secondary-lightest;
+    font-size: 15px;
+    line-height: 24px;
+    animation: testimonials-rise 420ms var(--ease-out) both;
+    &:first-child { border-radius: 8px; }
+    &:nth-child(2) { animation-delay: 110ms; }
+    &:nth-child(3) { animation-delay: 220ms; }
+    &:nth-child(n + 4) { animation-delay: 330ms; }
+  }
+  // each marked line is selected, then left underlined, in turn
+  .testimonials__highlight {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+    text-decoration-color: $color-primary;
+    background-image: linear-gradient(90deg, #fbd9cd 0, #fbd9cd calc(100% - 2px), $color-primary calc(100% - 2px), $color-primary 100%);
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    animation: testimonials-sweep 760ms var(--ease-out) both;
+  }
+  .testimonials__thread p:nth-child(1) .testimonials__highlight { animation-delay: 690ms; }
+  .testimonials__thread p:nth-child(2) .testimonials__highlight { animation-delay: 970ms; }
+  .testimonials__thread p:nth-child(3) .testimonials__highlight { animation-delay: 1250ms; }
+  .testimonials__thread p:nth-child(n + 4) .testimonials__highlight { animation-delay: 1530ms; }
+  .testimonials__receipt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 0;
+    padding-left: 2px;
+    font: 400 11px/16px var(--font-mono);
+    color: $color-secondary-dark;
+    animation: testimonials-fade 320ms ease-out 2200ms both;
+    i { width: 7px; height: 7px; background: $color-primary; }
+  }
+  .testimonials__composer { margin: 0 24px 22px; }
+
+  // tablet widths: a little shorter, a narrower list
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    .testimonials__tablet { height: 720px; }
+    .testimonials__people { flex-basis: 260px; }
+    .testimonials__person { padding: 0 20px; }
+  }
+
+  // phone: the tablet turns portrait, the people run across the top as a row
+  // of initials, and the frame and the meter step aside
+  @media (max-width: $breakpoint-sm) {
+    .testimonials__tablet { height: 780px; margin: var(--space-xl) 0 0; border-radius: 30px; transform: rotate(-1deg); }
+    .testimonials__buttons { display: none; }
+    .testimonials__rim { padding: 3px; border-radius: 30px; }
+    .testimonials__bezel { padding: 12px; border-radius: 27px; }
+    .testimonials__camera { top: 3px; width: 5px; height: 5px; left: calc(50% - 2px); }
+    .testimonials__screen { border-radius: 14px; }
+    .testimonials__status { height: 20px; padding: 0 14px; font-size: 10px; }
+    .testimonials__people { flex: none; }   // stacked, the list's width would read as its height
+    .testimonials__frame, .testimonials__meter, .testimonials__unread { display: none; }
+    .testimonials__list { padding-top: 8px; }
+    .testimonials__person { height: auto; padding: 6px 0 5px; grid-template-columns: 1fr; }
+    .testimonials__person[aria-selected='true'] { background: $color-white; box-shadow: 0 0 0 1px rgba(27, 27, 27, 0.1); }
+    .testimonials__messages { padding: 16px; }
+    .testimonials__thread p { font-size: 14px; line-height: 22px; }
+    .testimonials__composer { margin: 0 14px 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials__frame { transition: none; }
+    .testimonials__thread p, .testimonials__highlight, .testimonials__receipt { animation: none; }
+    .testimonials__highlight { background-size: 0% 100%; }
+  }
 }

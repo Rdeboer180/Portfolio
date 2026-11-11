@@ -13,7 +13,7 @@
 
 $side-panel-width: 320px;
 
-@media (min-width: 1000px) {
+@media (min-width: $breakpoint-lg) {
   html[data-side-panel='open'] {
     body { padding-left: $side-panel-width; }
 

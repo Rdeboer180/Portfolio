@@ -33,7 +33,7 @@
   padding: $section-pad-y 0;
 
   &__container {
-    max-width: 1186px;
+    max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 $container-padding-x;
   }
@@ -87,7 +87,7 @@
   // Section hover sends the spark across the stage line
   &:hover &__rule-spark,
   &:focus-within &__rule-spark {
-    transform: translateX(calc(1186px - 72px));
+    transform: translateX(calc(var(--container-max) - 72px));
   }
 
   // ── Control row ────────────────────────────────────────────────────────────
@@ -212,7 +212,7 @@
   }
 
   // A phone shows one card at a time; adjacent copy should not determine its height.
-  @media (max-width: 600px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     &__grid { align-items: flex-start; }
   }
 

@@ -90,7 +90,7 @@
   &__controls &__play { border-color: $color-neutral-light; white-space: nowrap; }
   > .cs__caption { margin: 0; padding: $spacing-sm $spacing-xl $spacing-lg; text-align: left; }
 
-  @media (max-width: 600px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     &__heading { padding: $spacing-lg; }
     &__heading p { font-size: $font-size-body; min-height: 45px; }
     &__eyebrow, &__index { font-size: 10px; }
