@@ -1,11 +1,11 @@
 import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { SEARCH_META } from '../data/seo';
 import { RESUME, ResumeBullet, ResumeEntry } from '../data/resume';
 import { usePageMeta } from '../hooks/usePageMeta';
+import SiteNav from './SiteNav';
 
 const CONTACT = {
   firstName: 'Ryan',
@@ -60,14 +60,14 @@ const ResumePage: React.FC = () => {
 
   return (
     <div className="resume-page">
-      <nav className="resume-page__nav" aria-label="Primary">
-        <Link to={getHomeHref()} className="resume-page__nav-logo">Ryan DeBoer</Link>
+      <SiteNav current="resume" />
+      {/* The page's own actions, under the shared header (11 November 2026). */}
+      <div className="resume-page__toolbar">
         <div className="resume-page__nav-actions">
           <a className="btn btn--primary btn--md resume-page__download-btn" href={RESUME.downloadHref} download={RESUME.downloadFilename}>Download résumé <span className="resume-page__download-format">PDF</span></a>
           <button className="btn btn--secondary btn--md resume-page__vcard-btn" onClick={handleDownloadVCard}>Save contact</button>
-          <Link to={getHomeHref()} className="resume-page__nav-back">&larr; Back to Portfolio</Link>
         </div>
-      </nav>
+      </div>
 
       <div className="resume-page__canvas">
         <article className="resume-page__paper" aria-labelledby="resume-name">

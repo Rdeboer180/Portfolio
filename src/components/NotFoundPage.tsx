@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { EMAIL_HREF } from '../data/site';
+import SiteNav from './SiteNav';
 
 /**
  * The 404 the site never had.
@@ -22,6 +23,8 @@ const NotFoundPage: React.FC = () => {
   });
 
   return (
+    <>
+    <SiteNav />
     <div className="not-found">
       <p className="not-found__eyebrow">404</p>
       <h1 className="not-found__title">That page doesn&rsquo;t exist</h1>
@@ -42,6 +45,7 @@ const NotFoundPage: React.FC = () => {
         </a>
       </nav>
     </div>
+    </>
   );
 };
 

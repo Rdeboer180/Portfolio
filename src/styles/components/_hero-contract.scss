@@ -783,3 +783,9 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-intro__grab { display: none; }
 }
+
+// The shared site header on every other page (SiteNav.tsx, 11 November 2026):
+// the homepage's bar, sticky so a page needs no spacer under it, and the
+// page's own link in ink.
+.hero__nav.hero__nav--site { position: sticky; }
+.hero__nav-links a[aria-current="page"], .hero__nav-menu a[aria-current="page"] { color: $color-neutral-dark; }
