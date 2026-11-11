@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { Link } from 'react-router-dom';
-import { getHomeHref } from '../utils/homeSession';
 import Tabs from './Tabs';
 import SectionBadge from './SectionBadge';
 import PageHeader from './PageHeader';
@@ -13,6 +11,7 @@ import SystemCatalogExplorer from './SystemCatalogExplorer';
 import HoloSticker from './HoloSticker';
 import snapshot from '../data/system-snapshot.json';
 import '../styles/styles.scss';
+import SiteNav from './SiteNav';
 
 const STICKER_GLYPHS = ['typography', 'ui-design', 'animation', 'research', 'tokenization', 'component-libraries', 'accessibility', 'git-github', 'ship', 'agentic-design', 'code', 'react'];
 
@@ -830,9 +829,10 @@ const DesignSystem: React.FC = () => {
   const [activeSection, setActiveSection] = useState('how');
 
   return (
+    <>
+    <SiteNav />
     <div className="ds">
       <header className="ds__header">
-        <Link to={getHomeHref()} className="ds__back">&larr; Back to Portfolio</Link>
         <h1 className="ds__title">Design system</h1>
         <p className="ds__subtitle">
           The rules, tokens and components this site ships. Written once in DESIGN.md and PRODUCT.md,
@@ -857,6 +857,7 @@ const DesignSystem: React.FC = () => {
       {activeSection === 'molecules' && <MoleculesContent />}
       {activeSection === 'catalog' && <SystemCatalogExplorer />}
     </div>
+    </>
   );
 };
 

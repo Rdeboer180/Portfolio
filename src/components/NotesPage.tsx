@@ -1,7 +1,6 @@
 import React from 'react';
 import ScrollReveal from './ScrollReveal';
 import { Link, useLocation } from 'react-router-dom';
-import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { NOTES_BY_DATE, KIND_LABEL } from '../data/notes';
@@ -9,6 +8,7 @@ import Footer from './Footer';
 import LinkedInLink from './LinkedInLink';
 import { PlayDraftLaunch } from './PlayDraftRelease';
 import '../styles/styles.scss';
+import SiteNav from './SiteNav';
 
 // ============================================
 // Notes index — the writing stream. Editorial list (rows, not cards):
@@ -42,12 +42,7 @@ const NotesPage: React.FC = () => {
 
   return (
     <article className="notes">
-      <nav className="notes__nav" aria-label="Primary">
-        <div className="notes__nav-inner">
-        <Link to={getHomeHref()} className="notes__nav-logo">Ryan DeBoer</Link>
-        <Link to={getHomeHref()} className="notes__nav-back">&larr; Back to Home</Link>
-        </div>
-      </nav>
+      <SiteNav current="notes" />
 
       {/* Intro is one two-column band on desktop: the page's own statement on
           the left, the way in on the right, so the first screen carries both

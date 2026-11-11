@@ -280,21 +280,34 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame); };
   }, [compact]);
 
-  const tabMounted = useRef(false);
-  useEffect(() => {
-    if (!tabMounted.current) { tabMounted.current = true; return; }
-    const panel = document.getElementById(`about-desk-panel-${tab}`);
+  // Bring a section's start to just under the header. A tab switch does it only
+  // when the section starts above the fold (switching near the top stays put);
+  // the Layers panel always does (Ryan, 11 November 2026): its sections start
+  // below the intro, so a click there changed nothing you could see.
+  const scrollToPanel = useCallback((key: string, always: boolean) => {
+    const panel = document.getElementById(`about-desk-panel-${key}`);
     const nav = document.querySelector<HTMLElement>('.about-desk__nav');
     if (!panel) return;
     const top = panel.getBoundingClientRect().top;
     const offset = (nav?.offsetHeight ?? 72) + 58 * (contained ? 1 : scale) + 16;
-    // only when the tab's start is above the fold: switching near the top stays put
-    if (top < offset) {
-      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      window.scrollBy({ top: top - offset, behavior: smooth ? 'smooth' : 'auto' });
-    }
+    if (!always && top >= offset) return;
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollBy({ top: top - offset, behavior: smooth ? 'smooth' : 'auto' });
+  }, [contained, scale]);
+  const jumpToTab = useRef(false);
+  const tabMounted = useRef(false);
+  useEffect(() => {
+    if (!tabMounted.current) { tabMounted.current = true; return; }
+    scrollToPanel(tab, jumpToTab.current);
+    jumpToTab.current = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
+  const layerTo = useCallback((i: number) => {
+    const key = DESK_TABS[i].key;
+    if (key === tab) { scrollToPanel(key, true); return; }
+    jumpToTab.current = true;
+    setTab(key);
+  }, [tab, scrollToPanel]);
 
   const tabKey = useCallback((e: React.KeyboardEvent) => {
     const keys = DESK_TABS.map((t) => t.key);
@@ -502,7 +515,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
                 label="Sections"
                 roles={DESK_TABS.map((t) => t.label)}
                 activeIndex={DESK_TABS.findIndex((t) => t.key === tab)}
-                onLayerClick={(i) => setTab(DESK_TABS[i].key)}
+                onLayerClick={layerTo}
                 controlsId={`about-desk-panel-${tab}`}
               />
               <p className="site-rail__meta">layer / {DESK_TABS.find((t) => t.key === tab)?.index} {DESK_TABS.find((t) => t.key === tab)?.label}</p>

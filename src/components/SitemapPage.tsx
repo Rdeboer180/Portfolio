@@ -7,10 +7,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import { orderedProjects } from '../data/projects';
-import { getHomeHref } from '../utils/homeSession';
 import { SITE, EMAIL_HREF } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import '../styles/styles.scss';
+import SiteNav from './SiteNav';
 
 const PAGES = [
   { to: '/', title: 'Home', sub: 'Hero, selected work, and how the work gets made.' },
@@ -81,10 +81,7 @@ const SitemapPage: React.FC = () => {
 
   return (
     <div className="sitemap-page">
-      <nav className="sitemap-page__nav" aria-label="Primary">
-        <Link to={getHomeHref()} className="sitemap-page__nav-logo">Ryan DeBoer</Link>
-        <Link to={getHomeHref()} className="sitemap-page__nav-back">&larr; Back to Home</Link>
-      </nav>
+      <SiteNav />
 
       <div className="sitemap-page__inner">
         <header className="sitemap-page__header">

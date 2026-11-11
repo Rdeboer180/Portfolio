@@ -1315,3 +1315,14 @@
     }
   }
 }
+
+// The Notes page's title block matches the homepage hero (11 November 2026):
+// the hero headline's size, weight and tracking, the same distance under the
+// shared site header. Article pages keep their own title.
+.notes:not(.notes--single) {
+  .notes__intro { padding-top: 56px; }
+  .notes__title { font-size: 44px; font-weight: $font-weight-extrabold; letter-spacing: -0.035em; line-height: 1.05; }
+}
+@media (max-width: $breakpoint-md) {
+  .notes:not(.notes--single) .notes__title { font-size: $font-size-h2; }
+}

@@ -1,7 +1,6 @@
 import { reviewHref } from '../utils/reviewRoutes';
 import React from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { AUTHOR } from '../data/seo';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -10,6 +9,7 @@ import { NOTE_BODIES } from '../data/notesBodies';
 import Footer from './Footer';
 import { PlayDraftLaunch } from './PlayDraftRelease';
 import '../styles/styles.scss';
+import SiteNav from './SiteNav';
 
 // ============================================
 // Single note — clean reading layout: mono meta, title, dek, ~68ch body.
@@ -50,13 +50,7 @@ const NotePage: React.FC = () => {
 
   return (
     <article className="notes notes--single">
-      <nav className="notes__nav" aria-label="Primary">
-        <div className="notes__nav-inner">
-        {/* Logo always goes home; "All notes" is the section breadcrumb */}
-        <Link to={getHomeHref()} className="notes__nav-logo">Ryan DeBoer</Link>
-        <Link to="/notes" className="notes__nav-back">&larr; All notes</Link>
-        </div>
-      </nav>
+      <SiteNav current="notes" />
 
       <header className="notes__header notes__header--article">
         <p className="notes__meta">

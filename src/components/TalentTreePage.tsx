@@ -9,9 +9,7 @@
 // ============================================
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Footer from './Footer';
-import { getHomeHref } from '../utils/homeSession';
 import { SITE } from '../data/site';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { RYAN_CLASS_LABEL } from '../data/talent/ryan';
@@ -19,6 +17,7 @@ import SkillTreeCanvas, { FRONT_ROUTE } from './talent/SkillTreeCanvas';
 import '../styles/styles.scss';
 // the skill tree's own styles, loaded with its page rather than with every page
 import '../styles/components/_skill-tree.scss';
+import SiteNav from './SiteNav';
 
 const TalentTreePage: React.FC = () => {
   usePageMeta({
@@ -30,10 +29,7 @@ const TalentTreePage: React.FC = () => {
 
   return (
     <article className="fc-page">
-      <nav className="fc-page__nav" aria-label="Primary">
-        <Link to={getHomeHref()} className="fc-page__logo">Ryan DeBoer</Link>
-        <Link to={getHomeHref()} className="fc-page__back">&larr; Back to Home</Link>
-      </nav>
+      <SiteNav />
       <div className="fc-page__body">
         <SkillTreeCanvas />
       </div>
