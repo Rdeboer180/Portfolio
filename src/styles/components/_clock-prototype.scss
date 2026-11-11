@@ -28,7 +28,7 @@ $pd-ease: $ease-out;
   font-size: 14px;
   line-height: 1.45;
 
-  @media (max-width: 760px) {
+  @media (max-width: #{$breakpoint-md - 1}) {
     grid-template-columns: 1fr;
     padding: $spacing-md;
   }

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import SectionBadge from './SectionBadge';
 import { BINDER_VERSION } from '../data/binderVersion';
 import { useNavigate } from 'react-router-dom';
 import { useUnlock } from '../context/UnlockContext';
 import { isReviewPath } from '../utils/reviewRoutes';
+import { EMAIL_HREF } from '../data/site';
 
 // The case studies as the collectible binder, lying open under the hero
 // (docs/explorations/binder-specimen). build-home.mjs writes the
@@ -20,6 +20,8 @@ declare global {
     __binderNavigate?: (slug: string) => void;
     __binderOverview?: (slug: string) => void;
     __binderUnlocked?: () => void;
+    /** Where a visitor without the password can write: a mailto href. */
+    __binderEmail?: string;
     binder?: { unlock?: (on?: boolean) => void };
   }
 }
@@ -58,13 +60,26 @@ const BASE = `${process.env.PUBLIC_URL}/binder-home`;
 // cached binder.js, since the server caches scripts for a year.
 const VERSION = `?v=${BINDER_VERSION}`;
 
-const BriefcaseIcon = () => (
-  <svg viewBox="0 0 64 64" fill="currentColor" stroke="none">
-    <path d="M55.44,27.02c-.712-.237-15.402-.037-16.58-.1A3.601,3.601,0,0,1,36.29,25.84l-4.97-5.09a5.609,5.609,0,0,0-4-1.69H19.08a5.739,5.739,0,0,0-6.55,5.59v3.53H7.73A3.739,3.739,0,0,0,4,31.92V54.35a3.739,3.739,0,0,0,3.73,3.74H56.27A3.739,3.739,0,0,0,60,54.35V31.92A3.739,3.739,0,0,0,56.27,28.18H55.44Z" />
-    <path d="M27.32,17.06a7.613,7.613,0,0,1,5.43,2.29l4.97,5.09a1.639,1.639,0,0,0,1.14.48c1.215.049,15.812-.107,16.58.08-.044-.577.109-9.054-.11-9.32-1.228-.002-9.544.001-10.98,0a4.432,4.432,0,0,1-4.43-4.43V4H15.4a3.73,3.73,0,0,0-3.73,3.73V17.06Z" />
-    <path d="M44.35,13.68H54.42a4.425,4.425,0,0,0-.98-1L42.6,4.46a4.339,4.339,0,0,0-.68-.43v7.22A2.433,2.433,0,0,0,44.35,13.68Z" />
-  </svg>
-);
+// The margin note beside the title is in Ryan's hand (DESIGN.md, the
+// Annotation Rule). Caveat is loaded only with the binder, subset to the
+// note's own letters, so the homepage's first load carries none of it.
+const NOTE = 'pick one, it flies out';
+let noteFont = false;
+const loadNoteFont = () => {
+  if (noteFont) return;
+  noteFont = true;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  // Never render-blocking (it is only a margin note's hand), and marked so the
+  // prerender leaves it out of the static page: captured there it became a
+  // blocking third-party request in every page's head, before the first paint.
+  link.media = 'print';
+  link.onload = () => { link.media = 'all'; };
+  link.dataset.runtimeOnly = 'binder-note-font';
+  // the testimonials' note below shares the font, so its letters ride along
+  link.href = `https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap&text=${encodeURIComponent(`${NOTE} tap a name, it opens`)}`;
+  document.head.appendChild(link);
+};
 
 let host: HTMLDivElement | null = null;
 
@@ -100,6 +115,7 @@ const build = (el: HTMLDivElement, attempt = 0) => {
     window.__binderCss = css;
     window.__binderNavigate = openStudy;
     window.__binderOverview = openOverview;
+    window.__binderEmail = EMAIL_HREF;
     // The script's page is the shadow root, and its root element the host:
     // the classes it sets there (binder-open, is-unlocked) are :host() rules.
     const doc = new Proxy(document, {
@@ -157,6 +173,7 @@ const CaseStudyBinder: React.FC = () => {
       }
       at.appendChild(host);
       if (fresh) build(host);
+      if (window.matchMedia?.('(min-width: 1180px) and (hover: hover)').matches) loadNoteFont();
     };
     // Built once it is about to be seen (a screen early), so the hero and the
     // page's first paint never wait on it; at once when it is already built,
@@ -176,8 +193,13 @@ const CaseStudyBinder: React.FC = () => {
   return (
     <section id="projects" className="case-binder" aria-labelledby="case-binder-title">
       <div className="case-binder__intro">
-        <SectionBadge icon={<BriefcaseIcon />} label="Case Studies" ruled tone="accent" />
-        <h2 id="case-binder-title" className="case-binder__title">Systems, products, and tools I&rsquo;ve shipped</h2>
+        <div className="case-binder__head">
+          <h2 id="case-binder-title" className="case-binder__title">Systems, products, and tools I&rsquo;ve shipped</h2>
+          <span className="case-binder__note" aria-hidden="true">
+            {NOTE}
+            <svg viewBox="0 0 54 46" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M4 6c18 2 34 12 42 34" /><path d="M38 34l8 7 3-10" /></svg>
+          </span>
+        </div>
       </div>
       <div ref={slot} className="case-binder__slot" />
     </section>

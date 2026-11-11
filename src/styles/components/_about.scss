@@ -441,22 +441,22 @@ $select-b: blue($color-primary-light);
   }
 
   // Wide screens: the labels hang in the margin, as on a specimen sheet.
-  @media (min-width: 1360px) {
+  @media (min-width: $breakpoint-2xl) {
     .about__specimen-word::after,
     .about__specimen-word:first-child::before { left: -104px; text-align: left; }
   }
   // Two columns, narrower: "Collaboration." would run into its label.
-  @media (min-width: 851px) and (max-width: 1359px) {
+  @media (min-width: $breakpoint-lg) and (max-width: #{$breakpoint-2xl - 1}) {
     .about__specimen-word:last-child::after { content: '' / ''; }
   }
-  @media (min-width: 1100px) {
+  @media (min-width: $breakpoint-xl) {
     .about__differentiator-grid { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); }
   }
   // Phones keep only the first cap height and the last baseline.
-  @media (max-width: 599px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     .about__specimen-word:not(:last-child)::after { display: none; }
   }
-  @media (max-width: 359px) {
+  @media (max-width: #{$breakpoint-2xs - 1}) {
     .about__specimen-word::after,
     .about__specimen-word:first-child::before { content: '' / ''; }
   }
@@ -479,7 +479,7 @@ $select-b: blue($color-primary-light);
   .about__background { padding: var(--space-4xl) 0; }
   .about__background .about__title { margin-top: 0; }
   .about__background .about__cta-links { margin-bottom: 0; }
-  @media (max-width: 850px) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
     .about__differentiator-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
   }
 }
@@ -516,11 +516,11 @@ $select-b: blue($color-primary-light);
   &__title { margin: 0; font: var(--weight-bold) var(--text-h5)/var(--leading-h5) var(--font-heading); }
   &__detail p { margin: 0; font: var(--text-body)/var(--leading-body) var(--font-body); color: var(--color-text-secondary); }
   &__detail .about__read-more { margin-top: var(--space-sm); font-size: var(--text-body-sm); }
-  @media (max-width: 850px) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
     &__step { grid-template-columns: 110px minmax(0, 1fr); gap: var(--space-sm) var(--space-xl); }
     &__detail { grid-column: 2; }
   }
-  @media (max-width: 540px) {
+  @media (max-width: $breakpoint-xs) {
     &__step { grid-template-columns: minmax(0, 1fr); }
     &__detail { grid-column: 1; }
   }
@@ -560,14 +560,14 @@ $select-b: blue($color-primary-light);
 }
 .about__timeline-closing { max-width: var(--copy-max-width); }
 
-// Homepage writing as a quick-open list (concept 05): a plain list of links
-// with one shared highlight that slides to the active row and opens its dek.
-// Orange means selected, so the kind dots stay ink, slate and steel.
+// Homepage writing as a quiet list (canvas L2, 10 Nov 2026): kind and date in
+// a left column, the title as the row's link, read time and an arrow at the
+// end, hairlines between. The open row shows its date and dek. Orange stays
+// off this section; the select and the links are ink.
 .selected-writing {
-  $row-cols: 200px minmax(0, 1fr) 56px 52px;
-  $glide: 150ms cubic-bezier(0.25, 1, 0.5, 1);
+  $cols: 228px minmax(0, 1fr) 72px 20px;
 
-  padding: $spacing-4xl 0;
+  padding: $section-pad-y 0;
   background: $color-white;
 
   &__container {
@@ -584,336 +584,198 @@ $select-b: blue($color-primary-light);
     margin-bottom: $spacing-xl;
 
     h2 {
-      margin: 0;
+      margin: $spacing-sm 0 0;
       font-family: $font-family-heading;
       font-size: $font-size-h2;
       line-height: $line-height-h2;
       letter-spacing: -0.02em;
+      color: $color-neutral-dark;
     }
+  }
+
+  &__eyebrow {
+    margin: 0;
+    font: $font-weight-bold #{$font-size-body-sm}/1.4 $font-family-heading;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-neutral-muted;
   }
 
   &__tools {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: $spacing-xl;
     flex-shrink: 0;
-    padding-bottom: 4px;
+    font-size: 15px;
   }
 
   &__filter {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-family: $font-family-mono;
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $color-text-secondary;
+    gap: $spacing-sm;
+    color: $color-neutral-muted;
   }
 
   &__select {
     position: relative;
     display: inline-flex;
+    align-items: center;
 
     select {
       appearance: none;
-      margin: 0;
-      padding: 7px 34px 7px 12px;
-      font-family: $font-family-primary;
-      font-size: 14px;
-      font-weight: $font-weight-medium;
-      letter-spacing: 0;
-      text-transform: none;
-      color: $color-text-primary;
+      height: 38px;
+      padding: 0 40px 0 12px;
+      // a control's edge needs 3:1 against the page (WCAG 1.4.11)
+      border: 1px solid $color-neutral-muted;
+      border-radius: $radius-md;
       background: $color-white;
-      border: 1px solid $color-secondary;
-      border-radius: 8px;
+      color: $color-neutral-dark;
+      font: inherit;
       cursor: pointer;
-
-      &:focus-visible {
-        outline: 2px solid $color-primary-text;
-        outline-offset: 2px;
-      }
+      &:hover { border-color: $color-neutral-dark; }
+      &:focus-visible { outline: 2px solid $color-primary; outline-offset: 2px; }
     }
 
     svg {
       position: absolute;
-      top: 50%;
       right: 12px;
-      margin-top: -6px;
       pointer-events: none;
       fill: none;
-      stroke: $color-text-primary;
-      stroke-width: 1.4;
+      stroke: $color-neutral-dark;
+      stroke-width: 1.8;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
   }
 
-  &__results { position: relative; }
-
-  // Painted over the row borders and under the row text. The same selection
-  // the Notes page gives its newest row: half the primary tint and the 5px
-  // steel corner handles, no outline (Ryan, 22 October), so the two lists of
-  // notes read as one component. ::before carries the top pair of handles and
-  // ::after the bottom pair, each a strip with a square drawn at either end.
-  $handles: linear-gradient($color-secondary, $color-secondary) left / 5px 5px no-repeat,
-            linear-gradient($color-secondary, $color-secondary) right / 5px 5px no-repeat;
-  &__highlight {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 0;
-    height: 0;
-    background: mix($color-primary-light, $color-white, 50%);
-    opacity: 0;
-    pointer-events: none;
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      left: -3px;
-      right: -3px;
-      height: 5px;
-      background: $handles;
-    }
-
-    &::before { top: -3px; }
-    &::after { bottom: -3px; }
-  }
-
-  &__results.is-measured &__highlight {
-    opacity: 1;
-    transition: transform $glide, height $glide;
-  }
-
-  // Before the highlight has measured (the prerendered page), the active
-  // row carries the tint itself.
-  &__results:not(.is-measured) &__item.is-active {
-    background: mix($color-primary-light, $color-white, 50%);
+  &__all {
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(27, 27, 27, 0.35);
+    &:hover { color: $color-primary-dark; text-decoration-color: currentColor; }
   }
 
   &__list {
     list-style: none;
-    padding: 0;
     margin: 0;
-    border-top: 1px solid $color-border-default;
+    padding: 0;
+    border-bottom: 1px solid $color-neutral-light;
   }
 
-  &__item { border-bottom: 1px solid $color-border-default; }
-
-  &__row {
+  &__item {
     position: relative;
-    z-index: 1;
     display: grid;
-    grid-template-columns: $row-cols;
-    align-items: center;
-    column-gap: $spacing-lg;
-    padding: 20px 12px;
-    color: $color-text-primary;
-    text-decoration: none;
-
-    // Stays ink under the pointer: the base link hover (dark orange) was the
-    // loud part, and the active row's soft-orange underline is the answer now.
-    &:hover { color: $color-text-primary; }
-
-    &:focus-visible {
-      outline: 2px solid $color-primary-text;
-      outline-offset: 2px;
-    }
+    grid-template-columns: $cols;
+    align-items: start;
+    padding: $spacing-xl 0;
+    border-top: 1px solid $color-neutral-light;
   }
 
   &__kind {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    color: $color-text-secondary;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: $color-neutral-muted;
   }
 
-  &__dot {
-    flex: none;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: $color-text-primary;
-
-    &--exploration { background: $color-secondary-dark; }
-    &--system { background: $color-secondary; }
-    &--reflection { background: none; box-shadow: inset 0 0 0 1.5px $color-text-primary; }
-    &--skill { background: none; box-shadow: inset 0 0 0 1.5px $color-secondary-dark; }
-  }
+  &__date { display: block; margin-top: 6px; }
 
   &__name {
-    font-size: 17px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    margin: 0;
+  }
+
+  // The title is the row's link; its box covers the whole row.
+  &__title {
+    font-size: 18px;
     font-weight: $font-weight-medium;
     line-height: 1.4;
+    color: $color-neutral-dark;
+    text-decoration: none;
+
+    &::after { content: ''; position: absolute; inset: 0; }
+    &:focus-visible { outline: none; }
+    &:focus-visible::after { outline: 2px solid $color-primary; outline-offset: -2px; border-radius: $radius-sm; }
   }
 
-  &__title {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
-    text-decoration-color: currentColor;
-    transition: text-decoration-color 160ms ease;
-  }
-
-  // The active row answers the way a Notes row does on hover, in the soft
-  // orange, slowly and a beat late. Only the underline takes it: at 17px the
-  // title text itself needs 4.5:1, which the soft orange doesn't reach.
-  &__item.is-active &__title {
-    text-decoration-color: $color-primary-soft;
-    transition: text-decoration-color 300ms ease 80ms;
-  }
+  &__item:hover &__title { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
   &__status {
-    margin-left: 14px;
-    font-family: $font-family-mono;
-    font-size: 11.5px;
-    font-weight: $font-weight-regular;
-    color: $color-text-secondary;
-    white-space: nowrap;
-
-    &::before {
-      content: '';
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      margin-right: 6px;
-      border: 1px solid $color-secondary-dark;
-      vertical-align: 1px;
-    }
-  }
-
-  &__read {
-    font-family: $font-family-mono;
-    font-size: $font-size-caption;
-    color: $color-text-secondary;
-    text-align: right;
-  }
-
-  &__go {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  &__arrow {
-    fill: none;
-    stroke: $color-primary-soft;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  kbd {
-    display: inline-block;
-    min-width: 20px;
-    box-sizing: border-box;
-    padding: 0 6px;
-    border: 1px solid #d6dce4;
-    border-bottom: 2px solid $color-secondary;
-    border-radius: 4px;
-    background: $color-white;
-    font-family: $font-family-mono;
-    font-size: 11px;
-    line-height: 17px;
-    color: $color-text-primary;
-    text-align: center;
-    vertical-align: 1px;
-  }
-
-  &__key { display: none !important; }
-
-  &__detail {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    column-gap: $spacing-lg;
-    padding: 0 12px 18px;
-    animation: selected-writing-dek $glide both;
-  }
-
-  &__when {
-    margin: 0;
-    font-family: $font-family-mono;
-    font-size: 11.5px;
-    line-height: 1.75;
-    color: $color-text-secondary;
+    font: 12px/1.5 $font-family-mono;
+    color: $color-neutral-muted;
   }
 
   &__dek {
-    margin: 0;
-    max-width: 740px;
+    max-width: 700px;
+    margin: 8px 0 0;
     font-size: 15px;
     line-height: 1.6;
-    color: $color-text-secondary;
+    color: $color-neutral-standard;
   }
 
-  // The active row's Enter key only where there is a keyboard-and-mouse
-  // setup to use it.
+  &__read {
+    margin: 0;
+    padding-top: 3px;
+    font-size: 14px;
+    color: $color-neutral-muted;
+  }
+
+  &__arrow {
+    margin-top: 5px;
+    fill: none;
+    stroke: $color-neutral-muted;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform $transition-fast, stroke $transition-fast;
+  }
+
+  &__item:hover &__arrow { stroke: $color-neutral-dark; transform: translateX(2px); }
+
+  &__count {
+    margin: 14px 0 0;
+    text-align: right;
+    font-size: 13px;
+    color: $color-neutral-muted;
+  }
+
+  // With a mouse or keyboard only the open row shows its date and dek. Touch
+  // has no hover to open a row, so there all three stay open.
   @media (hover: hover) and (pointer: fine) {
-    &__item.is-active &__key { display: inline-block !important; }
-    &__item.is-active &__arrow { display: none; }
+    &__item:not(.is-active) &__date,
+    &__item:not(.is-active) &__dek { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    &__results.is-measured &__highlight { transition: none; }
-    &__detail { animation: none; }
-    &__title,
-    &__item.is-active &__title { transition: none; }
+    &__arrow { transition: none; }
+    &__item:hover &__arrow { transform: none; }
   }
 
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: #{$breakpoint-md - 1}) {
     padding: $spacing-3xl 0;
 
-    &__header {
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: $spacing-lg;
-    }
+    &__header { flex-direction: column; align-items: flex-start; gap: $spacing-md; h2 { font-size: $font-size-h3; } }
 
-    &__tools {
-      width: 100%;
-      justify-content: space-between;
-    }
-
-    // 16px keeps iOS from zooming the page when the select opens.
-    &__select select { font-size: 16px; }
-
-    &__row {
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-areas: 'kind read' 'name go';
+    &__item {
+      grid-template-columns: minmax(0, 1fr) 20px;
       row-gap: 6px;
-      padding: 16px 12px;
     }
 
-    &__kind { grid-area: kind; }
-    &__name { grid-area: name; }
-    &__read { grid-area: read; }
-    &__go { grid-area: go; align-self: end; }
-
-    &__status {
-      display: block;
-      margin: 4px 0 0;
-    }
-
-    // Phones open a row on the first tap; the Enter key has nothing to do.
-    &__item.is-active &__key { display: none !important; }
-    &__item.is-active &__arrow { display: block; }
-
-    &__detail {
-      grid-template-columns: minmax(0, 1fr);
-      row-gap: 6px;
-      padding: 0 12px 16px;
-    }
+    &__kind { grid-column: 1 / -1; display: flex; gap: 8px; }
+    &__date { margin-top: 0; &::before { content: '· '; } }
+    &__main { grid-column: 1; }
+    &__read { display: none; }
+    &__arrow { grid-column: 2; grid-row: 2; }
+    &__count { text-align: left; }
   }
 }
 
-@keyframes selected-writing-dek {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+// Running text keeps the reading measure inside the wider copy column.
+.about__body p,
+.about__body li { max-width: $measure; }

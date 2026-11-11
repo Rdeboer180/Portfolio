@@ -1,157 +1,113 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NOTES_BY_DATE, KIND_LABEL, NoteKind } from '../data/notes';
 
-// Homepage writing as a quick-open list: the three notes Ryan features by
-// default (the ones he'd hand a hiring manager), or the newest three of any
-// kind from the same menu, one of them highlighted with its dek open, arrows to move and Enter to open. The
-// keys work without a legend under the list (Ryan, 22 October: the legend
-// read as confusing); the active row's Enter key is the only key shown.
-// It stays a plain list of links (never a listbox), so every row reads and
-// opens the same way with or without the keys. The mechanism follows the
-// launcher on Marco Cornacchia's portfolio (marco.fyi); concept 05 on the
-// sections canvas.
+// Homepage writing as a quiet list (canvas L2, Ryan's pick, 10 Nov 2026):
+// the newest three notes, or three of one kind, as plain rows. Every row
+// carries its date and dek in the markup, so touch and screen readers get
+// all three; with a mouse or keyboard (hover-capable, fine pointer) only the
+// open row shows them, and pointer, focus and the arrow keys move it. No
+// tint, no brackets, no key hint: hairlines and type carry the list. It stays
+// a list of links (never a listbox), so every row opens the same way with or
+// without the keys.
 
 const SHOWN = 3;
 const KIND_ORDER: NoteKind[] = ['practice', 'exploration', 'reflection', 'system', 'skill'];
 const countOf = (kind: NoteKind) => NOTES_BY_DATE.filter((note) => note.kind === kind).length;
-const FEATURED = NOTES_BY_DATE.filter((note) => note.featured);
-type Show = NoteKind | 'all' | 'featured';
+type Show = NoteKind | 'all';
+
+const Arrow = () => (
+  <svg className="selected-writing__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+);
 
 const SelectedWriting: React.FC = () => {
-  // Featured by default, so the prerendered page and a first visit open on the picks.
-  const [kind, setKind] = useState<Show>(FEATURED.length ? 'featured' : 'all');
+  const [kind, setKind] = useState<Show>('all');
   const [active, setActive] = useState(0);
-  const [mark, setMark] = useState<{ y: number; h: number } | null>(null);
-  const listRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  const matching = kind === 'featured' ? FEATURED
-    : kind === 'all' ? NOTES_BY_DATE
-      : NOTES_BY_DATE.filter((note) => note.kind === kind);
+  const matching = kind === 'all' ? NOTES_BY_DATE : NOTES_BY_DATE.filter((note) => note.kind === kind);
   const notes = matching.slice(0, SHOWN);
-  const noun = `${kind === 'all' || kind === 'featured' ? '' : `${KIND_LABEL[kind]} `}note${matching.length === 1 ? '' : 's'}`;
-  const countLine = kind === 'featured'
-    ? `${notes.length} featured ${noun}`
-    : matching.length > SHOWN
-      ? `Newest ${notes.length} of ${matching.length} ${noun}`
-      : `${matching.length === 1 ? 'The only' : `All ${matching.length}`} ${noun}`;
+  const noun = `${kind === 'all' ? '' : `${KIND_LABEL[kind].toLowerCase()} `}note${matching.length === 1 ? '' : 's'}`;
+  const countLine = matching.length > SHOWN
+    ? `Newest ${notes.length} of ${matching.length} ${noun}`
+    : `${matching.length === 1 ? 'The only' : `All ${matching.length}`} ${noun}`;
 
-  // One shared highlight slides to the active row. Until it has measured,
-  // the active row paints its own tint, so the prerendered page is right.
-  useLayoutEffect(() => {
-    const list = listRef.current;
-    if (!list) return undefined;
-    const place = () => {
-      const item = list.querySelectorAll<HTMLElement>('.selected-writing__item')[active];
-      if (item) setMark({ y: item.offsetTop - 1, h: item.offsetHeight + 1 });
-    };
-    place();
-    const observer = new ResizeObserver(place);
-    observer.observe(list);
-    return () => observer.disconnect();
-  }, [active, kind]);
-
-  const moveTo = (index: number) => {
-    const next = Math.max(0, Math.min(notes.length - 1, index));
-    rowRefs.current[next]?.focus();
-  };
-
+  // Up and down move between rows. At either end the key is left alone, so
+  // it scrolls the page as it would on any other link.
   const onKeyDown = (event: React.KeyboardEvent, index: number) => {
-    const keys: Record<string, number> = { ArrowDown: index + 1, ArrowUp: index - 1, Home: 0, End: notes.length - 1 };
-    const to = keys[event.key];
-    if (to === undefined) return;
+    const to = event.key === 'ArrowDown' ? index + 1 : event.key === 'ArrowUp' ? index - 1 : null;
+    if (to === null || to < 0 || to >= notes.length) return;
     event.preventDefault();
-    moveTo(to);
+    rowRefs.current[to]?.focus();
   };
 
   return (
     <section id="writing" className="selected-writing" aria-labelledby="selected-writing-title">
       <div className="selected-writing__container">
         <div className="selected-writing__header">
-          <h2 id="selected-writing-title">Writing from the work</h2>
+          <div>
+            <p className="selected-writing__eyebrow">Notes</p>
+            <h2 id="selected-writing-title">Writing from the work</h2>
+          </div>
           <div className="selected-writing__tools">
             <label className="selected-writing__filter">
-              Show
+              Kind
               <span className="selected-writing__select">
-                <select
-                  value={kind}
-                  onChange={(event) => { setKind(event.target.value as Show); setActive(0); }}
-                >
-                  {FEATURED.length > 0 && <option value="featured">Featured · {Math.min(FEATURED.length, SHOWN)}</option>}
-                  <option value="all">Newest · {NOTES_BY_DATE.length}</option>
+                <select value={kind} onChange={(event) => { setKind(event.target.value as Show); setActive(0); }}>
+                  <option value="all">All kinds · {NOTES_BY_DATE.length}</option>
                   {KIND_ORDER.filter(countOf).map((k) => (
                     <option key={k} value={k}>{KIND_LABEL[k]} · {countOf(k)}</option>
                   ))}
                 </select>
-                <svg aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M3 4.5 6 7.5 9 4.5" /></svg>
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" /></svg>
               </span>
             </label>
-            <Link to="/notes/" className="about__inline-link">All notes</Link>
+            <Link to="/notes/" className="selected-writing__all">All notes</Link>
           </div>
         </div>
 
-        <div ref={listRef} className={`selected-writing__results${mark ? ' is-measured' : ''}`}>
-          <span
-            className="selected-writing__highlight"
-            aria-hidden="true"
-            style={mark ? { transform: `translateY(${mark.y}px)`, height: mark.h } : undefined}
-          />
-          <ul className="selected-writing__list" aria-label={kind === 'featured' ? 'Featured notes' : 'Newest notes'}>
-            {notes.map((note, index) => {
-              const isActive = index === active;
-              const status = note.status === 'draft' ? 'draft' : note.inProgress ? 'in progress' : null;
-              return (
-                <li
-                  key={note.slug}
-                  className={`selected-writing__item${isActive ? ' is-active' : ''}`}
-                  onPointerMove={(event) => {
-                    // A real mouse move only: the page scrolling under a still
-                    // pointer must not open and close deks.
-                    if (event.pointerType === 'mouse' && (event.movementX || event.movementY)) setActive(index);
-                  }}
-                >
-                  <Link
-                    ref={(node) => { rowRefs.current[index] = node; }}
-                    to={`/notes/${note.slug}/`}
-                    className="selected-writing__row"
-                    aria-describedby={isActive ? `writing-dek-${note.slug}` : undefined}
-                    onFocus={() => setActive(index)}
-                    onKeyDown={(event) => onKeyDown(event, index)}
-                  >
-                    <span className="selected-writing__kind">
-                      <span className={`selected-writing__dot selected-writing__dot--${note.kind}`} aria-hidden="true" />
-                      <span className="bracketed">{KIND_LABEL[note.kind]}</span>
-                    </span>
-                    <span className="selected-writing__name">
-                      <span className="selected-writing__title">{note.title}</span>
-                      {status && <span className="selected-writing__status">{status}</span>}
-                    </span>
-                    <span className="selected-writing__read">{note.read}</span>
-                    <span className="selected-writing__go" aria-hidden="true">
-                      <kbd className="selected-writing__key">Enter</kbd>
-                      <svg className="selected-writing__arrow" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-                    </span>
-                  </Link>
-                  {isActive && (
-                    <div className="selected-writing__detail">
-                      <p className="selected-writing__when">
-                        <time dateTime={note.dateISO}>{note.date}</time>
-                        {note.relatedProject === 'playdraft' && (
-                          <> <br />Related: <Link to="/work/playdraft/" className="about__inline-link">PlayDraft ↗</Link></>
-                        )}
-                      </p>
-                      <p id={`writing-dek-${note.slug}`} className="selected-writing__dek">{note.dek}</p>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        {/* Announces what a kind filter left, for screen readers only. */}
-        <p className="sr-only" aria-live="polite">{countLine}</p>
+        <ol className="selected-writing__list">
+          {notes.map((note, index) => {
+            const isActive = index === active;
+            const status = note.status === 'draft' ? 'draft' : note.inProgress ? 'in progress' : null;
+            return (
+              <li
+                key={note.slug}
+                className={`selected-writing__item${isActive ? ' is-active' : ''}`}
+                onPointerMove={(event) => {
+                  // A real mouse move only, so a page scrolling under a still pointer never opens rows.
+                  if (event.pointerType === 'mouse' && (event.movementX || event.movementY)) setActive(index);
+                }}
+              >
+                <p className="selected-writing__kind">
+                  {KIND_LABEL[note.kind]}
+                  <time className="selected-writing__date" dateTime={note.dateISO}>{note.date}</time>
+                </p>
+                <div className="selected-writing__main">
+                  <p className="selected-writing__name">
+                    <Link
+                      ref={(node) => { rowRefs.current[index] = node; }}
+                      to={`/notes/${note.slug}/`}
+                      className="selected-writing__title"
+                      aria-describedby={`writing-dek-${note.slug}`}
+                      onFocus={() => setActive(index)}
+                      onKeyDown={(event) => onKeyDown(event, index)}
+                    >
+                      {note.title}
+                    </Link>
+                    {status && <span className="selected-writing__status">{status}</span>}
+                  </p>
+                  <p id={`writing-dek-${note.slug}`} className="selected-writing__dek">{note.dek}</p>
+                </div>
+                <p className="selected-writing__read">{note.read}</p>
+                <Arrow />
+              </li>
+            );
+          })}
+        </ol>
+        <p className="selected-writing__count" aria-live="polite">{countLine}</p>
       </div>
     </section>
   );

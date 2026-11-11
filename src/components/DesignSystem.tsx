@@ -10,8 +10,11 @@ import CaseStudyCard from './CaseStudyCard';
 import { SystemsBoard } from './SystemsInPractice';
 import SystemOverview from './SystemOverview';
 import SystemCatalogExplorer from './SystemCatalogExplorer';
+import HoloSticker from './HoloSticker';
 import snapshot from '../data/system-snapshot.json';
 import '../styles/styles.scss';
+
+const STICKER_GLYPHS = ['typography', 'ui-design', 'animation', 'research', 'tokenization', 'component-libraries', 'accessibility', 'git-github', 'ship', 'agentic-design', 'code', 'react'];
 
 // ============================================
 // Data
@@ -635,29 +638,66 @@ const CardsContent: React.FC = () => (
     </section>
 
     {/* ======================== BUTTONS ======================== */}
+    {/* The real .btn component (no look-alike), as a holo sticker: a trial for
+        review, 11 November 2026. Tokens: --sticker-foil, --sticker-* in _tokens.scss. */}
     <section className="ds__section">
       <h2 className="ds__section-title">Buttons</h2>
       <div className="ds__btn-group">
-        <h3 className="ds__subsection-title">Primary</h3>
+        <h3 className="ds__subsection-title">Primary · flat orange sticker</h3>
         <div className="ds__btn-row">
-          <button className="ds__btn ds__btn--primary ds__btn--sm">Small</button>
-          <button className="ds__btn ds__btn--primary ds__btn--md">Medium</button>
-          <button className="ds__btn ds__btn--primary ds__btn--lg">Large</button>
+          <button type="button" className="btn btn--primary btn--sm">Small</button>
+          <button type="button" className="btn btn--primary btn--md">Medium</button>
+          <button type="button" className="btn btn--primary btn--lg">Get in touch</button>
+          <button type="button" className="btn btn--primary btn--md" disabled>Disabled</button>
         </div>
         <div className="ds__btn-specs">
-          <code>font-weight: 800 (ExtraBold) · border-radius: 10px · font: Hubot Sans</code>
+          <code>flat #c23001 · 1.5px orange foil edge · 3px white die-cut · flat shadow · hover: the bottom-right corner peels 16px, 400ms --ease-out</code>
         </div>
       </div>
       <div className="ds__btn-group">
-        <h3 className="ds__subsection-title">Secondary</h3>
+        <h3 className="ds__subsection-title">Secondary · white die-cut sticker</h3>
         <div className="ds__btn-row">
-          <button className="ds__btn ds__btn--secondary ds__btn--sm">Small</button>
-          <button className="ds__btn ds__btn--secondary ds__btn--md">Medium</button>
-          <button className="ds__btn ds__btn--secondary ds__btn--lg">Large</button>
+          <button type="button" className="btn btn--secondary btn--sm">Small</button>
+          <button type="button" className="btn btn--secondary btn--md">Medium</button>
+          <button type="button" className="btn btn--secondary btn--lg">See my skill tree</button>
+          <button type="button" className="btn btn--secondary btn--md" disabled>Disabled</button>
         </div>
         <div className="ds__btn-specs">
-          <code>bg: white · border: #5e6c7c · text: #5e6c7c</code>
+          <code>white · ink label · 1px orange foil kiss-cut line 4px inside the white edge · hover: the corner peels</code>
         </div>
+      </div>
+      <div className="ds__btn-group">
+        <h3 className="ds__subsection-title">Icon button · glyph sticker</h3>
+        <div className="ds__btn-row">
+          <button type="button" className="btn btn--icon" aria-label="Get in touch">
+            <HoloSticker name="communication" size={44} />
+          </button>
+          <button type="button" className="btn btn--icon" aria-label="Read the plan">
+            <HoloSticker name="research" size={44} />
+          </button>
+          <button type="button" className="btn btn--icon" aria-label="Ship it">
+            <HoloSticker name="ship" size={44} />
+          </button>
+        </div>
+        <div className="ds__btn-specs">
+          <code>48px target · the glyph&apos;s own die-cut is the edge · hover: the light moves (foil crossfades) · no peel</code>
+        </div>
+      </div>
+    </section>
+
+    {/* ======================== STICKERS ======================== */}
+    <section className="ds__section">
+      <h2 className="ds__section-title">Sticker icons</h2>
+      <div className="ds__sticker-grid">
+        {STICKER_GLYPHS.map((k) => (
+          <div key={k} className="ds__sticker-card holo-sticker-host">
+            <HoloSticker name={k} size={72} />
+            <code className="ds__icon-value">{k}</code>
+          </div>
+        ))}
+      </div>
+      <div className="ds__btn-specs">
+        <code>talent glyph · steel kiss-cut · white die-cut (interiors filled) · brand orange foil · gloss from the upper left · 1.8 ink line · decorative unless labelled</code>
       </div>
     </section>
 

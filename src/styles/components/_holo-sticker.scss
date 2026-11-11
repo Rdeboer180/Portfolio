@@ -1,0 +1,44 @@
+// ============================================
+// Holo sticker icons and the icon button (trial, 11 November 2026)
+// The buttons' sticker lives on .btn in _base.scss; tokens in _tokens.scss.
+// ============================================
+
+.holo-sticker {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(1.2px 1.8px 1.2px rgba(27, 27, 27, 0.22)) drop-shadow(0 0 0.6px rgba(27, 27, 27, 0.18));
+  transition: transform 180ms var(--ease-out), filter 180ms ease-out;
+
+  &__foil-b {
+    opacity: 0;
+    transition: opacity 260ms ease-out;
+  }
+}
+
+// A sticker that answers the pointer: the light moves (the foil crossfades).
+// Flat: no lift or turn (11 November simplification).
+.holo-sticker-host:hover .holo-sticker,
+.btn--icon:hover .holo-sticker {
+  .holo-sticker__foil-b { opacity: 1; }
+}
+
+// The icon button: just the sticker, 48px, the glyph's own die-cut its edge.
+// It does not peel (its edge is the glyph's, not a rectangle).
+.btn.btn--icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  justify-content: center;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  box-shadow: none;
+  clip-path: none;
+  &::before, &::after { display: none; }
+
+  &:active:not(:disabled) .holo-sticker { transform: scale(0.96); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-sticker { transition: none; }
+}

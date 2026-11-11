@@ -254,7 +254,7 @@ button, select { font: inherit; }
 .spine__tab[aria-pressed="true"] b { color: #c6cbd2; }
 .spine__tab[aria-pressed="true"]::before {
   content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: 2px;
-  background: linear-gradient(180deg, #ffffff, #aeb3ba 55%, #eceef1); box-shadow: 0 0 6px rgba(255,255,255,.22);
+  background: var(--signal);   /* the site's "you are here" mark (A, 10 November 2026) */
 }
 .spine__tab:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 .spine__short { display: none; }
@@ -262,6 +262,86 @@ button, select { font: inherit; }
 @media (min-width: 1180px) {
   .binder { --spine-w: 196px; --gutter: 76px; }
   .binder__spine { display: flex; }
+}
+/* The spine as a Layers panel (B, 10 November 2026): the pages and the
+   disciplines listed the way the hero's Layers panel lists its layers, so the
+   binder's index reads as a tool the visitor has already met. Desktop only;
+   below it the tabs keep the cover's top edge and the pager sits under the page. */
+.spine__group, .spine__pages, .spine__glyph { display: none; }
+@media (min-width: 1180px) {
+  .spine__group { display: block; margin: 0 0 -14px; padding-left: 12px; font: 400 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: #9ba6b4; }
+  .spine__pages { display: grid; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  .spine__tabs { margin-top: 0; }
+  .spine__tab, .spine__page {
+    align-items: center; justify-content: flex-start; gap: 10px;
+    font: 400 13px/1.2 var(--font-mono); letter-spacing: 0;
+  }
+  .spine__tab > span:first-of-type, .spine__page > span:first-of-type { flex: 1; }
+  .spine__glyph { display: block; flex: none; width: 12px; height: 12px; fill: none; stroke: #9ba6b4; stroke-width: 2; stroke-linecap: round; }
+  .spine__tab[aria-pressed="true"], .spine__page[aria-current="page"] { color: #fff; background: rgba(240,61,1,.16); box-shadow: none; }
+  .spine__tab[aria-pressed="true"] .spine__glyph, .spine__page[aria-current="page"] .spine__glyph { stroke: var(--signal); }
+  .spine__page {
+    position: relative; width: 100%; display: flex; padding: 9px 8px 9px 12px; border: 0; border-radius: 6px;
+    background: transparent; color: #c6cbd2; text-align: left; cursor: pointer;
+  }
+  .spine__page b { font: 400 11px/1 var(--font-mono); color: #9ba6b4; }
+  .spine__page:hover:not([aria-disabled="true"]) { color: #fff; background: rgba(0,0,0,.14); }
+  .spine__page[aria-current="page"]::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: 2px; background: var(--signal);
+  }
+  .spine__page[aria-disabled="true"]:not([aria-current="page"]) { cursor: default; }
+  .spine__page:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .stage .pager { display: none; }   /* the spine's Pages list turns the page on desktop */
+}
+/* The binder as the selected object on the bench (B): a steel frame with
+   square handles and a layer name, the site's selection-frame vernacular.
+   On the open homepage it frames the page from the hinge's crease, since the
+   cover runs off the window. Not on phones, where the handles would sit on
+   the screen's edge. */
+.binder__select { display: none; }
+@media (min-width: 600px) {
+  .binder__select {
+    display: block; position: absolute; inset: -10px; pointer-events: none; z-index: 0;
+    border: 1px solid var(--steel);
+  }
+  .binder__select > i { position: absolute; width: 7px; height: 7px; box-sizing: border-box; background: var(--paper); border: 1px solid var(--steel); }
+  .binder__select > i:nth-child(1) { left: -4px; top: -4px; }
+  .binder__select > i:nth-child(2) { right: -4px; top: -4px; }
+  .binder__select > i:nth-child(3) { left: -4px; bottom: -4px; }
+  .binder__select > i:nth-child(4) { right: -4px; bottom: -4px; }
+  .binder__layer {
+    position: absolute; left: -1px; bottom: calc(100% + 10px);
+    display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 6px;
+    background: var(--paper); border: 1px solid rgba(27,27,27,.1);
+    font: 400 12px/1 var(--font-mono); color: var(--steel-dark); white-space: nowrap;
+  }
+  .binder__layer svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+}
+@media (min-width: 1180px) {
+  .stage--open .binder__select { left: calc(var(--spine-w) - var(--hinge-w)); }
+}
+/* the card in hand is the selected layer: orange handles at its corners and
+   its name over its top edge, as a frame picked on a canvas */
+.card__select { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .pocket--raised:not(.is-flying):not(.is-open) > .card > .card__select {
+    display: block; position: absolute; inset: -6px; pointer-events: none;
+    border: 1px solid var(--signal); border-radius: 2px;
+  }
+  .card__select > i { position: absolute; width: 7px; height: 7px; box-sizing: border-box; background: var(--paper); border: 1px solid var(--signal); }
+  .card__select > i:nth-child(1) { left: -4px; top: -4px; }
+  .card__select > i:nth-child(2) { right: -4px; top: -4px; }
+  .card__select > i:nth-child(3) { left: -4px; bottom: -4px; }
+  .card__select > i:nth-child(4) { right: -4px; bottom: -4px; }
+  .card__select > b {
+    position: absolute; left: -1px; bottom: calc(100% + 6px); padding: 4px 7px; border-radius: 4px;
+    background: #c23001; color: #fff;   /* white on --signal is 3.9:1 */
+    font: 400 11px/1 var(--font-mono); white-space: nowrap;
+  }
+  .card__select .is-open-label { display: none; }
+  :host(.is-unlocked) .card__select .is-shut-label { display: none; }
+  :host(.is-unlocked) .card__select .is-open-label { display: inline; }
+  .stage .leaf__seg .card__select { display: none !important; }
 }
 /* Below desktop the cover shows as a narrow edge down the left, the same
    leatherette as the spine, with the ring plate on its seam, as on desktop:
@@ -398,8 +478,9 @@ button, select { font: inherit; }
   --oy: calc(-1px * (var(--py) + 10));
 }
 .pocket[hidden] { display: none !important; }
-/* raised, a card is pulled, not slid: it tips back 4° about its bottom edge (Fable review) */
-.pocket--raised { --lift: -10%; --rx: -4deg; }
+/* raised, a card slides straight up out of its sleeve: no tip, no depth.
+   The 4° tip-back read oddly under the holo (Ryan, 10 November 2026). */
+.pocket--raised { --lift: -10%; }
 .pocket__well {
   position: absolute; inset: 0; border-radius: 7px;
   background:
@@ -513,6 +594,13 @@ button, select { font: inherit; }
     radial-gradient(300px 220px at 50% 50%, rgba(255,255,255,.18), rgba(255,255,255,.05) 55%, transparent 100%),
     radial-gradient(450px 340px at 50% 50%, rgba(255,255,255,.08), transparent 100%);
 }
+/* The light as a shader (a trial, 11 November 2026, after Jared Rauh's
+   "Animated Light Flair", CC BY 4.0): one canvas in the glare sheet draws
+   the band, the lamp's bloom and its flare ghosts, so it keeps the sheet's
+   mask (sleeves only) and its one screen blend. The three CSS sheets stand
+   aside while it runs. ?light=css brings them back for comparison. */
+.binder__flair { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.stage--flair .binder__band, .stage--flair .binder__prism, .stage--flair .binder__gloss { display: none; }
 /* the pointer's hand: a soft shadow cast away from the lamp, over the glare
    too. A hand held well above the page under a lamp casts a wide, faint
    penumbra, not a spot, and it trails the hand a little. At 70% of its first
@@ -628,8 +716,7 @@ button, select { font: inherit; }
 .card {
   position: absolute; inset: 10px; z-index: 2;
   border-radius: 6px;
-  /* the tilt turns about the bottom edge: down half the card, tip, back up */
-  transform: translate(0, var(--lift)) translateY(50%) perspective(900px) rotateX(var(--rx)) translateY(-50%);
+  transform: translate(0, var(--lift));
   transition: transform var(--d-lift) var(--e-out), z-index 0s linear var(--d-lift);
   cursor: pointer;
   outline: none;
@@ -904,8 +991,11 @@ button, select { font: inherit; }
   background-position: var(--ox) var(--oy), 0 0, 0 0;
   background-repeat: no-repeat;
 }
+/* The border, simplified (10 November 2026): one thinner band of the same
+   rainbow, no saturate filter, and no ink lip inside it, so the card's edge
+   reads as a single line of foil rather than a ring inside a frame. */
 .stage--holo .face__foil {
-  padding: calc(var(--cw) * .026);
+  padding: calc(var(--cw) * .018);
   background:
     repeating-linear-gradient(118deg,
       hsl(352 100% 72%) 0px, hsl(42 100% 66%) 78px, hsl(105 80% 62%) 156px, hsl(178 85% 62%) 234px,
@@ -913,10 +1003,10 @@ button, select { font: inherit; }
   background-size: var(--BW) var(--BH);
   background-position: var(--ox) var(--oy);
   background-repeat: no-repeat;
-  filter: saturate(1.15);
+  filter: none;
   opacity: 1;
 }
-.stage--holo .face__foil::after { box-shadow: 0 0 0 1px hsl(var(--h) calc(var(--s) * 50%) 28% / .35); }
+.stage--holo .face__foil::after { display: none; }
 .stage--holo .cf-index, .stage--holo .cf-foot { color: hsl(var(--h) calc(var(--s) * 45%) 18%); }   /* 27% fell to 2.8:1 on the brightest film */
 .stage--holo .cf-title p { color: hsl(var(--h) calc(var(--s) * 30%) 20%); }
 .stage--holo .cf-foot { border-top-color: hsl(var(--h) calc(var(--s) * 40%) 30% / .25); }
@@ -1333,6 +1423,49 @@ kbd { font: 600 11px/1 var(--font-mono); padding: 2px 5px; border: 1px solid var
   text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
 }
 .lock-dialog__alt button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+/* on the homepage the foot holds the way to ask for the password and the way back to the sleeve */
+.lock-dialog p.lock-dialog__alt--foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.lock-dialog__alt a { color: var(--ink); font-weight: 600; text-underline-offset: 3px; }
+.lock-dialog__alt a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; border-radius: 2px; }
+
+/* Overview first, drawn out (N1, 10 November 2026). On the homepage a
+   locked card leaves its sleeve, turns once and tucks into a sleeve in the
+   dialog: the flight a study takes beside its intro, without the unfold.
+   The card in the dialog is a copy laid out at the card's own size and
+   scaled into the sleeve, so its foil and type match the one it left. */
+.lock-dialog__sleeve, .lock-dialog__meta, .lock-dialog__sub { display: none; }
+.lock-dialog--card { width: min(680px, calc(100% - 32px)); padding: 32px; overflow: visible; }
+.lock-dialog--card[open] { display: grid; grid-template-columns: 140px minmax(0, 1fr); column-gap: 28px; align-items: start; }
+.lock-dialog--card > * { grid-column: 2; }
+.lock-dialog--card .lock-dialog__icon { display: none; }
+.lock-dialog--card .lock-dialog__sleeve {
+  display: block; grid-column: 1; grid-row: 1 / span 5; position: relative; width: 140px; box-sizing: border-box;
+  border-radius: 10px; background: #2b2e34; box-shadow: inset 0 2px 5px rgba(0,0,0,.55);
+}
+.lock-dialog--card .lock-dialog__meta { display: block; margin: 0 0 10px; font: 400 12px/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--steel-dark); }
+.lock-dialog--card h2 { margin: 0; font-size: 30px; line-height: 1.2; letter-spacing: -.02em; }
+.lock-dialog--card .lock-dialog__sub { display: block; margin: 2px 0 16px; font-size: 15px; }
+.lock-dialog--card #lockBody { color: var(--ink); font-size: 16px; line-height: 1.6; }
+.lock-dialog--card p.lock-dialog__alt { grid-column: 1 / -1; }
+.lock-card { position: absolute; left: 7px; top: 7px; z-index: 2; transform-origin: 0 0; pointer-events: none; --ry: 0deg; }
+.lock-dialog__plastic {   /* the sleeve's plastic, over the card once it has tucked in */
+  position: absolute; left: 2px; right: 2px; top: 24px; bottom: 2px; z-index: 3; pointer-events: none;
+  border-radius: 3px 3px 8px 8px; border: 1px solid rgba(255,255,255,.26); border-top-color: rgba(255,255,255,.55);
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.05) 38%, rgba(255,255,255,.1));
+}
+@keyframes lockScrimIn { 0%, 13% { opacity: 0; } 47%, 100% { opacity: 1; } }
+@keyframes lockScrimOut { from { opacity: 1; } to { opacity: 0; } }
+.lock-dialog--card.is-flying::backdrop { animation: lockScrimIn 1350ms linear both; }
+.lock-dialog--card.is-leaving::backdrop { animation: lockScrimOut 600ms linear both; }
+.pocket.is-asking .card, .pocket.is-asking .card__shadow { opacity: 0; }
+@media (max-width: 599px) {
+  .lock-dialog--card { padding: 24px; }
+  .lock-dialog--card[open] { grid-template-columns: 96px minmax(0, 1fr); column-gap: 18px; }
+  .lock-dialog--card .lock-dialog__sleeve { width: 96px; grid-row: 1 / span 4; }
+  .lock-dialog--card h2 { font-size: 24px; }
+  .lock-dialog--card .lock-dialog__actions, .lock-dialog--card .lock-dialog__form { grid-column: 1 / -1; margin-top: 8px; }
+  .lock-card { left: 6px; top: 6px; }
+}
 
 /* ---------- notes below ---------- */
 .notes { padding: 0 0 72px; display: grid; gap: 24px; grid-template-columns: 1fr; }

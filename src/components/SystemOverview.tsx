@@ -9,7 +9,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SizesLadder } from './SystemSizes';
+import { SystemSource, SOURCE_LAYERS as LAYERS } from './SystemSizes';
 import PrFlow from './PrFlow';
 import agents from '../data/system-agents.json';
 import snapshot from '../data/system-snapshot.json';
@@ -17,12 +17,6 @@ import snapshot from '../data/system-snapshot.json';
 const SITE = 'https://www.rdeboerdesigns.com';
 export const INSTALL = `curl -so ~/rdeboer-system.mjs ${SITE}/system/mcp.mjs\nclaude mcp add rdeboer-system -- node ~/rdeboer-system.mjs`;
 
-const LAYERS = [
-  { name: 'llms.txt', body: 'Where an agent starts: what exists and where to read it.', href: '/llms.txt' },
-  { name: 'Rules and skills', body: 'AGENTS.md, DESIGN.md, PRODUCT.md and my design-taste skill. How to use what exists.', href: '/system/design.md' },
-  { name: 'MCP server', body: `rdeboer-system: ${agents.tools.length} read-only tools over the generated files.`, href: '/system/mcp.mjs', foundation: true },
-  { name: 'Generated from the code', body: 'The catalog, rules and drift files, rewritten on every build.', href: '/system/catalog.json' },
-];
 
 const CopyInstall: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -50,7 +44,7 @@ const SystemOverview: React.FC<{ onOpenCatalog: () => void }> = ({ onOpenCatalog
         Anyone can sketch, the team can play, and only production gets the full review. Each size reads
         the same source. What changes is how much gets checked.
       </p>
-      <SizesLadder />
+      <SystemSource embed={false} />
       <ol className="sysx__sizes">
         {agents.sizes.map((size, i) => (
           <li key={size.id} className={`sysx__size${size.id === 'production' ? ' sysx__size--ships' : ''}`}>

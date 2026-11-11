@@ -493,12 +493,12 @@
 // ── Responsive ──────────────────────────────────────────────────────────
 // The editor AEM quotes is a desktop tool; the side panel and layout grid stay
 // there. Page properties, annotations and the switch work everywhere.
-@media (max-width: 999px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .author-bar__tool--desktop,
   .side-panel--author { display: none; }
 }
 
-@media (max-width: 639px) {
+@media (max-width: #{$breakpoint-sm - 1}) {
   .author-bar {
     right: 12px;
     bottom: 12px;

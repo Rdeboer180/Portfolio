@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { verifyPassword } from '../utils/unlock';
+import { EMAIL_HREF } from '../data/site';
 
 type Variant = 'case-study' | 'site';
 
@@ -24,7 +25,9 @@ interface PasswordModalProps {
 
 // The binder's lock dialog is the model (Ryan, 21 October): it names the
 // study, says in one sentence why it is locked, and offers the two ways on.
-type Copy = { title: string; body: string; primary: string; secondary: string };
+// overviewFirst: the primary button reads the overview and the secondary opens
+// the password field (a named study); otherwise Unlock leads, as before.
+type Copy = { title: string; body: string; primary: string; secondary: string; overviewFirst?: boolean };
 const COPY: Record<Variant, Copy> = {
   'case-study': {
     title: 'These screens are password protected',
@@ -39,11 +42,15 @@ const COPY: Record<Variant, Copy> = {
     secondary: 'Continue without a password',
   },
 };
+// A named study leads with the door that works for everyone (canvas N1, 10
+// November 2026): seven of the twelve studies are locked, so this is most
+// visitors' first click on the work. The binder's own dialog reads the same.
 const studyCopy = (study: string): Copy => ({
-  title: `${study} is password protected`,
-  body: 'Its screens include employer work, so the study is password protected. Unlock it to see the whole study, or read the overview without the screens.',
-  primary: 'Unlock',
-  secondary: 'Read the overview',
+  title: study,
+  body: 'The overview is open. Its screens include employer work, so they stay behind a password.',
+  primary: 'Read the overview',
+  secondary: 'I have the password',
+  overviewFirst: true,
 });
 
 const LockIcon = () => (
@@ -81,7 +88,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
   // Capture return target, set initial focus, and install Tab trap
   useEffect(() => {
     returnFocusRef.current = document.activeElement as HTMLElement;
-    // Initial state: focus the "Unlock" button
+    // Initial state: focus the primary button
     if (!showPassword) {
       unlockBtnRef.current?.focus();
     }
@@ -119,7 +126,7 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
     if (!el) return;
     const focusable = Array.from(
       el.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
       )
     ).filter((node) => !node.closest('[aria-hidden="true"]'));
     if (focusable.length === 0) return;
@@ -180,13 +187,13 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             <button
               ref={unlockBtnRef}
               className="password-modal__button password-modal__button--primary"
-              onClick={() => setShowPassword(true)}
+              onClick={copy.overviewFirst ? decline : () => setShowPassword(true)}
             >
               {copy.primary}
             </button>
             <button
               className="password-modal__button password-modal__button--secondary"
-              onClick={decline}
+              onClick={copy.overviewFirst ? () => setShowPassword(true) : decline}
             >
               {copy.secondary}
             </button>
@@ -215,6 +222,11 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
             </div>
             {error && <p className="password-modal__error" role="alert">{error}</p>}
           </form>
+        )}
+        {study && (
+          <p className="password-modal__ask">
+            No password? <a href={`${EMAIL_HREF}?subject=${encodeURIComponent(`Password for the ${study} case study`)}`}>Ask Ryan for it</a>
+          </p>
         )}
       </div>
     </div>

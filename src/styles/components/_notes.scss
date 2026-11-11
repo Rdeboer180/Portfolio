@@ -575,7 +575,7 @@
     width: 100%;
     max-width: $container-text-width;
     margin: 0 auto;
-    padding: $spacing-lg $spacing-2xl 0;
+    padding: $spacing-lg $container-padding-x 0;
     counter-reset: note-section;
 
     // Prose rules skip embedded components (.note-embed: the prototypes),
@@ -585,7 +585,7 @@
       font-size: $font-size-body;
       line-height: 1.7;
       color: $color-neutral-standard;
-      max-width: $container-text-width;
+      max-width: $measure;
     }
 
     p:where(:not(.note-embed *)) {
@@ -1132,15 +1132,16 @@
 @media (max-width: $breakpoint-md) {
   .notes {
     &__header {
-      padding: $spacing-3xl $spacing-xl $spacing-xl;
+      padding: $spacing-3xl $container-padding-x $spacing-xl;
     }
 
+    // the fluid gutter (see --gutter): 16px on a 320px phone, 24px by tablet
     &__pinned-wrap,
     &__body,
     &__close,
     &__section {
-      padding-left: $spacing-lg;
-      padding-right: $spacing-lg;
+      padding-left: $container-padding-x;
+      padding-right: $container-padding-x;
     }
 
     &__title {
@@ -1306,7 +1307,7 @@
     color: $color-neutral-muted;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: $breakpoint-xs) {
     .notes__artboard-controls {
       flex-wrap: wrap;
       button { flex: 1; }

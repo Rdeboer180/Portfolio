@@ -9,8 +9,8 @@ import NotFoundPage from './components/NotFoundPage';
 
 // Home-page sections load in the initial chunk — home is the default route.
 import Hero from './components/Hero';
-import About from './components/About';
 import SelectedWriting from './components/SelectedWriting';
+import WhyMe from './components/WhyMe';
 import SkillMastery from './components/SkillMastery';
 import CaseStudyBinder from './components/CaseStudyBinder';
 import SystemsInPractice from './components/SystemsInPractice';
@@ -154,7 +154,7 @@ function HomeRoute() {
           <SelectedWriting />
         </AuthoredSection>
         <AuthoredSection {...AUTHORED_COMPONENTS.bio}>
-          <About compact />
+          <WhyMe />
         </AuthoredSection>
         <AuthoredSection {...AUTHORED_COMPONENTS.process}>
           <SystemsInPractice />

@@ -38,7 +38,7 @@ export const RESUME = {
   "experience": [
     {
       "name": "Tire Rack",
-      "title": "Senior Web Designer",
+      "title": "Senior Web/Product Designer",
       "dates": "May 2021 - Present",
       "location": "South Bend, IN",
       "summary": "Lead product and interface design across ecommerce, dealer workflows, reusable content systems, and internal tools, working with UX, engineering, analytics, SEO, and content teams.",
@@ -75,7 +75,7 @@ export const RESUME = {
     },
     {
       "name": "Tire Rack",
-      "title": "Web Designer",
+      "title": "Web/Product Designer",
       "dates": "2014 - 2021",
       "location": "South Bend, IN",
       "bullets": [

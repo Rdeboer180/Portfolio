@@ -200,11 +200,8 @@ async function main() {
       // revealed. They are scoped by section, not by class: DesignSystem
       // renders `.sip__stage.is-visible` as a fixed demo, and /notes has
       // ScrollReveals of its own whose static state it keeps.
-      clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline, #systems .sip__intro, #systems .sip__stage, #systems .sip__loop, #mastery .reveal-fade')
+      clone.querySelectorAll('.about__signature, .career-timeline__step, .hero-intro__headline, #systems .sip__intro, #systems .sip__stage, #systems .sip__loop')
         .forEach((el) => el.classList.remove('is-visible'));
-      // SystemDoors arms itself (first frame) only after mount; the static
-      // file keeps its end frame, which is also React's first render.
-      clone.querySelectorAll('#systems .sip-doors').forEach((el) => el.classList.remove('is-visible', 'is-armed'));
       clone.querySelector('#projects.case-playground')?.classList.remove('case-playground--revealed');
       // `.case-playground__unlock` is the same thing wearing its current
       // clothes: the standing unlock offer moved out of the site chrome and
@@ -227,12 +224,9 @@ async function main() {
       // page on every load, and the captured script tag held up the page head
       // with 58 KB before any content showed, then loaded a second time.
       clone.querySelectorAll('.case-binder__host, script[src*="/binder-home/"], a[data-from-binder]').forEach((el) => el.remove());
-      // The homepage notes list (SelectedWriting) measures its shared
-      // highlight after mount. The client's first render has neither the
-      // measured class nor the inline position, and the active row carries
-      // the tint itself until then, so the static file shows the same.
-      clone.querySelectorAll('.selected-writing__results').forEach((el) => el.classList.remove('is-measured'));
-      clone.querySelectorAll('.selected-writing__highlight').forEach((el) => el.removeAttribute('style'));
+      // Anything a component adds to the page only at runtime (the binder's
+      // margin-note font) stays out of the static file.
+      clone.querySelectorAll('[data-runtime-only]').forEach((el) => el.remove());
 
       // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its
       // modifier classes straight to the DOM after the copy resolves — React

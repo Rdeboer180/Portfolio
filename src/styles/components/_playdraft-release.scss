@@ -55,7 +55,7 @@
     white-space: nowrap;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     &__platform { display: none; }
     &--note, &--index { align-items: flex-start; }
     &--note &__icon, &--index &__icon { margin-top: 4px; }
@@ -134,7 +134,7 @@
   }
   &__scan figcaption { color: $color-neutral-light; font-size: $font-size-caption; line-height: 1.5; }
 
-  @media (max-width: 600px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     &__content { grid-template-columns: minmax(0, 1fr); }
     &__scan { display: none; }
     &__button { width: 100%; }

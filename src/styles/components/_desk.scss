@@ -28,7 +28,7 @@
     inset 0 12px 16px -12px rgba(70, 55, 35, 0.16),
     inset 0 -10px 14px -10px rgba(70, 55, 35, 0.08);
 
-  @media (max-width: 600px) {
+  @media (max-width: #{$breakpoint-sm - 1}) {
     // smaller boards on a phone, in proportion to the screen
     background-size: auto, 840px 840px;
   }
@@ -37,6 +37,7 @@
 html.home-desk {
   .case-binder,
   .about__differentiator,
+  .why-me,
   .testimonials,
   .faq {
     @include desk-grain;

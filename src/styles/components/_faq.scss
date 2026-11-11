@@ -51,28 +51,6 @@
     margin-bottom: $spacing-lg;
   }
 
-  // Signature: inline ringed "?" drawn as SVG so it never depends on font
-  // metrics or load timing — perfectly centered vector, tilted for play.
-  &__mark {
-    display: inline-block;
-    width: 0.9em;
-    height: 0.9em;
-    margin: 0 0.08em;
-    vertical-align: -0.08em;
-    color: $color-primary;
-    transform: rotate(-4deg);
-    overflow: visible;
-  }
-
-  &__mark-glyph {
-    font-family: $font-family-heading;
-    font-weight: $font-weight-bold;
-    font-size: 19px;
-    fill: currentColor;
-    text-anchor: middle;
-    dominant-baseline: central;
-  }
-
   // ==========================================
   // Right column — accordion grouped in a card
   // ==========================================
@@ -204,7 +182,7 @@
 // ==========================================
 // Responsive
 // ==========================================
-@media (max-width: $breakpoint-md) {
+@media (max-width: #{$breakpoint-md - 1}) {
   .faq {
     padding: $spacing-3xl 0;
 
@@ -237,10 +215,193 @@
 }
 
 
-// The trigger is wrapped in an h3 for heading navigation; the heading itself
-// carries no visual weight of its own.
-.faq__question-heading {
-  margin: 0;
-  font: inherit;
-  text-transform: none;
+// ============================================
+// The homepage FAQ as five figures (canvas "Got questions: four takes", F2,
+// 10 Nov 2026). Each question is a tile: a small line drawing, a verdict and
+// the question. The open one wears the selection frame (ink, Signal Orange
+// handles) and a stem down to the one answer line. The accordion above stays
+// for the targeted homepage template.
+// ============================================
+.faq--figures {
+  .faq__container { display: block; }
+
+  .faq__title { margin: 0 0 var(--space-3xl); }
+
+
+  // the work questions take four tracks, the personal one a fifth, and the
+  // flex basis keeps every tile the same width across the gap between them
+  .faq-fig__groups {
+    display: flex;
+    gap: var(--space-3xl);
+  }
+  .faq-fig__group--work { flex: 4 1 calc(3 * var(--space-lg)); min-width: 0; }
+  .faq-fig__group--life { flex: 1 1 0; min-width: 0; }
+  .faq-fig__group--work .faq-fig__tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .faq-fig__rail {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-md);
+  }
+  .faq-fig__rail-label {
+    margin-right: var(--space-md);
+    font: 400 12px/16px var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary, #707070);
+    white-space: nowrap;
+  }
+  .faq-fig__rail-handle {
+    width: 5px;
+    height: 5px;
+    flex: none;
+    box-sizing: border-box;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-secondary);
+  }
+  .faq-fig__rail-line { flex: 1; height: 1px; background: rgba(27, 27, 27, 0.1); }
+
+  .faq-fig__tiles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .faq-fig__item { position: relative; display: flex; }
+
+  .faq-fig__tile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;   // two-line verdicts in the work row; the personal tile matches
+    box-sizing: border-box;
+    margin: 0;
+    padding: 18px;
+    text-align: left;
+    background: #fff;
+    border: 1px solid rgba(27, 27, 27, 0.1);
+    border-radius: var(--radius-xl);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+
+    &:hover { border-color: rgba(240, 61, 1, 0.45); }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+  }
+
+  .faq-fig__index { font: 400 12px/14px var(--font-mono); color: var(--color-secondary-dark); }
+  .faq-fig__drawing { display: block; width: 100%; max-width: 176px; height: auto; margin-top: 14px; overflow: visible; }
+  .faq-fig__verdict {
+    margin-top: 16px;
+    font: 800 24px/30px var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  .faq-fig__question {
+    margin-top: 6px;
+    font: var(--text-body-sm)/var(--leading-body-sm) var(--font-body);
+    color: var(--color-text-secondary);
+  }
+
+  // the drawings: ink, steel and one hairline weight, no fills but ink and paper
+  .faq-fig__ink { stroke: var(--color-text-primary); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .faq-fig__steel { stroke: var(--color-secondary); stroke-width: 1; }
+  .faq-fig__thick { stroke-width: 1.5; }
+  .faq-fig__faint { stroke: #d6dce4;   /* steel light */ stroke-width: 1.5; }
+  .faq-fig__hair { stroke-width: 1; }
+  .faq-fig__dash { stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .faq-fig__handle { fill: #fff; stroke: var(--color-secondary); }
+  .faq-fig__ink-fill { fill: var(--color-text-primary); }
+  .faq-fig__paper { fill: #fff; }
+  .faq-fig__tick { stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .faq-fig__label { font: 400 10.5px var(--font-mono); fill: var(--color-secondary-dark); }
+
+  // the open figure is the selected object: an ink frame with orange handles,
+  // and a stem down to its answer
+  .faq-fig__frame {
+    display: none;
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--color-text-primary);
+    border-radius: var(--radius-xl);
+    pointer-events: none;
+
+    i {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      box-sizing: border-box;
+      background: var(--color-primary);
+      border: 1px solid #fff;
+    }
+    i:nth-child(1) { top: -4px; left: -4px; }
+    i:nth-child(2) { top: -4px; right: -4px; }
+    i:nth-child(3) { bottom: -4px; left: -4px; }
+    i:nth-child(4) { bottom: -4px; right: -4px; }
+  }
+  .faq-fig__item.is-open {
+    .faq-fig__frame { display: block; }
+    .faq-fig__tile { border-color: transparent; }
+  }
+
+  .faq-fig__answer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: var(--space-xl);
+    margin-top: 28px;
+    padding-top: var(--space-xl);
+    border-top: 1px solid rgba(27, 27, 27, 0.1);
+    min-height: 160px;
+  }
+  .faq-fig__count {
+    font: 400 12px/26px var(--font-mono);
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary, #707070);
+  }
+  .faq-fig__text {
+    max-width: 674px;
+    font: var(--text-body)/1.6 var(--font-body);
+    color: var(--color-text-secondary);
+
+    p { margin: 0; }
+    p + p { margin-top: var(--space-md); }
+    a { color: var(--color-primary-dark); text-underline-offset: 3px; }
+    a:hover { color: var(--color-primary); }
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    .faq-fig__item.is-open::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 1px;
+      height: 28px;
+      background: var(--color-text-primary);
+      pointer-events: none;
+    }
+  }
+
+  // below desktop the two groups stack, each on the same four (or two)
+  // tracks, so the personal tile stays the size of the others
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    .faq-fig__groups { flex-direction: column; gap: var(--space-xl); }
+    .faq-fig__group--work, .faq-fig__group--life { flex: none; }
+    .faq-fig__tiles,
+    .faq-fig__group--work .faq-fig__tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: #{$breakpoint-md - 1}) {
+    .faq__title { font-size: $font-size-h3; }
+    .faq-fig__tiles,
+    .faq-fig__group--work .faq-fig__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+    .faq-fig__tile { min-height: 0; padding: 14px; }
+    .faq-fig__verdict { font-size: 20px; line-height: 26px; margin-top: 12px; }
+    .faq-fig__answer { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-fig__tile { transition: none; }
+  }
 }

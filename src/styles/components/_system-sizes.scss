@@ -64,38 +64,6 @@
     color: $color-neutral-standard;
   }
 
-  // ── Ladder: three rungs rising to production, each dropping to one rail ──
-  &__ladder {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: $spacing-xl;
-  }
-
-  &__rung {
-    display: flex;
-    flex-direction: column;
-
-    &::after {
-      content: '';
-      flex: 1 1 auto;
-      min-height: $spacing-lg;
-      align-self: center;
-      border-left: 1.5px dashed $color-secondary;
-    }
-  }
-
-  &__rung--1 { padding-top: 144px; }
-  &__rung--2 { padding-top: 72px; }
-
-  &__rail {
-    margin: 0;
-    padding-top: $spacing-sm;
-    border-top: 2px solid $color-secondary-dark;
-    font-family: $font-family-mono;
-    font-size: 12px;
-    color: $color-secondary-dark;
-  }
-
   // ── Two readers: what people read, one source, what agents read ──────────
   &__readers {
     display: grid;
@@ -203,17 +171,11 @@
 
   // ── Phones: each figure is its list ─────────────────────────────────────
   @media (max-width: #{$breakpoint-md - 1}) {
-    &__ladder,
     &__readers,
     &__drift {
       grid-template-columns: minmax(0, 1fr);
       row-gap: $spacing-md;
     }
-
-    &__rung--1,
-    &__rung--2 { padding-top: 0; }
-    &__rung::after { display: none; }
-    &__rail { margin-top: $spacing-md; }
 
     &__item::after,
     &__drift .sizes__card + .sizes__card::before { display: none; }
@@ -229,4 +191,351 @@
       &::after { display: none; }
     }
   }
+}
+
+// ── One source (canvas D5): sizes read on the left, the source in ink in the
+// middle, the drift loop writes back on the right. Markers carry the size
+// (dashed, outlined, filled) before the words do; Signal Orange stays on what
+// ships and on the person who decides.
+.sizes--source {
+  margin: 0;
+
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  figcaption {
+    margin-top: $spacing-xl;
+    text-align: left;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+}
+
+.sizes {
+  &__source {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 64px minmax(220px, 280px) 64px minmax(0, 1fr);
+    align-items: center;
+  }
+
+  &__side-col {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    min-width: 0;
+  }
+
+  // one mono label size inside the graph
+  &__source &__tag { font-size: 12px; }
+
+  &__tag--caps {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__stack {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__card--sketch { border: 1.5px dashed $color-secondary; }
+  &__card--playground { border: 1.5px solid $color-neutral-dark; }
+  // the source carries the orange now (treatment 4, 11 Nov 2026), so production is drawn in ink
+  &__card--production { border: 1.5px solid $color-neutral-dark; }
+
+  &__size-tag {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: 12px;
+  }
+
+  &__marker {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 12px;
+    box-sizing: border-box;
+    border-radius: 2px;
+
+    &--sketch { border: 1.5px dashed $color-secondary-dark; }
+    &--playground { border: 1.5px solid $color-neutral-dark; }
+    &--production { background: $color-neutral-dark; }
+  }
+
+  &__body--ink { color: $color-neutral-dark; font-size: $font-size-body; }
+
+  &__see {
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    &:hover { color: $color-primary-dark; }
+  }
+
+  // the arrows: a rule with a head, pointing into the source and out of it
+  &__arrow {
+    position: relative;
+    height: 1.5px;
+    margin: 0 $spacing-sm;
+    background: $color-primary-dark;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      transform: translateY(-50%);
+    }
+
+    &--in::after { right: -2px; border-left: 7px solid $color-primary-dark; }
+    &--out::after { left: -2px; border-right: 7px solid $color-primary-dark; }
+  }
+
+  &__core {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xl $spacing-lg;
+    // Orange Tint with a 35% Signal Orange line, the How I work board's pair
+    // (Ryan's pick of five treatments, 11 Nov 2026)
+    background: $color-primary-light;
+    border: 1px solid rgba(240, 61, 1, 0.35);
+    color: $color-neutral-dark;
+    border-radius: $card-border-radius-lg;
+
+  }
+
+  // The source as an agent reads it, top to bottom; the MCP server is the
+  // foundation the rules and skills sit on, so it carries the one light row.
+  &__layers {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__layer {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(240, 61, 1, 0.25);
+
+    &:first-child { border-top: 0; padding-top: 0; }
+  }
+
+  &__layer--foundation {
+    margin: 4px -10px;
+    padding: 10px;
+    border: 1px solid rgba(240, 61, 1, 0.35);
+    border-radius: $radius-md;
+    background: $color-white;
+
+    + .sizes__layer { border-top: 0; }
+  }
+
+  &__layer-name {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: $font-family-heading;
+    font-size: 15px;
+    font-weight: $font-weight-bold;
+    line-height: 1.3;
+    color: $color-neutral-dark;
+  }
+
+  &__layer-chip {
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: $color-neutral-dark;
+    color: $color-white;
+    font-family: $font-family-mono;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  &__layer-short {
+    font-family: $font-family-mono;
+    font-size: 12px;
+    line-height: 1.4;
+    color: $color-primary-dark;   // 4.9:1 on the tint
+  }
+
+  &__core-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-h4;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  // the loop back: a thread with a mark per step, the person who decides in orange
+  &__loop {
+    display: flex;
+    flex-direction: column;
+    border-left: 1.5px solid $color-primary-md;
+  }
+
+  &__loop-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: $spacing-sm;
+    align-items: baseline;
+    padding: 8px 0 8px $spacing-lg;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 15px;
+      width: 9px;
+      height: 9px;
+      box-sizing: border-box;
+      border: 1.5px solid $color-primary-muted;
+      background: $color-white;
+    }
+
+    &--decide {
+      &::before { border-color: $color-primary; background: $color-primary; }
+      .sizes__loop-who { color: $color-primary-dark; }
+    }
+  }
+
+  &__loop-text { display: flex; flex-direction: column; }
+
+  &__loop-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-lg;
+    line-height: 1.3;
+    color: $color-neutral-dark;
+  }
+
+  &__curtain {
+    margin: $spacing-sm 0 0;
+    padding-left: $spacing-lg;
+    font-size: $font-size-body-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-dark;
+  }
+
+  // Three columns need about 1000px; below that the graph stacks.
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    &__source {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: $spacing-md;
+    }
+
+    &__arrow {
+      justify-self: center;
+      width: 1.5px;
+      height: 28px;
+      margin: 0;
+
+      &::after {
+        top: auto;
+        left: 50%;
+        right: auto;
+        border-top: 7px solid $color-primary-dark;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 0;
+        transform: translateX(-50%);
+      }
+
+      &--in::after { bottom: -2px; }
+      // writes back: up into the source
+      &--out::after {
+        top: -2px;
+        bottom: auto;
+        border-top: 0;
+        border-bottom: 7px solid $color-primary-dark;
+      }
+    }
+  }
+}
+
+// Tablet (canvas N5, 10 Nov 2026): the graph keeps its shape as three bands
+// in place of the phone stack. Sizes in a row of three, the source as one tinted
+// bar with its four parts two by two, and the loop as a five-step rail. The
+// note's figure sits in a narrower reading column and keeps the stack.
+@media (min-width: $breakpoint-md) and (max-width: #{$breakpoint-lg - 1}) {
+  .sizes--source:not(.note-embed) {
+    .sizes__stack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: $spacing-md;
+    }
+
+    .sizes__core {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      align-items: center;
+      gap: $spacing-xl;
+    }
+
+    .sizes__layers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: $spacing-sm $spacing-lg;
+    }
+
+    .sizes__layer,
+    .sizes__layer:first-child {
+      padding: 10px;
+      border: 1px solid transparent;
+      border-radius: $radius-md;
+    }
+
+    .sizes__layer--foundation {
+      margin: 0;
+      border-color: rgba(240, 61, 1, 0.35);
+    }
+
+    // the loop as a rail: the thread runs along the top, a mark at each step
+    .sizes__loop {
+      flex-direction: row;
+      border-left: 0;
+      border-top: 1.5px solid $color-primary-md;
+    }
+
+    .sizes__loop-step {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      padding: $spacing-md $spacing-sm 0 0;
+
+      &::before { left: 0; top: -5px; }
+    }
+
+    // every step keeps a line for who acts, so the titles share a baseline
+    .sizes__loop-who { min-height: 18px; }
+
+    .sizes__curtain { padding-left: 0; }
+  }
+}
+
+// In a note's reading column the source narrows and the loop's names tuck in.
+.notes__body .sizes__source {
+  grid-template-columns: minmax(0, 1fr) 44px minmax(150px, 190px) 44px minmax(0, 1fr);
+}
+.notes__body .sizes__core { padding: $spacing-lg $spacing-md; }
+.notes__body .sizes__core-title { font-size: $font-size-h5; }
+.notes__body .sizes__loop-step { grid-template-columns: 52px minmax(0, 1fr); padding-left: $spacing-md; }
+.notes__body .sizes__body--ink { font-size: $font-size-body-sm; }
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .notes__body .sizes__source { grid-template-columns: minmax(0, 1fr); }
 }

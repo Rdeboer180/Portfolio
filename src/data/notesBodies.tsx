@@ -6,7 +6,7 @@ import playdraft from './playdraft.json';
 import { SystemsBoard } from '../components/SystemsInPractice';
 import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
 import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
-import { SizesLadder, SizesReaders, DriftLoop } from '../components/SystemSizes';
+import { SystemSource, SizesReaders, DriftLoop } from '../components/SystemSizes';
 import { FirstDraft, Inputs, EaseDemo } from '../components/VisualProblemSolver';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
@@ -313,7 +313,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
 
       <h2>A system needs three sizes, each with its own rules</h2>
       <p>I think of it as three sizes reading from one source. What changes between them is how much gets checked.</p>
-      <SizesLadder />
+      <SystemSource reviewHref="/design-system" caption={false} />
       <ul>
         <li><strong>Sketch</strong> is for anyone with an idea. The tokens are fixed and the layout is loose. Nobody reviews a sketch.</li>
         <li><strong>Playground</strong> is for the team: real components, no production. It&rsquo;s where an idea gets enough fidelity to hand off. Lance Barrera&rsquo;s team at GoFundMe runs one with their system, Heart, for designers and PMs.</li>

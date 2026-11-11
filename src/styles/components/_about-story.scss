@@ -9,7 +9,7 @@
   padding: $spacing-4xl 0;
 
   &__inner {
-    max-width: 1186px;
+    max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 $container-padding-x;
   }
@@ -102,3 +102,6 @@
     }
   }
 }
+
+// Running text keeps the reading measure inside the wider copy column.
+.about-story__copy p { max-width: var(--measure); }

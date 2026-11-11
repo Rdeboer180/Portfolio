@@ -94,6 +94,32 @@
         "fc-thread"
       ],
       "relatives": []
+    },
+    "HoloSticker": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #20",
+      "path": "src/components/HoloSticker.tsx",
+      "blocks": [],
+      "relatives": []
+    },
+    "WhyMe": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #20",
+      "path": "src/components/WhyMe.tsx",
+      "blocks": [
+        "btn",
+        "ink-ground",
+        "why-me"
+      ],
+      "relatives": [
+        "About",
+        "CaseStudyPlayground",
+        "FAQ"
+      ]
     }
   },
   "patterns": {
@@ -134,6 +160,31 @@
       "status": "proposed",
       "introduced": "PR #19",
       "stylesheet": "src/styles/components/_skill-tree.scss"
+    },
+    "glance": {
+      "status": "proposed",
+      "introduced": "PR #20",
+      "stylesheet": "src/styles/components/_about-desk.scss"
+    },
+    "hero-history": {
+      "status": "proposed",
+      "introduced": "PR #20",
+      "stylesheet": "src/styles/components/_hero-contract.scss"
+    },
+    "holo-sticker": {
+      "status": "proposed",
+      "introduced": "PR #20",
+      "stylesheet": "src/styles/components/_holo-sticker.scss"
+    },
+    "holo-sticker-host": {
+      "status": "proposed",
+      "introduced": "PR #20",
+      "stylesheet": "src/styles/components/_holo-sticker.scss"
+    },
+    "why-me": {
+      "status": "proposed",
+      "introduced": "PR #20",
+      "stylesheet": "src/styles/components/_why-me.scss"
     }
   }
 }

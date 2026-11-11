@@ -110,7 +110,7 @@
   }
 
   &__context {
-    max-width: $container-text-width;
+    max-width: $measure;
     margin: 0 0 $spacing-lg;
     font-size: $font-size-body;
     line-height: $line-height-body;
@@ -123,11 +123,11 @@
     line-height: $line-height-body-lg;
     color: $color-neutral-standard;
     margin-bottom: $spacing-xl;
-    max-width: $container-text-width;
+    max-width: $measure;
   }
 
   &__ownership {
-    max-width: $container-text-width;
+    max-width: $measure;
     margin: 0 0 $spacing-xl;
     padding-left: $spacing-lg;
     border-left: 2px solid $color-primary;
@@ -194,7 +194,7 @@
     margin: $spacing-2xl 0 0;
     padding: $spacing-lg 0 $spacing-lg $spacing-xl;
     border-left: 2px solid $color-primary;
-    max-width: $container-text-width;
+    max-width: $measure;
 
     blockquote { margin: 0; }
     p { margin: 0 0 $spacing-lg; font-size: $font-size-body-lg; line-height: $line-height-body-lg; }
@@ -544,7 +544,7 @@
     line-height: $line-height-body;
     color: $color-neutral-standard;
     margin: 0 0 $spacing-xl;
-    max-width: $container-text-width;
+    max-width: $measure;
   }
 
   // Inventory list under a subsection description; dash treatment comes from
@@ -575,7 +575,7 @@
     padding: $spacing-lg 0;
     border-bottom: 1px solid $color-neutral-light;
 
-    @media (max-width: 768px) {
+    @media (max-width: $breakpoint-md) {
       grid-template-columns: 1fr;
       gap: $spacing-sm;
     }
@@ -723,7 +723,7 @@
   // sides of the password gate. Dash treatment comes from the shared list
   // rule; this sets the measure and the gap from the note.
   &__takeaways {
-    max-width: $container-text-width;
+    max-width: $measure;
     margin: $spacing-xl 0 0;
     @include fade-in-up(0.3s);
   }
@@ -1835,7 +1835,7 @@
   }
 
   .cs__beat-caption {
-    max-width: $container-text-width;
+    max-width: $measure;
     margin: $spacing-md auto 0;
     padding: 0 $container-padding-x;
     font-size: $font-size-body-sm;

@@ -218,7 +218,7 @@ Flat by default. Surfaces rest with no shadow; structure comes from hairline bor
 - **Shadow XL** (`0 8px 10px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.3)`): The image lightbox and topmost layers.
 
 ### Named Rules
-**The Flat-By-Default Rule.** Surfaces are flat at rest. A shadow, a border-color shift, a lift (`translateY(-1px)`), or the marquee accent appears only in response to state (hover, focus, active, or scroll-into-view), and then settles back. Ambient shadows and floating cards are out of language.
+**The Flat-By-Default Rule.** Surfaces are flat at rest. (The one exception, on trial: buttons and sticker icons are holo stickers and carry a sticker's small shadow at rest; see Buttons.) A shadow, a border-color shift, a lift (`translateY(-1px)`), or the marquee accent appears only in response to state (hover, focus, active, or scroll-into-view), and then settles back. Ambient shadows and floating cards are out of language.
 
 ## Shapes
 
@@ -229,10 +229,22 @@ The signature silhouette is the **selection frame**: square handles quoting a Fi
 ## Components
 
 ### Buttons
+Flat foil stickers (a trial for review, 11 November 2026; simplified the same day). Each button is a flat sticker: the button's own border is a thin brand orange foil line (`--sticker-foil`, metal: deep runs of Orange Deep and Signal Orange broken by short near-white glints), and a white die-cut edge and one flat shadow (`0 1px 2px`, 16% ink) sit outside it as box-shadows, so no button changes size or markup. No gloss, enamel, lift or turn. Hover (and keyboard focus) peels the sticker's bottom-right corner back off the page: the corner is cut away, foil and die-cut with it, so the page shows through; the face darkens where the corner lifts, with a sheen from the upper left; and the flap shows the sticker's warm release-paper backing (bright tip, hard brown crease) with two shadows back onto the face. The peel is half the button's height so it never covers the label: 20px (`--md`), 24px (`--lg`), 14px (`--sm`), a few px further while pressed, over 220ms (the registered `--peel` length). Tokens: `--sticker-foil`, `--sticker-die-cut`, `--sticker-kiss-cut`, `--sticker-shadow`, `--sticker-shadow-raised`, `--sticker-shadow-pressed`.
 - **Shape:** 10px radius (`$button-radius`), inline-flex, Hubot Sans 800 / 14px label.
-- **Primary:** Signal Orange fill, white text, 48px tall (`--lg`) with 32px horizontal padding. Hover deepens to Orange Deep, text warms to Orange Tint, and the button lifts 1px.
-- **Secondary:** Paper fill, ink text, 1px ink border. Hover inverts to an ink fill with paper text, and lifts 1px.
-- **Sizes:** `--lg` 48px, `--md` 40px, `--sm` 32px. Transition is `all 150ms ease-in-out`.
+- **Primary:** flat Orange Deep (`#c23001`; white label at 5.65:1) inside a 1.5px foil edge and a 3px white die-cut.
+- **Secondary:** white with an ink label and a 1px foil kiss-cut line 4px inside its white edge. It stays white on hover; only the corner peels.
+- **Icon:** `.btn--icon`, a 48px target holding a `HoloSticker` glyph; the glyph's own die-cut is the edge, so it does not peel. Hover moves the light (the foil crossfades); pressed scales to 96%.
+- **States:** focus-visible peels the corner and draws a 2px Signal Orange ring 6px out, clear of the die-cut; disabled is 50% and greyed and never peels. Reduced motion turns the corner without the motion.
+- **Sizes:** `--lg` 48px, `--md` 40px, `--sm` 32px.
+
+### Sticker icons
+`HoloSticker` draws a talent glyph as a die-cut foil sticker: a steel kiss-cut edge, the white die-cut following the shape (interiors filled), the brand orange foil, a gloss from the upper left and the 1.8 ink line on top, with a drop shadow down and right. Decorative by default; pass `label` where it stands alone. A wrapper with `.holo-sticker-host` makes it answer hover.
+
+### Hero portrait intro: the fidelity pass
+On load the portrait goes through a design file's stages in about two seconds (trial, 11 November 2026; F1 on the Hero motion canvas). Pencil sketch, 0–700ms: a grid, the crosshair and the circle each drawn in two passes, a head-and-shoulders figure, crop marks snapping in one after another. Wireframe, 700ms: the pencil fades and an image placeholder takes its place (Cool Paper disc, Steel hairline and diagonals, the word "image" in Menlo). Greyscale, 1100ms: the photo wipes down over it in greyscale. Final, 1500ms: colour arrives as the Signal Orange ring draws from the top, then the dotted orbit and handles simply appear. The Roles panel comes in as the ring draws (1500ms), dragged in by a drawn hand in the familiar cursor style (white, black outline, cursor-sized; never the real cursor): the pointing finger lands on its title bar, turns to a gripping hand and throws the panel in from the upper right with a 2.5° tilt on the house curve, then turns back to the pointer as it lets go and fades, settled at about 2.2s. Every move is 200–500ms on the house curve; the end state has no animation of its own. On a phone the same stages run shorter, without the panel. Reduced motion shows the finished portrait at once.
+
+### The way back from a case study
+Beside an open case study, the page left of the panel is the exit. Over it the pointer becomes the exit arrow as a die-cut sticker (`HoloSticker` drawing the plain 24-grid arrow at 42px, its weights fattened to read small: kiss-cut 9.6, die-cut 8.6, foil 3.6, ink 2.5), its centre the hotspot, with the exit's name ("Back to all work" / "All notes") on a label sticker hanging below, from the arrow's left edge: white with a 1px orange foil kiss-cut line, a 3px white die-cut and steel edge, turned −3°. Both arrive over 180ms; touch and hoverless devices keep the native pointer, and the panel's top-left corner peels back like a page: the corner is cut out of the panel (clip-path), so the homepage behind shows through, and the folded-over paper carries a plain black arrow (the standard 24-grid arrow, 2.2 stroke, Ink). It grows from the corner to 96px over 400ms on the house curve (`--ease-out`) and lays flat again as the pointer leaves; keyboard focus on the exit peels it too, and reduced motion turns the corner without the motion. The flap's shadow is nothing at the fold and deepest past its tip; the panel drops its own edge shadow while peeled, so no box shows round the gap; and the backdrop keeps its one .48 veil throughout (it no longer lightens on hover). This retired Ryan's notched return chevron, as cursor and mark, from the case-study exit (11 November 2026: hard to read). The chevron (`ReturnArrow` in DismissStrip.tsx) remains only on the about desk's fly-outs and its close button.
 
 ### Cards / Containers
 - **Corner Style:** 12px (standard) or 16px (feature) radius.

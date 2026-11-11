@@ -29,9 +29,13 @@
     <div class="binder" id="binder">
       <nav class="binder__spine" id="spine" aria-label="Case studies by discipline">
         <p class="spine__mark" aria-hidden="true">RDB</p>
+        <p class="spine__group" id="spinePagesLabel">Pages</p>
+        <ul class="spine__pages" id="spinePages" aria-labelledby="spinePagesLabel"></ul>
+        <p class="spine__group" aria-hidden="true">Layers</p>
         <ul class="spine__tabs" id="spineTabs"></ul>
         <p class="spine__foot" id="spineFoot"></p>
       </nav>
+      <div class="binder__select" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="binder__layer"><svg viewBox="0 0 24 24"><path d="M7 3v18M17 3v18M3 7h18M3 17h18"/></svg><span id="layerName"></span></span></div>
       <div class="binder__cover" aria-hidden="true"></div>
       <div class="binder__hinge" aria-hidden="true"></div>
       <div class="binder__edge" aria-hidden="true"></div>
@@ -127,8 +131,11 @@
 <div class="sleeve fo-plastic" id="foPlastic" aria-hidden="true"></div>
 
 <dialog class="lock-dialog" id="lockDialog" aria-labelledby="lockTitle" aria-describedby="lockBody">
+  <div class="lock-dialog__sleeve" id="lockSleeve" aria-hidden="true"></div>
   <span class="lock-dialog__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+  <p class="lock-dialog__meta" id="lockMeta"></p>
   <h2 id="lockTitle">Password protected</h2>
+  <p class="lock-dialog__sub" id="lockSub"></p>
   <p id="lockBody">Its screens include employer work, so the study is password protected. Unlock it to take the card out of its sleeve.</p>
   <div class="lock-dialog__actions" id="lockAsk">
     <button type="button" class="btn btn--primary" id="lockUnlock">Unlock</button>
@@ -143,7 +150,7 @@
     </div>
     <p class="lock-dialog__note" id="lockNote" role="status" hidden>Incorrect password for this demo. <a id="lockSite" href="https://www.rdeboerdesigns.com/" target="_blank" rel="noopener">Unlock it on rdeboerdesigns.com ↗</a></p>
   </form>
-  <p class="lock-dialog__alt" id="lockAlt" hidden><button type="button" id="lockOverview">Read the overview without the screens</button></p>
+  <p class="lock-dialog__alt" id="lockAlt" hidden><span id="lockAskLine" hidden>No password? <a id="lockAskRyan" href="mailto:">Ask Ryan for it</a></span><button type="button" id="lockOverview">Read the overview without the screens</button></p>
 </dialog>
 
 <section class="wrap notes">

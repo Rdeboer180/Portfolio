@@ -15,10 +15,12 @@
 
 // Shared mixins (must precede components that @include them)
 @import 'components/selection-frame';
+@import 'components/holo-sticker';
 
 // Import component styles
 @import 'components/hero';
 @import 'components/about';
+@import 'components/why-me';
 @import 'components/reveal';
 @import 'components/linkedin-link';
 @import 'components/about-page';
@@ -41,7 +43,6 @@
 @import 'components/desk';
 @import 'components/systems-in-practice';
 @import 'components/visual-problem-solver';
-@import 'components/system-doors';
 @import 'components/system-sizes';
 @import 'components/cover-schematic';
 @import 'components/notes';

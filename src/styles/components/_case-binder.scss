@@ -19,12 +19,14 @@
   z-index: 1100;
 }
 
-// The section's header, above the binder: the same badge and title the
-// case-study section always had, on the site's container.
+// The section's header, above the binder: the title alone (the badge pill
+// was retired, 11 Nov 2026), on the site's container.
 .case-binder__intro {
-  max-width: 1186px;
+  max-width: var(--container-max);
   margin: 0 auto 48px;
   padding: 0 $container-padding-x;
+  // room for the binder's layer name, which sits over its selection frame
+  @media (min-width: 600px) { margin-bottom: 80px; }
 }
 
 .case-binder__title {
@@ -35,11 +37,35 @@
   font-weight: $font-weight-bold;
   color: $color-neutral-dark;
   letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin: $spacing-lg 0 0;
+  line-height: $line-height-h2;
+  margin: 0;
 
   @media (max-width: $breakpoint-md) {
     font-size: $font-size-h3;
+  }
+}
+
+// The title, with a margin note in Ryan's hand pointing down at the binder
+// (the bench's annotation, B, 10 November 2026). Desktop pointers only: on
+// touch the cards don't fly from a hover, and there's no margin to write in.
+.case-binder__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+.case-binder__note {
+  display: none;
+  @media (min-width: 1180px) and (hover: hover) {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+    flex: none;
+    margin: 0 var(--space-6xl) calc(-1 * var(--space-lg)) 0;
+    font: 600 24px/1 'Caveat', var(--font-heading), cursive;
+    color: var(--color-secondary-dark);
+    transform: rotate(-3deg);
+    svg { width: 54px; height: 46px; translate: 0 var(--space-lg); }
   }
 }
 

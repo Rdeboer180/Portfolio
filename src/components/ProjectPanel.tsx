@@ -4,39 +4,36 @@ import '../styles/components/_project-panel.scss';
 import { useUnlock } from '../context/UnlockContext';
 import { getHomeHref, HOME_TOP_STATE } from '../utils/homeSession';
 import ReadingErrorBoundary from './ReadingErrorBoundary';
+import HoloSticker from './HoloSticker';
 
 const readingPositions = new Map<string, number>();
-
-// The way back: Ryan's notched chevron pointing left to the page behind (25
-// October, replacing the block arrow of 21 October), white with a 1px ink
-// edge so it holds on both the homepage and the backdrop over it. Two 45°
-// bars, mirror images about the middle: the upper one runs to the point and
-// is cut square there, the lower one stops short of it, leaving the notch.
-// Traced from his drawing at 96px (98% overlap) and set on a 57×94 box.
-const ReturnArrow = () => (
-  <svg viewBox="0 0 57 94" aria-hidden="true" focusable="false">
-    <path d="M2.25 47 L14 58.75 L55 17.75 V7.53 A5.5 5.5 0 0 0 45.61 3.64 Z M17.75 62.5 L29.5 50.75 L55 76.25 V86.47 A5.5 5.5 0 0 1 45.61 90.36 Z" />
-  </svg>
-);
 
 // The exposed homepage strip left of the open drawer, made an explicit exit.
 //
 // The dialog already closed on a click left of its bounds, but nothing said
 // so, and keyboard and screen-reader users had no equivalent. This is a real
 // button covering the strip (CSS shows it only above 850px, where the strip
-// is wide enough to aim at), plus a 32px custom cursor that follows the
-// pointer while it is over the strip, after claire.io's case-study layer.
+// is wide enough to aim at).
+//
+// The way back is a paper peel (Ryan, 11 November 2026): over the strip the
+// pointer becomes the exit arrow as a die-cut sticker (the sticker icons'
+// recipe, on the plain 24-grid arrow, fattened to read at 42px) with the
+// exit's name on a label sticker under it, and the panel's top corner, beside it,
+// peels back like a page, its corner cut away to show the homepage behind
+// and the folded paper carrying a plain black arrow, over 400ms on the house
+// curve, laying flat again as the pointer leaves. Keyboard focus peels it
+// too. The peel is all CSS (:hover and :focus-visible).
 //
 // It is its own component on purpose. Hover state changes on every strip
 // entry; held in ProjectPanel, each change would re-render the reading
 // Suspense boundary beside it, and an update that reaches a still-dehydrated
 // boundary makes React 19 throw the prerendered article away. Here the
 // re-renders stop at this subtree.
+const EXIT_ARROW = '<path d="M19 12H5M11 6l-6 6 6 6"/>';
 function DismissStrip({ label, open, onDismiss }: { label: string; open: boolean; onDismiss: () => void }) {
   // Pointer-driven UI must not exist in the first client render, which has
   // to equal the prerendered HTML (see the mounted gates in
-  // CaseStudyPlayground.tsx). Hover can only begin after mount anyway; the
-  // gate makes that a guarantee instead of a timing accident.
+  // CaseStudyPlayground.tsx). Hover can only begin after mount anyway.
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
   const [hovering, setHovering] = useState(false);
@@ -48,16 +45,14 @@ function DismissStrip({ label, open, onDismiss }: { label: string; open: boolean
     point.current = { x, y };
     if (cursor.current) cursor.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
-  // Touch and hoverless devices never get the custom cursor. A finger has no
-  // pointer to replace, and a tap on the strip simply closes.
+  // Touch and hoverless devices never get the custom cursor.
   const canHover = (event: React.PointerEvent) => event.pointerType !== 'touch' && window.matchMedia('(hover: hover)').matches;
   const track = (event: React.PointerEvent<HTMLButtonElement>) => {
     if (!mounted || !canHover(event)) return;
     place(event.clientX, event.clientY);
     if (!hovering) setHovering(true);
   };
-  // Only while the drawer is settled open: during the slide in or out the
-  // strip is moving with the dialog and the native cursor should come back.
+  // Only while the drawer is settled open: mid-slide the native cursor comes back.
   const showCursor = mounted && hovering && open;
   return <>
     <button
@@ -70,15 +65,27 @@ function DismissStrip({ label, open, onDismiss }: { label: string; open: boolean
       onPointerMove={track}
       onPointerLeave={() => setHovering(false)}
     >
-      {/* Keyboard focus parks the same mark in the strip, so a focused exit
-          looks like the hovered one. */}
-      <span className="project-panel__dismiss-mark" aria-hidden="true"><ReturnArrow /></span>
+      <span className="project-panel__peel" aria-hidden="true">
+        <span className="project-panel__peel-shadow"><span /></span>
+        <span className="project-panel__peel-flap">
+          <span className="project-panel__peel-paper" />
+          <svg className="project-panel__peel-arrow" viewBox="0 0 24 24" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
+        </span>
+      </span>
     </button>
     {showCursor && <span
       className="project-panel__cursor"
       aria-hidden="true"
       ref={el => { cursor.current = el; if (el) el.style.transform = `translate3d(${point.current.x}px, ${point.current.y}px, 0)`; }}
-    ><ReturnArrow /></span>}
+    >
+      {/* centred on the pointer by the arrow; the label hangs below it */}
+      <span className="project-panel__cursor-body">
+        <span className="project-panel__cursor-pop">
+          <HoloSticker markup={EXIT_ARROW} size={42} weights={{ kiss: 9.6, cut: 8.6, foil: 3.6, ink: 2.5 }} />
+          <span className="project-panel__cursor-label">{label}</span>
+        </span>
+      </span>
+    </span>}
   </>;
 }
 

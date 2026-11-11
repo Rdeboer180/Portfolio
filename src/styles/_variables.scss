@@ -172,12 +172,15 @@ $card-border: 1px solid $color-border-default;
 // LAYOUT
 // ============================================
 
-$container-max-width: 1186px;
+$container-max-width: var(--container-max);
 // Keep existing copy-block consumers connected to the runtime layout token.
 $container-text-width: var(--copy-max-width);
 // Wide content column — case-study shells, about proof blocks, resume paper
-$container-wide: 960px;
-$container-padding-x: $spacing-2xl;
+$container-wide: var(--width-wide);
+// Running text: the reading measure (see --measure in _tokens.scss).
+$measure: var(--measure);
+// Fluid side gutter; the same value as --container-px.
+$container-padding-x: var(--gutter);
 // Uniform vertical rhythm for homepage sections (Layer 3 of the rhythm plan)
 $section-pad-y: 96px;
 
@@ -189,6 +192,12 @@ $grid-gutter-lg: $spacing-2xl;
 // BREAKPOINTS
 // ============================================
 
+// One scale for every layout change (10 Nov 2026), the common one most
+// systems now share (Tailwind's 640/768/1024/1280/1536), plus a floor for
+// 320px phones. Write min-width at a step and max-width one pixel under it.
+// Kept apart on purpose: _case-binder.scss mirrors the binder build's own
+// steps (600, 1024, 1180) to reserve its height, and must match that build.
+$breakpoint-2xs: 360px;
 $breakpoint-xs: 480px;
 $breakpoint-sm: 640px;
 $breakpoint-md: 768px;

@@ -6,7 +6,9 @@
   border: 0;
   padding: 0;
   // Shared with the dismiss strip, which covers exactly what this leaves.
-  --panel-width: 95vw;
+  // 92vw at 1024px and up (Ryan, 11 November; was 95vw); below 1024px the
+  // narrow rule further down keeps it at 95vw.
+  --panel-width: 92vw;
   width: var(--panel-width);
   max-width: none;
   height: 100dvh;
@@ -20,11 +22,12 @@
   color: $color-text-primary;
   box-shadow: -8px 0 40px rgba(0, 0, 0, .12);
   transform: translateX(100%);
-  // `right` carries the dismiss-strip nudge. It cannot ride on transform: any
-  // transform on the dialog makes it the containing block for its fixed
-  // children, so the strip button and the custom cursor would be pulled into
-  // the dialog's box and clipped by its `overflow: clip`.
-  transition: transform 250ms $ease-out, right 250ms $ease-out;
+  // Nothing positional may ride on transform once open: any transform on the
+  // dialog makes it the containing block for its fixed children, so the
+  // strip button would be pulled into the dialog's box and clipped by its
+  // `overflow: clip`. (At 1024px and up the transition is restated with the
+  // peel's clip-path, below.)
+  transition: transform 250ms $ease-out;
   &[data-phase='open'] { transform: none; }
   &[data-phase='closing'] { transition-duration: 200ms; }
   &::backdrop { opacity: 0; transition: opacity 250ms $ease-out, background-color 250ms $ease-out; }
@@ -81,7 +84,7 @@
 // the narrow layout stays exactly as it was.
 .project-panel__dismiss { display: none; }
 
-@media (min-width: 851px) {
+@media (min-width: $breakpoint-lg) {
   .project-panel__dismiss {
     // Fixed against the viewport, which the dialog is not a containing block
     // for while open (no transform; see the transition note above). `right`
@@ -97,7 +100,7 @@
     background: transparent;
     color: $color-text-primary;
     cursor: pointer;
-    // The native cursor goes only once the custom one is actually drawn, so a
+    // The native cursor goes only once the sticker is actually drawn, so a
     // visitor without JS, or before hydration, still sees a pointer.
     &[data-cursor] { cursor: none; }
     &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: -6px; }
@@ -106,61 +109,162 @@
   .project-panel:not([data-phase='open']) > .project-panel__dismiss { pointer-events: none; }
 }
 
-// One mark for both states: following the pointer, and parked in the strip
-// on keyboard focus. White with an ink edge and a soft shadow, no disc: it
-// reads as a cursor, and it holds on the light homepage and the dimmed
-// backdrop alike. Ink, not orange: it marks an exit, not a state.
-.project-panel__cursor,
-.project-panel__dismiss-mark {
-  display: block;
-  // the chevron's 57×94 box at 26px tall
-  width: 16px;
-  height: 26px;
-  pointer-events: none;
-  svg {
-    display: block; width: 100%; height: 100%; overflow: visible;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
+// The way back as a paper peel (ProjectPanel.tsx, 11 November 2026). The
+// panel's top-left corner turns over like a page: the corner is cut out of
+// the panel itself (clip-path), so the homepage behind shows through the gap,
+// and the folded-over paper, carrying a plain black arrow, lies on the panel
+// beside it. Both grow from the corner, 0 to 96px, over 400ms on the house
+// curve, and lay flat again the same way. The cut's polygon runs out over
+// the strip to the left, so the strip button (inside the dialog) stays drawn
+// and hoverable.
+.project-panel__peel { display: none; }
+
+@media (min-width: $breakpoint-lg) {
+  // The slide keeps its own 250ms (200ms closing); the cut adds 400ms.
+  .project-panel[data-phase] {
+    clip-path: polygon(-100vw 0, 0 0, 0 0, 0 0, 100% 0, 100% 100%, -100vw 100%);
+    transition: transform 250ms $ease-out, clip-path 400ms var(--ease-out), box-shadow 400ms var(--ease-out);
   }
-  // 1px on screen whatever the box's scale
-  path { fill: $color-white; stroke: $color-text-primary; stroke-width: 1px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .project-panel[data-phase='closing'] { transition-duration: 200ms, 400ms, 400ms; }
+  // The panel's own edge shadow is drawn round its whole rectangle, cut or not,
+  // so with the corner turned it showed as a hard box round the gap: it goes
+  // while the corner is peeled (the backdrop carries the depth there).
+  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover),
+  .project-panel[data-phase='open']:has(> .project-panel__dismiss:focus-visible) {
+    clip-path: polygon(-100vw 0, 0 0, 0 96px, 96px 0, 100% 0, 100% 100%, -100vw 100%);
+    box-shadow: none;
+  }
+
+  .project-panel__peel {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    z-index: 1;
+    display: block;
+    width: 96px;
+    height: 96px;
+    pointer-events: none;
+    transform: scale(0);
+    transform-origin: 0 0;
+    transition: transform 400ms var(--ease-out);
+  }
+  .project-panel[data-phase='open'] > .project-panel__dismiss:hover .project-panel__peel,
+  .project-panel[data-phase='open'] > .project-panel__dismiss:focus-visible .project-panel__peel { transform: scale(1); }
+
+  // The flap's shadow on the panel. A turned page is lifted least at the fold
+  // and most at its tip, so the shadow is nothing along the fold and deepest
+  // past the tip, falling down and right from the upper-left light; a box
+  // drop-shadow read as a hard square and ran off the panel onto the strip.
+  // The blur sits on the outer span so the triangle's clip doesn't cut it.
+  .project-panel__peel-shadow {
+    position: absolute;
+    inset: 0;
+    filter: blur(5px);
+    transform: translate(4px, 5px);
+    span {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+      background: linear-gradient(135deg, rgba(27, 27, 27, 0) 50%, rgba(27, 27, 27, .1) 72%, rgba(27, 27, 27, .3) 100%);
+    }
+  }
+  // the turned-over corner: the panel's own paper
+  .project-panel__peel-flap {
+    position: absolute;
+    inset: 0;
+  }
+  .project-panel__peel-paper {
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    // the back of the page: a little darker at the fold, lightest at the corner, as a curl catches light
+    background: linear-gradient(135deg, #e4e7ea 50%, #f3f4f6 64%, #ffffff 100%);
+  }
+  .project-panel__peel-arrow {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 22px;
+    height: 22px;
+    overflow: visible;
+    fill: none;
+    stroke: $color-text-primary;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  // no peel: the corner is simply turned over
+  .project-panel[data-phase], .project-panel__peel { transition: none; }
+}
+
+// The cursor over the strip: the exit arrow as a die-cut sticker, 42px, with
+// the exit's name on a label sticker hanging under it, both in the sticker
+// recipe (white die-cut, steel kiss-cut, orange foil line, gloss, a shadow
+// down and right). The arrow's centre is the hotspot. Three spans: the outer
+// takes the pointer's position from script, the body centres the arrow on
+// it, the pop runs the arrival.
 .project-panel__cursor {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 40;
-  // centred on the pointer, as the native cursor it replaces is aimed
-  margin: -13px 0 0 -8px;
+  pointer-events: none;
   will-change: transform;
-  // A quiet arrival: it fades in and settles from a touch smaller, on the
-  // inner mark, since the outer span's transform is the pointer's position.
-  // It starts already half there: the native cursor is gone the moment this
-  // one is drawn, and a fade from nothing left a beat with no cursor (24 Oct).
-  svg { animation: project-panel-cursor-in 140ms cubic-bezier(.2, .7, .3, 1) both; }
 }
-@keyframes project-panel-cursor-in { from { opacity: .55; transform: scale(.9); } to { opacity: 1; transform: none; } }
-
-.project-panel__dismiss-mark { opacity: 0; }
-.project-panel__dismiss:focus-visible .project-panel__dismiss-mark { opacity: 1; }
-
-// Hover-capable pointers only. The cursor is also never rendered for touch
-// (DismissStrip checks the pointer type), so this is belt and braces.
+.project-panel__cursor-body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  // the arrow's centre on the pointer; the label starts at the arrow's left
+  // edge and runs right, so it never leaves the window on the narrow strip
+  transform: translate(-21px, -21px);
+}
+.project-panel__cursor-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  transform-origin: 21px 21px;
+  animation: project-panel-cursor-in 180ms var(--ease-out) both;
+  .holo-sticker {
+    filter: drop-shadow(1.4px 2.2px 1.2px rgba(27, 27, 27, .32)) drop-shadow(3px 5px 6px rgba(27, 27, 27, .18));
+  }
+}
+.project-panel__cursor-label {
+  display: block;
+  padding: 4px 9px 5px;
+  border: 1px solid transparent;   // the orange foil kiss-cut line
+  border-radius: 7px;
+  font-family: $font-family-heading;
+  font-weight: $font-weight-extrabold;
+  font-size: 12px;
+  line-height: 1.1;
+  letter-spacing: .005em;
+  white-space: nowrap;
+  color: $color-text-primary;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 55%, rgba(27, 27, 27, .04)) padding-box,
+    linear-gradient(#fff, #fff) padding-box,
+    var(--sticker-foil) border-box;
+  // white die-cut, steel kiss-cut edge, then the shadow from the upper-left light
+  box-shadow:
+    0 0 0 3px var(--sticker-die-cut),
+    0 0 0 3.6px var(--sticker-kiss-cut),
+    1.4px 2.2px 1.4px rgba(27, 27, 27, .26),
+    3px 6px 10px -4px rgba(27, 27, 27, .3);
+  transform: rotate(-3deg);
+}
+@keyframes project-panel-cursor-in { from { opacity: .55; transform: scale(.85) rotate(-6deg); } to { opacity: 1; transform: none; } }
 @media (hover: none) { .project-panel__cursor { display: none; } }
+@media (prefers-reduced-motion: reduce) { .project-panel__cursor-pop { animation: none; } }
 
-@media (hover: hover) and (min-width: 851px) {
-  // Lighten the backdrop so the homepage behind reads as the destination.
-  // Not motion, so it holds under reduced motion (it just changes instantly).
-  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover)::backdrop { background-color: rgba(0, 0, 0, .28); }
-}
-@media (hover: hover) and (min-width: 851px) and (prefers-reduced-motion: no-preference) {
-  // Nudge the drawer aside, away from the pointer, on the dialog's own
-  // easing. The 8px it uncovers is backdrop, so moving onto it ends the hover
-  // and the drawer settles back under the pointer without flicker.
-  .project-panel[data-phase='open']:has(> .project-panel__dismiss:hover) { right: -8px; }
-}
-@media (prefers-reduced-motion: reduce) { .project-panel__cursor svg { animation-name: project-panel-cursor-fade; } }
-@keyframes project-panel-cursor-fade { from { opacity: .55; } to { opacity: 1; } }
+// The backdrop holds its one veil (.48) while the pointer is over the strip;
+// it no longer lightens to .28 (Ryan, 11 November: one overlay, the darker).
+// The drawer's 8px nudge aside on hover (22 October) gave way to the peel,
+// which sits on the panel's edge (11 November).
 
 // Every project shares the panel header, including locked and legacy views.
 .project-panel {
@@ -169,7 +273,7 @@
   .project-overview__rail { top: $spacing-xl; max-height: calc(100dvh - var(--panel-header-height) - #{$spacing-3xl}); }
   .project-overview section, .project-overview details { scroll-margin-top: $spacing-xl; }
   .cs > .cs__container { padding-top: $spacing-xl; }
-  @media (max-width: 1000px) { &__header { padding-inline: $spacing-2xl; } }
+  @media (max-width: #{$breakpoint-lg - 1}) { &__header { padding-inline: $spacing-2xl; } }
 }
 
 // Articles share the pinned panel chrome; keep their index breadcrumb in the body.
@@ -179,7 +283,7 @@
   .notes__nav-logo { display: none; }
   .notes__header--article { padding-top: $spacing-2xl; }
 
-  @media (max-width: 850px) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
     width: 95vw;
     &__header { padding-inline: $spacing-lg; gap: $spacing-md; }
     .project-overview { display: block; padding: $spacing-xl; }
@@ -215,7 +319,7 @@
 .project-panel__content { animation: reading-content-in 140ms ease-out; }
 .project-panel__content h1:focus { outline: none; }
 @keyframes reading-content-in { from { opacity: .65; } to { opacity: 1; } }
-@media (max-width: 850px) {
+@media (max-width: #{$breakpoint-lg - 1}) {
   .project-panel__identity:has(.project-panel__back) .project-panel__name { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .project-panel__content { animation: none; } }

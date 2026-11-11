@@ -167,6 +167,14 @@ button {
 // GLOBAL BUTTON CLASSES
 // ============================================
 
+// How far the sticker's corner is peeled (0 at rest), animated on hover.
+// Registered so it can transition, and inherited so the ::after flap reads it.
+@property --peel {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
 .btn {
   font-family: $font-family-heading;
   font-weight: $font-weight-extrabold;
@@ -176,44 +184,163 @@ button {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  transition: all $transition-fast;
   cursor: pointer;
-  border: none;
+  position: relative;
+  // The flat foil sticker (trial, 11 November 2026). The button's own border
+  // is a thin orange foil line; the white die-cut (--cut wide) and one flat
+  // shadow are box-shadows outside it, so no button changes size or markup.
+  // Hover peels the sticker's bottom-right corner (the peel from the
+  // sticker-peel branch, fitted to this sticker): the corner is cut away, foil
+  // and die-cut with it, so the page shows through; the face darkens where the
+  // corner lifts; the flap shows the sticker's warm release-paper backing with
+  // a hard crease and two shadows. It peels further while pressed.
+  --cut: 3px;
+  --bw: 1.5px;
+  // half the button's height, so the flap and its shadow stay clear of the label
+  --peel-to: 20px;
+  --peel-press: 23px;
+  isolation: isolate;
+  border: var(--bw) solid transparent;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  box-shadow:
+    0 0 0 var(--cut) var(--sticker-die-cut),
+    0 0 0 calc(var(--cut) + .5px) rgba(27, 27, 27, 0.12),
+    0 1px 2px rgba(27, 27, 27, 0.16);
+  // the diagonal meets the border box's edges --peel from its corner; everything
+  // past it (foil, die-cut, shadow) is cut. 10px of room keeps the focus ring.
+  clip-path: polygon(
+    -10px -10px,
+    calc(100% + 10px) -10px,
+    calc(100% + 10px) calc(100% - var(--peel) - 10px),
+    calc(100% - var(--peel) - 10px) calc(100% + 10px),
+    -10px calc(100% + 10px)
+  );
+  transition: --peel 220ms cubic-bezier(0.2, 0.8, 0.2, 1), color 150ms ease;
+
+  // the face where the corner leaves it: shadow pooling at the lift, a sheen from
+  // the upper left. Above the fill, below the label.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      radial-gradient(
+        circle at 100% 100%,
+        rgba(0, 0, 0, 0.5) 0,
+        rgba(0, 0, 0, 0.34) calc(var(--peel) * 1.1),
+        rgba(0, 0, 0, 0.12) calc(var(--peel) * 1.6),
+        transparent calc(var(--peel) * 2.4)
+      ),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.24) 0%, transparent 50%);
+    transition: opacity 220ms ease;
+  }
+
+  // the flap: the sticker's back folded over its face along the diagonal, a warm
+  // release-paper tone (bright tip, hard crease) so it reads on a white page
+  &::after {
+    content: '';
+    position: absolute;
+    right: calc(-1 * var(--bw));
+    bottom: calc(-1 * var(--bw));
+    z-index: 1;
+    width: var(--peel);
+    height: var(--peel);
+    pointer-events: none;
+    border-top-left-radius: 5px;
+    background: linear-gradient(
+      to bottom right,
+      #fffdf6 0%,
+      #f1e9d6 18%,
+      #dccfb4 34%,
+      #b9a987 45%,
+      #8c7d60 49%,
+      #5f533d 50%,
+      transparent 50%
+    );
+    filter: drop-shadow(-1px -1px 1px rgba(0, 0, 0, 0.55)) drop-shadow(-4px -4px 6px rgba(0, 0, 0, 0.35));
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) { --peel: var(--peel-to); }
+    &:hover:not(:disabled)::before { opacity: 1; }
+  }
+  &:focus-visible { --peel: var(--peel-to); }
+  &:focus-visible::before { opacity: 1; }
+  &:active:not(:disabled) { --peel: var(--peel-press); }
+  &:active:not(:disabled)::before { opacity: 1; }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 6px;   // clear of the white die-cut
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    filter: grayscale(0.7);
+    cursor: not-allowed;
+  }
 
   &--primary {
-    // White 14px/800 on #f03d01 is 3.91:1 — the CTA failed at rest and only
-    // passed on hover, which is backwards. #c23001 puts the resting state at
-    // 5.65:1 and leaves the hover state unchanged.
-    background: $color-primary-dark;
-    color: $color-white;
-
-    &:hover {
-      background: $color-primary-dark;
-      color: $color-primary-light;
-      transform: translateY(-1px);
-    }
+    // flat Orange Deep (#c23001, white at 5.65:1) inside the foil line. The
+    // label colour is held through hover: most buttons are links, and the
+    // global a:hover turns text Orange Deep, the fill, which hid the label.
+    &, &:hover, &:focus-visible, &:active { color: $color-white; }
+    background:
+      linear-gradient($color-primary-dark, $color-primary-dark) padding-box,
+      var(--sticker-foil) border-box;
   }
 
   &--secondary {
-    background: $color-white;
-    color: $color-neutral-dark;
-    border: 1px solid $color-neutral-dark;
-
-    &:hover {
-      background: $color-neutral-dark;
-      color: $color-white;
-      transform: translateY(-1px);
+    // a white sticker: a 1px foil kiss-cut line 4px inside its white edge
+    --cut: 4px;
+    --bw: 1px;
+    // white shows shadow far more than orange: the lift's shadow is a third as
+    // strong here, and the flap casts a lighter one
+    &::before {
+      background:
+        radial-gradient(
+          circle at 100% 100%,
+          rgba(27, 27, 27, 0.16) 0,
+          rgba(27, 27, 27, 0.1) calc(var(--peel) * 1.1),
+          rgba(27, 27, 27, 0.03) calc(var(--peel) * 1.6),
+          transparent calc(var(--peel) * 2.2)
+        );
     }
+    &::after { filter: drop-shadow(-1px -1px 1px rgba(27, 27, 27, 0.28)) drop-shadow(-3px -3px 4px rgba(27, 27, 27, 0.14)); }
+    &, &:hover, &:focus-visible, &:active { color: $color-neutral-dark; }
+    background:
+      linear-gradient(#ffffff, #ffffff) padding-box,
+      var(--sticker-foil) border-box;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: color 150ms ease;   // the corner turns without the motion
+    &::before { transition: none; }
   }
 
   &--lg {
     height: $button-height-lg;
     padding: 0 $button-padding-x-lg;
+    --peel-to: 24px;
+    --peel-press: 28px;
   }
 
   &--md {
     height: $button-height-md;
     padding: 0 $button-padding-x-md;
+  }
+
+  &--sm {
+    height: $button-height-sm;
+    padding: 0 $button-padding-x-sm;
+    --peel-to: 14px;
+    --peel-press: 16px;
   }
 }
 
