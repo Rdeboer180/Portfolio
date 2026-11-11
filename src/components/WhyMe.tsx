@@ -47,9 +47,9 @@ const WhyMe: React.FC = () => (
             <Link to="/notes/visual-problem-solver/" className="why-me__link">Read the note <span aria-hidden="true">→</span></Link>
           </p>
           {/* The way to the About page, as a secondary button that says whose page it is:
-              Ryan's face (the hero's photo, already loaded) and "More about me". */}
+              Ryan's face (a 96px, 4 KB crop of the hero photo) and "More about me". */}
           <Link to="/about" className="btn btn--secondary btn--md why-me__more">
-            <img className="why-me__more-face" src="/images/hero/ryan-deboer-2026-800.webp" alt="" width={24} height={24} loading="lazy" decoding="async" />
+            <img className="why-me__more-face" src="/images/hero/ryan-deboer-avatar-96.jpg" alt="" width={24} height={24} loading="lazy" decoding="async" />
             More about me <span aria-hidden="true">→</span>
           </Link>
         </div>

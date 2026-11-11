@@ -81,7 +81,7 @@
     flex: none;
     border-radius: 50%;
     object-fit: cover;
-    object-position: 62% 30%;
+    object-position: 62% 30%;   // the crop is square; the face sits right of centre
     box-shadow: 0 0 0 1.5px $color-white, 0 0 0 2.5px rgba($color-primary, 0.55);
   }
 

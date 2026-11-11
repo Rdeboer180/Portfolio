@@ -70,6 +70,12 @@ const loadNoteFont = () => {
   noteFont = true;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
+  // Never render-blocking (it is only a margin note's hand), and marked so the
+  // prerender leaves it out of the static page: captured there it became a
+  // blocking third-party request in every page's head, before the first paint.
+  link.media = 'print';
+  link.onload = () => { link.media = 'all'; };
+  link.dataset.runtimeOnly = 'binder-note-font';
   // the testimonials' note below shares the font, so its letters ride along
   link.href = `https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap&text=${encodeURIComponent(`${NOTE} tap a name, it opens`)}`;
   document.head.appendChild(link);

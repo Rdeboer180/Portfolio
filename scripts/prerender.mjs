@@ -224,6 +224,9 @@ async function main() {
       // page on every load, and the captured script tag held up the page head
       // with 58 KB before any content showed, then loaded a second time.
       clone.querySelectorAll('.case-binder__host, script[src*="/binder-home/"], a[data-from-binder]').forEach((el) => el.remove());
+      // Anything a component adds to the page only at runtime (the binder's
+      // margin-note font) stays out of the static file.
+      clone.querySelectorAll('[data-runtime-only]').forEach((el) => el.remove());
 
       // The inline-highlight sweep (Hero, About, HomepageTargeted) adds its
       // modifier classes straight to the DOM after the copy resolves — React
