@@ -46,6 +46,16 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'the-gate-stopped-my-redesign',
+    kind: 'practice',
+    origin: 'portfolio',
+    date: 'November 12, 2026',
+    dateISO: '2026-11-12',
+    title: 'The gate stopped my redesign. I merged it anyway.',
+    dek: 'What my design system’s steel curtain caught on my homepage redesign, the material palette it found missing, and the decisions still waiting on me.',
+    read: '4 min',
+  },
+  {
     slug: 'visual-problem-solver',
     kind: 'reflection',
     featured: true,

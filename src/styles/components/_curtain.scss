@@ -1,0 +1,293 @@
+// ============================================
+// CurtainCaught — the figures in "The gate stopped my redesign". Paper on
+// hairlines, Menlo for anything the curtain printed, Orange Deep only where
+// it blocked, Steel where it reported. The selection frame quotes Figma.
+// ============================================
+
+.notes__body .curtain {
+  margin: $spacing-2xl 0;
+
+  figcaption {
+    margin-top: $spacing-md;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+
+  ul { margin: 0; padding: 0; list-style: none; }
+  p { margin: 0; }
+
+  // the note's link and inline-code styles stay out of the figures
+  .btn { text-decoration: none; }
+  code { padding: 0; background: none; border: 0; }
+}
+
+.curtain {
+  // ── 1. The receipt, in a selection frame ────────────────────────────────
+  &__frame {
+    position: relative;
+    max-width: 400px;
+    margin-inline: 4px;
+    padding: 10px;
+    border: 1px solid $color-primary;
+  }
+
+  &__handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: $color-white;
+    border: 1px solid $color-primary;
+  }
+
+  &__handle--tl { top: -4px; left: -4px; }
+  &__handle--tr { top: -4px; right: -4px; }
+  &__handle--bl { bottom: -4px; left: -4px; }
+  &__handle--br { bottom: -4px; right: -4px; }
+
+  &__receipt {
+    padding: $spacing-xl $spacing-lg $spacing-lg;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    font-family: $font-family-mono;
+    font-size: 12.5px;
+    line-height: 1.7;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__receipt-title {
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  &__receipt-meta { text-align: center; color: $color-neutral-muted; }
+
+  &__receipt-group {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px dashed $color-secondary;
+  }
+
+  &__receipt-head {
+    color: $color-neutral-muted;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 11.5px;
+  }
+
+  &__line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3ch 7ch;
+    gap: $spacing-sm;
+  }
+
+  &__n { text-align: right; }
+
+  &__tag {
+    text-align: right;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__tag--block { color: $color-primary-text; }
+  &__tag--report { color: $color-secondary-dark; }
+  &__tag--pass { color: $color-neutral-dark; }
+  &__tag--zero { color: $color-neutral-muted; font-weight: 400; }
+
+  &__verdict {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px dashed $color-secondary;
+    font-weight: 700;
+    font-size: $font-size-body-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  // ── 2. The colour findings, to scale ────────────────────────────────────
+  &__bar {
+    display: flex;
+    height: 40px;
+    border-radius: $radius-sm;
+    overflow: hidden;
+  }
+
+  &__seg { display: block; }
+  &__seg--exact { background: $color-primary-dark; }
+  &__seg--close { background: $color-primary-muted; }
+  &__seg--none { background: $color-secondary; }
+
+  &__legend {
+    display: flex;
+    margin-top: $spacing-sm;
+
+    > div {
+      flex-basis: 0;
+      min-width: 0;
+      padding-left: $spacing-sm;
+      border-left: 1px solid $color-secondary-light;
+    }
+
+    b {
+      display: block;
+      font-family: $font-family-heading;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+  }
+
+  &__key {
+    display: block;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+
+  &__key--block { color: $color-primary-text; }
+
+  // ── 3. The colours with no token ────────────────────────────────────────
+  &__materials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xl $spacing-2xl;
+  }
+
+  &__material { min-width: 0; }
+
+  &__material-name { font-family: $font-family-heading; font-weight: 700; font-size: $font-size-body-sm; }
+  &__material-where { font-size: $font-size-caption; color: $color-neutral-muted; margin-bottom: $spacing-md !important; }
+
+  &__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md $spacing-sm;
+
+    li { width: 64px; }
+
+    code {
+      display: block;
+      margin-top: $spacing-xs;
+      font-family: $font-family-mono;
+      font-size: 11px;
+    }
+  }
+
+  &__chip {
+    display: block;
+    aspect-ratio: 1;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border-default;
+  }
+
+  &__near { display: block; font-size: 11px; line-height: 1.35; color: $color-neutral-muted; }
+
+  // ── 4. The ladder ───────────────────────────────────────────────────────
+  &__ladder {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 7.5rem minmax(0, 1fr);
+    border: 1px solid $color-border-default;
+    background: $color-white;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+  }
+
+  &__ladder-head {
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $color-secondary-light;
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+
+    span { color: $color-primary-text; }
+  }
+
+  &__ladder-head--level,
+  &__cell--level {
+    text-align: center;
+    background: $color-secondary-lightest;
+    border-inline: 1px solid $color-border-default;
+  }
+
+  &__row { display: contents; }
+
+  &__cell {
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  &__cell--level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-heading;
+    font-weight: 800;
+    font-size: 15px;
+  }
+
+  &__cell--read { background: rgba($color-primary-light, 0.6); }
+  &__cell--gap { background: $color-white; color: $color-neutral-muted; font-style: italic; }
+
+  &__writeback {
+    grid-column: 1 / -1;
+    padding: $spacing-md $spacing-lg;
+    background: $color-secondary-lightest;
+
+    span { color: $color-primary-text; font-weight: 700; margin-right: $spacing-xs; }
+  }
+
+  // ── 5. Buttons, before and after ───────────────────────────────────────
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $spacing-lg;
+  }
+
+  &__button-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+    padding: $spacing-lg;
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+
+    p { font-size: $font-size-caption; color: $color-neutral-muted; }
+  }
+
+  &__side-tag { font-family: $font-family-mono; font-size: 11px; color: $color-secondary-dark; }
+  &__side-tag--now { color: $color-primary-text; }
+
+  &__old-btn {
+    display: inline-flex;
+    align-items: center;
+    height: $button-height-md;
+    padding: 0 $button-padding-x-md;
+    border-radius: $button-radius;
+    background: $color-primary;
+    color: $color-white;
+    font-family: $font-family-heading;
+    font-weight: 800;
+    font-size: $font-size-body-sm;
+  }
+
+  @media (max-width: $breakpoint-md - 1) {
+    &__buttons { grid-template-columns: minmax(0, 1fr); }
+
+    &__ladder { grid-template-columns: minmax(0, 1fr); }
+    &__ladder-head { display: none; }
+    &__row { display: flex; flex-direction: column; }
+    &__cell--level { order: -1; }
+
+    &__cell--level {
+      justify-content: flex-start;
+      border-inline: 0;
+      border-top: 2px solid $color-neutral-dark;
+    }
+  }
+}
