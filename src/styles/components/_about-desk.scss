@@ -822,6 +822,25 @@
   // the mat sits as far off the foot of the desk as it does off the folder, so its bottom edge shows before the footer
   .shelf--hybrid { padding-bottom: 120px; }
   .shelf__lower--hybrid .shelf__lower-desk { margin: 0; }
+  // the crumpled concept sketch on the wood left of the mat: a link to the prototyping playground (12 Nov)
+  .shelf__lower--hybrid { position: relative; }
+  .sketch-paper {
+    position: absolute; z-index: 3; top: 56px; display: block; rotate: -5deg; color: inherit; text-decoration: none;
+    filter: drop-shadow(0 1px 1px rgba(46, 34, 20, 0.22)) drop-shadow(6px 14px 18px rgba(46, 34, 20, 0.18));
+    transition: rotate 240ms var(--desk-out, ease-out), translate 240ms var(--desk-out, ease-out), filter 240ms var(--desk-out, ease-out);
+  }
+  .sketch-paper:hover { rotate: -3deg; translate: 0 -4px; filter: drop-shadow(0 2px 2px rgba(46, 34, 20, 0.2)) drop-shadow(10px 22px 26px rgba(46, 34, 20, 0.2)); }
+  .sketch-paper:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 6px; border-radius: 4px; }
+  .sketch-paper__sheet { display: block; width: 100%; height: auto; overflow: visible; }
+  .sketch-paper__creases path { fill: none; stroke: rgba(80, 64, 40, 0.16); stroke-width: 1.2; }
+  .sketch-paper__light path { fill: rgba(255, 255, 255, 0.28); }
+  .sketch-paper__pencil path { fill: none; stroke: #3d3a36; stroke-linecap: round; stroke-linejoin: round; }
+  .sketch-paper__pencil .sketch-paper__fill { fill: #3d3a36; stroke: #3d3a36; stroke-width: 1.2; }
+  .sketch-paper__hand text { font: 700 22px/1 'Caveat', 'Hubot Sans', cursive; fill: #3d3a36; }
+  .sketch-paper__hand text.sm { font-size: 15px; font-weight: 600; }
+  .sketch-paper__go { font: 700 21px/1 'Caveat', 'Hubot Sans', cursive; fill: var(--color-primary-dark, #c23001); }
+  .sketch-paper:hover .sketch-paper__go { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { .sketch-paper { transition: none; } .sketch-paper:hover { rotate: -5deg; translate: none; } }
   // handwritten notes on the mat, in the same hand as the margin notes
   .shelf__note { position: absolute; z-index: 30; margin: 0; font: 700 26px/1 'Caveat', 'Hubot Sans', cursive; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); pointer-events: none; }
   // written on the wood just above the mat, clear of its ruler

@@ -32,6 +32,7 @@ import { LoopScreen } from './LoopScreen';
 import { DeskNote } from './DeskNotes';
 import DismissStrip, { ReturnArrow } from '../DismissStrip';
 import { HybridMargin, GUTTER_MIN } from './HybridMargin';
+import { SketchPaper } from './SketchPaper';
 import AboutIntroVideo from '../AboutIntroVideo';
 import { NoteOpener } from './noteOpener';
 import LayersPanel from '../LayersPanel';
@@ -529,6 +530,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
             <h2>The early work, my notes, and the skill tree</h2>
           </div>
           <section className="shelf__lower shelf__lower--hybrid" aria-label="My notes, the archive and the skill tree">
+            <SketchPaper gutter={shelf.gutter} />
             <div className="shelf__lower-desk" ref={lowerBox} style={{ width: matW, height: Math.max(HYBRID_LOWER_MIN, matH), zoom: shelf.lower }}>
               <div className="about-desk__mat" style={{ left: 0, top: 0 }} aria-hidden="true">
                 <CuttingMat className="s" style={{ width: matW, height: matH }} focusable="false" />

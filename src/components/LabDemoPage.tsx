@@ -4,6 +4,8 @@
 // and runs in a same-origin frame that grows to its full height, so the site
 // scrolls as one page. Inside a frame the lab's own dark nav stands down
 // (nav.js), and its links leave the frame for the whole window.
+// The prototype playground uses the same shell at /prototypingPlayground (12 Nov 2026);
+// a hash on the page, such as #simplicity, is handed to the frame.
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
@@ -12,13 +14,32 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import './labDemo.scss';
 
 export const FITMENT_DEMO_PATH = '/demo/tire-fitment';
-const SRC = '/lab/fitment-confidence/';
+export const PLAYGROUND_DEMO_PATH = '/prototypingPlayground';
 
-const LabDemoPage: React.FC = () => {
-  usePageMeta({
-    title: 'Tire Fitment Prototype | Ryan DeBoer',
+type Demo = { path: string; src: string; title: string; description: string };
+const DEMOS: Record<'fitment' | 'playground', Demo> = {
+  fitment: {
+    path: FITMENT_DEMO_PATH,
+    src: '/lab/fitment-confidence/',
+    title: 'Tire Fitment Prototype',
     description: 'Pick a vehicle and the page narrows to the sizes that fit, confirms the match on the sidewall, and says so when a tire isn’t made for your car.',
-    canonical: `${SITE.portfolioUrl}${FITMENT_DEMO_PATH}/`,
+  },
+  playground: {
+    path: PLAYGROUND_DEMO_PATH,
+    src: '/lab/playground/',
+    title: 'Prototype playground',
+    description: 'A prototype playground between Figma and production, and a study in simplicity: what each tire option actually changes, on one car with four colors.',
+  },
+};
+
+const LabDemoPage: React.FC<{ demo?: keyof typeof DEMOS }> = ({ demo = 'fitment' }) => {
+  const D = DEMOS[demo];
+  // the frame opens at the page's own hash, so /prototypingPlayground/#simplicity opens that tab
+  const [src] = useState(() => D.src + (typeof window !== 'undefined' ? window.location.hash : ''));
+  usePageMeta({
+    title: `${D.title} | Ryan DeBoer`,
+    description: D.description,
+    canonical: `${SITE.portfolioUrl}${D.path}/`,
     ogImage: `${SITE.portfolioUrl}/images/hero/ryan-deboer-og-2026.jpg`,
     ogType: 'website',
   });
@@ -102,8 +123,8 @@ const LabDemoPage: React.FC = () => {
       <iframe
         ref={frame}
         className="lab-demo__frame"
-        src={SRC}
-        title="Tire Fitment Prototype"
+        src={src}
+        title={D.title}
         onLoad={onLoad}
         style={{ height }}
       />

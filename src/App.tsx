@@ -303,6 +303,7 @@ function AppRoutes() {
         <Route path="/sitemap" element={<PageShell><SitemapPage /></PageShell>} />
         {/* the Tire Fitment Prototype under the site's own nav and footer; the trackpad on /about opens it */}
         <Route path="/demo/tire-fitment" element={<PageShell><LabDemoPage /></PageShell>} />
+        <Route path="/prototypingPlayground" element={<PageShell><LabDemoPage key="playground" demo="playground" /></PageShell>} />
         <Route path="/talent-tree" element={<PageShell><TalentTreePage /></PageShell>} />
         {/* The build-your-own path was retired on 8 November 2026; its links land on Ryan's tree. */}
         <Route path="/talent-tree/build" element={<Navigate to="/talent-tree/" replace />} />
