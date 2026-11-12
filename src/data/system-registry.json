@@ -135,6 +135,24 @@
         "HomepageTargeted",
         "LabDemoPage"
       ]
+    },
+    "CurtainCaught": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #22",
+      "path": "src/components/CurtainCaught.tsx",
+      "blocks": [
+        "btn",
+        "curtain",
+        "note-embed",
+        "sr-only"
+      ],
+      "relatives": [
+        "PlayDraftClockPrototype",
+        "SystemSizes",
+        "VisualProblemSolver"
+      ]
     }
   },
   "patterns": {
@@ -200,6 +218,11 @@
       "status": "proposed",
       "introduced": "PR #20",
       "stylesheet": "src/styles/components/_why-me.scss"
+    },
+    "curtain": {
+      "status": "proposed",
+      "introduced": "PR #22",
+      "stylesheet": "src/styles/components/_curtain.scss"
     }
   }
 }
