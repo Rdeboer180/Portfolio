@@ -477,7 +477,7 @@ button{font:inherit;color:inherit}
   --tr-font:var(--font-family-primary),-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   background:var(--color-white);color:var(--font-color-primary);font:var(--font-weight-reg) var(--font-size-md)/var(--line-height-primary) var(--tr-font);
 }
-
+/*h06:css:start*/
 /* ---- shared core: type, controls, tire + car drawing, evidence ---- */
 [data-v="h06"]{position:relative;--hatch:repeating-linear-gradient(135deg,var(--color-darkgrey) 0 1.5px,transparent 1.5px 5px);--car-w:170px;--lab-w:96px;--tw:calc(var(--car-w) * .14);--th:calc(var(--car-w) * .32)}
 [data-v="h06"] .case{margin:0 0 var(--space-lg);font:var(--font-weight-reg) var(--font-size-xs)/1.45 var(--tr-font);color:var(--color-darkgrey)}
@@ -634,6 +634,23 @@ button{font:inherit;color:inherit}
 [data-v="h06"] .mt--off > rect:first-child,[data-v="h06"] .mt--off > path:not(.mt__x){opacity:.28}
 [data-v="h06"] .mt > .mt__x{stroke:var(--color-blacktext);stroke-width:6;stroke-linecap:round}
 [data-v="h06"] .mt__ar{fill:none;stroke:var(--color-blue);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+/* whole-car before and after */
+[data-v="h06"] .stp{display:grid;gap:10px;padding:var(--space-md) var(--space-lg);border:1px solid var(--color-mediumgrey);border-radius:var(--border-radius);background:var(--color-white)}
+[data-v="h06"] .stp__top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px}
+[data-v="h06"] .stp__h{display:flex;align-items:center;gap:8px;margin:0;font:var(--font-weight-semibold) var(--font-size-md)/1.25 var(--tr-font);color:var(--font-color-primary)}
+[data-v="h06"] .stp__h small{margin-left:4px;font-weight:var(--font-weight-reg);font-size:var(--font-size-xs);color:var(--color-darkgrey)}
+[data-v="h06"] .stp__i{width:18px;height:18px;flex:none;color:var(--color-black)}
+[data-v="h06"] .stp__d{font:var(--font-weight-bold) var(--font-size-xl)/1.1 var(--tr-font)}
+[data-v="h06"] .stp__d--new{color:var(--act-new)}[data-v="h06"] .stp__d--move{color:var(--act-move)}[data-v="h06"] .stp__d--stay{color:var(--act-stay)}
+[data-v="h06"] .stp__r{display:grid;grid-template-columns:120px minmax(0,1fr) 72px;gap:12px;align-items:center;min-height:40px}
+[data-v="h06"] .stp__l{display:grid;justify-items:start;gap:3px;font:var(--font-weight-semibold) var(--font-size-sm)/1.2 var(--tr-font);color:var(--font-color-primary)}
+[data-v="h06"] .stp__l small{font-weight:var(--font-weight-reg);font-size:11px;color:var(--color-darkgrey)}
+[data-v="h06"] .stp .trk{height:18px}
+[data-v="h06"] .stp__r--b .trk__s{background:var(--color-darkgrey)}
+[data-v="h06"] .stp__r--new .trk__s{background:var(--act-new)}[data-v="h06"] .stp__r--move .trk__s{background:var(--act-move)}[data-v="h06"] .stp__r--stay .trk__s{background:var(--act-stay)}
+[data-v="h06"] .stp .val{justify-self:end;font-size:var(--font-size-lg);font-weight:var(--font-weight-bold);color:var(--font-color-primary)}
+[data-v="h06"] .stp__n{margin:2px 0 0;font-size:12px;line-height:1.4;color:var(--color-darkgrey)}
+@media (max-width:520px){[data-v="h06"] .stp{padding:var(--space-sm)}[data-v="h06"] .stp__r{grid-template-columns:minmax(0,1fr) 64px}[data-v="h06"] .stp .trk{grid-column:1 / -1;grid-row:2}}
 /* Meaning colors: what happens to each tire. Used on the car, tray, options, labels and bars.
    Each is paired with a word and a mark, so color is never the only signal. */
 [data-v="h06"]{--car-w:150px;--lab-w:88px;
@@ -725,7 +742,7 @@ button{font:inherit;color:inherit}
   [data-v="h06"] .bay{min-width:0;padding-inline:0}
   [data-v="h06"] .bay{padding-inline:0;background:#f7f7f7}
 }
-  
+  /*h06:css:end*/
 @media (prefers-reduced-motion:reduce){.card,.sf i,.swt__t,.swt__t i{transition:none}.rows li.is-in{animation:none}}
 </style>
 </head>
@@ -1155,11 +1172,11 @@ button{font:inherit;color:inherit}
       <ol class="study-list">
         <li><span><strong>Options show, they don't tell.</strong> A small colored car and a count. No numbers on the buttons.</span></li>
         <li><span><strong>One depth, one tag.</strong> Each tire label is its tread and what happens to it.</span></li>
-        <li><span><strong>Numbers live in one place.</strong> Under the car, one plain difference per axle.</span></li>
+        <li><span><strong>One before and after.</strong> One whole-car stop, today against the pick, for a dry, wet or snowy road.</span></li>
         <li><span><strong>Preview before picking.</strong> Point at an option and the car shows it, outlined.</span></li>
       </ol>
-      <p class="study__note">Still held: tested numbers only, ranges hatched, "Not tested" where nothing was measured, and no single stop for a mixed set, because Tire Rack tested full sets.</p>
-      <p class="study__src">Wet stops from <a href="https://www.tirerack.com/upgrade-garage/how-much-does-tire-tread-depth-affect-wet-braking">Tire Rack's tread depth braking test</a>; snow stops from its <a href="https://www.tirerack.com/upgrade-garage/winter-tires-vs-all-season-what-the-tests-show">winter vs all-season article</a>. Type and base colors are Tire Rack's public CSS variables; the four meaning colors are additions. Vehicle and readings are synthetic.</p>
+      <p class="study__note">The whole-car stop is a prototype estimate: each tire's stop is read from published tests at its depth, and the four are averaged. Wet uses Tire Rack's tread depth test, snow its winter test, dry DEKRA's worn-tire results; worn tires in snow are modelled, not measured.</p>
+      <p class="study__src">Wet stops from <a href="https://www.tirerack.com/upgrade-garage/how-much-does-tire-tread-depth-affect-wet-braking">Tire Rack's tread depth braking test</a>; dry from DEKRA's worn-tire tests; snow stops from its <a href="https://www.tirerack.com/upgrade-garage/winter-tires-vs-all-season-what-the-tests-show">winter vs all-season article</a>. Type and base colors are Tire Rack's public CSS variables; the four meaning colors are additions. Vehicle and readings are synthetic.</p>
     </aside>
   </div>
 </div></section>
@@ -1373,7 +1390,7 @@ window.IF = {
   },
 };
 </script>
-<script>(() => {
+<script>/*h06:js:start*/(() => {
   const root = document.querySelector('[data-v="h06"]'); const D = window.IF;
   /* ---- shared core: everything below reads window.IF and nothing else ---- */
   const POS = ['LF', 'RF', 'LR', 'RR'], NEW = 10;
@@ -1381,7 +1398,7 @@ window.IF = {
   const NAME = { two: 'Two new tires', four: 'Four new tires', winter: 'Four winter tires', not: 'Not now' };
   const MOVES = { two: 'Fronts come off · your rears move up front · 2 new go on the rear', four: 'All four come off · 4 new go on', winter: 'All four come off and are kept · 4 winter go on', not: 'Nothing moves. Measured again next visit' };
   const MAX = { wet: 400, snow: 100 };
-  const S = { k: null, c: 'wet', note: null, pv: null };
+  const S = { k: null, c: 'wet', note: null, pv: null };   // c: 'dry' | 'wet' | 'snow'
   // The four things that can happen to a tire. One color, one mark and one word each.
   const MARK = { off: '\u2715', move: '\u2191', new: '+', stay: '=' };
   const chip = (a, t) => `<span class="chip chip--${a}"><i data-g="${MARK[a]}" aria-hidden="true"></i>${t}</span>`;
@@ -1482,43 +1499,80 @@ window.IF = {
     }).join('');
     return `<div class="ev"><p class="ev__h">${c === 'wet' ? 'Tested wet stop from 60 mph · full set at each axle\'s depth' : 'Tested snow stop from 25 mph · new tires only'}</p>${rows}</div>`;
   }
+  // ---------- whole-car stopping, a prototype estimate ----------
+  // Each tire's stop is read off a curve through published figures, then the four are averaged.
+  // Tire Rack tested full sets, never a car with two depths, so the average is a modelling choice,
+  // labelled as an estimate on the page. Depths in 32nds; 'new' = 10/32".
+  const ROAD = {
+    // Dry, 60 mph. Base about 120 ft for a sedan on new all-season tires (typical of published
+    // 60-0 dry tests). DEKRA found worn tires 2.4 to 8.5% longer on dry pavement.
+    dry: { speed: 60, word: 'on a dry road', pts: [[2, 128], [4, 125], [10, 120]] },
+    // Wet, 60 mph: Tire Rack's tread depth braking test, a sedan on full sets at 10/32", 4/32" and 2/32".
+    wet: { speed: 60, word: 'on a wet road', pts: [[2, 400], [4, 270], [10, 205]] },
+    // Snow, 25 mph: Tire Rack's winter test, new all-season 81.1 ft, new winter 56.1 ft. Worn tires
+    // weren't tested in snow: the multiplier steepens under Tire Rack's ~5/32" snow line, in the
+    // range Kal Tire reported (+4.4 m on snow from half to three-quarters worn).
+    snow: { speed: 25, word: 'in snow', pts: [[2, 81.1 * 1.42], [3, 81.1 * 1.32], [4, 81.1 * 1.22], [5, 81.1 * 1.12], [6, 81.1 * 1.07], [7, 81.1 * 1.04], [8, 81.1 * 1.02], [10, 81.1]] },
+  };
+  const curve = (pts, d) => {
+    if (d <= pts[0][0]) return pts[0][1];
+    for (let i = 1; i < pts.length; i++) { const [d1, y1] = pts[i], [d0, y0] = pts[i - 1]; if (d <= d1) return y0 + (y1 - y0) * (d - d0) / (d1 - d0); }
+    return pts[pts.length - 1][1];
+  };
+  const tireStop = (v, c) => v === 'winter' ? D.snow.winter : curve(ROAD[c].pts, typeof v === 'number' ? v : NEW);
+  const carStop = (k, c) => { const L = layout(k); return POS.reduce((a, p) => a + tireStop(L.at[p].v, c), 0) / 4; };
+  const ft0 = v => Math.round(v);
+  const STOP_MAX = { dry: 160, wet: 300, snow: 110 };
+  const icon = c => ICON[c].replace('aria-hidden', 'class="stp__i" aria-hidden');
+  function stopHtml(k, c, preview) {
+    const R = ROAD[c], b = carStop(null, c), a = k ? carStop(k, c) : null, m = STOP_MAX[c];
+    const L = k ? layout(k) : null, act = !k ? 'stay' : L.on.length ? 'new' : L.moved.length ? 'move' : 'stay';
+    const gap = a === null ? 0 : ft0(b) - ft0(a);
+    const head = a === null ? '' : gap > 0 ? `<b class="stp__d stp__d--${act}">${gap} ft shorter</b>` : '<b class="stp__d stp__d--stay">No change</b>';
+    const row = (key, label, sub, v, cls) => `<div class="stp__r stp__r--${cls}"><span class="stp__l">${label}${sub}</span><span class="trk" aria-hidden="true"><i class="trk__s" data-bar="${key}" data-to="${Math.min(100, v / m * 100)}"></i></span><b class="val" data-n="${key}" data-a="${ft0(v)}" data-b="${ft0(v)}">${ft0(v)} ft</b></div>`;
+    const today = POS.map(p => D.tread[p]).join(' · ');
+    return `<div class="stp">
+      <div class="stp__top"><p class="stp__h">${icon(c)}Stopping from ${R.speed} mph ${R.word}<small>Whole car · estimate</small></p>${head}</div>
+      ${row(`st-${c}-b`, 'Today', `<small>${today}</small>`, b, 'b')}
+      ${a === null ? '' : row(`st-${c}-a`, preview ? 'Preview' : 'After', chip(act, k === 'not' ? 'Stays' : NAME[k].replace(' tires', '')), a, act)}
+      <p class="stp__n">Each tire's stop is read from published test figures at its depth, and the four are averaged. A prototype estimate, not a test of this car.</p>
+    </div>`;
+  }
   function lineFor(k, c) {
-    const M4 = D.wet.mphAtNewStop.d4, gap = (D.snow.allSeason - D.snow.winter).toFixed(1).replace(/\.0$/, '');
-    if (!k) return c === 'wet' ? `Today your fronts are at ${D.tread.LF}/32", Tire Rack's rain advice line. A set at that depth took ${D.wet.d4} ft in the test. New took ${D.wet.new} ft.` : `Worn tires were never tested in snow, so today has no snow number.`;
-    const T = {
-      wet: {
-        two: `New tires on the rear stopped in ${D.wet.new} ft in the test. Your ${D.tread.LR}/32" rears, now up front, sit between tested depths, so the front is a range.`,
-        four: `A new set stopped in ${D.wet.new} ft. A set at ${D.tread.LF}/32" took ${D.wet.d4} ft, and was still going ${M4} mph where the new set had stopped.`,
-        not: `Nothing changes. A set at ${D.tread.LF}/32", like your fronts, took ${D.wet.d4} ft in the test. New took ${D.wet.new} ft.`,
-      },
-      snow: {
-        two: `New all-season tires stopped in ${D.snow.allSeason} ft from 25 mph. Worn tires were never tested in snow, so the front has no number.`,
-        four: `New all-season tires stopped in ${D.snow.allSeason} ft from 25 mph. There is no tested number for the tires coming off.`,
-        winter: `New winter tires stopped in ${D.snow.winter} ft, ${gap} ft shorter than new all-season tires (${D.snow.allSeason} ft).`,
-        not: `Nothing changes. Worn tires were never tested in snow, so there is no number.`,
-      },
-    };
-    return T[c][k];
+    const R = ROAD[c], gap = k ? ft0(carStop(null, c)) - ft0(carStop(k, c)) : 0;
+    if (!k) return {
+      dry: 'On a dry road tread depth matters least: worn tires stop only a few percent longer than new ones.',
+      wet: `Rain is where tread pays. In Tire Rack's wet test, a set at ${D.tread.LF}/32", like your fronts, was still going ${D.wet.mphAtNewStop.d4} mph where a new set had stopped.`,
+      snow: `Your fronts are at ${D.tread.LF}/32", under Tire Rack's ~5/32" snow line, where tread stops packing and releasing snow.`,
+    }[c];
+    if (k === 'not') return `Nothing changes ${R.word}. The same four tires stay on.`;
+    const extra = k === 'winter' ? ` In Tire Rack's test, new winter tires stopped ${parseFloat((D.snow.allSeason - D.snow.winter).toFixed(1))} ft shorter than new all-season tires.`
+      : c === 'dry' ? ' In the dry the gain is small; rain and snow are where it shows.' : '';
+    return `${NAME[k]}: about ${gap} ft shorter from ${R.speed} mph ${R.word}.${extra}`;
   }
   function srcHtml(k) {
     const a = (h, t) => `<a href="${h}" target="_blank" rel="noopener">${t}</a>`;
-    const s = S.c === 'wet' ? `Wet stops: ${a(D.sources.wet, 'Tire Rack tread depth braking test')}, a sedan from 60 mph on full sets at new (10/32"), 4/32" and 2/32".`
-      : `Snow stops: ${a(D.sources.snow, 'Tire Rack winter vs all-season test')}, new tires only (${D.snow.allSeasonName}; ${D.snow.winterName}), from 25 mph. Worn tires were never tested in snow.`;
-    return `${s} The tests used full sets, and a car with two depths wasn't tested, so each axle is read on its own. Advice lines: ${a(D.sources.depth, 'how much tread is enough')}.${k === 'two' ? ` Placement: ${a(D.sources.policy, 'mixing tread depths')}.` : ''}`;
+    const by = {
+      dry: `Dry: a typical published 60-0 dry stop for a sedan on new all-season tires (about 120 ft), with DEKRA's finding that worn tires stop 2.4 to 8.5% longer on dry pavement.`,
+      wet: `Wet: ${a(D.sources.wet, 'Tire Rack tread depth braking test')}, a sedan from 60 mph on full sets at new (10/32"), 4/32" and 2/32"; depths in between are read along a straight line.`,
+      snow: `Snow: ${a(D.sources.snow, 'Tire Rack winter vs all-season test')} for new tires (${D.snow.allSeasonName} 81.1 ft, ${D.snow.winterName} 56.1 ft, from 25 mph). Worn tires weren't tested in snow; their penalty is a prototype curve that steepens under ${a(D.sources.depth, 'Tire Rack\'s ~5/32" snow line')}.`,
+    }[S.c];
+    return `${by} The whole-car number averages the four tires; no test measured a car with mixed depths. Prototype data, not a guarantee.${k === 'two' ? ` Placement: ${a(D.sources.policy, 'mixing tread depths')}.` : ''}`;
   }
   const ICON = {
+    dry: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3.1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M3.2 12.8l1.3-1.3M11.5 4.5l1.3-1.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
     wet: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.6C6.1 4.4 3.6 7.1 3.6 10a4.4 4.4 0 0 0 8.8 0C12.4 7.1 9.9 4.4 8 1.6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
     snow: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.2v13.6M2.1 4.6l11.8 6.8M2.1 11.4l11.8-6.8M6.2 2.6 8 4.2l1.8-1.6M6.2 13.4 8 11.8l1.8 1.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     info: '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 6.1v.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
   };
-  const roadHtml = () => `<div class="road" role="group" aria-label="Road condition">${[['wet', 'Wet road · 60 mph'], ['snow', 'Snow · 25 mph']].map(([c, l]) => `<button type="button" data-c="${c}" data-f="c-${c}" aria-pressed="${S.c === c}">${ICON[c]}${l}</button>`).join('')}</div>`;
+  const roadHtml = () => `<div class="road" role="group" aria-label="Road condition: dry, wet or snow">${[['dry', 'Dry'], ['wet', 'Wet'], ['snow', 'Snow']].map(([c, l]) => `<button type="button" data-c="${c}" data-f="c-${c}" aria-pressed="${S.c === c}">${ICON[c]}${l}</button>`).join('')}</div>`;
   const syncRoad = () => root.querySelectorAll('[data-c]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === S.c)));
   const NOTE = {
     two: () => `<b>New tires go on the rear.</b> Your ${D.tread.LR}/32" rear tires move up front. Tire Rack puts the newer pair on the rear so the back of the car isn't the first to slide in the rain.`,
-    winter: () => '<b>Four winter tires was cleared.</b> It\'s a snow option, and this data has no wet test for winter tires.',
+    winter: () => '<b>Four winter tires was cleared.</b> It\'s a snow option, so it only shows in Snow.',
   };
   const noteHtml = () => !S.note ? '' : `<div class="note">${ICON.info}<div><p>${NOTE[S.note.kind]()}</p><p class="note__a"><button type="button" class="lk" data-act="undo" data-f="undo">Undo</button>${S.note.kind === 'two' ? '<button type="button" class="lk" data-act="four" data-f="alt">Choose four instead</button>' : ''}</p></div></div>`;
-  const legendHtml = () => S.c === 'wet' ? `<ul class="lg" aria-label="Legend"><li><i class="h" aria-hidden="true"></i>Hatched: a range, between tested depths</li></ul>` : '';
+  const legendHtml = () => false ? `<ul class="lg" aria-label="Legend"><li><i class="h" aria-hidden="true"></i>Hatched: a range, between tested depths</li></ul>` : '';
 
   // Tire drawn from above. Groove depth and contrast follow the measured tread; new tires carry their paper label.
   function tireSvg(v) {
@@ -1647,7 +1701,7 @@ window.IF = {
     if (t.dataset.k) { if (t.dataset.k === S.k) return null; S.k = t.dataset.k; S.note = S.k === 'two' ? { kind: 'two', prev } : null; return `k-${S.k}`; }
     if (t.dataset.c) {
       if (t.dataset.c === S.c) return null; S.c = t.dataset.c;
-      if (S.c === 'wet' && S.k === 'winter') { S.k = null; S.note = { kind: 'winter', prev }; }
+      if (S.c !== 'snow' && S.k === 'winter') { S.k = null; S.note = { kind: 'winter', prev }; }
       else if (S.note && S.note.kind === 'winter') S.note = null;
       syncRoad(); return `c-${S.c}`;
     }
@@ -1658,8 +1712,8 @@ window.IF = {
   const keepFocus = (key, was) => { if (!key || !was) return; const el = root.querySelector(`[data-f="${key}"]`); if (el && document.activeElement !== el) el.focus({ preventScroll: true }); };
   const live = root.querySelector('[data-live]');
   function say(extra = '') {
-    const road = S.c === 'wet' ? 'Wet road, 60 mph.' : 'Snow, 25 mph.';
-    const ax = ['f', 'r'].map(x => { const A = axle(S.k, S.c, x); return `${A.name} axle: today ${A.e0.t.toLowerCase()}${A.same ? ', no change' : `, after ${A.e1.t.toLowerCase()}`}.`; }).join(' ');
+    const road = { dry: 'Dry road, 60 mph.', wet: 'Wet road, 60 mph.', snow: 'Snow, 25 mph.' }[S.c];
+    const ax = `Estimated stop ${ROAD[S.c].word}: today ${ft0(carStop(null, S.c))} feet, after ${ft0(carStop(S.k, S.c))} feet.`;
     const msg = `${S.k ? NAME[S.k] + '.' : 'No option picked.'} ${road} ${S.k ? ax : ''} ${S.note ? plain(NOTE[S.note.kind]()) + ' Undo is available.' : ''} ${extra}`;
     live.textContent = ''; setTimeout(() => { live.textContent = plain(msg); }, 30);
   }
@@ -1717,13 +1771,13 @@ window.IF = {
     });
     car.classList.toggle('is-pv', !!pv);
     setLabels('h2car', shown);
-    const road = S.c === 'wet' ? 'wet road, 60 mph' : 'snow, 25 mph';
+    const road = { dry: 'dry road, 60 mph', wet: 'wet road, 60 mph', snow: 'snow, 25 mph' }[S.c];
     $('[data-cap]').innerHTML = pv ? `<span class="pill pill--pv">Preview</span><span><b>${NAME[pv]}</b>, not picked yet</span>`
       : k ? `<span class="pill pill--pk">Picked</span><span><b>${NAME[k]}</b> · ${road}</span>` : `<span class="pill pill--td">Today</span><span>As measured · ${road}</span>`;
     $('[data-tcap]').innerHTML = trayCap(shown);
     $('[data-line]').textContent = lineFor(shown, S.c);
     $('[data-evh]').textContent = pv ? `If you pick ${NAME[pv].toLowerCase()}` : k ? 'What it changes' : 'Where you are today';
-    $('[data-ev]').innerHTML = evHtml(shown, S.c, pv ? { tag: 'Preview' } : {});
+    $('[data-ev]').innerHTML = stopHtml(shown, S.c, !!pv);
     syncOpts();
     motion();
   }
@@ -1759,7 +1813,7 @@ window.IF = {
     say();
   });
   update(false);
-})();</script>
+})();/*h06:js:end*/</script>
 <script>
 /* Page tabs. #simplicity opens the study directly; ?for= is kept. */
 (() => {
