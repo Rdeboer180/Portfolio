@@ -7,6 +7,18 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Prototype playground · Ryan DeBoer</title>
 <link rel="icon" href="data:,">
+<script>
+/* On rdeboerdesigns.com the playground lives under the site's own nav and footer, at
+   /prototypingPlayground/, which frames this page. Opened on its own (not in that frame,
+   and not a company-scoped ?for= link), it goes there, keeping its hash. */
+(function () {
+  try {
+    if (window.top === window.self && /(^|\.)rdeboerdesigns\.com$/.test(location.hostname) && !new URLSearchParams(location.search).has('for')) {
+      location.replace('/prototypingPlayground/' + location.hash);
+    }
+  } catch (_) {}
+})();
+</script>
 <style>
 /* Shared styles for the three prototype tabs. Pages link this with ../shared.css. */
 @font-face{font-family:'Hubot Sans';font-style:normal;font-weight:400 800;font-stretch:100%;font-display:swap;src:url(a/0.woff2) format('woff2')}
@@ -853,7 +865,7 @@ button{font:inherit;color:inherit}
 <section class="sec" id="directory" aria-labelledby="dirTitle"><div class="wrap">
   <p class="label">The directory</p>
   <h2 id="dirTitle">Where the method already runs</h2>
-  <p class="sub">A working prototype, then three projects that each show part of the playground on real work. Tire Rack material is shown with names removed.</p>
+  <p class="sub">Two working prototypes, then two projects that each show part of the playground on real work. Tire Rack material is shown with names removed.</p>
   <ul class="cards cards--4">
     <li><a class="card" href="../fitment-confidence/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -864,6 +876,16 @@ button{font:inherit;color:inherit}
         <p>Pick a vehicle and watch the page narrow to the sizes that fit, confirm the match on the sidewall, and say so when a tire isn't made for your car.</p>
         <p class="proves"><b>What it proves</b>The method end to end: test the feel and every state, with the handoff attached.</p>
         <span class="card__go">Open the prototype →</span>
+      </span></a></li>
+    <li><a class="card" href="#simplicity" data-goto="simple">
+      <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="card__img"><img src="a/3.svg" alt="A study in simplicity: one car seen from above with its fronts marked moved up and its rears marked new, the options as counts, and one tested difference per axle"></span>
+      <span class="card__body">
+        <span class="card__co">Study · Tire Rack public data</span>
+        <h3>A study in simplicity</h3>
+        <p>What each tire option actually changes at the install counter: one car, four colors, and the tested numbers in one place.</p>
+        <p class="proves"><b>What it proves</b>A data-heavy decision cut down until each place says one thing, without hiding what was never tested.</p>
+        <span class="card__go">Open the study →</span>
       </span></a></li>
     <li><a class="card" href="../wheelrack-handoff/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -877,7 +899,7 @@ button{font:inherit;color:inherit}
       </span></a></li>
     <li><a class="card" href="../binder/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span class="card__img"><img src="a/3.jpg" alt="The portfolio binder: a leather spine and holographic case study cards in clear sleeves"></span>
+      <span class="card__img"><img src="a/4.jpg" alt="The portfolio binder: a leather spine and holographic case study cards in clear sleeves"></span>
       <span class="card__body">
         <span class="card__co">Portfolio binder</span>
         <h3>Judgment over agent output</h3>
@@ -885,16 +907,7 @@ button{font:inherit;color:inherit}
         <p class="proves"><b>What it proves</b>The prompts that steered it are on the page, including two calls I made against the agents' written advice.</p>
         <span class="card__go">Open the binder →</span>
       </span></a></li>
-    <li><a class="card" href="../aem/">
-      <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span class="card__img card__img--locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>Opens with the portfolio password</span>
-      <span class="card__body">
-        <span class="card__co card__co--locked">AEM QA · Tire Rack<svg class="card__lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg><span class="sr-only">, password protected</span></span>
-        <h3>One review entry per change</h3>
-        <p>A skill builds the review doc for an AEM update. Each of the 24 changes gets its rule, live and branch captures, and the diff.</p>
-        <p class="proves"><b>What it proves</b>Design, engineering and QA read the same entry, and the rules ship in the Sass branch.</p>
-        <span class="card__go">Open AEM →</span>
-      </span></a></li>
+
   </ul>
 </div></section>
 
@@ -1762,6 +1775,12 @@ window.IF = {
     show(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length].dataset.ptab, true);
   });
   if (location.hash === '#simplicity') show('simple', false);
+  window.addEventListener('hashchange', () => show(location.hash === '#simplicity' ? 'simple' : 'method', false));
+  // the directory card opens the study tab and brings it into view
+  document.querySelectorAll('[data-goto="simple"]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); show('simple', false);
+    document.querySelector('.ptabs').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }));
 })();
 </script>
 </body>

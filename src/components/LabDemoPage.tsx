@@ -69,11 +69,15 @@ const LabDemoPage: React.FC<{ demo?: keyof typeof DEMOS }> = ({ demo = 'fitment'
   const onLoad = useCallback(() => {
     const doc = frame.current?.contentDocument;
     if (!doc) return;
-    const fit = () => setHeight(Math.ceil(doc.documentElement.scrollHeight));
+    // the body's own height, not the document's scrollHeight: that never drops below the
+    // frame's current height, so a page that gets shorter (the playground's study tab) would keep a gap
+    const fit = () => setHeight(Math.ceil(doc.body.getBoundingClientRect().height));
     fit();
     observer.current?.disconnect();
     observer.current = new ResizeObserver(fit);
     observer.current.observe(doc.body);
+    // and after any click inside, in case a tab switch lands between resize notifications
+    doc.addEventListener('click', () => { window.setTimeout(fit, 60); window.setTimeout(fit, 400); });
     // a link that leaves the prototype opens in the window, not the frame
     doc.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
       if (!a.getAttribute('href')!.startsWith('#') && !a.target) a.target = '_top';

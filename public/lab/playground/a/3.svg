@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" font-family="Lato, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <!-- Card art for "A study in simplicity": one car, four colors, the numbers in one place -->
+  <rect width="800" height="480" fill="#f4f4f2"/>
+  <rect x="40" y="36" width="300" height="408" rx="6" fill="#fafafa" stroke="#e3e3e3"/>
+  <!-- car from above -->
+  <g transform="translate(118 64)">
+    <path d="M72 6C100 6 124 10 133 23C141 35 144 54 144 74L144 312C144 338 140 356 128 365C115 372 96 372 72 372C48 372 29 372 16 365C4 356 0 338 0 312L0 74C0 54 3 35 11 23C20 10 44 6 72 6Z" fill="#fff" stroke="#3c3837" stroke-width="2"/>
+    <path d="M18 128C45 116 99 116 126 128L117 170C91 164 53 164 27 170Z" fill="#e4e6e7" stroke="#3c3837" stroke-width="1.4"/>
+    <path d="M27 174C53 168 91 168 117 174L117 246C91 250 53 250 27 246Z" fill="#f7f7f7" stroke="#cecece"/>
+    <path d="M27 250C53 254 91 254 117 250L126 284C99 292 45 292 18 284Z" fill="#e4e6e7" stroke="#3c3837" stroke-width="1.4"/>
+    <!-- fronts: moved up (amber) -->
+    <g fill="#57524c" stroke="#9a5b00" stroke-width="3"><rect x="-14" y="52" width="24" height="56" rx="5"/><rect x="134" y="52" width="24" height="56" rx="5"/></g>
+    <!-- rears: new (green) -->
+    <g fill="#2a2724" stroke="#1b7a4b" stroke-width="3"><rect x="-14" y="262" width="24" height="56" rx="5"/><rect x="134" y="262" width="24" height="56" rx="5"/></g>
+    <g fill="#fff"><rect x="-8" y="282" width="12" height="14" rx="1.5"/><rect x="140" y="282" width="12" height="14" rx="1.5"/></g>
+    <!-- marks -->
+    <g font-size="13" font-weight="700" text-anchor="middle" fill="#fff">
+      <circle cx="8" cy="50" r="10" fill="#9a5b00"/><text x="8" y="55">↑</text>
+      <circle cx="156" cy="50" r="10" fill="#9a5b00"/><text x="156" y="55">↑</text>
+      <circle cx="8" cy="260" r="10" fill="#1b7a4b"/><text x="8" y="265">+</text>
+      <circle cx="156" cy="260" r="10" fill="#1b7a4b"/><text x="156" y="265">+</text>
+    </g>
+  </g>
+  <!-- options -->
+  <g transform="translate(372 36)">
+    <text x="0" y="22" font-size="22" font-weight="700" fill="#19170d">Your options</text>
+    <g>
+      <rect x="0" y="40" width="388" height="78" rx="3" fill="#fff" stroke="#19170d" stroke-width="2"/>
+      <text x="20" y="72" font-size="18" font-weight="700" fill="#19170d">Two new tires</text>
+      <g font-size="13" font-weight="700">
+        <rect x="20" y="86" width="64" height="22" rx="11" fill="#fdecea"/><text x="34" y="101" fill="#c2281d">✕ 2 off</text>
+        <rect x="92" y="86" width="96" height="22" rx="11" fill="#fdf1d8"/><text x="106" y="101" fill="#9a5b00">↑ 2 move up</text>
+        <rect x="196" y="86" width="70" height="22" rx="11" fill="#e4f3ea"/><text x="210" y="101" fill="#1b7a4b">+ 2 new</text>
+      </g>
+    </g>
+    <g>
+      <rect x="0" y="130" width="388" height="78" rx="3" fill="#fff" stroke="#cecece"/>
+      <text x="20" y="162" font-size="18" font-weight="700" fill="#19170d">Four new tires</text>
+      <g font-size="13" font-weight="700">
+        <rect x="20" y="176" width="64" height="22" rx="11" fill="#fdecea"/><text x="34" y="191" fill="#c2281d">✕ 4 off</text>
+        <rect x="92" y="176" width="70" height="22" rx="11" fill="#e4f3ea"/><text x="106" y="191" fill="#1b7a4b">+ 4 new</text>
+      </g>
+    </g>
+    <!-- the numbers, in one place -->
+    <text x="0" y="250" font-size="13" font-weight="700" letter-spacing="1" fill="#666">WHAT IT CHANGES · WET, 60 MPH</text>
+    <text x="0" y="282" font-size="16" font-weight="700" fill="#19170d">Rear axle</text>
+    <text x="388" y="282" font-size="16" font-weight="900" fill="#19170d" text-anchor="end">Up to 65 ft shorter</text>
+    <text x="0" y="314" font-size="13" fill="#3c3837">Today</text>
+    <rect x="70" y="303" width="240" height="14" rx="2" fill="#eaeaea"/><rect x="70" y="303" width="122" height="14" rx="2" fill="#666"/>
+    <rect x="192" y="303" width="38" height="14" fill="#666" opacity=".45"/>
+    <text x="388" y="315" font-size="14" font-weight="700" fill="#3c3837" text-anchor="end">205–270 ft</text>
+    <text x="0" y="348" font-size="13" font-weight="700" fill="#19170d">After</text>
+    <rect x="70" y="337" width="240" height="14" rx="2" fill="#eaeaea"/><rect x="70" y="337" width="122" height="14" rx="2" fill="#1b7a4b"/>
+    <text x="388" y="349" font-size="14" font-weight="900" fill="#19170d" text-anchor="end">205 ft</text>
+    <!-- the key -->
+    <g font-size="13" font-weight="700" transform="translate(0 388)">
+      <rect x="0" y="0" width="92" height="24" rx="12" fill="#fdecea"/><text x="12" y="17" fill="#c2281d">✕ Comes off</text>
+      <rect x="100" y="0" width="96" height="24" rx="12" fill="#fdf1d8"/><text x="112" y="17" fill="#9a5b00">↑ Moves up</text>
+      <rect x="204" y="0" width="64" height="24" rx="12" fill="#e4f3ea"/><text x="216" y="17" fill="#1b7a4b">+ New</text>
+      <rect x="276" y="0" width="70" height="24" rx="12" fill="#eeeeee"/><text x="288" y="17" fill="#666">= Stays</text>
+    </g>
+  </g>
+</svg>
