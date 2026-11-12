@@ -261,6 +261,9 @@ body.no-pins .pin{display:none}
 @media (prefers-reduced-motion:reduce){.method-link{transition:none}}
 
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
 <style>
 [hidden]{display:none!important}
 button{font:inherit;color:inherit}
@@ -425,6 +428,292 @@ button{font:inherit;color:inherit}
 @media (max-width:820px){.phases{grid-template-columns:minmax(0,1fr)}.phases li + li{border-left:0;border-top:1px solid rgba(27,27,27,.1)}.rules__split{grid-template-columns:minmax(0,1fr)}.rules{padding:16px 12px}}
 @media (max-width:720px){.cards,.par__runs{grid-template-columns:minmax(0,1fr)}.card__img{height:180px}}
 @media (max-width:560px){.ho{grid-template-columns:minmax(0,1fr)}.ho > div + div{border-left:0;border-top:1px solid rgba(27,27,27,.1)}.rules2 .callout p{font-size:20px}.node__c{flex-basis:100%;margin-left:18px}.repo__tree{padding:12px 8px}}
+/* page tabs */
+.ptabs{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--hair);backdrop-filter:saturate(1.4) blur(6px)}
+.ptabs__in{display:flex;gap:28px;overflow-x:auto}
+.ptabs button{flex:none;min-height:52px;padding:0;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:none;font:700 14px/1 var(--font-h);letter-spacing:.02em;color:var(--graphite);cursor:pointer}
+.ptabs button:hover{color:var(--ink)}
+.ptabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--orange)}
+#ppanel-method > .sec:first-child,#ppanel-simple > .sec:first-child{border-top:0}
+.study [data-v="h06"] .chip{text-transform:none;letter-spacing:0}
+/* a study in simplicity */
+.study__grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start;margin-top:28px}
+.study__frame{min-width:0;border:1px solid rgba(27,27,27,.1);border-radius:12px;overflow:hidden;background:#fff}
+.study__frame > .stage{padding:28px 32px 32px}
+.study__side{position:sticky;top:72px;display:grid;gap:12px;font-size:14px;line-height:1.5;color:var(--slate)}
+.study__side .label + *{margin-top:-2px}
+.study-key,.study-list{margin:0 0 6px;padding:0;list-style:none;display:grid;gap:9px}
+.study-key li,.study-list li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
+.study-key b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;color:#fff;font:700 12px/1 var(--font-b)}
+.study-key strong,.study-list strong{color:var(--ink)}
+.study-list{counter-reset:s}
+.study-list li{counter-increment:s}
+.study-list li::before{content:counter(s);display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font:700 11px/1 var(--font-b)}
+.study__note{margin:0 0 10px;font-size:13px;color:var(--graphite)}
+.study__src{margin:0;padding-top:12px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--graphite)}
+@media (max-width:1100px){.study__grid{grid-template-columns:minmax(0,1fr)}.study__side{position:static}}
+@media (max-width:560px){.study__frame > .stage{padding:20px 14px 24px}}
+/* Tire Rack's public :root variables (read Nov 12, 2026), scoped to the study stage */
+.stage{
+  --font-family-primary:Lato;--line-height-header:1.2;--line-height-primary:1.4;
+  --font-size-xs:.85rem;--font-size-sm:.95rem;--font-size-md:1rem;--font-size-lg:1.15rem;--font-size-xl:1.25rem;--font-size-xxl:1.563rem;--font-size-xxxl:1.953rem;--font-size-xxxxl:2.441rem;
+  --space-xxxxs:.12rem;--space-xxxs:.25rem;--space-xxs:.45rem;--space-xs:.64rem;--space-sm:.8rem;--space-md:1rem;--space-lg:1.563rem;--space-xl:1.563rem;--space-xxl:1.953rem;--space-xxxl:2.441rem;--space-xxxxl:3.052rem;
+  --color-red:#d70000;--color-blacktext:#19170d;--color-black:#3c3837;--color-blue:#2b7088;--color-white:#fff;--color-darkgrey:#666;--color-grey:silver;--color-mediumgrey:#cecece;--color-lightgrey:#eaeaea;--color-gold:#f2a633;
+  --font-weight-reg:400;--font-weight-semibold:700;--font-weight-bold:900;
+  --font-color-link:var(--color-blue);--font-color-primary:var(--color-blacktext);
+  --border-radius:3px;--button-height:50px;
+  --tr-font:var(--font-family-primary),-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--color-white);color:var(--font-color-primary);font:var(--font-weight-reg) var(--font-size-md)/var(--line-height-primary) var(--tr-font);
+}
+
+/* ---- shared core: type, controls, tire + car drawing, evidence ---- */
+[data-v="h06"]{position:relative;--hatch:repeating-linear-gradient(135deg,var(--color-darkgrey) 0 1.5px,transparent 1.5px 5px);--car-w:170px;--lab-w:96px;--tw:calc(var(--car-w) * .14);--th:calc(var(--car-w) * .32)}
+[data-v="h06"] .case{margin:0 0 var(--space-lg);font:var(--font-weight-reg) var(--font-size-xs)/1.45 var(--tr-font);color:var(--color-darkgrey)}
+[data-v="h06"] .case b{font-weight:var(--font-weight-semibold);color:var(--font-color-primary)}
+[data-v="h06"] :focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}
+[data-v="h06"] button{-webkit-tap-highlight-color:transparent}
+[data-v="h06"] .hd{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-xs) var(--space-md);margin:0 0 var(--space-sm)}
+[data-v="h06"] .h{margin:0;font:var(--font-weight-semibold) var(--font-size-xl)/var(--line-height-header) var(--tr-font);color:var(--font-color-primary)}
+[data-v="h06"] .h small{display:block;margin-top:3px;font-weight:var(--font-weight-reg);font-size:var(--font-size-xs);color:var(--color-darkgrey)}
+[data-v="h06"] .eyebrow{margin:0 0 6px;font:var(--font-weight-semibold) 11px/1.2 var(--tr-font);letter-spacing:.07em;text-transform:uppercase;color:var(--color-darkgrey)}
+
+/* road toggle */
+[data-v="h06"] .road{display:inline-flex;gap:3px;padding:3px;background:var(--color-lightgrey);border-radius:var(--border-radius)}
+[data-v="h06"] .road button{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 var(--space-sm);border:0;border-radius:2px;background:transparent;color:var(--color-black);font:var(--font-weight-semibold) var(--font-size-sm)/1 var(--tr-font);cursor:pointer;transition:background-color var(--ia-in) var(--ia-ease-out),box-shadow var(--ia-in) var(--ia-ease-out)}
+[data-v="h06"] .road button:hover{background:rgba(255,255,255,.55);color:var(--font-color-primary)}
+[data-v="h06"] .road button:active{transform:translateY(1px)}
+[data-v="h06"] .road button[aria-pressed="true"]{background:var(--color-white);color:var(--font-color-primary);box-shadow:0 0 0 1px var(--color-mediumgrey),0 1px 3px rgba(25,23,13,.14)}
+[data-v="h06"] .road svg{flex:none;width:16px;height:16px}
+
+/* option button: shared states */
+[data-v="h06"] .opt{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:10px;min-width:0;min-height:var(--button-height);padding:12px 14px 14px;border:1px solid var(--color-mediumgrey);border-radius:var(--border-radius);background:var(--color-white);color:var(--font-color-primary);font:var(--font-weight-reg) var(--font-size-sm)/1.3 var(--tr-font);text-align:left;cursor:pointer;transition:border-color var(--ia-in) var(--ia-ease-out),box-shadow var(--ia-in) var(--ia-ease-out),background-color var(--ia-in) var(--ia-ease-out),transform 120ms var(--ia-ease-out)}
+[data-v="h06"] .opt:hover{border-color:var(--color-darkgrey);box-shadow:0 2px 8px rgba(25,23,13,.08)}
+[data-v="h06"] .opt:active{transform:translateY(1px);background:#fafafa;box-shadow:none}
+[data-v="h06"] .opt[aria-pressed="true"]{border-color:var(--color-blacktext);box-shadow:inset 0 0 0 1px var(--color-blacktext)}
+[data-v="h06"] .opt:disabled{cursor:not-allowed;opacity:.5;box-shadow:none}
+[data-v="h06"] .opt__n{display:flex;align-items:center;gap:9px;font:var(--font-weight-semibold) var(--font-size-md)/1.2 var(--tr-font)}
+[data-v="h06"] .opt__r{flex:none;display:grid;place-items:center;width:18px;height:18px;border:1.5px solid var(--color-darkgrey);border-radius:50%;background:var(--color-white);transition:background-color var(--ia-in) var(--ia-ease-out),border-color var(--ia-in) var(--ia-ease-out)}
+[data-v="h06"] .opt:hover .opt__r{border-color:var(--color-blacktext)}
+[data-v="h06"] .opt[aria-pressed="true"] .opt__r{border-color:var(--color-blacktext);background:var(--color-blacktext)}
+[data-v="h06"] .opt[aria-pressed="true"] .opt__r::after{content:'';width:8px;height:4px;margin-top:-2px;border:2px solid var(--color-white);border-top:0;border-right:0;transform:rotate(-45deg)}
+[data-v="h06"] .opt__pk{position:absolute;top:-9px;right:12px;padding:2px 6px;border-radius:2px;background:var(--color-blacktext);color:var(--color-white);font:var(--font-weight-semibold) 10.5px/1.3 var(--tr-font);letter-spacing:.05em;text-transform:uppercase}
+[data-v="h06"] .opt__mv{font-size:var(--font-size-xs);line-height:1.35;color:var(--color-black)}
+
+/* per-axle delta on an option */
+[data-v="h06"] .dl{display:grid;gap:6px;padding-top:10px;border-top:1px solid var(--color-lightgrey)}
+[data-v="h06"] .dl__h{font:var(--font-weight-semibold) 11px/1.2 var(--tr-font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .dl__r{display:grid;gap:1px}
+[data-v="h06"] .dl__k{font-size:11px;font-weight:var(--font-weight-semibold);color:var(--color-darkgrey)}
+[data-v="h06"] .dl__v{font-size:var(--font-size-sm);line-height:1.3;color:var(--color-black);font-variant-numeric:tabular-nums}
+[data-v="h06"] .dl__v b{font-weight:var(--font-weight-bold);color:var(--font-color-primary);white-space:nowrap}
+[data-v="h06"] .dl__ar{color:var(--color-darkgrey)}
+[data-v="h06"] .dl__same{font-size:var(--font-size-xs);color:var(--color-darkgrey)}
+[data-v="h06"] .rg{padding-bottom:3px;background:var(--hatch) left bottom / 100% 3px no-repeat;white-space:nowrap}
+[data-v="h06"] .nt{font-size:var(--font-size-xs);font-weight:var(--font-weight-semibold);color:var(--color-darkgrey);white-space:nowrap}
+
+/* tire drawing (seen from above) */
+[data-v="h06"] .tr{display:block;width:100%;height:100%;will-change:transform}
+[data-v="h06"] .tr svg,[data-v="h06"] .tg svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 1px 1.5px rgba(25,23,13,.28))}
+[data-v="h06"] .t-o{fill:#2a2724;stroke:var(--color-blacktext);stroke-width:1.5}
+[data-v="h06"] .t-f{fill:#57524c}
+[data-v="h06"] .t-g{fill:none;stroke:#121109;stroke-linecap:round}
+[data-v="h06"] .t-sp{fill:none;stroke:#a19b94;stroke-width:.55;stroke-linecap:round;stroke-linejoin:round}
+[data-v="h06"] .t-lb{fill:var(--color-white)}
+[data-v="h06"] .t-lt{fill:none;stroke:#8f8a84;stroke-width:1.1;stroke-linecap:round}
+[data-v="h06"] .t-sf{fill:none;stroke:var(--color-blue);stroke-width:1.3;stroke-linecap:round}
+
+/* car seen from above, front at the top */
+[data-v="h06"] .car{position:relative;flex:none;width:var(--car-w);aspect-ratio:200 / 440;margin:0}
+[data-v="h06"] .cb{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+[data-v="h06"] .cb__shell{fill:var(--color-white);stroke:var(--color-black);stroke-width:1.6}
+[data-v="h06"] .cb__mir{fill:var(--color-white);stroke:var(--color-black);stroke-width:1.4}
+[data-v="h06"] .cb__line{fill:none;stroke:var(--color-mediumgrey);stroke-width:1.2}
+[data-v="h06"] .cb__glass{fill:#e4e6e7;stroke:var(--color-black);stroke-width:1.1}
+[data-v="h06"] .cb__roof{fill:#f7f7f7;stroke:var(--color-mediumgrey);stroke-width:1}
+[data-v="h06"] .cb__lamp{fill:var(--color-mediumgrey)}
+[data-v="h06"] .cb__arch{fill:var(--color-lightgrey);stroke:var(--color-mediumgrey);stroke-width:1}
+[data-v="h06"] .ch{position:absolute;width:14%;height:14.545%}
+[data-v="h06"] .ch--LF{left:6%;top:15.45%}[data-v="h06"] .ch--RF{left:80%;top:15.45%}[data-v="h06"] .ch--LR{left:6%;top:69.55%}[data-v="h06"] .ch--RR{left:80%;top:69.55%}
+[data-v="h06"] .car__ax{position:absolute;left:50%;transform:translateX(-50%);font:var(--font-weight-semibold) 10.5px/1 var(--tr-font);letter-spacing:.08em;text-transform:uppercase;color:var(--color-darkgrey);white-space:nowrap}
+[data-v="h06"] .car__ax--f{top:-20px}[data-v="h06"] .car__ax--r{bottom:-20px}
+
+/* tire labels beside the car */
+[data-v="h06"] .sl{position:absolute;display:grid;gap:2px;width:var(--lab-w);font:var(--font-weight-reg) 12px/1.25 var(--tr-font);color:var(--color-black);transform:translateY(-50%)}
+[data-v="h06"] .sl--LF,[data-v="h06"] .sl--RF{top:22.7%}[data-v="h06"] .sl--LR,[data-v="h06"] .sl--RR{top:76.8%}
+[data-v="h06"] .sl--LF,[data-v="h06"] .sl--LR{right:calc(100% + 10px);justify-items:end;text-align:right}
+[data-v="h06"] .sl--RF,[data-v="h06"] .sl--RR{left:calc(100% + 10px);justify-items:start}
+[data-v="h06"] .sl__p{font:var(--font-weight-semibold) 10.5px/1.2 var(--tr-font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .sl__v{font:var(--font-weight-bold) var(--font-size-xl)/1.05 var(--tr-font);color:var(--font-color-primary);font-variant-numeric:tabular-nums}
+[data-v="h06"] .sl__v small{margin-left:1px;font-size:.58em;font-weight:var(--font-weight-semibold)}
+[data-v="h06"] .sl__s{font-size:12px;line-height:1.25}
+[data-v="h06"] .sl__s--mv{font-weight:var(--font-weight-semibold);color:var(--font-color-primary)}
+[data-v="h06"] .gg{position:relative;display:block;width:60px;height:5px;margin-top:3px;background:var(--color-lightgrey);border-radius:3px}
+[data-v="h06"] .gg i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--color-black)}
+[data-v="h06"] .gg em{position:absolute;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--color-blacktext)}
+[data-v="h06"] .tagnew{display:inline-block;margin-top:2px;padding:1px 6px;border:1px solid var(--color-blacktext);border-radius:2px;font:var(--font-weight-semibold) 11px/1.4 var(--tr-font)}
+
+/* off the car */
+[data-v="h06"] .tray{padding:var(--space-sm);border-radius:var(--border-radius);background:#f3f3f3;box-shadow:inset 0 0 0 1px var(--color-lightgrey)}
+[data-v="h06"] .tray__k{display:flex;justify-content:space-between;gap:8px;margin:0 0 10px;font:var(--font-weight-semibold) 11px/1.2 var(--tr-font);letter-spacing:.07em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .tray__row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px 14px;min-height:calc(var(--th) + 22px)}
+[data-v="h06"] .tray__slot{display:grid;justify-items:center;gap:5px;width:max(var(--tw),56px)}
+[data-v="h06"] .tray__h{width:var(--tw);height:var(--th)}
+[data-v="h06"] .tray__lab{font:var(--font-weight-reg) 11px/1.25 var(--tr-font);text-align:center;color:var(--color-black)}
+[data-v="h06"] .tray__lab b{display:block;font-size:12px;font-weight:var(--font-weight-bold);color:var(--font-color-primary)}
+[data-v="h06"] .tray__e{align-self:center;margin:0;font-size:var(--font-size-sm);color:var(--color-darkgrey)}
+[data-v="h06"] .tray__cap{margin:10px 0 0;font-size:var(--font-size-sm);line-height:1.35;color:var(--color-black)}
+[data-v="h06"] .tray__cap b{color:var(--font-color-primary)}
+
+/* evidence by axle */
+[data-v="h06"] .ev{display:grid;gap:var(--space-sm)}
+[data-v="h06"] .ev__h{margin:0;font:var(--font-weight-semibold) 11px/1.3 var(--tr-font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .ax{padding-top:var(--space-xs);border-top:1px solid var(--color-lightgrey)}
+[data-v="h06"] .ax__h{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:0 0 6px;font:var(--font-weight-semibold) var(--font-size-sm)/1.2 var(--tr-font);color:var(--font-color-primary)}
+[data-v="h06"] .ax__h small{font-weight:var(--font-weight-reg);font-size:var(--font-size-xs);color:var(--color-darkgrey)}
+[data-v="h06"] .ax__r{display:grid;grid-template-columns:96px minmax(0,1fr) 86px;gap:10px;align-items:center;min-height:30px}
+[data-v="h06"] .ax__l{font-size:var(--font-size-xs);line-height:1.2;color:var(--color-black)}
+[data-v="h06"] .ax__l small{display:block;font-size:11px;color:var(--color-darkgrey)}
+[data-v="h06"] .ax__r--a .ax__l{font-weight:var(--font-weight-semibold);color:var(--font-color-primary)}
+[data-v="h06"] .ax__v{display:grid;justify-items:end;text-align:right}
+[data-v="h06"] .val{font:var(--font-weight-semibold) var(--font-size-md)/1.15 var(--tr-font);color:var(--color-black);font-variant-numeric:tabular-nums;white-space:nowrap}
+[data-v="h06"] .ax__r--a .val{font-weight:var(--font-weight-bold);color:var(--font-color-primary)}
+[data-v="h06"] .val--nt{font-size:var(--font-size-sm);color:var(--color-darkgrey)}
+[data-v="h06"] .rtag{font:var(--font-weight-semibold) 10px/1.3 var(--tr-font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .trk{position:relative;display:block;height:12px;border-radius:2px;background:var(--color-lightgrey);overflow:hidden}
+[data-v="h06"] .trk__s{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--color-darkgrey);transition:width var(--ia-bar) var(--ia-ease-out)}
+[data-v="h06"] .ax__r--a .trk__s{background:var(--color-blacktext)}
+[data-v="h06"] .trk__h{position:absolute;top:0;bottom:0;left:0;width:0;background:var(--hatch);transition:left var(--ia-bar) var(--ia-ease-out),width var(--ia-bar) var(--ia-ease-out)}
+[data-v="h06"] .trk--nt{border:1px solid var(--color-mediumgrey);background:repeating-linear-gradient(90deg,var(--color-mediumgrey) 0 4px,transparent 4px 8px) center / 100% 1px no-repeat,var(--color-white)}
+[data-v="h06"] .ax__n{margin:4px 0 0;font-size:var(--font-size-xs);line-height:1.35;color:var(--color-black)}
+[data-v="h06"] .scale{display:flex;justify-content:space-between;margin:2px 0 0 88px;margin-right:96px;font:var(--font-weight-reg) 10.5px/1 var(--tr-font);color:var(--color-darkgrey);font-variant-numeric:tabular-nums}
+[data-v="h06"] .line{margin:0;font-size:var(--font-size-md);line-height:1.45;color:var(--font-color-primary)}
+
+/* legend, notice, sources */
+[data-v="h06"] .lg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:var(--space-sm) 0 0;padding:0;list-style:none;font-size:12px;line-height:1.3;color:var(--color-black)}
+[data-v="h06"] .lg li{display:inline-flex;align-items:center;gap:6px}
+[data-v="h06"] .lg i{flex:none;display:inline-block;width:22px;height:10px;border-radius:2px;background:var(--color-blacktext)}
+[data-v="h06"] .lg i.h{background:var(--hatch),var(--color-lightgrey)}
+[data-v="h06"] .lg i.g{width:22px;height:5px;background:linear-gradient(90deg,var(--color-black) 0 55%,var(--color-lightgrey) 55%);position:relative}
+[data-v="h06"] .lg i.g::after{content:'';position:absolute;left:40%;top:-3px;bottom:-3px;width:2px;background:var(--color-blacktext)}
+[data-v="h06"] .note{display:flex;gap:10px;align-items:flex-start;margin:var(--space-sm) 0 0;padding:12px 14px;border-left:3px solid var(--color-blue);border-radius:var(--border-radius);background:#f3f3f3;font:var(--font-weight-reg) var(--font-size-sm)/1.45 var(--tr-font);color:var(--color-black);animation:h06-in var(--ia-notice) var(--ia-ease-out) both}
+[data-v="h06"] .note svg{flex:none;width:18px;height:18px;margin-top:1px;color:var(--color-blue)}
+[data-v="h06"] .note p{margin:0}
+[data-v="h06"] .note b{color:var(--font-color-primary)}
+[data-v="h06"] .note__a{display:flex;flex-wrap:wrap;gap:2px 20px;margin-top:4px!important}
+[data-v="h06"] .lk{min-height:32px;padding:0;border:0;background:none;color:var(--font-color-link);font:var(--font-weight-semibold) var(--font-size-sm)/1.4 var(--tr-font);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+[data-v="h06"] .lk:hover{text-decoration-thickness:2px}
+[data-v="h06"] .src{margin:var(--space-md) 0 0;font:var(--font-weight-reg) 12px/1.5 var(--tr-font);color:var(--color-darkgrey)}
+[data-v="h06"] .src a{color:var(--font-color-link)}
+@keyframes h06-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:420px){
+  [data-v="h06"] .road{display:flex;width:100%}
+  [data-v="h06"] .road button{flex:1;justify-content:center;padding:0 6px;font-size:var(--font-size-xs);white-space:nowrap}
+  [data-v="h06"] .ax__r{grid-template-columns:80px minmax(0,1fr) 86px;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){[data-v="h06"] *{transition:none!important;animation:none!important}}
+/* small before/after car on option cards */
+[data-v="h06"] .mc{display:block;width:46px;height:auto;overflow:visible}
+[data-v="h06"] .mc__b{fill:var(--color-white);stroke:var(--color-black);stroke-width:5}
+[data-v="h06"] .mc__g{fill:#e4e6e7}
+[data-v="h06"] .mt > rect:first-child{fill:#55504b;stroke:var(--color-blacktext);stroke-width:4}
+[data-v="h06"] .mt > path{fill:none;stroke:#1a1814;stroke-width:3}
+[data-v="h06"] .mt--new > rect:first-child{fill:var(--color-blacktext)}
+[data-v="h06"] .mt__lb{fill:var(--color-white)}
+[data-v="h06"] .mt--off > rect:first-child,[data-v="h06"] .mt--off > path:not(.mt__x){opacity:.28}
+[data-v="h06"] .mt > .mt__x{stroke:var(--color-blacktext);stroke-width:6;stroke-linecap:round}
+[data-v="h06"] .mt__ar{fill:none;stroke:var(--color-blue);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+/* Meaning colors: what happens to each tire. Used on the car, tray, options, labels and bars.
+   Each is paired with a word and a mark, so color is never the only signal. */
+[data-v="h06"]{--car-w:150px;--lab-w:88px;
+  --act-off:#c2281d;--act-off-bg:#fdecea;
+  --act-move:#9a5b00;--act-move-bg:#fdf1d8;--act-move-fill:var(--color-gold);
+  --act-new:#1b7a4b;--act-new-bg:#e4f3ea;
+  --act-stay:#666;--act-stay-bg:#eee}
+[data-v="h06"] .chip{display:inline-flex;align-items:center;gap:5px;padding:2px 7px 2px 5px;border-radius:999px;font:var(--font-weight-semibold) 12px/1.35 var(--tr-font);white-space:nowrap;background:var(--act-stay-bg);color:var(--act-stay)}
+[data-v="h06"] .chip i{display:grid;place-items:center;flex:none;width:14px;height:14px;border-radius:50%;background:currentColor;font:700 10px/1 var(--tr-font);font-style:normal}
+[data-v="h06"] .chip i::before{content:attr(data-g);color:#fff}
+[data-v="h06"] .chip--off{background:var(--act-off-bg);color:var(--act-off)}
+[data-v="h06"] .chip--move{background:var(--act-move-bg);color:var(--act-move)}
+[data-v="h06"] .chip--new{background:var(--act-new-bg);color:var(--act-new)}
+[data-v="h06"] .chips{display:flex;flex-wrap:wrap;gap:5px}
+[data-v="h06"] .key{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:var(--space-xs) 0 0;padding:0;list-style:none}
+/* tires carry their action: a ring and a mark */
+[data-v="h06"] .tr{position:relative}
+[data-v="h06"] .tr.is-new svg,[data-v="h06"] .tr.is-moved svg,[data-v="h06"] .tr.is-off svg{border-radius:5px;outline:2.5px solid var(--act-new);outline-offset:2px}
+[data-v="h06"] .tr.is-moved svg{outline-color:var(--act-move)}
+[data-v="h06"] .tr.is-off svg{outline-color:var(--act-off)}
+[data-v="h06"] .tr.is-new::after,[data-v="h06"] .tr.is-moved::after,[data-v="h06"] .tr.is-off::after{content:'+';position:absolute;top:-8px;right:-8px;display:grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--act-new);color:#fff;font:700 11px/1 var(--tr-font);box-shadow:0 0 0 2px #fff}
+[data-v="h06"] .tr.is-moved::after{content:'\2191';background:var(--act-move)}
+[data-v="h06"] .tr.is-off::after{content:'\2715';font-size:8.5px;background:var(--act-off)}
+[data-v="h06"] .tg--new{outline-color:var(--act-new)!important}
+[data-v="h06"] .tg--move{outline-color:var(--act-move)!important}
+[data-v="h06"] .tg--stay{outline-color:var(--act-stay)!important}
+/* option: small colored car + counts */
+[data-v="h06"] .o__row{display:flex;align-items:center;gap:12px}
+[data-v="h06"] .o__row .mc{flex:none;width:46px}
+[data-v="h06"] .mt--new > rect:first-child{fill:var(--act-new);stroke:var(--act-new)}
+[data-v="h06"] .mt--mv > rect:first-child{fill:var(--act-move-fill);stroke:var(--act-move)}
+[data-v="h06"] .mt--mv > path{stroke:var(--act-move)}
+[data-v="h06"] .mt__ar{stroke:var(--act-move)}
+[data-v="h06"] .mt__lb{display:none}
+/* bars take the color of what is on that axle after */
+[data-v="h06"] .ax__r--a.is-new{--bar:var(--act-new)}
+[data-v="h06"] .ax__r--a.is-move{--bar:var(--act-move)}
+[data-v="h06"] .ax__r--a.is-stay{--bar:var(--act-stay)}
+[data-v="h06"] .ax__r--a .trk__s{background:var(--bar)}
+[data-v="h06"] .ax__r--a .trk__h{background:repeating-linear-gradient(135deg,var(--bar) 0 1.5px,transparent 1.5px 5px)}
+[data-v="h06"] .ax__l .chip{margin-top:2px;font-size:11px;padding:1px 6px 1px 4px}
+[data-v="h06"] .ax__d{margin-left:auto;font:var(--font-weight-bold) var(--font-size-sm)/1.2 var(--tr-font);color:var(--font-color-primary)}
+[data-v="h06"] .ax__d--none{font-weight:var(--font-weight-reg);color:var(--color-darkgrey)}
+[data-v="h06"] .sl .chip{margin-top:3px}
+[data-v="h06"] .sl__t{font-size:12px;color:var(--color-darkgrey)}
+[data-v="h06"] .bay{box-sizing:border-box;min-width:calc(var(--car-w) + 2 * var(--lab-w) + 28px);padding-inline:calc(var(--lab-w) + 12px)}
+[data-v="h06"] .top{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--space-lg) var(--space-xl);align-items:start}
+[data-v="h06"] .hero{min-width:0}
+[data-v="h06"] .cap{display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;gap:4px 8px;min-height:44px;margin:0 0 var(--space-xs);font-size:var(--font-size-sm);line-height:1.35;color:var(--color-black)}
+[data-v="h06"] .cap b{color:var(--font-color-primary)}
+[data-v="h06"] .pill{display:inline-block;padding:2px 7px;border-radius:2px;font:var(--font-weight-semibold) 11px/1.35 var(--tr-font);letter-spacing:.05em;text-transform:uppercase}
+[data-v="h06"] .pill--pv{border:1.5px dashed var(--color-blue);color:var(--color-blue);background:var(--color-white)}
+[data-v="h06"] .pill--pk{background:var(--color-blacktext);color:var(--color-white)}
+[data-v="h06"] .pill--td{border:1px solid var(--color-mediumgrey);color:var(--color-black)}
+[data-v="h06"] .bay{display:flex;justify-content:center;padding:28px calc(var(--lab-w) + 10px);border-radius:var(--border-radius);background:linear-gradient(#fafafa,#f3f3f3)}
+[data-v="h06"] .bay .car{margin:0}
+[data-v="h06"] .gh{pointer-events:none;opacity:0;transform:translateY(-8px);transition:opacity var(--ia-in) var(--ia-ease-out),transform var(--ia-in) var(--ia-ease-out);z-index:2}
+[data-v="h06"] .gh.is-on{opacity:1;transform:none}
+[data-v="h06"] .tg{display:block;width:100%;height:100%;border-radius:6px;outline:2px dashed var(--color-blue);outline-offset:3px;background:rgba(255,255,255,.35)}
+[data-v="h06"] .tg svg{opacity:.62}
+[data-v="h06"] .ch .tr{transition:opacity var(--ia-in) var(--ia-ease-out)}
+[data-v="h06"] .ch.is-dim .tr{opacity:.22}
+
+[data-v="h06"] .sl__s--pv{font-weight:var(--font-weight-semibold);color:var(--color-blue)}
+[data-v="h06"] .hero .tray{margin-top:var(--space-sm)}
+[data-v="h06"] .side{display:grid;gap:var(--space-sm);min-width:0}
+[data-v="h06"] .side .road{justify-self:start}
+[data-v="h06"] .opts{display:grid;gap:var(--space-xs)}
+[data-v="h06"] .opts__h{margin:var(--space-xxs) 0 0;font:var(--font-weight-semibold) 11px/1.3 var(--tr-font);letter-spacing:.06em;text-transform:uppercase;color:var(--color-darkgrey)}
+[data-v="h06"] .o{gap:8px;padding:12px 14px}
+[data-v="h06"] .o .dl{gap:4px;padding-top:8px}
+[data-v="h06"] .o .dl__r{grid-template-columns:46px minmax(0,1fr);align-items:baseline}
+[data-v="h06"] .o .dl__x{display:none}
+[data-v="h06"] .o:not([aria-pressed="true"]):focus-visible,[data-v="h06"] .o.is-pv:not([aria-pressed="true"]){border-color:var(--color-blue);box-shadow:inset 0 0 0 1px var(--color-blue)}
+[data-v="h06"] .o__eye{display:none;margin-left:auto;font:var(--font-weight-semibold) 11px/1 var(--tr-font);letter-spacing:.05em;text-transform:uppercase;color:var(--color-blue)}
+[data-v="h06"] .o.is-pv:not([aria-pressed="true"]) .o__eye{display:inline}
+[data-v="h06"] .after{margin-top:var(--space-xl);padding-top:var(--space-lg);border-top:1px solid var(--color-mediumgrey)}
+[data-v="h06"] .after .ev{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--space-xl)}
+[data-v="h06"] .after .ev__h{grid-column:1 / -1}
+[data-v="h06"] .after .line{margin-bottom:var(--space-sm)}
+@media (max-width:820px){
+  [data-v="h06"] .top{grid-template-columns:minmax(0,1fr)}
+  [data-v="h06"] .after .ev{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  [data-v="h06"]{--car-w:108px;--lab-w:84px}
+  [data-v="h06"] .tr.is-new::after,[data-v="h06"] .tr.is-moved::after,[data-v="h06"] .tr.is-off::after{width:13px;height:13px;top:-7px;right:-7px;font-size:9.5px}
+  [data-v="h06"] .tr.is-off::after{font-size:7.5px}
+  [data-v="h06"] .bay{min-width:0;padding-inline:0}
+  [data-v="h06"] .bay{padding-inline:0;background:#f7f7f7}
+}
+  
 @media (prefers-reduced-motion:reduce){.card,.sf i,.swt__t,.swt__t i{transition:none}.rows li.is-in{animation:none}}
 </style>
 </head>
@@ -555,6 +844,12 @@ button{font:inherit;color:inherit}
   <a class="method-link" href="../how-i-work/"><div><strong>How I think, prototype and build</strong><span>The method behind this page and every demo in the lab.</span></div><em>How I work →</em></a>
 </div></header>
 
+<div class="ptabs" role="tablist" aria-label="Playground"><div class="wrap ptabs__in">
+  <button type="button" role="tab" id="ptab-method" data-ptab="method" aria-selected="true" aria-controls="ppanel-method">The playground</button>
+  <button type="button" role="tab" id="ptab-simple" data-ptab="simple" aria-selected="false" aria-controls="ppanel-simple" tabindex="-1">A study in simplicity</button>
+</div></div>
+
+<div id="ppanel-method" role="tabpanel" aria-labelledby="ptab-method">
 <section class="sec" id="directory" aria-labelledby="dirTitle"><div class="wrap">
   <p class="label">The directory</p>
   <h2 id="dirTitle">Where the method already runs</h2>
@@ -819,6 +1114,43 @@ button{font:inherit;color:inherit}
   </div>
   <nav class="nextdemo" aria-label="Next"><a href="https://www.rdeboerdesigns.com/">← Ryan DeBoer</a><a href="../wheelrack-handoff/">Start with WheelRack →</a></nav>
 </div></section>
+</div>
+
+<div id="ppanel-simple" role="tabpanel" aria-labelledby="ptab-simple" hidden>
+<section class="sec study" aria-labelledby="studyTitle"><div class="wrap">
+  <p class="label">A study in simplicity</p>
+  <h2 id="studyTitle">What each option actually changes</h2>
+  <p class="sub">At the install counter a customer decides with numbers only the installer can read. This is the decision cut down until each place says one thing: one car, four colors, and the tested numbers in one place. A proposal on Tire Rack's public data, not a Tire Rack page.</p>
+  <div class="study__grid">
+    <div class="study__frame">
+      <div class="stage" data-v="h06">
+        <p class="case"></p>
+        <div data-app></div>
+        <p class="sr-only" aria-live="polite" data-live></p>
+      </div>
+    </div>
+    <aside class="study__side" aria-label="How to read it">
+      <p class="label">Four colors, one meaning each</p>
+      <ul class="study-key">
+        <li><b style="background:#c2281d">&#x2715;</b><span><strong>Red · comes off.</strong> The tire leaves the car.</span></li>
+        <li><b style="background:#9a5b00">&#x2191;</b><span><strong>Amber · moves up.</strong> Same tire, new position.</span></li>
+        <li><b style="background:#1b7a4b">+</b><span><strong>Green · new.</strong> A tire going on.</span></li>
+        <li><b style="background:#666">=</b><span><strong>Grey · stays.</strong> Nothing happens to it.</span></li>
+      </ul>
+      <p class="study__note">The same four on the tires, the tray, the option buttons and the bars. Each color always comes with its word and its mark.</p>
+      <p class="label">What got simpler</p>
+      <ol class="study-list">
+        <li><span><strong>Options show, they don't tell.</strong> A small colored car and a count. No numbers on the buttons.</span></li>
+        <li><span><strong>One depth, one tag.</strong> Each tire label is its tread and what happens to it.</span></li>
+        <li><span><strong>Numbers live in one place.</strong> Under the car, one plain difference per axle.</span></li>
+        <li><span><strong>Preview before picking.</strong> Point at an option and the car shows it, outlined.</span></li>
+      </ol>
+      <p class="study__note">Still held: tested numbers only, ranges hatched, "Not tested" where nothing was measured, and no single stop for a mixed set, because Tire Rack tested full sets.</p>
+      <p class="study__src">Wet stops from <a href="https://www.tirerack.com/upgrade-garage/how-much-does-tire-tread-depth-affect-wet-braking">Tire Rack's tread depth braking test</a>; snow stops from its <a href="https://www.tirerack.com/upgrade-garage/winter-tires-vs-all-season-what-the-tests-show">winter vs all-season article</a>. Type and base colors are Tire Rack's public CSS variables; the four meaning colors are additions. Vehicle and readings are synthetic.</p>
+    </aside>
+  </div>
+</div></section>
+</div>
 </main>
 
 <footer class="foot"><div class="wrap">
@@ -998,6 +1330,438 @@ $('fixSwitch').addEventListener('click', e => {
   else say(`The branch ${P.fix ? 'now includes' : 'no longer includes'} the focus fix. Run from the branch to see it.`);
 });
 renderRows(null);
+})();
+</script>
+<script>
+/* Sourced data for the study. */
+window.IF = {
+  vehicle: { name: '2021 compact sedan', drive: 'Front-wheel drive', size: '225/45R17 front and rear' },
+  tread: { LF: 4, RF: 4, LR: 7, RR: 7 },          // 32nds, synthetic reading
+  // Placement rule (Tire Rack policy): a new pair goes on the rear; the better rears move up front.
+  after: {
+    two:    { LF: { v: 7, from: 'LR' }, RF: { v: 7, from: 'RR' }, LR: { v: 'new' }, RR: { v: 'new' } },
+    four:   { LF: { v: 'new' }, RF: { v: 'new' }, LR: { v: 'new' }, RR: { v: 'new' } },
+    winter: { LF: { v: 'winter' }, RF: { v: 'winter' }, LR: { v: 'winter' }, RR: { v: 'winter' } },
+    not:    { LF: { v: 4 }, RF: { v: 4 }, LR: { v: 7 }, RR: { v: 7 } },
+  },
+  // Wet: Tire Rack tread depth test, sedan, 60 mph, full sets. Only these depths were tested.
+  wet: { new: 205, d4: 270, d2: 400, mphAtNewStop: { d4: 35, d2: 50 } },
+  // A depth between tested depths is a RANGE, never a guessed number.
+  wetStop(d) { if (d >= 10) return [205, 205]; if (d > 4) return [205, 270]; if (d === 4) return [270, 270]; if (d > 2) return [270, 400]; return [400, 400]; },
+  // Snow: Tire Rack all-weather vs winter test (article Oct 21, 2026), NEW tires, 25 mph.
+  snow: { allSeason: 81.1, allSeasonName: 'Michelin Primacy Tour A/S', winter: 56.1, winterName: 'Michelin X-Ice Snow' },
+  // Worn tires were never tested in snow: show "not tested", never a number.
+  lines: { wet: 4, snow: 5, legal: 2 },              // Tire Rack advice: replace at 4/32" (rain), ~5/32" (snow)
+  sources: {
+    wet: 'https://www.tirerack.com/upgrade-garage/how-much-does-tire-tread-depth-affect-wet-braking',
+    snow: 'https://www.tirerack.com/upgrade-garage/winter-tires-vs-all-season-what-the-tests-show',
+    depth: 'https://www.tirerack.com/upgrade-garage/how-much-tread-depth-is-enough',
+    policy: 'https://www.tirerack.com/upgrade-garage/can-i-mix-tires-with-different-tread-depths',
+  },
+};
+</script>
+<script>(() => {
+  const root = document.querySelector('[data-v="h06"]'); const D = window.IF;
+  /* ---- shared core: everything below reads window.IF and nothing else ---- */
+  const POS = ['LF', 'RF', 'LR', 'RR'], NEW = 10;
+  const PNAME = { LF: 'Left front', RF: 'Right front', LR: 'Left rear', RR: 'Right rear' };
+  const NAME = { two: 'Two new tires', four: 'Four new tires', winter: 'Four winter tires', not: 'Not now' };
+  const MOVES = { two: 'Fronts come off · your rears move up front · 2 new go on the rear', four: 'All four come off · 4 new go on', winter: 'All four come off and are kept · 4 winter go on', not: 'Nothing moves. Measured again next visit' };
+  const MAX = { wet: 400, snow: 100 };
+  const S = { k: null, c: 'wet', note: null, pv: null };
+  // The four things that can happen to a tire. One color, one mark and one word each.
+  const MARK = { off: '\u2715', move: '\u2191', new: '+', stay: '=' };
+  const chip = (a, t) => `<span class="chip chip--${a}"><i data-g="${MARK[a]}" aria-hidden="true"></i>${t}</span>`;
+  const STEPS = {
+    two: [['off', 'Fronts come off'], ['move', 'Rears move up front'], ['new', 'New pair on the rear']],
+    four: [['off', 'All four come off'], ['new', 'Four new go on']],
+    winter: [['off', 'All four come off, kept'], ['new', 'Four winter go on']],
+    not: [['stay', 'All four stay on']],
+  };
+  const stepsHtml = k => `<span class="chips">${STEPS[k].map(([a, t]) => chip(a, t)).join('')}</span>`;
+  function countsHtml(k) {
+    const L = layout(k), stay = 4 - L.moved.length - L.on.length, c = [];
+    if (L.off.length) c.push(chip('off', `${L.off.length} off`));
+    if (L.moved.length) c.push(chip('move', `${L.moved.length} move up`));
+    if (L.on.length) c.push(chip('new', `${L.on.length} ${k === 'winter' ? 'winter' : 'new'}`));
+    if (stay) c.push(chip('stay', `${stay} stay`));
+    return `<span class="chips">${c.join('')}</span>`;
+  }
+  const keys = c => c === 'snow' ? ['two', 'four', 'winter', 'not'] : ['two', 'four', 'not'];
+  const ft = r => r[0] === r[1] ? `${r[0]} ft` : `${r[0]}–${r[1]} ft`;
+  const dep = v => typeof v === 'number' ? `${v}/32"` : v === 'winter' ? 'new winter' : 'new';
+  const plain = h => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const MS = (() => { const cs = getComputedStyle(document.documentElement), n = (k, d) => parseFloat(cs.getPropertyValue(k)) || d; return { swap: n('--ia-swap', 420), inn: n('--ia-in', 260), bar: n('--ia-bar', 520), move: cs.getPropertyValue('--ia-ease-move').trim() || 'ease', out: cs.getPropertyValue('--ia-ease-out').trim() || 'ease-out' }; })();
+  const still = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.querySelector('.case').innerHTML = `<b>${D.vehicle.name}</b> · ${D.vehicle.drive} · ${D.vehicle.size} · Measured today: fronts ${D.tread.LF}/32", rears ${D.tread.LR}/32"`;
+
+  // Where every physical tire sits for an option. The placement rule lives in IF.after.
+  function layout(k) {
+    const a = D.after[k || 'not'], at = {}, used = new Set();
+    POS.forEach(p => {
+      const x = a[p];
+      if (typeof x.v === 'number') { const o = x.from || p; at[p] = { id: 'o' + o, v: x.v, origin: o, moved: o !== p }; used.add(o); }
+      else at[p] = { id: (x.v === 'winter' ? 'w' : 'n') + p, v: x.v, isNew: true };
+    });
+    return { at, off: POS.filter(p => !used.has(p)), moved: POS.filter(p => at[p].moved), on: POS.filter(p => at[p].isNew) };
+  }
+  // Tested evidence for one tire value on one road. Ranges come from IF.wetStop; untested is never a number.
+  function ev(v, c) {
+    if (c === 'wet') {
+      if (v === 'winter') return { k: 'none', t: 'Not tested' };
+      const r = D.wetStop(typeof v === 'number' ? v : NEW);
+      return { k: r[0] === r[1] ? 'num' : 'range', r, t: ft(r) };
+    }
+    if (v === 'new') return { k: 'num', r: [D.snow.allSeason, D.snow.allSeason], t: `${D.snow.allSeason} ft` };
+    if (v === 'winter') return { k: 'num', r: [D.snow.winter, D.snow.winter], t: `${D.snow.winter} ft` };
+    return { k: 'none', t: 'Not tested' };
+  }
+  // One axle, today vs after. Both tires on an axle read the same here, so the left one stands for the axle.
+  function axle(k, c, ax) {
+    const p = ax === 'f' ? 'LF' : 'LR', t = layout(k).at[p], b = D.tread[p];
+    return { ax, name: ax === 'f' ? 'Front' : 'Rear', job: ax === 'f' ? 'steers and drives' : 'keeps the back planted', b, a: t.v, e0: ev(b, c), e1: ev(t.v, c), moved: !!t.moved, from: t.origin, same: t.id === 'o' + p };
+  }
+  const rv = e => e.k === 'range' ? `<span class="rg">${e.t}</span>` : e.k === 'none' ? '<span class="nt">not tested</span>' : e.t;
+  const dlHead = c => c === 'wet' ? 'Wet stop from 60 mph, by axle' : 'Snow stop from 25 mph, by axle';
+  function deltaHtml(k, c) {
+    return ['f', 'r'].map(x => {
+      const A = axle(k, c, x);
+      const v = A.same ? `${rv(A.e0)} <span class="dl__same">· no change</span>` : `${rv(A.e0)}<span class="dl__ar" aria-hidden="true"> → </span><span class="sr-only"> becomes </span><b>${rv(A.e1)}</b>`;
+      return `<span class="dl__r"><span class="dl__k">${A.name}<span class="dl__x">${A.moved ? ' · your rears move up' : A.same ? '' : ` · ${A.a === 'winter' ? 'new winter' : 'new'}`}</span></span><span class="dl__v">${v}</span></span>`;
+    }).join('');
+  }
+  function axNotes(A, c, after) {
+    const v = after ? A.a : A.b, n = [];
+    if (typeof v !== 'number') return n;
+    if (c === 'wet') {
+      if (v === 4) n.push(`In the test, a set at 4/32" was still going ${D.wet.mphAtNewStop.d4} mph where a new set had stopped.`);
+      else if (v === 2) n.push(`In the test, a set at 2/32" was still going ${D.wet.mphAtNewStop.d2} mph where a new set had stopped.`);
+      else if (v < NEW) n.push(`${v}/32" falls between tested depths, so it's a range, not one number.`);
+    } else n.push(`${v}/32" is ${v < D.lines.snow ? 'under' : 'above'} Tire Rack's ~${D.lines.snow}/32" snow advice. Worn tires were never tested in snow.`);
+    return n;
+  }
+  function trk(key, e) {
+    if (e.k === 'none') return '<span class="trk trk--nt" aria-hidden="true"></span>';
+    const m = MAX[S.c], w0 = e.r[0] / m * 100, w1 = (e.r[1] - e.r[0]) / m * 100;
+    return `<span class="trk" aria-hidden="true"><i class="trk__s" data-bar="${key}s" data-to="${w0}"></i><i class="trk__h" data-bar="${key}h" data-off="${w0}" data-to="${w1}"></i></span>`;
+  }
+  const valHtml = (key, e) => e.k === 'none' ? '<span class="ax__v"><b class="val val--nt">Not tested</b></span>'
+    : `<span class="ax__v"><b class="val" data-n="${key}" data-a="${e.r[0]}" data-b="${e.r[1]}">${e.t}</b>${e.k === 'range' ? '<span class="rtag">Range</span>' : ''}</span>`;
+  const axAct = A => A.same ? 'stay' : A.moved ? 'move' : 'new';
+  function afterLabel(A) { return chip(axAct(A), A.same ? 'Stays' : A.moved ? 'Moved up' : A.a === 'winter' ? 'New winter' : 'New'); }
+  // One plain difference per axle, from the tested numbers. A range on either side makes it "up to".
+  function diffHtml(A, k) {
+    if (!k) return '';
+    if (A.same) return '<span class="ax__d ax__d--none">No change</span>';
+    if (A.e0.k === 'none' || A.e1.k === 'none') return '<span class="ax__d ax__d--none">No tested before and after</span>';
+    const hi = A.e0.r[1] - A.e1.r[0], lo = A.e0.r[0] - A.e1.r[1], n = v => String(+v.toFixed(1));
+    if (hi <= 0) return '<span class="ax__d ax__d--none">About the same</span>';
+    return `<span class="ax__d">${lo === hi ? '' : 'Up to '}${n(hi)} ft shorter</span>`;
+  }
+  // Today / After rows for both axles. opts.k: the option shown (may be a preview); opts.tag: label for the after row
+  function evHtml(k, c, opts = {}) {
+    const rows = ['f', 'r'].map(x => {
+      const A = axle(k, c, x), key = `${c}-${x}`;
+      const notes = k ? axNotes(A, c, true) : axNotes(A, c, false);
+      const today = `<div class="ax__r ax__r--b"><span class="ax__l">Today<small>${dep(A.b)}</small></span>${trk(key + 'b', A.e0)}${valHtml(key + 'b', A.e0)}</div>`;
+      const after = !k ? '' : `<div class="ax__r ax__r--a is-${axAct(A)}"><span class="ax__l">${opts.tag || 'After'}<br>${afterLabel(A)}</span>${trk(key + 'a', A.e1)}${valHtml(key + 'a', A.e1)}</div>`;
+      return `<div class="ax"><p class="ax__h">${A.name} axle${diffHtml(A, k)}</p>${today}${after}${notes.length ? `<p class="ax__n">${notes.join(' ')}</p>` : ''}</div>`;
+    }).join('');
+    return `<div class="ev"><p class="ev__h">${c === 'wet' ? 'Tested wet stop from 60 mph · full set at each axle\'s depth' : 'Tested snow stop from 25 mph · new tires only'}</p>${rows}</div>`;
+  }
+  function lineFor(k, c) {
+    const M4 = D.wet.mphAtNewStop.d4, gap = (D.snow.allSeason - D.snow.winter).toFixed(1).replace(/\.0$/, '');
+    if (!k) return c === 'wet' ? `Today your fronts are at ${D.tread.LF}/32", Tire Rack's rain advice line. A set at that depth took ${D.wet.d4} ft in the test. New took ${D.wet.new} ft.` : `Worn tires were never tested in snow, so today has no snow number.`;
+    const T = {
+      wet: {
+        two: `New tires on the rear stopped in ${D.wet.new} ft in the test. Your ${D.tread.LR}/32" rears, now up front, sit between tested depths, so the front is a range.`,
+        four: `A new set stopped in ${D.wet.new} ft. A set at ${D.tread.LF}/32" took ${D.wet.d4} ft, and was still going ${M4} mph where the new set had stopped.`,
+        not: `Nothing changes. A set at ${D.tread.LF}/32", like your fronts, took ${D.wet.d4} ft in the test. New took ${D.wet.new} ft.`,
+      },
+      snow: {
+        two: `New all-season tires stopped in ${D.snow.allSeason} ft from 25 mph. Worn tires were never tested in snow, so the front has no number.`,
+        four: `New all-season tires stopped in ${D.snow.allSeason} ft from 25 mph. There is no tested number for the tires coming off.`,
+        winter: `New winter tires stopped in ${D.snow.winter} ft, ${gap} ft shorter than new all-season tires (${D.snow.allSeason} ft).`,
+        not: `Nothing changes. Worn tires were never tested in snow, so there is no number.`,
+      },
+    };
+    return T[c][k];
+  }
+  function srcHtml(k) {
+    const a = (h, t) => `<a href="${h}" target="_blank" rel="noopener">${t}</a>`;
+    const s = S.c === 'wet' ? `Wet stops: ${a(D.sources.wet, 'Tire Rack tread depth braking test')}, a sedan from 60 mph on full sets at new (10/32"), 4/32" and 2/32".`
+      : `Snow stops: ${a(D.sources.snow, 'Tire Rack winter vs all-season test')}, new tires only (${D.snow.allSeasonName}; ${D.snow.winterName}), from 25 mph. Worn tires were never tested in snow.`;
+    return `${s} The tests used full sets, and a car with two depths wasn't tested, so each axle is read on its own. Advice lines: ${a(D.sources.depth, 'how much tread is enough')}.${k === 'two' ? ` Placement: ${a(D.sources.policy, 'mixing tread depths')}.` : ''}`;
+  }
+  const ICON = {
+    wet: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.6C6.1 4.4 3.6 7.1 3.6 10a4.4 4.4 0 0 0 8.8 0C12.4 7.1 9.9 4.4 8 1.6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+    snow: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 1.2v13.6M2.1 4.6l11.8 6.8M2.1 11.4l11.8-6.8M6.2 2.6 8 4.2l1.8-1.6M6.2 13.4 8 11.8l1.8 1.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    info: '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 6.1v.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+  };
+  const roadHtml = () => `<div class="road" role="group" aria-label="Road condition">${[['wet', 'Wet road · 60 mph'], ['snow', 'Snow · 25 mph']].map(([c, l]) => `<button type="button" data-c="${c}" data-f="c-${c}" aria-pressed="${S.c === c}">${ICON[c]}${l}</button>`).join('')}</div>`;
+  const syncRoad = () => root.querySelectorAll('[data-c]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === S.c)));
+  const NOTE = {
+    two: () => `<b>New tires go on the rear.</b> Your ${D.tread.LR}/32" rear tires move up front. Tire Rack puts the newer pair on the rear so the back of the car isn't the first to slide in the rain.`,
+    winter: () => '<b>Four winter tires was cleared.</b> It\'s a snow option, and this data has no wet test for winter tires.',
+  };
+  const noteHtml = () => !S.note ? '' : `<div class="note">${ICON.info}<div><p>${NOTE[S.note.kind]()}</p><p class="note__a"><button type="button" class="lk" data-act="undo" data-f="undo">Undo</button>${S.note.kind === 'two' ? '<button type="button" class="lk" data-act="four" data-f="alt">Choose four instead</button>' : ''}</p></div></div>`;
+  const legendHtml = () => S.c === 'wet' ? `<ul class="lg" aria-label="Legend"><li><i class="h" aria-hidden="true"></i>Hatched: a range, between tested depths</li></ul>` : '';
+
+  // Tire drawn from above. Groove depth and contrast follow the measured tread; new tires carry their paper label.
+  function tireSvg(v) {
+    const isNew = typeof v !== 'number', d = isNew ? NEW : v, g = Math.max(0, Math.min(1, (d - 1) / (NEW - 1)));
+    const gw = (0.7 + 2.3 * g).toFixed(2), go = (0.3 + 0.7 * g).toFixed(2), lw = (0.45 + 1.25 * g).toFixed(2);
+    let lat = '', sp = '';
+    for (let y = 5; y <= 52; y += 6.5) {
+      lat += `M3.2 ${y.toFixed(1)}h5.2M19.6 ${(y + 3.2).toFixed(1)}h5.2M8.6 ${(y + 1.4).toFixed(1)}l5.4 2.6M14 ${(y + 4.2).toFixed(1)}l5.4 2.6`;
+      if (v === 'winter') sp += `M3.8 ${(y + 2.4).toFixed(1)}l1.1.8 1.1-.8 1.1.8 1.1-.8M20.2 ${(y + 5.6).toFixed(1)}l1.1.8 1.1-.8 1.1.8M10 ${(y + 5.2).toFixed(1)}l1 .7 1-.7 1 .7M15.4 ${(y + 1.9).toFixed(1)}l1 .7 1-.7 1 .7`;
+    }
+    let s = `<svg viewBox="0 0 28 64" aria-hidden="true" focusable="false"><rect class="t-o" x=".75" y=".75" width="26.5" height="62.5" rx="5.5"/><rect class="t-f" x="3" y="2.5" width="22" height="59" rx="3.5"/>`;
+    s += `<path class="t-g" d="${lat}" stroke-width="${lw}" stroke-opacity="${go}"/><path class="t-g" d="M8.6 3.2v57.6M14 3.2v57.6M19.4 3.2v57.6" stroke-width="${gw}" stroke-opacity="${go}"/>`;
+    if (sp) s += `<path class="t-sp" d="${sp}"/>`;
+    if (isNew) s += `<rect class="t-lb" x="6.2" y="24.5" width="15.6" height="15" rx="1.2"/>` + (v === 'winter' ? '<path class="t-sf" d="M14 27v10M9.7 29.5l8.6 5M9.7 34.5l8.6-5"/>' : '<path class="t-lt" d="M9 28.5h10M9 32h10M9 35.5h6"/>');
+    return s + '</svg>';
+  }
+  const CAR_PATH = 'M100 10C130 10 156 14 166 28C175 41 178 62 178 84L178 364C178 394 174 414 160 424C146 432 124 432 100 432C76 432 54 432 40 424C26 414 22 394 22 364L22 84C22 62 25 41 34 28C44 14 70 10 100 10Z';
+  const CAR_SVG = `<svg class="cb" viewBox="0 0 200 440" aria-hidden="true" focusable="false">
+    <path class="cb__mir" d="M24 164L9 158Q4 157 4 162L5 169Q6 172 10 172L24 175Z M176 164L191 158Q196 157 196 162L195 169Q194 172 190 172L176 175Z"/>
+    <path class="cb__shell" d="${CAR_PATH}"/>
+    <path class="cb__line" d="M66 30C68 70 70 112 72 148M134 30C132 70 130 112 128 148"/>
+    <path class="cb__glass" d="M42 158C72 144 128 144 158 158L148 206C118 199 82 199 52 206Z"/>
+    <path class="cb__roof" d="M52 210C82 203 118 203 148 210L148 292C118 297 82 297 52 292Z"/>
+    <path class="cb__glass" d="M52 296C82 301 118 301 148 296L158 334C128 344 72 344 42 334Z"/>
+    <path class="cb__glass" d="M33 172L46 208L46 290L33 322ZM167 172L154 208L154 290L167 322Z"/>
+    <path class="cb__lamp" d="M32 34C40 22 56 16 72 15L70 24C56 26 44 32 36 42ZM168 34C160 22 144 16 128 15L130 24C144 26 156 32 164 42Z"/>
+    <path class="cb__lamp" d="M30 411C40 419 56 423 70 424L70 417C56 416 42 412 32 404ZM170 411C160 419 144 423 130 424L130 417C144 416 158 412 168 404Z"/>
+    <rect class="cb__arch" x="8" y="62" width="36" height="76" rx="9"/><rect class="cb__arch" x="156" y="62" width="36" height="76" rx="9"/>
+    <rect class="cb__arch" x="8" y="300" width="36" height="76" rx="9"/><rect class="cb__arch" x="156" y="300" width="36" height="76" rx="9"/>
+  </svg>`;
+  // A car figure with four tire holders. Labels are optional; physical tires are placed into the holders by place().
+  const carHtml = (id, labels = true, label = 'Car seen from above, front at the top') => `<div class="car" data-car="${id}" role="group" aria-label="${label}">${CAR_SVG}<span class="car__ax car__ax--f" aria-hidden="true">Front</span><span class="car__ax car__ax--r" aria-hidden="true">Rear</span>${POS.map(p => `<span class="ch ch--${p}" data-h="${id}-${p}"></span>`).join('')}${labels ? POS.map(p => `<span class="sl sl--${p}" data-lab="${id}-${p}"></span>`).join('') : ''}</div>`;
+  // The small before/after car used on option cards (04)
+  function miniCar(k, side) {
+    const L = layout(k), off = new Set(L.off), X = { LF: 10, RF: 162, LR: 10, RR: 162 }, Y = { LF: 68, RF: 68, LR: 306, RR: 306 };
+    let t = '', ar = '';
+    POS.forEach(p => {
+      const x = X[p], y = Y[p]; let cls = 'mt';
+      if (side === 'b') { if (off.has(p)) cls += ' mt--off'; }
+      else { const a = L.at[p]; if (a.isNew) cls += ' mt--new'; else if (a.moved) cls += ' mt--mv'; }
+      t += `<g class="${cls}"><rect x="${x}" y="${y}" width="28" height="64" rx="6"/><path d="M${x + 9} ${y + 6}v52M${x + 19} ${y + 6}v52"/>${cls.includes('off') ? `<path class="mt__x" d="M${x - 4} ${y + 70}L${x + 32} ${y - 6}"/>` : ''}${cls.includes('new') ? `<rect class="mt__lb" x="${x + 6}" y="${y + 24}" width="16" height="16" rx="2"/>` : ''}</g>`;
+    });
+    if (side === 'a') L.moved.forEach(p => { const x = p[0] === 'L' ? -8 : 208; ar += `<path class="mt__ar" d="M${x} 330V96M${x - 9} 110L${x} 94L${x + 9} 110"/>`; });
+    return `<svg class="mc" viewBox="-20 0 240 440" aria-hidden="true" focusable="false"><path class="mc__b" d="${CAR_PATH}"/><path class="mc__g" d="M42 158C72 144 128 144 158 158L148 206C118 199 82 199 52 206ZM52 296C82 301 118 301 148 296L158 334C128 344 72 344 42 334Z"/>${t}${ar}</svg>`;
+  }
+  const gauge = v => `<span class="gg" aria-hidden="true"><i style="width:${v / NEW * 100}%"></i><em style="left:${D.lines[S.c] / NEW * 100}%"></em></span>`;
+  // Labels beside a car for option k. status(p, tire) can override the small line.
+  function setLabels(carId, k, status) {
+    const L = layout(k);
+    POS.forEach(p => {
+      const el = root.querySelector(`[data-lab="${carId}-${p}"]`); if (!el) return;
+      const t = L.at[p], num = typeof t.v === 'number';
+      const tag = !k ? '<span class="sl__t">Measured today</span>' : t.isNew ? chip('new', t.v === 'winter' ? 'New winter' : 'New') : t.moved ? chip('move', 'Moved up') : chip('stay', 'Stays');
+      const h = `<span class="sr-only">${PNAME[p]}: </span><b class="sl__v">${num ? `${t.v}<small>/32"</small>` : t.v === 'winter' ? 'Winter' : 'New'}</b>${tag}`;
+      if (el.dataset.sig !== h) { el.dataset.sig = h; el.innerHTML = h; fresh(el); }
+    });
+  }
+  function fresh(el, delay = MS.swap * .5) { if (still() || !el.animate) return; el.animate([{ opacity: 0, transform: el.classList.contains('sl') ? 'translateY(calc(-50% + 4px))' : 'translateY(4px)' }, { opacity: 1, transform: el.classList.contains('sl') ? 'translateY(-50%)' : 'none' }], { duration: MS.inn, delay, easing: MS.out, fill: 'backwards' }); }
+  // Off-the-car tray holders for option k
+  function trayHtml(trayId, k, word = 'Coming off') {
+    const L = layout(k);
+    if (!L.off.length) return `<p class="tray__e">${k ? 'Nothing comes off.' : 'Empty until you pick an option.'}</p>`;
+    return L.off.map(p => `<span class="tray__slot"><span class="tray__h" data-h="${trayId}-${p}"></span><span class="tray__lab"><b>${D.tread[p]}/32"</b>was ${PNAME[p].toLowerCase()}</span></span>`).join('');
+  }
+  function trayCap(k) { return k ? stepsHtml(k) : 'Tires that come off land here.'; }
+
+  // Physical tires: one element per real tire, moved between holders with FLIP so it visibly travels.
+  const tires = new Map();
+  function snapTires() { const m = new Map(); tires.forEach((el, id) => { if (el.isConnected) m.set(id, el.getBoundingClientRect()); }); return m; }
+  function tireMap(k, carId, trayId) {
+    const L = layout(k), m = new Map();
+    POS.forEach(p => { const x = L.at[p]; m.set(x.id, { h: `${carId}-${p}`, v: x.v, cls: x.moved ? 'is-moved' : x.isNew ? 'is-new' : '' }); });
+    if (trayId) L.off.forEach(p => m.set('o' + p, { h: `${trayId}-${p}`, v: D.tread[p], cls: 'is-off' }));
+    return m;
+  }
+  function ghostOut(el, r) {
+    const R = root.getBoundingClientRect(), g = el.cloneNode(true);
+    Object.assign(g.style, { position: 'absolute', left: `${r.left - R.left}px`, top: `${r.top - R.top}px`, width: `${r.width}px`, height: `${r.height}px`, pointerEvents: 'none', zIndex: 4 });
+    root.appendChild(g);
+    g.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-16px) scale(.92)' }], { duration: MS.inn, easing: MS.out }).onfinish = () => g.remove();
+    setTimeout(() => g.remove(), MS.inn + 120);   // also clears it if the tab is in the background and the animation never ticks
+  }
+  function place(map, first, animate) {
+    const go = animate && !still() && !!root.animate;
+    tires.forEach((el, id) => { if (!map.has(id)) { if (go && first.has(id)) ghostOut(el, first.get(id)); el.remove(); tires.delete(id); } });
+    map.forEach((m, id) => {
+      let el = tires.get(id);
+      if (!el) { el = document.createElement('span'); tires.set(id, el); }
+      const sig = String(m.v); if (el.dataset.sig !== sig) { el.dataset.sig = sig; el.innerHTML = tireSvg(m.v); }
+      el.className = 'tr' + (m.cls ? ' ' + m.cls : '');
+      const h = root.querySelector(`[data-h="${m.h}"]`); if (h && el.parentNode !== h) h.appendChild(el);
+    });
+    if (!go) return;
+    map.forEach((m, id) => {
+      const el = tires.get(id); if (!el.isConnected) return;
+      const a = first.get(id), b = el.getBoundingClientRect();
+      if (!a) { el.animate([{ opacity: 0, transform: 'translateY(-22px) scale(.9)' }, { opacity: 1, transform: 'none' }], { duration: MS.inn + 80, delay: MS.swap * .55, easing: MS.out, fill: 'backwards' }); return; }
+      const dx = a.left - b.left, dy = a.top - b.top, sx = a.width / (b.width || 1), sy = a.height / (b.height || 1);
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .02) return;
+      el.animate([{ transformOrigin: '0 0', transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})` }, { transformOrigin: '0 0', transform: 'none' }], { duration: MS.swap, easing: MS.move });
+    });
+  }
+
+  // Bars grow from their last width; numbers settle from their last value.
+  const lastW = new Map(), lastN = new Map();
+  function motion() {
+    const bars = [...root.querySelectorAll('[data-bar]')], nums = [...root.querySelectorAll('[data-n]')];
+    const seenB = new Set(bars.map(b => b.dataset.bar)), seenN = new Set(nums.map(n => n.dataset.n));
+    [...lastW.keys()].forEach(k => { if (!seenB.has(k)) lastW.delete(k); });
+    [...lastN.keys()].forEach(k => { if (!seenN.has(k)) lastN.delete(k); });
+    bars.forEach(el => { const p = lastW.get(el.dataset.bar); el.style.transition = 'none'; el.style.width = `${p ? p.w : 0}%`; if (el.dataset.off != null) el.style.left = `${p ? p.l : el.dataset.off}%`; });
+    void root.offsetWidth;
+    bars.forEach(el => { el.style.transition = ''; el.style.width = `${el.dataset.to}%`; if (el.dataset.off != null) el.style.left = `${el.dataset.off}%`; lastW.set(el.dataset.bar, { w: +el.dataset.to, l: +(el.dataset.off || 0) }); });
+    nums.forEach(el => { const k = el.dataset.n, q = [+el.dataset.a, +el.dataset.b], p = lastN.get(k); lastN.set(k, q); if (p && !still() && (p[0] !== q[0] || p[1] !== q[1])) settle(el, p, q); });
+  }
+  function settle(el, p, q) {
+    const dec = (q[0] % 1 || q[1] % 1) ? 1 : 0, t0 = performance.now(), end = el.textContent;
+    const fmt = (a, b) => a.toFixed(dec) === b.toFixed(dec) ? `${a.toFixed(dec)} ft` : `${a.toFixed(dec)}–${b.toFixed(dec)} ft`;
+    const step = now => { if (!el.isConnected) return; const t = Math.min(1, (now - t0) / MS.bar), e = 1 - Math.pow(1 - t, 3); if (t >= 1) { el.textContent = end; return; } el.textContent = fmt(p[0] + (q[0] - p[0]) * e, p[1] + (q[1] - p[1]) * e); requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+
+  // State changes shared by all three. Returns the data-f key to keep focus on, or null when nothing changed.
+  function act(t) {
+    const prev = { k: S.k, c: S.c };
+    if (t.dataset.k) { if (t.dataset.k === S.k) return null; S.k = t.dataset.k; S.note = S.k === 'two' ? { kind: 'two', prev } : null; return `k-${S.k}`; }
+    if (t.dataset.c) {
+      if (t.dataset.c === S.c) return null; S.c = t.dataset.c;
+      if (S.c === 'wet' && S.k === 'winter') { S.k = null; S.note = { kind: 'winter', prev }; }
+      else if (S.note && S.note.kind === 'winter') S.note = null;
+      syncRoad(); return `c-${S.c}`;
+    }
+    if (t.dataset.act === 'undo' && S.note) { const p = S.note.prev; S.k = p.k; S.c = p.c; S.note = null; syncRoad(); return S.k ? `k-${S.k}` : 'k-two'; }
+    if (t.dataset.act === 'four') { S.k = 'four'; S.note = null; return 'k-four'; }
+    return null;
+  }
+  const keepFocus = (key, was) => { if (!key || !was) return; const el = root.querySelector(`[data-f="${key}"]`); if (el && document.activeElement !== el) el.focus({ preventScroll: true }); };
+  const live = root.querySelector('[data-live]');
+  function say(extra = '') {
+    const road = S.c === 'wet' ? 'Wet road, 60 mph.' : 'Snow, 25 mph.';
+    const ax = ['f', 'r'].map(x => { const A = axle(S.k, S.c, x); return `${A.name} axle: today ${A.e0.t.toLowerCase()}${A.same ? ', no change' : `, after ${A.e1.t.toLowerCase()}`}.`; }).join(' ');
+    const msg = `${S.k ? NAME[S.k] + '.' : 'No option picked.'} ${road} ${S.k ? ax : ''} ${S.note ? plain(NOTE[S.note.kind]()) + ' Undo is available.' : ''} ${extra}`;
+    live.textContent = ''; setTimeout(() => { live.textContent = plain(msg); }, 30);
+  }
+  /* ---- end core ---- */
+
+  const app = root.querySelector('[data-app]');
+  app.innerHTML = `
+    <div class="top">
+      <section class="hero" aria-labelledby="h06-ba">
+        <div class="hd"><h3 class="h" id="h06-ba">Before and after you choose</h3></div>
+        <p class="cap" data-cap></p>
+        <div class="bay">${carHtml('h2car')}</div>
+        <ul class="key" aria-label="What the colors mean"><li>${chip('off', 'Comes off')}</li><li>${chip('move', 'Moves up')}</li><li>${chip('new', 'New')}</li><li>${chip('stay', 'Stays')}</li></ul>
+        <div class="tray"><p class="tray__k"><span>Off the car</span></p><div class="tray__row" data-tray></div><p class="tray__cap" data-tcap></p></div>
+      </section>
+      <section class="side" aria-labelledby="h06-op">
+        <div class="hd"><h3 class="h" id="h06-op">Your options<small>Point at one to preview it on the car. Pick it to move the tires.</small></h3></div>
+        ${roadHtml()}
+        <div class="opts" role="group" aria-label="Your options" data-opts></div>
+        <div data-note></div>
+      </section>
+    </div>
+    <section class="after" aria-label="Tested stops by axle">
+      <h3 class="h" data-evh></h3>
+      <p class="line" data-line></p>
+      <div data-ev></div>
+      <div data-lg></div>
+      <p class="src" data-src></p>
+    </section>`;
+  const $ = s => root.querySelector(s);
+  const optsEl = $('[data-opts]'), noteEl = $('[data-note]'), car = $('[data-car="h2car"]');
+  // ghost holders sit over the real ones
+  POS.forEach(p => car.insertAdjacentHTML('beforeend', `<span class="ch ch--${p} gh" data-g="${p}" aria-hidden="true"></span>`));
+  let optsFor = null, hoverK = null, focusK = null;
+
+  function renderOpts() {
+    optsFor = S.c;
+    optsEl.innerHTML = keys(S.c).map(k => `<button type="button" class="opt o" data-k="${k}" data-f="k-${k}" aria-pressed="${S.k === k}">
+      <span class="opt__n"><span class="opt__r" aria-hidden="true"></span>${NAME[k]}<span class="o__eye" aria-hidden="true">Previewing</span><span class="opt__pk"${S.k === k ? '' : ' hidden'}>Picked</span></span>
+      <span class="o__row">${miniCar(k, 'a')}${countsHtml(k)}</span></button>`).join('');
+  }
+  function syncOpts() {
+    if (optsFor !== S.c) renderOpts();
+    optsEl.querySelectorAll('[data-k]').forEach(b => { const on = b.dataset.k === S.k; b.setAttribute('aria-pressed', String(on)); b.querySelector('.opt__pk').hidden = !on; b.classList.toggle('is-pv', b.dataset.k === S.pv); });
+  }
+  const pvStatus = (p, t) => t.isNew ? '' : t.moved ? `<span class="sl__s--pv">Would move up from ${PNAME[t.origin].toLowerCase()}</span>` : 'Would stay on';
+  // Everything that depends on what is shown: the picked option, or the one being previewed.
+  function renderShown() {
+    const pv = S.pv, k = S.k, shown = pv || k, Lc = layout(k), Lp = pv ? layout(pv) : null;
+    POS.forEach(p => {
+      const g = $(`[data-g="${p}"]`), on = !!Lp && Lp.at[p].id !== Lc.at[p].id;
+      if (on) { const sig = Lp.at[p].id + (Lp.at[p].moved ? 'm' : ''); if (g.dataset.sig !== sig) { g.dataset.sig = sig; g.innerHTML = `<span class="tg tg--${Lp.at[p].isNew ? 'new' : Lp.at[p].moved ? 'move' : 'stay'}">${tireSvg(Lp.at[p].v)}</span>`; } }
+      g.classList.toggle('is-on', on);
+      $(`[data-h="h2car-${p}"]`).classList.toggle('is-dim', on);
+    });
+    car.classList.toggle('is-pv', !!pv);
+    setLabels('h2car', shown);
+    const road = S.c === 'wet' ? 'wet road, 60 mph' : 'snow, 25 mph';
+    $('[data-cap]').innerHTML = pv ? `<span class="pill pill--pv">Preview</span><span><b>${NAME[pv]}</b>, not picked yet</span>`
+      : k ? `<span class="pill pill--pk">Picked</span><span><b>${NAME[k]}</b> · ${road}</span>` : `<span class="pill pill--td">Today</span><span>As measured · ${road}</span>`;
+    $('[data-tcap]').innerHTML = trayCap(shown);
+    $('[data-line]').textContent = lineFor(shown, S.c);
+    $('[data-evh]').textContent = pv ? `If you pick ${NAME[pv].toLowerCase()}` : k ? 'What it changes' : 'Where you are today';
+    $('[data-ev]').innerHTML = evHtml(shown, S.c, pv ? { tag: 'Preview' } : {});
+    syncOpts();
+    motion();
+  }
+  function update(animate) {
+    const first = snapTires();
+    S.pv = null; hoverK = null;
+    syncOpts();
+    const nh = noteHtml(); if (noteEl.dataset.sig !== nh) { noteEl.dataset.sig = nh; noteEl.innerHTML = nh; }
+    $('[data-tray]').innerHTML = trayHtml('h2tray', S.k);
+    place(tireMap(S.k, 'h2car', 'h2tray'), first, animate);
+    $('[data-lg]').innerHTML = legendHtml();
+    $('[data-src]').innerHTML = srcHtml(S.k);
+    renderShown();
+  }
+  function setPv() {
+    const want = hoverK || focusK, pv = want && want !== S.k ? want : null;
+    if (pv === S.pv) return;
+    S.pv = pv; renderShown();
+  }
+  root.addEventListener('pointerover', e => { if (e.pointerType === 'touch') return; const b = e.target.closest('[data-k]'); const k = b && root.contains(b) ? b.dataset.k : null; if (k !== hoverK) { hoverK = k; setPv(); } });
+  root.addEventListener('pointerleave', () => { hoverK = null; setPv(); });
+  root.addEventListener('focusin', e => { const b = e.target.closest('[data-k]'); focusK = b ? b.dataset.k : null; setPv(); });
+  root.addEventListener('focusout', e => { const n = e.relatedTarget; if (!n || !root.contains(n) || !n.closest('[data-k]')) { focusK = null; setPv(); } });
+  root.addEventListener('keydown', e => { if (e.key === 'Escape' && S.pv) { hoverK = null; focusK = null; S.pv = null; renderShown(); } });
+  root.addEventListener('click', e => {
+    const t = e.target.closest('button[data-k],button[data-c],button[data-act]');
+    if (!t || !root.contains(t)) return;
+    const was = document.activeElement === t || t.dataset.act;
+    const fk = act(t); if (!fk) return;
+    update(true);
+    keepFocus(fk, was);
+    focusK = null;
+    say();
+  });
+  update(false);
+})();</script>
+<script>
+/* Page tabs. #simplicity opens the study directly; ?for= is kept. */
+(() => {
+  const tabs = [...document.querySelectorAll('[data-ptab]')];
+  function show(id, focus) {
+    tabs.forEach(t => { const on = t.dataset.ptab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); document.getElementById('ppanel-' + t.dataset.ptab).hidden = !on; });
+    try { history.replaceState(null, '', location.pathname + location.search + (id === 'simple' ? '#simplicity' : '')); } catch (_) {}
+  }
+  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.ptab, false)));
+  document.querySelector('.ptabs').addEventListener('keydown', e => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+    show(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length].dataset.ptab, true);
+  });
+  if (location.hash === '#simplicity') show('simple', false);
 })();
 </script>
 </body>
