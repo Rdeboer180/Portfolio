@@ -8,6 +8,7 @@ import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
 import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
 import { SystemSource, SizesReaders, DriftLoop } from '../components/SystemSizes';
 import { FirstDraft, Inputs, EaseDemo } from '../components/VisualProblemSolver';
+import { CurtainReceipt, CurtainColourBar, CurtainMaterials, CurtainLadder, CurtainButtons } from '../components/CurtainCaught';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
 // dates and the rest live in notes.tsx, which the homepage and the index read
@@ -124,6 +125,39 @@ const StackItem: React.FC<{
 );
 
 export const NOTE_BODIES: Record<string, React.ReactNode> = {
+  'the-gate-stopped-my-redesign': (
+    <>
+      <p>On 11 November I merged my <Link to="/">homepage redesign</Link>: sticker buttons, a new hero intro, testimonials in an iPad, and a quieter page around the binder. Before it merged, the <Link to="/notes/a-design-system-in-more-than-one-size/">steel curtain</Link> read every line it added. It took 38 seconds.</p>
+      <p><strong>It stopped the merge on 46 findings. I merged it anyway.</strong></p>
+      <CurtainReceipt />
+
+      <h2>Every blocking finding was a colour I&rsquo;d already named</h2>
+      <p>The curtain only blocks what a script can be sure of: a raw colour that has a token, a class with no stylesheet, an image without alt text, a positive tabIndex. Everything else it reports for me to answer. I built it with Claude. Which rules block and which only report is my call.</p>
+      <p>All 46 were colours. 29 were token values typed out by hand, 17 were near-copies of one. Fourteen of the exact ones sat in HoloSticker, the new sticker icon, redrawing a foil the tokens already had. The build, the prerender and hydration all passed. Copy and accessibility found nothing.</p>
+      <CurtainColourBar />
+
+      <h2>The colours it couldn&rsquo;t match are things you can touch</h2>
+      <p>Thirteen more were too far from any token to block. They come to twelve colours, and ten of them draw a material: the paper backing under a peeling sticker, the aluminium, glass and lens of the iPad. <strong>My system has a brand palette. It doesn&rsquo;t have a material palette, and the page found that before I did.</strong></p>
+      <CurtainMaterials />
+      <p>The rule cuts the other way too. Eight more iPad greys landed close to Steel and were blocked as near-copies. Fixed as asked, the iPad would wear my brand colour. For a material, close can be a coincidence.</p>
+
+      <h2>Atomic design always had a way back down</h2>
+      <p>Brad Frost&rsquo;s stages climb: atoms, molecules, organisms, templates, pages. He said from the start it isn&rsquo;t a linear process, and that the page is where a system gets tested. On most teams the trip back down is an audit someone runs every few months.</p>
+      <p>Here it ran on the diff. The curtain read the page down to a single hex value, then wrote back up: it committed HoloSticker, WhyMe and five style patterns to the system&rsquo;s registry, in the same pull request, for me to review.</p>
+      <CurtainLadder />
+      <CurtainButtons />
+
+      <h2>The machine half works. The decision half is mine.</h2>
+      <ul>
+        <li><strong>A red check isn&rsquo;t a gate.</strong> main has no branch protection, so the curtain can mark a pull request red but can&rsquo;t hold it. PR #17 merged red too.</li>
+        <li><strong>Sixteen proposals, no decisions.</strong> The curtain has proposed five components and eleven patterns since it went in. I haven&rsquo;t promoted one.</li>
+        <li><strong>Token files get a pass.</strong> The foil token brought in two near-copies of my oranges, unflagged.</li>
+        <li><strong>Layout has no gate.</strong> Nothing checks templates yet.</li>
+      </ul>
+      <p>Spotting drift is cheap now. Deciding what the system keeps is still the job, and I&rsquo;ve been skipping it.</p>
+      <p>I don&rsquo;t know yet whether materials belong inside the system or beside it. The iPad is going to make me decide.</p>
+    </>
+  ),
   'building-the-binder': (
     <>
       <p>Until 21 October, the case studies on my homepage were a grid of white cards: a header, an endorsement, filter chips, a pager, and a schematic or screenshot on each. It was clear and it was correct. It also looked like what anyone can now generate in an afternoon.</p>
