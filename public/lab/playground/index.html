@@ -441,11 +441,8 @@ button{font:inherit;color:inherit}
 @media (max-width:720px){.cards,.par__runs{grid-template-columns:minmax(0,1fr)}.card__img{height:180px}}
 @media (max-width:560px){.ho{grid-template-columns:minmax(0,1fr)}.ho > div + div{border-left:0;border-top:1px solid rgba(27,27,27,.1)}.rules2 .callout p{font-size:20px}.node__c{flex-basis:100%;margin-left:18px}.repo__tree{padding:12px 8px}}
 /* page tabs */
-.ptabs{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--hair);backdrop-filter:saturate(1.4) blur(6px)}
-.ptabs__in{display:flex;gap:28px;overflow-x:auto}
-.ptabs button{flex:none;min-height:52px;padding:0;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:none;font:700 14px/1 var(--font-h);letter-spacing:.02em;color:var(--graphite);cursor:pointer}
-.ptabs button:hover{color:var(--ink)}
-.ptabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--orange)}
+.study__back{display:inline-block;margin-bottom:18px;font:700 14px/1.4 var(--font-h);color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.study__back:hover{color:var(--orange)}
 #ppanel-method > .sec:first-child,#ppanel-simple > .sec:first-child{border-top:0}
 .study [data-v="h06"] .chip{text-transform:none;letter-spacing:0}
 /* a study in simplicity */
@@ -650,6 +647,21 @@ button{font:inherit;color:inherit}
 [data-v="h06"] .stp__r--new .trk__s{background:var(--act-new)}[data-v="h06"] .stp__r--move .trk__s{background:var(--act-move)}[data-v="h06"] .stp__r--stay .trk__s{background:var(--act-stay)}
 [data-v="h06"] .stp .val{justify-self:end;font-size:var(--font-size-lg);font-weight:var(--font-weight-bold);color:var(--font-color-primary)}
 [data-v="h06"] .stp__n{margin:2px 0 0;font-size:12px;line-height:1.4;color:var(--color-darkgrey)}
+[data-v="h06"] .stp .trk__s{z-index:1}
+[data-v="h06"] .stp .trk__z{position:absolute;top:0;bottom:0;right:0;z-index:2;background:repeating-linear-gradient(135deg,rgba(194,40,29,.55) 0 2px,rgba(194,40,29,.12) 2px 6px);border-left:2px solid var(--act-off)}
+[data-v="h06"] .stp .trk__best{position:absolute;top:0;bottom:0;z-index:3;width:3px;margin-left:-1.5px;background:var(--act-new);box-shadow:0 0 0 1px var(--color-white)}
+[data-v="h06"] .stp__d--off{color:var(--act-off)}
+[data-v="h06"] .stp__r--off .trk__s{background:var(--act-off)}
+[data-v="h06"] .stp__r.is-danger .val{color:var(--act-off)}
+[data-v="h06"] .stp__z{font-style:normal;font-size:11px;font-weight:var(--font-weight-bold);color:var(--act-off)}
+[data-v="h06"] .stp__z::before{content:"\26A0\FE0E  "}
+[data-v="h06"] .stp__k,[data-v="h06"] .stp__b{display:flex;gap:8px;align-items:flex-start;margin:0;font-size:12px;line-height:1.45;color:var(--color-darkgrey)}
+[data-v="h06"] .stp__k b{color:var(--act-off)}
+[data-v="h06"] .stp__b{padding:8px 10px;border-radius:var(--border-radius);background:#e4f3ea;color:var(--font-color-primary);font-size:13px}
+[data-v="h06"] .stp__b b{color:var(--act-new)}
+[data-v="h06"] .stp__zk{flex:none;width:18px;height:12px;margin-top:2px;background:repeating-linear-gradient(135deg,rgba(194,40,29,.55) 0 2px,rgba(194,40,29,.12) 2px 6px);border-left:2px solid var(--act-off)}
+[data-v="h06"] .stp .trk__gain{position:absolute;top:0;bottom:0;z-index:2;background:repeating-linear-gradient(90deg,rgba(255,255,255,.0) 0 5px,rgba(255,255,255,.35) 5px 6px),#5fae86;border-left:3px solid var(--act-new)}
+[data-v="h06"] .stp__bk{flex:none;width:18px;height:12px;margin-top:3px;background:#5fae86;border-left:3px solid var(--act-new)}
 @media (max-width:520px){[data-v="h06"] .stp{padding:var(--space-sm)}[data-v="h06"] .stp__r{grid-template-columns:minmax(0,1fr) 64px}[data-v="h06"] .stp .trk{grid-column:1 / -1;grid-row:2}}
 /* Meaning colors: what happens to each tire. Used on the car, tray, options, labels and bars.
    Each is paired with a word and a mark, so color is never the only signal. */
@@ -873,12 +885,7 @@ button{font:inherit;color:inherit}
   <a class="method-link" href="../how-i-work/"><div><strong>How I think, prototype and build</strong><span>The method behind this page and every demo in the lab.</span></div><em>How I work →</em></a>
 </div></header>
 
-<div class="ptabs" role="tablist" aria-label="Playground"><div class="wrap ptabs__in">
-  <button type="button" role="tab" id="ptab-method" data-ptab="method" aria-selected="true" aria-controls="ppanel-method">The playground</button>
-  <button type="button" role="tab" id="ptab-simple" data-ptab="simple" aria-selected="false" aria-controls="ppanel-simple" tabindex="-1">A study in simplicity</button>
-</div></div>
-
-<div id="ppanel-method" role="tabpanel" aria-labelledby="ptab-method">
+<div id="ppanel-method">
 <section class="sec" id="directory" aria-labelledby="dirTitle"><div class="wrap">
   <p class="label">The directory</p>
   <h2 id="dirTitle">Where the method already runs</h2>
@@ -1146,8 +1153,9 @@ button{font:inherit;color:inherit}
 </div></section>
 </div>
 
-<div id="ppanel-simple" role="tabpanel" aria-labelledby="ptab-simple" hidden>
+<div id="ppanel-simple" hidden>
 <section class="sec study" aria-labelledby="studyTitle"><div class="wrap">
+  <a class="study__back" href="./" data-goto="method">← The playground</a>
   <p class="label">A study in simplicity</p>
   <h2 id="studyTitle">What each option actually changes</h2>
   <p class="sub">At the install counter a customer decides with numbers only the installer can read. This is the decision cut down until each place says one thing: one car, four colors, and the tested numbers in one place. A proposal on Tire Rack's public data, not a Tire Rack page.</p>
@@ -1522,20 +1530,48 @@ window.IF = {
   const tireStop = (v, c) => v === 'winter' ? D.snow.winter : curve(ROAD[c].pts, typeof v === 'number' ? v : NEW);
   const carStop = (k, c) => { const L = layout(k); return POS.reduce((a, p) => a + tireStop(L.at[p].v, c), 0) / 4; };
   const ft0 = v => Math.round(v);
-  const STOP_MAX = { dry: 160, wet: 300, snow: 110 };
+  const STOP_MAX = { dry: 160, wet: 360, snow: 125 };
+  // Danger zone: a whole-car stop longer than a full set at the depth where grip falls off.
+  // Dry: the 2/32" legal minimum. Wet: Tire Rack's 4/32" rain advice. Snow: Tire Rack's ~5/32" snow line.
+  const DANGER = {
+    dry: { d: 2, why: 'longer than a full set at 2/32", the legal minimum' },
+    wet: { d: 4, why: 'longer than a full set at 4/32", where Tire Rack says rain grip falls off' },
+    snow: { d: 5, why: 'longer than a full set at 5/32", Tire Rack\'s snow line' },
+  };
+  const dangerFt = c => curve(ROAD[c].pts, DANGER[c].d);
+  // If nothing changes: about 2/32" of wear in a typical year (~12,000 miles), never below 2/32". An estimate.
+  const WEAR = 2;
+  const laterStop = c => POS.reduce((a, p) => a + curve(ROAD[c].pts, Math.max(2, D.tread[p] - WEAR)), 0) / 4;
+  const bestKey = c => c === 'snow' ? 'winter' : 'four';
   const icon = c => ICON[c].replace('aria-hidden', 'class="stp__i" aria-hidden');
   function stopHtml(k, c, preview) {
-    const R = ROAD[c], b = carStop(null, c), a = k ? carStop(k, c) : null, m = STOP_MAX[c];
-    const L = k ? layout(k) : null, act = !k ? 'stay' : L.on.length ? 'new' : L.moved.length ? 'move' : 'stay';
-    const gap = a === null ? 0 : ft0(b) - ft0(a);
-    const head = a === null ? '' : gap > 0 ? `<b class="stp__d stp__d--${act}">${gap} ft shorter</b>` : '<b class="stp__d stp__d--stay">No change</b>';
-    const row = (key, label, sub, v, cls) => `<div class="stp__r stp__r--${cls}"><span class="stp__l">${label}${sub}</span><span class="trk" aria-hidden="true"><i class="trk__s" data-bar="${key}" data-to="${Math.min(100, v / m * 100)}"></i></span><b class="val" data-n="${key}" data-a="${ft0(v)}" data-b="${ft0(v)}">${ft0(v)} ft</b></div>`;
+    const R = ROAD[c], b = carStop(null, c), m = STOP_MAX[c], z = dangerFt(c), bk = bestKey(c), best = carStop(bk, c);
+    const later = k === 'not', a = !k ? null : later ? laterStop(c) : carStop(k, c);
+    const L = k && !later ? layout(k) : null, act = !L ? 'stay' : L.on.length ? 'new' : L.moved.length ? 'move' : 'stay';
+    const pct = v => Math.min(100, v / m * 100), zp = pct(z), bp = pct(best);
+    const gap = a === null ? 0 : ft0(b) - ft0(a), room = ft0(b) - ft0(best);
+    const head = a === null ? '' : later
+      ? (gap < 0 ? `<b class="stp__d stp__d--off">${-gap} ft longer in a year</b>` : '<b class="stp__d stp__d--stay">No change</b>')
+      : gap > 0 ? `<b class="stp__d stp__d--${act}">${gap} ft shorter</b>` : '<b class="stp__d stp__d--stay">No change</b>';
+    const row = (key, label, sub, v, cls) => {
+      const bad = v > z + 0.5;
+      return `<div class="stp__r stp__r--${cls}${bad ? ' is-danger' : ''}"><span class="stp__l">${label}${sub}${bad ? '<em class="stp__z">In the danger zone</em>' : ''}</span><span class="trk" aria-hidden="true"><i class="trk__s" data-bar="${key}" data-to="${pct(v)}"></i><i class="trk__z" style="left:${zp}%"></i>${cls === 'b' && v - best > 0.5 ? `<i class="trk__gain" style="left:${bp}%;width:${pct(v) - bp}%"></i>` : `<i class="trk__best" style="left:${bp}%"></i>`}</span><b class="val" data-n="${key}" data-a="${ft0(v)}" data-b="${ft0(v)}">${ft0(v)} ft</b></div>`;
+    };
     const today = POS.map(p => D.tread[p]).join(' · ');
+    const laterTread = POS.map(p => Math.max(2, D.tread[p] - WEAR)).join(' · ');
+    const afterRow = a === null ? '' : later
+      ? row(`st-${c}-a`, 'In a year', `<small>if nothing changes · ${laterTread}</small>`, a, 'off')
+      : row(`st-${c}-a`, preview ? 'Preview' : 'After', chip(act, NAME[k].replace(' tires', '')), a, act);
+    // The whole possible gain, measured on the same chart: today down to the best option for this road
+    const share = a !== null && !later && k !== bk && room > 0 ? ` ${NAME[k].replace(' tires', '')} gets ${Math.max(0, gap)} of those ${room} ft.` : '';
+    const benefit = room > 0 ? `<p class="stp__b"><i class="stp__bk" aria-hidden="true"></i><span><b>Best possible ${R.word}: ${ft0(best)} ft</b> with ${NAME[bk].toLowerCase()}, up to <b>${room} ft shorter</b> than today. The green on today's bar is the distance you could take back.${share}</span></p>` : '';
     return `<div class="stp">
       <div class="stp__top"><p class="stp__h">${icon(c)}Stopping from ${R.speed} mph ${R.word}<small>Whole car · estimate</small></p>${head}</div>
       ${row(`st-${c}-b`, 'Today', `<small>${today}</small>`, b, 'b')}
-      ${a === null ? '' : row(`st-${c}-a`, preview ? 'Preview' : 'After', chip(act, k === 'not' ? 'Stays' : NAME[k].replace(' tires', '')), a, act)}
-      <p class="stp__n">Each tire's stop is read from published test figures at its depth, and the four are averaged. A prototype estimate, not a test of this car.</p>
+      ${afterRow}
+      <div class="stp__k"><span><i class="stp__zk" aria-hidden="true"></i><b>Danger zone</b> past ${ft0(z)} ft: ${DANGER[c].why}.</span></div>
+      ${benefit}
+      <p class="stp__n">Each tire's stop is read from published test figures at its depth, and the four are averaged.${later ? ' "In a year" assumes about 2/32" of wear, a typical 12,000 miles.' : ''} A prototype estimate, not a test of this car.</p>
     </div>`;
   }
   function lineFor(k, c) {
@@ -1545,7 +1581,8 @@ window.IF = {
       wet: `Rain is where tread pays. In Tire Rack's wet test, a set at ${D.tread.LF}/32", like your fronts, was still going ${D.wet.mphAtNewStop.d4} mph where a new set had stopped.`,
       snow: `Your fronts are at ${D.tread.LF}/32", under Tire Rack's ~5/32" snow line, where tread stops packing and releasing snow.`,
     }[c];
-    if (k === 'not') return `Nothing changes ${R.word}. The same four tires stay on.`;
+    if (k === 'not') { const d = ft0(laterStop(c)) - ft0(carStop(null, c)), inZ = laterStop(c) > dangerFt(c) + 0.5;
+      return `Nothing changes today, but the tires keep wearing. In about a year the car needs ${d > 0 ? `${d} ft more` : 'about the same distance'} to stop ${R.word}${inZ ? ', inside the danger zone' : ''}.`; }
     const extra = k === 'winter' ? ` In Tire Rack's test, new winter tires stopped ${parseFloat((D.snow.allSeason - D.snow.winter).toFixed(1))} ft shorter than new all-season tires.`
       : c === 'dry' ? ' In the dry the gain is small; rain and snow are where it shows.' : '';
     return `${NAME[k]}: about ${gap} ft shorter from ${R.speed} mph ${R.word}.${extra}`;
@@ -1815,25 +1852,20 @@ window.IF = {
   update(false);
 })();/*h06:js:end*/</script>
 <script>
-/* Page tabs. #simplicity opens the study directly; ?for= is kept. */
+/* The study opens from its directory card (#simplicity); no tab bar. ?for= is kept. */
 (() => {
-  const tabs = [...document.querySelectorAll('[data-ptab]')];
-  function show(id, focus) {
-    tabs.forEach(t => { const on = t.dataset.ptab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); document.getElementById('ppanel-' + t.dataset.ptab).hidden = !on; });
+  const P = { method: document.getElementById('ppanel-method'), simple: document.getElementById('ppanel-simple') };
+  const smooth = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  function show(id) {
+    Object.entries(P).forEach(([k, el]) => { el.hidden = k !== id; });
     try { history.replaceState(null, '', location.pathname + location.search + (id === 'simple' ? '#simplicity' : '')); } catch (_) {}
   }
-  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.ptab, false)));
-  document.querySelector('.ptabs').addEventListener('keydown', e => {
-    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
-    show(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length].dataset.ptab, true);
-  });
-  if (location.hash === '#simplicity') show('simple', false);
-  window.addEventListener('hashchange', () => show(location.hash === '#simplicity' ? 'simple' : 'method', false));
-  // the directory card opens the study tab and brings it into view
-  document.querySelectorAll('[data-goto="simple"]').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault(); show('simple', false);
-    document.querySelector('.ptabs').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  if (location.hash === '#simplicity') show('simple');
+  window.addEventListener('hashchange', () => show(location.hash === '#simplicity' ? 'simple' : 'method'));
+  document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); const id = a.dataset.goto; show(id);
+    (id === 'simple' ? P.simple : document.getElementById('directory')).scrollIntoView({ behavior: smooth() });
+    if (id === 'simple') P.simple.querySelector('.study__back').focus({ preventScroll: true });
   }));
 })();
 </script>
