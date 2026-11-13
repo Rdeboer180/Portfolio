@@ -150,7 +150,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       <h2>The machine half works. The decision half is mine.</h2>
       <ul>
         <li><strong>A red check isn&rsquo;t a gate.</strong> main has no branch protection, so the curtain can mark a pull request red but can&rsquo;t hold it. PR #17 merged red too.</li>
-        <li><strong>Sixteen proposals, no decisions.</strong> The curtain has proposed five components and eleven patterns since it went in. I haven&rsquo;t promoted one.</li>
+        <li><strong>Eighteen proposals, no decisions.</strong> The curtain has proposed six components and twelve patterns since it went in, two of them from this note. I haven&rsquo;t promoted one.</li>
         <li><strong>Token files get a pass.</strong> The foil token brought in two near-copies of my oranges, unflagged.</li>
         <li><strong>Layout has no gate.</strong> Nothing checks templates yet.</li>
       </ul>
