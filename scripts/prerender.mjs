@@ -106,7 +106,7 @@ function isInternalRoute(href) {
   // Standalone static apps hosted under public/ — they ship their own
   // index.html; prerendering would overwrite it with the portfolio shell.
   if (path.startsWith('/loopstack-demo') || path.startsWith('/dive/loopstack-demo')) return false;
-  if (path.startsWith('/loopstack-plus-demo') || path.startsWith('/dive/loopstack-plus-demo')) return false;
+  if (path.startsWith('/loopstack-desktop-demo') || path.startsWith('/dive/loopstack-desktop-demo')) return false;
   return true;
 }
 
@@ -119,7 +119,7 @@ async function main() {
 
   // The portfolio links to a real standalone demo and an HTML writing artifact.
   // Reuse their original HTML and shared assets, under the review prefix too.
-  for (const file of ['loopstack-demo/index.html', 'loopstack-plus-demo/index.html', 'artifacts/eight-wrong-first-drafts.html']) {
+  for (const file of ['loopstack-demo/index.html', 'loopstack-desktop-demo/index.html', 'artifacts/eight-wrong-first-drafts.html']) {
     const source = join(BUILD_DIR, file);
     if (!existsSync(source)) continue;
     const target = join(BUILD_DIR, 'dive', file);
