@@ -58,7 +58,7 @@ describe('groups', () => {
   });
 
   it('resolves a group to its studies, and a client to the studies it names', () => {
-    expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'bolus-binder', 'loopstack', 'overscroll-tactics']);
+    expect(slugsOf(studiesFor('client', 'personal'))).toEqual(['playdraft', 'loopstack', 'bolus-binder', 'overscroll-tactics']);
     expect(slugsOf(studiesFor('client', 'heatherwood'))).toEqual(['heatherwood']);
     expect(slugsOf(studiesFor('client', 'employer'))).toHaveLength(7);
   });

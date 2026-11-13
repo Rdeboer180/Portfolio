@@ -1852,15 +1852,15 @@ $mobile-max-width: 768px;
     clientLabel: 'Personal product',
     client: 'LoopStack (personal project)',
     context: 'LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.',
-    title: 'LoopStack: Pattern Review for Meals and Glucose',
+    title: 'LoopStack: Pattern Review for Meals and Glucose, on the Phone and the Desktop',
     cardTitle: 'LoopStack: Patterns worth reviewing',
     seoTitle: 'LoopStack: Trends-First Health-Data UX for Type 1 Diabetes (React/TypeScript)',
-    summary: 'A Type 1 diabetes app that compares what Loop predicted with what happened after a meal, then groups repeated glucose curves into patterns worth reviewing with a care team. It runs on TestFlight with 90 days of my HealthKit CGM data and never gives dosing advice.',
+    summary: 'A Type 1 diabetes app that compares what Loop predicted with what happened after a meal, then groups repeated glucose curves into patterns worth reviewing with a care team. The phone app runs on TestFlight with 90 days of my HealthKit CGM data. The desktop app adds a dashboard you arrange yourself and a care-team review view. Neither gives dosing advice.',
     year: '2026',
-    tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'HealthKit'],
+    tags: ['0 → 1 Product Design', 'Pattern Intelligence', 'Mobile (iOS)', 'Desktop (Electron)', 'Customizable Dashboard', 'AI-Assisted Workflow', 'Type 1 Diabetes', 'HealthKit'],
     role: 'Product Design · UX · Agent-Assisted Build',
-    tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'HealthKit', 'Vitest', 'TestFlight'],
-    timeline: 'Initial build ~3–4 weeks; HealthKit wiring and pattern intelligence ongoing',
+    tools: ['Figma', 'Claude', 'ChatGPT', 'Cursor', 'HealthKit', 'Electron', 'Vitest', 'TestFlight'],
+    timeline: 'Initial build ~3–4 weeks; HealthKit wiring and pattern intelligence ongoing; desktop app v1 in November 2026',
     featured: '/images/work/loopstack/loopstack-portfolio-cover-2026-update.png',
     featuredVideo: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
     featuredVideoPrimary: true,
@@ -1896,22 +1896,24 @@ $mobile-max-width: 768px;
     approachSubsections: [
       {
         key: 'alignment',
+        part: 'Part 1 · On the phone',
         label: "Keep the review grounded in my own history",
         description: "I compare what Loop predicted with what happened over the meal's response window. Claude and ChatGPT helped me explore logic and wording; I owned the review of what the app could claim. This remains a personal pattern-review tool, with observations to discuss with a care team rather than instructions to change therapy.",
         images: [
           {
             src: '/assets/portfolio-safe/loopstack/cover-loop.mp4',
-            alt: 'Ten-second LoopStack overview: the Trends dashboard and favorite-meal report card, fed by Loop, Apple Health, and Apple Watch data, ending on an evidence-gated confidence ring',
+            alt: 'Sixteen-second LoopStack loop: the phone app’s Trends tab, then the desktop app, where a tile on My dashboard is dragged into a new place, What Loop did is explored hour by hour, and a clinician agrees an option on a synthetic patient’s question in the care-team review, ending on the phone and desktop side by side',
             layout: 'full',
             isVideo: true,
             videoPoster: '/assets/portfolio-safe/loopstack/cover-loop-poster.jpg',
             caption:
-              'Ten seconds of LoopStack: real data in from Loop, Apple Health, and Apple Watch. Metrics studied into evidence-gated confidence reports.',
+              'One LoopStack on two surfaces: a glance on the phone, a dashboard you arrange yourself on the desktop, and a care-team review a clinician reads in a couple of minutes.',
           },
         ],
       },
       {
         key: 'structure',
+        part: 'Part 1 · On the phone',
         label: 'Ingredients ordered by how much they move the curve',
         description: 'Mapped the loop as Input → Compare → Cluster → Review → Refine. Every surface has a single job. The meal builder orders ingredients by absorption impact; context chips (meal time, activity, setting) let pattern-matching cluster a meal with the right past ones. Evidence stays optional: a meal photo or Loop screenshot pairs with the entry automatically.',
         systemMarker: 'Loop introduced',
@@ -1934,6 +1936,7 @@ $mobile-max-width: 768px;
       },
       {
         key: 'system',
+        part: 'Part 1 · On the phone',
         label: 'Real CGM data in, and sample data labeled as sample',
         description: 'Real data replaces hand entry, and the app says where each number comes from.',
         bullets: [
@@ -1961,6 +1964,7 @@ $mobile-max-width: 768px;
       },
       {
         key: 'build',
+        part: 'Part 1 · On the phone',
         label: '460 tests guarding what the app may claim',
         description: 'Claude and ChatGPT helped me compare logic and language quickly; the harder review was mine. A 460-test Vitest suite now guards the confidence logic that decides what the app may claim. TestFlight adds the device check against real Loop data, meal after meal.',
         codeBlock: {
@@ -1992,6 +1996,7 @@ Frame every output as:
       },
       {
         key: 'iteration',
+        part: 'Part 1 · On the phone',
         label: "Build confidence through repeat meals",
         description: "I use repeat meals and time-of-day patterns to review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Each observation shows the supporting meals, trend and confidence tier. Full response windows build evidence; a single unusual result stays an observation for review.",
         systemMarker: 'Confidence gate',
@@ -2005,10 +2010,72 @@ Frame every output as:
           },
         ],
       },
+      {
+        key: 'desktop-why',
+        part: 'Part 2 · On the desktop',
+        label: 'Review needs room, so the second surface is a desktop app',
+        description: "The phone is for the moment: glucose now, a heads-up before a stretch that usually runs low, the day tracker. Review is different work. Comparing fourteen days hour by hour, or a lunch before and after a settings change, needs width and the detail beside the chart rather than under it. I first drew that review surface at phone width and it kept collapsing into sheets and tabs. So LoopStack has a second surface: a desktop app you download, with the same data, the same rules and the same name.",
+        systemMarker: 'Two surfaces',
+        images: [
+          {
+            src: '/images/work/loopstack/desktop/dashboard.jpg',
+            alt: 'LoopStack desktop app: a sidebar with My dashboard and Care-team review, and a grid of tracker tiles for glucose now, trend heads-ups, the day tracker, what Loop did, time in range and device life',
+            layout: 'full',
+            caption: 'My dashboard on the desktop, on a synthetic patient. The same trackers as the phone, with room to compare.',
+          },
+        ],
+      },
+      {
+        key: 'desktop-dashboard',
+        part: 'Part 2 · On the desktop',
+        label: 'A dashboard the person arranges',
+        description: "Everyone who loops watches something different, so the dashboard is a twelve-column grid of trackers the person arranges. Drag a tile to move it, resize it, add trackers from the library, or start from a preset such as Everyday, Before a visit, or Overnight. Every move also works from the keyboard. Two tiles always stay on the dashboard: the daily trend heads-ups and the day tracker. They can move and resize but not leave, because they catch routine lows and highs.",
+        systemMarker: 'Customizable',
+        bullets: [
+          'Each tile has a glance face and a detail face one click in. Detail opens beside the tile, not over it.',
+          'What Loop did shows fourteen days by twenty-four hours against the scheduled basal, with the selected hour explained beside the grid.',
+          'Glass is only on the controls: the toolbar, the tracker library and popovers. Tiles and charts stay solid.',
+        ],
+        images: [
+          {
+            src: '/images/work/loopstack/desktop/dashboard-edit.jpg',
+            alt: 'The dashboard in edit mode: drag handles and resize controls on each tile, and the tracker library open on the side',
+            layout: 'full',
+            caption: 'Edit layout: drag, resize, and add from the library. The heads-ups and day tracker can move but not be removed.',
+          },
+          {
+            src: '/images/work/loopstack/desktop/what-loop-did-detail.jpg',
+            alt: 'What Loop did on the desktop: a 14-day by 24-hour grid of delivered insulin against the schedule, with 7am selected and its detail beside the grid',
+            layout: 'full',
+            caption: 'What Loop did, hour by hour. The morning dip is 6 to 8am, seen on 11 of 13 usable days at 6am.',
+          },
+        ],
+      },
+      {
+        key: 'desktop-review',
+        part: 'Part 2 · On the desktop',
+        label: 'The care-team review: the same data, read the way clinicians read',
+        description: "The second view in the same app is for the clinician. The person who loops chooses what to share as a review packet; it isn't a live feed. The review has a fixed layout, the same for every patient, so a clinician can read it in one or two minutes in the order they already use: enough data, then lows, then time in range, then the glucose curve. What Loop did follows in clinician terms, then the settings changes with who proposed and who agreed, then the patient's open question with Agree, Modify or Discuss. LoopStack never changes Loop or the pump. The person applies any change themselves.",
+        systemMarker: 'Care-team review',
+        images: [
+          {
+            src: '/images/work/loopstack/desktop/review.jpg',
+            alt: 'The care-team review: a synthetic patient packet read in AGP order, with sensor wear, lows, time in range, time in automation and the glucose curve, then the patient question with Agree, Modify and Discuss',
+            layout: 'full',
+            caption: 'The care-team review, in the order clinicians already read. Synthetic patient.',
+          },
+          {
+            src: '/images/work/loopstack/desktop/review-loop.jpg',
+            alt: 'The care-team review page for what Loop did: algorithm-modulated against user-initiated insulin, time in automation, and the settings-change timeline',
+            layout: 'full',
+            caption: 'What Loop did, in clinician terms, with the settings changes and who agreed to them.',
+          },
+        ],
+      },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'LoopStack runs on TestFlight as my own pattern-review tool. Observed values stay beside the pump settings rather than replacing them. Clinician-facing review and tighter safety language come before any wider release.',
+    outcomeNote: 'The phone app runs on TestFlight as my own pattern-review tool. The desktop app v1 runs on a synthetic patient: a dashboard you arrange yourself and a care-team review in the same download. Observed values stay beside the pump settings rather than replacing them, and a clinician review of the safety language comes before any real patient data reaches the desktop.',
     takeaways: [
       'Claude and ChatGPT compared logic and language quickly. The review of what the app may say was mine: every output reads as an observation, a piece of evidence, or a discussion point, never an instruction.',
       'Tiers are gated by evidence, not enthusiasm: one odd meal stays an observation until the pattern holds.',
@@ -2028,7 +2095,8 @@ Frame every output as:
     // since HealthKit only exists on device. The disclosure system labels it.
     outcomeLiveLinksLabel: 'Use the working product',
     outcomeLiveLinks: [
-      { label: 'Try the live demo (real app, sample data)', url: '/loopstack-demo/' },
+      { label: 'Try the phone app demo (real app, sample data)', url: '/loopstack-demo/' },
+      { label: 'Try the desktop app in your browser (synthetic patient)', url: '/loopstack-desktop-demo/' },
     ],
     // TODO(Ryan): swap to the TestFlight public link once it exists —
     // App Store Connect → TestFlight → external group → Enable Public Link.
@@ -2643,14 +2711,17 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'Read why the line between Figma and the codebase is getting thinner' },
   }),
   loopstack: p => ({
-    title: 'LoopStack', category: 'Personal product', status: 'TestFlight · Personal pattern-review tool',
-    deck: "A personal Type 1 diabetes app for following repeat meals through their full glucose-response window and reviewing recurring patterns with the evidence beside them.",
-    ownership: 'I designed and built the product with AI assistance and tested it against my own Loop data. It supports pattern review and care-team discussion, not dosing advice.',
+    title: 'LoopStack', category: 'Personal product', status: 'Phone app on TestFlight · Desktop app v1',
+    deck: "A personal Type 1 diabetes app for following repeat meals through their full glucose-response window and reviewing recurring patterns with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
+    ownership: 'I designed and built both surfaces with AI assistance. The phone app is tested against my own Loop data; the desktop app runs on a synthetic patient. It supports pattern review and care-team discussion, not dosing advice.',
     opening: p.approachSubsections?.flatMap(s => s.images ?? []).find(i => i.isVideo && i.src),
     decisions: [
-      { title: "Follow the response beyond the meal", body: "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.", image: evidence(p, 'structure') },
-      { title: 'Say where each number comes from', body: 'Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.', image: evidence(p, 'system', 1) },
-      { title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.", images: [evidence(p, 'iteration')!, findImage(p, '04_fix_log')!] },
+      { part: 'On the phone', title: "Follow the response beyond the meal", body: "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.", image: evidence(p, 'structure') },
+      { part: 'On the phone', title: 'Say where each number comes from', body: 'Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.', image: evidence(p, 'system', 1) },
+      { part: 'On the phone', title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.", images: [evidence(p, 'iteration')!, findImage(p, '04_fix_log')!] },
+      { part: 'On the desktop', title: 'Give review its own surface', body: subsection(p, 'desktop-why')!.description, wide: evidence(p, 'desktop-why') },
+      { part: 'On the desktop', title: 'Let the person arrange the dashboard', body: subsection(p, 'desktop-dashboard')!.description, points: subsection(p, 'desktop-dashboard')?.bullets, images: subsection(p, 'desktop-dashboard')?.images },
+      { part: 'On the desktop', title: 'Read it the way clinicians read', body: subsection(p, 'desktop-review')!.description, images: subsection(p, 'desktop-review')?.images },
     ],
     outcome: p.outcomeNote!,
   }),
@@ -2712,11 +2783,11 @@ export const WORK_ORDER = [
   'wheelrack',
   'design-enablement',
   'playdraft',
+  'loopstack',
   'aem-component-system',
   'figma-template-governance',
   'bolus-binder',
   'tire-categories',
-  'loopstack',
   'landing-pages',
   'seasonal-content-system',
   'overscroll-tactics',
