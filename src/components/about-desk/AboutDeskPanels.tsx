@@ -11,8 +11,8 @@ import { progression } from '../About';
 import { TOOL_GROUPS } from '../AboutHero';
 import { FACTS, STACK } from '../CandidateSnapshot';
 import { STUDIO_POINTS } from '../AboutStudio';
-import { SITE, EMAIL_HREF } from '../../data/site';
-import { LINKEDIN_PROFILE_URL } from '../LinkedInLink';
+import { EMAIL_HREF } from '../../data/site';
+import LinkedInLink from '../LinkedInLink';
 import { getHomeHref } from '../../utils/homeSession';
 import { DeskTab } from './deskObjects';
 
@@ -183,9 +183,7 @@ const Glance: React.FC = () => (
     <div className="glance__links">
       <a className="btn btn--primary btn--md" href={EMAIL_HREF}>Email</a>
       <Link className="btn btn--secondary btn--md" to="/resume">Résumé</Link>
-      <a className="btn btn--secondary btn--md" href={LINKEDIN_PROFILE_URL} target="_blank" rel="noopener noreferrer" data-li-surface="candidate_snapshot">
-        LinkedIn<span className="sr-only"> (opens in a new tab)</span>
-      </a>
+      <LinkedInLink label="LinkedIn" surface="candidate_snapshot" variant="button" />
     </div>
   </section>
 );
@@ -217,7 +215,7 @@ export const WorkPanel: React.FC<{ wiki: Wiki }> = ({ wiki }) => (
       <h2 id="about-desk-bridge">How that shows up in the work</h2>
       <p className="lead">I keep working on a design after it leaves Figma. I check how it behaves in the product and use what implementation reveals to improve the next version.</p>
       <p>This site is one working example. The decisions behind it live in {wiki('notes', 'the notes')}, alongside the systems, mistakes, and open questions that shaped the work.</p>
-      <a className="more" href={LINKEDIN_PROFILE_URL} target="_blank" rel="noopener noreferrer" data-li-surface="about_bridge">Read along as it happens →</a>
+      <LinkedInLink label="Read along as it happens" surface="about_bridge" className="more" />
     </section>
     <section id="process" aria-labelledby="about-desk-process">
       <p className="label">[ Process ]</p>
@@ -258,7 +256,7 @@ export const WorkPanel: React.FC<{ wiki: Wiki }> = ({ wiki }) => (
       <Channels />
       <p className="about-desk__fine">
         All seven recommendations, in full: <a href={`${getHomeHref()}#testimonials`}>on the homepage</a> or{' '}
-        <a href={SITE.linkedinRecommendationsUrl} target="_blank" rel="noopener noreferrer">on LinkedIn</a>.
+        <LinkedInLink label="on LinkedIn" surface="testimonial_source" to="recommendations" variant="inline" />.
       </p>
     </section>
   </>

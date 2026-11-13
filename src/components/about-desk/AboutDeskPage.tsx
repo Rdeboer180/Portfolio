@@ -15,7 +15,7 @@ import ArchiveCard from '../ArchiveCard';
 import { ARCHIVE_CARDS } from '../../data/archiveCards';
 import { SITE, EMAIL_HREF } from '../../data/site';
 import { SEARCH_META, profileJsonLd } from '../../data/seo';
-import { LINKEDIN_PROFILE_URL } from '../LinkedInLink';
+import LinkedInLink from '../LinkedInLink';
 import { usePageMeta } from '../../hooks/usePageMeta';
 import { getHomeHref } from '../../utils/homeSession';
 import { CONTAINED_MAT, CONTAINED_STARTS, CONTAINER, CUTTING_MAT, HYBRID_LOWER_MIN, HYBRID_MAT_MIN_WIDTH, HYBRID_STARTS, MAT_RATIO, DESK_TABS, DESK_THINGS, DESK_WIDTH, DeskTab, DeskThing, FOLDER, LINK_TO, LOWER_HEIGHT, SHELF_LOWER, TRAY } from './deskObjects';
@@ -604,7 +604,7 @@ const AboutDeskPage: React.FC<{ variant?: 'desk' | 'contained' | 'hybrid'; flavo
             <p>I’m open to remote product design, design systems, and design engineering roles in the US. If my work fits what your team needs, I would be glad to talk.</p>
             <div className="about-desk__flyout-links">
               <a href={EMAIL_HREF}>Email me</a>
-              <a href={LINKEDIN_PROFILE_URL} target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+              <LinkedInLink label="Connect on LinkedIn" surface="about_contact" />
             </div>
             <h3>Elsewhere on the site</h3>
             <div className="about-desk__flyout-links">

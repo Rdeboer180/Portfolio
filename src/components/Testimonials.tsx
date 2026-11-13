@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useReveal } from '../hooks/useReveal';
-import { EMAIL_HREF, SITE } from '../data/site';
+import { EMAIL_HREF } from '../data/site';
+import LinkedInLink from './LinkedInLink';
 
 const H: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="testimonials__highlight">{children}</span>
@@ -222,9 +223,13 @@ const Testimonials: React.FC = () => {
             tap a name, it opens
             <svg viewBox="0 0 64 64" fill="none"><path d="M6 6 C 30 4, 44 20, 34 54" /><path d="M26 46 L 34 55 L 41 45" /></svg>
           </span>
-          <a href={SITE.linkedinRecommendationsUrl} className="testimonials__all" target="_blank" rel="noopener noreferrer">
-            All {featured.length} on LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          <LinkedInLink
+            label={`All ${featured.length} on LinkedIn`}
+            surface="testimonial_source"
+            to="recommendations"
+            variant="inline"
+            className="testimonials__all"
+          />
         </div>
 
         <div className="testimonials__tablet">

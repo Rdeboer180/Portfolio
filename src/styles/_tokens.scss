@@ -146,6 +146,15 @@
   --sticker-shadow-pressed: 0.5px 1px 1px rgba(27, 27, 27, 0.18);
   --sticker-enamel: linear-gradient(180deg, #d93b06 0%, #c23001 42%, #b02c01 100%);
 
+  // The LinkedIn sticker (12 November 2026): the one sticker that is not
+  // brand orange, because its job is to say whose site the link opens. Same
+  // recipe (white die-cut, steel kiss-cut, a foil line, enamel face, the
+  // upper-left light); the foil and face are LinkedIn's blue family instead.
+  --linkedin-blue: #0a66c2;
+  --linkedin-blue-deep: #004182;
+  --sticker-foil-linkedin: linear-gradient(115deg, #004182 0%, #0a66c2 12%, #378fe9 18%, #eef6fe 22%, #70b5f9 26%, #0a66c2 38%, #004182 52%, #0a66c2 64%, #378fe9 70%, #ffffff 74%, #378fe9 78%, #004182 100%);
+  --sticker-enamel-linkedin: linear-gradient(180deg, #1673d0 0%, #0a66c2 45%, #0857a8 100%);
+
   // ==========================================
   // ICONS
   // ==========================================

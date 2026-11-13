@@ -1,14 +1,21 @@
 // ============================================
-// LinkedInLink — shared profile-link atom
-// Caption-size text link with the 12px LinkedIn
-// glyph (CSS mask on ::before, follows currentColor).
-// Consumers: testimonials source links, case-study
-// close rail, About bridge (white override there).
-// NOTE: imported early in styles.scss — before
-// testimonials (mixin availability) and before
-// about-page (so its white override wins the cascade).
+// LinkedInLink: every outbound LinkedIn link (12 November 2026)
+// A die-cut "in" sticker leads the link, so a reader knows before the click
+// that it leaves for LinkedIn. It is the sticker recipe (_holo-sticker.scss,
+// .btn in _base.scss): white die-cut, steel kiss-cut, a thin foil line, an
+// enamel face with a gloss from the upper left, the shadow down and right.
+// The one change is colour: LinkedIn's blue (--linkedin-*, --sticker-*-linkedin
+// in _tokens.scss), because the sticker's job is to name whose site it opens.
+// Hover moves the light (the foil slides); nothing lifts or turns.
+// Variants: --link (caption text link), --inline (in a sentence), --button
+// (the secondary sticker button).
+// NOTE: imported early in styles.scss: the linkedin-glyph mixin is used by
+// testimonials, and page overrides (about-page, about-desk) must win.
 // ============================================
 
+$linkedin-in-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
+
+// The bare 12px glyph, kept for surfaces that compose it (testimonials).
 @mixin linkedin-glyph {
   display: inline-flex;
   align-items: center;
@@ -26,12 +33,8 @@
     height: 12px;
     flex-shrink: 0;
     background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+    -webkit-mask: $linkedin-in-glyph center / contain no-repeat;
+    mask: $linkedin-in-glyph center / contain no-repeat;
   }
 
   &:hover,
@@ -47,5 +50,111 @@
 }
 
 .linkedin-link {
-  @include linkedin-glyph;
+  text-decoration: none;
+
+  // the sticker
+  &__sticker {
+    --li-size: max(1.25em, 15px);
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--li-size);
+    height: var(--li-size);
+    border: 1px solid transparent;   // the blue foil line
+    border-radius: calc(var(--li-size) * 0.24);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 48%) padding-box,
+      var(--sticker-enamel-linkedin) padding-box,
+      var(--sticker-foil-linkedin) border-box;
+    background-size: 100% 100%, 100% 100%, 260% 260%;
+    background-position: 0 0, 0 0, 0% 0%;
+    box-shadow:
+      0 0 0 2px var(--sticker-die-cut),
+      0 0 0 2.6px var(--sticker-kiss-cut),
+      1px 1.6px 1.2px rgba(27, 27, 27, 0.22),
+      2px 4px 6px -3px rgba(27, 27, 27, 0.3);
+    transform: rotate(-4deg);
+    transition: background-position 360ms var(--ease-out);
+
+    // the "in", printed white on the enamel
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 21% 22% 23% 24%;
+      background-color: var(--sticker-die-cut);
+      -webkit-mask: $linkedin-in-glyph center / contain no-repeat;
+      mask: $linkedin-in-glyph center / contain no-repeat;
+    }
+  }
+
+  // the light moves: the foil line's glint travels round the edge
+  @media (hover: hover) {
+    &:hover .linkedin-link__sticker { background-position: 0 0, 0 0, 100% 100%; }
+  }
+  &:focus-visible .linkedin-link__sticker { background-position: 0 0, 0 0, 100% 100%; }
+
+  &__out {
+    font-weight: $font-weight-regular;
+    text-decoration: none;
+  }
+
+  // --link: the caption text link (case-study close rail, notes, snapshot)
+  &--link,
+  &--inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    width: fit-content;
+
+    &:hover .linkedin-link__label,
+    &:focus-visible .linkedin-link__label {
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  &--link {
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-text;
+    // the die-cut sits outside the face; room so it never touches a neighbour
+    padding-left: 3px;
+  }
+
+  // --inline: inside a sentence, in the sentence's type and link colour
+  &--inline {
+    display: inline;
+    color: inherit;
+    font: inherit;
+    .linkedin-link__sticker {
+      --li-size: 1.05em;
+      margin: 0 0.4em 0 0.2em;
+      vertical-align: -0.15em;
+    }
+    .linkedin-link__out { margin-left: 0.15em; }
+  }
+
+  // --button: the secondary sticker button, the LinkedIn sticker on its face
+  &--button {
+    gap: 9px;
+    .linkedin-link__sticker {
+      --li-size: 18px;
+      // the button's own die-cut is wider; a hair of a gap keeps them apart
+      box-shadow:
+        0 0 0 1.5px var(--sticker-die-cut),
+        0 0 0 2px var(--sticker-kiss-cut),
+        0.8px 1.2px 1px rgba(27, 27, 27, 0.22);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .linkedin-link__sticker { transition: none; }
+  }
 }

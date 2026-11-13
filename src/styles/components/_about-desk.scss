@@ -905,3 +905,8 @@
 // Running text keeps the reading measure inside the page's wider column.
 .about-desk__intro p,
 .glance p { max-width: var(--measure); }
+
+// the LinkedIn sticker link in a panel takes the panel's .more type, laid out
+// as the sticker link (sticker, label, off-site arrow in a row)
+.about-desk .panel .more.linkedin-link { display: inline-flex; }
+.about-desk .panel .more.linkedin-link:hover { text-decoration: none; }
