@@ -15,7 +15,7 @@ import { DraftRoom } from './DraftRoom';
 import playdraft from '../../data/playdraft.json';
 import { FEATURED, initials, testimonials } from '../Testimonials';
 import { strengthRows } from '../../data/about';
-import { SITE } from '../../data/site';
+import LinkedInLink from '../LinkedInLink';
 
 /** the opening of every draft note: what PlayDraft is and why, then which board this is */
 const PlayDraftIntro: React.FC<{ topic: string }> = ({ topic }) => (
@@ -268,7 +268,7 @@ const ThreadNote: React.FC<{ name: string } & NoteProps> = ({ name, open }) => {
         </div>
       </div>
       <p className="note__fine">
-        <a href={SITE.linkedinRecommendationsUrl} target="_blank" rel="noopener noreferrer">On LinkedIn ↗<span className="sr-only"> (opens in a new tab)</span></a>
+        <LinkedInLink label="On LinkedIn" surface="testimonial_source" to="recommendations" variant="inline" />
       </p>
       <button type="button" className="note__next" onClick={() => open(`thread:${next}`)}>Next: {next} →</button>
     </>

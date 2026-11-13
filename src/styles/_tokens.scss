@@ -146,6 +146,18 @@
   --sticker-shadow-pressed: 0.5px 1px 1px rgba(27, 27, 27, 0.18);
   --sticker-enamel: linear-gradient(180deg, #d93b06 0%, #c23001 42%, #b02c01 100%);
 
+  // The LinkedIn sticker (12 November 2026, direction B "Peeled emblem"):
+  // LinkedIn's own rounded-square emblem in blue foil, the one sticker that is
+  // not brand orange, because its job is to say whose site the link opens.
+  // Same recipe as HoloSticker (white die-cut, steel kiss-cut, shadow down and
+  // right); its bottom-right corner is peeled, the flap in release paper.
+  --linkedin-blue: #0a66c2;
+  --linkedin-blue-deep: #004182;
+  --linkedin-blue-light: #378fe9;
+  --linkedin-blue-glint: #e8f3ff;
+  --sticker-kiss-cut-steel: #8f9daf;
+  --sticker-release-paper: #f5f5f5;
+
   // ==========================================
   // ICONS
   // ==========================================

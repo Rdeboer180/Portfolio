@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SITE, EMAIL_HREF } from '../data/site';
+import { EMAIL_HREF } from '../data/site';
+import LinkedInLink from './LinkedInLink';
 
 const Footer: React.FC = () => {
   return (
@@ -18,10 +19,7 @@ const Footer: React.FC = () => {
             <a href={EMAIL_HREF} className="btn btn--primary btn--md">
               Email me
             </a>
-            <a href={SITE.linkedinUrl} className="btn btn--secondary btn--md" target="_blank" rel="noopener noreferrer">
-              Connect on LinkedIn
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            <LinkedInLink label="Connect on LinkedIn" surface="footer" variant="button" />
           </div>
         </div>
         <div className="footer__bottom">

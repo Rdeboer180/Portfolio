@@ -18,7 +18,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { strengthRows, StrengthVoucher } from '../data/about';
-import { SITE } from '../data/site';
+import LinkedInLink from './LinkedInLink';
 import { getHomeHref } from '../utils/homeSession';
 import { useReveal } from '../hooks/useReveal';
 
@@ -93,14 +93,13 @@ const ProcessStrengths: React.FC = () => {
             on the homepage
           </Link>{' '}
           or{' '}
-          <a
-            href={SITE.linkedinRecommendationsUrl}
+          <LinkedInLink
+            label="on LinkedIn"
+            surface="testimonial_source"
+            to="recommendations"
+            variant="inline"
             className="process-strengths__link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            on LinkedIn<span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          />
           .
         </p>
       </div>

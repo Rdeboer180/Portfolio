@@ -1,14 +1,21 @@
 // ============================================
-// LinkedInLink — shared profile-link atom
-// Caption-size text link with the 12px LinkedIn
-// glyph (CSS mask on ::before, follows currentColor).
-// Consumers: testimonials source links, case-study
-// close rail, About bridge (white override there).
-// NOTE: imported early in styles.scss — before
-// testimonials (mixin availability) and before
-// about-page (so its white override wins the cascade).
+// LinkedInLink: every outbound LinkedIn link (12 November 2026)
+// The link ends on a sticker, so a reader knows before the click that it
+// leaves for LinkedIn. Direction B, "Peeled emblem" (Ryan, 12 November):
+// LinkedIn's rounded-square emblem in blue foil, white die-cut, steel
+// kiss-cut, its bottom-right corner already peeling (release-paper flap).
+// The SVG is drawn in LinkedInLink.tsx; colours are tokens (--linkedin-*,
+// --sticker-*). Hover or focus: the corner peels further, the foil's light
+// moves, and the sticker lifts 2px and turns 4deg. Reduced motion: no motion.
+// Variants: --link (caption text link), --inline (in a sentence), --button
+// (the secondary sticker button).
+// NOTE: imported early in styles.scss: the linkedin-glyph mixin is used by
+// testimonials, and page overrides (about-page, about-desk) must win.
 // ============================================
 
+$linkedin-in-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
+
+// The bare 12px glyph, kept for surfaces that compose it (testimonials).
 @mixin linkedin-glyph {
   display: inline-flex;
   align-items: center;
@@ -26,12 +33,8 @@
     height: 12px;
     flex-shrink: 0;
     background-color: currentColor;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M100.28 448H7.4V148.9h92.88zm-46.44-341a53.79 53.79 0 1 1 53.79-53.79 53.79 53.79 0 0 1-53.79 53.79zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.28 61.9 111.28 142.3z'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+    -webkit-mask: $linkedin-in-glyph center / contain no-repeat;
+    mask: $linkedin-in-glyph center / contain no-repeat;
   }
 
   &:hover,
@@ -47,5 +50,90 @@
 }
 
 .linkedin-link {
-  @include linkedin-glyph;
+  text-decoration: none;
+
+  // the sticker: 30 units square, the emblem 20 of them
+  &__sticker {
+    --li-size: 1.75em;
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--li-size);
+    height: var(--li-size);
+    overflow: visible;
+    filter: drop-shadow(1.5px 2.5px 1.5px rgba(27, 27, 27, 0.22));
+    transition:
+      transform 320ms var(--ease-out),
+      filter 320ms var(--ease-out);
+  }
+  &__rest { transition: opacity 320ms ease-out; }
+  &__lift { opacity: 0; transition: opacity 320ms ease-out; }
+
+  @mixin lifted {
+    .linkedin-link__sticker {
+      transform: translateY(-2px) rotate(4deg);
+      filter: drop-shadow(3px 6px 4px rgba(27, 27, 27, 0.2));
+    }
+    .linkedin-link__rest { opacity: 0; }
+    .linkedin-link__lift { opacity: 1; }
+  }
+  @media (hover: hover) {
+    &:hover { @include lifted; }
+  }
+  &:focus-visible { @include lifted; }
+
+  // --link: the caption text link (case-study close rail, notes, snapshot)
+  &--link,
+  &--inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    width: fit-content;
+
+    .linkedin-link__label {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.25em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  &--link {
+    font-family: $font-family-primary;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
+    color: $color-primary-text;
+    .linkedin-link__sticker { --li-size: 30px; margin: -6px 0; }
+  }
+
+  // --inline: inside a sentence, in the sentence's type and link colour
+  &--inline {
+    display: inline;
+    color: inherit;
+    font: inherit;
+    .linkedin-link__sticker {
+      --li-size: 1.6em;
+      margin: -0.4em 0 -0.4em 0.1em;
+      vertical-align: -0.5em;
+    }
+  }
+
+  // --button: the secondary sticker button, the LinkedIn sticker on its face
+  &--button {
+    gap: 6px;
+    .linkedin-link__sticker { --li-size: 30px; margin: -6px -8px -6px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .linkedin-link__sticker,
+    .linkedin-link__rest,
+    .linkedin-link__lift { transition: none; }
+    // the corner still peels and the light still moves; nothing travels
+    &:hover .linkedin-link__sticker,
+    &:focus-visible .linkedin-link__sticker { transform: none; }
+  }
 }
