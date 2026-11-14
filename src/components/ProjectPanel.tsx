@@ -248,6 +248,20 @@ export default function ProjectPanel({ children, overlay, fromNavigation = false
     // One panel lifetime; section hash changes must not reset focus or scroll.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // The panel is a non-modal <dialog>, so the page it slides over stays in the
+  // accessibility tree: a screen reader found the homepage's h1 behind a study's
+  // own, and could read on into the hero and nav. While the panel is open the
+  // page behind is inert. It lets go the moment the exit starts, so focus can
+  // go back to the card or link that opened the study.
+  const exiting = phase === 'closing';
+  useEffect(() => {
+    const panel = dialog.current;
+    const host = panel?.parentElement;
+    if (!panel || !host || exiting) return undefined;
+    const behind = Array.from(host.children).filter(child => child !== panel && !child.hasAttribute('inert'));
+    behind.forEach(child => child.setAttribute('inert', ''));
+    return () => behind.forEach(child => child.removeAttribute('inert'));
+  }, [exiting]);
   const trapFocus = (event: React.KeyboardEvent<HTMLDialogElement>) => {
     if (event.defaultPrevented || event.key !== 'Tab') return;
     const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, video[controls], [tabindex]:not([tabindex="-1"])'))

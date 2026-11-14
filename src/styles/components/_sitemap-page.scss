@@ -40,7 +40,7 @@
     transition: color $transition-fast;
 
     &:hover {
-      color: $color-primary;
+      color: $color-primary-text;
     }
   }
 
@@ -60,7 +60,7 @@
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: $color-primary;
+    color: $color-primary-text;
     margin: 0 0 $spacing-md;
   }
 
@@ -147,7 +147,7 @@
 
     &:hover .sitemap__row-title,
     &:focus-visible .sitemap__row-title {
-      color: $color-primary;
+      color: $color-primary-text;
     }
 
     &:hover .sitemap__row-arrow,
@@ -187,7 +187,7 @@
 
   &__row-arrow {
     flex-shrink: 0;
-    color: $color-primary;
+    color: $color-primary-text;
     font-size: $font-size-body;
     transition: transform $transition-fast;
   }
