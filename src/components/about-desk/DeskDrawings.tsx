@@ -551,11 +551,11 @@ const LID = 'M26 1H78C96 1 103 8 103 26V28H1V26C1 8 8 1 26 1Z';
 /** one AirPod Pro, standing up: the bud, its silicone tip, the stem (69 × 98 px, 21.8 × 30.9 mm) */
 const ProBud: React.FC<{ flip?: boolean }> = ({ flip }) => (
   <svg viewBox="0 0 69 98" width="69" height="98" aria-hidden="true" focusable="false" style={flip ? { transform: 'scaleX(-1)' } : undefined}>
-    <defs>
+    {!flip && <defs>
       <radialGradient id="pb-head" cx=".42" cy=".34" r=".72"><stop offset="0" stopColor="#ffffff" /><stop offset=".62" stopColor="#f2f2f2" /><stop offset="1" stopColor="#d6d6d6" /></radialGradient>
       <linearGradient id="pb-stem" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#dcdcdc" /><stop offset=".35" stopColor="#fbfbfb" /><stop offset="1" stopColor="#d2d2d2" /></linearGradient>
       <radialGradient id="pb-tip" cx=".5" cy=".45" r=".6"><stop offset="0" stopColor="#f4f4f4" /><stop offset="1" stopColor="#c9c9c9" /></radialGradient>
-    </defs>
+    </defs>}
     {/* stem, short and flat-ended, with the force sensor and the mic at its foot */}
     <rect x="30" y="34" width="20" height="60" rx="10" fill="url(#pb-stem)" />
     <rect x="35" y="56" width="4" height="16" rx="2" fill="#000" fillOpacity=".08" />
@@ -779,7 +779,7 @@ const NotesPage: React.FC<{ page: PageKey }> = ({ page }) => {
     return (
       <div className="book__page">
         <span className="book__folio">The notebook</span>
-        <h4 className="book__title">Notes</h4>
+        <h3 className="book__title">Notes</h3>
         <p className="book__dek">Decisions, mistakes and open questions, as they happen.</p>
         <ol>
           {NOTES_BY_DATE.slice(0, 3).map((note) => (

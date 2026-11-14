@@ -124,6 +124,7 @@ const LabDemoPage: React.FC<{ demo?: keyof typeof DEMOS }> = ({ demo = 'fitment'
           </div>
         )}
       </nav>
+      <h1 className="sr-only">{D.title}</h1>
       <iframe
         ref={frame}
         className="lab-demo__frame"
