@@ -63,6 +63,7 @@ const placeHero = (src, slug) => {
 };
 // The manifest's alt text still describes the older AEM and Seasonal images.
 const CURRENT_ALT = {
+  loopstack: 'LoopStack, an open-source SaaS for the Loop community: its My dashboard on a laptop, showing glucose now, time in range, daily glucose, meal history and a care-team review in progress, beside the phone app, with the green LoopStack mark at top left.',
   'aem-component-system': 'An AEM page editor open on a homepage hero, with its style options, a site-structure map and the button component states.',
   'seasonal-content-system': 'Standard and winter phone homepages beside the AEM folder of winter hero fragments.',
   'design-enablement': 'A laptop open on a published Tire Rack tire test page, beside the tr-tire-tests MCP workflow (read documents, build in stage, independent QA, human review) and the Hero Crop Simulator at desktop and mobile widths.',

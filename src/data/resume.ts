@@ -125,7 +125,7 @@ export const RESUME = {
       "dates": "2026 - Present",
       "bullets": [
         {
-          "text": "Designed an iOS pattern-review experience using real HealthKit CGM history to compare predicted and observed glucose responses.",
+          "text": "Designed an open-source SaaS for the Loop community: an iOS pattern-review experience and a desktop dashboard that use real HealthKit CGM history to compare predicted and observed glucose responses.",
           "emphasis": "pattern-review experience"
         },
         {

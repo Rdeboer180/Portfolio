@@ -1638,8 +1638,8 @@ SYSTEM_RIGOR      how strongly output maps to tokens + production
       </Callout>
       <h2>Where I learned this the hard way</h2>
       <p>
-        <Link to="/work/loopstack/">LoopStack</Link> is a Type 1 diabetes pattern-review app I
-        built for myself. The models were happy to generate dosing calculators, prediction
+        <Link to="/work/loopstack/">LoopStack</Link> is an open-source SaaS for the Loop community, a Type 1 diabetes pattern-review app I
+        started building for myself. The models were happy to generate dosing calculators, prediction
         dashboards, and confident recommendations. All plausible. All wrong for this product.
         The constraint that defined the whole thing was what the app must never do: present
         itself as medical advice.

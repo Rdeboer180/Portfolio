@@ -141,7 +141,7 @@ const FIGURES: Figure[] = [
         </p>
         <p>
           I like building things and improving them over time. My custom Loop setup for managing Type 1 diabetes
-          inspired <Link to="/work/loopstack/">LoopStack</Link>. At Tire Rack, I helped found MPG to connect teams
+          inspired <Link to="/work/loopstack/">LoopStack</Link>, an open-source SaaS for the Loop community. At Tire Rack, I helped found MPG to connect teams
           through shared learning. I value honest feedback, personal connections, and am always looking to learn from
           the people around me. My mentor at Tire Rack has led with the mantra{' '}
           <Link to="/notes/visual-problem-solver/">&ldquo;What does better look like?&rdquo;</Link> and I have taken
