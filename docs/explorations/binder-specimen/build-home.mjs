@@ -63,7 +63,10 @@ for (const c of cards) {
   // run from the output folder, which holds no Python, so nothing local shadows Pillow
   const run = spawnSync('python3', ['-c', WEBP, join(here, c.hero), join(out, name), '800'], { encoding: 'utf8', cwd: out });
   if (run.status !== 0) throw new Error(`build-home: could not make ${name}: ${run.stderr}`);
-  c.hero = `/binder-home/${name}`;
+  // The server keeps images for a year, and a new picture keeps its file name. The query
+  // carries the picture's own hash, so a changed hero is fetched and the rest stay cached.
+  const seen = createHash('sha256').update(readFileSync(join(out, name))).digest('hex').slice(0, 8);
+  c.hero = `/binder-home/${name}?v=${seen}`;
 }
 const css = between('<style>', '</style>')
   .replace(/:root\b/g, ':host')

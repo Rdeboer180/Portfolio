@@ -1,2 +1,2 @@
 // Written by docs/explorations/binder-specimen/build-home.mjs. Do not edit by hand.
-export const BINDER_VERSION = 'dfb754749d';
+export const BINDER_VERSION = '0bac0ec699';
