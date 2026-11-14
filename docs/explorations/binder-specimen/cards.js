@@ -684,8 +684,8 @@ window.BINDER_CARDS = [
       "s": 0.85
     },
     "hero": "heroes/loopstack.jpg",
-    "heroAlt": "LoopStack glucose dashboard on a phone beside its green identity and a chart motif.",
-    "heroSource": "artwork v1",
+    "heroAlt": "LoopStack, an open-source SaaS for the Loop community: its My dashboard on a laptop, showing glucose now, time in range, daily glucose, meal history and a care-team review in progress, beside the phone app, with the green LoopStack mark at top left.",
+    "heroSource": "supplied file",
     "stats": [
       {
         "value": "90 days",
@@ -707,7 +707,7 @@ window.BINDER_CARDS = [
       }
     ],
     "year": "2026",
-    "category": "Personal product",
+    "category": "Open-source SaaS",
     "back": {
       "intro": {
         "src": "../../../public/assets/portfolio-safe/loopstack/cover-loop.mp4",
@@ -723,7 +723,7 @@ window.BINDER_CARDS = [
       }
     },
     "panel": {
-      "eyebrow": "Personal product · 2026",
+      "eyebrow": "Open-source SaaS · 2026",
       "title": "LoopStack",
       "status": "Phone app on TestFlight · Desktop app v1",
       "role": "Product Design · UX · Agent-Assisted Build",
@@ -752,13 +752,13 @@ window.BINDER_CARDS = [
         "Vitest",
         "TestFlight"
       ],
-      "context": "LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.",
+      "context": "LoopStack is an open-source SaaS project for the Loop community, built around my own meal and glucose history. It is for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It brings recurring patterns into view for personal review and care-team discussion.",
       "problemPunch": "Most T1D tools treat meals as one-time entries. Real meals behave like curves.",
       "problem": [
         "I wanted to follow a repeat meal through its full glucose-response window, including what happened hours after I finished eating.",
         "A single entry was not enough. I needed to compare similar meals and see whether the same response kept appearing across timing, activity and my current Loop settings."
       ],
-      "deck": "A personal Type 1 diabetes app for following repeat meals through their full glucose-response window and reviewing recurring patterns with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
+      "deck": "An open-source SaaS for the Loop community, for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It follows repeat meals through their full glucose-response window and puts recurring patterns in front of you with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
       "ownership": "I designed and built both surfaces with AI assistance. The phone app is tested against my own Loop data; the desktop app runs on a synthetic patient. It supports pattern review and care-team discussion, not dosing advice.",
       "evidence": [],
       "decisions": [
