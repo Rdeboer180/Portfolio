@@ -2,7 +2,7 @@
 // physics can reach inside them: the Dragon Ball's stars turn as it rolls, the
 // AirPods case opens on its seam, the trackpad answers a fingertip, and the
 // notebook turns its pages. The still drawings stay SVG files.
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ReactComponent as Trackpad } from '../../assets/desk/objects/trackpad.svg';
 import { ReactComponent as NotebookOpen } from '../../assets/desk/objects/notebook-open.svg';
 import { NOTES_BY_DATE } from '../../data/notes';
@@ -549,32 +549,28 @@ const SHELL = 'M26 1H78C96 1 103 8 103 26V54C103 72 96 79 78 79H26C8 79 1 72 1 5
 const LID = 'M26 1H78C96 1 103 8 103 26V28H1V26C1 8 8 1 26 1Z';
 
 /** one AirPod Pro, standing up: the bud, its silicone tip, the stem (69 × 98 px, 21.8 × 30.9 mm) */
-const ProBud: React.FC<{ flip?: boolean }> = ({ flip }) => {
-  // each bud carries its own gradient ids: both buds are on the page at once
-  const uid = useId().replace(/:/g, '');
-  return (
+const ProBud: React.FC<{ flip?: boolean }> = ({ flip }) => (
   <svg viewBox="0 0 69 98" width="69" height="98" aria-hidden="true" focusable="false" style={flip ? { transform: 'scaleX(-1)' } : undefined}>
-    <defs>
-      <radialGradient id={`pb-head-${uid}`} cx=".42" cy=".34" r=".72"><stop offset="0" stopColor="#ffffff" /><stop offset=".62" stopColor="#f2f2f2" /><stop offset="1" stopColor="#d6d6d6" /></radialGradient>
-      <linearGradient id={`pb-stem-${uid}`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#dcdcdc" /><stop offset=".35" stopColor="#fbfbfb" /><stop offset="1" stopColor="#d2d2d2" /></linearGradient>
-      <radialGradient id={`pb-tip-${uid}`} cx=".5" cy=".45" r=".6"><stop offset="0" stopColor="#f4f4f4" /><stop offset="1" stopColor="#c9c9c9" /></radialGradient>
-    </defs>
+    {!flip && <defs>
+      <radialGradient id="pb-head" cx=".42" cy=".34" r=".72"><stop offset="0" stopColor="#ffffff" /><stop offset=".62" stopColor="#f2f2f2" /><stop offset="1" stopColor="#d6d6d6" /></radialGradient>
+      <linearGradient id="pb-stem" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#dcdcdc" /><stop offset=".35" stopColor="#fbfbfb" /><stop offset="1" stopColor="#d2d2d2" /></linearGradient>
+      <radialGradient id="pb-tip" cx=".5" cy=".45" r=".6"><stop offset="0" stopColor="#f4f4f4" /><stop offset="1" stopColor="#c9c9c9" /></radialGradient>
+    </defs>}
     {/* stem, short and flat-ended, with the force sensor and the mic at its foot */}
-    <rect x="30" y="34" width="20" height="60" rx="10" fill={`url(#pb-stem-${uid})`} />
+    <rect x="30" y="34" width="20" height="60" rx="10" fill="url(#pb-stem)" />
     <rect x="35" y="56" width="4" height="16" rx="2" fill="#000" fillOpacity=".08" />
     <rect x="34" y="88" width="12" height="4" rx="2" fill="#2b2b2b" fillOpacity=".55" />
     {/* the bud */}
-    <path d="M40 4C56 4 66 15 66 29C66 42 57 50 44 50C30 50 22 43 22 30C22 15 28 4 40 4Z" fill={`url(#pb-head-${uid})`} />
+    <path d="M40 4C56 4 66 15 66 29C66 42 57 50 44 50C30 50 22 43 22 30C22 15 28 4 40 4Z" fill="url(#pb-head)" />
     {/* silicone ear tip, angled out */}
-    <ellipse cx="17" cy="27" rx="13" ry="15" fill={`url(#pb-tip-${uid})`} />
+    <ellipse cx="17" cy="27" rx="13" ry="15" fill="url(#pb-tip)" />
     <ellipse cx="15" cy="27" rx="6" ry="8" fill="#8a8a8a" fillOpacity=".5" />
     {/* the vent and a highlight */}
     <circle cx="51" cy="14" r="2.6" fill="#2b2b2b" fillOpacity=".55" />
     <path d="M36 10C44 8 54 10 58 17" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" opacity=".9" />
     <path d="M40 4C56 4 66 15 66 29C66 42 57 50 44 50C30 50 22 43 22 30C22 15 28 4 40 4Z" fill="none" stroke="#000" strokeOpacity=".08" />
   </svg>
-  );
-};
+);
 
 /** where each bud stands in the case, and where it lands on the desk, in px from the case's top left */
 const BUDS = [
