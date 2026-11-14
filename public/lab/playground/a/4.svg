@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <!-- Card art for "Side by side at the counter": two trucks braking on one snowy road, the gap in green -->
+  <rect width="800" height="480" fill="#f4f5f6"/>
+  <text x="48" y="74" font-size="30" font-weight="700" fill="#1b1b1b">On snow, the upgrade stops</text>
+  <text x="48" y="114" font-size="30" font-weight="700" fill="#1b7a4b">21.8 ft sooner<tspan fill="#1b1b1b"> — about a truck length.</tspan></text>
+  <!-- road -->
+  <rect x="48" y="150" width="704" height="200" rx="14" fill="#4f565c"/>
+  <g fill="#fff" opacity=".35">
+    <circle cx="90" cy="180" r="1.8"/><circle cx="170" cy="320" r="1.8"/><circle cx="260" cy="200" r="1.8"/><circle cx="330" cy="300" r="1.8"/><circle cx="420" cy="175" r="1.8"/><circle cx="500" cy="330" r="1.8"/><circle cx="560" cy="210" r="1.8"/><circle cx="640" cy="310" r="1.8"/><circle cx="720" cy="190" r="1.8"/><circle cx="210" cy="250" r="1.8"/><circle cx="610" cy="255" r="1.8"/>
+  </g>
+  <!-- gap: the room the upgrade gives back -->
+  <rect x="510" y="160" width="158" height="180" fill="#5fd394" opacity=".2"/>
+  <line x1="510" y1="160" x2="510" y2="340" stroke="#5fd394" stroke-width="3"/>
+  <line x1="668" y1="160" x2="668" y2="340" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
+  <!-- brake line -->
+  <line x1="72" y1="160" x2="72" y2="340" stroke="#fff" stroke-width="3" opacity=".85"/>
+  <line x1="72" y1="250" x2="728" y2="250" stroke="#f2c94c" stroke-width="2" stroke-dasharray="10 8" opacity=".6"/>
+  <!-- now: grey truck -->
+  <line x1="72" y1="205" x2="668" y2="205" stroke="#fff" stroke-opacity=".35" stroke-width="4"/>
+  <g transform="translate(544 178) scale(2.07)" fill="#c9cdd1"><path d="M1 15V8h32V3h12l6 5h8v7z"/><circle cx="12" cy="15.5" r="4.2"/><circle cx="47" cy="15.5" r="4.2"/></g>
+  <text x="530" y="211" font-size="16" font-weight="600" fill="#fff" text-anchor="end">89.7 ft · now</text>
+  <!-- upgrade: green truck -->
+  <line x1="72" y1="298" x2="510" y2="298" stroke="#7fd1a6" stroke-width="4"/>
+  <g transform="translate(386 271) scale(2.07)" fill="#5fd394"><path d="M1 15V8h32V3h12l6 5h8v7z"/><circle cx="12" cy="15.5" r="4.2"/><circle cx="47" cy="15.5" r="4.2"/></g>
+  <text x="372" y="304" font-size="16" font-weight="600" fill="#fff" text-anchor="end">67.9 ft · upgrade</text>
+  <!-- scorecard strip -->
+  <g transform="translate(48 380)">
+    <rect width="704" height="64" rx="10" fill="#fff" stroke="#e3e3e3"/>
+    <text x="22" y="40" font-size="20" font-weight="700" fill="#1b1b1b">Better in 5 of 5</text>
+    <rect x="230" y="20" width="132" height="26" rx="13" fill="#e3f2ea"/><text x="296" y="38" font-size="14" font-weight="600" fill="#1b7a4b" text-anchor="middle">Snow ✓</text>
+    <rect x="374" y="20" width="132" height="26" rx="13" fill="#e3f2ea"/><text x="440" y="38" font-size="14" font-weight="600" fill="#1b7a4b" text-anchor="middle">Ice ✓</text>
+    <rect x="518" y="20" width="164" height="26" rx="13" fill="#f3f3f3"/><text x="600" y="38" font-size="14" font-weight="600" fill="#5f6368" text-anchor="middle">+ your quote</text>
+  </g>
+</svg>

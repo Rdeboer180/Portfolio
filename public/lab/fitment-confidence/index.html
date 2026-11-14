@@ -12,6 +12,12 @@
 @font-face{font-family:'Hubot Sans';font-style:normal;font-weight:400 800;font-stretch:100%;font-display:swap;src:url(a/0.woff2) format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(a/1.woff2) format('woff2')}
 :root{
+  /* Motion (13 Nov 2026, after Derek Briggs on Dive Club): the eye reads ~200ms either way.
+     ease-out: soft-close drawer, for anything that lands against something hard. No bounce.
+     ease-stop: a car braking to a stop, then the tires rolling back a touch. The move is
+     done by 200ms; the last 800ms is the settle. Default for every car-stopping graphic. */
+  --ease-out:cubic-bezier(.2,.8,.1,1);--dur-out:400ms;
+  --ease-stop:linear(0, 0.202 2.5%, 0.376 5%, 0.523 7.5%, 0.645 10%, 0.745 12.5%, 0.826 15%, 0.888 17.5%, 0.935 20%, 0.991 25%, 1.012 30%, 1.015 35%, 1.014 45%, 1.012 55%, 1.008 65%, 1.005 75%, 1.002 85%, 1);--dur-stop:1000ms;
   color-scheme:light;
   --orange:#f03d01;--orange-deep:#c23001;--orange-tint:#fdede9;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;
   --hair:#e5e5e5;--mist:#f5f5f5;--paper:#fff;--cool:#f4f6f7;--steel:#8f9daf;--steel-light:#d6dce4;

@@ -24,6 +24,12 @@
 @font-face{font-family:'Hubot Sans';font-style:normal;font-weight:400 800;font-stretch:100%;font-display:swap;src:url(a/0.woff2) format('woff2')}
 @font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(a/1.woff2) format('woff2')}
 :root{
+  /* Motion (13 Nov 2026, after Derek Briggs on Dive Club): the eye reads ~200ms either way.
+     ease-out: soft-close drawer, for anything that lands against something hard. No bounce.
+     ease-stop: a car braking to a stop, then the tires rolling back a touch. The move is
+     done by 200ms; the last 800ms is the settle. Default for every car-stopping graphic. */
+  --ease-out:cubic-bezier(.2,.8,.1,1);--dur-out:400ms;
+  --ease-stop:linear(0, 0.202 2.5%, 0.376 5%, 0.523 7.5%, 0.645 10%, 0.745 12.5%, 0.826 15%, 0.888 17.5%, 0.935 20%, 0.991 25%, 1.012 30%, 1.015 35%, 1.014 45%, 1.012 55%, 1.008 65%, 1.005 75%, 1.002 85%, 1);--dur-stop:1000ms;
   color-scheme:light;
   --orange:#f03d01;--orange-deep:#c23001;--orange-tint:#fdede9;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;
   --hair:#e5e5e5;--mist:#f5f5f5;--paper:#fff;--cool:#f4f6f7;--steel:#8f9daf;--steel-light:#d6dce4;
@@ -476,7 +482,7 @@ button{font:inherit;color:inherit}
 }
 /*h06:css:start*/
 /* ---- shared core: type, controls, tire + car drawing, evidence ---- */
-[data-v="h06"]{position:relative;--hatch:repeating-linear-gradient(135deg,var(--color-darkgrey) 0 1.5px,transparent 1.5px 5px);--car-w:170px;--lab-w:96px;--tw:calc(var(--car-w) * .14);--th:calc(var(--car-w) * .32)}
+[data-v="h06"]{position:relative;--ease-out:cubic-bezier(.2,.8,.1,1);--dur-out:400ms;--ease-stop:linear(0, 0.202 2.5%, 0.376 5%, 0.523 7.5%, 0.645 10%, 0.745 12.5%, 0.826 15%, 0.888 17.5%, 0.935 20%, 0.991 25%, 1.012 30%, 1.015 35%, 1.014 45%, 1.012 55%, 1.008 65%, 1.005 75%, 1.002 85%, 1);--dur-stop:1000ms;--hatch:repeating-linear-gradient(135deg,var(--color-darkgrey) 0 1.5px,transparent 1.5px 5px);--car-w:170px;--lab-w:96px;--tw:calc(var(--car-w) * .14);--th:calc(var(--car-w) * .32)}
 [data-v="h06"] .case{margin:0 0 var(--space-lg);font:var(--font-weight-reg) var(--font-size-xs)/1.45 var(--tr-font);color:var(--color-darkgrey)}
 [data-v="h06"] .case b{font-weight:var(--font-weight-semibold);color:var(--font-color-primary)}
 [data-v="h06"] :focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}
@@ -669,13 +675,14 @@ button{font:inherit;color:inherit}
 @keyframes h06-snow{from{background-position:0 0,0 0}to{background-position:-10px 30px,8px 44px}}
 @keyframes h06-ripple{0%{opacity:0;transform:scale(.3)}25%{opacity:.9}100%{opacity:0;transform:scale(2.2)}}
 /* entrance: the difference grows out of today's line, the new stop line drops in, the car settles */
-[data-v="h06"] .rd__gain--in{transform-origin:right center;animation:h06-grow .55s var(--ia-ease-out) both}
-[data-v="h06"] .rd__gain--out{transform-origin:left center;animation:h06-grow .55s var(--ia-ease-out) both}
-[data-v="h06"] .rd__sl--a{animation:h06-drop .35s .2s var(--ia-ease-out) both}
-[data-v="h06"] .rd__car{animation:h06-brake .5s var(--ia-ease-out) both}
+[data-v="h06"] .rd__gain--in{transform-origin:right center;animation:h06-grow var(--dur-out) .15s var(--ease-out) both}
+[data-v="h06"] .rd__gain--out{transform-origin:left center;animation:h06-grow var(--dur-out) .15s var(--ease-out) both}
+[data-v="h06"] .rd__sl--a{animation:h06-drop var(--dur-out) .1s var(--ease-out) both}
+/* the car brakes into place and the tires roll back a touch: --ease-stop, 1000ms, ~200ms to read */
+[data-v="h06"] .rd__car{animation:h06-brake var(--dur-stop) var(--ease-stop) both}
 @keyframes h06-grow{from{transform:scaleX(0)}to{transform:none}}
 @keyframes h06-drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-@keyframes h06-brake{0%{transform:translateX(-6px)}70%{transform:translateX(2px)}100%{transform:none}}
+@keyframes h06-brake{from{transform:translateX(-28px)}to{transform:none}}
 [data-v="h06"] .stp__sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [data-v="h06"] .stp__cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin:0;font-size:12px;line-height:1.4;color:var(--color-darkgrey)}
 [data-v="h06"] .stp__cap b{color:var(--font-color-primary)}
@@ -934,8 +941,8 @@ button{font:inherit;color:inherit}
 <section class="sec" id="directory" aria-labelledby="dirTitle"><div class="wrap">
   <p class="label">The directory</p>
   <h2 id="dirTitle">Where the method already runs</h2>
-  <p class="sub">Two working prototypes, then two projects that each show part of the playground on real work. Tire Rack material is shown with names removed.</p>
-  <ul class="cards cards--4">
+  <p class="sub">Three open prototypes and studies, then three projects that each show part of the playground on real work. Tire Rack material is shown with names removed, and WheelRack and AEM open with the portfolio password.</p>
+  <ul class="cards">
     <li><a class="card" href="../fitment-confidence/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="card__img"><img src="a/2.jpg" alt="The tire fitment prototype: a Turanza EverDrive product page confirming the tire fits a 2021 compact SUV in 225/65R17, with numbered dev-note pins"></span>
@@ -956,6 +963,16 @@ button{font:inherit;color:inherit}
         <p class="proves"><b>What it proves</b>A data-heavy decision cut down until each place says one thing, without hiding what was never tested.</p>
         <span class="card__go">Open the study →</span>
       </span></a></li>
+    <li><a class="card" href="../side-by-side/">
+      <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="card__img"><img src="a/4.svg" alt="Two trucks braking on one snowy road, the upgrade stopping 21.8 ft sooner, with the gap shaded green and a scorecard reading better in 5 of 5"></span>
+      <span class="card__body">
+        <span class="card__co">Study · Tire Rack public data</span>
+        <h3>Side by side at the counter</h3>
+        <p>A 30-tire snow test turned into what an advisor shows a customer: the tire on the truck now next to the upgrade, drawn to scale.</p>
+        <p class="proves"><b>What it proves</b>Three ways to show one comparison, with losses shown as plainly as wins and the shop's own quote beside what it buys.</p>
+        <span class="card__go">Open the comparison →</span>
+      </span></a></li>
     <li><a class="card" href="../wheelrack-handoff/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="card__img card__img--locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>Opens with the portfolio password</span>
@@ -966,9 +983,19 @@ button{font:inherit;color:inherit}
         <p class="proves"><b>What it proves</b>Dev notes on each rule name the React state that owns it, so the prototype carries the handoff.</p>
         <span class="card__go">Open WheelRack →</span>
       </span></a></li>
+    <li><a class="card" href="../aem/">
+      <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="card__img card__img--locked"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>Opens with the portfolio password</span>
+      <span class="card__body">
+        <span class="card__co card__co--locked">AEM QA · Tire Rack<svg class="card__lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg><span class="sr-only">, password protected</span></span>
+        <h3>One review entry per change</h3>
+        <p>A skill builds the review doc for an AEM update. Each of the 24 changes gets its rule, live and branch captures, and the diff.</p>
+        <p class="proves"><b>What it proves</b>Design, engineering and QA read the same entry, and the rules ship in the Sass branch.</p>
+        <span class="card__go">Open AEM →</span>
+      </span></a></li>
     <li><a class="card" href="../binder/">
       <span class="sf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span class="card__img"><img src="a/4.jpg" alt="The portfolio binder: a leather spine and holographic case study cards in clear sleeves"></span>
+      <span class="card__img"><img src="a/5.jpg" alt="The portfolio binder: a leather spine and holographic case study cards in clear sleeves"></span>
       <span class="card__body">
         <span class="card__co">Portfolio binder</span>
         <h3>Judgment over agent output</h3>

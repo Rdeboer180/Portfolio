@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Side by side at the counter · Experience Systems Lab</title>
+<link rel="icon" href="data:,">
+<style>
+/* Shared styles for the three prototype tabs. Pages link this with ../shared.css. */
+@font-face{font-family:'Hubot Sans';font-style:normal;font-weight:400 800;font-stretch:100%;font-display:swap;src:url(a/0.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(a/1.woff2) format('woff2')}
+:root{
+  /* Motion (13 Nov 2026, after Derek Briggs on Dive Club): the eye reads ~200ms either way.
+     ease-out: soft-close drawer, for anything that lands against something hard. No bounce.
+     ease-stop: a car braking to a stop, then the tires rolling back a touch. The move is
+     done by 200ms; the last 800ms is the settle. Default for every car-stopping graphic. */
+  --ease-out:cubic-bezier(.2,.8,.1,1);--dur-out:400ms;
+  --ease-stop:linear(0, 0.202 2.5%, 0.376 5%, 0.523 7.5%, 0.645 10%, 0.745 12.5%, 0.826 15%, 0.888 17.5%, 0.935 20%, 0.991 25%, 1.012 30%, 1.015 35%, 1.014 45%, 1.012 55%, 1.008 65%, 1.005 75%, 1.002 85%, 1);--dur-stop:1000ms;
+  color-scheme:light;
+  --orange:#f03d01;--orange-deep:#c23001;--orange-tint:#fdede9;--ink:#1b1b1b;--slate:#4a4a4a;--graphite:#707070;
+  --hair:#e5e5e5;--mist:#f5f5f5;--paper:#fff;--cool:#f4f6f7;--steel:#8f9daf;--steel-light:#d6dce4;
+  --int:#2563c9;--state:#7048c8;--a11y:#c2185b;--content:#d9480f;--token:#0e8a82;--data:#b8860b;--dev:#2e8540;--never:#b3261e;--proposed:#a16207;
+  --font-h:'Hubot Sans','Inter',-apple-system,BlinkMacSystemFont,sans-serif;--font-b:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:Menlo,Monaco,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--font-b);-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:var(--orange-deep);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+code{font:12.5px/1.4 var(--mono);background:var(--mist);border-radius:4px;padding:1px 5px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.label{font:700 13px/1.25 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin:0}
+.label em{font-style:normal;color:var(--orange-deep)}
+h1{font:800 clamp(34px,4.6vw,54px)/1.06 var(--font-h);letter-spacing:-.035em;margin:14px 0 18px;max-width:22ch}
+h2{font:800 clamp(26px,3vw,36px)/1.12 var(--font-h);letter-spacing:-.025em;margin:10px 0 14px}
+h3{font:700 19px/1.3 var(--font-h);margin:10px 0 6px}
+.lede{font-size:19px;line-height:1.55;color:var(--slate);max-width:64ch;margin:0}
+.hero{padding:64px 0 48px}
+.sec{padding:72px 0;border-top:1px solid var(--hair)}
+.sec--band{background:var(--cool)}
+.pts{list-style:none;margin:0;padding:0}
+.pts li{position:relative;padding-left:20px;margin:0 0 12px;font-size:16px;line-height:1.5;color:var(--slate)}
+.pts li::before{content:'';position:absolute;left:2px;top:.6em;width:7px;height:7px;background:var(--steel)}
+.pts strong{color:var(--ink);font-weight:600}
+.callout{border-left:3px solid var(--orange);padding:4px 0 4px 20px}
+.callout p{font:700 22px/1.4 var(--font-h);letter-spacing:-.01em;margin:0}
+.callout small{display:block;margin-top:10px;font-size:14px;color:var(--graphite)}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;margin-top:24px;align-items:start}
+.open{display:inline-flex;align-items:center;gap:6px;font:600 14px/1 var(--font-b);color:#fff;background:var(--ink);border-radius:10px;padding:11px 14px;text-decoration:none;white-space:nowrap}
+.open:hover{background:#000}
+.open--ghost{background:var(--paper);color:var(--ink);border:1px solid var(--hair)}
+.open--ghost:hover{background:var(--paper);border-color:var(--steel)}
+.chip{display:inline-block;font:700 10.5px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;border-radius:4px;padding:4px 6px;color:#fff}
+.c-int{background:var(--int)}.c-state{background:var(--state)}.c-a11y{background:var(--a11y)}.c-content{background:var(--content)}.c-data{background:var(--data)}.c-dev{background:var(--dev)}.c-never{background:var(--never)}.c-token{background:var(--token)}.c-proposed{background:var(--proposed)}.c-rule{background:var(--ink)}
+/* thumbnails that open the zoom viewer */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.thumb{margin:0}
+.thumb button{position:relative;display:block;width:100%;height:var(--h,180px);padding:0;border:1px solid var(--hair);border-radius:8px;background:var(--mist);cursor:zoom-in;overflow:hidden}
+.thumb button img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,top center)}
+.thumb--natural button{height:auto}
+.thumb--natural button img{height:auto}
+.thumb button::after{content:'';position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 2px transparent;pointer-events:none}
+.thumb button:hover::after,.thumb button:focus-visible::after{box-shadow:inset 0 0 0 2px var(--orange)}
+.thumb figcaption{font-size:13px;line-height:1.4;color:var(--graphite);margin-top:7px}
+.thumb figcaption strong{color:var(--ink);font-weight:600}
+.tag{position:absolute;top:10px;left:10px;z-index:1;font:700 11px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:4px;background:var(--ink);color:#fff;pointer-events:none}
+.tag--after{background:var(--orange-deep)}
+/* embedded live prototype */
+.embed{border:1px solid var(--hair);border-radius:12px;background:var(--paper);overflow:hidden}
+.embed__head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+.embed__head .label{color:var(--ink)}
+.embed__frame{position:relative;overflow:hidden;background:#fff}
+.embed__frame iframe{position:absolute;left:0;top:0;border:0;transform-origin:0 0}
+.foot{padding:36px 0 60px;font-size:13px;color:var(--graphite);border-top:1px solid var(--hair)}
+.foot p{margin:0 0 6px}
+@media (max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.wrap{padding:0 16px}.grid,.grid--3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.grid,.grid--3,.grid--2{grid-template-columns:minmax(0,1fr)}}
+/* project header: the project name, one line, and its case study */
+.proj{padding:48px 0 32px}
+.proj h1{margin:0 0 10px}
+.proj__line{font-size:19px;line-height:1.55;color:var(--slate);max-width:62ch;margin:0}
+.proj__link{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font:600 15px/1 var(--font-b);color:var(--orange-deep);text-decoration:none}
+.proj__link:hover{text-decoration:underline}
+/* what I did, and talking points */
+.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 48px;margin-top:32px}
+.notes h3{font:700 13px/1.25 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--graphite);margin:0 0 14px}
+.notes .pts li{font-size:15.5px}
+.more{margin-top:20px}
+.more summary{display:inline-flex;align-items:center;gap:10px;cursor:pointer;list-style:none;font:600 15px/1 var(--font-b);color:var(--ink);border:1px solid var(--hair);border-radius:10px;padding:12px 16px;background:var(--paper)}
+.more summary::-webkit-details-marker{display:none}
+.more summary::after{content:'+';font:700 18px/1 var(--font-h);color:var(--orange-deep)}
+.more[open] summary::after{content:'\2212'}
+.more summary:hover{border-color:var(--steel)}
+.more__body{padding-top:20px}
+@media (max-width:820px){.notes{grid-template-columns:minmax(0,1fr)}.proj{padding:36px 0 24px}}
+
+/* the code behind a prototype, collapsed by default */
+.code{margin-top:28px;border:1px solid rgba(27,27,27,.1);border-radius:12px;background:var(--paper)}
+.code summary{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;padding:14px 18px;cursor:pointer;list-style:none}
+.code summary::-webkit-details-marker{display:none}
+.code summary::before{content:'+';display:grid;place-items:center;width:22px;height:22px;border-radius:6px;border:1px solid rgba(27,27,27,.1);font:700 15px/1 var(--font-h);color:var(--orange-deep)}
+.code[open] summary::before{content:'\2212'}
+.code summary:hover{background:var(--mist);border-radius:12px}
+.code__t{font:700 16px/1.3 var(--font-h);color:var(--ink)}
+.code__meta{font:400 12.5px/1.4 var(--mono);color:#5e6c7c}
+.code__body{padding:0 18px 18px;border-top:1px solid rgba(27,27,27,.1)}
+.code__note{margin:14px 0 12px;font-size:14.5px;line-height:1.55;color:var(--slate);max-width:80ch}
+.code pre{margin:0;padding:16px 18px;max-height:520px;overflow:auto;background:var(--cool);border:1px solid rgba(27,27,27,.1);border-radius:8px;font:400 12.5px/1.6 var(--mono);color:var(--slate);tab-size:2}
+.code pre:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.code pre .c{color:#707070;font-style:italic}
+.code pre .k{color:var(--ink);font-weight:700}
+.code pre .s{color:#5e6c7c}
+.code__note--tests{margin-top:18px}
+.code__tests{margin:0;padding-left:20px;font:400 13px/1.7 var(--mono);color:var(--slate)}
+/* three-column notes: what I did, tradeoffs, worth asking about */
+.notes--3{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 36px}
+@media (max-width:1100px){.notes--3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){.notes--3{grid-template-columns:minmax(0,1fr)}}
+
+</style>
+<style>
+:root{
+  --now:#6b6b6b; --up:#1b7a4b; --up-tint:#e3f2ea; --worse:#c2281d; --worse-tint:#fbe9e7;
+  --road:#3d4247; --road-line:#f2c94c; --snow:#eef2f5; --ice:#dfeef7;
+  --ink:#1b1b1b; --muted:#5f6368; --hair:#e3e3e3; --card:#fff; --page:#f4f5f6;
+  --truck:18; /* ft */
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--page);color:var(--ink);font:400 15px/1.5 var(--font-b)}
+button,select,input{font:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
+.back{display:inline-block;margin:0 0 16px;font:700 14px/1.4 var(--font-h);color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.kick{margin:0;font:700 11px/1.2 var(--font-h);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+h1{margin:6px 0 6px;font:700 30px/1.15 var(--font-h);letter-spacing:-.01em}
+.lede{margin:0;max-width:760px;color:var(--muted)}
+.lede b{color:var(--ink)}
+
+/* controls */
+.ctl{position:sticky;top:0;z-index:5;margin:20px -20px 0;padding:12px 20px;background:rgba(244,245,246,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--hair);display:flex;flex-wrap:wrap;align-items:end;gap:10px 14px}
+.pick{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 230px}
+.pick label{font:700 11px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.pick label i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.pick--now label{color:var(--now)} .pick--now label i{background:var(--now)}
+.pick--up label{color:var(--up)} .pick--up label i{background:var(--up)}
+.pick select{min-height:40px;padding:6px 10px;border:1px solid #cfd3d7;border-radius:8px;background:#fff;color:var(--ink);max-width:100%}
+.pick--up select{border-color:var(--up);box-shadow:inset 0 0 0 1px var(--up)}
+.icon-btn{min-height:40px;padding:0 12px;border:1px solid #cfd3d7;border-radius:8px;background:#fff;cursor:pointer;white-space:nowrap}
+.icon-btn:hover{border-color:var(--ink)}
+.quote{display:flex;flex-direction:column;gap:4px;flex:0 1 190px}
+.quote label{font:700 11px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.quote div{display:flex;align-items:center;border:1px solid #cfd3d7;border-radius:8px;background:#fff;min-height:40px;padding:0 10px}
+.quote input{border:0;outline:0;width:100%;padding:6px 4px;background:transparent}
+.quote div:focus-within{outline:2px solid var(--ink);outline-offset:1px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;width:100%}
+.try{border:1px solid #cfd3d7;background:#fff;border-radius:99px;padding:3px 10px;font:500 12.5px/1.4 var(--font-b);text-transform:none;letter-spacing:0;cursor:pointer;color:var(--muted)}
+.try:hover{color:var(--ink);border-color:var(--ink)}
+
+/* option frame */
+.opt{margin-top:36px}
+.opt__hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-bottom:10px}
+.opt__id{font:700 12px/1 var(--font-h);background:var(--ink);color:#fff;border-radius:4px;padding:4px 7px}
+.opt__hd h2{margin:0;font:700 21px/1.2 var(--font-h)}
+.opt__hd p{margin:0;flex-basis:100%;color:var(--muted);font-size:14px}
+.stage{background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:24px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.stage__tag{margin:0 0 14px;font-size:12px;color:var(--muted)}
+.say{margin:0 0 4px;font:600 24px/1.25 var(--font-h);letter-spacing:-.01em;max-width:900px}
+.say em{font-style:normal;color:var(--up)}
+.say .bad{color:var(--worse)}
+.say-sub{margin:0 0 18px;color:var(--muted);font-size:14px}
+.fine{margin:16px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.who{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.who i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+/* ── S1: two trucks, one road ── */
+.scene{margin:0 0 22px}
+.scene:last-child{margin-bottom:0}
+.scene__h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.scene__h h3{margin:0;font:700 15px/1.2 var(--font-h)}
+.scene__h span{font-size:13px;color:var(--muted)}
+.road{position:relative;border-radius:10px;overflow:hidden;background:var(--road);padding:10px 0}
+.road--snow{background:linear-gradient(#5a6168,#4a5056)}
+.road--ice{background:linear-gradient(#4f6472,#40525e)}
+.road::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(circle at 20% 30%,#fff 0 1px,transparent 1.5px),radial-gradient(circle at 70% 70%,#fff 0 1px,transparent 1.5px);background-size:38px 26px,53px 31px}
+.road--ice::before{opacity:.18;background-image:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);background-size:160px 100%}
+.ln{position:relative;height:52px;margin:0 16px}
+.ln + .ln{border-top:2px dashed rgba(242,201,76,.55)}
+.ln__go{position:absolute;left:0;top:0;bottom:0;width:2px;background:rgba(255,255,255,.8)}
+.ln__trail{position:absolute;left:0;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;transform-origin:left;animation:trail var(--dur-stop) var(--ease-stop) both}
+.ln--now .ln__trail{background:rgba(255,255,255,.35)}
+.ln--up .ln__trail{background:#7fd1a6}
+.ln__car{position:absolute;top:50%;width:calc(var(--truck) / var(--max) * 100%);min-width:34px;transform:translate(-100%,-50%);animation:drive var(--dur-stop) var(--ease-stop) both}
+.ln__car svg{display:block;width:100%;height:auto}
+.ln--now .ln__car svg{fill:#c9cdd1}
+.ln--up .ln__car svg{fill:#5fd394}
+.ln__tag{position:absolute;top:50%;transform:translateY(-50%);text-shadow:0 1px 2px rgba(0,0,0,.5);font:600 12px/1 var(--font-b);color:#fff;white-space:nowrap;padding-left:8px}
+.ln__tag--l{transform:translate(-100%,-50%);padding:0 8px 0 0;text-align:right}
+.ln__tag small{font-weight:400;opacity:.75;margin-left:4px}
+.gap{position:absolute;top:10px;bottom:10px;background:rgba(95,211,148,.18);border-left:2px solid #5fd394;border-right:2px solid rgba(255,255,255,.6);animation:fade var(--dur-out) .2s var(--ease-out) both}
+.gap--bad{background:rgba(255,120,100,.2);border-left-color:#ff8a7a}
+.ticks{position:relative;height:20px;margin:4px 16px 0;font:400 11px/1 var(--mono);color:var(--muted)}
+.ticks span{position:absolute;top:5px;transform:translateX(-50%)}
+.ticks span:first-child{transform:none}
+.delta{display:flex;align-items:center;gap:10px;margin:8px 0 0;font-size:14px}
+.pill{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-weight:600;font-size:13px;background:var(--up-tint);color:var(--up)}
+.pill--bad{background:var(--worse-tint);color:var(--worse)}
+.pill--same{background:#eee;color:var(--muted)}
+.lens{display:inline-flex;gap:3px;vertical-align:middle}
+.lens svg{width:30px;height:10px;fill:currentColor}
+.lens .part{clip-path:inset(0 calc(100% - var(--f) * 100%) 0 0)}
+.s1-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.s1-grid .ln{height:40px}
+@keyframes drive{from{left:0;opacity:0}}
+@keyframes trail{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ── S2: scorecard ── */
+.card2{display:grid;grid-template-columns:minmax(0,1fr) 150px minmax(0,1fr);border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+.c2h{padding:16px 18px;border-bottom:1px solid var(--hair)}
+.c2h--now{background:#f3f3f3}
+.c2h--up{background:var(--up-tint);text-align:right}
+.c2h small{display:block;font:700 11px/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.c2h--now small{color:var(--now)} .c2h--up small{color:var(--up)}
+.c2h b{display:block;font:700 18px/1.2 var(--font-h)}
+.c2h span{font-size:12.5px;color:var(--muted)}
+.c2mid{display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--hair);background:#fafafa;text-align:center;padding:10px}
+.c2mid b{font:700 26px/1 var(--font-h)}
+.c2mid span{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.c2row{display:contents}
+.c2row > div{padding:14px 18px;border-bottom:1px solid var(--hair)}
+.c2row:last-child > div{border-bottom:0}
+.c2v{display:flex;align-items:center;gap:10px}
+.c2v--now{flex-direction:row-reverse}
+.c2v .bar{flex:1;height:12px;background:#eef0f2;border-radius:3px;position:relative;overflow:hidden}
+.c2v .bar i{position:absolute;top:0;bottom:0;border-radius:3px;transition:width var(--dur-out) var(--ease-out)}
+.c2v--now .bar i{right:0;background:var(--now)}
+.c2v--up .bar i{left:0;background:var(--up)}
+.c2v .num{min-width:74px;font:600 15px/1.2 var(--font-b);font-variant-numeric:tabular-nums}
+.c2v--now .num{text-align:right}
+.c2v .num small{display:block;font-size:11.5px;font-weight:400;color:var(--muted)}
+.c2v.win .num{color:var(--ink)}
+.c2v:not(.win) .num{color:var(--muted);font-weight:500}
+.c2m{text-align:center;background:#fafafa}
+.c2m b{display:block;font:700 13px/1.2 var(--font-h)}
+.c2m span{display:block;font-size:12px;line-height:1.3;margin-top:3px}
+.c2m .g{color:var(--up)} .c2m .r{color:var(--worse)} .c2m .s{color:var(--muted)}
+.c2foot{grid-column:1/-1;padding:14px 18px;background:#fafafa;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:14px}
+.c2foot b{font-family:var(--font-h)}
+
+/* ── S3: walk them through ── */
+.walk{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.steps button{width:100%;text-align:left;border:0;background:transparent;border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:center;color:var(--muted)}
+.steps button:hover{background:#f2f3f4;color:var(--ink)}
+.steps button[aria-current="step"]{background:var(--ink);color:#fff}
+.steps .n{width:22px;height:22px;border-radius:99px;border:1.5px solid currentColor;display:grid;place-items:center;font:700 11px/1 var(--font-h);flex:none}
+.steps .ok{margin-left:auto;font-size:12px}
+.steps .ok.g{color:#2ea96a} .steps .ok.r{color:#e1604f}
+.panel{min-height:330px;display:flex;flex-direction:column}
+.panel .say{font-size:30px}
+.big{display:flex;align-items:end;gap:28px;flex-wrap:wrap;margin:18px 0 6px}
+.big div{display:flex;flex-direction:column}
+.big b{font:700 52px/1 var(--font-h);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.big small{font-size:13px;color:var(--muted);margin-top:4px}
+.big .vs{font:600 16px/1 var(--font-h);color:var(--muted);padding-bottom:22px}
+.big .b-now b{color:var(--now)} .big .b-up b{color:var(--up)}
+.nav3{margin-top:auto;padding-top:18px;display:flex;justify-content:space-between;gap:10px}
+.btn{min-height:42px;padding:0 18px;border-radius:8px;border:1px solid var(--ink);background:#fff;cursor:pointer;font-weight:600}
+.btn--pri{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.35;cursor:default}
+.scale{position:relative;height:56px;margin:26px 8px 0}
+.scale__track{position:absolute;left:0;right:0;top:22px;height:8px;border-radius:4px;background:linear-gradient(90deg,#f4d6d1,#eef0f2 45%,#d7efe2)}
+.scale__ax{position:absolute;left:0;right:0;top:36px;font:400 11px/1 var(--mono);color:var(--muted)}
+.scale__ax span{position:absolute;transform:translateX(-50%);top:4px}
+.mk{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;transition:left var(--dur-out) var(--ease-out)}
+.mk b{font:700 12px/1 var(--font-h);padding:3px 7px;border-radius:4px;color:#fff;white-space:nowrap}
+.mk i{width:2px;height:14px}
+.mk--now b,.mk--now i{background:var(--now)} .mk--up b,.mk--up i{background:var(--up)}
+.mk--up{top:auto}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:14px}
+.sum div{border:1px solid var(--hair);border-radius:10px;padding:12px 14px}
+.sum small{display:block;font-size:12px;color:var(--muted)}
+.sum b{font:700 18px/1.25 var(--font-h)}
+.sum .g{color:var(--up)} .sum .r{color:var(--worse)} .sum .s{color:var(--muted)}
+.price{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--up-tint);font-size:15px}
+.price--empty{background:#f3f3f3;color:var(--muted)}
+
+.note{margin-top:40px;padding:18px 20px;border-left:3px solid var(--ink);background:#fff;border-radius:0 10px 10px 0;font-size:14px;color:var(--muted)}
+.note h3{margin:0 0 6px;font:700 15px/1.2 var(--font-h);color:var(--ink)}
+.note ul{margin:6px 0 0;padding-left:18px}
+.src{margin-top:18px;font-size:12.5px;color:var(--muted)}
+.src a{color:inherit}
+
+@media (max-width:820px){
+  .s1-grid{grid-template-columns:1fr}
+  .walk{grid-template-columns:1fr}
+  .steps{flex-direction:row;overflow-x:auto;gap:6px}
+  .steps button{white-space:nowrap}
+  .steps .lbl{display:none}
+  .steps button[aria-current="step"] .lbl{display:inline}
+  .card2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .c2mid{grid-column:1/-1;grid-row:1}
+  .c2h--now{grid-row:2;grid-column:1}
+  .c2h--up{grid-row:2;grid-column:2}
+  .c2h{padding:12px 14px}
+  .c2h b{font-size:15px}
+  .c2row{display:grid;grid-column:1/-1;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-bottom:1px solid var(--hair)}
+  .c2row:last-of-type{border-bottom:0}
+  .c2row > div{border-bottom:0!important}
+  .c2row .c2m{grid-column:1/-1;grid-row:1;display:flex;justify-content:space-between;gap:10px;text-align:left;padding:10px 14px 0;background:none}
+  .c2m span{margin:0;text-align:right}
+  .c2row .c2v--now{grid-row:2;grid-column:1;padding:8px 14px 12px}
+  .c2row .c2v--up{grid-row:2;grid-column:2;padding:8px 14px 12px}
+  .c2v{flex-direction:column!important;align-items:stretch;gap:6px}
+  .c2v .bar{flex:none;width:100%}
+  .c2v .num,.c2v--now .num{text-align:left;min-width:0}
+  .c2v--up .num{text-align:right}
+  .c2foot span[style]{margin-left:0!important}
+}
+@media (max-width:520px){
+  .wrap{padding:20px 16px 48px}
+  h1{font-size:25px}
+  .ctl{position:static;margin:16px -16px 0;padding:10px 16px}
+  .quote{flex:1 1 100%}
+  .stage{padding:16px}
+  .say{font-size:20px}
+  .panel .say{font-size:22px}
+  .big{flex-wrap:nowrap;gap:18px;align-items:start}
+  .big div{flex:1;min-width:0}
+  .big .vs{display:none}
+  .big b{font-size:40px}
+  .ln__tag--l{transform:translate(-100%,-50%);padding:0 8px 0 0;text-align:right}
+.ln__tag small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="../playground/">← The playground</a>
+  <p class="kick">Experience Systems Lab · concept, not a Tire Rack page</p>
+  <h1>Side by side at the counter</h1>
+  <p class="lede">The same 30-tire snow test, turned into something an advisor can show a customer: <b>the tire on the truck now</b> next to <b>the one we'd put on</b>. Three ways to show it. Every number is from Tire Rack's published test. The quote is the shop's own number.</p>
+
+  <div class="ctl" role="group" aria-label="Compare two tires">
+    <div class="pick pick--now"><label for="pNow"><i></i>On the truck now</label><select id="pNow"></select></div>
+    <button type="button" class="icon-btn" id="swap" aria-label="Swap the two tires">⇄ Swap</button>
+    <div class="pick pick--up"><label for="pUp"><i></i>What we'd put on</label><select id="pUp"></select></div>
+    <div class="quote"><label for="q">Extra for the set (your quote)</label><div>$<input id="q" inputmode="numeric" placeholder="e.g. 240" autocomplete="off"></div></div>
+    <div class="presets" aria-label="Try a pair">
+      <button type="button" class="try" data-p="21,2">Clear win</button>
+      <button type="button" class="try" data-p="13,16">A trade-off</button>
+      <button type="button" class="try" data-p="10,9">About the same</button>
+    </div>
+  </div>
+
+  <!-- S1 -->
+  <section class="opt" aria-labelledby="s1h">
+    <div class="opt__hd"><span class="opt__id">S1</span><h2 id="s1h">Two trucks, one road</h2><p>Both trucks brake at the same line. The green strip is the room the upgrade gives back. Drawn to scale, one truck is 18 ft.</p></div>
+    <div class="stage" id="s1"></div>
+  </section>
+
+  <!-- S2 -->
+  <section class="opt" aria-labelledby="s2h">
+    <div class="opt__hd"><span class="opt__id">S2</span><h2 id="s2h">Head to head</h2><p>A scorecard that fits on an estimate or a text message. Each row says who wins and by how much, with the losing number greyed out, not hidden.</p></div>
+    <div class="stage" id="s2"></div>
+  </section>
+
+  <!-- S3 -->
+  <section class="opt" aria-labelledby="s3h">
+    <div class="opt__hd"><span class="opt__id">S3</span><h2 id="s3h">Walk them through it</h2><p>One point per screen for a tablet turned toward the customer. The advisor taps through and ends on the price next to what it buys.</p></div>
+    <div class="stage" id="s3"></div>
+  </section>
+
+  <div class="note">
+    <h3>Rules every option follows</h3>
+    <ul>
+      <li>Both tires are shown new, as tested. A worn set on the truck today stops longer still, so the real gap is bigger. The page says so instead of guessing a number.</li>
+      <li>Losses are shown, not hidden. If the upgrade is worse at something, it reads in red with the same weight as a win.</li>
+      <li>Under 2 ft reads "about the same". Gaps of 7 ft and up also read in truck lengths (the test truck, a Tacoma, is about 18 ft).</li>
+      <li>No price is invented. The shop types its own quote, and the page pairs it with what it buys.</li>
+    </ul>
+  </div>
+  <p class="src">Source: <a href="https://www.tirerack.com/tires/tests/are-all-terrain-tires-good-in-the-snow-we-tested-30-truck-tires-to-find-out?ttid=363">Tire Rack, 30 truck tires on snow and ice, Oct 12, 2026</a>. Owner ratings from Tire Rack's public survey, read Nov 11, 2026. A design concept by Ryan DeBoer, not affiliated with Tire Rack.</p>
+</main>
+
+<script>
+(() => {
+  // name, type, snowflake, LT, driver rating, stop+start, snow stop, snow start, ice stop, ice start, owner miles, owner winter rating
+  const RAW = [
+    ['Cooper Discoverer Stronghold AT','OFAT',1,1,5.67,119.87,72.50,47.37,52.31,5.75,'804K',8.4],
+    ['Vredestein Pinza AT','ONAT',1,0,5.50,117.30,76.77,40.53,47.41,6.61,'6.5M',8.6],
+    ['Bridgestone Dueler A/T Ascent','ONAT',1,0,5.33,104.54,67.85,36.69,40.49,5.48,'1.4M',8.7],
+    ['Michelin Defender LTX M/S2','HAS',0,0,5.33,109.09,70.20,38.89,47.20,5.97,'8.3M',8.4],
+    ['Falken WildPeak A/T4W','OFAT',1,0,5.33,131.34,82.28,49.06,47.52,5.96,'4.3M',8.7],
+    ['Vredestein Pinza HT','HAS',0,0,5.17,117.62,77.75,39.88,49.13,6.31,'1.7M',8.0],
+    ['Bridgestone Dueler LX','HAS',0,0,5.00,117.57,76.74,40.83,46.26,5.84,'770K',8.1],
+    ['BFGoodrich All-Terrain T/A KO3','OFAT',1,1,5.00,118.75,72.34,46.41,53.27,6.23,'3.9M',9.0],
+    ['Mickey Thompson Baja Boss A/T','RAT',1,0,4.83,109.51,71.32,38.19,57.20,6.59,null,null],
+    ['Cooper Discoverer Road + Trail AT','ONAT',1,0,4.83,114.01,71.54,42.47,44.35,5.79,'3.3M',8.7],
+    ['Continental TerrainContact H/T','HAS',0,0,4.83,115.19,72.84,42.34,47.39,6.08,'6.7M',8.2],
+    ['Cooper Discoverer Rugged Trek','RAT',1,0,4.83,124.11,79.07,45.04,50.50,6.00,'3.6M',8.4],
+    ['Kumho Crugen HT51','HAS',1,0,4.83,124.33,82.70,41.63,55.42,6.69,'12M',8.3],
+    ['Hankook Dynapro AT2 Xtreme','ONAT',1,0,4.67,118.46,76.78,41.67,41.20,5.39,null,null],
+    ['Firestone Destination LE3','HAS',0,0,4.67,128.09,81.72,46.37,46.63,5.68,'11M',7.9],
+    ['General Grabber HT','HAS',0,0,4.67,134.47,86.19,48.28,48.43,6.19,'446K',8.2],
+    ['Goodyear Wrangler DuraTrac RT','RAT',1,0,4.50,112.74,70.41,42.32,45.18,5.52,'1.6M',8.8],
+    ['Continental TerrainContact A/T','ONAT',0,0,4.50,116.20,75.07,41.13,51.60,6.21,'9.1M',7.8],
+    ['Nitto Recon Grappler A/T','OFAT',0,1,4.50,122.14,76.62,45.51,46.45,5.94,'1.3M',7.2],
+    ['Yokohama Geolandar A/T4','ONAT',1,1,4.33,119.63,71.85,47.79,48.45,6.04,null,null],
+    ['Goodyear Wrangler Workhorse AT2','OFAT',1,0,4.17,115.05,71.99,43.06,49.10,5.99,null,null],
+    ['Goodyear Wrangler Workhorse HT','HAS',0,0,4.00,138.75,89.68,49.07,50.88,6.50,'1.4M',7.9],
+    ['Sumitomo Encounter AT2','OFAT',1,0,3.83,119.09,77.10,41.99,47.30,6.08,null,null],
+    ['Kumho Road Venture RT','RAT',0,0,3.83,128.08,82.66,45.42,49.20,6.09,null,null],
+    ['Falken Rubitrek A/T01','OFAT',1,0,3.83,138.76,87.61,51.15,54.70,6.25,'345K',8.7],
+    ['Goodyear Wrangler Steadfast HT','HAS',0,0,3.83,136.44,84.06,52.38,56.92,6.82,'1.9M',8.3],
+    ['Nitto Terra Grappler G3','ONAT',1,0,3.67,132.03,86.87,45.16,47.83,6.06,null,null],
+    ['Toyo Open Country A/T III','OFAT',1,0,3.67,126.63,78.99,47.64,52.60,6.42,'8.6M',8.7],
+    ['Falken WildPeak R/T01','RAT',0,0,3.50,159.65,97.57,62.08,68.30,7.16,null,null],
+    ['Toyo Open Country R/T Trail','RAT',0,0,3.17,134.29,84.18,50.11,46.50,5.91,'441K',8.5],
+  ];
+  const CATS = { HAS: 'Highway All-Season', ONAT: 'On-Road All-Terrain', OFAT: 'Off-Road All-Terrain', RAT: 'Rugged All-Terrain' };
+  const T = RAW.map((r, i) => ({ id: i, name: r[0], cat: r[1], flake: !!r[2], subj: r[4], sb: r[6], sa: r[7], ib: r[8], miles: r[10], own: r[11] }));
+
+  const TRUCK = 18, SAME = 2;
+  const f1 = v => (Math.round(v * 10 + 1e-6) / 10).toFixed(1);
+  // Measures: distance ones (lower wins) are drawn on a road; ratings (higher wins) on a scale.
+  const M = [
+    { k: 'sb', short: 'Stop on snow', h: 'Stopping on packed snow', from: 'from 25 mph', max: 100, road: 'snow', verb: ['stops', 'sooner', 'later'], unit: 'ft' },
+    { k: 'sa', short: 'Get moving on snow', h: 'Getting moving on packed snow', from: '0 to 12 mph', max: 65, road: 'snow', verb: ['gets up to speed in', 'less room', 'more room'], unit: 'ft' },
+    { k: 'ib', short: 'Stop on ice', h: 'Stopping on ice', from: 'from 12 mph', max: 70, road: 'ice', verb: ['stops', 'sooner', 'later'], unit: 'ft' },
+    { k: 'subj', short: 'How sure it feels', h: 'How sure it feels to test drivers', from: '1 to 10', hi: true, unit: '/10', same: 0.25 },
+    { k: 'own', short: 'Owners in winter', h: 'What owners say about winter', from: '1 to 10', hi: true, unit: '/10', same: 0.15 },
+  ];
+  const DIST = M.filter(m => !m.hi);
+
+  // Plain-language comparison. d > 0 means the upgrade is better.
+  function cmp(m, a, b) {
+    const va = a[m.k], vb = b[m.k];
+    if (va == null || vb == null) return { s: 'na', d: 0 };
+    const d = m.hi ? vb - va : va - vb;
+    const same = m.same ?? SAME;
+    return { s: Math.abs(d) < same ? 'same' : d > 0 ? 'win' : 'loss', d };
+  }
+  function lengths(ft) {
+    const n = Math.abs(ft) / TRUCK;
+    if (n < 0.375) return null;
+    if (n < 0.75) return 'about half a truck length';
+    if (n < 1.25) return 'about a truck length';
+    if (n < 1.75) return 'about a truck length and a half';
+    return `about ${Math.round(n * 2) / 2} truck lengths`;
+  }
+  const TRUCK_SVG = '<svg viewBox="0 0 60 20" aria-hidden="true"><path d="M1 15V8h32V3h12l6 5h8v7z"/><circle cx="12" cy="15.5" r="4.2"/><circle cx="47" cy="15.5" r="4.2"/></svg>';
+  function lensIcons(ft) {
+    const n = Math.abs(ft) / TRUCK; if (n < 0.375) return '';
+    const q = Math.round(n * 2) / 2, full = Math.floor(q), part = q - full;
+    let h = ''; for (let i = 0; i < full; i++) h += TRUCK_SVG;
+    if (part) h += `<span class="part" style="--f:${part};display:inline-flex">${TRUCK_SVG}</span>`;
+    return `<span class="lens" aria-hidden="true">${h}</span>`;
+  }
+  function diffText(m, c) {
+    if (c.s === 'na') return 'No owner survey yet';
+    if (c.s === 'same') return 'About the same';
+    const a = Math.abs(c.d);
+    if (m.hi) return `${a.toFixed(m.k === 'own' ? 1 : 2)} pts ${c.s === 'win' ? 'higher' : 'lower'}`;
+    const word = c.s === 'win' ? m.verb[1] : m.verb[2];
+    return `${f1(a)} ft ${word}`;
+  }
+  const short = n => n.replace(/^(Goodyear|Bridgestone|Continental|Cooper|Falken|Vredestein|Michelin|Mickey Thompson|BFGoodrich|Kumho|Hankook|Firestone|General|Nitto|Yokohama|Sumitomo|Toyo) /, '');
+  const brand = n => n.slice(0, n.length - short(n).length).trim();
+
+  const S = { now: 21, up: 2, step: 0 };
+  const $ = id => document.getElementById(id);
+  const quote = () => { const v = parseFloat(($('q').value || '').replace(/[^0-9.]/g, '')); return isFinite(v) && v > 0 ? v : null; };
+
+  // ── headline: the one sentence the advisor says out loud ──
+  function headline(a, b) {
+    const c = cmp(M[0], a, b), L = lengths(c.d);
+    if (a === b) return { say: 'Pick two different tires to compare.', sub: '' };
+    if (c.s === 'same') return { say: `On snow, these two stop <em>about the same</em>.`, sub: `${f1(a.sb)} ft vs ${f1(b.sb)} ft from 25 mph. Look at ice and feel for the difference.` };
+    if (c.s === 'win') return { say: `On snow, the ${short(b.name)} stops <em>${f1(c.d)} ft sooner</em>${L ? ` — ${L}` : ''}.`, sub: `From 25 mph on packed snow: ${f1(b.sb)} ft vs ${f1(a.sb)} ft for the ${short(a.name)}.` };
+    return { say: `On snow, the ${short(b.name)} needs <span class="bad">${f1(-c.d)} ft more</span> to stop.`, sub: `From 25 mph on packed snow: ${f1(b.sb)} ft vs ${f1(a.sb)} ft. It may still win elsewhere.` };
+  }
+  const tally = (a, b) => { const r = { win: 0, loss: 0, same: 0, n: 0 }; M.forEach(m => { const c = cmp(m, a, b); if (c.s !== 'na') { r[c.s]++; r.n++; } }); return r; };
+
+  // ── S1 ──
+  function lane(m, a, b, big) {
+    const c = cmp(m, a, b), max = m.max, pct = v => Math.min(v / max * 100, 100);
+    const pa = pct(a[m.k]), pb = pct(b[m.k]), lo = Math.min(pa, pb), hi = Math.max(pa, pb);
+    const ticks = []; for (let x = 0; x <= max; x += TRUCK) ticks.push(`<span style="left:${x / max * 100}%">${x}${x ? '' : ' ft'}</span>`);
+    const gap = c.s === 'same' ? '' : `<span class="gap${c.s === 'loss' ? ' gap--bad' : ''}" style="left:${lo}%;width:${hi - lo}%"></span>`;
+    const row = (t, cls, p) => `<div class="ln ln--${cls}"><span class="ln__go"></span><span class="ln__trail" style="width:${p}%"></span><span class="ln__car" style="left:${p}%;--max:${max}">${TRUCK_SVG}</span><span class="ln__tag${p > 58 ? ' ln__tag--l' : ''}" style="left:${p > 58 ? p - TRUCK / max * 100 : p}%">${f1(t[m.k])} ft<small>${short(t.name)}</small></span></div>`;
+    const pill = c.s === 'same' ? `<span class="pill pill--same">About the same</span>` : `<span class="pill${c.s === 'loss' ? ' pill--bad' : ''}">${diffText(m, c)}</span>`;
+    return `<div class="scene"><div class="scene__h"><h3>${big ? m.h : m.short}</h3><span>${m.from}</span></div>
+      <div class="road road--${m.road}" role="img" aria-label="${m.h} ${m.from}: ${short(a.name)} ${f1(a[m.k])} ft, ${short(b.name)} ${f1(b[m.k])} ft.">${gap}${row(a, 'now', pa)}${row(b, 'up', pb)}</div>
+      <div class="ticks" aria-hidden="true">${ticks.join('')}</div>
+      <p class="delta">${pill}${c.s === 'win' ? lensIcons(c.d) : ''}${c.s !== 'same' && lengths(c.d) ? `<span>${lengths(c.d)}</span>` : ''}</p></div>`;
+  }
+  function renderS1(a, b) {
+    const h = headline(a, b);
+    if (a === b) { $('s1').innerHTML = `<p class="say">${h.say}</p>`; return; }
+    $('s1').innerHTML = `<p class="say">${h.say}</p><p class="say-sub">${h.sub}</p>${lane(DIST[0], a, b, true)}<div class="s1-grid">${lane(DIST[1], a, b)}${lane(DIST[2], a, b)}</div>
+      <p class="fine">Both tires new, as tested on the same Toyota Tacoma. Tires that are already worn stop longer, so the gap on your truck today is likely bigger.</p>`;
+  }
+
+  // ── S2 ──
+  function renderS2(a, b) {
+    if (a === b) { $('s2').innerHTML = `<p class="say">Pick two different tires to compare.</p>`; return; }
+    const t = tally(a, b);
+    const verdict = t.loss === 0 ? `Better in ${t.win} of ${t.n}` : `Better in ${t.win}, worse in ${t.loss}`;
+    const rows = M.map(m => {
+      const c = cmp(m, a, b), va = a[m.k], vb = b[m.k];
+      const vals = T.map(x => x[m.k]).filter(v => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
+      // bar = how good it is within the 30 tested: always "longer bar = better"
+      const g = v => v == null ? 0 : 12 + 88 * (m.hi ? (v - lo) / (hi - lo) : (hi - v) / (hi - lo));
+      const fmt = v => v == null ? '—' : m.hi ? (m.k === 'own' ? f1(v) : v.toFixed(2)) + '<small>of 10</small>' : f1(v) + '<small>ft</small>';
+      const cls = c.s === 'win' ? 'g' : c.s === 'loss' ? 'r' : 's';
+      const mark = c.s === 'win' ? '→ Upgrade' : c.s === 'loss' ? '← Now' : c.s === 'na' ? '' : '=';
+      return `<div class="c2row">
+        <div class="c2v c2v--now${c.s === 'loss' ? ' win' : ''}"><span class="num">${fmt(va)}</span><span class="bar"><i style="width:${g(va)}%"></i></span></div>
+        <div class="c2m"><b>${m.short}</b><span class="${cls}">${c.s === 'na' ? 'No owner survey' : `${mark ? mark + ' · ' : ''}${diffText(m, c)}`}</span></div>
+        <div class="c2v c2v--up${c.s === 'win' ? ' win' : ''}"><span class="bar"><i style="width:${g(vb)}%"></i></span><span class="num">${fmt(vb)}</span></div></div>`;
+    }).join('');
+    const q = quote(), c0 = cmp(M[0], a, b);
+    const foot = q && c0.s === 'win' ? `<span><b>$${Math.round(q)}</b> more for the set buys <b>${f1(c0.d)} ft</b> of stopping room on snow.</span>`
+      : q ? `<span><b>$${Math.round(q)}</b> more for the set.</span>` : `<span>Add the shop's quote above to put the price next to the difference.</span>`;
+    $('s2').innerHTML = `<div class="card2">
+      <div class="c2h c2h--now"><small>On the truck now</small><b>${short(a.name)}</b><span>${brand(a.name)} · ${CATS[a.cat]}</span></div>
+      <div class="c2mid"><div><b>${verdict}</b><span>Tire Rack test and owner survey</span></div></div>
+      <div class="c2h c2h--up"><small>What we'd put on</small><b>${short(b.name)}</b><span>${brand(b.name)} · ${CATS[b.cat]}</span></div>
+      ${rows}
+      <div class="c2foot">${foot}<span style="margin-left:auto;font-size:12.5px;color:var(--muted)">Bars show where each tire lands among the 30 tested. Longer is better.</span></div></div>`;
+  }
+
+  // ── S3 ──
+  const STEPS = [...DIST.map(m => ({ m })), { m: M[3] }, { sum: true }];
+  function scaleHtml(m, a, b) {
+    const pos = v => (v - 1) / 9 * 100, ax = [];
+    for (let i = 1; i <= 10; i++) ax.push(`<span style="left:${pos(i)}%">${i}</span>`);
+    return `<div class="scale" role="img" aria-label="${m.h}: ${short(a.name)} ${a[m.k]}, ${short(b.name)} ${b[m.k]} of 10."><div class="scale__track"></div>
+      <span class="mk mk--now" style="left:${pos(a[m.k])}%"><b>Now ${a[m.k].toFixed(2)}</b><i></i></span>
+      <span class="mk mk--up" style="left:${pos(b[m.k])}%;top:32px;flex-direction:column-reverse"><b>Upgrade ${b[m.k].toFixed(2)}</b><i></i></span>
+      <div class="scale__ax" style="top:62px">${ax.join('')}</div></div><div style="height:40px"></div>`;
+  }
+  function renderS3(a, b) {
+    if (a === b) { $('s3').innerHTML = `<p class="say">Pick two different tires to compare.</p>`; return; }
+    const steps = STEPS.map((s, i) => {
+      const label = s.sum ? 'What you get' : s.m.short;
+      let ok = '';
+      if (!s.sum) { const c = cmp(s.m, a, b); ok = c.s === 'win' ? '<span class="ok g">✓</span>' : c.s === 'loss' ? '<span class="ok r">✕</span>' : '<span class="ok">=</span>'; }
+      return `<li><button type="button" data-step="${i}" ${i === S.step ? 'aria-current="step"' : ''}><span class="n">${i + 1}</span><span class="lbl">${label}</span>${ok}</button></li>`;
+    }).join('');
+    const s = STEPS[S.step]; let body;
+    if (s.sum) {
+      const t = tally(a, b), q = quote(), c0 = cmp(M[0], a, b);
+      const cells = M.map(m => { const c = cmp(m, a, b); const cls = c.s === 'win' ? 'g' : c.s === 'loss' ? 'r' : 's'; return `<div><small>${m.short}</small><b class="${cls}">${diffText(m, c)}</b></div>`; }).join('');
+      const say = t.loss === 0 ? `The ${short(b.name)} is <em>better or equal in all ${t.n}</em>.` : `The ${short(b.name)} wins ${t.win} and <span class="bad">gives up ${t.loss}</span>.`;
+      const price = q ? `<div class="price"><b>$${Math.round(q)} more for the set.</b> ${c0.s === 'win' ? `On snow, that's ${f1(c0.d)} ft of stopping room from 25 mph${lengths(c0.d) ? `, ${lengths(c0.d)}` : ''}.` : 'Weigh it against the measures above.'}</div>` : `<div class="price price--empty">Type the shop's quote at the top to show the price next to what it buys.</div>`;
+      body = `<p class="say">${say}</p><p class="say-sub">Both new, as tested. A worn set stops longer still.</p><div class="sum">${cells}</div>${price}`;
+    } else if (s.m.hi) {
+      const c = cmp(s.m, a, b);
+      const say = c.s === 'same' ? `Test drivers rated them <em>about the same</em>.` : c.s === 'win' ? `Test drivers felt <em>more sure</em> on the ${short(b.name)}.` : `Test drivers felt <span class="bad">less sure</span> on the ${short(b.name)}.`;
+      body = `<p class="say">${say}</p><p class="say-sub">Driver rating on snow and ice, ${s.m.from}. Higher is better.</p>${scaleHtml(s.m, a, b)}`;
+    } else {
+      const m = s.m, c = cmp(m, a, b);
+      const say = c.s === 'same' ? `${m.short}: <em>about the same</em>.` : c.s === 'win' ? `${m.h}, it ${m.verb[0] === 'stops' ? 'stops' : 'needs'} <em>${f1(c.d)} ft ${m.verb[0] === 'stops' ? 'sooner' : 'less'}</em>.` : `${m.h}, it needs <span class="bad">${f1(-c.d)} ft more</span>.`;
+      body = `<p class="say">${say}</p><p class="say-sub">${m.from}${lengths(c.d) && c.s !== 'same' ? ` · ${lengths(c.d)}` : ''}</p>
+        <div class="big"><div class="b-now"><b>${f1(a[m.k])}</b><small>ft · ${short(a.name)} (now)</small></div><span class="vs">vs</span><div class="b-up"><b>${f1(b[m.k])}</b><small>ft · ${short(b.name)}</small></div></div>
+        ${lane(m, a, b, false).replace(/<div class="scene__h">.*?<\/div>/, '').replace(/<p class="delta">.*?<\/p>/, '')}`;
+    }
+    $('s3').innerHTML = `<div class="walk"><ol class="steps" aria-label="Steps">${steps}</ol>
+      <div class="panel" aria-live="polite">${body}<div class="nav3"><button type="button" class="btn" data-nav="-1" ${S.step === 0 ? 'disabled' : ''}>Back</button><button type="button" class="btn btn--pri" data-nav="1" ${S.step === STEPS.length - 1 ? 'disabled' : ''}>Next</button></div></div></div>`;
+  }
+
+  function render() { const a = T[S.now], b = T[S.up]; renderS1(a, b); renderS2(a, b); renderS3(a, b); }
+
+  // pickers grouped by tire type
+  const opts = Object.entries(CATS).map(([k, l]) => `<optgroup label="${l}">${T.filter(t => t.cat === k).map(t => `<option value="${t.id}">${t.name}</option>`).join('')}</optgroup>`).join('');
+  $('pNow').innerHTML = opts; $('pUp').innerHTML = opts;
+  const sync = () => { $('pNow').value = S.now; $('pUp').value = S.up; render(); };
+  $('pNow').addEventListener('change', e => { S.now = +e.target.value; render(); });
+  $('pUp').addEventListener('change', e => { S.up = +e.target.value; render(); });
+  $('swap').addEventListener('click', () => { [S.now, S.up] = [S.up, S.now]; sync(); });
+  $('q').addEventListener('input', () => { renderS2(T[S.now], T[S.up]); renderS3(T[S.now], T[S.up]); });
+  document.querySelector('.presets').addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; [S.now, S.up] = b.dataset.p.split(',').map(Number); S.step = 0; sync(); });
+  $('s3').addEventListener('click', e => {
+    const st = e.target.closest('[data-step]'), nv = e.target.closest('[data-nav]');
+    if (st) S.step = +st.dataset.step; else if (nv) S.step = Math.max(0, Math.min(STEPS.length - 1, S.step + +nv.dataset.nav)); else return;
+    renderS3(T[S.now], T[S.up]);
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
