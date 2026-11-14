@@ -167,20 +167,20 @@ window.BINDER_CARDS = [
           "title": "Annotate in the build’s own terms",
           "body": "Cheryl Carpenter owned the React build; I owned the design of the whole product, and we worked daily in Slack and on calls. My notes named focus rings by their CSS variable, listed every state and size in tables, and mapped numbered callouts to a behavior table. Then I spent 40+ hours checking her build against Figma, screen by screen.",
           "link": null,
-          "image": {
-            "src": "../../../public/images/work/wheelrack/dev-notes/filter-hover-focus.jpg",
+          "image": null,
+          "images": [],
+          "wide": {
+            "src": "../../../public/images/work/wheelrack/dev-notes-stack.mp4",
             "display": null,
-            "poster": null,
-            "video": false,
+            "poster": "../../../public/images/work/wheelrack/dev-notes-stack-poster.jpg",
+            "video": true,
             "frame": null,
             "crop": null,
-            "alt": "Filter dropdown component notes: hover states, focus outline styles, and a +8 left padding rule for the mobile fly-out",
-            "caption": "Hover, focus and the mobile fly-out padding, written beside the component.",
-            "width": 1920,
-            "height": 525
+            "alt": "Eight WheelRack dev-note sheets stacking in a loop: filter hover and focus, the filter panel and its mobile fly-out, filter headers and price ranges, inputs, checkboxes and radios, dropdowns and buttons, each state labelled",
+            "caption": "More of the notes: filters, form controls and buttons, each state labelled beside the component.",
+            "width": 1600,
+            "height": 1000
           },
-          "images": [],
-          "wide": null,
           "artboards": [],
           "points": [],
           "quote": {
@@ -666,8 +666,290 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "aem-component-system",
+    "slug": "loopstack",
     "index": "04",
+    "title": "LoopStack",
+    "subtitle": "Patterns worth reviewing",
+    "titleSize": "l",
+    "locked": false,
+    "group": "product",
+    "groupLabel": "Product design",
+    "type": "mobile",
+    "typeLabel": "Mobile app",
+    "groups": [
+      "product"
+    ],
+    "theme": {
+      "h": 128,
+      "s": 0.85
+    },
+    "hero": "heroes/loopstack.jpg",
+    "heroAlt": "LoopStack glucose dashboard on a phone beside its green identity and a chart motif.",
+    "heroSource": "artwork v1",
+    "stats": [
+      {
+        "value": "90 days",
+        "size": "m",
+        "primary": "Real HealthKit CGM history",
+        "secondary": "Time in range, GMI, variability"
+      },
+      {
+        "value": "460 tests",
+        "size": "m",
+        "primary": "Vitest suite across 28 files",
+        "secondary": "Guarding what the app may claim"
+      },
+      {
+        "value": "0 directives",
+        "size": "s",
+        "primary": "Every output frames as evidence or discussion point",
+        "secondary": ""
+      }
+    ],
+    "year": "2026",
+    "category": "Personal product",
+    "back": {
+      "intro": {
+        "src": "../../../public/assets/portfolio-safe/loopstack/cover-loop.mp4",
+        "poster": "../../../public/assets/portfolio-safe/loopstack/cover-loop-poster.jpg",
+        "captions": null,
+        "caption": "",
+        "alt": "LoopStack: Pattern Review for Meals and Glucose, on the Phone and the Desktop preview",
+        "frame": "preview",
+        "focus": 0.5,
+        "posterAt": 1.1,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    "panel": {
+      "eyebrow": "Personal product · 2026",
+      "title": "LoopStack",
+      "status": "Phone app on TestFlight · Desktop app v1",
+      "role": "Product Design · UX · Agent-Assisted Build",
+      "nav": [
+        "Walkthrough",
+        "Decisions",
+        "Outcome"
+      ],
+      "links": [
+        {
+          "label": "Try the phone app demo (real app, sample data)",
+          "url": "https://www.rdeboerdesigns.com/loopstack-demo/"
+        },
+        {
+          "label": "Try the desktop app in your browser (synthetic patient)",
+          "url": "https://www.rdeboerdesigns.com/loopstack-desktop-demo/"
+        }
+      ],
+      "tools": [
+        "Figma",
+        "Claude",
+        "ChatGPT",
+        "Cursor",
+        "HealthKit",
+        "Electron",
+        "Vitest",
+        "TestFlight"
+      ],
+      "context": "LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.",
+      "problemPunch": "Most T1D tools treat meals as one-time entries. Real meals behave like curves.",
+      "problem": [
+        "I wanted to follow a repeat meal through its full glucose-response window, including what happened hours after I finished eating.",
+        "A single entry was not enough. I needed to compare similar meals and see whether the same response kept appearing across timing, activity and my current Loop settings."
+      ],
+      "deck": "A personal Type 1 diabetes app for following repeat meals through their full glucose-response window and reviewing recurring patterns with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
+      "ownership": "I designed and built both surfaces with AI assistance. The phone app is tested against my own Loop data; the desktop app runs on a synthetic patient. It supports pattern review and care-team discussion, not dosing advice.",
+      "evidence": [],
+      "decisions": [
+        {
+          "title": "Follow the response beyond the meal",
+          "body": "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/loopstack/02_memory_pattern.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Build your meal: guided meal builder ordering grains, proteins and legumes, and nuts or seeds by their effect on absorption timing and insulin disruption",
+            "caption": "Input, structured. The builder orders ingredients by how much they move the curve.",
+            "width": 1206,
+            "height": 2622
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Say where each number comes from",
+          "body": "Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/loopstack/06_profile_calibration.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Health connections: Apple Health, Dexcom, and Loop connected, with a current fitness trend applying a ×0.92 sensitivity multiplier explained in plain language",
+            "caption": "Real sources in. Fitness load shifts the sensitivity baseline, visibly and explainably.",
+            "width": 1206,
+            "height": 2622
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Require repetition before confidence",
+          "body": "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.",
+          "link": null,
+          "image": null,
+          "images": [
+            {
+              "src": "../../../public/images/work/loopstack/05_meal_builder.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "Loop calibration: uploading current therapy settings, absorption model, and favorite meals, with full 6–8h outcome slots; screenshots stay on-device",
+              "caption": "Calibration mirrors what Loop is actually running. Screenshots stay on-device, and favorite meals accumulate toward report cards.",
+              "width": 1206,
+              "height": 2622
+            },
+            {
+              "src": "../../../public/images/work/loopstack/04_fix_log.png",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "Targets and sensitivity: observed ISF of 54 mg/dL per 1U at 72% actionable across 18 meals, shown alongside the base ISF from Loop therapy settings",
+              "caption": "The payoff: observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.",
+              "width": 1206,
+              "height": 2622
+            }
+          ],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Give review its own surface",
+          "body": "The phone is for the moment: glucose now, a heads-up before a stretch that usually runs low, the day tracker. Review is different work. Comparing fourteen days hour by hour, or a lunch before and after a settings change, needs width and the detail beside the chart rather than under it. I first drew that review surface at phone width and it kept collapsing into sheets and tabs. So LoopStack has a second surface: a desktop app you download, with the same data, the same rules and the same name.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": {
+            "src": "../../../public/images/work/loopstack/desktop/dashboard.jpg",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "LoopStack desktop app: a sidebar with My dashboard and Care-team review, and a grid of tracker tiles for glucose now, trend heads-ups, the day tracker, what Loop did, time in range and device life",
+            "caption": "My dashboard on the desktop, on a synthetic patient. The same trackers as the phone, with room to compare.",
+            "width": 2400,
+            "height": 1500
+          },
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Let the person arrange the dashboard",
+          "body": "Everyone who loops watches something different, so the dashboard is a twelve-column grid of trackers the person arranges. Drag a tile to move it, resize it, add trackers from the library, or start from a preset such as Everyday, Before a visit, or Overnight. Every move also works from the keyboard. Two tiles always stay on the dashboard: the daily trend heads-ups and the day tracker. They can move and resize but not leave, because they catch routine lows and highs.",
+          "link": null,
+          "image": null,
+          "images": [
+            {
+              "src": "../../../public/images/work/loopstack/desktop/dashboard-edit.jpg",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "The dashboard in edit mode: drag handles and resize controls on each tile, and the tracker library open on the side",
+              "caption": "Edit layout: drag, resize, and add from the library. The heads-ups and day tracker can move but not be removed.",
+              "width": 2400,
+              "height": 1500
+            },
+            {
+              "src": "../../../public/images/work/loopstack/desktop/what-loop-did-detail.jpg",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "What Loop did on the desktop: a 14-day by 24-hour grid of delivered insulin against the schedule, with 7am selected and its detail beside the grid",
+              "caption": "What Loop did, hour by hour. The morning dip is 6 to 8am, seen on 11 of 13 usable days at 6am.",
+              "width": 2400,
+              "height": 1500
+            }
+          ],
+          "wide": null,
+          "artboards": [],
+          "points": [
+            "Each tile has a glance face and a detail face one click in. Detail opens beside the tile, not over it.",
+            "What Loop did shows fourteen days by twenty-four hours against the scheduled basal, with the selected hour explained beside the grid.",
+            "Glass is only on the controls: the toolbar, the tracker library and popovers. Tiles and charts stay solid."
+          ],
+          "quote": null
+        },
+        {
+          "title": "Read it the way clinicians read",
+          "body": "The second view in the same app is for the clinician. The person who loops chooses what to share as a review packet; it isn't a live feed. The review has a fixed layout, the same for every patient, so a clinician can read it in one or two minutes in the order they already use: enough data, then lows, then time in range, then the glucose curve. What Loop did follows in clinician terms, then the settings changes with who proposed and who agreed, then the patient's open question with Agree, Modify or Discuss. LoopStack never changes Loop or the pump. The person applies any change themselves.",
+          "link": null,
+          "image": null,
+          "images": [
+            {
+              "src": "../../../public/images/work/loopstack/desktop/review.jpg",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "The care-team review: a synthetic patient packet read in AGP order, with sensor wear, lows, time in range, time in automation and the glucose curve, then the patient question with Agree, Modify and Discuss",
+              "caption": "The care-team review, in the order clinicians already read. Synthetic patient.",
+              "width": 2400,
+              "height": 1500
+            },
+            {
+              "src": "../../../public/images/work/loopstack/desktop/review-loop.jpg",
+              "display": null,
+              "poster": null,
+              "video": false,
+              "frame": null,
+              "crop": null,
+              "alt": "The care-team review page for what Loop did: algorithm-modulated against user-initiated insulin, time in automation, and the settings-change timeline",
+              "caption": "What Loop did, in clinician terms, with the settings changes and who agreed to them.",
+              "width": 2400,
+              "height": 1500
+            }
+          ],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        }
+      ],
+      "outcomeMetric": null,
+      "outcome": "The phone app runs on TestFlight as my own pattern-review tool. The desktop app v1 runs on a synthetic patient: a dashboard you arrange yourself and a care-team review in the same download. Observed values stay beside the pump settings rather than replacing them, and a clinician review of the safety language comes before any real patient data reaches the desktop.",
+      "outcomeImages": [],
+      "href": "https://www.rdeboerdesigns.com/work/loopstack/"
+    }
+  },
+  {
+    "slug": "aem-component-system",
+    "index": "05",
     "title": "AEM Component System",
     "subtitle": "",
     "titleSize": "w",
@@ -727,7 +1009,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Professional work · 2024–2026",
       "title": "AEM Components",
       "status": "Live components · CSS overhaul in branch · Homepage concepts in Figma",
-      "role": "Senior Web Designer / UX Engineer",
+      "role": "Senior Web/Product Designer / UX Engineer",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -1028,7 +1310,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "figma-template-governance",
-    "index": "05",
+    "index": "06",
     "title": "Figma starter template & governance",
     "subtitle": "",
     "titleSize": "w",
@@ -1192,7 +1474,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "bolus-binder",
-    "index": "06",
+    "index": "07",
     "title": "T1D Hub",
     "subtitle": "Brand system to Bolus Binder",
     "titleSize": "l",
@@ -1433,7 +1715,7 @@ window.BINDER_CARDS = [
   },
   {
     "slug": "tire-categories",
-    "index": "07",
+    "index": "08",
     "title": "Tire Category Redesign",
     "subtitle": "Path to the right tire",
     "titleSize": "n",
@@ -1493,7 +1775,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Professional work · 2024",
       "title": "Tire Categories",
       "status": "Live · 30+ category pages",
-      "role": "Senior Web Designer / UX Engineer",
+      "role": "Senior Web/Product Designer / UX Engineer",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -1611,185 +1893,6 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "loopstack",
-    "index": "08",
-    "title": "LoopStack",
-    "subtitle": "Patterns worth reviewing",
-    "titleSize": "l",
-    "locked": false,
-    "group": "product",
-    "groupLabel": "Product design",
-    "type": "mobile",
-    "typeLabel": "Mobile app",
-    "groups": [
-      "product"
-    ],
-    "theme": {
-      "h": 128,
-      "s": 0.85
-    },
-    "hero": "heroes/loopstack.jpg",
-    "heroAlt": "LoopStack glucose dashboard on a phone beside its green identity and a chart motif.",
-    "heroSource": "artwork v1",
-    "stats": [
-      {
-        "value": "90 days",
-        "size": "m",
-        "primary": "Real HealthKit CGM history",
-        "secondary": "Time in range, GMI, variability"
-      },
-      {
-        "value": "460 tests",
-        "size": "m",
-        "primary": "Vitest suite across 28 files",
-        "secondary": "Guarding what the app may claim"
-      },
-      {
-        "value": "0 directives",
-        "size": "s",
-        "primary": "Every output frames as evidence or discussion point",
-        "secondary": ""
-      }
-    ],
-    "year": "2026",
-    "category": "Personal product",
-    "back": {
-      "intro": {
-        "src": "../../../public/assets/portfolio-safe/loopstack/cover-loop.mp4",
-        "poster": "../../../public/assets/portfolio-safe/loopstack/cover-loop-poster.jpg",
-        "captions": null,
-        "caption": "",
-        "alt": "LoopStack: Pattern Review for Meals and Glucose preview",
-        "frame": "preview",
-        "focus": 0.5,
-        "posterAt": 1.1,
-        "width": 1280,
-        "height": 720
-      }
-    },
-    "panel": {
-      "eyebrow": "Personal product · 2026",
-      "title": "LoopStack",
-      "status": "TestFlight · Personal pattern-review tool",
-      "role": "Product Design · UX · Agent-Assisted Build",
-      "nav": [
-        "Walkthrough",
-        "Decisions",
-        "Outcome"
-      ],
-      "links": [
-        {
-          "label": "Try the live demo (real app, sample data)",
-          "url": "https://www.rdeboerdesigns.com/loopstack-demo/"
-        }
-      ],
-      "tools": [
-        "Figma",
-        "Claude",
-        "ChatGPT",
-        "Cursor",
-        "HealthKit",
-        "Vitest",
-        "TestFlight"
-      ],
-      "context": "LoopStack is my independent Type 1 diabetes app, built around my own meal and glucose history. It brings recurring patterns into view for personal review and care-team discussion.",
-      "problemPunch": "Most T1D tools treat meals as one-time entries. Real meals behave like curves.",
-      "problem": [
-        "I wanted to follow a repeat meal through its full glucose-response window, including what happened hours after I finished eating.",
-        "A single entry was not enough. I needed to compare similar meals and see whether the same response kept appearing across timing, activity and my current Loop settings."
-      ],
-      "deck": "A personal Type 1 diabetes app for following repeat meals through their full glucose-response window and reviewing recurring patterns with the evidence beside them.",
-      "ownership": "I designed and built the product with AI assistance and tested it against my own Loop data. It supports pattern review and care-team discussion, not dosing advice.",
-      "evidence": [],
-      "decisions": [
-        {
-          "title": "Follow the response beyond the meal",
-          "body": "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/loopstack/02_memory_pattern.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Build your meal: guided meal builder ordering grains, proteins and legumes, and nuts or seeds by their effect on absorption timing and insulin disruption",
-            "caption": "Input, structured. The builder orders ingredients by how much they move the curve.",
-            "width": 1206,
-            "height": 2622
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Say where each number comes from",
-          "body": "Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/loopstack/06_profile_calibration.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Health connections: Apple Health, Dexcom, and Loop connected, with a current fitness trend applying a ×0.92 sensitivity multiplier explained in plain language",
-            "caption": "Real sources in. Fitness load shifts the sensitivity baseline, visibly and explainably.",
-            "width": 1206,
-            "height": 2622
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Require repetition before confidence",
-          "body": "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.",
-          "link": null,
-          "image": null,
-          "images": [
-            {
-              "src": "../../../public/images/work/loopstack/05_meal_builder.png",
-              "display": null,
-              "poster": null,
-              "video": false,
-              "frame": null,
-              "crop": null,
-              "alt": "Loop calibration: uploading current therapy settings, absorption model, and favorite meals, with full 6–8h outcome slots; screenshots stay on-device",
-              "caption": "Calibration mirrors what Loop is actually running. Screenshots stay on-device, and favorite meals accumulate toward report cards.",
-              "width": 1206,
-              "height": 2622
-            },
-            {
-              "src": "../../../public/images/work/loopstack/04_fix_log.png",
-              "display": null,
-              "poster": null,
-              "video": false,
-              "frame": null,
-              "crop": null,
-              "alt": "Targets and sensitivity: observed ISF of 54 mg/dL per 1U at 72% actionable across 18 meals, shown alongside the base ISF from Loop therapy settings",
-              "caption": "The payoff: observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.",
-              "width": 1206,
-              "height": 2622
-            }
-          ],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        }
-      ],
-      "outcomeMetric": null,
-      "outcome": "LoopStack runs on TestFlight as my own pattern-review tool. Observed values stay beside the pump settings rather than replacing them. Clinician-facing review and tighter safety language come before any wider release.",
-      "outcomeImages": [],
-      "href": "https://www.rdeboerdesigns.com/work/loopstack/"
-    }
-  },
-  {
     "slug": "landing-pages",
     "index": "09",
     "title": "AEM Landing Governance",
@@ -1851,7 +1954,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Professional work · 2023–Present",
       "title": "Landing Page System",
       "status": "Live · Governed AEM templates",
-      "role": "Senior Web Designer / UX Engineer",
+      "role": "Senior Web/Product Designer / UX Engineer",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -2047,7 +2150,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Professional work · 2013–Present",
       "title": "AEM Targeting & Seasonal Content",
       "status": "Live · Ongoing seasonal ownership",
-      "role": "Senior Web Designer / AEM Content Strategist",
+      "role": "Senior Web/Product Designer / AEM Content Strategist",
       "nav": [
         "Walkthrough",
         "Decisions",
@@ -2346,7 +2449,7 @@ window.BINDER_CARDS = [
       "eyebrow": "Independent client work · 2025",
       "title": "Heatherwood",
       "status": "Live · Owner-managed WordPress site",
-      "role": "Brand & Web Designer",
+      "role": "Brand & Web/Product Designer",
       "nav": [
         "Walkthrough",
         "Decisions",
