@@ -683,8 +683,8 @@ window.BINDER_CARDS = [
       "h": 128,
       "s": 0.85
     },
-    "hero": "heroes/loopstack.jpg",
-    "heroAlt": "LoopStack, an open-source SaaS for the Loop community: its My dashboard on a laptop, showing glucose now, time in range, daily glucose, meal history and a care-team review in progress, beside the phone app, with the green LoopStack mark at top left.",
+    "hero": "heroes/loopstack.webp",
+    "heroAlt": "LoopStack dashboard tiles on a green tray: glucose now, time in range, variability, daily glucose, meal history, the week’s glucose pattern and a care-team review in progress.",
     "heroSource": "supplied file",
     "stats": [
       {
