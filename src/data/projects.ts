@@ -2097,6 +2097,8 @@ Frame every output as:
     outcomeLiveLinks: [
       { label: 'Try the phone app demo (real app, sample data)', url: '/loopstack-demo/' },
       { label: 'Try the desktop app in your browser (synthetic patient)', url: '/loopstack-desktop-demo/' },
+      { label: 'Download LoopStack for Mac (free, open source)', url: 'https://github.com/Rdeboer180/LoopStack/releases/latest' },
+      { label: 'Source code and getting-started guide on GitHub', url: 'https://github.com/Rdeboer180/LoopStack' },
     ],
     // TODO(Ryan): swap to the TestFlight public link once it exists —
     // App Store Connect → TestFlight → external group → Enable Public Link.
