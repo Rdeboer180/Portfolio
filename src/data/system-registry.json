@@ -153,6 +153,24 @@
         "SystemSizes",
         "VisualProblemSolver"
       ]
+    },
+    "PrototypeFrame": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #34",
+      "path": "src/components/PrototypeFrame.tsx",
+      "blocks": [
+        "cs",
+        "framed",
+        "proto",
+        "sr-only"
+      ],
+      "relatives": [
+        "PlayDraftClockPrototype",
+        "WheelRackFitmentPrototype",
+        "CaseStudyPage"
+      ]
     }
   },
   "patterns": {
@@ -223,6 +241,11 @@
       "status": "proposed",
       "introduced": "PR #22",
       "stylesheet": "src/styles/components/_curtain.scss"
+    },
+    "proto": {
+      "status": "proposed",
+      "introduced": "PR #34",
+      "stylesheet": "src/styles/components/_framed-viewport.scss"
     }
   }
 }
