@@ -734,12 +734,12 @@ window.BINDER_CARDS = [
       ],
       "links": [
         {
-          "label": "Try the phone app demo (real app, sample data)",
-          "url": "https://www.rdeboerdesigns.com/loopstack-demo/"
+          "label": "Download LoopStack for Mac (free, open source)",
+          "url": "https://github.com/Rdeboer180/LoopStack/releases/latest"
         },
         {
-          "label": "Try the desktop app in your browser (synthetic patient)",
-          "url": "https://www.rdeboerdesigns.com/loopstack-desktop-demo/"
+          "label": "Try the phone app demo (real app, sample data)",
+          "url": "https://www.rdeboerdesigns.com/loopstack-demo/"
         }
       ],
       "tools": [
@@ -1309,110 +1309,165 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "figma-template-governance",
+    "slug": "tire-categories",
     "index": "06",
-    "title": "Figma starter template & governance",
-    "subtitle": "",
-    "titleSize": "w",
+    "title": "Tire Category Redesign",
+    "subtitle": "Path to the right tire",
+    "titleSize": "n",
     "locked": true,
-    "group": "systems",
-    "groupLabel": "System design",
-    "type": "tools",
-    "typeLabel": "Internal tools",
+    "group": "aem",
+    "groupLabel": "AEM",
+    "type": "aem",
+    "typeLabel": "AEM",
     "groups": [
-      "systems"
+      "aem",
+      "product"
     ],
     "theme": {
-      "h": 35,
-      "s": 0.35
+      "h": 350,
+      "s": 0.9
     },
-    "hero": "heroes/figma-template-governance.jpg",
-    "heroAlt": "Four Figma plugins presented in a published-tools panel.",
+    "hero": "heroes/tire-categories.jpg",
+    "heroAlt": "A performance tire category screen beside an enlarged comparison chart.",
     "heroSource": "artwork v1",
     "stats": [
       {
-        "value": "4",
-        "size": "l",
-        "primary": "Internal Figma plugins built with agent assistance",
+        "value": "Up to +50%",
+        "size": "m",
+        "primary": "Initial conversion lift",
         "secondary": ""
       },
       {
-        "value": "15+",
+        "value": "Up to +400%",
+        "size": "s",
+        "primary": "Initial growth vs. month prior",
+        "secondary": ""
+      },
+      {
+        "value": "36",
         "size": "l",
-        "primary": "Web and UX designers the shared template and tools are built for",
+        "primary": "Icons scaled into a governed sitewide sprite library",
         "secondary": ""
       }
     ],
-    "year": "2026",
+    "year": "2024",
     "category": "Professional work",
     "back": {
       "intro": {
-        "src": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4",
-        "poster": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg",
+        "src": "../../../public/images/work/tire-categories/tire-categories-reel.mp4",
+        "poster": "../../../public/images/work/tire-categories/tire-categories-reel-poster.jpg",
         "captions": null,
-        "caption": "16-second tour using original screenshots and footage. Layer Cleanup is shown in the published tools list.",
-        "alt": "Quick tour of four internal Figma plugins using original screenshots and footage",
+        "caption": "The live pages on tirerack.com, captured 24 October 2026: the types page and its Performance chart, three category pages, then eight sub-category pages with their icons in place.",
+        "alt": "The Tire Categories & Types page and its icon grid; the Performance category modal building its performance chart; the Winter, All-Terrain and Performance category pages; then a flip through eight sub-category pages, each with its Tire Features icons.",
         "frame": "reel",
         "focus": 0.5,
-        "posterAt": 0,
-        "width": 1280,
-        "height": 800
+        "posterAt": 3.6,
+        "width": 1600,
+        "height": 900
       }
     },
     "panel": {
-      "eyebrow": "Professional work · 2026",
-      "title": "Figma Template Governance",
-      "status": "Internally published · Governance and rollout ongoing",
-      "role": "Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development",
+      "eyebrow": "Professional work · 2024",
+      "title": "Tire Categories",
+      "status": "Live · 30+ category pages",
+      "role": "Senior Web/Product Designer / UX Engineer",
       "nav": [
         "Walkthrough",
         "Decisions",
         "Outcome"
       ],
-      "links": [],
-      "tools": [
-        "Figma",
-        "Claude",
-        "Workfront"
-      ],
-      "context": "Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.",
-      "problemPunch": "A reviewer should not have to reconstruct the project from the file.",
-      "problem": [
-        "Project context lived in Workfront while the design evolved in Figma. Reviewers needed a consistent way to find the brief, inspect the proof, and see what was ready for handoff.",
-        "I moved proof preparation from Figma Slides into the working design file, where the team was already comfortable."
-      ],
-      "deck": "A shared Figma starter and four internal plugins for a team of 15+ Web and UX designers.",
-      "ownership": "I designed the template and workflows, built the plugins with agent assistance, and partnered with the lead PM on project metadata.",
-      "evidence": [
+      "links": [
         {
-          "src": "../../../public/images/work/figma-template-governance/starter-template-cover.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "Original Figma starter-template cover with the Project Info Card, plugin instructions, and supporting links",
-          "caption": "The starter-template cover keeps the brief, guide, and project links together.",
-          "width": 3516,
-          "height": 1532
-        },
-        {
-          "src": "../../../public/images/work/figma-template-governance/plugin-suite.png",
-          "display": null,
-          "poster": null,
-          "video": false,
-          "frame": null,
-          "crop": null,
-          "alt": "Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup",
-          "caption": "Four tools published to the team’s Figma workspace.",
-          "width": 646,
-          "height": 872
+          "label": "High Performance Summer (live CSS chart)",
+          "url": "https://www.tirerack.com/tires/summer/high-performance"
         }
       ],
+      "tools": [
+        "Figma",
+        "FigJam",
+        "HTML/CSS",
+        "Adobe Creative Suite"
+      ],
+      "context": "Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.",
+      "problemPunch": "Make tire-performance tradeoffs useful to everyday shoppers.",
+      "problem": [
+        "The category pages had to explain what a tire's strengths meant for someone's driving. I could not assume a visitor from search already understood the terms our testing team used.",
+        "The experience was dense, inconsistent, and almost entirely verbal. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another.",
+        "I needed to translate that knowledge into a comparison someone could use, even if this was the first Tire Rack page they had seen."
+      ],
+      "deck": "A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.",
+      "ownership": "I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.",
+      "evidence": [],
       "decisions": [
         {
-          "title": "Put the project context where the work starts",
-          "body": "A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.",
+          "title": "Make the types page a comparison",
+          "body": "Every category on Tire Categories & Types gets an icon, a short description and a Category Performance Averages link. The modal builds its chart in CSS, with reduced-motion behavior, a text fallback and screen-reader labels, so a shopper can compare categories before choosing one.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/tire-categories/primaryHome+icons_safe.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Annotated category-page proof: mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal",
+            "caption": "The annotated proof: category layouts with numbered callouts mapped to written UI behavior specs",
+            "width": 2416,
+            "height": 1439
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Give each category its own photography and template",
+          "body": "I redesigned the layout and template for each category page and directed its photoshoot, so the photography shows the driving conditions the category suits. The performance chart and three essential takeaways come first, so the page makes sense to someone arriving straight from search.",
+          "link": null,
+          "image": {
+            "src": "../../../public/images/work/tire-categories/supporting/outcome/in-page-application.png",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "Category detail page showing performance bar charts, product grid, and icon system in context",
+            "caption": "Category page in context: performance data, icon system, and product discovery working together",
+            "width": 3000,
+            "height": 7200
+          },
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Design the icons once, place them on every child page",
+          "body": "I designed a suite of over 32 icons for the sub-category pages. Each one names a tire feature, such as winter traction, off-road durability or heavy duty build, and carries a line of copy, so the pages beneath each category explain themselves the same way.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": {
+            "src": "../../../public/images/work/tire-categories/icon-suite.jpg",
+            "display": null,
+            "poster": null,
+            "video": false,
+            "frame": null,
+            "crop": null,
+            "alt": "The tire-feature icon suite: wet, dry and winter traction, track and competition, compact design, summer and winter only, handling, special use, tread life, off-road durability and traction, ride comfort, heavy duty, period-correct aesthetics, studdable, all-season, drag use and authentic handling, each with its label and description, in stacked and inline layouts",
+            "caption": "The icon suite, each icon in its stacked and inline layout, with the label and line of copy it carries on the page.",
+            "width": 4000,
+            "height": 1935
+          },
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Let authors change the data",
+          "body": "Reusable AEM components give content teams control of category copy and performance data without waiting for engineering.",
           "link": null,
           "image": null,
           "images": [],
@@ -1420,56 +1475,16 @@ window.BINDER_CARDS = [
           "artboards": [],
           "points": [],
           "quote": null
-        },
-        {
-          "title": "Keep proof preparation with the design",
-          "body": "Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/figma-template-governance/proof-template.png",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Original proof template with desktop and mobile snapshots",
-            "caption": "Proofs use shared layouts and explicit snapshot refreshes.",
-            "width": 2740,
-            "height": 1540
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Make handoff readiness explainable",
-          "body": "Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.",
-          "link": null,
-          "image": {
-            "src": "../../../public/images/work/figma-template-governance/actual-checklist-frame.jpg",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "Project Checklist in the original working Figma file",
-            "caption": "",
-            "width": 1280,
-            "height": 720
-          },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
         }
       ],
-      "outcomeMetric": null,
-      "outcome": "Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.",
+      "outcomeMetric": {
+        "value": "Up to +400%",
+        "label": "Category entry growth",
+        "context": "Natural-search entries to category pages, compared with the month before launch."
+      },
+      "outcome": "In the first month, Performance All-Season and Performance Summer reached up to a 50% purchase-conversion lift against the month before launch. Niche categories gained 30 to 40% in the same window. We tracked natural-search entries, on-page engagement and whether visitors entering through a category page went on to buy. These are page-level results over that comparison window.",
       "outcomeImages": [],
-      "href": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
+      "href": "https://www.rdeboerdesigns.com/work/tire-categories/"
     }
   },
   {
@@ -1714,111 +1729,133 @@ window.BINDER_CARDS = [
     }
   },
   {
-    "slug": "tire-categories",
+    "slug": "figma-template-governance",
     "index": "08",
-    "title": "Tire Category Redesign",
-    "subtitle": "Path to the right tire",
-    "titleSize": "n",
+    "title": "Figma starter template & governance",
+    "subtitle": "",
+    "titleSize": "w",
     "locked": true,
-    "group": "aem",
-    "groupLabel": "AEM",
-    "type": "aem",
-    "typeLabel": "AEM",
+    "group": "systems",
+    "groupLabel": "System design",
+    "type": "tools",
+    "typeLabel": "Internal tools",
     "groups": [
-      "aem",
-      "product"
+      "systems"
     ],
     "theme": {
-      "h": 350,
-      "s": 0.9
+      "h": 35,
+      "s": 0.35
     },
-    "hero": "heroes/tire-categories.jpg",
-    "heroAlt": "A performance tire category screen beside an enlarged comparison chart.",
+    "hero": "heroes/figma-template-governance.jpg",
+    "heroAlt": "Four Figma plugins presented in a published-tools panel.",
     "heroSource": "artwork v1",
     "stats": [
       {
-        "value": "Up to +50%",
-        "size": "m",
-        "primary": "Initial conversion lift",
-        "secondary": ""
-      },
-      {
-        "value": "Up to +400%",
-        "size": "s",
-        "primary": "Initial growth vs. month prior",
-        "secondary": ""
-      },
-      {
-        "value": "36",
+        "value": "4",
         "size": "l",
-        "primary": "Icons scaled into a governed sitewide sprite library",
+        "primary": "Internal Figma plugins built with agent assistance",
+        "secondary": ""
+      },
+      {
+        "value": "15+",
+        "size": "l",
+        "primary": "Web and UX designers the shared template and tools are built for",
         "secondary": ""
       }
     ],
-    "year": "2024",
+    "year": "2026",
     "category": "Professional work",
     "back": {
       "intro": {
-        "src": "../../../public/images/work/tire-categories/tire-categories-reel.mp4",
-        "poster": "../../../public/images/work/tire-categories/tire-categories-reel-poster.jpg",
+        "src": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook.mp4",
+        "poster": "../../../public/assets/portfolio-safe/figma-template-governance/plugin-quicklook-poster.jpg",
         "captions": null,
-        "caption": "The live pages on tirerack.com, captured 24 October 2026: the types page and its Performance chart, three category pages, then eight sub-category pages with their icons in place.",
-        "alt": "The Tire Categories & Types page and its icon grid; the Performance category modal building its performance chart; the Winter, All-Terrain and Performance category pages; then a flip through eight sub-category pages, each with its Tire Features icons.",
+        "caption": "16-second tour using original screenshots and footage. Layer Cleanup is shown in the published tools list.",
+        "alt": "Quick tour of four internal Figma plugins using original screenshots and footage",
         "frame": "reel",
         "focus": 0.5,
-        "posterAt": 3.6,
-        "width": 1600,
-        "height": 900
+        "posterAt": 0,
+        "width": 1280,
+        "height": 800
       }
     },
     "panel": {
-      "eyebrow": "Professional work · 2024",
-      "title": "Tire Categories",
-      "status": "Live · 30+ category pages",
-      "role": "Senior Web/Product Designer / UX Engineer",
+      "eyebrow": "Professional work · 2026",
+      "title": "Figma Template Governance",
+      "status": "Internally published · Governance and rollout ongoing",
+      "role": "Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development",
       "nav": [
         "Walkthrough",
         "Decisions",
         "Outcome"
       ],
-      "links": [
-        {
-          "label": "High Performance Summer (live CSS chart)",
-          "url": "https://www.tirerack.com/tires/summer/high-performance"
-        }
-      ],
+      "links": [],
       "tools": [
         "Figma",
-        "FigJam",
-        "HTML/CSS",
-        "Adobe Creative Suite"
+        "Claude",
+        "Workfront"
       ],
-      "context": "Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.",
-      "problemPunch": "Make tire-performance tradeoffs useful to everyday shoppers.",
+      "context": "Tire Rack is a national online tire and wheel retailer. Its Web and UX designers use Figma for design and Workfront for project tracking and approvals.",
+      "problemPunch": "A reviewer should not have to reconstruct the project from the file.",
       "problem": [
-        "The category pages had to explain what a tire's strengths meant for someone's driving. I could not assume a visitor from search already understood the terms our testing team used.",
-        "The experience was dense, inconsistent, and almost entirely verbal. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another.",
-        "I needed to translate that knowledge into a comparison someone could use, even if this was the first Tire Rack page they had seen."
+        "Project context lived in Workfront while the design evolved in Figma. Reviewers needed a consistent way to find the brief, inspect the proof, and see what was ready for handoff.",
+        "I moved proof preparation from Figma Slides into the working design file, where the team was already comfortable."
       ],
-      "deck": "A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.",
-      "ownership": "I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.",
-      "evidence": [],
+      "deck": "A shared Figma starter and four internal plugins for a team of 15+ Web and UX designers.",
+      "ownership": "I designed the template and workflows, built the plugins with agent assistance, and partnered with the lead PM on project metadata.",
+      "evidence": [
+        {
+          "src": "../../../public/images/work/figma-template-governance/starter-template-cover.png",
+          "display": null,
+          "poster": null,
+          "video": false,
+          "frame": null,
+          "crop": null,
+          "alt": "Original Figma starter-template cover with the Project Info Card, plugin instructions, and supporting links",
+          "caption": "The starter-template cover keeps the brief, guide, and project links together.",
+          "width": 3516,
+          "height": 1532
+        },
+        {
+          "src": "../../../public/images/work/figma-template-governance/plugin-suite.png",
+          "display": null,
+          "poster": null,
+          "video": false,
+          "frame": null,
+          "crop": null,
+          "alt": "Four internal Figma plugins: Project Checklist, Proof Assist, Title Card Generator, and Layer Cleanup",
+          "caption": "Four tools published to the team’s Figma workspace.",
+          "width": 646,
+          "height": 872
+        }
+      ],
       "decisions": [
         {
-          "title": "Make the types page a comparison",
-          "body": "Every category on Tire Categories & Types gets an icon, a short description and a Category Performance Averages link. The modal builds its chart in CSS, with reduced-motion behavior, a text fallback and screen-reader labels, so a shopper can compare categories before choosing one.",
+          "title": "Put the project context where the work starts",
+          "body": "A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.",
+          "link": null,
+          "image": null,
+          "images": [],
+          "wide": null,
+          "artboards": [],
+          "points": [],
+          "quote": null
+        },
+        {
+          "title": "Keep proof preparation with the design",
+          "body": "Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.",
           "link": null,
           "image": {
-            "src": "../../../public/images/work/tire-categories/primaryHome+icons_safe.png",
+            "src": "../../../public/images/work/figma-template-governance/proof-template.png",
             "display": null,
             "poster": null,
             "video": false,
             "frame": null,
             "crop": null,
-            "alt": "Annotated category-page proof: mobile layouts with numbered callouts mapped to UI Behavior specs for icons, performance averages, and the category modal",
-            "caption": "The annotated proof: category layouts with numbered callouts mapped to written UI behavior specs",
-            "width": 2416,
-            "height": 1439
+            "alt": "Original proof template with desktop and mobile snapshots",
+            "caption": "Proofs use shared layouts and explicit snapshot refreshes.",
+            "width": 2740,
+            "height": 1540
           },
           "images": [],
           "wide": null,
@@ -1827,54 +1864,21 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
-          "title": "Give each category its own photography and template",
-          "body": "I redesigned the layout and template for each category page and directed its photoshoot, so the photography shows the driving conditions the category suits. The performance chart and three essential takeaways come first, so the page makes sense to someone arriving straight from search.",
+          "title": "Make handoff readiness explainable",
+          "body": "Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.",
           "link": null,
           "image": {
-            "src": "../../../public/images/work/tire-categories/supporting/outcome/in-page-application.png",
+            "src": "../../../public/images/work/figma-template-governance/actual-checklist-frame.jpg",
             "display": null,
             "poster": null,
             "video": false,
             "frame": null,
             "crop": null,
-            "alt": "Category detail page showing performance bar charts, product grid, and icon system in context",
-            "caption": "Category page in context: performance data, icon system, and product discovery working together",
-            "width": 3000,
-            "height": 7200
+            "alt": "Project Checklist in the original working Figma file",
+            "caption": "",
+            "width": 1280,
+            "height": 720
           },
-          "images": [],
-          "wide": null,
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Design the icons once, place them on every child page",
-          "body": "I designed a suite of over 32 icons for the sub-category pages. Each one names a tire feature, such as winter traction, off-road durability or heavy duty build, and carries a line of copy, so the pages beneath each category explain themselves the same way.",
-          "link": null,
-          "image": null,
-          "images": [],
-          "wide": {
-            "src": "../../../public/images/work/tire-categories/icon-suite.jpg",
-            "display": null,
-            "poster": null,
-            "video": false,
-            "frame": null,
-            "crop": null,
-            "alt": "The tire-feature icon suite: wet, dry and winter traction, track and competition, compact design, summer and winter only, handling, special use, tread life, off-road durability and traction, ride comfort, heavy duty, period-correct aesthetics, studdable, all-season, drag use and authentic handling, each with its label and description, in stacked and inline layouts",
-            "caption": "The icon suite, each icon in its stacked and inline layout, with the label and line of copy it carries on the page.",
-            "width": 4000,
-            "height": 1935
-          },
-          "artboards": [],
-          "points": [],
-          "quote": null
-        },
-        {
-          "title": "Let authors change the data",
-          "body": "Reusable AEM components give content teams control of category copy and performance data without waiting for engineering.",
-          "link": null,
-          "image": null,
           "images": [],
           "wide": null,
           "artboards": [],
@@ -1882,14 +1886,10 @@ window.BINDER_CARDS = [
           "quote": null
         }
       ],
-      "outcomeMetric": {
-        "value": "Up to +400%",
-        "label": "Category entry growth",
-        "context": "Natural-search entries to category pages, compared with the month before launch."
-      },
-      "outcome": "In the first month, Performance All-Season and Performance Summer reached up to a 50% purchase-conversion lift against the month before launch. Niche categories gained 30 to 40% in the same window. We tracked natural-search entries, on-page engagement and whether visitors entering through a category page went on to buy. These are page-level results over that comparison window.",
+      "outcomeMetric": null,
+      "outcome": "Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.",
       "outcomeImages": [],
-      "href": "https://www.rdeboerdesigns.com/work/tire-categories/"
+      "href": "https://www.rdeboerdesigns.com/work/figma-template-governance/"
     }
   },
   {
