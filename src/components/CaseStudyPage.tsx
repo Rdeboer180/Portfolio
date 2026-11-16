@@ -7,6 +7,7 @@ import CoverSchematic, { hasSchematic } from './CoverSchematic';
 import { getHomeHref, getProjectsHref } from '../utils/homeSession';
 import OverlayCard from './OverlayCard';
 import LinkedInLink from './LinkedInLink';
+import OutboundLink, { outboundKind } from './OutboundLink';
 import { PlayDraftDownload, PlayDraftLaunch } from './PlayDraftRelease';
 import { useUnlock } from '../context/UnlockContext';
 import { SITE, EMAIL_HREF } from '../data/site';
@@ -1062,7 +1063,9 @@ const CaseStudyPage: React.FC<CaseStudyPageProps> = ({ slug, detailOnly = false 
                 <div className="cs__live-links">
                   <span className="cs__live-links-label">{project.outcomeLiveLinksLabel ?? 'Select pages are live'}</span>
                   <div className="cs__live-links-list">
-                    {project.outcomeLiveLinks.map((link, i) => (
+                    {project.outcomeLiveLinks.map((link, i) => outboundKind(link.url) ? (
+                      <OutboundLink key={i} href={link.url} kind={outboundKind(link.url)!} label={link.label} className="cs__live-link" />
+                    ) : (
                       <a key={i} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer" className="cs__live-link">
                         {link.label} &rarr;
                         <span className="sr-only"> (opens in a new tab)</span>

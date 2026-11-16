@@ -28,12 +28,16 @@
     gap: $spacing-xl;
     max-height: calc(100dvh - 48px);
     overflow-y: auto;
-    padding: 4px 8px 4px 4px;
+    padding: 6px 8px 6px 6px;
     font-size: $font-size-body-sm;
     header p { margin: $spacing-md 0 0; }
     h1 { font-size: $font-size-h1; margin: $spacing-sm 0; }
     nav { display: grid; gap: $spacing-sm; }
     nav a { min-height: 32px; display: flex; align-items: center; }
+    // The rail scrolls (overflow-y), which clips anything drawn outside its
+    // padding box: the page-wide 5px focus ring lost its left edge here. In
+    // the rail the ring sits 3px out, inside the rail's 6px gutter.
+    a:focus-visible { outline-offset: 3px; border-radius: 2px; }
   }
   &__home { font-weight: 700; text-decoration: none; }
   &__eyebrow { font-family: $font-family-mono !important; font-size: $font-size-caption; font-weight: 400; color: $color-text-secondary; }

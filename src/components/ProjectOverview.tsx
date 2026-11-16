@@ -1,4 +1,5 @@
 import { reviewHref } from '../utils/reviewRoutes';
+import OutboundLink, { outboundKind } from './OutboundLink';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ToolBucket from './ToolBucket';
@@ -140,9 +141,12 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
           <a href="#project-outcome" onClick={event => goToSection(event, 'project-outcome')}>Outcome</a>
         </nav>
         {project.slug === 'playdraft' && <PlayDraftStoreLink>Get PlayDraft for iPhone</PlayDraftStoreLink>}
-        {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, project.slug === 'loopstack' ? 3 : 2).map(link =>
-          <a key={link.url} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer">{link.label}<span className="sr-only"> (opens in a new tab)</span> ↗</a>
-        )}
+        {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, project.slug === 'loopstack' ? 3 : 2).map(link => {
+          const kind = outboundKind(link.url);
+          return kind
+            ? <OutboundLink key={link.url} href={link.url} kind={kind} label={link.label} />
+            : <a key={link.url} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer">{link.label}<span className="sr-only"> (opens in a new tab)</span> ↗</a>;
+        })}
         <div className="project-overview__tools">
           <p className="project-overview__eyebrow">Tools used</p>
           <ToolBucket slug={project.slug} tools={project.tools} />
@@ -212,7 +216,7 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
           {project.outcomePrototype && <PrototypeFrame {...project.outcomePrototype} />}
           {project.slug === 'loopstack' && project.outcomeLiveLinks && <p className="project-overview__links">
             {project.outcomeLiveLinks.filter(link => link.url.startsWith('https://github.com')).map(link =>
-              <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗<span className="sr-only"> (opens in a new tab)</span></a>)}
+              <OutboundLink key={link.url} href={link.url} kind={outboundKind(link.url) ?? 'github'} label={link.label} />)}
           </p>}
           {overview.outcomeImages?.filter(Boolean).length ? (overview.outcomeImages.length > 1
             ? <ComparisonRow title="Outcome" images={overview.outcomeImages} />
