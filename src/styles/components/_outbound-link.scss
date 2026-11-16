@@ -24,6 +24,9 @@
   &__rest { transition: opacity 320ms ease-out; }
   &__lift { opacity: 0; transition: opacity 320ms ease-out; }
 
+  // The download sticker leads the text, inline on its first line.
+  &--download &__sticker { margin: -0.35em 0.3em -0.35em 0; vertical-align: -0.08em; }
+
   @mixin lifted {
     .outbound-link__sticker {
       transform: translateY(-1px) rotate(4deg);

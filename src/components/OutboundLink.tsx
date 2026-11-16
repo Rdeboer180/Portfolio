@@ -5,6 +5,8 @@ import PeelSticker, { FoilStops } from './PeelSticker';
  * OutboundLink — the GitHub and download links end on a small peeled-emblem
  * sticker, the same recipe as LinkedInLink's (16 November 2026), so a reader
  * knows before the click where the link goes. The sticker replaces the ↗.
+ * A download sticker leads its text, inline on the first line (Ryan, 16
+ * November): the action reads first. The GitHub sticker trails, like LinkedIn.
  * GitHub: the mark in white on graphite foil. Download: a white arrow into a
  * tray on the brand-orange enamel. Styles: styles/components/_outbound-link.scss;
  * colours are tokens (--github-*, --download-*, --sticker-*).
@@ -45,6 +47,8 @@ interface OutboundLinkProps {
 
 const OutboundLink: React.FC<OutboundLinkProps> = ({ href, kind, label, className }) => {
   const sticker = STICKERS[kind];
+  const mark = <PeelSticker block="outbound-link" foil={sticker.foil} lift={sticker.lift} mark={sticker.mark} />;
+  const leads = kind === 'download';
   return (
     <a
       href={href}
@@ -52,8 +56,9 @@ const OutboundLink: React.FC<OutboundLinkProps> = ({ href, kind, label, classNam
       target="_blank"
       rel="noopener noreferrer"
     >
+      {leads && mark}
       <span className="outbound-link__label">{label}</span>
-      <PeelSticker block="outbound-link" foil={sticker.foil} lift={sticker.lift} mark={sticker.mark} />
+      {!leads && mark}
       <span className="sr-only"> (opens in a new tab)</span>
     </a>
   );
