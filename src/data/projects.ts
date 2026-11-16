@@ -265,6 +265,8 @@ export interface Project {
   outcomeImages?: ProjectImage[];
   outcomeGridImages?: ProjectImage[];
   outcomeLiveLinks?: { label: string; url: string }[];
+  /** A live prototype shown in a browser window in the outcome, started on click. */
+  outcomePrototype?: { src: string; title: string; caption?: string };
   // Optional heading over the live-links list (default: 'Select pages are live')
   outcomeLiveLinksLabel?: string;
   // Scan-to-install block in the outcome section. `qr` is a slug under
@@ -2093,11 +2095,16 @@ Frame every output as:
     ],
     // Same code the iOS build wraps (Capacitor) — served on sample data,
     // since HealthKit only exists on device. The disclosure system labels it.
+    outcomePrototype: {
+      src: '/loopstack-desktop-demo/',
+      title: 'LoopStack desktop prototype on a synthetic patient',
+      caption: 'The desktop app, running in your browser on a synthetic patient.',
+    },
     outcomeLiveLinksLabel: 'Use the working product',
     outcomeLiveLinks: [
+      { label: 'Download LoopStack for Mac (free, open source)', url: 'https://github.com/Rdeboer180/LoopStack/releases/latest' },
       { label: 'Try the phone app demo (real app, sample data)', url: '/loopstack-demo/' },
       { label: 'Try the desktop app in your browser (synthetic patient)', url: '/loopstack-desktop-demo/' },
-      { label: 'Download LoopStack for Mac (free, open source)', url: 'https://github.com/Rdeboer180/LoopStack/releases/latest' },
       { label: 'Source code and getting-started guide on GitHub', url: 'https://github.com/Rdeboer180/LoopStack' },
     ],
     // TODO(Ryan): swap to the TestFlight public link once it exists —

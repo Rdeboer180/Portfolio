@@ -12,6 +12,7 @@ import { ProjectContext } from './ProjectBrand';
 import FramedViewport from './FramedViewport';
 import BinderTop from './BinderTop';
 import BrandIntro from './BrandIntro';
+import PrototypeFrame from './PrototypeFrame';
 import WheelRackFitmentPrototype from './WheelRackFitmentPrototype';
 
 /** Live code prototypes a decision can embed (decision.prototype.id). Each also lives in its note. */
@@ -139,7 +140,7 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
           <a href="#project-outcome" onClick={event => goToSection(event, 'project-outcome')}>Outcome</a>
         </nav>
         {project.slug === 'playdraft' && <PlayDraftStoreLink>Get PlayDraft for iPhone</PlayDraftStoreLink>}
-        {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, 2).map(link =>
+        {project.slug !== 'playdraft' && project.outcomeLiveLinks?.slice(0, project.slug === 'loopstack' ? 3 : 2).map(link =>
           <a key={link.url} href={reviewHref(link.url)} target="_blank" rel="noopener noreferrer">{link.label}<span className="sr-only"> (opens in a new tab)</span> ↗</a>
         )}
         <div className="project-overview__tools">
@@ -208,6 +209,11 @@ const ProjectOverview: React.FC<{ project: Project }> = ({ project }) => {
             {overview.outcomeMetric.context && <span className="project-overview__metric-context">{overview.outcomeMetric.context}</span>}
           </p>}
           <p>{overview.outcome}</p>
+          {project.outcomePrototype && <PrototypeFrame {...project.outcomePrototype} />}
+          {project.slug === 'loopstack' && project.outcomeLiveLinks && <p className="project-overview__links">
+            {project.outcomeLiveLinks.filter(link => link.url.startsWith('https://github.com')).map(link =>
+              <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗<span className="sr-only"> (opens in a new tab)</span></a>)}
+          </p>}
           {overview.outcomeImages?.filter(Boolean).length ? (overview.outcomeImages.length > 1
             ? <ComparisonRow title="Outcome" images={overview.outcomeImages} />
             : <OverviewMedia image={overview.outcomeImages[0]} />) : null}

@@ -281,3 +281,8 @@
   }
 }
 .project-overview__prototype-link { font-size: $font-size-body-sm; font-weight: 600; }
+
+.project-overview__links {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0 0 24px;
+  a { font-weight: 600; }
+}
