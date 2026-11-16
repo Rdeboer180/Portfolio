@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const CANVAS = { w: 1280, h: 800 };
-// Below this column width the desktop canvas would be scaled past reading.
-const SCALE_MIN = 640;
+// A phone is the screen, not the column: a laptop window can have a narrow
+// column and still want the live app, scaled to fit.
+const PHONE_QUERY = '(max-width: 767px)';
 
 interface PrototypeFrameProps {
   src: string;
@@ -20,6 +21,7 @@ interface PrototypeFrameProps {
 const PrototypeFrame: React.FC<PrototypeFrameProps> = ({ src, title, caption, phoneAlt }) => {
   const [on, setOn] = useState(false);
   const [w, setW] = useState(0);
+  const [narrow, setNarrow] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   // The app is drawn on a desktop canvas and scaled to the column, so it reads
   // as the desktop app and not a squeezed one.
@@ -31,11 +33,20 @@ const PrototypeFrame: React.FC<PrototypeFrameProps> = ({ src, title, caption, ph
     setW(el.clientWidth);
     return () => ro.disconnect();
   }, []);
-  const scaled = w >= SCALE_MIN;
-  const k = scaled ? w / CANVAS.w : 1;
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia(PHONE_QUERY);
+    const sync = () => setNarrow(mq.matches);
+    sync();
+    mq.addEventListener?.('change', sync);
+    return () => mq.removeEventListener?.('change', sync);
+  }, []);
   // On a phone a desktop app can only be cropped or shrunk past reading, so
   // the frame offers the phone build first and the desktop app full screen.
-  const phone = !!phoneAlt && w > 0 && !scaled;
+  const phone = !!phoneAlt && narrow;
+  // Everywhere else the desktop canvas is scaled to the column.
+  const scaled = w > 0 && !narrow;
+  const k = scaled ? w / CANVAS.w : 1;
   return (
     <figure className="proto">
       <div className="framed framed--browser">
