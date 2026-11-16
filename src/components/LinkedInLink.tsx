@@ -1,4 +1,5 @@
-import React, { useId } from 'react';
+import React from 'react';
+import PeelSticker from './PeelSticker';
 import { SITE } from '../data/site';
 
 /**
@@ -48,63 +49,26 @@ const IN_MARK = 'M7.5 7.4v.01M7.5 11v6.5M11.6 17.5v-6.5M11.6 13.6c0-1.8 1.3-2.6 
  * it. Two states are drawn, rest and lift; hover / focus-visible on the link
  * crossfades to the lift (the corner peels further, the foil's light moves)
  * and the sticker rises 2px and turns 4deg. Colours are tokens
- * (--linkedin-*, --sticker-*). Decorative: the link carries the name.
+ * (--linkedin-*, --sticker-*). Drawn by PeelSticker, shared with OutboundLink.
  */
-const LinkedInSticker: React.FC<{ ink: number }> = ({ ink }) => {
-  const id = useId().replace(/:/g, '');
-  const emblem = (foil: string, clip: string) => (
-    <g clipPath={`url(#${id}${clip})`}>
-      <rect x="2" y="2" width="20" height="20" rx="4.5" fill="var(--sticker-die-cut)" stroke="var(--sticker-kiss-cut-steel)" strokeWidth="3.6" />
-      <rect x="2" y="2" width="20" height="20" rx="4.5" fill={`url(#${id}${foil})`} stroke="var(--sticker-die-cut)" strokeWidth="2.8" />
-      <path d={IN_MARK} stroke="var(--sticker-die-cut)" strokeWidth={ink} />
-    </g>
-  );
-  return (
-    <svg
-      className="linkedin-link__sticker"
-      viewBox="-3 -3 30 30"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <linearGradient id={`${id}a`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="var(--linkedin-blue-deep)" />
-          <stop offset=".26" stopColor="var(--linkedin-blue)" />
-          <stop offset=".38" stopColor="var(--linkedin-blue-light)" />
-          <stop offset=".44" stopColor="var(--linkedin-blue-glint)" />
-          <stop offset=".5" stopColor="var(--linkedin-blue-light)" />
-          <stop offset=".7" stopColor="var(--linkedin-blue)" />
-          <stop offset="1" stopColor="var(--linkedin-blue-deep)" />
-        </linearGradient>
-        <linearGradient id={`${id}b`} x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--linkedin-blue)" />
-          <stop offset=".32" stopColor="var(--linkedin-blue-light)" />
-          <stop offset=".5" stopColor="var(--sticker-die-cut)" />
-          <stop offset=".58" stopColor="var(--linkedin-blue-light)" />
-          <stop offset="1" stopColor="var(--linkedin-blue-deep)" />
-        </linearGradient>
-        <linearGradient id={`${id}p`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="var(--sticker-die-cut)" />
-          <stop offset=".6" stopColor="var(--sticker-release-paper)" />
-          <stop offset="1" stopColor="var(--sticker-kiss-cut)" />
-        </linearGradient>
-        <clipPath id={`${id}c`}><polygon points="-5,-5 29,-5 29,11 11,29 -5,29" /></clipPath>
-        <clipPath id={`${id}l`}><polygon points="-5,-5 29,-5 29,7 7,29 -5,29" /></clipPath>
-      </defs>
-      <g className="linkedin-link__rest">
-        {emblem('a', 'c')}
-        <path d="M22.9 17.1L17.1 22.9L13.8 13.8Z" fill={`url(#${id}p)`} stroke="var(--sticker-kiss-cut)" strokeWidth=".3" />
-      </g>
-      <g className="linkedin-link__lift">
-        {emblem('b', 'l')}
-        <path d="M22.9 13.1L13.1 22.9L9.6 9.6Z" fill={`url(#${id}p)`} stroke="var(--sticker-kiss-cut)" strokeWidth=".3" />
-      </g>
-    </svg>
-  );
-};
+const LI_FOIL = [
+  [0, 'var(--linkedin-blue-deep)'], [0.26, 'var(--linkedin-blue)'], [0.38, 'var(--linkedin-blue-light)'],
+  [0.44, 'var(--linkedin-blue-glint)'], [0.5, 'var(--linkedin-blue-light)'], [0.7, 'var(--linkedin-blue)'],
+  [1, 'var(--linkedin-blue-deep)'],
+] as const;
+const LI_LIFT = [
+  [0, 'var(--linkedin-blue)'], [0.32, 'var(--linkedin-blue-light)'], [0.5, 'var(--sticker-die-cut)'],
+  [0.58, 'var(--linkedin-blue-light)'], [1, 'var(--linkedin-blue-deep)'],
+] as const;
+
+const LinkedInSticker: React.FC<{ ink: number }> = ({ ink }) => (
+  <PeelSticker
+    block="linkedin-link"
+    foil={LI_FOIL}
+    lift={LI_LIFT}
+    mark={<path d={IN_MARK} stroke="var(--sticker-die-cut)" strokeWidth={ink} />}
+  />
+);
 
 /**
  * LinkedInLink — every outbound LinkedIn link on the site. The peeled emblem

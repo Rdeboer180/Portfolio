@@ -1,0 +1,47 @@
+// ============================================
+// OutboundLink: GitHub and download links (16 November 2026)
+// The LinkedIn sticker's recipe (PeelSticker), kept small: the sticker sits
+// after the label at about the label's cap height and replaces the ↗.
+// Hover or focus: the corner peels further, the foil's light moves, and the
+// sticker lifts 1px and turns 4deg. Reduced motion: no travel.
+// The link keeps its surface's type and colour; only the sticker is added.
+// ============================================
+
+.outbound-link {
+  &__sticker {
+    --ob-size: 1.45em;
+    display: inline-block;
+    width: var(--ob-size);
+    height: var(--ob-size);
+    margin: -0.35em 0 -0.35em 0.15em;
+    vertical-align: -0.42em;
+    overflow: visible;
+    filter: drop-shadow(1px 1.5px 1px rgba(27, 27, 27, 0.22));
+    transition:
+      transform 320ms var(--ease-out),
+      filter 320ms var(--ease-out);
+  }
+  &__rest { transition: opacity 320ms ease-out; }
+  &__lift { opacity: 0; transition: opacity 320ms ease-out; }
+
+  @mixin lifted {
+    .outbound-link__sticker {
+      transform: translateY(-1px) rotate(4deg);
+      filter: drop-shadow(2px 4px 3px rgba(27, 27, 27, 0.2));
+    }
+    .outbound-link__rest { opacity: 0; }
+    .outbound-link__lift { opacity: 1; }
+  }
+  @media (hover: hover) {
+    &:hover { @include lifted; }
+  }
+  &:focus-visible { @include lifted; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .outbound-link__sticker,
+    .outbound-link__rest,
+    .outbound-link__lift { transition: none; }
+    &:hover .outbound-link__sticker,
+    &:focus-visible .outbound-link__sticker { transform: none; }
+  }
+}

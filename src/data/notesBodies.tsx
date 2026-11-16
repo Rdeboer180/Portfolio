@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LinkedInLink from '../components/LinkedInLink';
+import OutboundLink from '../components/OutboundLink';
 import PaperArtboardGallery from '../components/PaperArtboardGallery';
 import playdraft from './playdraft.json';
 import { SystemsBoard } from '../components/SystemsInPractice';
@@ -499,7 +500,7 @@ export const NOTE_BODIES: Record<string, React.ReactNode> = {
       </figure>
       <p>My <Link to="/work/aem-component-system/">AEM component work</Link> covers variants, production styles, and authoring defaults. The <Link to="/work/landing-pages/">template system</Link> defines where authors can use them. I'll map Figma components to those AEM equivalents and provide approved references where the mapping is incomplete.</p>
       <p>A custom skill can hold the guidance we usually have to explain: which variant fits, which brand assets to use, and when to stop and ask. AEM permissions and policies still apply. I'll review what the agent produces against our component rules and the rendered page.</p>
-      <p>I'm also studying Adobe's published <a href="https://github.com/adobe/skills" target="_blank" rel="noopener noreferrer"><code>figma-to-content</code> skill</a>. It targets document-based Edge Delivery Services content, a separate workflow from the Coworker demo. I'll assess what we can adapt to our system.</p>
+      <p>I'm also studying Adobe's published <OutboundLink href="https://github.com/adobe/skills" kind="github" label={<><code>figma-to-content</code> skill</>} />. It targets document-based Edge Delivery Services content, a separate workflow from the Coworker demo. I'll assess what we can adapt to our system.</p>
       <figure className="notes__figure">
         <a href="/images/notes/aem-authoring/template-mapping.png" target="_blank" rel="noopener noreferrer" aria-label="Open the template evaluation frame at full size">
           <img src="/images/notes/aem-authoring/template-mapping.png" width="3744" height="2594" loading="lazy" alt="Coworker evaluates a content-page template, identifies its allowed components, and proposes mappings from design blocks to Teaser, Separator, Text, and Title." />

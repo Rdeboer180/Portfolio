@@ -16,6 +16,7 @@ import playdraft from '../../data/playdraft.json';
 import { FEATURED, initials, testimonials } from '../Testimonials';
 import { strengthRows } from '../../data/about';
 import LinkedInLink from '../LinkedInLink';
+import OutboundLink from '../OutboundLink';
 
 /** the opening of every draft note: what PlayDraft is and why, then which board this is */
 const PlayDraftIntro: React.FC<{ topic: string }> = ({ topic }) => (
@@ -145,7 +146,7 @@ const NOTES: Record<string, (p: NoteProps) => React.ReactNode> = {
       <h3>The phone</h3>
       <h2 id="desk-note-title">I build the app that runs my insulin</h2>
       <p>I have Type 1 diabetes. For eight years I have been part of the DIY Loop community: I build Loop, the open-source app that reads my glucose sensor and adjusts my insulin pump on its own, and I maintain it myself.</p>
-      <p>Now I am experimenting with custom builds. My fork adds parabolic carb absorption, an 8-hour curve for heavy meals and a 12-hour curve for dessert, past meals saved as favorites, and a rolling 24-hour carb history. Every patch is public in <a href="https://github.com/Rdeboer180/LoopWorkspace" target="_blank" rel="noopener noreferrer">my LoopWorkspace fork on GitHub <span aria-hidden="true">↗</span><span className="sr-only">(opens in a new tab)</span></a>. The screen on the desk is a working copy of it. Hover the reading.</p>
+      <p>Now I am experimenting with custom builds. My fork adds parabolic carb absorption, an 8-hour curve for heavy meals and a 12-hour curve for dessert, past meals saved as favorites, and a rolling 24-hour carb history. Every patch is public in <OutboundLink href="https://github.com/Rdeboer180/LoopWorkspace" kind="github" label="my LoopWorkspace fork on GitHub" />. The screen on the desk is a working copy of it. Hover the reading.</p>
       <p>LoopStack builds on everything that accumulates while I loop. It compares what Loop predicted after a meal with what happened, then groups repeated curves into patterns worth reviewing with my care team. It is an open-source SaaS for the Loop community, for people who want tighter control of their glucose and the confidence to refine their settings with their care team.</p>
       <p>The same story runs through my other work for people with Type 1: T1D Hub, the brand and design system I built with Dr. Brian Huber for his practice, and Bolus Binder, the companion app that carries it into the kitchen.</p>
       <div className="note__links">
