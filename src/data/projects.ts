@@ -266,7 +266,9 @@ export interface Project {
   outcomeGridImages?: ProjectImage[];
   outcomeLiveLinks?: { label: string; url: string }[];
   /** A live prototype shown in a browser window in the outcome, started on click. */
-  outcomePrototype?: { src: string; title: string; caption?: string };
+  // phoneAlt: where a phone reader goes instead, when the prototype is a
+  // desktop app that needs a wide screen (LoopStack: the phone app demo).
+  outcomePrototype?: { src: string; title: string; caption?: string; phoneAlt?: { label: string; href: string } };
   // Optional heading over the live-links list (default: 'Select pages are live')
   outcomeLiveLinksLabel?: string;
   // Scan-to-install block in the outcome section. `qr` is a slug under
@@ -2099,6 +2101,7 @@ Frame every output as:
       src: '/loopstack-desktop-demo/',
       title: 'LoopStack desktop prototype on a synthetic patient',
       caption: 'The desktop app, running in your browser on a synthetic patient.',
+      phoneAlt: { label: 'Try the phone app demo', href: '/loopstack-demo/' },
     },
     outcomeLiveLinksLabel: 'Use the working product',
     outcomeLiveLinks: [

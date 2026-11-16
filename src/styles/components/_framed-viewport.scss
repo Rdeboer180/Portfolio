@@ -89,3 +89,22 @@
   &__hint { font-weight: 400; font-size: 0.875rem; opacity: 0.75; }
 }
 @media (max-width: 640px) { .proto__screen { aspect-ratio: 4 / 5; } }
+
+// On a phone the frame holds the way in, not the desktop app: the phone
+// build first, the desktop app full screen second.
+.proto__screen--phone { aspect-ratio: auto; }
+.proto__phone {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+  padding: 24px 20px;
+}
+.proto__phone-note { margin: 0; font-size: 0.9375rem; line-height: 1.5; color: $color-text-secondary; }
+.proto__phone-primary {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 18px;
+  border-radius: 999px; background: $color-neutral-dark; color: $color-white !important;
+  font-weight: 600; text-decoration: none;
+  &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: 3px; }
+}
+.proto__phone-secondary {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 0.9375rem; font-weight: 600; text-decoration: underline; text-underline-offset: 4px;
+}
