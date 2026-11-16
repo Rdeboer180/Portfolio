@@ -171,6 +171,32 @@
         "WheelRackFitmentPrototype",
         "CaseStudyPage"
       ]
+    },
+    "OutboundLink": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #35",
+      "path": "src/components/OutboundLink.tsx",
+      "blocks": [
+        "outbound-link",
+        "sr-only"
+      ],
+      "relatives": [
+        "LinkedInLink",
+        "ProjectLink"
+      ]
+    },
+    "PeelSticker": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "PR #35",
+      "path": "src/components/PeelSticker.tsx",
+      "blocks": [],
+      "relatives": [
+        "HoloSticker"
+      ]
     }
   },
   "patterns": {
@@ -246,6 +272,11 @@
       "status": "proposed",
       "introduced": "PR #34",
       "stylesheet": "src/styles/components/_framed-viewport.scss"
+    },
+    "outbound-link": {
+      "status": "proposed",
+      "introduced": "PR #35",
+      "stylesheet": "src/styles/components/_outbound-link.scss"
     }
   }
 }
