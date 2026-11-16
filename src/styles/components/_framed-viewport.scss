@@ -70,3 +70,22 @@
     border-radius: 34px;
   }
 }
+
+// A live prototype inside the browser window (PrototypeFrame.tsx).
+.proto {
+  margin: 0 0 24px;
+
+  &__screen { position: relative; aspect-ratio: 16 / 10; background: $color-neutral-lightest; }
+  &__screen--scaled { aspect-ratio: auto; overflow: hidden; }
+  &__screen--scaled &__frame { inset: auto; top: 0; left: 0; transform-origin: 0 0; }
+  &__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: $color-white; }
+  &__start {
+    position: absolute; inset: 0; width: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    border: 0; background: transparent; font: inherit; font-weight: 600; cursor: pointer; color: inherit;
+    &:hover { background: rgba($color-neutral-dark, 0.03); }
+    &:focus-visible { outline: 2px solid $color-primary-text; outline-offset: -4px; }
+  }
+  &__hint { font-weight: 400; font-size: 0.875rem; opacity: 0.75; }
+}
+@media (max-width: 640px) { .proto__screen { aspect-ratio: 4 / 5; } }

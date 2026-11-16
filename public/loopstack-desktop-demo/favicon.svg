@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- LoopStack mark, Concept 07c (the chosen icon): the ring with a speech tail; the care team's reply in ink comes in from outside the ring. -->
+  <defs><linearGradient id="g" x1="0" y1="14" x2="0" y2="86" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#6DCE3F"/><stop offset="1" stop-color="#1F7A2E"/></linearGradient></defs>
+  <rect width="100" height="100" rx="22.5" fill="#FFFFFF"/>
+  <g transform="translate(-1.2 1.8)">
+    <path d="M66.1 28.6A28 28 0 1 0 66.1 67.4" fill="none" stroke="url(#g)" stroke-width="11"/>
+    <polygon points="33.3,75.2 18.8,60.7 13,81" fill="url(#g)" stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="50" y="35.25" width="30" height="6.5" rx="3.25" fill="url(#g)"/>
+    <rect x="60" y="44.75" width="30" height="6.5" rx="3.25" fill="#0E1216"/>
+    <rect x="50" y="54.25" width="21" height="6.5" rx="3.25" fill="url(#g)"/>
+  </g>
+</svg>
