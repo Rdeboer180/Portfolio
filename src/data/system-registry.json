@@ -197,6 +197,20 @@
       "relatives": [
         "HoloSticker"
       ]
+    },
+    "HeroBubbles": {
+      "size": "playground",
+      "documented": null,
+      "status": "proposed",
+      "introduced": "this branch",
+      "path": "src/components/HeroBubbles.tsx",
+      "blocks": [
+        "hero-bubbles"
+      ],
+      "relatives": [
+        "AboutHero",
+        "Hero"
+      ]
     }
   },
   "patterns": {
@@ -277,6 +291,11 @@
       "status": "proposed",
       "introduced": "PR #35",
       "stylesheet": "src/styles/components/_outbound-link.scss"
+    },
+    "hero-bubbles": {
+      "status": "proposed",
+      "introduced": "this branch",
+      "stylesheet": "src/styles/components/_hero-bubbles.scss"
     }
   }
 }
