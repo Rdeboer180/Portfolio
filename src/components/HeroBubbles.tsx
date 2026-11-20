@@ -15,20 +15,22 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-type Word = { text: string; to?: string; desktop?: number; mobile?: number };
+type Word = { text: string; to?: string; desktop?: number; mid?: number; midLift?: number; mobile?: number };
 
-// desktop / phone: the angle each sticker settles at (deg, 0 = right, clockwise).
-// Four stickers: Ambitious, System Driven, Ruthlessly Curious and Committed,
-// spread over the top and right of the ring on desktop, and on the portrait's
-// four corners on a phone.
+// The angle each sticker settles at (deg, 0 = right, clockwise), per width:
+// desktop (1280 and up) spreads the four over the top of the ring; mid
+// (1024–1279) stacks them in a staggered cluster above it, midLift raising a
+// sticker into a second row; mobile puts them on the portrait's four corners.
+// Each set was searched in a headless browser to stay clear of the copy, the
+// Roles panel, the nav, the screen edge and each other at every width.
 // Words without an angle pour into the portrait with the catalog.
 const WORDS: Word[] = [
-  { text: 'Ambitious', desktop: -160, mobile: -145 },
+  { text: 'Ambitious', desktop: -145, mid: -118, midLift: 0, mobile: -125 },
   { text: 'Point of View' },
-  { text: 'System Driven', to: '/design-system', desktop: -116, mobile: -35 },
+  { text: 'System Driven', to: '/design-system', desktop: -108, mid: -102, midLift: 30, mobile: -55 },
   { text: 'Craft' },
-  { text: 'Ruthlessly Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
-  { text: 'Committed', to: '/work/wheelrack/', desktop: -20, mobile: 35 },
+  { text: 'Ruthlessly Curious', to: '/talent-tree', desktop: -72, mid: -65, midLift: 50, mobile: 125 },
+  { text: 'Committed', to: '/work/wheelrack/', desktop: -35, mid: -48, midLift: 0, mobile: 55 },
   { text: 'Care' },
   { text: 'Visual Problem Solver' },
   { text: 'Restless' },
@@ -40,6 +42,15 @@ const WORDS: Word[] = [
 const AUTHORED = 2400;
 export const BUBBLES_DURATION = 3400;
 export const BUBBLES_STRETCH = BUBBLES_DURATION / AUTHORED;
+
+// Settled stickers are placed by the browser, not by script: CSS anchor
+// positioning ties each one to the portrait's ring (_hero-bubbles.scss), so a
+// resize moves them on the same frame as the portrait, with nothing to
+// recalculate or glide. The geometry here and in the stylesheet is the same:
+// a radius of half the profile plus 30px on desktop (the sticker's near edge
+// on that circle), and the sticker's centre at 1.02 of the radius on a phone.
+// Browsers without anchor positioning keep the script placement below.
+const anchorable = () => typeof CSS !== 'undefined' && CSS.supports('position-anchor: --hero-ring') && CSS.supports('left: anchor(center)');
 
 type Mark = { kind: 'comp' | 'block' | 'prop'; prod: boolean; x: number; y: number; k: number; j: number; sz: number };
 type Pt = { x: number; y: number };
@@ -85,6 +96,7 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
   const raf = useRef(0);
   const [placed, setPlaced] = useState(false);
   const [settled, setSettled] = useState(false);
+  const [anchored, setAnchored] = useState(false);
   const [gliding, setGliding] = useState(false);
 
   // ---- measure: the portrait's ring, the copy, the Roles panel ----
@@ -146,10 +158,23 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     });
     // where the stickers settle: just outside the ring at their angle, then
     // pushed clear of each other, the copy, the panel and the section's edges
+    const anchored = anchorable();
     words.forEach((s, i) => {
       const deg = mobile ? WORDS[i].mobile : WORDS[i].desktop;
       if (deg === undefined) return;
       const a = (deg * Math.PI) / 180;
+      if (anchored) {
+        // read the stylesheet's angle, lift and push for this width, so the
+        // intro's last frame is exactly where CSS will hold the sticker
+        const el = wordRefs.current[i];
+        const cs = el ? getComputedStyle(el) : null;
+        const ca = cs ? (parseFloat(cs.getPropertyValue('--a')) * Math.PI) / 180 : a;
+        const lift = cs ? parseFloat(cs.getPropertyValue('--lift')) || 0 : 0;
+        const push = cs ? parseFloat(cs.getPropertyValue('--push')) : mobile ? 0 : 1;
+        const r = push ? R + 30 + lift : R * 1.02;
+        s.fin = { x: C.x + Math.cos(ca) * r + push * Math.cos(ca) * s.w / 2, y: C.y + Math.sin(ca) * r + push * Math.sin(ca) * s.h / 2 };
+        return;
+      }
       if (mobile) {
         const r = R * 1.02;
         s.fin = { x: Math.max(14 + s.w / 2, Math.min(W - 14 - s.w / 2, C.x + Math.cos(a) * r)), y: C.y + Math.sin(a) * r };
@@ -159,7 +184,7 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
       const r = R + 30 + ext;
       s.fin = { x: C.x + Math.cos(a) * r, y: C.y + Math.sin(a) * r };
     });
-    if (!mobile) {
+    if (!mobile && !anchored) {
       const shown = words.filter((s) => s.show).map((s) => ({ s, hw: s.w / 2 + 6, hh: s.h / 2 + 5 }));
       const rects = [{ x0: copy.x0 - 10, y0: copy.y0 - 10, x1: copy.x1 + 24, y1: copy.y1 + 10 }];
       if (panel) rects.push({ x0: panel.x0 - 10, y0: panel.y0 - 10, x1: panel.x1 + 10, y1: panel.y1 + 10 });
@@ -286,13 +311,26 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     }
   }, [sectionRef]);
 
-  // Settled, each sticker keeps its offset from the ring's centre and is
-  // re-anchored to wherever the ring is now, every frame of a resize, so it
-  // moves with the portrait instead of waiting and then jumping.
+  // Settled. Where the browser can anchor, hand each sticker to the stylesheet:
+  // drop the script's transform and let CSS hold it to the ring. Elsewhere,
+  // each sticker keeps its offset from the ring's centre and is re-anchored to
+  // wherever the ring is now, every frame of a resize.
   const anchor = useCallback(() => {
     const g = geo.current, section = sectionRef.current;
     const ring = section?.querySelector('.hero__intro-ring');
     if (!g || !section || !ring) return;
+    if (anchorable()) {
+      g.words.forEach((s, i) => {
+        const el = wordRefs.current[i];
+        if (!el || !s.show) return;
+        el.style.setProperty('--tilt', `${s.tilt}deg`);
+        el.style.opacity = '1';
+      });
+      // the script's transform comes off in the layout effect below, after
+      // the anchored class is on the page, so no frame shows neither
+      setAnchored(true);
+      return;
+    }
     const sr = section.getBoundingClientRect(), rr = ring.getBoundingClientRect();
     const cx = (rr.left + rr.right) / 2 - sr.left, cy = (rr.top + rr.bottom) / 2 - sr.top;
     g.words.forEach((s, i) => {
@@ -311,6 +349,17 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     setPlaced(true);
     setSettled(true);
   }, [measure, render, anchor]);
+
+  // Hand the stickers to the stylesheet once the anchored class is committed,
+  // before the browser paints: the script's last transform and the CSS spot
+  // are the same place, so nothing moves.
+  useLayoutEffect(() => {
+    if (!anchored) return;
+    geo.current?.words.forEach((s, i) => {
+      const el = wordRefs.current[i];
+      if (el && s.show) el.style.transform = '';
+    });
+  }, [anchored]);
 
   // the catalog: fetched once, quietly
   useEffect(() => {
@@ -336,6 +385,7 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     measure();
     setPlaced(true);
     setSettled(false);
+    setAnchored(false);
     const start = performance.now();
     const frame = (now: number) => {
       const t = Math.min(BUBBLES_DURATION, now - start);
@@ -353,7 +403,7 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
   // worked out again, and only if they moved (a breakpoint, a sticker that
   // would now touch the copy) do the stickers glide to them.
   useEffect(() => {
-    if (!settled) return;
+    if (!settled || anchored) return;   // anchored stickers need no script on resize
     let frame = 0, timer: ReturnType<typeof setTimeout>, glideTimer: ReturnType<typeof setTimeout>;
     const offsets = () => (geo.current?.words ?? []).map((s) => `${Math.round(s.fin.x - (geo.current?.C.x ?? 0))},${Math.round(s.fin.y - (geo.current?.C.y ?? 0))}`).join('|');
     const onResize = () => {
@@ -374,17 +424,19 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     };
     window.addEventListener('resize', onResize);
     return () => { window.removeEventListener('resize', onResize); cancelAnimationFrame(frame); clearTimeout(timer); clearTimeout(glideTimer); };
-  }, [settled, measure, anchor]);
+  }, [settled, anchored, measure, anchor]);
 
   return (
-    <div className={`hero-bubbles${placed ? ' hero-bubbles--placed' : ''}${gliding ? ' hero-bubbles--gliding' : ''}`}>
+    <div className={`hero-bubbles${placed ? ' hero-bubbles--placed' : ''}${gliding ? ' hero-bubbles--gliding' : ''}${anchored ? ' hero-bubbles--anchored' : ''}`}>
       <canvas ref={canvasRef} className="hero-bubbles__canvas" aria-hidden="true" />
       {WORDS.map((word, i) => {
         const shown = word.desktop !== undefined || word.mobile !== undefined;
-        const className = `hero-bubbles__word${shown ? '' : ' hero-bubbles__word--pours'}${word.desktop === undefined ? ' hero-bubbles__word--phone-only' : ''}${word.mobile === undefined ? ' hero-bubbles__word--desktop-only' : ''}`;
+        const className = `hero-bubbles__word${shown ? ' hero-bubbles__word--sticker' : ' hero-bubbles__word--pours'}${word.desktop === undefined ? ' hero-bubbles__word--phone-only' : ''}${word.mobile === undefined ? ' hero-bubbles__word--desktop-only' : ''}`;
         const ref = (el: HTMLElement | null) => { wordRefs.current[i] = el; };
-        if (word.to) return <Link key={word.text} ref={ref as React.Ref<HTMLAnchorElement>} to={word.to} className={className}>{word.text}</Link>;
-        return <span key={word.text} ref={ref} className={className} aria-hidden={shown ? undefined : true}>{word.text}</span>;
+        // each sticker's angle around the ring, read by the stylesheet
+        const style = shown ? ({ '--a-desktop': `${word.desktop ?? 0}deg`, '--a-mid': `${word.mid ?? word.desktop ?? 0}deg`, '--lift-mid': `${word.midLift ?? 0}px`, '--a-phone': `${word.mobile ?? 0}deg` } as React.CSSProperties) : undefined;
+        if (word.to) return <Link key={word.text} ref={ref as React.Ref<HTMLAnchorElement>} to={word.to} className={className} style={style}>{word.text}</Link>;
+        return <span key={word.text} ref={ref} className={className} style={style} aria-hidden={shown ? undefined : true}>{word.text}</span>;
       })}
     </div>
   );
