@@ -1,12 +1,12 @@
 // Build the system's inventory from a checkout: every component, the style
-// blocks it draws with, the stylesheets that define them, the colour tokens and
-// every raw hex value outside the token files. Used by the catalog build and,
-// inside a checkout, by the MCP server, so an agent always reads the working
-// tree as it is now.
+// blocks it draws with, the stylesheets that define them, the colour tokens,
+// every raw hex value outside the token files and every custom property src
+// defines. Used by the catalog build and, inside a checkout, by the MCP
+// server, so an agent always reads the working tree as it is now.
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, join, relative } from 'node:path';
-import { blockOf } from './core.mjs';
+import { blockOf, customPropertyDefs } from './core.mjs';
 
 export function buildCatalog(root) {
   const HEX = /#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g;
@@ -76,6 +76,15 @@ export function buildCatalog(root) {
       .map((m) => [m[1], m[2].toLowerCase()]),
   );
 
+  // Every custom property src could define, for the ghost-token rule (SYS004).
+  const defined = { names: new Set(), prefixes: new Set() };
+  for (const path of walk(join(root, 'src'), (p) => /\.(?:s?css|[jt]sx?)$/.test(p))) {
+    const { names, prefixes } = customPropertyDefs(readFileSync(path, 'utf8'));
+    names.forEach((n) => defined.names.add(n));
+    prefixes.forEach((n) => defined.prefixes.add(n));
+  }
+  const customProperties = { names: [...defined.names].sort(), prefixes: [...defined.prefixes].sort() };
+
   let commit = null;
   try {
     commit = execFileSync('git', ['-C', root, 'rev-parse', '--short', 'HEAD'], { encoding: 'utf8' }).trim();
@@ -83,5 +92,5 @@ export function buildCatalog(root) {
     // Not a checkout; the catalog still stands without a commit.
   }
 
-  return { commit, components, styles, tokens };
+  return { commit, components, styles, tokens, customProperties };
 }

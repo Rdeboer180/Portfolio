@@ -12,6 +12,7 @@ export const CODES = {
   SYS001: 'Raw colour outside the token files',
   SYS002: 'Class block with no stylesheet',
   SYS003: 'Inline style colour',
+  SYS004: 'Custom property defined nowhere (ghost token)',
   COPY001: 'Phrase on the never list (ryan-taste)',
   COPY002: 'Heading is a label, not a claim (ryan-taste)',
   A11Y001: 'Image without alt',
@@ -25,7 +26,7 @@ export const CODES = {
 /** What the steel curtain stops a merge on: deterministic and unambiguous. Everything else is reported. */
 export const blocksMerge = (f) =>
   ((f.code === 'SYS001' || f.code === 'SYS003') && f.verdict !== 'none') ||
-  f.code === 'SYS002' || f.code === 'A11Y001' || f.code === 'A11Y003';
+  f.code === 'SYS002' || f.code === 'SYS004' || f.code === 'A11Y001' || f.code === 'A11Y003';
 
 export const COMMON_BLOCKS = new Set(['reveal-fade', 'reveal-mask', 'sr-only', 'btn', 'animated-bold']);
 
@@ -80,11 +81,58 @@ export const relatives = (component, components, limit = 3) => {
 export const definedBlocks = (catalog) => new Set(catalog.styles.flatMap((s) => s.mentions || s.blocks));
 
 const HEX = /#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g;
+
+// ---------------------------------------------------------------- ghost tokens
+// Brad Frost's ds-token-architecture, check 8: a var(--name) that nothing
+// defines fails silently, the property gets no value and the browser falls
+// back. A definition is anything that could set one: `--x:` in a stylesheet
+// or a template string, a quoted '--x' in code (style={{ '--x': ... }},
+// ['--x' as string], setProperty('--x')), or @property --x. Interpolated
+// names (--shadow-#{$s}, `--fp-${k}`) define a prefix. Lenient on purpose:
+// a missed ghost is reported by the next audit, a false block stops a merge.
+const DEF_PLAIN = /(?<![\w&-])(--[a-zA-Z0-9_-]+)\s*:(?!:)/g;
+const DEF_QUOTED = /['"`](--[a-zA-Z0-9_-]+)['"`]/g;
+const DEF_AT_PROPERTY = /@property\s+(--[a-zA-Z0-9_-]+)/g;
+const DEF_PREFIX = /(?<!var\(\s*)(?<![\w&-])(--[a-zA-Z0-9_-]*)(?:#\{|\$\{)/g;
+const VAR_REF = /var\(\s*(--[a-zA-Z0-9_-]+)(#\{|\$\{)?\s*(,)?/g;
+
+/** Every custom property a file could define, and the prefixes it defines by interpolation. */
+export const customPropertyDefs = (text) => {
+  const names = new Set();
+  const prefixes = new Set();
+  for (const re of [DEF_PLAIN, DEF_QUOTED, DEF_AT_PROPERTY]) for (const m of text.matchAll(re)) names.add(m[1]);
+  for (const m of text.matchAll(DEF_PREFIX)) prefixes.add(m[1]);
+  return { names, prefixes };
+};
+
+/**
+ * SYS004: var(--name) with no fallback, where --name is defined nowhere in
+ * src (catalog.customProperties) or in the code itself. Skipped when the
+ * catalog predates the list, so an old published catalog never false-blocks.
+ */
+export const checkCustomProperties = (code, catalog) => {
+  if (!catalog || !catalog.customProperties) return [];
+  const own = customPropertyDefs(code);
+  const names = new Set([...catalog.customProperties.names, ...own.names]);
+  const prefixes = [...catalog.customProperties.prefixes, ...own.prefixes];
+  const findings = [];
+  code.split('\n').forEach((line, i) => {
+    if (/^\s*(?:\/\/|\*|\/\*)/.test(line)) return;
+    for (const m of line.matchAll(VAR_REF)) {
+      const [, name, interpolated, fallback] = m;
+      if (interpolated || fallback || names.has(name) || prefixes.some((p) => name.startsWith(p))) continue;
+      findings.push({ code: 'SYS004', line: i + 1, found: `var(${name})`, rule: CODES.SYS004,
+        suggestion: `Nothing in src defines ${name}, so this resolves to nothing. Use a token that exists, define it, or give var() a fallback.` });
+    }
+  });
+  return findings;
+};
 const CLASS_WORD = /^[a-z][a-z0-9-]*(?:__[a-z0-9-]+)?(?:--[a-z0-9-]+)?$/;
 
 /**
  * Deterministic check of a snippet of TSX or SCSS against the catalog: raw
- * colours get their token, class blocks with no stylesheet get flagged. The
+ * colours get their token, class blocks with no stylesheet get flagged, and
+ * custom properties nothing defines are ghosts (SYS004). The
  * same rules the pull-request review applies, run before the code is written.
  */
 export const checkSource = (code, catalog) => {
@@ -114,7 +162,9 @@ export const checkSource = (code, catalog) => {
       }
     }
   });
-  return findings.map((f) => ({ ...f, rule: CODES[f.code] }));
+  return [...findings, ...checkCustomProperties(code, catalog)]
+    .map((f) => ({ ...f, rule: CODES[f.code] }))
+    .sort((a, b) => a.line - b.line);
 };
 
 /**

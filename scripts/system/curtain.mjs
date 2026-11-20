@@ -3,6 +3,12 @@
 // Frost's, from AI & Design Systems; the split is mine: deterministic rules
 // block, everything else is reported for a person to answer.
 //
+// Brad Frost's skills (.agents/skills, from bradfrost/skills) feed it two ways.
+// The deterministic part of ds-token-architecture's check 8 is a rule here:
+// ghost tokens, a var() nothing defines (SYS004). The rest of the skills need
+// judgment, so the report only points at them: "Brad Frost lenses" names the
+// skill a person should run next, and only when the diff gave a reason.
+//
 // Used by scripts/steel-curtain.mjs (the pull-request workflow and local runs)
 // and by the MCP server's review_change, so an agent gets the same verdict
 // before the pull request that the pull request gets.
@@ -11,7 +17,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'no
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { buildCatalog } from './catalog.mjs';
-import { CODES, blocksMerge, checkA11y, checkCopy, checkSource, parseVoice, relatives, reviewCatalogs } from './core.mjs';
+import { CODES, blocksMerge, checkA11y, checkCopy, checkCustomProperties, checkSource, parseVoice, relatives, reviewCatalogs } from './core.mjs';
 
 const REGISTRY = 'src/data/system-registry.json';
 const SKILL = '.claude/skills/ryan-taste/SKILL.md';
@@ -45,6 +51,12 @@ const addedLines = (root, base) => {
   return files;
 };
 
+/** Every path the branch touches, anywhere in the repo, for the lenses. */
+const changedPaths = (root, base) => [...new Set([
+  ...git(root, ['diff', '--name-only', '--no-renames', base]).split('\n'),
+  ...git(root, ['ls-files', '--others', '--exclude-standard']).split('\n'),
+].filter(Boolean))];
+
 export function runCurtain({ root, base = 'origin/main', pr = null }) {
   const mergeBase = git(root, ['merge-base', base, 'HEAD']).trim();
   const dir = mkdtempSync(join(tmpdir(), 'steel-curtain-'));
@@ -66,6 +78,8 @@ export function runCurtain({ root, base = 'origin/main', pr = null }) {
     const text = readFileSync(join(root, file), 'utf8');
     const keep = (list, area) => list.filter((f) => lines.has(f.line)).forEach((f) => findings.push({ ...f, file, area, blocking: isBlocking(f) }));
     if (/\.(tsx|scss)$/.test(file) && !TOKEN_FILES.has(file) && !/\.test\.tsx$/.test(file)) keep(checkSource(text, head), 'system');
+    // Raw values belong in the token files; a ghost reference doesn't.
+    if (TOKEN_FILES.has(file)) keep(checkCustomProperties(text, head), 'system');
     if (/\.tsx$/.test(file) && !/\.test\.tsx$/.test(file)) keep(checkA11y(text), 'accessibility');
     if (/\.(tsx|ts|md)$/.test(file) && !/\.test\.tsx?$/.test(file)) keep(checkCopy(text, voice), 'copy');
   }
@@ -125,7 +139,52 @@ export function runCurtain({ root, base = 'origin/main', pr = null }) {
     registryPath,
     registryChanged,
     review: reviewCatalogs(baseCatalog, head, registry),
+    lenses: lensesFor({ findings, proposals, changed: changedPaths(root, mergeBase), newComponents }),
   };
+}
+
+// ---------------------------------------------------------------- Brad Frost lenses
+// Which installed skill a person should run next, from signals in the diff.
+// Pointers only: nothing here blocks, and a lens only shows when its signal fired.
+const MANY_SYSTEM = 5;
+const MANY_RAW = 3;
+const AI_CONFIG = /^(?:AGENTS\.md|CLAUDE\.md|\.mcp\.json|skills-lock\.json|\.claude\/|\.agents\/|scripts\/system\/mcp\.mjs$|src\/data\/system-agents\.json$)/;
+
+export function lensesFor({ findings, proposals, changed, newComponents }) {
+  const lenses = [];
+  const add = (skill, why) => lenses.push({ skill, why });
+  const tokenFiles = changed.filter((f) => TOKEN_FILES.has(f));
+  const ghosts = findings.filter((f) => f.code === 'SYS004');
+  if (tokenFiles.length || ghosts.length) {
+    const why = [
+      tokenFiles.length ? `touches ${tokenFiles.map((f) => `\`${f}\``).join(' and ')}` : null,
+      ghosts.length ? `adds ${ghosts.length} ghost token${ghosts.length === 1 ? '' : 's'}` : null,
+    ].filter(Boolean).join(' and ');
+    add('ds-token-architecture', `This PR ${why}. Check the tiers still hold: what's a definition, what's usage, what components read.`);
+  }
+  const proposed = proposals.filter((p) => p.kind === 'component').map((p) => p.name);
+  if (proposed.length) {
+    add('ds-inspection', `${proposed.length} new component${proposed.length === 1 ? '' : 's'} proposed to the registry (${proposed.join(', ')}). Run station 1, coverage and gaps, before promoting ${proposed.length === 1 ? 'it' : 'them'}.`);
+  }
+  const raw = (path) => findings.filter((f) => f.file === path && (f.code === 'SYS001' || f.code === 'SYS003')).length;
+  const rawNew = newComponents.map((c) => ({ name: c.name, n: raw(c.path) })).filter((c) => c.n >= MANY_RAW);
+  const system = findings.filter((f) => f.area === 'system');
+  if (rawNew.length || system.length >= MANY_SYSTEM) {
+    const why = rawNew.length
+      ? `${rawNew.map((c) => `${c.name} carries ${c.n} raw colours`).join(', ')}`
+      : `${system.length} system findings in one PR`;
+    add('vibe-killer', `${why}. Rebuild it from components and tokens that exist before fixing values one at a time.`);
+  }
+  // A skill is one change, not one per file: .agents/skills/x/** reads as .agents/skills/x/.
+  const ai = [...new Set(changed.filter((f) => AI_CONFIG.test(f)).map((f) => {
+    const m = f.match(/^(\.(?:agents|claude)\/[^/]+\/[^/]+)\//);
+    return m ? `${m[1]}/` : f;
+  }))];
+  if (ai.length) {
+    const shown = ai.slice(0, 4).map((f) => `\`${f}\``).join(', ');
+    add('ds-ai-rails', `Agent config changed (${shown}${ai.length > 4 ? `, ${ai.length - 4} more` : ''}). Check agents still reach the system: the MCP, the rules, the reuse policy.`);
+  }
+  return lenses;
 }
 
 export const writeRegistry = (result) => writeFileSync(result.registryPath, `${JSON.stringify(result.registry, null, 2)}\n`);
@@ -138,7 +197,7 @@ export function curtainReport(r, { build = null } = {}) {
   const lines = ['<!-- steel-curtain -->', '## Steel curtain', ''];
   const toAddress = r.findings.filter((f) => !f.blocking);
   lines.push(r.blocking.length
-    ? `**Stopped.** ${r.blocking.length} blocking, ${toAddress.length} to address. Blocking findings are deterministic: a raw colour that has a token, a class with no stylesheet, an image with no alt, a positive tabIndex.`
+    ? `**Stopped.** ${r.blocking.length} blocking, ${toAddress.length} to address. Blocking findings are deterministic: a raw colour that has a token, a class with no stylesheet, a var() nothing defines, an image with no alt, a positive tabIndex.`
     : `**Holds.** Nothing blocking${toAddress.length ? `; ${toAddress.length} to address before merging` : ''}.`);
   lines.push('', `<sub>Checks what this PR adds against \`${r.base}\`. Inherited debt isn't counted here; it's on /design-system under Drift.</sub>`, '');
 
@@ -161,9 +220,15 @@ export function curtainReport(r, { build = null } = {}) {
     lines.push('');
   }
 
+  if (r.lenses && r.lenses.length) {
+    lines.push('### Brad Frost lenses', '', 'Not blocking. The skill to run next, and why this PR points at it.', '');
+    r.lenses.forEach((l) => lines.push(`- \`${l.skill}\`: ${l.why}`));
+    lines.push('');
+  }
+
   if (build) lines.push('### Build', '', build, '');
   const review = r.review.replace('<!-- system-review -->\n', '').replace('## System review', '### What the system should absorb');
   lines.push(review.trim(), '');
-  lines.push('<sub>Rules: scripts/system/core.mjs · voice: .claude/skills/ryan-taste/SKILL.md · the same checks run in the MCP server (`check_source`, `check_copy`, `review_change`).</sub>');
+  lines.push('<sub>Rules: scripts/system/core.mjs · voice: .claude/skills/ryan-taste/SKILL.md · lenses: .agents/skills (bradfrost/skills) · the same checks run in the MCP server (`check_source`, `check_copy`, `review_change`).</sub>');
   return `${lines.join('\n')}\n`;
 }
