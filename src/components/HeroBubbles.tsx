@@ -18,13 +18,15 @@ import { Link } from 'react-router-dom';
 type Word = { text: string; to?: string; desktop?: number; mobile?: number };
 
 // desktop / phone: the angle each sticker settles at (deg, 0 = right, clockwise).
+// Three stickers, spaced evenly over the top of the ring on desktop; on a
+// phone, the two top corners and the bottom centre.
 // Words without an angle pour into the portrait with the catalog.
 const WORDS: Word[] = [
-  { text: 'Ambitious', desktop: -160, mobile: -145 },
+  { text: 'Ambitious', desktop: -150, mobile: -140 },
   { text: 'Point of View' },
-  { text: 'Driven', to: '/design-system', desktop: -116, mobile: -35 },
+  { text: 'Driven', to: '/design-system', desktop: -90, mobile: -40 },
   { text: 'Craft' },
-  { text: 'Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
+  { text: 'Curious', to: '/talent-tree', desktop: -30, mobile: 90 },
   { text: 'Care' },
   { text: 'Visual Problem Solver' },
   { text: 'Restless' },
