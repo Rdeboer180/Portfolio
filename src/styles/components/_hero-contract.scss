@@ -606,12 +606,10 @@
   color: var(--color-text-secondary);
 }
 
-// "Giving a damn does not." starts its own line on desktop, so the line that
-// lands the intro never splits; on a phone it runs on with the sentence.
-.hero-intro__break { display: none; }
-@media (min-width: $breakpoint-lg) {
-  .hero--contract .hero-intro__break { display: inline; }
-}
+// The closing line of the paragraph never splits across lines. It follows the
+// sentence before it when it fits, and drops whole to the next line when it
+// doesn't; no forced break, so no word is left alone above it.
+.hero-intro__landing { display: inline-block; }
 
 // ============================================
 // The fidelity pass (F1, from the Hero motion canvas; 11 November 2026)

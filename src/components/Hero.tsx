@@ -134,7 +134,7 @@ const Hero: React.FC = () => {
               </h1>
             </AuthoredSection>
             <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
-              <p>I don&rsquo;t stop at &lsquo;this could be better.&rsquo; I build it in code, ship it, and leave a rule behind so the team hits that bar next time. Agents make more.{' '}<br className="hero-intro__break" aria-hidden="true" /><strong className="animated-bold">I spend the time making it better.</strong></p>
+              <p>I don&rsquo;t stop at &lsquo;this could be better.&rsquo; I build it in code, ship it, and leave a rule behind so the team hits that bar next time. Agents make more.{' '}<strong className="animated-bold hero-intro__landing">I spend the time making it better.</strong></p>
               <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
               <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
                 {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
