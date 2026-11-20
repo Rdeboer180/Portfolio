@@ -3,7 +3,7 @@
 // Ten trait words and the design system's own catalog (every component,
 // style block and custom property in /system/catalog.json) start as a messy
 // map around the portrait, tidy into rings, zoom out and pour into the photo.
-// Four words stay behind as stickers around the ring.
+// Three words stay behind as stickers around the ring.
 //
 // The canvas lives in the portrait column: it fades out before the copy, so
 // the headline and paragraph read from the first frame. Hero owns the stage
@@ -18,22 +18,26 @@ import { Link } from 'react-router-dom';
 type Word = { text: string; to?: string; desktop?: number; mobile?: number };
 
 // desktop / phone: the angle each sticker settles at (deg, 0 = right, clockwise).
+// Three stickers, spaced evenly over the top of the ring on desktop; on a
+// phone, the two top corners and the bottom centre.
 // Words without an angle pour into the portrait with the catalog.
 const WORDS: Word[] = [
-  { text: 'Ambitious', desktop: -160, mobile: -145 },
+  { text: 'Ambitious', desktop: -150, mobile: -140 },
   { text: 'Point of View' },
-  { text: 'System Driven', to: '/design-system', desktop: -116, mobile: -35 },
+  { text: 'Driven', to: '/design-system', desktop: -90, mobile: -40 },
   { text: 'Craft' },
-  { text: 'Ruthlessly Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
+  { text: 'Curious', to: '/talent-tree', desktop: -30, mobile: 90 },
   { text: 'Care' },
-  { text: 'Committed', to: '/work/wheelrack/', desktop: -20, mobile: 35 },
   { text: 'Visual Problem Solver' },
   { text: 'Restless' },
   { text: 'Adaptive' },
 ];
 
-export const BUBBLES_DURATION = 2400;
-const SESSION_KEY = 'hero-bubbles-played';
+// The timeline is authored at 2.4s and played at 3.4s (Ryan, 20 November):
+// every beat stretches evenly, so the choreography keeps its proportions.
+const AUTHORED = 2400;
+export const BUBBLES_DURATION = 3400;
+export const BUBBLES_STRETCH = BUBBLES_DURATION / AUTHORED;
 
 type Mark = { kind: 'comp' | 'block' | 'prop'; prod: boolean; x: number; y: number; k: number; j: number; sz: number };
 type Pt = { x: number; y: number };
@@ -78,6 +82,8 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
   const catalog = useRef<Catalog>(FALLBACK);
   const raf = useRef(0);
   const [placed, setPlaced] = useState(false);
+  const [settled, setSettled] = useState(false);
+  const [gliding, setGliding] = useState(false);
 
   // ---- measure: the portrait's ring, the copy, the Roles panel ----
   const measure = useCallback(() => {
@@ -207,8 +213,9 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     geo.current = { C, R, mobile, W, H, words, marks, colours };
   }, [sectionRef]);
 
-  // ---- one frame of the timeline ----
-  const render = useCallback((t: number) => {
+  // ---- one frame of the timeline (played time in, authored time inside) ----
+  const render = useCallback((played: number) => {
+    const t = played / BUBBLES_STRETCH;
     const g = geo.current, canvas = canvasRef.current, section = sectionRef.current;
     if (!g || !canvas || !section) return;
     const ctx = canvas.getContext('2d');
@@ -272,17 +279,36 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     const profile = section.querySelector<HTMLElement>('.hero__profile');
     if (profile) {
       const grow = ease(clamp((t - 1450) / 520));
-      profile.style.transform = t >= BUBBLES_DURATION ? '' : `scale(${t < 1450 ? 0.0001 : lerp(5 / R, 1, grow)})`;
-      profile.style.opacity = t >= BUBBLES_DURATION ? '' : String(clamp((t - 1450) / 200));
+      profile.style.transform = t >= AUTHORED ? '' : `scale(${t < 1450 ? 0.0001 : lerp(5 / R, 1, grow)})`;
+      profile.style.opacity = t >= AUTHORED ? '' : String(clamp((t - 1450) / 200));
     }
+  }, [sectionRef]);
+
+  // Settled, each sticker keeps its offset from the ring's centre and is
+  // re-anchored to wherever the ring is now, every frame of a resize, so it
+  // moves with the portrait instead of waiting and then jumping.
+  const anchor = useCallback(() => {
+    const g = geo.current, section = sectionRef.current;
+    const ring = section?.querySelector('.hero__intro-ring');
+    if (!g || !section || !ring) return;
+    const sr = section.getBoundingClientRect(), rr = ring.getBoundingClientRect();
+    const cx = (rr.left + rr.right) / 2 - sr.left, cy = (rr.top + rr.bottom) / 2 - sr.top;
+    g.words.forEach((s, i) => {
+      const el = wordRefs.current[i];
+      if (!el || !s.show) return;
+      el.style.transform = `translate(${cx + s.fin.x - g.C.x - s.w / 2}px, ${cy + s.fin.y - g.C.y - s.h / 2}px) rotate(${s.tilt}deg)`;
+      el.style.opacity = '1';
+    });
   }, [sectionRef]);
 
   const settle = useCallback(() => {
     measure();
     render(BUBBLES_DURATION);
     canvasRef.current?.getContext('2d')?.clearRect(0, 0, geo.current?.W ?? 0, geo.current?.H ?? 0);
+    anchor();
     setPlaced(true);
-  }, [measure, render]);
+    setSettled(true);
+  }, [measure, render, anchor]);
 
   // the catalog: fetched once, quietly
   useEffect(() => {
@@ -303,12 +329,11 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
   // play, or open settled
   useLayoutEffect(() => {
     if (!playing) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let seen = false;
-    try { seen = sessionStorage.getItem(SESSION_KEY) === '1'; sessionStorage.setItem(SESSION_KEY, '1'); } catch { /* storage blocked: play */ }
-    if (reduce || seen) { settle(); return; }
+    // plays on every load; reduced motion opens settled
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { settle(); return; }
     measure();
     setPlaced(true);
+    setSettled(false);
     const start = performance.now();
     const frame = (now: number) => {
       const t = Math.min(BUBBLES_DURATION, now - start);
@@ -321,17 +346,36 @@ const HeroBubbles: React.FC<HeroBubblesProps> = ({ sectionRef, playing }) => {
     return () => cancelAnimationFrame(raf.current);
   }, [playing, measure, render, settle]);
 
-  // keep the stickers placed when the layout changes
+  // Keep the stickers with the portrait as the layout changes. Every frame of a
+  // resize re-anchors them to the ring; once the resize settles, the spots are
+  // worked out again, and only if they moved (a breakpoint, a sticker that
+  // would now touch the copy) do the stickers glide to them.
   useEffect(() => {
-    if (!placed) return;
-    let timer: ReturnType<typeof setTimeout>;
-    const onResize = () => { clearTimeout(timer); timer = setTimeout(() => { measure(); render(BUBBLES_DURATION); canvasRef.current?.getContext('2d')?.clearRect(0, 0, geo.current?.W ?? 0, geo.current?.H ?? 0); }, 80); };
+    if (!settled) return;
+    let frame = 0, timer: ReturnType<typeof setTimeout>, glideTimer: ReturnType<typeof setTimeout>;
+    const offsets = () => (geo.current?.words ?? []).map((s) => `${Math.round(s.fin.x - (geo.current?.C.x ?? 0))},${Math.round(s.fin.y - (geo.current?.C.y ?? 0))}`).join('|');
+    const onResize = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(anchor);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const before = offsets();
+        measure();
+        canvasRef.current?.getContext('2d')?.clearRect(0, 0, geo.current?.W ?? 0, geo.current?.H ?? 0);
+        if (offsets() !== before) {
+          setGliding(true);
+          clearTimeout(glideTimer);
+          glideTimer = setTimeout(() => setGliding(false), 460);
+        }
+        anchor();
+      }, 160);
+    };
     window.addEventListener('resize', onResize);
-    return () => { window.removeEventListener('resize', onResize); clearTimeout(timer); };
-  }, [placed, measure, render]);
+    return () => { window.removeEventListener('resize', onResize); cancelAnimationFrame(frame); clearTimeout(timer); clearTimeout(glideTimer); };
+  }, [settled, measure, anchor]);
 
   return (
-    <div className={`hero-bubbles${placed ? ' hero-bubbles--placed' : ''}`}>
+    <div className={`hero-bubbles${placed ? ' hero-bubbles--placed' : ''}${gliding ? ' hero-bubbles--gliding' : ''}`}>
       <canvas ref={canvasRef} className="hero-bubbles__canvas" aria-hidden="true" />
       {WORDS.map((word, i) => {
         const shown = word.desktop !== undefined || word.mobile !== undefined;

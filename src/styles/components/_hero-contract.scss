@@ -606,11 +606,6 @@
   color: var(--color-text-secondary);
 }
 
-// The closing line of the paragraph never splits across lines. It follows the
-// sentence before it when it fits, and drops whole to the next line when it
-// doesn't; no forced break, so no word is left alone above it.
-.hero-intro__landing { display: inline-block; }
-
 // ============================================
 // The fidelity pass (F1, from the Hero motion canvas; 11 November 2026)
 // The portrait goes through a design file's stages inside the two-second

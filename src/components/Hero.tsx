@@ -3,7 +3,7 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'reac
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
-import HeroBubbles from './HeroBubbles';
+import HeroBubbles, { BUBBLES_STRETCH } from './HeroBubbles';
 import { progression } from './About';
 import AuthoredSection from './AuthoredSection';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
@@ -18,13 +18,11 @@ const defaultRole = 2;
 // The dated career rule under the hero; off while Ryan tries the hero without it.
 const SHOW_HISTORY = false;
 const roleDescriptions: React.ReactNode[] = [
-  // Each paragraph runs four lines at desktop, opens on named work, and uses
-  // only what the case studies state (mentor pass, 19 November 2026).
-  <>I designed <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>&rsquo;s dealer product from vehicle search through checkout while it grew from six retail partners to ten. On <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> I built too much around the core game, so I cut XP and competitive modes to get friends to the draft sooner.</>,
-  <>My 200+ <strong><ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink></strong> tokens and 50+ Storybook components became one library across its retail partners, still in use six months later. <strong><ProjectLink to="/work/aem-component-system/" className="about__inline-link">Our AEM components</ProjectLink></strong> go from Figma to production Sass, so SEO authors build pages without waiting on me.</>,
-  <>When a comp can&rsquo;t answer the question, I prototype it. My <Link to="/prototypingPlayground/" className="about__inline-link">Prototyping Playground</Link> tests one car in four colors between Figma and production, and <Link to="/notes/prototyping-wheelrack-fitment/" className="about__inline-link">WheelRack&rsquo;s</Link> fitment prototype shows the state a spec missed: a finish not made in your size.</>,
-  <>The <ProjectLink to="/work/tire-categories/" className="about__inline-link">tire-category redesign</ProjectLink> lifted conversion up to 50% on its top pages in the first month. <ProjectLink to="/work/loopstack/" className="about__inline-link">LoopStack</ProjectLink>, my open-source SaaS for the Loop community, turns glucose curves into patterns to review with a care team, and never gives dosing advice.</>,
-  <>A <ProjectLink to="/work/figma-template-governance/" className="about__inline-link">Figma starter template and four internal plugins</ProjectLink> carry our brand standards for 15+ Web and UX designers. <ProjectLink to="/work/overscroll-tactics/" className="about__inline-link">Overscroll Tactics</ProjectLink> names my practice: one mark and a motion ident that runs in about two seconds, on the web and in PlayDraft.</>,
+  <>I designed <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>&rsquo;s dealer experience from vehicle search through checkout. During the build, we went from six retail partners to ten. On <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> I built too much around the core game, so I’m cutting XP and competitive modes to get friends to the draft sooner.</>,
+  <>I brought 200+ <strong><ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink></strong> tokens and 50+ Storybook components into one library that every retail partner shares. <strong><ProjectLink to="/work/aem-component-system/" className="about__inline-link">Our AEM components</ProjectLink></strong> follow the same rules in Figma and production Sass, so SEO authors can build pages without waiting on me.</>,
+  <>When a comp can’t answer the question, I prototype it in code. My <Link to="/prototypingPlayground/" className="about__inline-link">Prototyping Playground</Link> shows the details I check, like where keyboard focus lands when a selection changes. I leave those rules in my agent skills so the next build starts with what I’ve already learned.</>,
+  <>I redesigned the <ProjectLink to="/work/tire-categories/" className="about__inline-link">tire category pages</ProjectLink> to help shoppers compare their options. In the first month, purchase conversion rose up to 50% on the top pages. <ProjectLink to="/work/loopstack/" className="about__inline-link">LoopStack</ProjectLink> grew out of my own meal and glucose history. It helps me spot patterns I can review with my care team.</>,
+  <>I built a <ProjectLink to="/work/figma-template-governance/" className="about__inline-link">Figma starter template and four internal plugins</ProjectLink> to put our brand standards in the hands of 15+ Web and UX designers. For <ProjectLink to="/work/overscroll-tactics/" className="about__inline-link">Overscroll Tactics</ProjectLink>, I built the studio mark out of a game board. It takes about two seconds to play out when you launch PlayDraft.</>,
 ];
 
 const Hero: React.FC = () => {
@@ -35,19 +33,18 @@ const Hero: React.FC = () => {
   const [bubblesPlaying, setBubblesPlaying] = useState(false);
   useLayoutEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // reduced motion, and later visits in the same session, open settled
-    let seen = false;
-    try { seen = sessionStorage.getItem('hero-bubbles-played') === '1'; } catch { /* storage blocked: play */ }
-    if (motion.matches || seen) { setInkStarted(true); setBubblesPlaying(true); return; }
+    // plays on every load; reduced motion opens settled
+    if (motion.matches) { setInkStarted(true); setBubblesPlaying(true); return; }
     const timers: ReturnType<typeof setTimeout>[] = [];
     const play = () => {
       setInkStarted(true);
       setIntroStage('bubbles');
       setBubblesPlaying(true);
       // The messy canvas (19 November 2026): HeroBubbles pours the trait words
-      // and the system's catalog into the portrait over 2.4s; the orange ring
-      // draws as the photo lands ('final'), and the Roles panel fades in.
-      const steps: [number, string][] = [[1600, 'final'], [2250, 'done']];
+      // and the system's catalog into the portrait over 3.4s; the orange ring
+      // draws as the photo lands ('final'), and the Roles panel fades in. The
+      // stage beats stretch with the timeline.
+      const steps: [number, string][] = [[Math.round(1600 * BUBBLES_STRETCH), 'final'], [Math.round(2250 * BUBBLES_STRETCH), 'done']];
       steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
     };
     // Start when the portrait is in view: at once if it already is, so the
@@ -134,7 +131,7 @@ const Hero: React.FC = () => {
               </h1>
             </AuthoredSection>
             <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
-              <p>I don&rsquo;t stop at &lsquo;this could be better.&rsquo; I build it in code, ship it, and leave a rule behind so the team hits that bar next time. Agents make more.{' '}<strong className="animated-bold hero-intro__landing">I spend the time making it better.</strong></p>
+              <p>I’m a product designer. I ship systems that scale as the product evolves. I automate the routine work so I can spend more time on the hard problems and <strong className="animated-bold">the interactions that give a brand its character.</strong></p>
               <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
               <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
                 {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
