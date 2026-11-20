@@ -3,7 +3,7 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'reac
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
-import HeroBubbles from './HeroBubbles';
+import HeroBubbles, { BUBBLES_STRETCH } from './HeroBubbles';
 import { progression } from './About';
 import AuthoredSection from './AuthoredSection';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
@@ -35,19 +35,18 @@ const Hero: React.FC = () => {
   const [bubblesPlaying, setBubblesPlaying] = useState(false);
   useLayoutEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // reduced motion, and later visits in the same session, open settled
-    let seen = false;
-    try { seen = sessionStorage.getItem('hero-bubbles-played') === '1'; } catch { /* storage blocked: play */ }
-    if (motion.matches || seen) { setInkStarted(true); setBubblesPlaying(true); return; }
+    // plays on every load; reduced motion opens settled
+    if (motion.matches) { setInkStarted(true); setBubblesPlaying(true); return; }
     const timers: ReturnType<typeof setTimeout>[] = [];
     const play = () => {
       setInkStarted(true);
       setIntroStage('bubbles');
       setBubblesPlaying(true);
       // The messy canvas (19 November 2026): HeroBubbles pours the trait words
-      // and the system's catalog into the portrait over 2.4s; the orange ring
-      // draws as the photo lands ('final'), and the Roles panel fades in.
-      const steps: [number, string][] = [[1600, 'final'], [2250, 'done']];
+      // and the system's catalog into the portrait over 3.4s; the orange ring
+      // draws as the photo lands ('final'), and the Roles panel fades in. The
+      // stage beats stretch with the timeline.
+      const steps: [number, string][] = [[Math.round(1600 * BUBBLES_STRETCH), 'final'], [Math.round(2250 * BUBBLES_STRETCH), 'done']];
       steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
     };
     // Start when the portrait is in view: at once if it already is, so the

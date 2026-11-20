@@ -48,6 +48,8 @@
   }
 
   &--placed a.hero-bubbles__word { pointer-events: auto; }
+  // a settled sticker glides to a new spot after a resize, never jumps
+  &--gliding .hero-bubbles__word { transition: transform 420ms var(--ease-out); }
   a.hero-bubbles__word:hover { color: $color-neutral-dark; }
   a.hero-bubbles__word:focus-visible {
     outline: 2px solid $color-primary;
