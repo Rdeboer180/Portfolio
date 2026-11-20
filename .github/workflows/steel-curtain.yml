@@ -8,6 +8,11 @@
 #               New components and style blocks are proposed into
 #               src/data/system-registry.json and committed to the PR, so the
 #               MCP server's rules change in the same diff a person reviews.
+#               Brad Frost's skills (.agents/skills, from bradfrost/skills)
+#               add one rule, ghost tokens from ds-token-architecture check 8
+#               (SYS004, blocks), and a "Brad Frost lenses" section that names
+#               the skill to run next when the diff gives a reason. The
+#               lenses point at a skill; a person runs it.
 #   build       The deploy's own gates, run before merge instead of after:
 #               build, prerender, hydration on every route, Dive Club checks.
 #

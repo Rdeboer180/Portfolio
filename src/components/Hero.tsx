@@ -3,6 +3,7 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'reac
 import { Link } from 'react-router-dom';
 import { EMAIL_HREF } from '../data/site';
 import LayersPanel from './LayersPanel';
+import HeroBubbles from './HeroBubbles';
 import { progression } from './About';
 import AuthoredSection from './AuthoredSection';
 import { AUTHORED_COMPONENTS } from '../data/authorChrome';
@@ -17,11 +18,13 @@ const defaultRole = 2;
 // The dated career rule under the hero; off while Ryan tries the hero without it.
 const SHOW_HISTORY = false;
 const roleDescriptions: React.ReactNode[] = [
-  <>I decide what a product needs and what it should leave out. I designed <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>&rsquo;s dealer journey from vehicle search through checkout, and I am now simplifying <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> after building too much around the core game.</>,
-  <>I keep one set of rules in step across Figma, code, and AEM. My <strong><ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink></strong> Figma tokens and components became one React and Storybook library shared across its retail partners. For <strong><ProjectLink to="/work/aem-component-system/" className="about__inline-link">our AEM components</ProjectLink></strong>, I spec the variants in Figma, build them in production Sass, and document the rules, so SEO authors and agents can build pages without waiting on me.</>,
-  <>When a static comp cannot answer the question, I prototype it in code, so engineers and agents build from the same decision. My <Link to="/prototypingPlayground/" className="about__inline-link">Prototyping Playground</Link> takes an idea past the canvas, and <Link to="/notes/prototyping-wheelrack-fitment/" className="about__inline-link">WheelRack&rsquo;s</Link> shows the states a spec frame missed.</>,
-  <>I make complex choices easier to compare and act on. The <ProjectLink to="/work/tire-categories/" className="about__inline-link">tire-category redesign</ProjectLink> lifted conversion on its top pages in the first month. <ProjectLink to="/work/loopstack/" className="about__inline-link">LoopStack</ProjectLink>, my open-source SaaS for the Loop community, turns repeated meal responses into patterns worth reviewing with a care team, and it never gives dosing advice.</>,
-  <>I put brand standards into the tools people already use: a <ProjectLink to="/work/figma-template-governance/" className="about__inline-link">Figma starter kit and internal plugins</ProjectLink> for the Web and UX designers I work with, and one mark and motion ident for <ProjectLink to="/work/overscroll-tactics/" className="about__inline-link">Overscroll Tactics</ProjectLink> that works on the web and in PlayDraft.</>,
+  // Each paragraph runs four lines at desktop, opens on named work, and uses
+  // only what the case studies state (mentor pass, 19 November 2026).
+  <>I designed <ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink>&rsquo;s dealer product from vehicle search through checkout while it grew from six retail partners to ten. On <ProjectLink to="/work/playdraft/" className="about__inline-link">PlayDraft</ProjectLink> I built too much around the core game, so I cut XP and competitive modes to get friends to the draft sooner.</>,
+  <>My 200+ <strong><ProjectLink to="/work/wheelrack/" className="about__inline-link">WheelRack</ProjectLink></strong> tokens and 50+ Storybook components became one library across its retail partners, still in use six months later. <strong><ProjectLink to="/work/aem-component-system/" className="about__inline-link">Our AEM components</ProjectLink></strong> go from Figma to production Sass, so SEO authors build pages without waiting on me.</>,
+  <>When a comp can&rsquo;t answer the question, I prototype it. My <Link to="/prototypingPlayground/" className="about__inline-link">Prototyping Playground</Link> tests one car in four colors between Figma and production, and <Link to="/notes/prototyping-wheelrack-fitment/" className="about__inline-link">WheelRack&rsquo;s</Link> fitment prototype shows the state a spec missed: a finish not made in your size.</>,
+  <>The <ProjectLink to="/work/tire-categories/" className="about__inline-link">tire-category redesign</ProjectLink> lifted conversion up to 50% on its top pages in the first month. <ProjectLink to="/work/loopstack/" className="about__inline-link">LoopStack</ProjectLink>, my open-source SaaS for the Loop community, turns glucose curves into patterns to review with a care team, and never gives dosing advice.</>,
+  <>A <ProjectLink to="/work/figma-template-governance/" className="about__inline-link">Figma starter template and four internal plugins</ProjectLink> carry our brand standards for 15+ Web and UX designers. <ProjectLink to="/work/overscroll-tactics/" className="about__inline-link">Overscroll Tactics</ProjectLink> names my practice: one mark and a motion ident that runs in about two seconds, on the web and in PlayDraft.</>,
 ];
 
 const Hero: React.FC = () => {
@@ -29,28 +32,32 @@ const Hero: React.FC = () => {
   const portraitRef = useRef<HTMLDivElement>(null);
   const [introStage, setIntroStage] = useState('done');
   const [inkStarted, setInkStarted] = useState(false);
+  const [bubblesPlaying, setBubblesPlaying] = useState(false);
   useLayoutEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motion.matches) { setInkStarted(true); return; }
-    const mobile = window.matchMedia('(max-width: 1023px)').matches;
+    // reduced motion, and later visits in the same session, open settled
+    let seen = false;
+    try { seen = sessionStorage.getItem('hero-bubbles-played') === '1'; } catch { /* storage blocked: play */ }
+    if (motion.matches || seen) { setInkStarted(true); setBubblesPlaying(true); return; }
     const timers: ReturnType<typeof setTimeout>[] = [];
     const play = () => {
       setInkStarted(true);
-      setIntroStage('sketch');
-      // The fidelity pass (F1, 11 November 2026): pencil sketch, then a wireframe
-      // placeholder ('lowfi'), then the photo wiping down in greyscale ('grey'),
-      // then colour as the orange ring draws ('final'), while a hand drags the
-      // Roles panel in by its title bar (from 1500ms, so it ends by 2180ms).
-      const steps: [number, string][] = mobile
-        ? [[600, 'lowfi'], [950, 'grey'], [1300, 'final'], [2050, 'done']]   // done after the panel's 680ms drag (tablets show it)
-        : [[700, 'lowfi'], [1100, 'grey'], [1500, 'final'], [2000, 'panel'], [2250, 'done']];
+      setIntroStage('bubbles');
+      setBubblesPlaying(true);
+      // The messy canvas (19 November 2026): HeroBubbles pours the trait words
+      // and the system's catalog into the portrait over 2.4s; the orange ring
+      // draws as the photo lands ('final'), and the Roles panel fades in.
+      const steps: [number, string][] = [[1600, 'final'], [2250, 'done']];
       steps.forEach(([delay, stage]) => timers.push(setTimeout(() => setIntroStage(stage), delay)));
     };
-    // Start the portrait construction when it enters view.
+    // Start when the portrait is in view: at once if it already is, so the
+    // settled photo never flashes before the intro takes it away.
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { play(); observer.disconnect(); }
     }, { threshold: 0.2 });
-    if (portraitRef.current) observer.observe(portraitRef.current);
+    const box = portraitRef.current?.getBoundingClientRect();
+    if (box && box.top < window.innerHeight && box.bottom > 0) play();
+    else if (portraitRef.current) observer.observe(portraitRef.current);
     // Direct links below the hero still receive the settled section background.
     timers.push(setTimeout(() => setInkStarted(true), 3500));
     const settle = () => {
@@ -73,7 +80,7 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [navOpen]);
   return (
-    <section id="intro" className="hero hero--contract" ref={sectionRef} data-intro-stage={introStage} data-ink-started={inkStarted}>
+    <section id="intro" className="hero hero--contract hero--bubbles" ref={sectionRef} data-intro-stage={introStage} data-ink-started={inkStarted}>
       <nav className="hero__nav" aria-label="Primary">
         <div className="hero__nav-logo">Ryan DeBoer</div>
         <div className="hero__nav-links">
@@ -127,7 +134,7 @@ const Hero: React.FC = () => {
               </h1>
             </AuthoredSection>
             <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
-              <p>I learn by building things I will have to maintain. I fight for consistency and simplicity because the tools can change.{' '}<br className="hero-intro__break" aria-hidden="true" /><strong className="animated-bold">Giving a damn does not.</strong></p>
+              <p>I don&rsquo;t stop at &lsquo;this could be better.&rsquo; I build it in code, ship it, and leave a rule behind so the team hits that bar next time. Agents make more.{' '}<br className="hero-intro__break" aria-hidden="true" /><strong className="animated-bold">I spend the time making it better.</strong></p>
               <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
               <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
                 {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
@@ -145,6 +152,10 @@ const Hero: React.FC = () => {
                   <span className="hero-intro__status-dot" aria-hidden="true" />Open to new work
                 </a>
                 <span className="hero-intro__byline-place">South Bend, IN / Remote US, Eastern Time</span>
+              </p>
+              <p className="hero-intro__links">
+                <a href="#projects" className="hero-intro__links-work" onClick={handleWorkNav}>See the work <span aria-hidden="true">↓</span></a>
+                <Link to="/about#video" className="hero-intro__links-video">Watch how I work</Link>
               </p>
             </AuthoredSection>
           </div>
@@ -264,6 +275,7 @@ const Hero: React.FC = () => {
           })}
         </ol>}
       </div>
+      <HeroBubbles sectionRef={sectionRef} playing={bubblesPlaying} />
     </section>
   );
 };

@@ -1,0 +1,122 @@
+// ============================================
+// Hero bubbles (19 November 2026, "messy canvas")
+// The intro layer HeroBubbles draws over the hero, and the four trait words
+// that stay as stickers around the portrait. The stickers are the site's white
+// sticker (.btn--secondary in _base.scss, the --sticker-* tokens): a white
+// face, the foil kiss-cut, the white die-cut, Hubot at 800. They do not peel.
+// ============================================
+
+.hero--contract { position: relative; }
+
+.hero-bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 11;   // over the portrait and the Roles panel (10), under the fixed nav
+  pointer-events: none;
+
+  &__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__word {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;   // placed by script; nothing shows before it is measured
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: $font-weight-extrabold;
+    font-size: $font-size-body-sm;
+    line-height: 1;
+    color: $color-neutral-dark;
+    padding: $spacing-sm 15px;
+    border: 1px solid transparent;
+    border-radius: $button-radius;
+    background:
+      linear-gradient(var(--sticker-die-cut), var(--sticker-die-cut)) padding-box,
+      var(--sticker-foil) border-box;
+    box-shadow:
+      0 0 0 4px var(--sticker-die-cut),
+      0 0 0 4.5px var(--color-border-default),
+      var(--sticker-shadow);
+    will-change: transform, opacity;
+    transform-origin: 50% 50%;
+  }
+
+  &--placed a.hero-bubbles__word { pointer-events: auto; }
+  a.hero-bubbles__word:hover { color: $color-neutral-dark; }
+  a.hero-bubbles__word:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 8px;
+  }
+
+}
+
+// ── the intro stage: the portrait is built by HeroBubbles, so the pencil,
+// the crop marks and the selection wait; the Roles panel arrives at the end ──
+.hero--contract[data-intro-stage="bubbles"] {
+  .hero__intro-sketch,
+  .hero__intro-crop,
+  .hero__profile-selection { opacity: 0; }
+  .hero__intro-ring { opacity: 0; animation: none; }
+  .hero__ui-element--layers { opacity: 0; }
+}
+// after the bubbles, 'final' still draws the orange ring; the panel fades in
+// instead of being dragged (the board cut the hand, 19 November)
+.hero--contract.hero--bubbles[data-intro-stage="final"],
+.hero--contract.hero--bubbles[data-intro-stage="done"] {
+  .hero__intro-sketch,
+  .hero__intro-crop { opacity: 0; }
+  .hero__ui-element--layers {
+    animation: heroBubblesPanel 400ms var(--ease-out) both;
+  }
+  .hero-intro__grab { display: none; }
+}
+@keyframes heroBubblesPanel {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+// a quiet row under the byline: a path to the work, and the How I work video
+.hero-intro__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm $spacing-xl;
+  margin: 0;
+  font-size: $font-size-body-sm;
+
+  a { text-decoration: none; }
+  &-work {
+    color: $color-neutral-dark;
+    font-weight: $font-weight-semibold;
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 3px;
+    &:hover { color: $color-primary-dark; }
+  }
+  &-video {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $color-neutral-muted;
+    &:hover { color: $color-neutral-dark; }
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 4.5px 0 4.5px 7px;
+      border-color: transparent transparent transparent currentColor;
+    }
+  }
+  a:focus-visible { outline: 2px solid $color-primary; outline-offset: 3px; border-radius: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bubbles__word { will-change: auto; }
+}

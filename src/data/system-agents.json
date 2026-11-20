@@ -77,7 +77,7 @@
     {
       "name": "check_source",
       "summary": "The curtain's system and accessibility rules, run on code before it's written.",
-      "description": "Check a TSX or SCSS snippet with the same deterministic rules the steel curtain runs on a pull request: raw colours get the token they should be (SYS001, SYS003 inline), class blocks with no stylesheet (SYS002), and the accessibility basics (A11Y001 image without alt, A11Y002 new tab without rel, A11Y003 positive tabIndex, A11Y004 click handler on a div). Run it on new styles, className or JSX before finishing. Findings say whether the curtain would block."
+      "description": "Check a TSX or SCSS snippet with the same deterministic rules the steel curtain runs on a pull request: raw colours get the token they should be (SYS001, SYS003 inline), class blocks with no stylesheet (SYS002), custom properties nothing in src defines (SYS004 ghost tokens), and the accessibility basics (A11Y001 image without alt, A11Y002 new tab without rel, A11Y003 positive tabIndex, A11Y004 click handler on a div). Run it on new styles, className or JSX before finishing. Findings say whether the curtain would block."
     },
     {
       "name": "check_copy",
@@ -87,7 +87,7 @@
     {
       "name": "review_change",
       "summary": "The full steel curtain on your branch, before the pull request. Local only.",
-      "description": "Only inside a checkout of the repo: run the steel curtain on the working tree against a base ref (default origin/main), exactly as the pull request will. Returns blocking findings, findings to address (system, accessibility, copy), registry proposals for new components and style blocks, and what the system should absorb."
+      "description": "Only inside a checkout of the repo: run the steel curtain on the working tree against a base ref (default origin/main), exactly as the pull request will. Returns blocking findings, findings to address (system, accessibility, copy), registry proposals for new components and style blocks, what the system should absorb, and which Brad Frost skill to run next when the diff points at one."
     }
   ],
   "gates": [
@@ -99,7 +99,7 @@
     },
     {
       "stage": "Pull request",
-      "check": "Steel curtain: raw colours with a token, unstyled blocks, images without alt, positive tabIndex",
+      "check": "Steel curtain: raw colours with a token, unstyled blocks, ghost tokens, images without alt, positive tabIndex",
       "kind": "blocking",
       "status": "live"
     },

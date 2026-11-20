@@ -78,3 +78,38 @@ test('accessibility basics read whole elements, not lines, and skip comments', a
   assert.deepEqual(found.map((f) => `${f.code}@${f.line}`), ['A11Y002@2', 'A11Y001@4', 'A11Y004@5', 'A11Y003@6']);
   assert.deepEqual(found.map(blocksMerge), [false, true, false, true]);
 });
+
+test('ghost tokens: a var() nothing defines blocks; fallbacks, inline sets and interpolation do not', async () => {
+  const { checkCustomProperties, customPropertyDefs, blocksMerge } = await import('./core.mjs');
+  const defs = customPropertyDefs(":root { --color-primary: #f03d01; }\n<div style={{ '--sw': x, ['--k' as string]: 1 }} />\nel.style.setProperty('--sway', '1deg');\n.x { --fp-#{$n}: 1; }\n@property --angle { syntax: '<angle>'; }\n.block--mod:hover {}\n&--on:focus {}");
+  assert.deepEqual([...defs.names].sort(), ['--angle', '--color-primary', '--k', '--sw', '--sway']);
+  assert.deepEqual([...defs.prefixes], ['--fp-']);
+  const cat = { customProperties: { names: [...defs.names], prefixes: [...defs.prefixes] } };
+  const code = [
+    '.a { color: var(--color-primary); }',
+    '.b { color: var(--nope-not-real); }',
+    '.c { color: var(--nope, red); }',
+    '.d { width: var(--fp-size); }',
+    '<div style={{ boxShadow: `var(--shadow-${size})` }} />',
+    '// var(--in-a-comment)',
+    '.e { --local: 1px; margin: var(--local); padding: var(--color-primry); }',
+  ].join('\n');
+  const found = checkCustomProperties(code, cat);
+  assert.deepEqual(found.map((f) => `${f.code}@${f.line}:${f.found}`), ['SYS004@2:var(--nope-not-real)', 'SYS004@7:var(--color-primry)']);
+  assert.ok(found.every(blocksMerge));
+  assert.deepEqual(checkCustomProperties(code, {}), [], 'an old catalog with no list never blocks');
+});
+
+test('Brad Frost lenses only show when their signal fired', async () => {
+  const { lensesFor } = await import('./curtain.mjs');
+  assert.deepEqual(lensesFor({ findings: [], proposals: [], changed: ['src/components/Hero.tsx'], newComponents: [] }), []);
+  const raw = (n) => Array.from({ length: n }, () => ({ code: 'SYS001', area: 'system', file: 'src/components/QuoteCard.tsx' }));
+  const lenses = lensesFor({
+    findings: [...raw(3), { code: 'SYS004', area: 'system', file: 'src/styles/x.scss' }],
+    proposals: [{ kind: 'component', name: 'QuoteCard' }, { kind: 'pattern', name: 'quote-card' }],
+    changed: ['src/styles/_tokens.scss', 'CLAUDE.md', 'src/components/QuoteCard.tsx'],
+    newComponents: [{ name: 'QuoteCard', path: 'src/components/QuoteCard.tsx' }],
+  });
+  assert.deepEqual(lenses.map((l) => l.skill), ['ds-token-architecture', 'ds-inspection', 'vibe-killer', 'ds-ai-rails']);
+  assert.ok(lenses.every((l) => !/—/.test(l.why)), 'no em dashes in the copy');
+});
