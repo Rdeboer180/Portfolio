@@ -3,7 +3,7 @@
 // Ten trait words and the design system's own catalog (every component,
 // style block and custom property in /system/catalog.json) start as a messy
 // map around the portrait, tidy into rings, zoom out and pour into the photo.
-// Three words stay behind as stickers around the ring.
+// Four words stay behind as stickers around the ring.
 //
 // The canvas lives in the portrait column: it fades out before the copy, so
 // the headline and paragraph read from the first frame. Hero owns the stage
@@ -18,15 +18,17 @@ import { Link } from 'react-router-dom';
 type Word = { text: string; to?: string; desktop?: number; mobile?: number };
 
 // desktop / phone: the angle each sticker settles at (deg, 0 = right, clockwise).
-// Three stickers, spaced evenly over the top of the ring on desktop; on a
-// phone, the two top corners and the bottom centre.
+// Four stickers: Ambitious, System Driven, Ruthlessly Curious and Committed,
+// spread over the top and right of the ring on desktop, and on the portrait's
+// four corners on a phone.
 // Words without an angle pour into the portrait with the catalog.
 const WORDS: Word[] = [
-  { text: 'Ambitious', desktop: -150, mobile: -140 },
+  { text: 'Ambitious', desktop: -160, mobile: -145 },
   { text: 'Point of View' },
-  { text: 'Driven', to: '/design-system', desktop: -90, mobile: -40 },
+  { text: 'System Driven', to: '/design-system', desktop: -116, mobile: -35 },
   { text: 'Craft' },
-  { text: 'Curious', to: '/talent-tree', desktop: -30, mobile: 90 },
+  { text: 'Ruthlessly Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
+  { text: 'Committed', to: '/work/wheelrack/', desktop: -20, mobile: 35 },
   { text: 'Care' },
   { text: 'Visual Problem Solver' },
   { text: 'Restless' },
