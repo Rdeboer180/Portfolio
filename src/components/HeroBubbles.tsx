@@ -3,7 +3,7 @@
 // Ten trait words and the design system's own catalog (every component,
 // style block and custom property in /system/catalog.json) start as a messy
 // map around the portrait, tidy into rings, zoom out and pour into the photo.
-// Four words stay behind as stickers around the ring.
+// Three words stay behind as stickers around the ring.
 //
 // The canvas lives in the portrait column: it fades out before the copy, so
 // the headline and paragraph read from the first frame. Hero owns the stage
@@ -22,11 +22,10 @@ type Word = { text: string; to?: string; desktop?: number; mobile?: number };
 const WORDS: Word[] = [
   { text: 'Ambitious', desktop: -160, mobile: -145 },
   { text: 'Point of View' },
-  { text: 'System Driven', to: '/design-system', desktop: -116, mobile: -35 },
+  { text: 'Driven', to: '/design-system', desktop: -116, mobile: -35 },
   { text: 'Craft' },
-  { text: 'Ruthlessly Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
+  { text: 'Curious', to: '/talent-tree', desktop: -64, mobile: 145 },
   { text: 'Care' },
-  { text: 'Committed', to: '/work/wheelrack/', desktop: -20, mobile: 35 },
   { text: 'Visual Problem Solver' },
   { text: 'Restless' },
   { text: 'Adaptive' },
