@@ -9,22 +9,27 @@
 .hero--contract { position: relative; }
 
 .hero-bubbles {
-  position: absolute;
-  inset: 0;
-  z-index: 11;   // over the portrait and the Roles panel (10), under the fixed nav
+  // Not a positioned box: the canvas and the words take the hero section as
+  // their containing block. That's what lets a settled sticker anchor to the
+  // portrait's ring, which is inside the section but not inside this layer.
+  position: static;
   pointer-events: none;
 
   &__canvas {
     position: absolute;
     inset: 0;
+    z-index: 11;   // over the portrait and the Roles panel (10), under the fixed nav
     width: 100%;
     height: 100%;
+    pointer-events: none;
   }
 
   &__word {
     position: absolute;
+    z-index: 11;
     top: 0;
     left: 0;
+    pointer-events: none;
     opacity: 0;   // placed by script; nothing shows before it is measured
     white-space: nowrap;
     text-decoration: none;
@@ -56,6 +61,54 @@
     outline-offset: 8px;
   }
 
+}
+
+// ── settled stickers, held to the ring by the browser ──
+// The ring is the anchor; each sticker sits at its angle on a circle around
+// it. Desktop: radius = half the profile + 30px, and the sticker is pushed out
+// by half its own size along the angle, so its near edge touches the circle.
+// Phone: the sticker's centre sits on 1.02 × the profile's radius, over the
+// ring. --profile-size already changes per breakpoint, so the circle does too,
+// and a resize moves the stickers on the same frame as the portrait. The same
+// numbers are in HeroBubbles.tsx, so the hand-off from the intro doesn't move.
+.hero__intro-ring { anchor-name: --hero-ring; }
+
+// Where each sticker sits, per width. Set on the sticker at all times, so the
+// intro can read the same numbers (getComputedStyle) for its last frame.
+.hero-bubbles__word--sticker {
+  --a: var(--a-desktop);
+  --lift: 0px;
+  --push: 1;
+}
+// 1024–1279: the portrait is 320px with about 60px either side of the ring,
+// so all four sit above it in a staggered cluster (--lift raises a sticker)
+@media (min-width: $breakpoint-lg) and (max-width: #{$breakpoint-xl - 1}) {
+  .hero-bubbles__word--sticker { --a: var(--a-mid); --lift: var(--lift-mid); }
+}
+// phones and tablets: centred on the ring at the portrait's four corners
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .hero-bubbles__word--sticker { --a: var(--a-phone); --push: 0; }
+}
+
+@supports (position-anchor: --hero-ring) {
+  .hero-bubbles--anchored .hero-bubbles__word--sticker {
+    --r: calc(var(--profile-size) / 2 + 30px + var(--lift));
+    position-anchor: --hero-ring;
+    left: calc(anchor(center) + cos(var(--a)) * var(--r));
+    top: calc(anchor(center) + sin(var(--a)) * var(--r));
+    transform:
+      translate(calc(-50% + cos(var(--a)) * 50% * var(--push)), calc(-50% + sin(var(--a)) * 50% * var(--push)))
+      rotate(var(--tilt, 0deg));
+  }
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    .hero-bubbles--anchored .hero-bubbles__word--sticker { --r: calc(var(--profile-size) / 2 * 1.02); }
+  }
+}
+
+// the narrowest phones: a slightly smaller sticker, so the longest word
+// (Ruthlessly Curious) still clears the screen edge on the portrait's corner
+@media (max-width: 374px) {
+  .hero-bubbles__word { font-size: 12px; padding: 6px 11px; }
 }
 
 // ── the intro stage: the portrait is built by HeroBubbles, so the pencil,
