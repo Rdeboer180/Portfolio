@@ -606,13 +606,6 @@
   color: var(--color-text-secondary);
 }
 
-// "Giving a damn does not." starts its own line on desktop, so the line that
-// lands the intro never splits; on a phone it runs on with the sentence.
-.hero-intro__break { display: none; }
-@media (min-width: $breakpoint-lg) {
-  .hero--contract .hero-intro__break { display: inline; }
-}
-
 // ============================================
 // The fidelity pass (F1, from the Hero motion canvas; 11 November 2026)
 // The portrait goes through a design file's stages inside the two-second
