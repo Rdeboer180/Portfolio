@@ -283,24 +283,24 @@ button,input,select,textarea{font:inherit;color:inherit}
 .slide-wrap{position:relative;border:1px solid var(--hair);border-radius:12px;padding:14px;background:var(--cool)}
 .slide{--s-bg:var(--tok-surface);--s-fg:var(--tok-text);--s-accent:var(--tok-accent);
   position:relative;aspect-ratio:16/9;border-radius:6px;background:var(--s-bg);color:var(--s-fg);overflow:hidden;
-  display:grid;grid-template-rows:auto 1fr auto;padding:5% 6%;container-type:inline-size;transition:background 200ms var(--ease-out),color 200ms var(--ease-out)}
+  display:grid;grid-template-rows:auto 1fr auto;padding:5% 6%;container-type:inline-size;transition:background var(--dur-out) var(--ease-out),color var(--dur-out) var(--ease-out)}
 .slide__k{font:700 clamp(9px,1.7cqw,13px)/1 var(--font-h);letter-spacing:.12em;text-transform:uppercase;color:var(--s-accent)}
 .slide__h{margin:0;font:800 var(--tok-title)/1.06 var(--font-h);letter-spacing:-.02em;max-width:22ch;align-self:center}
 .slide__m{font:800 var(--tok-metric)/1 var(--font-h);letter-spacing:-.03em;color:var(--s-accent)}
 .slide__b{margin:0;font:400 var(--tok-body)/1.4 var(--font-b);max-width:46ch;opacity:.92}
 .slide__foot{display:flex;justify-content:space-between;font:500 clamp(8px,1.4cqw,11px)/1 var(--font-b);opacity:.7}
-.slide--cmp .slide__mid{display:grid;grid-template-columns:1fr 1fr;gap:4%}
-.slide--cmp .slide__mid div{border-top:3px solid var(--s-accent);padding-top:6px}
 .slide--off{--s-accent:#ff6a00}
-.slide__chart{display:flex;align-items:flex-end;gap:3%;height:30%;margin-top:3%}
-.slide__chart i{flex:1;background:var(--s-accent);border-radius:2px 2px 0 0;opacity:.85}
+.slide--over .slide__h{outline:2px dashed var(--never);outline-offset:6px;background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(179,38,30,.12) 6px 7px)}
+.slide--over::after{content:'Headline too long';position:absolute;right:4%;top:4%;font:700 clamp(8px,1.4cqw,11px)/1 var(--font-h);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--never);padding:4px 6px;border-radius:4px}
+.slide__svg{display:block;width:100%;height:auto;max-height:34%;margin-top:3%}
+.slide__cap{margin:4px 0 0;font:400 clamp(8px,1.4cqw,11px)/1.3 var(--font-b);opacity:.7}
 .pinned{position:relative}
 .pinned .pin{position:absolute;top:8px;right:8px;z-index:3}
 /* lint panel */
 .lint{border:1px solid var(--hair);border-radius:12px;padding:16px;background:var(--paper)}
 .lint h3{margin:0 0 4px}
 .lint ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
-.lint li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px;border:1px solid var(--hair);border-radius:8px;font-size:14px;line-height:1.4}
+.lint li{transition:background var(--dur-out) var(--ease-out),border-color var(--dur-out) var(--ease-out);display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px;border:1px solid var(--hair);border-radius:8px;font-size:14px;line-height:1.4}
 .lint li[data-ok="false"]{border-color:#e9b7b2;background:#fdf1f0}
 .lint li p{margin:2px 0 0;font-size:13px;color:var(--graphite)}
 .lint .fix{border:1px solid var(--ink);border-radius:8px;background:var(--paper);padding:6px 10px;font:600 12.5px/1 var(--font-b);cursor:pointer;white-space:nowrap}
@@ -316,7 +316,7 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
 .btn[disabled]{opacity:.35;cursor:not-allowed}
 .log{margin:10px 0 0;font:12.5px/1.5 var(--mono);color:var(--slate);max-height:120px;overflow:auto;padding:0;list-style:none}
 .log li{padding:2px 0;border-bottom:1px dashed var(--hair)}
-@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+@media (prefers-reduced-motion:reduce){.slide,.lint li{transition:none}}
 </style>
 </head>
 <body>
@@ -443,10 +443,10 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
 <header class="proj"><div class="wrap">
   <p class="for"><span class="for__co">Built for Shopify</span><span class="for__role">Brand Design Studio · presentation systems and AI workflows</span></p>
   <h1>Presentations as a product</h1>
-  <p class="proj__line">Draft a slide with AI, watch the system check it against its own rules, fix what fails, and only then approve it. Which rules should a deck system enforce, and which should a person decide?</p>
+  <p class="proj__line">An AI drafts a slide. The system checks it, you fix it, a person approves it.</p>
   <div class="read">
     <p class="read__t">What I read first</p>
-    <p>The Staff Presentation Designer posting asks you to <q>consider presentations as a product</q> and to <q>establish clear governance</q> for templates, libraries and AI-assisted workflows. This demo is my small version of that: one template set, tokens for the rules, a linter that reads them, and a human gate.</p>
+    <p>The posting says <q>consider presentations as a product</q> and <q>establish clear governance</q>. This is my small version: tokens, a linter, a human gate.</p>
   </div>
 </div></header>
 
@@ -454,11 +454,11 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
   <p class="label">How I planned it</p>
   <h2 id="planTitle">Question, constraints, states, build, check</h2>
   <ol class="plan">
-    <li><span class="t">Question</span><p>If non-designers (and an AI) assemble decks from a template library, which rules keep the result on-brand and readable, and where does a person still have to say yes?</p></li>
-    <li><span class="t">Constraints</span><p>Built from public information only. No Shopify marks, colors or content; the tokens are this lab's own. Every number and sentence on the slides is synthetic. The "AI draft" is canned and offline on purpose, so the page runs anywhere and nothing is sent anywhere.</p></li>
-    <li><span class="t">States</span><p>Clean, AI draft with violations, each rule failing alone, fixed, approved, and edited-after-approval (which revokes the approval). Audience changes the type scale, so the same slide re-checks.</p></li>
-    <li><span class="t">Build</span><p>One slide renders from tokens (<code>--tok-*</code>). Six rules read the same tokens and the slide state. Fixes change tokens or content, never the checker.</p></li>
-    <li><span class="t">Check</span><p>The acceptance list below runs live against the slide. Keyboard works end to end; the contrast check uses the WCAG formula, not a guess.</p></li>
+    <li><span class="t">Question</span><p>Which deck rules should a system enforce, and which should a person decide?</p></li>
+    <li><span class="t">Constraints</span><p>Public information only. No Shopify marks or content. Synthetic data. The AI draft is canned and offline.</p></li>
+    <li><span class="t">States</span><p>Clean, AI draft, each rule failing, fixed, approved, edited after approval.</p></li>
+    <li><span class="t">Build</span><p>One slide from tokens. Five rules read the same tokens. Fixes change content or tokens, never the rule.</p></li>
+    <li><span class="t">Check</span><p>The acceptance list runs live. Contrast uses the WCAG formula. Keyboard works end to end.</p></li>
   </ol>
 </div></section>
 
@@ -469,7 +469,7 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
     <div class="demo__head"><p class="label">Governed slide</p><span class="demo__hint">Synthetic content · no network · keyboard works</span></div>
     <div class="demo__body">
       <div class="dk__ctl">
-        <label class="fld">Template<select id="tpl"><option value="metric">Metric</option><option value="cmp">Comparison</option><option value="quote">Quote</option></select></label>
+        <label class="fld">Template<select id="tpl"><option value="metric">Metric</option><option value="quote">Quote</option></select></label>
         <label class="fld">Audience<select id="aud"><option value="exec">Executive room</option><option value="all">All-hands</option><option value="inv">Investor PDF</option></select></label>
         <label class="fld">Background<select id="bg"><option value="surface">Surface (light)</option><option value="ink">Ink (dark)</option><option value="soft">Soft accent</option></select></label>
         <label class="fld fld--wide">Headline<input id="hd" type="text" autocomplete="off"></label>
@@ -488,13 +488,17 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
             <div>
               <div class="slide__m" id="s-m"></div>
               <p class="slide__b" id="s-b"></p>
-              <div class="slide__chart" aria-hidden="true"><i style="height:35%"></i><i style="height:48%"></i><i style="height:60%"></i><i style="height:82%"></i></div>
+              <svg class="slide__svg" viewBox="0 0 200 60" aria-hidden="true"><g fill="var(--s-accent)" opacity=".9"><rect x="6" y="38" width="36" height="22" rx="2"/><rect x="56" y="30" width="36" height="30" rx="2"/><rect x="106" y="20" width="36" height="40" rx="2"/><rect x="156" y="6" width="36" height="54" rx="2"/></g><g font-family="Inter,sans-serif" font-size="7" fill="currentColor" opacity=".75" text-anchor="middle"><text x="24" y="57" fill="#fff">Q1</text><text x="74" y="57" fill="#fff">Q2</text><text x="124" y="57" fill="#fff">Q3</text><text x="174" y="57" fill="#fff">Q4</text></g></svg>
+              <p class="slide__cap" id="s-alt"></p>
             </div>
           </div>
           <div class="btns">
             <button class="btn btn--ghost" id="ai" type="button">Draft with AI</button>
             <button class="btn btn--ghost" id="reset" type="button">Reset</button>
           </div>
+          <details class="code" style="margin-top:10px"><summary><span class="code__t">The prompt behind "Draft with AI"</span><span class="code__meta">canned, not sent anywhere</span></summary><div class="code__body"><p class="code__note">What a real draft step would send. The page returns a fixed answer so the failures repeat.</p><pre tabindex="0">Draft one slide for an all-hands: headline, one number, one supporting line.
+Use only these tokens: color.accent, type.title, type.body.
+Source: checkout-time pilot, median -18%. No invented figures.</pre></div></details>
           <ul class="log" id="log" aria-live="polite"></ul>
         </div>
         <div class="lint pinned">
@@ -519,13 +523,13 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
     <div class="handoff__col"><h3>Dev notes</h3>
       <ol class="devnotes">
         <li id="note-1"><span class="pin" aria-hidden="true">1</span><div><h4>Rules are tokens, not paint</h4><p>Type size, color role, minimum body size and word limits live as named tokens per audience. A slide stores token names, never hex values or point sizes. Swapping the audience re-resolves every value.</p><span class="owner">Owned by: the token file (<code>deck.tokens.json</code>), read by Figma variables, the Slides template and the linter</span></div></li>
-        <li id="note-2"><span class="pin" aria-hidden="true">2</span><div><h4>One linter, six rules, plain words</h4><p>Each rule returns pass or fail, a sentence a non-designer can act on, and at most one proposed fix. The fix edits content or swaps a token; it never silences the rule.</p><span class="owner">Owned by: the rule list; a rule is added by adding a function, not a screen</span></div></li>
+        <li id="note-2"><span class="pin" aria-hidden="true">2</span><div><h4>One linter, five rules, plain words</h4><p>Each rule returns pass or fail, a sentence a non-designer can act on, and at most one proposed fix. The fix edits content or swaps a token; it never silences the rule.</p><span class="owner">Owned by: the rule list; a rule is added by adding a function, not a screen</span></div></li>
         <li id="note-3"><span class="pin" aria-hidden="true">3</span><div><h4>AI drafts, a person approves</h4><p>Approval is only available when every rule passes. Any edit after approval revokes it and logs why. The log records who approved, not who drafted.</p><span class="owner">Owned by: the approval state, stored with the slide</span></div></li>
       </ol>
     </div>
     <div class="handoff__col"><h3>Acceptance checks · also agent eval cases</h3>
       <ul class="accept" id="accept"></ul>
-      <div class="parity"><p>Parity check: does the real template match the prototype?</p><ul><li>Same token names and audience scale.</li><li>Same six rules with the same thresholds.</li><li>Approval blocked on any failing rule.</li></ul></div>
+      <div class="parity"><p>Parity check: does the real template match the prototype?</p><ul><li>Same token names and audience scale.</li><li>Same five rules with the same thresholds.</li><li>Approval blocked on any failing rule.</li></ul></div>
       <p class="decides"><strong>Engineering decides:</strong> where the linter runs (Figma plugin, Slides add-on, CI on exported decks) and how rules are versioned.</p>
     </div>
   </div>
@@ -537,9 +541,9 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
   <div class="matrix-wrap"><table class="matrix">
     <thead><tr><th>State</th><th>What the user sees</th><th>What must hold</th><th>A11y</th></tr></thead>
     <tbody>
-      <tr><td data-h="State"><span class="st st--ok">Clean</span></td><td data-h="Sees">All six rules green, Approve available.</td><td data-h="Must hold">Approve stays disabled until the last rule passes, then enables without a reload.</td><td data-h="A11y">Status line announces the count.</td></tr>
+      <tr><td data-h="State"><span class="st st--ok">Clean</span></td><td data-h="Sees">All five rules green, Approve available.</td><td data-h="Must hold">Approve stays disabled until the last rule passes, then enables without a reload.</td><td data-h="A11y">Status line announces the count.</td></tr>
       <tr><td data-h="State"><span class="st st--bad">AI draft</span></td><td data-h="Sees">Headline too long, off-token accent color, no chart text.</td><td data-h="Must hold">Each failure names the rule in plain words and offers one fix.</td><td data-h="A11y">Failing rows use a diamond plus the word "Fails", never color alone.</td></tr>
-      <tr><td data-h="State"><span class="st st--ok">Fixed</span></td><td data-h="Sees">The row turns green; the slide updates in 200 ms.</td><td data-h="Must hold">A fix changes tokens or content, then the rule re-runs.</td><td data-h="A11y">Motion removed under reduced-motion.</td></tr>
+      <tr><td data-h="State"><span class="st st--ok">Fixed</span></td><td data-h="Sees">The row turns green; the slide updates in 400 ms (soft close).</td><td data-h="Must hold">A fix changes tokens or content, then the rule re-runs.</td><td data-h="A11y">Motion removed under reduced-motion.</td></tr>
       <tr><td data-h="State"><span class="st st--ok">Approved</span></td><td data-h="Sees">Gate turns green and records the approval.</td><td data-h="Must hold">Approval needs zero failing rules.</td><td data-h="A11y">Role=status announces it.</td></tr>
       <tr><td data-h="State"><span class="st st--bad">Edited after approval</span></td><td data-h="Sees">Gate reverts and the log says why.</td><td data-h="Must hold">Any content, audience or background change revokes approval.</td><td data-h="A11y">Announced, focus stays in the field.</td></tr>
     </tbody>
@@ -583,7 +587,7 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
   const AUD = { exec: { title: 'clamp(22px,5.2cqw,44px)', metric: 'clamp(30px,8cqw,64px)', body: 'clamp(13px,2.6cqw,22px)', minBodyPt: 28, label: 'Executive room' }, all: { title: 'clamp(20px,4.6cqw,38px)', metric: 'clamp(28px,7cqw,56px)', body: 'clamp(12px,2.3cqw,19px)', minBodyPt: 24, label: 'All-hands' }, inv: { title: 'clamp(18px,4cqw,32px)', metric: 'clamp(26px,6cqw,48px)', body: 'clamp(11px,1.9cqw,16px)', minBodyPt: 14, label: 'Investor PDF' } };
   const LIMITS = { headlineWords: 12, bodyWords: 28, contrast: 4.5 };
   const APPROVED_ACCENTS = new Set(['#c23001', '#ff8a5c']);
-  const DEFAULT = { tpl: 'metric', aud: 'exec', bg: 'surface', hd: 'Merchants reached checkout faster this quarter', mt: '+18%', bd: 'Median checkout time fell across the pilot group, led by returning buyers.', alt: 'Bar chart: four quarters, each higher than the last, ending at +18%.', off: false };
+  const DEFAULT = { tpl: 'metric', aud: 'exec', bg: 'surface', hd: 'Merchants reached checkout faster this quarter', mt: '+18%', bd: 'Median checkout time fell across the pilot group, led by returning buyers.', alt: 'Four quarters, each higher than the last, ending at +18%.', off: false };
   const AI_DRAFT = { hd: 'In the third quarter our merchants experienced a meaningful and measurable improvement in how quickly buyers were able to complete checkout', mt: '+18%', bd: 'Median checkout time fell across the pilot group, led by returning buyers.', alt: '', off: true };
   let S = { ...DEFAULT }; let approved = false;
   const logEl = $('log');
@@ -602,16 +606,15 @@ li[data-ok="false"] .dot{background:var(--never);border-radius:2px;transform:rot
     { id: 'contrast', name: 'Text is readable on the background', test: () => ratio(BG[S.bg].text, BG[S.bg].surface) >= LIMITS.contrast && ratio(accentHex(), BG[S.bg].surface) >= LIMITS.contrast, why: () => `Accent on this background is ${ratio(accentHex(), BG[S.bg].surface).toFixed(1)}:1; the minimum is ${LIMITS.contrast}:1.`, fixLabel: 'Use token color', fix: () => { S.off = false; } },
     { id: 'token', name: 'Only approved color tokens', test: () => APPROVED_ACCENTS.has(accentHex()), why: () => `The accent ${accentHex()} is a local override, not a token.`, fixLabel: 'Use token color', fix: () => { S.off = false; } },
     { id: 'alt', name: 'Chart has a text alternative', test: () => words(S.alt) >= 5, why: () => 'The chart has no text alternative a screen reader or a printed copy can use.', fixLabel: 'Add text', fix: () => { S.alt = DEFAULT.alt; } },
-    { id: 'size', name: 'Type is large enough for the room', test: () => S.aud !== 'exec' || words(S.bd) <= 28, why: () => `${AUD[S.aud].label} needs at least ${AUD[S.aud].minBodyPt} pt body copy; a long line forces it smaller.`, fixLabel: 'Trim', fix: () => { S.bd = DEFAULT.bd; } },
   ];
 
   // ---- render -------------------------------------------------------------
   function render() {
     const slide = $('slide'), bg = BG[S.bg], a = AUD[S.aud];
-    slide.className = 'slide' + (S.tpl === 'cmp' ? ' slide--cmp' : '') + (S.off ? ' slide--off' : '');
+    slide.className = 'slide' + (S.off ? ' slide--off' : '') + (!RULES[0].test() ? ' slide--over' : '');
     slide.style.setProperty('--tok-surface', bg.surface); slide.style.setProperty('--tok-text', bg.text); slide.style.setProperty('--tok-accent', S.off ? '#ff6a00' : bg.accent);
     slide.style.setProperty('--tok-title', a.title); slide.style.setProperty('--tok-metric', a.metric); slide.style.setProperty('--tok-body', a.body);
-    $('s-h').textContent = S.tpl === 'quote' ? '“' + S.hd + '”' : S.hd; $('s-m').textContent = S.tpl === 'quote' ? '' : S.mt; $('s-b').textContent = S.bd;
+    $('s-h').textContent = S.tpl === 'quote' ? '“' + S.hd + '”' : S.hd; $('s-m').textContent = S.tpl === 'quote' ? '' : S.mt; $('s-b').textContent = S.bd; $('s-alt').textContent = S.alt ? 'Chart: ' + S.alt : 'No chart description.';
     slide.setAttribute('aria-label', `Slide: ${S.hd}. ${S.mt}. ${S.alt || 'No chart description.'}`);
     for (const k of ['tpl', 'aud', 'bg']) if ($(k).value !== S[k]) $(k).value = S[k];
     for (const [id, k] of [['hd', 'hd'], ['mt', 'mt'], ['bd', 'bd'], ['alt', 'alt']]) if ($(id).value !== S[k]) $(id).value = S[k];
