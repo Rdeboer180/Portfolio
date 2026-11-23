@@ -131,7 +131,7 @@ const Hero: React.FC = () => {
               </h1>
             </AuthoredSection>
             <AuthoredSection {...AUTHORED_COMPONENTS.heroText} className="authored--above">
-              <p>I’m a product designer. I ship systems that scale as the product evolves. I automate the routine work so I can spend more time on the hard problems and <strong className="animated-bold">the interactions that give a brand its character.</strong></p>
+              <p>I’m a product designer who builds systems and maintains them as they evolve. I run agent workflows on those systems to get the work to good fast, then spend the time I save defining what better looks like: the hard problems, and the interactions that give a brand its character. The tools will change. <strong className="animated-bold">Giving a damn does not.</strong></p>
               <p className="hero-intro__mobile-role">{roleDescriptions[defaultRole]}</p>
               <div className={`hero-intro__role-story${switching ? ' hero-intro__role-story--switching' : ''}`} data-role-input={input}>
                 {/* Reserve the tallest paragraph at the current width so selections never move the controls. */}
