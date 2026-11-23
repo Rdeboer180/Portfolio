@@ -46,6 +46,15 @@ export const KIND_LABEL: Record<NoteKind, string> = {
 
 export const NOTES: Note[] = [
   {
+    slug: 'my-training-didnt-go-anywhere',
+    kind: 'reflection',
+    date: 'November 23, 2026',
+    dateISO: '2026-11-23',
+    title: 'My training didn’t go anywhere. It became sentences.',
+    dek: 'Years of Adobe, Figma and front-end courses now run in minutes through an agent. What that cost, and where the craft went instead.',
+    read: '3 min',
+  },
+  {
     slug: 'the-gate-stopped-my-redesign',
     kind: 'practice',
     origin: 'portfolio',

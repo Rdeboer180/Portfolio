@@ -1,0 +1,88 @@
+// ============================================
+// TrainingToSentences — the "My training didn't go anywhere" note's figure.
+// Paper rows on hairlines, Menlo tags, Signal Orange only on the prompt side.
+// ============================================
+
+.notes__body .tts {
+  margin: $spacing-2xl 0;
+  max-width: $container-text-width;
+
+  figcaption {
+    margin-top: $spacing-md;
+    font-size: $font-size-body-sm;
+    line-height: 1.6;
+    color: $color-neutral-muted;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.tts {
+  &__head,
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+    gap: $spacing-md;
+    align-items: center;
+  }
+
+  &__head { margin-bottom: $spacing-sm; }
+
+  &__tag {
+    font-family: $font-family-mono;
+    font-size: 11px;
+    color: $color-secondary-dark;
+  }
+
+  &__tag--mine { color: $color-primary-text; }
+
+  &__rows {
+    background: $color-white;
+    border: 1px solid $color-border-default;
+    border-radius: $card-border-radius;
+  }
+
+  &__row {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-body-sm;
+    line-height: 1.5;
+
+    & + & { border-top: 1px solid $color-border-default; }
+  }
+
+  &__canvas { color: $color-secondary-dark; }
+
+  &__arrow {
+    text-align: center;
+    color: $color-secondary;
+  }
+
+  &__prompt {
+    padding-left: $spacing-md;
+    border-left: 2px solid $color-primary;
+    font-weight: 600;
+    color: $color-neutral-dark;
+  }
+
+  // Phones: each row reads top to bottom, canvas over prompt.
+  @media (max-width: 599px) {
+    &__head { display: none; }
+
+    &__row {
+      grid-template-columns: 1fr;
+      gap: $spacing-xs;
+    }
+
+    &__arrow { display: none; }
+
+    &__canvas::before {
+      content: 'On the canvas · ';
+      font-family: $font-family-mono;
+      font-size: 11px;
+    }
+  }
+}

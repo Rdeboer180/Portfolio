@@ -9,6 +9,7 @@ import WheelRackFitmentPrototype from '../components/WheelRackFitmentPrototype';
 import PlayDraftClockPrototype from '../components/PlayDraftClockPrototype';
 import { SystemSource, SizesReaders, DriftLoop } from '../components/SystemSizes';
 import { FirstDraft, Inputs, EaseDemo } from '../components/VisualProblemSolver';
+import { TrainingToSentences } from '../components/TrainingToSentences';
 import { CurtainReceipt, CurtainColourBar, CurtainMaterials, CurtainLadder, CurtainButtons } from '../components/CurtainCaught';
 
 // The notes' bodies, by slug, for the note page (NotePage). Their titles,
@@ -126,6 +127,36 @@ const StackItem: React.FC<{
 );
 
 export const NOTE_BODIES: Record<string, React.ReactNode> = {
+  'my-training-didnt-go-anywhere': (
+    <>
+      <p>I spent years earning skills an agent now runs in minutes. Six semesters of Photoshop, Illustrator and InDesign. More than 180 hours on Figma and Tokens Studio. More front-end courses than I can count, learning to build light, fast visual work for the web. For a long time, that was how I knew I was good at this.</p>
+      <p>Now I can direct most of it through an MCP connection, or a prompt, and watch it happen. I&rsquo;d be lying if I said that doesn&rsquo;t sting.</p>
+      <p><strong>The training didn&rsquo;t go anywhere. It moved off the canvas and into the sentences I write.</strong></p>
+      <TrainingToSentences />
+
+      <h2>I know it&rsquo;s wrong before I can say why</h2>
+      <p>When an agent gets something wrong, I usually feel it before I can explain it. Then I name it, and the naming is where the training shows. That isn&rsquo;t a prompting skill. It&rsquo;s sixteen years of looking closely, and it still does the work. It just comes out in a prompt window now instead of as shortcuts on a canvas.</p>
+
+      <h2>My agent starts from my decisions, not the average</h2>
+      <p>My personal project right now is <Link to="/work/loopstack/">LoopStack</Link>, an open-source tool for making sense of complex diabetes data and connecting an involved patient with their care team. My agent works from my design preferences and a log of the decisions I&rsquo;ve made, so the first concepts it gave me were ones I liked right away.</p>
+      <p>That got me to good fast. Good isn&rsquo;t the job anymore.</p>
+
+      <h2>Better lives inside each widget</h2>
+      <p>The job now is taking each widget apart:</p>
+      <ul>
+        <li>how the glucose line eases into place</li>
+        <li>which number settles last</li>
+        <li>how a low reading gets attention without causing panic</li>
+        <li>how the same data reads on a dashboard a doctor already knows</li>
+      </ul>
+      <p>Those small details are where the years show up. They turn a wall of numbers into something a person can read at a glance and trust.</p>
+
+      <h2>The default is free now. Knowing what better looks like isn&rsquo;t.</h2>
+      <p>A designer posted a line I can&rsquo;t shake: you wouldn&rsquo;t let your optometrist do open heart surgery just because they got new AI tools. If that was you, tell me so I can credit you.</p>
+      <p>I wrote about directing that work in <Link to="/notes/visual-problem-solver/">It&rsquo;s up to us to ask: what does better look like?</Link> This note is about what it cost to get here.</p>
+      <p>The hours don&rsquo;t count the way they used to. What they trained into me counts more. I don&rsquo;t know yet how a designer starting today builds that eye without the hours. Maybe they find a faster way. I hope they don&rsquo;t skip it.</p>
+    </>
+  ),
   'the-gate-stopped-my-redesign': (
     <>
       <p>On 11 November I merged my <Link to="/">homepage redesign</Link>: sticker buttons, a new hero intro, testimonials in an iPad, and a quieter page around the binder. Before it merged, the <Link to="/notes/a-design-system-in-more-than-one-size/">steel curtain</Link> read every line it added. It took 38 seconds.</p>
