@@ -28,22 +28,26 @@ Every case study in `src/data/projects.ts`, read against the `unslop` / `humaniz
 - **Tags and role strings.** These are search terms, not prose.
 - **`/notes/*`.** These are Ryan’s own essays, and the voice skill was built from them. Rewriting them in a pass like this would be circular. If you want them covered, run them as a separate pass.
 
-## Claims that need Ryan’s input
+## Flagged claims, and how each was settled
 
-| Study | Line | Why it’s flagged | What I did |
-|---|---|---|---|
-| WheelRack | "the designs helped win them [partners 6 → 10], alongside other business factors" | This causal claim is attributed to design. The summary had dropped the hedge that the body keeps. | I restored the hedge in the summary. Confirm the attribution is one you can defend in an interview. |
-| Tire Categories | Margin aside "People could not decide." | No research or data behind it in the study. | I replaced it with "Forty categories, mostly text, and no way to compare them." This comes from the problem section. |
-| Landing Pages | Metric "Weeks → Days" | Your own outcome note says complex pages went from about a month to 1–2 weeks. Days applies only to simple launches. | Changed to "~1 mo → 1–2 wk, complex pages on the templates". |
-| Landing Pages | "<1 QA issues per page on average" | No source or window is named. | Unchanged. Name the source (QA log? period?) or soften it. |
-| AEM Component System | "WebPageTest reported 60% faster loads" | No pages, dates or before/after values are given. | Unchanged. Add the measurement window and pages, or label it as one test. |
-| Seasonal Content | "Winter conversion has generally been stronger since the seasonal program began" | No number. It's already hedged for weather, marketing and product. | Unchanged. Add a figure or leave it hedged. |
-| T1D Hub | "deep navy for stability, sky blue for hope and for data" | Brand-meaning language with nothing behind it on the page. | Cut to "the logo’s navy and sky blue". Restore it if those meanings are written in the v1.0 system doc. |
-| T1D Hub | "a working app in TestFlight that people can cook with" | Implies use by people other than you. There is no usage evidence in the study. | Cut to "a working app in TestFlight". |
-| LoopStack | Code caption "clinician-safe boundaries" | The outcome note says clinician review of the safety language hasn’t happened yet. The caption contradicted it. | Removed "clinician-safe". |
-| LoopStack | "Representative prompt" | Your rule is to show real prompts when AI did part of the work. This one is reconstructed. | The caption now says plainly that it isn’t verbatim. Swap in a real prompt if you have one. |
-| Design Enablement | Title "Internal tools that optimize and automate production work" / "Tools that optimize and automate tasks" | "Optimize" is vague, and the study is about not retyping documents. | Unchanged, because titles feed search. A candidate: "Tools that do the retyping". |
-| Photography Workflow Agent (hidden) | "In use by the internal photography team", "adoption came from…" | No evidence on the page. It also overlaps the Hero Crop Simulator in Design Enablement. | Softened the causal line and cut the wordless metrics. Decide whether this study should exist apart from Design Enablement. |
+Ryan reviewed the flags on 23 Nov 2026. He gave the scope of the AEM load claim and said to reconcile the rest.
+
+| Study | Line | Settled as |
+|---|---|---|
+| AEM Component System | "WebPageTest reported 60% faster loads" | **Ryan supplied the scope.** It now reads "60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery". The metric label became "Faster loads across 120+ pages (WebPageTest)". |
+| WheelRack | Partners 6 → 10, credited to the designs | The hedge ("alongside other business factors") is restored in the summary, so every mention now carries it. |
+| Tire Categories | Aside "People could not decide." | Replaced with "Forty categories, mostly text, and no way to compare them," taken from the problem section. |
+| Landing Pages | Metric "Weeks → Days" | Now "~1 mo → 1–2 wk, complex pages on the templates", matching the outcome note. |
+| Landing Pages | "<1 QA issues per page on average" | Kept. This is Ryan’s figure, and the two places it appears agree. |
+| Seasonal Content | "Winter conversion has generally been stronger" | Kept. It is already hedged for weather, marketing and product, and it claims no number. |
+| T1D Hub | "navy for stability, sky blue for hope" | Stays cut. No system doc with that language turned up outside the portfolio’s own copy. |
+| T1D Hub | "an app … that people can cook with" | Stays cut to "a working app in TestFlight". |
+| LoopStack | "clinician-safe" in the code caption | Stays removed, because the outcome note says the clinician review is still to come. |
+| LoopStack | Reconstructed prompt | The caption says it isn’t verbatim, and the code block’s filename now reads "pattern-review prompt (representative)" rather than a file name that implied a real file. |
+| Design Enablement | Title says "optimize and automate" | Kept. Titles feed search and were tuned in ddaa3ec. |
+| Photography Workflow Agent | Claims of use with no evidence; overlaps the Hero Crop Simulator | The causal line is softened and the wordless metrics are cut. The study stays hidden (direct link only), and Design Enablement carries the public version. |
+
+Outside this PR: `src/data/resume.ts` still says "60% faster loads on pages using the new components", without the 120+ page scope.
 
 ## Checks
 

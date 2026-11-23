@@ -1673,7 +1673,7 @@ $mobile-max-width: 768px;
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The homepage exploration holds the next options, each with a hypothesis and a test behind it. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. The distance between the Figma file and the branch is the part still closing: with the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
+    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The homepage exploration holds the next options, each with a hypothesis and a test behind it. The core components from the earlier rebuild are live, and WebPageTest measured 60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery. The distance between the Figma file and the branch is the part still closing: with the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     takeaways: [
       'Measurements come from local AEM builds of the branch, not from the design file.',
       'Reuse came first: a full-bleed band is two existing containers nested together, not a new component.',
@@ -1688,7 +1688,7 @@ $mobile-max-width: 768px;
       { label: 'Packages', url: 'https://www.tirerack.com/packages' },
     ],
     metrics: [
-      { value: '60%', label: 'Faster page loads (WebPageTest)' },
+      { value: '60%', label: 'Faster loads across 120+ pages (WebPageTest)' },
       { value: '7', label: 'Component pages in the Figma guide' },
       { value: '10+', label: 'Reusable components shipped to production' },
     ],
@@ -1971,7 +1971,7 @@ $mobile-max-width: 768px;
         description: 'Claude and ChatGPT helped me compare logic and language quickly; the harder review was mine. A 460-test Vitest suite now guards the confidence logic that decides what the app may claim. TestFlight adds the device check against real Loop data, meal after meal.',
         codeBlock: {
           language: 'text',
-          filename: 'pattern-review-system-prompt.md',
+          filename: 'pattern-review prompt (representative)',
           code: `Design a Type 1 diabetes pattern-review screen.
 
 Compare what Loop predicted (modeled carb absorption + insulin activity)
@@ -2715,7 +2715,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
       { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter], points: subsection(p, 'build')?.bullets, code: subsection(p, 'build')?.codeBlock },
       { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components.', images: [GUIDE.heroAuthor, GUIDE.heroPreview], artboards: [REFINED.desktop, REFINED.phone] },
     ],
-    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
+    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest measured 60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'Read why the line between Figma and the codebase is getting thinner' },
   }),
   loopstack: p => ({
