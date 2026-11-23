@@ -406,9 +406,9 @@ const projects: Project[] = [
     title: 'Figma Design & UX: Starter Template Governance and Plugin Development',
     cardTitle: 'Figma starter template & governance',
     seoTitle: 'Figma Design & UX Governance: Starter Templates and Four Internal Plugins',
-    summary: 'I built a shared Figma starter template and four internal plugins with agent assistance for a team of 15+ Web and UX designers. Together, they carry the project brief through design, proofing, and handoff.',
+    summary: 'I built a shared Figma starter template and four internal plugins with agent assistance for a team of 15+ Web and UX designers. The brief, the proofs and the handoff checklist now live in the design file.',
     cardHook: 'A shared starter template and four internal plugins for a team of 15+ Web and UX designers, from project setup through handoff.',
-    thesis: 'A shared starting point. A clearer handoff.',
+    thesis: 'Open the file and the brief is already on the cover.',
     year: '2026',
     role: 'Design & UX Workflow Design · Figma Template Governance · Agent-Assisted Plugin Development',
     ownership: 'I designed the template and plugin workflows, built the tools with agent assistance, and worked with the lead PM on the metadata export.',
@@ -443,7 +443,7 @@ const projects: Project[] = [
       'Proof snapshots update on an explicit refresh, so ongoing edits cannot silently change an approved proof.',
       'The edit uses original footage and screenshots. Team adoption and time savings have not yet been measured.',
     ],
-    insightCallout: 'The file should help the next person understand the work without needing its original designer in the room.',
+    insightCallout: 'Someone who wasn’t on the project should be able to open the file and see what was asked and what’s left.',
     approachSubsections: [
       {
         key: 'shared-template',
@@ -489,7 +489,7 @@ const projects: Project[] = [
       decisions: [
         { title: 'Put the project context where the work starts', body: 'A standard cover imports exported project metadata and links back to the master project. The starter file gives UX and Design a shared structure with guidance beside the work.' },
         { title: 'Keep proof preparation with the design', body: 'Linked snapshot slots bring source frames into review boards. Designers control refreshes, preserving the reviewed version while the working frames continue to change.', image: { src: '/images/work/figma-template-governance/proof-template.png', alt: 'Original proof template with desktop and mobile snapshots', layout: 'full', caption: 'Proofs use shared layouts and explicit snapshot refreshes.' } },
-        { title: 'Make handoff readiness explainable', body: 'Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.', image: { src: '/images/work/figma-template-governance/actual-checklist-frame.jpg', alt: 'Project Checklist in the original working Figma file', layout: 'full' } },
+        { title: 'Say why a step was skipped', body: 'Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.', image: { src: '/images/work/figma-template-governance/actual-checklist-frame.jpg', alt: 'Project Checklist in the original working Figma file', layout: 'full' } },
       ],
       outcome: 'Four plugins are published internally for a team of 15+ Web and UX designers. Team rollout is ongoing; adoption and time savings are not yet measured.',
     },
@@ -514,7 +514,7 @@ const projects: Project[] = [
     cardTitle: 'WheelRack: Design system to full product',
     seoTitle: 'WheelRack: Enterprise React Design System for a Wholesale Ecommerce Platform',
     thesis: 'Shared rules for the details that make wheel fitment complicated.',
-    summary: 'I built WheelRack’s design system from scratch and designed the full dealer product, from vehicle search through checkout. I specified every state and edge case in the terms our React engineer built from, and the designs and the dealer experience helped the platform grow from six retail partners to ten.',
+    summary: 'I built WheelRack’s design system from scratch and designed the full dealer product, from vehicle search through checkout. I specified every state and edge case in the terms our React engineer built from. Retail partners grew from six to ten during the build, and the designs helped win them, alongside other business factors.',
     ownership: 'I owned the complete design system, product design, and behavior specifications. Cheryl Carpenter owned the React build; we worked together on implementation and review.',
     cardHook: 'I built the design system from scratch and designed the full dealer product, specified for React down to its edge cases. Partners grew from six to ten during the build.',
     compactStory: true,
@@ -536,7 +536,7 @@ const projects: Project[] = [
       alt: 'WheelRack dealer interface with wheel filters, vehicle preview, and separate front and rear wheel configurations',
       layout: 'full',
       crop: { x: 158, y: 190, width: 1367, height: 1575, sourceWidth: 6466, sourceHeight: 7179 },
-      caption: 'The dealer view brings filters, a vehicle preview, and front/rear purchasing options into one responsive experience. Design artifact.',
+      caption: 'Filters, the vehicle preview and front and rear purchasing on one dealer screen. Design artifact.',
     },
     timeToLive: 'Launched June 4, 2026. The system and partner brand builds are complete; rollout continues across additional retailers.',
     problemPunch: 'A dealer interface built for six different partners.',
@@ -573,7 +573,7 @@ const projects: Project[] = [
         key: 'journey',
         part: 'Part 2 · The full product, specified for React',
         label: 'Define the journey around dealer tasks',
-        description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes. Those rules gave the team a shared starting point for each screen.',
+        description: 'With the UX design manager and stakeholders, I mapped vehicle selection, search results, product details, and checkout. I kept the visualizer separate from purchasing information and documented autocomplete, responsive behavior, and errors in the wireframes.',
       },
       {
         key: 'fitment',
@@ -696,10 +696,10 @@ const projects: Project[] = [
     publicContext: PUBLIC_RETAILER_CONTEXT,
     thesis: 'Turn 40 confusing categories into choices people can actually make.',
     annotations: {
-      problem: 'Too many choices, too much text. People could not decide.',
+      problem: 'Forty categories, mostly text, and no way to compare them.',
       gaps: 'No visual language existed yet. I had to build the system and the vocabulary.',
       constraints: '40+ categories, 80+ products each, SEO fighting usability.',
-      approach: 'Balancing data with intuition: eight core icons, not ninety.',
+      approach: 'Eight core icons, not ninety.',
       outcome: 'Category entry jumped, and the icon system went sitewide.',
     },
     stream: 'professional',
@@ -710,7 +710,7 @@ const projects: Project[] = [
     cardTitle: 'Tire Category Redesign: Path to the right tire',
     seoTitle: 'Automotive Ecommerce Category UX Redesign: +400% Category Entry',
     summary: 'I rebuilt 30+ tire category pages around one icon, comparison, and content system. In the first month, top-performing pages saw up to a 50% conversion lift.',
-    cardHook: 'Choosing tires takes expertise most shoppers do not have. 30+ category pages were rebuilt into one guided system. Top pages lifted conversion up to +50% in the first month.',
+    cardHook: 'Choosing tires takes expertise most shoppers do not have. I rebuilt 30+ category pages on one icon and comparison system. Top pages lifted conversion up to +50% in the first month.',
     beat: {
       kind: 'metric',
       value: 'Up to +400%',
@@ -738,11 +738,10 @@ const projects: Project[] = [
     problemPunch: "Make tire-performance tradeoffs useful to everyday shoppers.",
     problem: [
   "The category pages had to explain what a tire's strengths meant for someone's driving. I could not assume a visitor from search already understood the terms our testing team used.",
-  "The experience was dense, inconsistent, and almost entirely verbal. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another.",
-  "I needed to translate that knowledge into a comparison someone could use, even if this was the first Tire Rack page they had seen."
+  "The pages were dense and almost all text. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another."
 ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'No visual language existed. Design had to define both the system and the vocabulary.',
+    gapsPunch: 'There was no visual language to start from. I had to build the system and its vocabulary.',
     gaps: [
       'There was no visual framework for comparing category strengths.',
       'The system had to make each category distinct without inventing a different design for all 40.',
@@ -754,12 +753,12 @@ const projects: Project[] = [
     constraints: [
       '40+ unique category variations needed consistent treatment.',
       'Often 80 or more tires per category, and the page still had to stay readable.',
-      'SEO content requirements had to coexist with clean, scannable design.',
+      'SEO copy had to stay on the page without pushing the comparison down.',
       'No photography direction existed for category-specific imagery.',
       'Performance data had to be sourced, validated, and visualized for each category.',
     ],
 
-    insightCallout: 'Pushed back on 90 one-off icons in favor of a scalable system: 8 primary icons for broad strengths, 24 supporting icons for specific category distinctions. This framework now governs a 100+ icon sprite library used across the site.',
+    insightCallout: 'I pushed back on 90 one-off icons. We shipped two tiers instead: 8 primary icons for broad strengths and 24 supporting icons for category differences. The same tiers now organize a 100+ icon sprite library across the site.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -830,13 +829,13 @@ const projects: Project[] = [
         src: '/images/work/tire-categories/supporting/outcome/in-page-application.png',
         alt: 'Category detail page showing performance bar charts, product grid, and icon system in context',
         layout: 'full',
-        caption: 'Category page in context: performance data, icon system, and product discovery working together',
+        caption: 'A category page with the performance chart, the icons and the product grid in place.',
       },
       {
         src: '/images/work/tire-categories/winter_m_safe.png',
         alt: 'Winter tire category page on mobile showing responsive layout with performance data and product listings',
         layout: 'full',
-        caption: 'Mobile category experience: responsive layout maintaining full functionality',
+        caption: 'The Winter category page on a phone.',
         mobile: true,
       },
     ],
@@ -866,7 +865,7 @@ const projects: Project[] = [
     cardStatus: 'In TestFlight',
     seoTitle: 'T1D Hub brand identity and design system, carried into Bolus Binder, a React Native companion app',
     summary:
-      'This study has two parts. The first is T1D Hub, the brand identity and design system I built with Dr. Brian Huber for his Type 1 practice, from the logo to the site his marketing team runs. The second is Bolus Binder, a React Native companion app on the same system, where scaling a recipe moves its nutrition and estimated absorption with it. A controlled diabetic already reads a CGM trace every day, so both use the trace and the colors they already know.',
+      'T1D Hub is the brand identity and design system I built with Dr. Brian Huber for his Type 1 practice, from the logo to the site his marketing team runs. Bolus Binder is a React Native companion app on the same system: scale a recipe and its nutrition and estimated absorption move with it. A controlled diabetic already reads a CGM trace every day, so both use the trace and the colors they already know.',
     thesis: 'The clinic’s colors mean the same thing in the kitchen.',
     year: '2026',
     tags: ['Product Design', 'Mobile (iOS)', 'Brand Identity', 'Brand System', 'Design System', 'Health Data', 'React Native'],
@@ -890,7 +889,6 @@ const projects: Project[] = [
       'T1D Hub mark and design system by June 2026, the clinic site live in July 2026, Bolus Binder in TestFlight since August.',
     metrics: [
       { value: 'React Native + Expo', label: 'Agent-assisted iOS build · Running in TestFlight' },
-      { value: '1 → 2', label: 'One system, two experiences · The T1D Hub clinic brand and the Bolus Binder companion app' },
       { value: '1.5×', label: 'Portion-aware nutrition · Macros and the absorption estimate rescale with the serving' },
       { value: '12', label: 'Color tokens carrying clinical semantics · In range, above range, urgent low' },
       { value: 'July 2026', label: 'T1D Hub brand live · Logo, design system and site, with the practice’s marketing team' },
@@ -918,7 +916,7 @@ const projects: Project[] = [
       {
         key: 'brand',
         part: 'Part 1 · T1D Hub brand identity & design system',
-        label: 'A real brand, built to be used',
+        label: 'A mark built around the CGM trace',
         systemMarker: 'BRAND',
         description:
           'Brian is a close friend, and I have been a Type 1 for most of my life, so the practice did not get a designer looking at a healthcare brief. It got a patient. I drew the T1D Hub mark around the one line a Type 1 reads every day: a CGM trace runs through the wordmark, entering at the T and holding the name together, and it has to stay connected in every configuration. Around the mark I built the foundations the practice could run without me: the logo system, the palette, the type, and the rules written beside each one. Those are what Brian’s marketing team works from on the site, and what I review with them when a page goes up.',
@@ -945,7 +943,7 @@ const projects: Project[] = [
         label: 'A design system the practice can extend',
         systemMarker: 'DESIGN SYSTEM',
         description:
-          'T1D Hub Design System v1.0 went to Brian in June 2026 as a working website. It is built from the logo’s two-tone foundation: deep navy for stability, sky blue for hope and for data. Twelve color tokens carry clinical meaning, so green is in range, amber is above and red is an urgent low, the same colors a patient already trusts on a CGM. Four gradients stand for stages of the Type 1 journey. Sora carries the headings, Inter the body, and JetBrains Mono is reserved for numbers, so a glucose figure never reads as prose. The system also covers buttons, badges, inputs, alerts, cards and navigation, plus a CGM chart language with a time-in-range summary. Its motion rules keep things calm: entrances take 350ms, the CGM trace draws in 1000ms, and micro-interactions take 150ms. It closes on the brand in context: the website, an office wall, conference slides and business cards.',
+          'T1D Hub Design System v1.0 went to Brian in June 2026 as a working website. It is built on the logo’s navy and sky blue. Twelve color tokens carry clinical meaning: green is in range, amber is above and red is an urgent low, the same colors a patient already trusts on a CGM, and none of them is used for decoration. Sora sets the headings, Inter the body, and JetBrains Mono only the numbers, so a glucose figure never reads as prose. Four gradients stand for stages of the Type 1 journey. It also covers buttons, badges, inputs, alerts, cards, navigation and a CGM chart language with a time-in-range summary. Motion stays calm: 350ms entrances, a 1000ms trace draw, 150ms micro-interactions. The last pages show the brand on the website, an office wall, conference slides and business cards.',
         gridColumns: 2,
         images: [
           {
@@ -1008,7 +1006,7 @@ const projects: Project[] = [
         label: 'The same system, carried into TestFlight',
         systemMarker: 'BUILD',
         description:
-          'Bolus Binder runs on the T1D Hub system itself: the same tokens, the same clinical color meanings, the same type roles and component rules, so a patient moving from the clinic’s site to the app never has to relearn what green means. The foundations were drawn in Figma and taken into React Native with Expo through an agent-assisted build: I set the system, described each screen against it, reviewed the working states, and refined the interface where the build drifted from the tokens or the hierarchy. The result is a working app in TestFlight that people can cook with.',
+          'Bolus Binder runs on the T1D Hub system itself: the same tokens, the same clinical color meanings, the same type roles and component rules, so a patient moving from the clinic’s site to the app never has to relearn what green means. The foundations were drawn in Figma and taken into React Native with Expo through an agent-assisted build: I set the system, described each screen against it, reviewed the working states, and refined the interface where the build drifted from the tokens or the hierarchy. The result is a working app in TestFlight.',
         gridColumns: 2,
         images: [
           {
@@ -1071,8 +1069,8 @@ const projects: Project[] = [
     title: 'Seasonal Content Swap: AEM Experience Fragments & Adobe Target',
     cardTitle: 'Seasonal content, without rebuilds',
     seoTitle: 'Seasonal Ecommerce Content System: AEM Experience Fragments & Adobe Target',
-    summary: 'I built and still govern reusable AEM Experience Fragments for A/B testing and geographic targeting with Adobe Target. More than 20 seasonal fragments serve six landing pages, supported by documented authoring rules, junior-designer onboarding, and final review.',
-    cardHook: 'Reusable AEM Experience Fragments support A/B testing and geographic targeting with Adobe Target. Authors update 20+ seasonal fragments across six pages within a shared review workflow.',
+    summary: 'I built and still govern reusable AEM Experience Fragments for A/B testing and geographic targeting with Adobe Target. More than 20 seasonal fragments serve six landing pages. I wrote the authoring rules, trained two junior designers to author them, and still do the final review.',
+    cardHook: 'The page stays put and the fragments swap. 20+ AEM Experience Fragments, targeted by region through Adobe Target, change six pages each season without a rebuild.',
     beat: {
       kind: 'image',
       src: '/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png',
@@ -1097,13 +1095,13 @@ const projects: Project[] = [
     timeToLive: '10+ years of continuous ownership. Deployed seasonally each fall, with same-day content swaps.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
-    problemPunch: 'Manual seasonal updates. No scalable system. Winter and southern-states customers seeing the same content.',
+    problemPunch: 'Seasonal swaps were manual, and winter-climate and southern-state customers saw the same page.',
     problem: [
   "The seasonal program gets customers thinking about winter tires in September and October, before the first snowfall. That preparation shapes the homepage, tire pages, delivery, research and wheel-fitment content.",
   "Early swaps were manual. As the site grew, rebuilding pages every season became slow, while serving different text on the same URLs complicated search visibility."
 ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'No fragment library, no audience targeting, no way to serve different content to different regions without page duplication.',
+    gapsPunch: 'There was no way to show two regions different content without duplicating the page.',
     gaps: [
       'The same page needed to speak differently to winter-climate and southern-state customers.',
       'AEM needed new fragment types and accessible variants; Adobe Target needed a dependable audience split.',
@@ -1111,15 +1109,15 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
-    constraintsPunch: 'Google must not see duplicate pages. Analytics needs audience segmentation. Photography needs seasonal imagery on a schedule.',
+    constraintsPunch: 'Google could not see duplicate pages, and the audience split had to run through Analytics.',
     constraints: [
       'Google had to treat winter and southern-states variants consistently, not as duplicate pages.',
       'Audience segmentation currently runs as a geo-based split with two segmented audiences via Adobe Target, coordinated with the Analytics team.',
-      'Shaped the annual Sweden winter-shoot wishlist alongside Tire Rack\u2019s tire-testing trips. The brief for composition and tone drew on marketing goals, AI-generated reference imagery, and design-system needs.',
-      'System needed to be documented clearly enough for two junior designers to author seasonally alongside me, with my oversight on approvals, governance, and design-system alignment.',
-      'When breaks happen, they are usually tied to Experience Fragment / Adobe Target sync issues. Those get resolved through coordinated fixes across authoring, analytics, and targeting.',
+      'I shape the shot wishlist for the annual winter shoot in Sweden, which runs alongside Tire Rack’s tire-testing trips. The brief draws on marketing goals, AI-generated reference images and the design system.',
+      'The system had to be written down well enough for two junior designers to author each season, with me approving the work.',
+      'When it breaks, it is usually an Experience Fragment out of sync with Adobe Target. Fixing that takes authoring, Analytics and targeting together.',
     ],
-    insightCallout: 'The page stays put while the authored fragments change. That one decision made seasonal swaps faster, kept regional targeting out of duplicated URLs, and gave junior designers a system they could run.',
+    insightCallout: 'The page stays put while the authored fragments change. That one call kept regional targeting off duplicate URLs and made the swap something a junior designer can run.',
 
     // \u2500\u2500 04 Approach (subsections) \u2500\u2500
     approachSubsections: [
@@ -1127,7 +1125,7 @@ const projects: Project[] = [
         key: 'alignment',
         label: 'Four teams with a stake in one page',
         systemMarker: 'Team',
-        description: 'Coordinated across Analytics (audience segmentation rules), Photography (seasonal shoots I directed), SEO (variant indexing strategy), and junior designers (authoring onboarding).',
+        description: 'Analytics owned the audience split, Photography shot the seasonal images I directed, SEO decided how variants were indexed, and the junior designers had to learn the authoring. I coordinated all four.',
         images: [],
       },
       {
@@ -1147,7 +1145,7 @@ const projects: Project[] = [
       {
         key: 'system',
         label: 'Five fragment types, authored in AEM without a developer',
-        description: 'Built reusable fragment types: Hero, Teaser, Entertainment, Video Center, Category Bar. Each with content fields, link behavior, and CTA configuration authored directly in AEM.',
+        description: 'I built five fragment types: Hero, Teaser, Entertainment, Video Center and Category Bar. Authors set the content, links and buttons in AEM.',
         images: [
           {
             src: '/images/work/seasonal-content-system/winter-aem-hero-detail_blurred.png',
@@ -1160,7 +1158,7 @@ const projects: Project[] = [
       {
         key: 'build',
         label: 'Written down, then taught to the people authoring it',
-        description: 'Authored, tested, and deployed seasonal content directly in AEM. Documented the system in Confluence and mentored junior designers through the authoring workflow.',
+        description: 'I authored and shipped the seasonal content in AEM myself, then wrote the system up in Confluence and walked the junior designers through authoring it.',
         systemMarker: 'Documentation',
         images: [],
       },
@@ -1178,7 +1176,7 @@ const projects: Project[] = [
     takeaways: [
   "Declining natural-search traffic led us to review seasonal content with SEO. We shifted toward visual changes while keeping the text consistent across variants.",
   "In 2018, I reduced the program to the highest-traffic surfaces.",
-  "When Experience Fragments and Adobe Target fall out of sync, authoring, analytics and targeting work through the fix together."
+  "Most breaks are a fragment out of sync with Target, and I still own those fixes."
 ],
     outcomeImages: [
       {
@@ -1237,7 +1235,7 @@ const projects: Project[] = [
       'The owner needed to manage the site herself after launch, without an agency retainer.',
     ],
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'An aging identity up against polished commercial programs, with none of the SEO or conversion infrastructure to compete.',
+    gapsPunch: 'An old identity next to polished commercial programs, and no search presence or inquiry path to compete with them.',
     gaps: [
       'The identity needed to feel as warm and personal as the academy while holding its own beside larger commercial programs.',
       'Every headline had to work for both the parent and the search engine.',
@@ -1247,12 +1245,12 @@ const projects: Project[] = [
         src: '/images/work/heatherwood/supporting/opportunity/heatherwood-notes-01.png',
         alt: 'Brand identity applied to roadside signage with QR code for mobile conversion',
         layout: 'full',
-        caption: 'Brand collateral: extending the identity into physical touchpoints',
+        caption: 'The roadside sign, with a QR code to the site.',
       },
     ],
 
     // \u2500\u2500 03 Constraints \u2500\u2500
-    constraintsPunch: 'Non-technical owner. Real photography needed. Every page doubles as a search entry point.',
+    constraintsPunch: 'The owner had to run it herself, and every page had to work as a search landing page.',
     constraints: [
       'Owner has no technical background. The CMS had to be fully self-manageable.',
       'Each service (lessons, camps, boarding, birthday parties, trail rides) needed its own page with an SEO-targeted headline, a contact form, and FAQ content.',
@@ -1286,27 +1284,27 @@ const projects: Project[] = [
             src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-desktop-02.png',
             alt: 'Services and Experiences page with card grid of all 10 offerings',
             layout: 'half',
-            caption: 'Services hub: 10 SEO entry points with consistent card patterns',
+            caption: 'Services: ten offerings, each a card that leads to its own page.',
           },
           {
             src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-desktop-03.png',
             alt: 'Riding Lessons service page with SEO copy and contact form sidebar',
             layout: 'half',
-            caption: 'Service landing page: dedicated contact form on every page',
+            caption: 'A service page, with its own contact form.',
           },
         ],
       },
       {
         key: 'build',
         label: 'Built on tools the owner could keep after I left',
-        description: 'Built on WordPress with Elementor, WPForms for contact routing, and Yoast SEO for on-page optimization. Configured caching, analytics, and form notifications for the owner.',
+        description: 'WordPress with Elementor, because the budget ruled out custom code. WPForms routes the inquiries and Yoast handles on-page SEO. I set up caching, analytics and the form notifications before handing it over.',
         images: [],
       },
       {
         key: 'iteration',
         label: 'Handing it over is the last design decision',
         systemMarker: 'Team',
-        description: 'Trained the owner to manage content updates independently.',
+        description: 'I trained Deborah to update the content herself. She now adds services and checks form submissions and SEO scores on her own.',
         images: [],
       },
     ],
@@ -1323,20 +1321,20 @@ const projects: Project[] = [
         src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-desktop-01.png',
         alt: 'Homepage hero with SEO-targeted headline and primary inquiry CTA',
         layout: 'full',
-        caption: 'Homepage: SEO-targeted headline with primary inquiry CTA',
+        caption: 'Homepage: the headline families search for, and one inquiry button.',
       },
       {
         src: '/images/work/heatherwood/supporting/outcome/heatherwood-final-mobile-01.png',
         alt: 'Mobile homepage with service cards and enrollment CTA',
         layout: 'full',
-        caption: 'Mobile experience: service cards and enrollment flow',
+        caption: 'On a phone: service cards and the enrollment button.',
         mobile: true,
       },
     ],
     metrics: [
       { value: '~3\u20134/mo \u2192 4\u20135/day', label: 'Inquiry volume, pre vs. post launch' },
       { value: '10+', label: 'SEO-targeted service landing pages' },
-      { value: 'Owner-managed', label: 'No agency dependency post-handoff' },
+      { value: 'Owner-managed', label: 'Deborah updates it herself, no agency' },
     ],
   },
   // =============================================
@@ -1347,12 +1345,12 @@ const projects: Project[] = [
     coverGround: '#f2f2f2',
     context: TIRE_RACK_CONTEXT,
     publicContext: PUBLIC_RETAILER_CONTEXT,
-    thesis: 'Make landing pages a system, not a fire drill.',
+    thesis: 'Stop solving the same landing page twice.',
     annotations: {
       problem: 'Every landing page started from scratch. No templates, no patterns.',
       gaps: 'The same decisions, remade on every request.',
       constraints: 'Thin briefs, two audiences, AEM’s limits, and speed as the expectation.',
-      approach: 'Invest in the system, and speed stops costing quality.',
+      approach: 'Put the repeated decisions in templates.',
       outcome: 'Complex pages take one to two weeks instead of about a month.',
     },
     stream: 'professional',
@@ -1374,7 +1372,7 @@ const projects: Project[] = [
     timeToLive: '~1 month \u2192 1\u20132 weeks for complex pages, 1 week for standard, 1\u20132 days for simple launches.',
 
     // \u2500\u2500 01 Problem \u2500\u2500
-    problemPunch: 'Every landing page started from scratch. No templates, no patterns, no scalable process.',
+    problemPunch: 'Every landing page started from an empty Figma file.',
     problem: [
       'Tire Rack uses landing pages to answer high-intent searches for tire sizes, categories, and narrow product needs.',
       'SEO and partner teams needed those pages quickly, but every request still started from an empty Figma file and a thin brief.',
@@ -1391,13 +1389,13 @@ const projects: Project[] = [
     ],
 
     // \u2500\u2500 02 Gaps & Opportunity \u2500\u2500
-    gapsPunch: 'No reusable templates. No component strategy. Speed and quality treated as tradeoffs.',
+    gapsPunch: 'Every request remade the same layout decisions, and fast meant rushed.',
     gaps: [
   "There was no shared pattern library. Each page needed a fresh layout and cross-team coordination.",
   "An optimized heading and metadata did not settle which product benefits or answers the page should lead with."
 ],
     // \u2500\u2500 03 Constraints \u2500\u2500
-    constraintsPunch: 'Minimal briefs. Two audiences (users + search engines). AEM component limitations. Speed is the expectation.',
+    constraintsPunch: 'Thin briefs, two readers (the shopper and the search engine) and AEM’s component limits, on a fast turnaround.',
     constraints: [
   "Pages need to answer a shopper's question while supporting search discovery.",
   "SEO briefs established headings, metadata and target keywords; design still had to decide how to organize the answer.",
@@ -1483,7 +1481,7 @@ const projects: Project[] = [
     ],
     metrics: [
       { value: '50+', label: 'Landing pages personally designed' },
-      { value: 'Weeks \u2192 Days', label: 'Turnaround via governed template system' },
+      { value: '~1 mo \u2192 1\u20132 wk', label: 'Complex pages, on the templates' },
       { value: '<1', label: 'QA issues per page on average' },
     ],
   },
@@ -1528,7 +1526,7 @@ const projects: Project[] = [
       caption: 'The refined homepage, where the research came back to the components: desktop, the vehicle selector open, and phone. From the reDesign file, with internal notes removed.',
     },
     publicPlan: {
-      lead: 'The process, drawn in the portfolio’s own hand: how the homepage concepts were ordered, tested, explored section by section, and refined into one page. The boards themselves, from the exploration file, the reDesign file, and the component guide, open with the password.',
+      lead: 'I redrew the process for the public page: how the homepage concepts were ordered, tested, explored section by section and refined into one page. The real boards, from the exploration file, the reDesign file and the component guide, open with the password.',
       images: [PLAN.order, PLAN.tests, PLAN.explorations, PLAN.endState],
     },
     timeToLive: 'The core components went live after a 12-month rebuild. The CSS overhaul that followed is in a working branch, with the remaining steps to release written down in the guide. The homepage exploration continues in Figma, each concept with its test written before it is built.',
@@ -1558,7 +1556,7 @@ const projects: Project[] = [
       'Containers had to match the gutter of pages built outside AEM, so the content edge holds when a visitor moves between them.',
       'Most designers and authors work in Figma and the AEM editor, not in Sass. The rules had to read as measurements, pictures, and clicks.',
     ],
-    insightCallout: 'A style option is a decision made for the author in advance. It needs CSS behind it, a defined result at every width, and a picture of what to select. The guide documents all three, the branch fixes what it can, and the exploration file shows what the next option should be, with its test, before anyone builds it.',
+    insightCallout: 'A style option is a decision made for the author in advance. It needs CSS behind it, a defined result at every width, and a picture of what to select.',
 
     // ── 04 Approach (subsections) ──
     approachSubsections: [
@@ -1667,15 +1665,15 @@ $mobile-max-width: 768px;
       },
       {
         key: 'iteration',
-        label: 'Show authors the result, keep the open items in writing, and draw where the options go next',
+        label: 'Show authors the result before they pick it',
         systemMarker: 'Documentation',
-        description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content. The research then came back to the components: the refined homepage is one page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component. It is the direction the style options move toward, and the guide is where each option lands once it has a rule, a class, and a picture.',
+        description: 'High-fidelity references rebuild the live Homepage and Tire & Wheel Packages heroes, and a featured teaser from the 33-inch tires page, with real images, copy, and branch values. Numbered steps follow the AEM editor from selecting the component to the classes that result, and they record heading levels: the hero pretitle and title render as one H1, the teaser pair as one H2. Neither hero had a saved style, so each reference records the recommended selection. The read-me page keeps five open items in view until they close, starting with the template settings that still need to move into ui.content. The research then came back to the components: the refined homepage is one page at desktop and phone widths, built from the components the guide defines, with the vehicle selector as the one new component.',
         images: [GUIDE.heroAuthor, GUIDE.heroPreview, REFINED.desktop, REFINED.phone],
       },
     ],
 
     // ── 05 Outcome ──
-    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The homepage exploration holds the next options, each with a hypothesis and a test behind it. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. The distance between the Figma file and the branch is the part still closing: with the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
+    outcomeNote: 'The v1 guide has seven component pages: containers, copy width, hero, buttons, teaser and flex layouts, cards, and the tire size table. The CSS changes are in a working branch, and the guide records the steps that remain before release. The homepage exploration holds the next options, each with a hypothesis and a test behind it. The core components from the earlier rebuild are live, and WebPageTest measured 60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery. The distance between the Figma file and the branch is the part still closing: with the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     takeaways: [
       'Measurements come from local AEM builds of the branch, not from the design file.',
       'Reuse came first: a full-bleed band is two existing containers nested together, not a new component.',
@@ -1690,7 +1688,7 @@ $mobile-max-width: 768px;
       { label: 'Packages', url: 'https://www.tirerack.com/packages' },
     ],
     metrics: [
-      { value: '60%', label: 'Faster page loads (WebPageTest)' },
+      { value: '60%', label: 'Faster loads across 120+ pages (WebPageTest)' },
       { value: '7', label: 'Component pages in the Figma guide' },
       { value: '10+', label: 'Reusable components shipped to production' },
     ],
@@ -1765,7 +1763,7 @@ $mobile-max-width: 768px;
       'The plugin could only write to stage. It never publishes, pushes or deletes anything, and it never touches the old admin. Pushing to production stays a manual step.',
       'It could not guess. A blank in the documents stays blank and goes on a to-do list instead of being filled with something plausible.',
       'The Hero Crop Simulator had to reproduce the live responsive CSS, gradients and safe zones. A close approximation would still approve the wrong image.',
-      'Everything was built alongside normal production work, so scope stayed surgical.',
+      'I built everything alongside normal production work, so I kept each tool small.',
     ],
 
     insightCallout: 'The tool does the copying and the checking. A person approves the plan and pushes to production.',
@@ -1846,16 +1844,16 @@ $mobile-max-width: 768px;
     thesis: 'Meals behave like curves, so the app should too.',
     annotations: {
       problem: 'Most diabetes tools treat a meal as one entry. Real meals are curves.',
-      gaps: 'Curves over entries. Confidence over recommendations.',
+      gaps: 'Compare repeat meals by their curves, and say how sure the app is.',
       constraints: 'High-stakes domain. A review tool, never dosing advice.',
-      approach: 'Confidence is the safety mechanism, not a feature.',
+      approach: 'A pattern needs repeats before the app calls it one.',
       outcome: 'Patterns ready to review stay separate from patterns still forming.',
     },
     stream: 'passion',
     groups: ['product'],
     clientLabel: 'Personal product',
     client: 'LoopStack (personal project)',
-    context: 'LoopStack is an open-source SaaS project for the Loop community, built around my own meal and glucose history. It is for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It brings recurring patterns into view for personal review and care-team discussion.',
+    context: 'LoopStack is an open-source SaaS project for the Loop community, built around my own meal and glucose history. It is for people who want tighter control of their glucose and the confidence to refine their settings with their care team.',
     title: 'LoopStack: Pattern Review for Meals and Glucose, on the Phone and the Desktop',
     cardTitle: 'LoopStack: Patterns worth reviewing',
     seoTitle: 'LoopStack: Open-Source SaaS for Type 1 Diabetes and the Loop Community',
@@ -1878,7 +1876,7 @@ $mobile-max-width: 768px;
 ],
 
     // ── 02 Gaps & Opportunity ──
-    gapsPunch: 'Static logs → pattern review. Curves over entries; confidence over recommendations.',
+    gapsPunch: 'A log lists meals. I needed to compare them.',
     gaps: [
   "My review needed to connect repeat meals by their glucose response, with the earlier entries still available for comparison.",
   "A pattern needs evidence before it earns confidence. I wanted to see how often it recurred and what context might change the interpretation.",
@@ -1886,7 +1884,7 @@ $mobile-max-width: 768px;
 ],
 
     // ── 03 Constraints ──
-    constraintsPunch: 'Solo 0 → 1. High-stakes domain. Pattern review and care-team discussion, never dosing advice.',
+    constraintsPunch: 'Just me, no clinical team, and health data. It reviews patterns and never gives dosing advice.',
     constraints: [
       'Solo designer and builder: no research budget, no clinical team, no user panel.',
       'Type 1 physiology is individual. The app had to ground patterns in one user’s real Loop history before it could ever be useful more broadly.',
@@ -1919,7 +1917,7 @@ $mobile-max-width: 768px;
         key: 'structure',
         part: 'Part 1 · On the phone',
         label: 'Ingredients ordered by how much they move the curve',
-        description: 'Mapped the loop as Input → Compare → Cluster → Review → Refine. Every surface has a single job. The meal builder orders ingredients by absorption impact; context chips (meal time, activity, setting) let pattern-matching cluster a meal with the right past ones. Evidence stays optional: a meal photo or Loop screenshot pairs with the entry automatically.',
+        description: 'I mapped the loop as Input → Compare → Cluster → Review → Refine and gave each screen one step. The meal builder orders ingredients by absorption impact; context chips (meal time, activity, setting) let pattern-matching cluster a meal with the right past ones. Evidence stays optional: a meal photo or Loop screenshot pairs with the entry automatically.',
         systemMarker: 'Loop introduced',
         images: [
           {
@@ -1961,7 +1959,7 @@ $mobile-max-width: 768px;
             src: '/images/work/loopstack/06_profile_calibration.png',
             alt: 'Health connections: Apple Health, Dexcom, and Loop connected, with a current fitness trend applying a ×0.92 sensitivity multiplier explained in plain language',
             layout: 'half',
-            caption: 'Real sources in. Fitness load shifts the sensitivity baseline, visibly and explainably.',
+            caption: 'Apple Health, Dexcom and Loop connected. Fitness load shows up as a visible multiplier on sensitivity.',
             mobile: true,
           },
         ],
@@ -1973,7 +1971,7 @@ $mobile-max-width: 768px;
         description: 'Claude and ChatGPT helped me compare logic and language quickly; the harder review was mine. A 460-test Vitest suite now guards the confidence logic that decides what the app may claim. TestFlight adds the device check against real Loop data, meal after meal.',
         codeBlock: {
           language: 'text',
-          filename: 'pattern-review-system-prompt.md',
+          filename: 'pattern-review prompt (representative)',
           code: `Design a Type 1 diabetes pattern-review screen.
 
 Compare what Loop predicted (modeled carb absorption + insulin activity)
@@ -1994,7 +1992,7 @@ Frame every output as:
 - pattern evidence
 - a suggested point of discussion with a care team
 - a setting category that may be worth reviewing, never a directive`,
-          caption: 'Representative prompt used to keep every generated surface inside clinician-safe boundaries: pattern review and discussion points, not dosing directives.',
+          caption: 'A representative prompt, not a verbatim one. It kept generated screens to pattern review and discussion points, with no dosing directives.',
         },
         images: [],
       },
@@ -2082,7 +2080,7 @@ Frame every output as:
     outcomeNote: 'The phone app runs on TestFlight as my own pattern-review tool. The desktop app v1 runs on a synthetic patient: a dashboard you arrange yourself and a care-team review in the same download. Observed values stay beside the pump settings rather than replacing them, and a clinician review of the safety language comes before any real patient data reaches the desktop.',
     takeaways: [
       'Claude and ChatGPT compared logic and language quickly. The review of what the app may say was mine: every output reads as an observation, a piece of evidence, or a discussion point, never an instruction.',
-      'Tiers are gated by evidence, not enthusiasm: one odd meal stays an observation until the pattern holds.',
+      'One odd meal stays an observation until the pattern repeats.',
       'Fitness load shifts the sensitivity baseline as a visible multiplier rather than a dose.',
       'Where real history is thin, sample values are labeled as sample; computed and demonstrated are never blended.',
     ],
@@ -2091,7 +2089,7 @@ Frame every output as:
         src: '/images/work/loopstack/04_fix_log.png',
         alt: 'Targets and sensitivity: observed ISF of 54 mg/dL per 1U at 72% actionable across 18 meals, shown alongside the base ISF from Loop therapy settings',
         layout: 'full',
-        caption: 'The payoff: observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.',
+        caption: 'Observed sensitivity beside the setting Loop is running: 54 mg/dL per unit across 18 meals, as evidence to bring to a care team.',
         mobile: true,
       },
     ],
@@ -2124,7 +2122,7 @@ Frame every output as:
     metrics: [
       { value: '90 days', label: 'Real HealthKit CGM history: time in range, GMI, variability' },
       { value: '460 tests', label: 'Vitest suite across 28 files, guarding what the app may claim' },
-      { value: '0 directives', label: 'Every output frames as evidence or discussion point' },
+      { value: '0 directives', label: 'Every output is evidence or a point to discuss' },
     ],
   },
 
@@ -2234,7 +2232,7 @@ Frame every output as:
     constraints: [
       "I had no engineering team or research budget. I designed components, built screens with agents and reviewed the results in the simulator as part of the same workflow.",
       "The app uses React Native and Expo, with Supabase for accounts and live draft data. Service modules separate the screens from the backend so game logic can be tested without a network connection.",
-      'App Store guidelines shaped real product decisions: UGC moderation (block / report / eject) for guideline 1.2, a wager token renamed and made coin-only for 5.3, and non-functional cash UI stripped for 2.1.',
+      'App Store guidelines changed the product: UGC moderation (block / report / eject) for guideline 1.2, a wager token renamed and made coin-only for 5.3, and non-functional cash UI stripped for 2.1.',
       'Packs that name real brands, shows, and athletes follow content rules I wrote myself, without counsel: names only, no likenesses, trademarked nicknames scrubbed, one pack renamed, and a remote kill switch that disables any pack without an app release. The riskiest content launches free-tier only until a lawyer has reviewed it.',
     ],
 
@@ -2489,7 +2487,7 @@ export const packs = {
       {
         key: 'cut',
         label: 'The logo is the waste product',
-        systemMarker: 'THE PAYOFF',
+        systemMarker: 'DIE-CUT',
         description:
           'A blade sweeps the finished board and die-cuts the mark out of it. The offcuts are real: each scrap is a plain rectangle trimmed by a mask of everything inside the board that is not the mark, so the waste matches the cut exactly and no scrap is drawn by hand. Freed pieces fall behind the sheet. The same blade then types the wordmark on, one glyph per step, the way a high-score line resolves.',
       },
@@ -2541,7 +2539,7 @@ export const packs = {
     context: 'This project supports an internal photography team preparing and reviewing images for digital production. The team needs tools it can use directly in its daily workflow.',
     title: 'Photography Workflow Agent',
     seoTitle: 'Photography Workflow Agent: AI-Assisted Internal Design Tooling',
-    summary: 'A zero-install internal tool that packages a repetitive photography workflow into one interface the team can run, preview, and check themselves. I used Claude to accelerate the build, then tested it against the team’s real tasks.',
+    summary: 'A zero-install internal tool for a repetitive photography workflow. The team runs it and checks the preview themselves. I used Claude to speed up the build, then tested it on the team’s real tasks.',
     year: '2026',
     tags: ['Agentic Workflow', 'Internal Tools', 'AI-Assisted Product', 'UX Engineering', 'Production Systems'],
     role: 'Product Design · UX Engineering · AI-Assisted Build',
@@ -2549,20 +2547,20 @@ export const packs = {
     timeline: 'Self-started internal build, 2026',
     timeToLive: 'In use by the internal photography team; ongoing refinement.',
 
-    problemPunch: 'Repetitive, judgment-heavy image production steps were slowing a real team down.',
+    problemPunch: 'The photography team repeated the same setup by hand, and mistakes showed up late.',
     problem: [
       'The photography team repeated the same preparation and review steps by hand. The work needed judgment, but too much of the time went to setup and mistakes surfaced late.',
       'The tool needed to handle the repeatable parts while keeping the review decision with the person who understood the image.',
     ],
 
-    gapsPunch: 'A tool, not a deck. Built to be used, not presented.',
+    gapsPunch: 'It had to follow the team’s steps, not add another image editor.',
     gaps: [
       'Off-the-shelf editors did not match the team’s sequence of decisions. The useful part was fitting their actual workflow, not adding another general image tool.',
       'It needed to run with zero setup friction for non-technical users and produce output they could trust at a glance.',
       'A convincing demo was not enough. The test was whether the team chose it for a real task the next day.',
     ],
 
-    constraintsPunch: 'Self-started. Zero-install. Real users on day one.',
+    constraintsPunch: 'I started it alongside project work, and it had to run with no install.',
     constraints: [
       'I started it alongside core project work, so the first release had to solve one useful path instead of covering every edge case.',
       'Had to be usable by the photography team directly, with no install step and no technical onboarding.',
@@ -2598,12 +2596,10 @@ export const packs = {
       },
     ],
 
-    outcomeNote: 'The photography team now uses the tool directly, with no install step or technical handoff. It makes the repeatable work faster and shows the result early enough to catch a bad decision before export. Claude accelerated the build, but adoption came from matching the team’s real sequence and leaving the final judgment with them. The operational details remain private, so this entry stays at the workflow level.',
+    outcomeNote: 'The photography team now uses the tool directly, with no install step or technical handoff. It makes the repeatable work faster and shows the result early enough to catch a bad decision before export. Claude sped up the build. The design work was following the team’s own order of steps and leaving the final call with them. The operational details remain private, so this entry stays at the workflow level.',
     metrics: [
-      { value: 'Self-started', label: 'Built alongside core work' },
-      { value: 'Zero-install', label: 'Runs for non-technical users day one' },
-      { value: 'In use', label: 'Adopted by a real internal team' },
-      { value: 'AI-assisted', label: 'Claude accelerated the working build' },
+      { value: 'Zero-install', label: 'No install and no technical onboarding' },
+      { value: 'In use', label: 'By the internal photography team' },
     ],
   },
 ];
@@ -2657,7 +2653,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
   }),
   'tire-categories': p => ({
     title: 'Tire Categories', category: 'Professional work', status: 'Live · 30+ category pages',
-    deck: 'A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.',
+    deck: 'One icon and comparison system across 30+ category pages, so a shopper can pick a category without learning our testing vocabulary first.',
     ownership: 'I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.',
     decisions: [
       { title: 'Make the types page a comparison', body: 'Every category on Tire Categories & Types gets an icon, a short description and a Category Performance Averages link. The modal builds its chart in CSS, with reduced-motion behavior, a text fallback and screen-reader labels, so a shopper can compare categories before choosing one.', image: evidence(p, 'system') },
@@ -2674,8 +2670,8 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     ownership: 'I designed the fragment architecture, authored and deployed content, documented the workflow, and trained junior designers. I still own system rules and final review.',
     opening: { src: p.featured, alt: 'AEM winter seasonal content, homepage project card', layout: 'full' },
     decisions: [
-      { title: 'Map the content to its audience', body: 'Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics so each page receives the intended experience.', image: p.outcomeImages?.[0] },
-      { title: 'Trace each swap through Figma, AEM, and Target', body: 'I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I retain approval and responsibility for exceptions.' },
+      { title: 'Map the content to its audience', body: 'Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics, so winter-climate visitors get the winter page.', image: p.outcomeImages?.[0] },
+      { title: 'Trace each swap through Figma, AEM, and Target', body: 'I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I still approve the swaps and own the exceptions.' },
       { title: "Keep seasonal changes visible without changing the page text", body: "Natural-search traffic to swapped pages declined over successive years. After reviewing it with SEO, we shifted toward visual winterization in 2025 and 2026 while keeping text consistent on the same URLs. We swap imagery or change content order for seasonal and geographic audiences, with SEO reviewing the annual refresh." },
     ],
     outcome: 'The geo-based seasonal program is live. Two junior designers author the swaps, and I handle final review and AEM/Target sync issues. Winter conversion has generally strengthened, but weather, marketing, and product changes also contribute.',
@@ -2688,7 +2684,7 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
     decisions: [
       { title: 'Give every service its own entrance', body: 'Dedicated service pages answer parent questions and offer a relevant contact form. Families can arrive directly at the activity they searched for.', images: [evidence(p, 'system', 1)!, { ...findImage(p, 'heatherwood-final-mobile-01')!, mobile: false, frame: 'phone' }] },
       { title: 'Carry one identity across the site', body: 'Logo, color, and typography rules extend into reusable service cards, FAQ accordions, and contact sidebars, and off the screen onto the roadside sign.', images: [evidence(p, 'system')!, findImage(p, 'heatherwood-notes-01')!] },
-      { title: 'Design the handover, too', body: 'WordPress, Elementor, and clear training let Deborah update content independently. The site did not require an ongoing developer relationship to stay useful.' },
+      { title: 'Design the handover, too', body: 'I built on WordPress and Elementor and trained Deborah to update it herself. The site does not need a developer to stay current.' },
     ],
     outcome: 'Deborah still manages the content herself. Rough inbox counts rose from three or four inquiries a month to four or five a day in the weeks after launch. These are unfiltered form counts; the change reflects brand, content, search, and the inquiry path together.',
     outcomeImages: [findImage(p, 'heatherwood-final-desktop-01')!],
@@ -2717,20 +2713,20 @@ const compactEditions: Record<string, (project: Project) => ProjectOverview> = {
       { title: 'Measure the build, then write the rule', body: 'Pixel values come from local AEM builds of the branch, measured at widths from 375 to 1920 pixels. The read-me page sets the frame every component shares, and a status legend marks each rule as in the branch, configured only on local AEM, or still pasted into the page.', image: GUIDE.readMe },
       { title: 'Reuse first, then a variant, then a named gap', body: 'A full-bleed color band is two existing containers nested together, not a new component. Copy Width and the Flex Container extend the existing layout container. The tire size table was a real gap, so I documented it as rendered today and recommended moving its pasted CSS into the branch.', images: [GUIDE.flex, GUIDE.table] },
       { title: 'Define the edge case, then fix it in Sass', body: 'Each change in the branch is listed beside the behavior it replaced: hero buttons that overflowed 375px phones, featured images pinned to the top of a tall row, and a red text-link arrow that could wrap onto a line by itself.', images: [GUIDE.heroUpdates, GUIDE.teaserBeforeAfter], points: subsection(p, 'build')?.bullets, code: subsection(p, 'build')?.codeBlock },
-      { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components. The guide is where each option lands once it has a rule, a class, and a picture.', images: [GUIDE.heroAuthor, GUIDE.heroPreview], artboards: [REFINED.desktop, REFINED.phone] },
+      { title: 'Show authors what to select, and keep the target in view', body: 'High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components.', images: [GUIDE.heroAuthor, GUIDE.heroPreview], artboards: [REFINED.desktop, REFINED.phone] },
     ],
-    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
+    outcome: 'The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest measured 60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.',
     relatedNote: { href: '/notes/the-line-between-figma-and-the-codebase/', label: 'Read why the line between Figma and the codebase is getting thinner' },
   }),
   loopstack: p => ({
     title: 'LoopStack', category: 'Open-source SaaS', status: 'Phone app on TestFlight · Desktop app v1',
-    deck: "An open-source SaaS for the Loop community, for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It follows repeat meals through their full glucose-response window and puts recurring patterns in front of you with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
+    deck: "An open-source SaaS for the Loop community. It follows a repeat meal through its whole glucose response and shows recurring patterns with the evidence beside them, to review on your own or with a care team. The phone is the glance; the desktop is a dashboard you arrange, with a care-team review in the same app.",
     ownership: 'I designed and built both surfaces with AI assistance. The phone app is tested against my own Loop data; the desktop app runs on a synthetic patient. It supports pattern review and care-team discussion, not dosing advice.',
     opening: p.approachSubsections?.flatMap(s => s.images ?? []).find(i => i.isVideo && i.src),
     decisions: [
       { part: 'On the phone', title: "Follow the response beyond the meal", body: "I wanted to see what a repeat meal did over its full absorption window. Ingredients, timing and activity stay beside the glucose curve, so I can compare the response with earlier meals.", image: evidence(p, 'structure') },
       { part: 'On the phone', title: 'Say where each number comes from', body: 'Real data sources replace repeated manual entry, while sample data is labeled. Observations stay alongside settings rather than replacing them.', image: evidence(p, 'system', 1) },
-      { part: 'On the phone', title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.", images: [evidence(p, 'iteration')!, findImage(p, '04_fix_log')!] },
+      { part: 'On the phone', title: 'Require repetition before confidence', body: "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app shows them for review and never recommends a change.", images: [evidence(p, 'iteration')!, findImage(p, '04_fix_log')!] },
       { part: 'On the desktop', title: 'Give review its own surface', body: subsection(p, 'desktop-why')!.description, wide: evidence(p, 'desktop-why') },
       { part: 'On the desktop', title: 'Let the person arrange the dashboard', body: subsection(p, 'desktop-dashboard')!.description, points: subsection(p, 'desktop-dashboard')?.bullets, images: subsection(p, 'desktop-dashboard')?.images },
       { part: 'On the desktop', title: 'Read it the way clinicians read', body: subsection(p, 'desktop-review')!.description, images: subsection(p, 'desktop-review')?.images },
