@@ -47,7 +47,9 @@ Ryan reviewed the flags on 23 Nov 2026. He gave the scope of the AEM load claim 
 | Design Enablement | Title says "optimize and automate" | Kept. Titles feed search and were tuned in ddaa3ec. |
 | Photography Workflow Agent | Claims of use with no evidence; overlaps the Hero Crop Simulator | The causal line is softened and the wordless metrics are cut. The study stays hidden (direct link only), and Design Enablement carries the public version. |
 
-Outside this PR: `src/data/resume.ts` still says "60% faster loads on pages using the new components", without the 120+ page scope.
+The résumé page (`src/data/resume.ts`) carries the same 120+ page scope. `public/Ryan-DeBoer-Resume.pdf` still has the old line; there is no generator for it in the repo, so it was left for the résumé system.
+
+The homepage binder ships its own snapshot of this copy (`public/binder-home/binder.js`, built from `docs/explorations/binder-specimen/`). It was regenerated so the cards and fly-outs show the rewrites. The LoopStack hero was kept at the committed image: the local hero override had been changed today, outside this PR.
 
 ## Checks
 

@@ -64,7 +64,7 @@ export const RESUME = {
           "emphasis": "from about a month to 1-2 weeks"
         },
         {
-          "text": "Partnered with AEM engineers on 10+ reusable components, defining fields, variants, responsive behavior, and accessibility requirements and writing production Sass. WebPageTest measured 60% faster loads on pages using the new components.",
+          "text": "Partnered with AEM engineers on 10+ reusable components, defining fields, variants, responsive behavior, and accessibility requirements and writing production Sass. WebPageTest measured 60% faster loads across 120+ pages using the new components: category landing pages, tires, wheels, parts, research and delivery.",
           "emphasis": "60% faster loads"
         },
         {

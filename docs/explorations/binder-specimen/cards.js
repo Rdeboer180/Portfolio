@@ -702,7 +702,7 @@ window.BINDER_CARDS = [
       {
         "value": "0 directives",
         "size": "s",
-        "primary": "Every output frames as evidence or discussion point",
+        "primary": "Every output is evidence or a point to discuss",
         "secondary": ""
       }
     ],
@@ -752,13 +752,13 @@ window.BINDER_CARDS = [
         "Vitest",
         "TestFlight"
       ],
-      "context": "LoopStack is an open-source SaaS project for the Loop community, built around my own meal and glucose history. It is for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It brings recurring patterns into view for personal review and care-team discussion.",
+      "context": "LoopStack is an open-source SaaS project for the Loop community, built around my own meal and glucose history. It is for people who want tighter control of their glucose and the confidence to refine their settings with their care team.",
       "problemPunch": "Most T1D tools treat meals as one-time entries. Real meals behave like curves.",
       "problem": [
         "I wanted to follow a repeat meal through its full glucose-response window, including what happened hours after I finished eating.",
         "A single entry was not enough. I needed to compare similar meals and see whether the same response kept appearing across timing, activity and my current Loop settings."
       ],
-      "deck": "An open-source SaaS for the Loop community, for people who want tighter control of their glucose and the confidence to refine their settings with their care team. It follows repeat meals through their full glucose-response window and puts recurring patterns in front of you with the evidence beside them. On the phone it is the glance; on the desktop it is a dashboard you arrange yourself, with a care-team review in the same app.",
+      "deck": "An open-source SaaS for the Loop community. It follows a repeat meal through its whole glucose response and shows recurring patterns with the evidence beside them, to review on your own or with a care team. The phone is the glance; the desktop is a dashboard you arrange, with a care-team review in the same app.",
       "ownership": "I designed and built both surfaces with AI assistance. The phone app is tested against my own Loop data; the desktop app runs on a synthetic patient. It supports pattern review and care-team discussion, not dosing advice.",
       "evidence": [],
       "decisions": [
@@ -796,7 +796,7 @@ window.BINDER_CARDS = [
             "frame": null,
             "crop": null,
             "alt": "Health connections: Apple Health, Dexcom, and Loop connected, with a current fitness trend applying a ×0.92 sensitivity multiplier explained in plain language",
-            "caption": "Real sources in. Fitness load shifts the sensitivity baseline, visibly and explainably.",
+            "caption": "Apple Health, Dexcom and Loop connected. Fitness load shows up as a visible multiplier on sensitivity.",
             "width": 1206,
             "height": 2622
           },
@@ -808,7 +808,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Require repetition before confidence",
-          "body": "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app keeps those observations in review scope, without recommending changes.",
+          "body": "Repeat meals and time-of-day patterns help me review questions about sensitivity, meal boluses and background insulin alongside my Loop settings. Confidence reflects the supporting history. The app shows them for review and never recommends a change.",
           "link": null,
           "image": null,
           "images": [
@@ -832,7 +832,7 @@ window.BINDER_CARDS = [
               "frame": null,
               "crop": null,
               "alt": "Targets and sensitivity: observed ISF of 54 mg/dL per 1U at 72% actionable across 18 meals, shown alongside the base ISF from Loop therapy settings",
-              "caption": "The payoff: observed sensitivity earns its confidence tier next to what Loop is running, as evidence for a care-team conversation.",
+              "caption": "Observed sensitivity beside the setting Loop is running: 54 mg/dL per unit across 18 meals, as evidence to bring to a care team.",
               "width": 1206,
               "height": 2622
             }
@@ -973,7 +973,7 @@ window.BINDER_CARDS = [
       {
         "value": "60%",
         "size": "l",
-        "primary": "Faster page loads",
+        "primary": "Faster loads across 120+ pages",
         "secondary": "WebPageTest"
       },
       {
@@ -1242,7 +1242,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Show authors what to select, and keep the target in view",
-          "body": "High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components. The guide is where each option lands once it has a rule, a class, and a picture.",
+          "body": "High-fidelity references recreate the AEM editor around live heroes, with numbered steps from selecting the component to the classes that result. The exploration ends in one target homepage at desktop and phone widths, built from the same components.",
           "link": null,
           "image": null,
           "images": [
@@ -1303,7 +1303,7 @@ window.BINDER_CARDS = [
         }
       ],
       "outcomeMetric": null,
-      "outcome": "The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest reported 60% faster loads on pages using them. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.",
+      "outcome": "The CSS overhaul is in branch, and the guide covers seven component pages. Template settings still need to move into ui.content before release, and the table stays inline until its rules move under Tr Table. The homepage exploration holds the next options with a test behind each one. The core components from the earlier rebuild are live, and WebPageTest measured 60% faster loads across the 120+ pages using them: category landing pages, tires, wheels, parts, research and delivery. With the Figma MCP connection I now push between code and Figma in both directions, under the governance skill I built.",
       "outcomeImages": [],
       "href": "https://www.rdeboerdesigns.com/work/aem-component-system/"
     }
@@ -1392,10 +1392,9 @@ window.BINDER_CARDS = [
       "problemPunch": "Make tire-performance tradeoffs useful to everyday shoppers.",
       "problem": [
         "The category pages had to explain what a tire's strengths meant for someone's driving. I could not assume a visitor from search already understood the terms our testing team used.",
-        "The experience was dense, inconsistent, and almost entirely verbal. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another.",
-        "I needed to translate that knowledge into a comparison someone could use, even if this was the first Tire Rack page they had seen."
+        "The pages were dense and almost all text. More than 40 categories, many with 80 or more products, had no shared way to show how one choice differed from another."
       ],
-      "deck": "A shared icon, comparison, and content system helps shoppers choose a tire category without first becoming tire experts.",
+      "deck": "One icon and comparison system across 30+ category pages, so a shopper can pick a category without learning our testing vocabulary first.",
       "ownership": "I redesigned the category layout and template, directed the photoshoots for each category page, designed the icon suite, and contributed page structure, chart motion, SVGs, and shared styles. Ransom Rockliffe owned SEO; engineering partnered on AEM components.",
       "evidence": [],
       "decisions": [
@@ -1433,7 +1432,7 @@ window.BINDER_CARDS = [
             "frame": null,
             "crop": null,
             "alt": "Category detail page showing performance bar charts, product grid, and icon system in context",
-            "caption": "Category page in context: performance data, icon system, and product discovery working together",
+            "caption": "A category page with the performance chart, the icons and the product grid in place.",
             "width": 3000,
             "height": 7200
           },
@@ -1516,16 +1515,16 @@ window.BINDER_CARDS = [
         "secondary": "Running in TestFlight"
       },
       {
-        "value": "1 → 2",
-        "size": "l",
-        "primary": "One system, two experiences",
-        "secondary": "The T1D Hub clinic brand and the Bolus Binder companion app"
-      },
-      {
         "value": "1.5×",
         "size": "l",
         "primary": "Portion-aware nutrition",
         "secondary": "Macros and the absorption estimate rescale with the serving"
+      },
+      {
+        "value": "12",
+        "size": "l",
+        "primary": "Color tokens carrying clinical semantics",
+        "secondary": "In range, above range, urgent low"
       }
     ],
     "year": "2026",
@@ -1864,7 +1863,7 @@ window.BINDER_CARDS = [
           "quote": null
         },
         {
-          "title": "Make handoff readiness explainable",
+          "title": "Say why a step was skipped",
           "body": "Layer Cleanup supports file naming. Project Checklist saves progress and exports completion notes for senior review, including explanations for skipped steps.",
           "link": null,
           "image": {
@@ -1922,9 +1921,9 @@ window.BINDER_CARDS = [
         "secondary": ""
       },
       {
-        "value": "Weeks → Days",
+        "value": "~1 mo → 1⁠–⁠2 wk",
         "size": "s",
-        "primary": "Turnaround via governed template system",
+        "primary": "Complex pages, on the templates",
         "secondary": ""
       },
       {
@@ -1978,7 +1977,7 @@ window.BINDER_CARDS = [
         "ChatGPT"
       ],
       "context": "Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.",
-      "problemPunch": "Every landing page started from scratch. No templates, no patterns, no scalable process.",
+      "problemPunch": "Every landing page started from an empty Figma file.",
       "problem": [
         "Tire Rack uses landing pages to answer high-intent searches for tire sizes, categories, and narrow product needs.",
         "SEO and partner teams needed those pages quickly, but every request still started from an empty Figma file and a thin brief.",
@@ -2165,7 +2164,7 @@ window.BINDER_CARDS = [
         "Adobe Creative Suite"
       ],
       "context": "Tire Rack is a national online retailer of tires, wheels, and automotive accessories. Its website combines shopping with tire testing, reviews, and buying guidance for drivers.",
-      "problemPunch": "Manual seasonal updates. No scalable system. Winter and southern-states customers seeing the same content.",
+      "problemPunch": "Seasonal swaps were manual, and winter-climate and southern-state customers saw the same page.",
       "problem": [
         "The seasonal program gets customers thinking about winter tires in September and October, before the first snowfall. That preparation shapes the homepage, tire pages, delivery, research and wheel-fitment content.",
         "Early swaps were manual. As the site grew, rebuilding pages every season became slow, while serving different text on the same URLs complicated search visibility."
@@ -2176,7 +2175,7 @@ window.BINDER_CARDS = [
       "decisions": [
         {
           "title": "Map the content to its audience",
-          "body": "Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics so each page receives the intended experience.",
+          "body": "Five fragment types organize seasonal heroes, teasers, video, entertainment, and category bars. I coordinate the regional audience split with Analytics, so winter-climate visitors get the winter page.",
           "link": null,
           "image": {
             "src": "../../../public/images/work/seasonal-content-system/supporting/outcome/winter-homepage-desktop.png",
@@ -2198,7 +2197,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Trace each swap through Figma, AEM, and Target",
-          "body": "I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I retain approval and responsibility for exceptions.",
+          "body": "I map each Figma section to its AEM Experience Fragment and document matching names. Designers can trace a seasonal asset to the fragment and Adobe Target experience that uses it. I still approve the swaps and own the exceptions.",
           "link": null,
           "image": null,
           "images": [],
@@ -2425,7 +2424,7 @@ window.BINDER_CARDS = [
       {
         "value": "Owner⁠-⁠managed",
         "size": "s",
-        "primary": "No agency dependency post-handoff",
+        "primary": "Deborah updates it herself, no agency",
         "secondary": ""
       }
     ],
@@ -2489,7 +2488,7 @@ window.BINDER_CARDS = [
               "frame": null,
               "crop": null,
               "alt": "Riding Lessons service page with SEO copy and contact form sidebar",
-              "caption": "Service landing page: dedicated contact form on every page",
+              "caption": "A service page, with its own contact form.",
               "width": 2500,
               "height": 7200
             },
@@ -2501,7 +2500,7 @@ window.BINDER_CARDS = [
               "frame": "phone",
               "crop": null,
               "alt": "Mobile homepage with service cards and enrollment CTA",
-              "caption": "Mobile experience: service cards and enrollment flow",
+              "caption": "On a phone: service cards and the enrollment button.",
               "width": 900,
               "height": 1950
             }
@@ -2525,7 +2524,7 @@ window.BINDER_CARDS = [
               "frame": null,
               "crop": null,
               "alt": "Services and Experiences page with card grid of all 10 offerings",
-              "caption": "Services hub: 10 SEO entry points with consistent card patterns",
+              "caption": "Services: ten offerings, each a card that leads to its own page.",
               "width": 2500,
               "height": 7200
             },
@@ -2537,7 +2536,7 @@ window.BINDER_CARDS = [
               "frame": null,
               "crop": null,
               "alt": "Brand identity applied to roadside signage with QR code for mobile conversion",
-              "caption": "Brand collateral: extending the identity into physical touchpoints",
+              "caption": "The roadside sign, with a QR code to the site.",
               "width": 1600,
               "height": 1200
             }
@@ -2549,7 +2548,7 @@ window.BINDER_CARDS = [
         },
         {
           "title": "Design the handover, too",
-          "body": "WordPress, Elementor, and clear training let Deborah update content independently. The site did not require an ongoing developer relationship to stay useful.",
+          "body": "I built on WordPress and Elementor and trained Deborah to update it herself. The site does not need a developer to stay current.",
           "link": null,
           "image": null,
           "images": [],
@@ -2570,7 +2569,7 @@ window.BINDER_CARDS = [
           "frame": null,
           "crop": null,
           "alt": "Homepage hero with SEO-targeted headline and primary inquiry CTA",
-          "caption": "Homepage: SEO-targeted headline with primary inquiry CTA",
+          "caption": "Homepage: the headline families search for, and one inquiry button.",
           "width": 3070,
           "height": 1866
         }
