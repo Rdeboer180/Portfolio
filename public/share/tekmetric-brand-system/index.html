@@ -4,307 +4,227 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>How I'd future-proof the agentic-ready Tekmetric brand system</title>
-<meta name="description" content="A concept for Jared Haleck: the rules an agent reads first, a gate after the build, and a decision record that keeps design inside the why.">
+<meta name="description" content="A one-page concept for Jared Haleck: rules the agent reads first, a gate after the build, and a decision record that keeps design inside the why.">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- Standalone page, deliberately off the portfolio's tokens. It is a concept for another company's system,
-     so it carries a neutral palette with one swappable accent and no Tekmetric marks. Two faces only. -->
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<!-- Standalone one-pager, deliberately off the portfolio's tokens: it is a concept for another company's
+     system, so it stays a plain document. One family, one column, two figures, and one accent that marks
+     only what Ryan would own. -->
 <style>
-/* One editorial column. Each figure is a row of real HTML nodes joined by hairline arrows,
-   with a dashed return line for the loop. The accent is spent only on the "mine" tags and the return lines. */
 :root {
-  --bg: #F4F5F2;
-  --card: #FBFBF9;
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
   --fg: #16181A;
-  --muted: #556067;
-  --line: #D5D9D3;
-  --line-strong: #87918C;
-  --accent: #C4470F;
-  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-  --gap: 36px;
+  --muted: #5A6369;
+  --line: #E0E2DD;
+  --line-strong: #9AA29E;
+  --accent: #B8420E;
+  --accent-soft: #E7AD8F;
+  --font: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121413; --card: #191C1B; --fg: #ECEEEA; --muted: #A2ABA7;
-    --line: #2D3230; --line-strong: #6C7773; --accent: #FF8450; color-scheme: dark;
+    --bg: #131514; --card: #1A1D1C; --fg: #ECEEEA; --muted: #A2ABA7; --line: #2D3230; --line-strong: #5E6865;
+    --accent: #FF8450; --accent-soft: #8A4A30; color-scheme: dark;
   }
 }
-
 * { box-sizing: border-box; }
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font: 400 16px/1.55 var(--body);
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 40px 72px;
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 400 17px/1.6 var(--font);
+  padding: 48px max(20px, env(safe-area-inset-right, 0px)) 72px max(20px, env(safe-area-inset-left, 0px));
   -webkit-font-smoothing: antialiased;
 }
-.page { max-width: 1120px; margin: 0 auto; }
-a { color: var(--fg); text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--line-strong); }
+main { max-width: 660px; margin: 0 auto; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--muted); }
 a:hover { text-decoration-color: var(--accent); }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 
-.label { font: 600 11px/1.3 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-
-/* masthead */
-.mast { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-.mast a { text-decoration: none; }
-.mast a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
-h1 {
-  font: 600 clamp(2rem, 5vw, 3.5rem)/1.04 var(--display);
-  letter-spacing: -.025em; margin: 36px 0 0; max-width: 18ch; text-wrap: balance;
-}
-.lead { font-size: 1.125rem; line-height: 1.55; max-width: 60ch; margin: 20px 0 0; }
+.byline { margin: 0; color: var(--muted); font-size: .875rem; }
+h1 { font-weight: 600; font-size: clamp(1.75rem, 4.5vw, 2.25rem); line-height: 1.15; letter-spacing: -.015em; margin: 12px 0 0; text-wrap: balance; }
+.lead { margin: 20px 0 0; font-size: 1.125rem; }
 .lead strong { font-weight: 600; }
-.caveat { margin: 14px 0 0; max-width: 60ch; color: var(--muted); font-size: .9rem; }
+.caveat { margin: 12px 0 0; color: var(--muted); font-size: .9375rem; }
 
-/* sections */
-section { margin-top: 72px; }
-h2 { font: 600 clamp(1.5rem, 3vw, 2rem)/1.15 var(--display); letter-spacing: -.02em; margin: 0; max-width: 28ch; text-wrap: balance; }
-.sub { margin: 12px 0 0; max-width: 62ch; color: var(--muted); }
+section { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+h2 { font-weight: 600; font-size: 1.1875rem; line-height: 1.35; margin: 0; text-wrap: balance; }
+section > p { margin: 10px 0 0; }
+.note { color: var(--muted); font-size: .9375rem; }
+.mine { color: var(--accent); font-size: .875rem; font-weight: 600; white-space: nowrap; }
 
 /* figures */
-figure { margin: 28px 0 0; }
-figcaption { margin-top: 16px; color: var(--muted); font-size: .85rem; max-width: 70ch; }
-.flow {
-  display: grid;
-  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-  column-gap: var(--gap);
-  row-gap: 20px;
-}
-.node {
-  position: relative; min-width: 0;
-  display: flex; flex-direction: column; gap: 8px;
-  padding: 16px 16px 18px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-.node.prep { border-style: dashed; border-color: var(--line-strong); }
-.node h3 { font: 600 1.075rem/1.25 var(--display); letter-spacing: -.01em; margin: 0; }
-.node p { margin: 0; font-size: .875rem; line-height: 1.45; color: var(--muted); }
-.node ul { list-style: none; margin: 4px 0 0; padding: 0; }
-.node li { padding: 9px 0; border-top: 1px solid var(--line); font-size: .9rem; line-height: 1.35; }
-.node li:last-child { padding-bottom: 0; }
+figure { margin: 20px 0 0; }
+figcaption { margin-top: 12px; color: var(--muted); font-size: .9375rem; }
+.loop svg { display: block; width: 100%; height: auto; overflow: visible; }
+.loop .tall { display: none; }
+.loop text { font-family: var(--font); fill: var(--fg); }
+.loop .t { font-size: 14px; font-weight: 600; }
+.loop .s { font-size: 12px; fill: var(--muted); }
+.loop .tag { font-size: 11px; font-weight: 600; fill: var(--accent); }
+.loop .lbl { font-size: 12px; fill: var(--muted); paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
+.loop .lbl.acc { fill: var(--accent); font-weight: 600; }
+.loop .box { fill: var(--card); stroke: var(--line-strong); stroke-width: 1; }
+.loop .box.own { stroke: var(--accent); stroke-width: 1.5; }
+.loop .box.rec { fill: none; stroke: var(--accent); stroke-dasharray: 4 3; }
+.loop .ln { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+.loop .ln.acc { stroke: var(--accent); stroke-dasharray: 4 3; }
+.loop .ah { fill: none; stroke: var(--line-strong); stroke-width: 1.25; }
+.loop .ah.acc { stroke: var(--accent); }
+@media (max-width: 560px) { .loop .wide { display: none; } .loop .tall { display: block; max-width: 360px; } }
 
-/* arrows between nodes */
-.node.next::after {
-  content: ""; position: absolute; top: 50%; left: 100%; width: var(--gap); height: 1px; background: var(--line-strong);
-}
-.node.next::before {
-  content: ""; position: absolute; top: 50%; left: calc(100% + var(--gap) - 6px);
-  width: 7px; height: 7px; border-top: 1px solid var(--line-strong); border-right: 1px solid var(--line-strong);
-  transform: translateY(-50%) rotate(45deg);
-}
+.receipt { padding: 16px 18px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 6px; }
+.r-head { display: flex; justify-content: space-between; gap: 12px; font-size: .9375rem; }
+.r-head b { font-weight: 600; }
+.r-head span { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar, .key { display: flex; gap: 3px; }
+.bar { margin-top: 6px; height: 14px; }
+.key.over { margin-top: 14px; }
+.key.over span { border-left: 1px solid var(--line-strong); padding-left: 6px; font-size: .75rem; letter-spacing: .02em; }
+.bar span { border-radius: 2px; }
+.typed { background: var(--accent); }
+.near { background: var(--accent-soft); }
+.rep { background: var(--line); }
+.key { margin-top: 8px; font-size: .8125rem; line-height: 1.35; color: var(--muted); }
+.key span { min-width: 0; }
+.key b { display: block; color: var(--fg); font-weight: 600; font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.r-foot { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: .9375rem; }
 
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-.chip { font: 500 12px/1.2 var(--body); border: 1px solid var(--line); border-radius: 4px; padding: 4px 7px; background: var(--bg); }
-.chip.dash { border-style: dashed; border-color: var(--line-strong); }
+dl { margin: 18px 0 0; }
+dt { font-weight: 600; margin-top: 10px; }
+dd { margin: 2px 0 0; }
 
-.mine {
-  align-self: flex-start; margin-top: auto;
-  font: 600 11px/1 var(--body); letter-spacing: .07em; text-transform: uppercase;
-  color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 4px 6px;
-}
-.node .mine { margin-top: 10px; }
-.loop .mine { align-self: center; margin-top: 0; background: var(--bg); }
+ol.steps { list-style: none; margin: 16px 0 0; padding: 0; counter-reset: step; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); padding: 6px 0; }
+.steps li::before { content: counter(step); color: var(--muted); font-variant-numeric: tabular-nums; }
+.steps b { font-weight: 600; }
 
-/* return line: runs from the centre of the last spanned column back to the centre of the first */
-.loop {
-  --inset: calc(50% / var(--s) - (var(--s) - 1) * var(--gap) / (2 * var(--s)));
-  position: relative; grid-row: 2;
-  min-height: 78px; padding: 0 12px 4px;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px;
-  text-align: center; font-size: .875rem; color: var(--fg);
-}
-.loop::before {
-  content: ""; position: absolute; top: -20px; bottom: 0; left: var(--inset); right: var(--inset);
-  border: 1px dashed var(--accent); border-top: 0; border-radius: 0 0 8px 8px; pointer-events: none;
-}
-.loop::after {
-  content: ""; position: absolute; top: -20px; left: calc(var(--inset) - 4px);
-  border-left: 4.5px solid transparent; border-right: 4.5px solid transparent; border-bottom: 7px solid var(--accent);
-}
-.loop span { position: relative; background: var(--bg); padding: 2px 10px; max-width: 44ch; }
+ul.plain { margin: 14px 0 0; padding-left: 1.1em; }
+ul.plain li { margin-top: 8px; padding-left: .2em; }
+ul.plain li::marker { color: var(--muted); }
 
-/* proof + doubts */
-.proof { margin: 24px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
-.proof li { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 24px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.proof h3 { font: 600 1.05rem/1.3 var(--display); margin: 0; }
-.proof p { margin: 0; max-width: 62ch; }
-.doubts { margin: 24px 0 0; padding: 0; list-style: none; max-width: 66ch; }
-.doubts li { padding: 12px 0; border-top: 1px solid var(--line); }
-.doubts li:last-child { border-bottom: 1px solid var(--line); }
-.close { margin: 28px 0 0; max-width: 60ch; font-size: 1.125rem; }
-
-footer { margin-top: 64px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; max-width: 80ch; }
-
-/* below 980px every figure becomes a vertical stack: same nodes, same order, same loop note */
-@media (max-width: 980px) {
-  .flow { grid-template-columns: minmax(0, 1fr); row-gap: var(--gap); }
-  .node.next::after { top: 100%; left: 24px; width: 1px; height: var(--gap); }
-  .node.next::before { top: calc(100% + var(--gap) - 5px); left: 20px; transform: rotate(135deg); }
-  .loop { grid-row: auto !important; grid-column: auto !important; min-height: 0; padding: 12px 14px; align-items: flex-start; text-align: left; border: 1px dashed var(--accent); border-radius: 8px; }
-  .loop::before, .loop::after { display: none; }
-  .loop span { background: none; padding: 0; max-width: none; }
-  .loop span::before { content: "\21BA  "; color: var(--accent); }
-  .proof li { grid-template-columns: minmax(0, 1fr); }
-  section { margin-top: 56px; }
-}
-@media (max-width: 420px) { h1 { margin-top: 28px; } }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8125rem; }
+@media (max-width: 480px) { body { font-size: 16px; padding-top: 32px; } .receipt { padding: 14px; } }
 </style>
 </head>
 <body>
-<div class="page">
+<main>
 
 <header>
-  <div class="mast"><span class="label">Concept for Jared Haleck</span><span class="label"><a href="https://www.rdeboerdesigns.com/">Ryan DeBoer</a> · November 2026</span></div>
-  <h1>How I'd future-proof the agentic-ready Tekmetric brand system</h1>
-  <p class="lead">Jared, you said building now costs less than coordinating. Here is where I'd put the coordination instead: <strong>rules the agent reads before the building team gets going, a gate after, and a record that keeps design inside the why.</strong> I want to build this system, and to write the rules for how it evolves.</p>
-  <p class="caveat">Drawn from our call. I haven't seen Tekmetric's real system, so read these as shapes, not specs.</p>
+  <p class="byline">For Jared Haleck · <a href="https://www.rdeboerdesigns.com/">Ryan DeBoer</a> · November 2026</p>
+  <h1>How I'd future-proof the agentic&#8209;ready Tekmetric brand system</h1>
+  <p class="lead">You said building now costs less than coordinating. Here is where I'd put the coordination instead: <strong>rules the agent reads before the building team gets going, a gate after, and a record that keeps design inside the why.</strong> I want to build that system and write the rules for how it evolves.</p>
+  <p class="caveat">Drawn from our call. I haven't seen Tekmetric's system, so read these as shapes, not specs.</p>
 </header>
 
 <section>
-  <h2>The rules go in before the request, not after the review</h2>
-  <p class="sub">Your builders will ask an agent first. Make the system the first thing it reads and the last thing the build has to pass.</p>
-  <figure>
-    <div class="flow" style="--cols:5" role="group" aria-label="A builder's request flows through the system rules, a prototype build, a gate, and a small release. A failed gate sends the build back to be fixed.">
-      <div class="node next">
-        <span class="label">Builder</span>
-        <h3>Asks for something</h3>
-        <p>A request in plain words. No ticket, no spec.</p>
-      </div>
-      <div class="node next prep">
-        <span class="label">Prepared by the system team</span>
-        <h3>The agent reads the rules</h3>
-        <p>Before it draws or codes a line.</p>
-        <div class="chips"><span class="chip">Tokens</span><span class="chip">Legos</span><span class="chip">Shop wording</span><span class="chip">Accessibility</span></div>
-        <span class="mine">I'd build this</span>
-      </div>
-      <div class="node next">
-        <span class="label">Agent + builder</span>
-        <h3>Builds to learn</h3>
-        <p>A working prototype, not a frame.</p>
-        <div class="chips"><span class="chip dash">Shop data, anonymized, read-only, via MCP</span></div>
-      </div>
-      <div class="node next">
-        <span class="label">Gate</span>
-        <h3>Checks the build</h3>
-        <p>Fails with a reason the builder can act on.</p>
-        <div class="chips"><span class="chip">Token drift</span><span class="chip">Every state</span><span class="chip">Contrast, tap size</span><span class="chip">Failures with numbers</span></div>
-        <span class="mine">I'd build this</span>
-      </div>
-      <div class="node">
-        <span class="label">Builder + engineering</span>
-        <h3>Ships to a few shops</h3>
-        <p>Engineering builds to earn once it works.</p>
-      </div>
-      <div class="loop" style="--s:2; grid-column: 3 / span 2"><span>Fails the gate: fix it and run again</span></div>
+  <h2>Rules before the request, a gate after the build</h2>
+  <figure class="loop">
+    <div role="img" aria-label="A builder asks in plain words. The agent reads the system rules first, builds to learn, and a gate checks the build and fails with data. A failed gate goes back to the build. What passes ships to a few shops first, and a decision record of what shops did and which rule changed goes back into the rules. Ryan would build the rules, the gate and the decision record.">
+      <svg class="wide" viewBox="0 0 660 164" aria-hidden="true">
+        <defs>
+          <marker id="a" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path class="ah" d="M1 1 L7 4 L1 7"/></marker>
+          <marker id="aa" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path class="ah acc" d="M1 1 L7 4 L1 7"/></marker>
+        </defs>
+        <text class="tag" x="192" y="12" text-anchor="middle">I'd build</text>
+        <text class="tag" x="468" y="12" text-anchor="middle">I'd build</text>
+        <rect class="box" x="0.5" y="22.5" width="107" height="60" rx="6"/>
+        <rect class="box own" x="138.5" y="22.5" width="107" height="60" rx="6"/>
+        <rect class="box" x="276.5" y="22.5" width="107" height="60" rx="6"/>
+        <rect class="box own" x="414.5" y="22.5" width="107" height="60" rx="6"/>
+        <rect class="box" x="552.5" y="22.5" width="107" height="60" rx="6"/>
+        <text class="t" x="54" y="49" text-anchor="middle">Ask</text><text class="s" x="54" y="67" text-anchor="middle">plain words</text>
+        <text class="t" x="192" y="49" text-anchor="middle">Rules</text><text class="s" x="192" y="67" text-anchor="middle">agent reads first</text>
+        <text class="t" x="330" y="49" text-anchor="middle">Build</text><text class="s" x="330" y="67" text-anchor="middle">to learn</text>
+        <text class="t" x="468" y="49" text-anchor="middle">Gate</text><text class="s" x="468" y="67" text-anchor="middle">fails with data</text>
+        <text class="t" x="606" y="49" text-anchor="middle">Ship</text><text class="s" x="606" y="67" text-anchor="middle">few shops first</text>
+        <path class="ln" d="M111 53 H135" marker-end="url(#a)"/>
+        <path class="ln" d="M249 53 H273" marker-end="url(#a)"/>
+        <path class="ln" d="M387 53 H411" marker-end="url(#a)"/>
+        <path class="ln" d="M525 53 H549" marker-end="url(#a)"/>
+        <path class="ln" d="M468 86 V108 H330 V87" marker-end="url(#a)"/>
+        <text class="lbl" x="399" y="112" text-anchor="middle">fails: fix, run again</text>
+        <path class="ln acc" d="M606 86 V142 H192 V87" marker-end="url(#aa)"/>
+        <text class="lbl acc" x="399" y="146" text-anchor="middle">Decision record: what shops did, which rule changed</text>
+      </svg>
+      <svg class="tall" viewBox="0 0 344 456" aria-hidden="true">
+        <defs>
+          <marker id="b" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path class="ah" d="M1 1 L7 4 L1 7"/></marker>
+          <marker id="ba" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path class="ah acc" d="M1 1 L7 4 L1 7"/></marker>
+        </defs>
+        <rect class="box" x="40.5" y="0.5" width="226" height="52" rx="6"/>
+        <rect class="box own" x="40.5" y="78.5" width="226" height="52" rx="6"/>
+        <rect class="box" x="40.5" y="156.5" width="226" height="52" rx="6"/>
+        <rect class="box own" x="40.5" y="234.5" width="226" height="52" rx="6"/>
+        <rect class="box" x="40.5" y="312.5" width="226" height="52" rx="6"/>
+        <rect class="box rec" x="40.5" y="390.5" width="226" height="52" rx="6"/>
+        <text class="t" x="56" y="23">Ask</text><text class="s" x="56" y="41">plain words</text>
+        <text class="t" x="56" y="101">Rules</text><text class="s" x="56" y="119">agent reads first</text><text class="tag" x="254" y="101" text-anchor="end">I'd build</text>
+        <text class="t" x="56" y="179">Build</text><text class="s" x="56" y="197">to learn</text>
+        <text class="t" x="56" y="257">Gate</text><text class="s" x="56" y="275">fails with data</text><text class="tag" x="254" y="257" text-anchor="end">I'd build</text>
+        <text class="t" x="56" y="335">Ship</text><text class="s" x="56" y="353">few shops first</text>
+        <text class="t" x="56" y="413" style="fill:var(--accent)">Decision record</text><text class="s" x="56" y="431">what shops did, which rule changed</text>
+        <path class="ln" d="M153 56 V75" marker-end="url(#b)"/>
+        <path class="ln" d="M153 134 V153" marker-end="url(#b)"/>
+        <path class="ln" d="M153 212 V231" marker-end="url(#b)"/>
+        <path class="ln" d="M153 290 V309" marker-end="url(#b)"/>
+        <path class="ln acc" d="M153 368 V387" marker-end="url(#ba)"/>
+        <path class="ln" d="M270 261 H288 V183 H271" marker-end="url(#b)"/>
+        <text class="lbl" x="296" y="218">fails:</text><text class="lbl" x="296" y="233">rerun</text>
+        <path class="ln acc" d="M37 417 H18 V105 H36" marker-end="url(#ba)"/>
+      </svg>
     </div>
-    <figcaption>The dashed chip is a question for you: what read-only, anonymized shop data could a builder's agent reach, and how?</figcaption>
+    <figcaption>Builders own the why; the record keeps design in it. Open question for you: what shop data could a builder's agent safely read?</figcaption>
   </figure>
 </section>
 
 <section>
   <h2>Review picks the winners. Design engineering makes them reusable.</h2>
-  <p class="sub">Your Legos role and your review role, joined by the PRs designers open. The time it frees goes to the work that still needs "more brain cells," the triad teams you put at about 30%.</p>
-  <figure>
-    <div class="flow" style="--cols:4" role="group" aria-label="Builders explore, a design reviewer chooses what works, a design engineer writes it into the system, and everyone reuses it. Time saved returns to exploration and to triad work.">
-      <div class="node next">
-        <span class="label">Builders + agents</span>
-        <h3>Explore</h3>
-        <p>Many directions, built fast.</p>
-      </div>
-      <div class="node next">
-        <span class="label">Design review</span>
-        <h3>Choose what works</h3>
-        <p>One reviewer across about five builder teams.</p>
-      </div>
-      <div class="node next">
-        <span class="label">Design engineering</span>
-        <h3>Write it down</h3>
-        <p>A PR to the system: a rule, a component, a skill. Or a small fix nobody had time for.</p>
-        <span class="mine">I'd set the rules</span>
-      </div>
-      <div class="node prep">
-        <span class="label">The Legos</span>
-        <h3>Everyone reuses it</h3>
-        <p>Builders and agents start from the better version.</p>
-        <span class="mine">I'd build this</span>
-      </div>
-      <div class="loop" style="--s:4; grid-column: 1 / span 4"><span>Time saved goes back into exploration, and into the work that still needs a full triad</span></div>
-    </div>
-    <figcaption>I'd build the Legos and set the rules for how they change.</figcaption>
-  </figure>
-</section>
-
-<section>
-  <h2>Builders own the why. A decision record keeps design in it.</h2>
-  <p class="sub">A reviewer covering five teams still needs to see why a builder tested what they tested. Every test writes back what was tried, what shops did, and which rule changed.</p>
-  <figure>
-    <div class="flow" style="--cols:3" role="group" aria-label="The why feeds what builders test, which feeds what ships. A decision record returns from what ships to the why.">
-      <div class="node next">
-        <span class="label">Builder owns it, design stays in it</span>
-        <h3>The why</h3>
-        <ul>
-          <li>Drivers need to trust the shop</li>
-          <li>Service, not price, as the differentiator</li>
-          <li>What high-converting shops actually do</li>
-          <li>Brand voice</li>
-        </ul>
-      </div>
-      <div class="node next">
-        <span class="label">Builders test</span>
-        <h3>What gets built</h3>
-        <ul>
-          <li>How DVI findings are worded</li>
-          <li>The estimate and approval flow</li>
-          <li>Personalized service plans</li>
-          <li>Customer updates</li>
-        </ul>
-      </div>
-      <div class="node">
-        <span class="label">Engineering builds to earn</span>
-        <h3>What ships</h3>
-        <ul>
-          <li>A small cohort of shops first</li>
-          <li>Then everyone, built to scale</li>
-          <li>A new rule or component</li>
-        </ul>
-      </div>
-      <div class="loop" style="--s:3; grid-column: 1 / span 3"><span>Decision record: what we tried, what shops did, what rule changed</span><span class="mine">I'd set the rules</span></div>
-    </div>
-  </figure>
+  <ol class="steps">
+    <li><span><b>Explore.</b> Builders and agents try many directions, fast.</span></li>
+    <li><span><b>Review.</b> One designer across about five builder teams picks what works.</span></li>
+    <li><span><b>Write it down.</b> A PR to the system: a rule, a component, a skill. <span class="mine">I'd set the rules</span></span></li>
+    <li><span><b>Reuse.</b> Everyone starts from the better version. <span class="mine">I'd build this</span></span></li>
+  </ol>
+  <p class="note">The time it frees goes to the triad teams, the roughly 30% that still need more brain cells.</p>
 </section>
 
 <section>
   <h2>I've built the gate before, on a smaller system</h2>
-  <ul class="proof">
-    <li><h3>Steel Curtain</h3><p>A gate on my own site. It read every line my last redesign added in 38 seconds and stopped it. <a href="https://www.rdeboerdesigns.com/notes/the-gate-stopped-my-redesign/">The gate stopped my redesign. I merged it anyway.</a></p></li>
-    <li><h3>Design Enablement</h3><p>A Claude Code plugin that builds tire test pages from their source documents and checks its own work. <a href="https://www.rdeboerdesigns.com/work/design-enablement/">Case study</a>. Locked; password in my earlier note.</p></li>
-    <li><h3>WheelRack</h3><p>200+ tokens and 50+ components, built from nothing for a dealer wheel and fitment platform. <a href="https://www.rdeboerdesigns.com/work/wheelrack/">Case study</a>. Locked; password in my earlier note.</p></li>
-  </ul>
+  <figure class="receipt">
+    <div class="r-head"><b>Steel Curtain on my homepage redesign</b><span>38 seconds</span></div>
+    <div class="key over" aria-hidden="true"><span style="flex:46">Blocked the merge</span><span style="flex:13">Reported</span></div>
+    <div class="bar" role="img" aria-label="59 color findings. 46 blocked the merge: 29 hand-typed token values and 17 near-copies of a token. 13 were reported only.">
+      <span class="typed" style="flex:29"></span><span class="near" style="flex:17"></span><span class="rep" style="flex:13"></span>
+    </div>
+    <div class="key" aria-hidden="true">
+      <span style="flex:29"><b>29</b>token values typed by hand</span>
+      <span style="flex:17"><b>17</b>near-copies</span>
+      <span style="flex:13"><b>13</b>too far from any token</span>
+    </div>
+    <p class="r-foot">It blocked the merge on 46 colors, and build, prerender, hydration, copy and accessibility passed. I merged it anyway: the 13 it couldn't match were mostly materials my system has no palette for. <a href="https://www.rdeboerdesigns.com/notes/the-gate-stopped-my-redesign/">Read the note</a></p>
+  </figure>
+  <dl>
+    <dt>Design Enablement</dt><dd>A Claude Code plugin that builds tire test pages from their source documents and checks its own work. <a href="https://www.rdeboerdesigns.com/work/design-enablement/">Case study</a> (password in my earlier note)</dd>
+    <dt>WheelRack</dt><dd>200+ tokens and 50+ components for a dealer wheel and fitment platform. <a href="https://www.rdeboerdesigns.com/work/wheelrack/">Case study</a> (password in my earlier note)</dd>
+  </dl>
 </section>
 
 <section>
-  <h2>A gate costs something</h2>
-  <ul class="doubts">
-    <li>A gate slows builders. Mine stopped a redesign of my own site and I overrode it. I'd start with a rulebook the agent can read, and add the gate only once drift shows up.</li>
-    <li>I can't tell yet whether your builders would accept a gate at all. I'd measure how often they override it, and treat each override as a question about the rule.</li>
-    <li>Everything here assumes a system team exists. If it doesn't yet, the first job is the smallest version of one.</li>
+  <h2>What it costs</h2>
+  <ul class="plain">
+    <li>A gate slows builders. I'd start with rules the agent reads and add the gate once drift shows up.</li>
+    <li>Builders may not accept a gate. I'd track overrides and treat each one as a question about the rule.</li>
+    <li>This assumes a system team exists. If it doesn't yet, the first job is the smallest version of one.</li>
   </ul>
-  <p class="close">Whatever happens with the role, I'd like to hear where this is wrong.</p>
+  <p>Whatever happens with the role, I'd like to hear where this is wrong.</p>
 </section>
 
-<footer>A concept by Ryan DeBoer, not affiliated with or endorsed by Tekmetric. Claude built the page and drew the figures from my call notes; the structure, claims, and calls are mine. Diagram style adapted from Paul Jun's Dive Club talk.</footer>
+<footer>A concept by Ryan DeBoer, not affiliated with or endorsed by Tekmetric. Claude built the page and drew the figures from my call notes; the structure, claims and calls are mine.</footer>
 
-</div>
+</main>
 </body>
 </html>
