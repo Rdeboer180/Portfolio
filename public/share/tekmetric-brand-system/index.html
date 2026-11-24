@@ -93,6 +93,25 @@ figcaption { margin-top: 12px; color: var(--muted); font-size: .9375rem; }
 .key b { display: block; color: var(--fg); font-weight: 600; font-size: .9375rem; font-variant-numeric: tabular-nums; }
 .r-foot { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: .9375rem; }
 
+/* rule layers */
+.sub-h { font-weight: 600; font-size: 1rem; margin: 32px 0 0; }
+.stack svg { display: block; width: 100%; height: auto; overflow: visible; }
+.stack text { font-family: var(--font); fill: var(--fg); }
+.stack .t { font-size: 15px; font-weight: 600; }
+.stack .t.acc { fill: var(--accent); }
+.stack .s { font-size: 13px; fill: var(--muted); }
+.stack .lay { fill: var(--card); stroke: var(--line-strong); stroke-width: 1; stroke-linejoin: round; }
+.stack .lay.acc { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.stack .lead { stroke: var(--line-strong); stroke-width: 1; fill: none; }
+.stack .lead.acc { stroke: var(--accent); }
+.stack .dot { fill: var(--line-strong); }
+.stack .dot.acc { fill: var(--accent); }
+.stack dl.tall { display: none; margin: 0; padding-left: 14px; border-left: 1px solid var(--line-strong); }
+.stack dl.tall dt { margin-top: 12px; }
+.stack dl.tall dt:first-child { margin-top: 0; }
+.stack dl.tall dt.acc { color: var(--accent); }
+.stack dl.tall dd { color: var(--muted); font-size: .9375rem; }
+@media (max-width: 560px) { .stack svg { display: none; } .stack dl.tall { display: block; } }
 dl { margin: 18px 0 0; }
 dt { font-weight: 600; margin-top: 10px; }
 dd { margin: 2px 0 0; }
@@ -178,6 +197,31 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
       </svg>
     </div>
     <figcaption>The builder now does the product manager's job; the record keeps design inside the why. The agent writes it back on its own, so nobody writes a doc. The gate is the automated half of the review you compared to code review: a script, not a meeting.</figcaption>
+  </figure>
+  <h3 class="sub-h">What the agent reads first</h3>
+  <figure class="stack">
+    <div role="img" aria-label="Five layers of rules the agent reads before it builds, top to bottom: how it sounds, Tekmetric's voice and shop wording; what it's built from, tokens, the Legos, every state and accessibility; where people stay in charge, the agent drafts and a person approves each finding; what's already decided, past decision records fed back by the loop; and at the base, why it exists, the shop outcome and who reads the screen.">
+      <svg class="wide" viewBox="0 0 660 260" aria-hidden="true">
+        <path class="lay" d="M8 230 L126 206 L244 230 L126 254 Z"/>
+        <path class="lay acc" d="M8 180 L126 156 L244 180 L126 204 Z"/>
+        <path class="lay" d="M8 130 L126 106 L244 130 L126 154 Z"/>
+        <path class="lay" d="M8 80 L126 56 L244 80 L126 104 Z"/>
+        <path class="lay" d="M8 30 L126 6 L244 30 L126 54 Z"/>
+        <path class="lead" d="M250 30 H296"/><circle class="dot" cx="298" cy="30" r="2.5"/><text class="t" x="312" y="27">How it sounds</text><text class="s" x="312" y="45">Tekmetric&#39;s voice and shop wording</text>
+        <path class="lead" d="M250 80 H296"/><circle class="dot" cx="298" cy="80" r="2.5"/><text class="t" x="312" y="77">What it&#39;s built from</text><text class="s" x="312" y="95">Tokens, the Legos, every state, accessibility</text>
+        <path class="lead" d="M250 130 H296"/><circle class="dot" cx="298" cy="130" r="2.5"/><text class="t" x="312" y="127">Where people stay in charge</text><text class="s" x="312" y="145">The agent drafts; a person approves each finding</text>
+        <path class="lead acc" d="M250 180 H296"/><circle class="dot acc" cx="298" cy="180" r="2.5"/><text class="t acc" x="312" y="177">What&#39;s already decided</text><text class="s" x="312" y="195">Past decision records, fed back by the loop</text>
+        <path class="lead" d="M250 230 H296"/><circle class="dot" cx="298" cy="230" r="2.5"/><text class="t" x="312" y="227">Why it exists</text><text class="s" x="312" y="245">The shop outcome, and who reads the screen</text>
+      </svg>
+    </div>
+    <dl class="tall" aria-hidden="true">
+      <dt>How it sounds</dt><dd>Tekmetric's voice and shop wording</dd>
+      <dt>What it's built from</dt><dd>Tokens, the Legos, every state, accessibility</dd>
+      <dt>Where people stay in charge</dt><dd>The agent drafts; a person approves each finding</dd>
+      <dt class="acc">What's already decided</dt><dd>Past decision records, fed back by the loop</dd>
+      <dt>Why it exists</dt><dd>The shop outcome, and who reads the screen</dd>
+    </dl>
+    <figcaption>Each layer is a file the agent reads over MCP, written so people can read it too.</figcaption>
   </figure>
   <p class="note">Open question for you: what shop data could a builder's agent safely read?</p>
 </section>
