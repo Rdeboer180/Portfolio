@@ -93,6 +93,38 @@ figcaption { margin-top: 12px; color: var(--muted); font-size: .9375rem; }
 .key b { display: block; color: var(--fg); font-weight: 600; font-size: .9375rem; font-variant-numeric: tabular-nums; }
 .r-foot { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: .9375rem; }
 
+/* rule layers: slabs with a thin edge, a file name on each plane, settled bottom-up once */
+.sub-h { font-weight: 600; font-size: 1rem; margin: 32px 0 0; }
+.stack { --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; --ease-out: cubic-bezier(0.2, 0.8, 0, 1); }
+.stack svg { display: block; width: 100%; height: auto; overflow: visible; }
+.stack text { font-family: var(--font); fill: var(--fg); }
+.stack .t { font-size: 15px; font-weight: 600; }
+.stack .t.acc { fill: var(--accent); }
+.stack .s { font-size: 13px; fill: var(--muted); }
+.stack .fn { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); letter-spacing: .02em; }
+.stack .fn.acc { fill: var(--accent); }
+.stack .lay { fill: var(--card); stroke: var(--line-strong); stroke-width: 1; stroke-linejoin: round; }
+.stack .lay.acc { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.stack .side-l { fill: var(--line); }
+.stack .side-r { fill: var(--line-strong); opacity: .55; }
+.stack .side-l.acc { fill: var(--accent-soft); }
+.stack .side-r.acc { fill: var(--accent); opacity: .7; }
+.stack .lead { stroke: var(--line-strong); stroke-width: 1; fill: none; }
+.stack .lead.acc { stroke: var(--accent); }
+.stack .dot { fill: var(--line-strong); }
+.stack .dot.acc { fill: var(--accent); }
+.stack .layer { transition: transform 400ms var(--ease-out), opacity 400ms var(--ease-out); transition-delay: calc(var(--i) * 90ms); }
+.stack.pre .layer { opacity: 0; transform: translateY(-16px); }
+.stack.done .layer { transition-delay: 0ms; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .stack.done .layer:hover { transform: translateY(-4px); } }
+.stack dl.tall { display: none; margin: 0; padding-left: 14px; border-left: 1px solid var(--line-strong); }
+.stack dl.tall dt { margin-top: 12px; }
+.stack dl.tall dt:first-child { margin-top: 0; }
+.stack dl.tall dt.acc { color: var(--accent); }
+.stack dl.tall code { font: 400 .75rem/1 var(--mono); color: var(--muted); margin-left: 6px; }
+.stack dl.tall dt.acc code { color: var(--accent); }
+.stack dl.tall dd { color: var(--muted); font-size: .9375rem; }
+@media (max-width: 560px) { .stack svg { display: none; } .stack dl.tall { display: block; } }
 dl { margin: 18px 0 0; }
 dt { font-weight: 600; margin-top: 10px; }
 dd { margin: 2px 0 0; }
@@ -179,6 +211,61 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
     </div>
     <figcaption>The builder now does the product manager's job; the record keeps design inside the why. The agent writes it back on its own, so nobody writes a doc. The gate is the automated half of the review you compared to code review: a script, not a meeting.</figcaption>
   </figure>
+  <h3 class="sub-h">What the agent reads first</h3>
+  <figure class="stack">
+    <div role="img" aria-label="Five layers of rules the agent reads before it builds, top to bottom: how it sounds, Tekmetric's voice and shop wording; what it's built from, tokens, the Legos, every state and accessibility; where people stay in charge, the agent drafts and a person approves each finding; what's already decided, past decision records fed back by the loop; and at the base, why it exists, the shop outcome and who reads the screen.">
+      <svg class="wide" viewBox="0 0 660 268" aria-hidden="true">
+        <g class="layer" style="--i:0">
+          <path class="side-l" d="M8 230 L126 254 L126 260 L8 236 Z"/>
+          <path class="side-r" d="M126 254 L244 230 L244 236 L126 260 Z"/>
+          <path class="lay" d="M8 230 L126 206 L244 230 L126 254 Z"/>
+          <text class="fn" x="126" y="238" text-anchor="middle">why.md</text>
+          <path class="lead" d="M250 230 H296"/><circle class="dot" cx="298" cy="230" r="2.5"/>
+          <text class="t" x="312" y="227">Why it exists</text><text class="s" x="312" y="245">The shop outcome, and who reads the screen</text>
+        </g>
+        <g class="layer acc" style="--i:1">
+          <path class="side-l acc" d="M8 180 L126 204 L126 210 L8 186 Z"/>
+          <path class="side-r acc" d="M126 204 L244 180 L244 186 L126 210 Z"/>
+          <path class="lay acc" d="M8 180 L126 156 L244 180 L126 204 Z"/>
+          <text class="fn acc" x="126" y="188" text-anchor="middle">decisions/</text>
+          <path class="lead acc" d="M250 180 H296"/><circle class="dot acc" cx="298" cy="180" r="2.5"/>
+          <text class="t acc" x="312" y="177">What&#39;s already decided</text><text class="s" x="312" y="195">Past decision records, fed back by the loop</text>
+        </g>
+        <g class="layer" style="--i:2">
+          <path class="side-l" d="M8 130 L126 154 L126 160 L8 136 Z"/>
+          <path class="side-r" d="M126 154 L244 130 L244 136 L126 160 Z"/>
+          <path class="lay" d="M8 130 L126 106 L244 130 L126 154 Z"/>
+          <text class="fn" x="126" y="138" text-anchor="middle">guardrails.md</text>
+          <path class="lead" d="M250 130 H296"/><circle class="dot" cx="298" cy="130" r="2.5"/>
+          <text class="t" x="312" y="127">Where people stay in charge</text><text class="s" x="312" y="145">The agent drafts; a person approves each finding</text>
+        </g>
+        <g class="layer" style="--i:3">
+          <path class="side-l" d="M8 80 L126 104 L126 110 L8 86 Z"/>
+          <path class="side-r" d="M126 104 L244 80 L244 86 L126 110 Z"/>
+          <path class="lay" d="M8 80 L126 56 L244 80 L126 104 Z"/>
+          <text class="fn" x="126" y="88" text-anchor="middle">tokens.json · legos/</text>
+          <path class="lead" d="M250 80 H296"/><circle class="dot" cx="298" cy="80" r="2.5"/>
+          <text class="t" x="312" y="77">What it&#39;s built from</text><text class="s" x="312" y="95">Tokens, the Legos, every state, accessibility</text>
+        </g>
+        <g class="layer" style="--i:4">
+          <path class="side-l" d="M8 30 L126 54 L126 60 L8 36 Z"/>
+          <path class="side-r" d="M126 54 L244 30 L244 36 L126 60 Z"/>
+          <path class="lay" d="M8 30 L126 6 L244 30 L126 54 Z"/>
+          <text class="fn" x="126" y="38" text-anchor="middle">voice.md</text>
+          <path class="lead" d="M250 30 H296"/><circle class="dot" cx="298" cy="30" r="2.5"/>
+          <text class="t" x="312" y="27">How it sounds</text><text class="s" x="312" y="45">Tekmetric&#39;s voice and shop wording</text>
+        </g>
+      </svg>
+    </div>
+    <dl class="tall" aria-hidden="true">
+      <dt>How it sounds <code>voice.md</code></dt><dd>Tekmetric&#39;s voice and shop wording</dd>
+      <dt>What it&#39;s built from <code>tokens.json · legos/</code></dt><dd>Tokens, the Legos, every state, accessibility</dd>
+      <dt>Where people stay in charge <code>guardrails.md</code></dt><dd>The agent drafts; a person approves each finding</dd>
+      <dt class="acc">What&#39;s already decided <code>decisions/</code></dt><dd>Past decision records, fed back by the loop</dd>
+      <dt>Why it exists <code>why.md</code></dt><dd>The shop outcome, and who reads the screen</dd>
+    </dl>
+    <figcaption>Each layer is a file the agent reads over MCP, written so people can read it too.</figcaption>
+  </figure>
   <p class="note">Open question for you: what shop data could a builder's agent safely read?</p>
 </section>
 
@@ -227,5 +314,19 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
 <footer>A concept by Ryan DeBoer, not affiliated with or endorsed by Tekmetric. Claude built the page and drew the figures from my call notes; the structure, claims and calls are mine.</footer>
 
 </main>
+<script>
+/* Settle the rule layers once, bottom-up, when they scroll into view. No JS or reduced motion: they stay put. */
+(() => {
+  const f = document.querySelector('.stack');
+  if (!f || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(max-width: 560px)').matches) return;
+  f.classList.add('pre');
+  new IntersectionObserver((entries, o) => {
+    if (!entries[0].isIntersecting) return;
+    o.disconnect();
+    requestAnimationFrame(() => f.classList.remove('pre'));
+    setTimeout(() => f.classList.add('done'), 900);
+  }, { threshold: 0.35 }).observe(f);
+})();
+</script>
 </body>
 </html>
