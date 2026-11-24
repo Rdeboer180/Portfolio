@@ -123,7 +123,7 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
 <section>
   <h2>Rules before the request, a gate after the build</h2>
   <figure class="loop">
-    <div role="img" aria-label="A builder asks in plain words. The agent reads the system rules first, builds to learn, and a gate checks the build and fails with data. A failed gate goes back to the build. What passes ships to a few shops first, and a decision record of what shops did and which rule changed goes back into the rules. Ryan would build the rules, the gate and the decision record.">
+    <div role="img" aria-label="A builder asks in plain words. The agent reads the system rules first, builds to learn, and a gate checks the build and fails with data. A failed gate goes back to the build. What passes ships to a few shops first, and the agent writes a decision record of what the data showed and which rule changed back into the rules. Ryan would build the rules, the gate and the decision record.">
       <svg class="wide" viewBox="0 0 660 164" aria-hidden="true">
         <defs>
           <marker id="a" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path class="ah" d="M1 1 L7 4 L1 7"/></marker>
@@ -148,7 +148,7 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
         <path class="ln" d="M468 86 V108 H330 V87" marker-end="url(#a)"/>
         <text class="lbl" x="399" y="112" text-anchor="middle">fails: fix, run again</text>
         <path class="ln acc" d="M606 86 V142 H192 V87" marker-end="url(#aa)"/>
-        <text class="lbl acc" x="399" y="146" text-anchor="middle">Decision record: what shops did, which rule changed</text>
+        <text class="lbl acc" x="399" y="146" text-anchor="middle">Decision record: what the data showed, which rule changed</text>
       </svg>
       <svg class="tall" viewBox="0 0 344 456" aria-hidden="true">
         <defs>
@@ -166,7 +166,7 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
         <text class="t" x="56" y="179">Build</text><text class="s" x="56" y="197">to learn</text>
         <text class="t" x="56" y="257">Gate</text><text class="s" x="56" y="275">fails with data</text><text class="tag" x="254" y="257" text-anchor="end">I'd build</text>
         <text class="t" x="56" y="335">Ship</text><text class="s" x="56" y="353">few shops first</text>
-        <text class="t" x="56" y="413" style="fill:var(--accent)">Decision record</text><text class="s" x="56" y="431">what shops did, which rule changed</text>
+        <text class="t" x="56" y="413" style="fill:var(--accent)">Decision record</text><text class="s" x="56" y="431">the data, and which rule changed</text>
         <path class="ln" d="M153 56 V75" marker-end="url(#b)"/>
         <path class="ln" d="M153 134 V153" marker-end="url(#b)"/>
         <path class="ln" d="M153 212 V231" marker-end="url(#b)"/>
@@ -177,19 +177,20 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
         <path class="ln acc" d="M37 417 H18 V105 H36" marker-end="url(#ba)"/>
       </svg>
     </div>
-    <figcaption>Builders own the why; the record keeps design in it. Open question for you: what shop data could a builder's agent safely read?</figcaption>
+    <figcaption>The builder now does the product manager's job; the record keeps design inside the why. The agent writes it back on its own, so nobody writes a doc. The gate is the automated half of the review you compared to code review: a script, not a meeting.</figcaption>
   </figure>
+  <p class="note">Open question for you: what shop data could a builder's agent safely read?</p>
 </section>
 
 <section>
-  <h2>Review picks the winners. Design engineering makes them reusable.</h2>
+  <h2>Review gives direction. Design engineering makes it reusable.</h2>
   <ol class="steps">
     <li><span><b>Explore.</b> Builders and agents try many directions, fast.</span></li>
-    <li><span><b>Review.</b> One designer across about five builder teams picks what works.</span></li>
-    <li><span><b>Write it down.</b> A PR to the system: a rule, a component, a skill. <span class="mine">I'd set the rules</span></span></li>
-    <li><span><b>Reuse.</b> Everyone starts from the better version. <span class="mine">I'd build this</span></span></li>
+    <li><span><b>Review.</b> One designer across about five teams gives art and UX direction.</span></li>
+    <li><span><b>Fix it in a PR.</b> The small things that never got prioritized, plus the rule behind them: a token, a component, a skill. <span class="mine">I'd set the rules</span></span></li>
+    <li><span><b>Reuse.</b> Every builder team starts from the better version. <span class="mine">I'd build this</span></span></li>
   </ol>
-  <p class="note">The time it frees goes to the triad teams, the roughly 30% that still need more brain cells.</p>
+  <p class="note">On our call I ranked design engineer first. This is that work, aimed at the Legos: each PR that fixes something small also fixes the rule behind it. The roughly 30% of teams that stay triads keep a designer for the blue-sky work.</p>
 </section>
 
 <section>
