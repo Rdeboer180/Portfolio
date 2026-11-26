@@ -49,6 +49,7 @@ const NotePage = lazy(() => import('./components/NotePage'));
 // The author panel (its finder, the work navigator, the project data and
 // framer-motion with them) loads only once it is opened in author mode.
 const AuthorSidePanel = lazy(() => import('./components/AuthorSidePanel'));
+const SHOW_AUTHOR_CHROME = false;
 function AuthorSidePanelGate() {
   const { authoring, ui } = useAuthorMode();
   if (!authoring || !ui.panelOpen) return null;
@@ -133,7 +134,11 @@ function HomeRoute() {
   }, homeLocation.key);
   // The Dive Club review build keeps every link under /dive and carries its own
   // feedback widget, so the author chrome stays on the public homepage only.
-  const authorChrome = !isReviewPath();
+  // The Author/Publisher switch is parked (26 November 2026): it only resonates
+  // in an AEM-specific interview, and until then it is noise. Flip
+  // SHOW_AUTHOR_CHROME to true to bring back the switch, ⌘⇧M, the side panel,
+  // the layout grid and page properties; nothing else changed.
+  const authorChrome = SHOW_AUTHOR_CHROME && !isReviewPath();
   return (
     <AuthorModeProvider enabled={authorChrome}>
       <WorkNavigatorProvider>
